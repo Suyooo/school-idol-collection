@@ -19,11 +19,14 @@ import TranslationSkill from "../translations/skill";
 
 import Attribute from "../../consts/attributes";
 
+import {pieceInfoGetter, pieceInfoSetter} from "../utils/pieceInfoGetterSetter";
+
 import CardType from "../../enums/cardType";
 import {RarityMember, RaritySong} from "../../enums/rarity";
 import SongRequirementType from "../../enums/songRequirementType";
 import MemberIdolizeType from "../../enums/memberIdolizeType";
 import TranslationCostume from "../translations/costume";
+import PieceInfo from "../../cards/pieceInfo";
 
 @Table({
     timestamps: false,
@@ -221,7 +224,13 @@ export class CardMemberExtraInfo extends Model {
     @Column
     piecesCool!: number;
 
-    // TODO: Getter to get/set pieces* as a PieceInfo object
+    get pieces(): PieceInfo {
+        return pieceInfoGetter("piecesAll", "piecesSmile", "piecesPure", "piecesCool");
+    }
+
+    set pieces(pieces: PieceInfo) {
+        pieceInfoSetter(pieces, "piecesAll", "piecesSmile", "piecesPure", "piecesCool");
+    }
 
     @Column(DataType.NUMBER)
     pieceBdayAttribute!: Attribute | null;
@@ -295,7 +304,13 @@ export class CardMemberIdolizePieceExtraInfo extends Model {
     @Column
     piecesCool!: number;
 
-    // TODO: Getter to get/set pieces* as a PieceInfo object
+    get pieces(): PieceInfo {
+        return pieceInfoGetter("piecesAll", "piecesSmile", "piecesPure", "piecesCool");
+    }
+
+    set pieces(pieces: PieceInfo) {
+        pieceInfoSetter(pieces, "piecesAll", "piecesSmile", "piecesPure", "piecesCool");
+    }
 }
 
 @Table({
@@ -367,9 +382,15 @@ export class CardSongAnyReqExtraInfo extends Model {
     @AllowNull(false)
     @Min(0)
     @Column
-    pieces!: number;
+    piecesAll!: number;
 
-    // TODO: Getter to get/set pieces* as a PieceInfo object
+    get pieces(): PieceInfo {
+        return pieceInfoGetter("piecesAll");
+    }
+
+    set pieces(pieces: PieceInfo) {
+        pieceInfoSetter(pieces, "piecesAll");
+    }
 }
 
 @Table({timestamps: false})
@@ -397,5 +418,11 @@ export class CardSongAttrReqExtraInfo extends Model {
     @Column
     piecesCool!: number;
 
-    // TODO: Getter to get/set pieces* as a PieceInfo object
+    get pieces(): PieceInfo {
+        return pieceInfoGetter(undefined, "piecesSmile", "piecesPure", "piecesCool");
+    }
+
+    set pieces(pieces: PieceInfo) {
+        pieceInfoSetter(pieces, undefined, "piecesSmile", "piecesPure", "piecesCool");
+    }
 }

@@ -31,6 +31,7 @@ const DB = new Sequelize({
         Pattern,
     ]
 });
+
 DB.sync();
 
 export default DB;
