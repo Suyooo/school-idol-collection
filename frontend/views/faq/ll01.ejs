@@ -1,0 +1,79 @@
+<%- include("../partials/header", {"title": "LL01 FAQ &bull; How To Play", "styles": ["faq", "skill"]}); %>
+
+<div class="content">
+    <div class="panel">
+        <div class="panel-inner">
+            <h4>LL01 Frequenty Asked Questions</h4>
+
+            <h5><a href="/card/LL01-046/">LL01-046 "Honoka Kousaka"</a> to <a href="/card/LL01-054/">LL01-054 "Nico
+                    Yazawa"</a></h5>
+            <div class="question" id="046_all">
+                Does this Skill require all three Members of the same Year to join
+                the <%- skillFormat("⟪LIVE⟫", 1, false) %>?
+            </div>
+            <div class="answer">
+                No. If, for example, <a href="/card/LL01-046/">LL01-046 "Honoka Kousaka"</a> is joining
+                a <%- skillFormat("⟪LIVE⟫", 1, false) %> with
+                either a <span class="redtext">"Kotori"</span> or <span class="redtext">"Umi"</span> card, she will
+                gain <%- skillFormat("+[ALL]", 1, false) %>.
+            </div>
+            <div class="question" id="046_other">
+                Does the condition for <a href="/card/LL01-046/">LL01-046 "Honoka Kousaka"</a>'s Skill include cards
+                other than this <span class="redtext">"Honoka"</span> card?
+            </div>
+            <div class="answer">
+                No, it means all <span class="redtext">"Honoka"</span> cards do not qualify. She only
+                gains <%- skillFormat("+[ALL]", 1, false) %> if a <span class="redtext">"Kotori"</span> or <span
+                        class="redtext">"Umi"</span> card joins
+                the same <%- skillFormat("⟪LIVE⟫",1,false) %>. No other joining Members have an effect.
+            </div>
+
+            <h5><a href="/card/LL01-055/">LL01-055 "Honoka Kousaka"</a></h5>
+            <div class="seealso">
+                See also: <a href="/faq/general#more_less">If a Skill's condition says "more/less than", does it also
+                    count if you have the same amount?</a>
+            </div>
+
+            <h5><a href="/card/LL01-056/">LL01-056 "Eli Ayase"</a></h5>
+            <div class="question" id="056">
+                Does this Skill activate if performing a <%- skillFormat("⟪LIVE⟫",1,false) %> using a Song card with says "3+1" for it's Live Points?
+            </div>
+            <div class="answer">
+                Yes. It will activate if the total of both base and bonus Live Points is 4 or more. However, you must
+                meet the conditions to gain the bonus Live Points.
+            </div>
+
+            <h5><a href="/card/LL01-057/">LL01-057 "Kotori Minami"</a></h5>
+            <div class="seealso">
+                See also: <a href="/faq/general#top_deck_card_faceup">What should I do if I have to turn the top card of
+                    my Deck face-up?</a>
+            </div>
+
+            <h5><a href="/card/LL01-060/">LL01-060 "Maki Nishikino"</a></h5>
+            <div class="seealso">
+                See also: <a href="/faq/general#more_faceup_songs">What happens if there's additional face-up cards in
+                    the Set List?</a>
+            </div>
+
+            <h5><a href="/card/LL01-063/">LL01-063 "Nico Yazawa"</a></h5>
+            <div class="seealso">
+                See also: <a href="/faq/general#skill_order_multiple_skills">What if a Member card has two or more
+                    Skills?</a>
+            </div>
+            <div class="seealso">
+                See also: <a href="/faq/general#more_less_than_other_players">If a Skill's condition says "more/less
+                    than any of the other players", does it also count if you have the same amount?</a>
+            </div>
+
+            <h5><a href="/card/LL01-064/">LL01-064 "Natsuiro Egao de 1,2,Jump!"</a></h5>
+            <h5><a href="/card/LL01-065/">LL01-065 "Mogyutto “love” de Sekkin chuu!"</a></h5>
+            <h5><a href="/card/LL01-072/">LL01-072 "Angelic Angel" / "Hello, Hoshi o Kazoete"</a></h5>
+            <h5><a href="/card/LL01-073/">LL01-073 "SUNNY DAY SONG" / "?←HEARTBEAT"</a></h5>
+            <h5><a href="/card/LL01-074/">LL01-074 "Bokutachi wa Hitotsu no Hikari" / "Future style"</a></h5>
+            <div class="seealso">
+                See also: <a href="/faq/general#member_counting">How do I count Members?</a>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("../partials/footer", {"jquery": true, "scripts": ["faq"]}); %>

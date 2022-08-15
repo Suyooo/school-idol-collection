@@ -1,0 +1,18 @@
+h6 > span {
+    color: var(--orange3);
+}
+
+.pill {
+    background-color: var(--blue5);
+    padding: .1em .5em;
+    border-radius: 1em;
+    user-select: none;
+    cursor: pointer;
+}
+
+#submit {
+    float: right;
+    margin-right: 1em;
+    margin-top: 1em;
+    display: none;
+}

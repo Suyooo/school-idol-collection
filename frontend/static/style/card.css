@@ -1,0 +1,145 @@
+h5 {
+    margin: 0 0 .25em;
+}
+
+.imgcont {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.imgcont > div {
+    margin: 0 1em;
+}
+
+.imgcont > div > img {
+    border-radius: 6px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.row > h5 {
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+    background-color: var(--blue5);
+}
+
+.inforow {
+    display: flex;
+}
+
+.inforow:not(.first) div {
+    border-top: 1px solid var(--blue2);
+}
+
+.inforow > div {
+    padding: 0.25em 0.5em;
+}
+
+.inforow > div:first-child {
+    background-color: var(--blue2);
+    font-weight: 600;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 30%;
+    font-size: .75em;
+    text-transform: uppercase;
+    letter-spacing: .1rem;
+    line-height: 2.2;
+}
+
+.inforow > div:last-child {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.cost > span {
+    display: inline-block;
+    width: 1em;
+    text-align: center;
+}
+
+.piecelabel > span {
+    float: right;
+    font-weight: normal;
+}
+
+.buttons {
+    width: 100%;
+    text-align: center;
+}
+
+.buttons .buttonrow {
+    padding-top: 1em;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.buttons .buttonrow .button {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 0;
+    margin: 0 0.5em;
+}
+
+.buttons .buttonrow:first-child .button {
+    flex-grow: 0;
+}
+
+.cardcopyright {
+    text-align: right;
+    font-size: 70%;
+    color: var(--blue3);
+    margin-top: .5em;
+    margin-right: 1em;
+}
+
+b {
+    white-space: nowrap;
+}
+
+.faqs > a {
+    position: relative;
+    padding-left: 1em;
+    display: block;
+}
+
+.faqs > a:before {
+    position: absolute;
+    content: "►";
+    color: var(--orange3);
+    font-weight: bold;
+    top: 0;
+    left: 0;
+}
+
+@media (min-width: 950px) {
+    .panel-inner .row {
+        display: flex;
+    }
+
+    .imgcont {
+        flex-direction: column;
+    }
+
+    .one-half.column.inforow {
+        width: 50%;
+        margin: 0;
+    }
+
+    .row.inforow > div:first-child {
+        flex-basis: 15%;
+    }
+
+    .row.first .inforow div {
+        border: none;
+    }
+
+    .buttons .buttonrow {
+        display: inline-block;
+        width: unset;
+    }
+}

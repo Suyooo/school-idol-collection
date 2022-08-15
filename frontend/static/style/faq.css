@@ -1,0 +1,139 @@
+h4 {
+    margin-top: 0;
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+    background-color: var(--blue5);
+}
+
+h5 {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+h5 + h5 {
+    margin: 0;
+}
+
+.panel:not(:first-child) {
+    margin-top: 3em;
+}
+
+.paragraph {
+    padding-left: 1rem;
+}
+
+.paragraph > h5 {
+    margin-left: -1rem;
+}
+
+.question, .answer {
+    padding-left: 3em;
+    position: relative;
+}
+
+.question {
+    margin-top: 2em;
+    font-weight: bold;
+}
+
+h5 + .question {
+    margin-top: 0;
+}
+
+.seealso + .question, .note + .question {
+    margin-top: 1em;
+}
+
+.question:after, .answer:after {
+    position: absolute;
+    left: 1em;
+    top: 0;
+    width: 1.325em;
+    height: 1.4em;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 50%;
+    margin-top: 0.1em;
+    line-height: 1.4em;
+    padding-left: .075em;
+    color: black;
+}
+
+/*.question:before, */
+.question:after {
+    content: "Q";
+    background-color: var(--orange1);
+}
+
+/*.answer:before, */
+.answer:after {
+    content: "A";
+    background-color: var(--blue1);
+}
+
+/*.question:before, .answer:before {
+    position: absolute;
+    left: 1.55em;
+    top: 0.5em;
+    bottom: 0.25em;
+    width: 0.35em;
+    border-radius: 0.175em;
+    color: rgba(0,0,0,0);
+}*/
+
+@keyframes targethlblink {
+    0%, 30%, 60%, 90% {
+        background-color: var(--blue4);
+    }
+    15%, 45%, 75% {
+        background-color: var(--blue2);
+    }
+}
+
+@keyframes targethloff {
+    0% {
+        padding-top: 4em;
+        margin-top: -4em;
+    }
+    100% {
+        padding-top: 0;
+        margin-top: 0;
+    }
+}
+
+.paragraph:target {
+    animation: targethlblink 1s ease-in, targethloff 0.00001s;
+}
+
+.question:target {
+    animation: targethlblink 1s ease-in, targethloff 0.00001s;
+}
+
+.question:target + .answer {
+    animation: targethlblink 1s ease-in, targethloff 0.00001s;
+}
+
+.note:before, .seealso:before {
+    color: var(--orange3);
+    font-weight: bold;
+}
+
+.note:before {
+    content: "※";
+}
+
+.seealso:before {
+    content: "►";
+}
+
+.link {
+    position: absolute;
+    top: .4em;
+    left: 0;
+    width: .8em;
+    height: .8em;
+    background: url("/images/link.svg") no-repeat;
+    background-size: .8em;
+    cursor: pointer;
+}

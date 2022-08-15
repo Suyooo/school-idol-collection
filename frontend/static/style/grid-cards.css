@@ -1,0 +1,22 @@
+.grid-item > .imgcont {
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
+    flex-basis: 8em;
+    width: 100%;
+    border-radius: .75em;
+    padding: .5em 0;
+    margin-bottom: .2em;
+    background-color: var(--blue4);
+    overflow: hidden;
+    align-content: center;
+    align-items: center;
+}
+
+.grid-item > .imgcont > img {
+    max-width: 50%;
+    max-height: 8em;
+    object-fit: contain;
+    border-radius: 4px;
+    flex: 0 1 0;
+}

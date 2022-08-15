@@ -1,0 +1,118 @@
+body {
+    --blue1: #8BBEE8;
+    --blue2: #519AD7;
+    --blue3: #2780CA;
+    --blue4: #0963AF;
+    --blue5: #064375;
+    --orange1: #FFD091;
+    --orange2: #FFB755;
+    --orange3: #FFA222;
+    --orange4: #FF9400;
+    --orange5: #B66900;
+
+    --all: #ffd87f;
+    --smile: #fa7dca;
+    --pure: #8ec4a6;
+    --cool: #a2e3ff;
+
+    background-color: #02101B;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+a {
+    color: var(--orange3);
+}
+a:focus, a:hover {
+    color: var(--orange1);
+}
+
+a.button {
+    background-color: var(--blue4);
+    border-color: var(--blue4);
+    color: white;
+    font-size: .75em;
+}
+
+a.button:hover, a.button:focus {
+    background-color: var(--blue2);
+    border-color: var(--blue2);
+    color: white;
+}
+
+a.button.button-primary {
+    background-color: var(--orange4);
+    border-color: var(--orange4);
+}
+
+a.button.button-primary:hover, a.button.button-primary:focus {
+    background-color: var(--orange2);
+    border-color: var(--orange2);
+}
+
+.content {
+    background-color: var(--blue5);
+    padding: 1em;
+    border-radius: 2em;
+}
+
+.panel {
+    background-color: var(--blue4);
+    padding: .5em;
+    border-radius: 1em;
+}
+
+.panel-inner {
+    border-radius: .5em;
+    overflow: hidden;
+}
+
+span.card-id {
+    color: var(--blue1);
+    font-weight: bold;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    margin-top: 1em;
+    margin-bottom: 0;
+}
+
+.panel h6 {
+    margin: 0;
+}
+
+input, textarea {
+    background-color: var(--blue5) !important;
+    border-color: var(--blue1) !important;
+    margin: 0;
+}
+
+label {
+    display: inline;
+    margin: 0;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+}
+
+textarea {
+    height: 8em;
+}
+
+.error {
+    display: none;
+    background-color: darkred;
+}
+
+span.nowrap, tr > th { white-space: nowrap; }
+
+ul {
+    margin: 0;
+}
+
+li {
+    margin: 0;
+    padding-left: 1em;
+    text-indent: -1em;
+}

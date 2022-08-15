@@ -1,0 +1,98 @@
+<%- include("../partials/header", {"title": "LL03 FAQ &bull; How To Play", "styles": ["faq", "skill"]}); %>
+
+<div class="content">
+    <div class="panel">
+        <div class="panel-inner">
+            <h4>LL03 Frequenty Asked Questions</h4>
+
+            <h5><a href="/card/LL03-056/">LL03-056 "Eli Ayase"</a></h5>
+            <div class="question" id="056">
+                What are "base Live Points"?
+            </div>
+            <div class="answer">
+                It refers to the number in the top right of the Song card. If there are bonus Live Points, as in "2 +
+                1", it only refers to the number on the left.
+            </div>
+
+            <h5><a href="/card/LL03-057/">LL03-057 "Kotori Minami"</a></h5>
+            <div class="seealso">
+                See also: <a href="/faq/general#join_success_order">What is the order for <%- skillFormat("[Live Join]/[Live Success]",1,false) %>
+                    Skills?</a>
+            </div>
+
+            <h5><a href="/card/LL03-058/">LL03-058 "Umi Sonoda"</a></h5>
+            <div class="question" id="058_three">
+                When I <%- skillFormat("⟪ENTER⟫ed this Member, there already were three face-up Song card in my Set List. Can I still ⟪ENTER⟫",1,false) %> the top card of my Deck?
+            </div>
+            <div class="answer">
+                Yes. No matter whether you flipped cards or not, as long as you meet the Attribute requirement, you can
+                <%- skillFormat("⟪ENTER⟫",1,false) %> the top card of your deck.
+            </div>
+            <div class="question" id="058_flip">
+                There was only one face-up Song card in my Set List when I <%- skillFormat("⟪ENTER⟫",1,false) %>ed this Member. Which Song cards should
+                I flip and how?
+            </div>
+            <div class="answer">
+                Flip face-down cards one by one until there are three face-up cards.<br>
+                If there are any Song cards that were flipped face-down by another Skill, you can, but don't have to
+                choose them.<br>
+                After you have flipped your first card, you may choose your second card after seeing which Song card you
+                just turned over.
+            </div>
+
+            <h5><a href="/card/LL03-061/">LL03-061 "Nozomi Tojo"</a></h5>
+            <div class="question" id="061">
+                Which Members are meant by "other Members"?
+            </div>
+            <div class="answer">
+                Any card that is not this one. For example, you may use this Member's Skill to give <%- skillFormat("+[ALL][ALL]",1,false) %> to any
+                other <span class="redtext">"Nozomi"</span> card, including another <a href="/card/LL03-061/">LL03-061 "Nozomi Tojo"</a>.
+            </div>
+
+            <h5><a href="/card/LL03-062/">LL03-062 "Hanayo Koizumi"</a></h5>
+            <div class="question" id="062">
+                If this Skill's requirement is not met, but there's a Member with three Stars joining the same <%- skillFormat("⟪LIVE⟫, will this card gain +[ALL][ALL]",1,false) %>?
+            </div>
+            <div class="answer">
+                No. At the time the <%- skillFormat("[Live Join] Skill is resolved, there are no Members in Lives with three or more Stars, so this card will not gain +[ALL][ALL]",1,false) %>.
+            </div>
+
+            <h5><a href="/card/LL03-065/">LL03-065 "Yuujou No Change"</a></h5>
+            <div class="seealso">
+                See also: <a href="/faq/general#member_counting">How do I count Members?</a>
+            </div>
+
+            <h5><a href="/card/LL03-066/">LL03-066 "Bokura wa Ima no Naka de" / "WILD STARS"</a></h5>
+            <div class="seealso">
+                See also: <a href="/faq/general#member_counting">How do I count Members?</a>
+            </div>
+            <div class="seealso">
+                See also: <a href="/faq/general#flip_before_skills">Between flipping over a new Song card from the Set
+                    List and the <%- skillFormat("[Live Success]",1,false) %> Skills, which one should go first?</a>
+            </div>
+
+            <h5><a href="/card/LL03-068/">LL03-068 "Music S.T.A.R.T!!" / "LOVELESS WORLD"</a></h5>
+            <div class="seealso">
+                See also: <a href="/faq/general#member_counting">How do I count Members?</a>
+            </div>
+
+            <h5><a href="/card/LL03-071/">LL03-071 "HEART to HEART!"</a></h5>
+            <div class="seealso">
+                See also: <a href="/faq/general#member_counting">How do I count Members?</a>
+            </div>
+
+            <h5><a href="/card/LL03-072/">LL03-072 "WAO-WAO Powerful day!"</a></h5>
+            <h5><a href="/card/LL03-073/">LL03-073 "Omoide Ijou ni Naritakute"</a></h5>
+            <h5><a href="/card/LL03-074/">LL03-074 "Sankaku CROSSROADS"</a></h5>
+            <div class="question" id="072">
+                Are the Skill requirements for these Song cards only met if all three Members of the unit join?
+            </div>
+            <div class="answer">
+                No. It is not neccessary for all three to be there. For example, if you perform a <%- skillFormat("⟪LIVE⟫",1,false) %> with <a
+                        href="/card/LL03-072/">LL03-072 "WAO-WAO Powerful day!"</a> with only <span class="redtext">"Honoka"</span> cards, the Any
+                Piece requirement is still reduced by 3.
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("../partials/footer", {"jquery": true, "scripts": ["faq"]}); %>

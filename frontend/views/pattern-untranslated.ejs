@@ -1,0 +1,29 @@
+<%- include("partials/header", {"title": "Untranslated", "styles": []}); %>
+<div class="content">
+    <h5><%= untranslated.length %> Untranslated Card Skill(s)</h5>
+    <div class="panel">
+        <div class="panel-inner">
+            <table>
+                <thead>
+                <tr>
+                    <th>Card</th>
+                    <th>JPN</th>
+                    <th>Translated</th>
+                    <th>Pattern</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% untranslated.forEach(function(a) { %>
+                    <tr>
+                        <th><a href="/card/<%= a.cardno %>"><%= a.cardno %></a></th>
+                        <td><%- a.skill.replace(/\n/g, "<br>") %></td>
+                        <td><%= a.translation_count %> / <%= a.skill_count %></td>
+                        <td><a href="/pattern/create/<%= a.cards_m_cardno %>/<%= a.line %>/">Pattern</a></td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<%- include("partials/footer", {"jquery": false, "scripts": []}); %>

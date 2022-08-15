@@ -1,0 +1,32 @@
+<%- include("partials/header", {"title": "Assign Pattern", "styles": []}); %>
+<div class="content">
+    <div class="panel">
+        <div class="panel-inner">
+            <table>
+                <thead>
+                <tr>
+                    <th>Card</th>
+                    <th>JPN</th>
+                    <th>ENG</th>
+                    <th>Apply</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% assigns.forEach(function(a) { %>
+                    <tr>
+                        <th><a href="/card/<%= a.id %>/"><%= a.id %></a></th>
+                        <td><%= a.skillJpn %></td>
+                        <td><%= a.skillEng %></td>
+                        <td><input type="checkbox" id="<%= a.id %>-<%= a.line %>" data-id="<%= a.id %>"
+                                   data-line="<%= a.line %>"></td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+            <a class="button button-primary" id="submit" style="float: right">Submit</a>
+            <a class="button button-primary" id="edit" href="/pattern/edit/<%- patternid %>" style="float: left">Edit</a>
+        </div>
+    </div>
+</div>
+<script>const patternid = <%= patternid %>;</script>
+<%- include("partials/footer", {"jquery": true, "scripts": ["pattern-assign"]}); %>

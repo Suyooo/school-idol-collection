@@ -1,0 +1,11 @@
+<%- include("partials/header", {"title": set, "styles": ["grid", "grid-cards"]}); %>
+<h5><%= set %></h5>
+<div class="content">
+    <div class="panel grid">
+        <% for(var i = 0; i < cards.length; i++) { %>
+            <%- include("partials/grid-card", {f: cards[i]}); %>
+        <% } %>
+    </div>
+</div>
+<a class="button" href="/" style="margin-top:1em;float:right">View Full Card List</a>
+<%- include("partials/footer", {"jquery": false, "scripts": []}); %>
