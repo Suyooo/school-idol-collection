@@ -1,7 +1,7 @@
 // noinspection JSNonASCIINames,NonAsciiCharacters
 
 import * as fs from "fs";
-import {Card, CardMember, CardMemberIdolizable, CardMemory, CardSongAnyReq, CardSongAttrReq} from "../cards/card";
+import {Card, CardMember, CardMemberIdolizable, CardMemory, CardSongAnyReq, CardSongAttrReq} from "../models/card/card";
 import UnimplementedError from "../errors/unimplemented";
 import {RarityMember, RaritySong} from "../cards/rarity";
 import PieceInfo, {PieceNameJpn} from "../cards/pieceInfo";

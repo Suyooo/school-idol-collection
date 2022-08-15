@@ -228,16 +228,16 @@ app.put('/pattern/set/', (req, res, next) => {
 
 /*
 app.get('/songs/', (req, res, next) => {
-    res.json(db.songList());
+    res.json(models.songList());
 });
 
 app.get('/songs/:songid/', (req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
-    res.send(db.getSongRaw(req.songid));
+    res.send(models.getSongRaw(req.songid));
 });
 
 app.put('/songs/', (req, res, next) => {
-    res.json({"songid": db.newSong(req.body)});
+    res.json({"songid": models.newSong(req.body)});
 });
 
 app.delete('/songs/:songid/', (req, res, next) => {

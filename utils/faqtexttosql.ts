@@ -1,5 +1,5 @@
 import {loadCardFromCardNo} from "../cards/loader";
-import {Card} from "../cards/card";
+import {Card} from "../models/card/card";
 import DB from "./db";
 import * as fs from "fs";
 

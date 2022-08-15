@@ -1,4 +1,4 @@
-import {Card, CardMember, CardMemberIdolizable, CardSong} from "../cards/card";
+import {Card, CardMember, CardMemberIdolizable, CardSong} from "../models/card/card";
 import {RarityMember, RaritySong} from "../cards/rarity";
 import UnimplementedError from "../errors/unimplemented";
 import WrongTypeError from "../errors/wrongType";

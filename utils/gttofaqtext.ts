@@ -1,5 +1,5 @@
 import {loadCardFromCardNo} from "../cards/loader";
-import {Card} from "../cards/card";
+import {Card} from "../models/card/card";
 import fs from "fs";
 
 const faqname = "LL06";

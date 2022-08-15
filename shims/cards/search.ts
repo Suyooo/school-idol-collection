@@ -1,6 +1,6 @@
 import CardType from "../../cards/cardType";
 import DB from "../../utils/db";
-import {Card} from "../../cards/card";
+import {Card} from "../../models/card/card";
 import {loadCardFromRow} from "../../cards/loader";
 
 export default function CardSearch(search: { "column": string, "cond": string | number }[]): Card[] {

@@ -1,4 +1,4 @@
-import {Card} from "./card";
+import {Card} from "../models/card/card";
 import {loadCardFromRow} from "./loader";
 import DB from "../utils/db";
 

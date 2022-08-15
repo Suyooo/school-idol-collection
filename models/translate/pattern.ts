@@ -1,50 +1,45 @@
-import Trigger from "../../consts/triggers";
-import PatternGroupType from "./patternGroupTypes";
-import Log from "../../utils/logger";
-import DB, {patternRow} from "../../utils/db";
-import ParseError from "../../errors/parse";
-import ErrorWithCause from "../../errors/errorWithCause";
+import {
+    AllowNull,
+    AutoIncrement,
+    Column,
+    Model,
+    PrimaryKey,
+    Table
+} from "sequelize-typescript";
 
-const getPatternStmt = DB.prepare("SELECT * FROM patterns WHERE id = ?");
-const insertPatternStmt = DB.prepare("INSERT OR REPLACE INTO patterns(triggers, regex, template, grouptypes) VALUES(?,?,?,?)");
-const updatePatternStmt = DB.prepare("INSERT OR REPLACE INTO patterns(id, triggers, regex, template, grouptypes) VALUES(?,?,?,?,?)");
-
-export function getPattern(id: number) {
-    const r: patternRow = getPatternStmt.get(id);
-    if (r === undefined) return undefined;
-    return Pattern.loadFromRow(r);
-}
-
-export function addPattern(patternid: number | undefined, triggers: [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], regex: string, template: string, grouptypes: string) {
+/*export function addPattern(patternid: number | undefined, triggers: [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], regex: string, template: string, grouptypes: string) {
     const trigBitmask = triggers.map((t, i) => t ? 1 << i : 0).reduce((acc, i) => acc + i, 0);
     const res = patternid === undefined
         ? insertPatternStmt.run(trigBitmask, regex, template, grouptypes)
         : updatePatternStmt.run(patternid, trigBitmask, regex, template, grouptypes);
     return res.lastInsertRowid;
-}
+}*/
 
-export class Pattern {
-    readonly id: number;
-    readonly triggers: Trigger[];
-    readonly pattern: RegExp;
-    readonly template: string;
-    readonly groupTypes: PatternGroupType[];
+@Table({timestamps: false})
+export class Pattern extends Model {
+    @PrimaryKey
+    @AutoIncrement
+    @Column
+    id: number;
 
-    constructor(id: number, triggers: Trigger[], pattern: RegExp, template: string, groupTypes: PatternGroupType[]) {
-        this.id = id;
-        this.triggers = triggers;
-        this.pattern = pattern;
-        if (this.pattern.source.charAt(0) != "^")
-            Log.warn("PATTERN", "Pattern #" + id + " does not start with ^");
-        if (this.pattern.source.charAt(this.pattern.source.length - 1) != "$")
-            Log.warn("PATTERN", "Pattern #" + id + " does not end with $");
-        if (this.pattern.source.indexOf("\\d") !== -1 && this.pattern.source.indexOf("{{card:(\\d*)}}") !== -1)
-            Log.warn("PATTERN", "Pattern #" + id + " contains digits character class outside card annotation");
-        this.template = template;
-        this.groupTypes = groupTypes;
-    }
+    @AllowNull(false)
+    @Column
+    triggers: number; // TODO: getter/setter from bitmask to Trigger array
 
-    static loadFromRow(row: patternRow): Pattern {
+    @AllowNull(false)
+    @Column
+    pattern: string;
+
+    @AllowNull(false)
+    @Column
+    template: string;
+
+    @AllowNull(false)
+    @Column
+    groupTypes: string; // TODO: getter/setter from string to PatternGroupType array
+
+
+    /*static loadFromRow(row: patternRow): Pattern {
         const triggerIds = [];
         let i = 0;
         while (row.triggers > 0) {
@@ -54,9 +49,9 @@ export class Pattern {
         }
         return new Pattern(row.id, triggerIds.map(i => Trigger[i]), new RegExp(row.regex), row.template,
             [...row.grouptypes].map(c => PatternGroupType[Number(c)]));
-    }
+    }*/
 
-    testSkill(skill: string): boolean {
+    /*testSkill(skill: string): boolean {
         return this.pattern.test(skill);
     }
 
@@ -119,5 +114,5 @@ export class Pattern {
             Log.warn("PATTERN", "Template: " + this.template);
         }
         return res;
-    }
+    }*/
 }

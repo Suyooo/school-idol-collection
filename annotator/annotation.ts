@@ -1,6 +1,6 @@
 import {loadCardsFromId} from "../cards/loader";
 import UnimplementedError from "../errors/unimplemented";
-import {Card} from "../cards/card";
+import {Card} from "../models/card/card";
 import Language from "../consts/language";
 
 const annotationPattern = /(.){{(.*?):(.*?)}}(.)/g;
