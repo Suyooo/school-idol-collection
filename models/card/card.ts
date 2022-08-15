@@ -77,11 +77,11 @@ export class Card extends Model {
     faqs!: CardFAQLink[];
 
     @HasOne(() => TranslationName)
-    nameObjEn!: TranslationName | null;
+    nameOEn!: TranslationName | null;
 
     get nameEn(): string | null {
-        if (this.nameObjEn === null) return null;
-        return this.nameObjEn.name;
+        if (this.nameOEn === null) return null;
+        return this.nameOEn.name;
     }
 
     @HasMany(() => TranslationSkill)
