@@ -1,11 +1,10 @@
-import NameTranslation from "../../constsdb/nameTranslation";
-import {getName} from "../../shims/cards/search";
-import CardType from "../../cards/cardType";
 import * as Grammar from "./grammar";
 import * as Regex from "./regex";
 import PieceInfo, {PieceNameJpn} from "../../cards/pieceInfo";
 import NotFoundError from "../../errors/notFound";
-import SongTranslation from "../../constsdb/songTranslation";
+import CardType from "../../enums/cardType";
+import TranslateTableName from "../../models/translatetables/name";
+import TranslateTableSong from "../../models/translatetables/song";
 
 const skilltextPattern = /{{skilltext:([^}]*?)}}/g;
 
@@ -27,22 +26,22 @@ export default class PatternGroupType {
 
     static 0 = new PatternGroupType(0, "Name or Group", function (match: string): string {
         const skilltext = skilltextPattern.exec(match)?.[1];
-        const n = NameTranslation(skilltext || match);
+        const n = ""; // TODO: TranslateTableName
         if (n == undefined) throw new NotFoundError(match + " is not a known name");
         return skilltext ? "{{skilltext:"+n+"}}" : n;
     }, generateAOrAnReplacements);
     static 1 = new PatternGroupType(1, "Song Name", function (match: string): string {
-        const n = SongTranslation(match);
+        const n = ""; // TODO: TranslateTableSong
         if (n == undefined) throw new NotFoundError(match + " is not a known song");
         return n;
     }, generateAOrAnReplacements);
     static 2 = new PatternGroupType(2, "Costume Name", function (match: string): string {
-        const n = SongTranslation(match);
+        const n = ""; // TODO: TranslateTableSong
         if (n == undefined) throw new NotFoundError(match + " is not a known song");
         return n;
     }, generateAOrAnReplacements);
     static 3 = new PatternGroupType(3, "Mem Name", function (match: string): string {
-        return getName({"name": match, "type": CardType.MEMORY});
+        return ""; // TODO: getName({"name": match, "type": CardType.MEMORY});
     }, generateAOrAnReplacements);
     static 4 = new PatternGroupType(4, "Number", function (match: string): string {
         return Regex.num(match).toFixed(0);

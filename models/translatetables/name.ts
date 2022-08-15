@@ -7,7 +7,7 @@ import {
 } from "sequelize-typescript";
 
 @Table({timestamps: false})
-export default class ConstantSong extends Model {
+export default class TranslateTableName extends Model {
     @PrimaryKey
     @Column
     jpn: string;

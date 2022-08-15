@@ -1,7 +1,7 @@
 import {
     AllowNull,
     AutoIncrement,
-    Column,
+    Column, DataType,
     Model,
     PrimaryKey,
     Table
@@ -18,14 +18,14 @@ import PatternGroupType from "../../translate/skills/patternGroupTypes";
 }*/
 
 @Table({timestamps: false})
-export class Pattern extends Model {
+export default class TranslateTablePattern extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column
     id: number;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.NUMBER)
     get triggers(): Trigger[] {
         const triggers: Trigger[] = [];
         let triggerBitmask: number = this.getDataValue("triggers");
@@ -51,7 +51,7 @@ export class Pattern extends Model {
     template: string;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.STRING)
     get groupTypes(): PatternGroupType[] {
         const types = [];
         let typeString: string = this.getDataValue("groupTypes");

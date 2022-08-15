@@ -9,9 +9,9 @@ import {
 } from "./card/card";
 import CardFAQLink from "./card/faqLink";
 import CardMemberGroup from "./card/memberGroup";
-import {Pattern} from "./translate/pattern";
-import ConstantName from "./translate/name";
-import ConstantSong from "./translate/song";
+import TranslateTablePattern from "./translatetables/pattern";
+import TranslateTableName from "./translatetables/name";
+import TranslateTableSong from "./translatetables/song";
 import TranslationCostume from "./translations/costume";
 import TranslationGroupSkill from "./translations/groupSkill";
 import TranslationName from "./translations/name";
@@ -27,8 +27,8 @@ const DB = new Sequelize({
         CardSongExtraInfo, CardSongAnyReqExtraInfo, CardSongAttrReqExtraInfo,
         CardFAQLink, CardMemberGroup,
         TranslationName, TranslationSkill, TranslationGroupSkill, TranslationCostume,
-        ConstantName, ConstantSong,
-        Pattern,
+        TranslateTableName, TranslateTableSong,
+        TranslateTablePattern
     ]
 });
 
