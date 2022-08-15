@@ -44,5 +44,8 @@ export default class CardMemberGroup extends Model {
     skill!: string | null;
 
     @HasMany(() => TranslationGroupSkill)
-    skillsEn!: string[]; // TODO: getter (return skills instead of the Skill objects)
+    skillsEn!: TranslationGroupSkill[];
+    get skillEn(): string {
+        return this.skillsEn.map(sk => sk.skill).join("\n");
+    }
 }

@@ -74,13 +74,22 @@ export class Card extends Model {
     copyright!: string;
 
     @HasMany(() => CardFAQLink, {sourceKey: "id"})
-    faqs!: CardFAQLink[]; // TODO: getter
+    faqs!: CardFAQLink[];
 
     @HasOne(() => TranslationName)
-    nameEn!: string | null; // TODO: getter (return name instead of the TranslationName object)
+    nameObjEn!: TranslationName | null;
+
+    get nameEn(): string | null {
+        if (this.nameObjEn === null) return null;
+        return this.nameObjEn.name;
+    }
 
     @HasMany(() => TranslationSkill)
-    skillsEn!: string[]; // TODO: getter (return skills instead of the Skill objects)
+    skillsEn!: TranslationSkill[];
+
+    get skillEn(): string {
+        return this.skillsEn.map(sk => sk.skill).join("\n");
+    }
 
     isMember(): this is CardMember {
         return this.type == CardType.MEMBER;
