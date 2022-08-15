@@ -6,9 +6,11 @@ import {
     PrimaryKey,
     Table
 } from "sequelize-typescript";
+import Trigger from "../../consts/triggers";
+import PatternGroupType from "../../translate/skills/patternGroupTypes";
 
 /*export function addPattern(patternid: number | undefined, triggers: [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], regex: string, template: string, grouptypes: string) {
-    const trigBitmask = triggers.map((t, i) => t ? 1 << i : 0).reduce((acc, i) => acc + i, 0);
+
     const res = patternid === undefined
         ? insertPatternStmt.run(trigBitmask, regex, template, grouptypes)
         : updatePatternStmt.run(patternid, trigBitmask, regex, template, grouptypes);
@@ -24,7 +26,21 @@ export class Pattern extends Model {
 
     @AllowNull(false)
     @Column
-    triggers: number; // TODO: getter/setter from bitmask to Trigger array
+    get triggers(): Trigger[] {
+        const triggers: Trigger[] = [];
+        let triggerBitmask: number = this.getDataValue("triggers");
+        let i: number = 0;
+        while (triggerBitmask > 0) {
+            if ((triggerBitmask & 1) == 1) triggers.push(Trigger[i]);
+            i++;
+            triggerBitmask = triggerBitmask >> 1;
+        }
+        return triggers;
+    }
+    set triggers(triggers: Trigger[]) {
+        const triggerBitmask: number = triggers.map(t => 1 << t.id).reduce((acc, i) => acc + i, 0);
+        this.setDataValue("triggers", triggerBitmask);
+    }
 
     @AllowNull(false)
     @Column
@@ -36,20 +52,22 @@ export class Pattern extends Model {
 
     @AllowNull(false)
     @Column
-    groupTypes: string; // TODO: getter/setter from string to PatternGroupType array
-
-
-    /*static loadFromRow(row: patternRow): Pattern {
-        const triggerIds = [];
-        let i = 0;
-        while (row.triggers > 0) {
-            if ((row.triggers & 1) == 1) triggerIds.push(i);
-            i++;
-            row.triggers = row.triggers >> 1;
+    get groupTypes(): PatternGroupType[] {
+        const types = [];
+        let typeString: string = this.getDataValue("groupTypes");
+        for (let i: number = 0; i < typeString.length; i++) {
+            const n: number = parseInt(typeString.charAt(i));
+            types.push(PatternGroupType[n]);
         }
-        return new Pattern(row.id, triggerIds.map(i => Trigger[i]), new RegExp(row.regex), row.template,
-            [...row.grouptypes].map(c => PatternGroupType[Number(c)]));
-    }*/
+        return types;
+    }
+    set groupTypes(types: PatternGroupType[]) {
+        let typeString: string = "";
+        for (let i: number = 0; i < types.length; i++) {
+            typeString += types[i].id;
+        }
+        this.setDataValue("groupTypes", typeString);
+    }
 
     /*testSkill(skill: string): boolean {
         return this.pattern.test(skill);

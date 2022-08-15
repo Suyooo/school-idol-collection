@@ -26,7 +26,7 @@ export default class CardMemberGroup extends Model {
     type: CardMemberGroupType;
 
     @HasMany(() => CardMemberExtraInfo)
-    members: CardMemberExtraInfo[]; // TODO: map to Card
+    memberExtraInfos: CardMemberExtraInfo[]; // TODO: map to Card
 
     @Column(DataType.TEXT)
     skill!: string | null;
