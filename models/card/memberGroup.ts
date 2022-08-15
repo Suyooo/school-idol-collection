@@ -9,7 +9,7 @@ import {
     Table
 } from "sequelize-typescript";
 
-import {CardMemberExtraInfo} from "./card";
+import {CardMember, CardMemberExtraInfo} from "./card";
 import TranslationGroupSkill from "../translations/groupSkill";
 
 import {CardMemberGroupType} from "../../enums/memberGroupType";
@@ -26,7 +26,19 @@ export default class CardMemberGroup extends Model {
     type: CardMemberGroupType;
 
     @HasMany(() => CardMemberExtraInfo)
-    memberExtraInfos: CardMemberExtraInfo[]; // TODO: map to Card
+    get members(): CardMember[] {
+        return this.getDataValue("members").map((extraInfo: CardMemberExtraInfo) => extraInfo.card);
+    }
+
+    set members(newMembers: CardMember[]) {
+        this.setDataValue("members", newMembers.map(card => card.memberExtraInfo));
+    }
+
+    addMember(card: CardMember) {
+        const newMembers = this.getDataValue("members");
+        newMembers.push(card.memberExtraInfo)
+        this.setDataValue("members", newMembers);
+    }
 
     @Column(DataType.TEXT)
     skill!: string | null;

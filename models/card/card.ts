@@ -278,10 +278,15 @@ export class CardMemberIdolizePieceExtraInfo extends Model {
     @PrimaryKey
     @ForeignKey(() => CardMemberExtraInfo)
     @Column
-    cardMemberExtraInfoId: string;
+    cardId: string;
 
     @BelongsTo(() => CardMemberExtraInfo)
-    cardMemberExtraInfo: CardMemberExtraInfo; // TODO: map to Card
+    get card(): CardMember {
+        return this.getDataValue("card").card;
+    }
+    set card(newCard: CardMember) {
+        this.setDataValue("card", newCard.memberExtraInfo);
+    }
 
     @AllowNull(false)
     @Min(0)
@@ -374,10 +379,16 @@ export class CardSongAnyReqExtraInfo extends Model {
     @PrimaryKey
     @ForeignKey(() => CardSongExtraInfo)
     @Column
-    cardSongExtraInfoId: string;
+    cardId: string;
 
     @BelongsTo(() => CardSongExtraInfo)
-    cardSongExtraInfo: CardSongExtraInfo; // TODO: map to Card
+    get card(): CardSong {
+        return this.getDataValue("card").card;
+    }
+
+    set card(newCard: CardSong) {
+        this.setDataValue("card", newCard.songExtraInfo);
+    }
 
     @AllowNull(false)
     @Min(0)
@@ -398,10 +409,16 @@ export class CardSongAttrReqExtraInfo extends Model {
     @PrimaryKey
     @ForeignKey(() => CardSongExtraInfo)
     @Column
-    cardSongExtraInfoId: string;
+    cardId: string;
 
     @BelongsTo(() => CardSongExtraInfo)
-    cardSongExtraInfo: CardSongExtraInfo; // TODO: map to Card
+    get card(): CardSong {
+        return this.getDataValue("card").card;
+    }
+
+    set card(newCard: CardSong) {
+        this.setDataValue("card", newCard.songExtraInfo);
+    }
 
     @AllowNull(false)
     @Min(0)

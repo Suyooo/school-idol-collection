@@ -7,17 +7,22 @@ import {
     PrimaryKey,
     Table
 } from "sequelize-typescript";
-import {CardMemberExtraInfo} from "../card/card";
+import {CardMember, CardMemberExtraInfo} from "../card/card";
 
 @Table({timestamps: false})
 export default class TranslationCostume extends Model {
     @PrimaryKey
     @ForeignKey(() => CardMemberExtraInfo)
     @Column
-    cardMemberExtraInfoId: string;
+    cardId: string;
 
     @BelongsTo(() => CardMemberExtraInfo)
-    cardMemberExtraInfo: CardMemberExtraInfo;
+    get card(): CardMember {
+        return this.getDataValue("card").card;
+    }
+    set card(newCard: CardMember) {
+        this.setDataValue("card", newCard.memberExtraInfo);
+    }
 
     @AllowNull(false)
     @Column
