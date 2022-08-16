@@ -15,22 +15,22 @@ export default class CardFAQLink extends Model {
     @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
-    cardId: number;
+    cardId!: number;
 
     @BelongsTo(() => Card)
-    card: Card;
+    card!: Card;
 
     @PrimaryKey
     @Min(1)
     @AllowNull(false)
     @Column
-    displayOrder: number;
+    displayOrder!: number;
 
     @AllowNull(false)
     @Column(DataType.TEXT)
-    label: string;
+    label!: string;
 
     @AllowNull(false)
     @Column
-    link: string;
+    link!: string;
 }

@@ -1,17 +1,15 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import {loadCardFromCardNo, loadCardSet, loadCardsFromId} from "../cards/loader";
-import EJSCardPage from "../ejs-util/cardPageEn";
+import EJSCardPage from "../formatting/cardPageEn";
 import translateSkill, {
     assignSkills,
     getAssignableSkills,
     listUntranslatedSkills,
     loadSkillDetails
 } from "../translate/skills/translateSkill";
-import {addPattern, getPattern} from "../translate/skills/pattern";
-import {searchSkill, searchCostume, searchTypeName} from "../cards/searcher";
-import {skillFormat} from "../ejs-util/skillFormat";
-import Trigger from "../consts/triggers";
+import {skillFormat} from "../formatting/skillFormatter";
+import DB from "../models/db";
+import {Op} from "sequelize";
 
 const app = express();
 const port = 3000;
@@ -138,13 +136,25 @@ app.get("/search/memory/name/:query", (req, res) => {
     });
 });
 
-app.get("/card/:cardno/", (req, res) => {
-    const card = loadCardFromCardNo(req.params.cardno);
-    if (card == undefined) throw new Error("Card not found");
-    res.render("card", {
-        "f": new EJSCardPage(card),
-        "sameId": loadCardsFromId(card.id, card.cardno).map(c => new EJSCardPage(c)).filter(c => c.set() != "EX15" || c.cardnoInSet() <= 54 || c.cardno().startsWith("EX15-E"))
-    });
+app.get("/card/:cardno/", async (req, res) => {
+    const card = await DB.Card.findByPk(req.params.cardno);
+    if (card == undefined) {
+        res.status(404);
+        res.send("Card not found.");
+    } else {
+        const sameIdCards = await DB.Card.findAll({
+            where: {
+                id: card.id,
+                cardNo: {
+                    [Op.not]: card.cardNo
+                }
+            }
+        });
+        res.render("card", {
+            "f": new EJSCardPage(card),
+            "sameId": sameIdCards.map(c => new EJSCardPage(c))
+        });
+    }
 });
 
 app.get("/pattern/create/:cardno?/:line?/", (req, res) => {

@@ -21,14 +21,14 @@ export default class CardMemberGroup extends Model {
     @AllowNull(false)
     @AutoIncrement
     @Column
-    id: number;
+    id!: number;
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
-    type: CardMemberGroupType;
+    type!: CardMemberGroupType;
 
     @HasMany(() => CardMemberExtraInfo)
-    memberExtraInfos: CardMemberExtraInfo[];
+    memberExtraInfos!: CardMemberExtraInfo[];
 
     get members(): CardMember[] {
         return this.memberExtraInfos.map((extraInfo: CardMemberExtraInfo) => <CardMember>extraInfo.card);

@@ -5,11 +5,9 @@ import Language from "../consts/language";
 
 const annotationPattern = /(.){{(.*?):(.*?)}}(.)/g;
 
-function getAnnotation(type: string, param: string): AbstractAnnotation {
+function getAnnotation(type: string, param: string, lang: Language): AbstractAnnotation {
     if (type == "card") {
-        return new AnnotationCard(param, Language.JPN);
-    } else if (type == "card-en") {
-        return new AnnotationCard(param, Language.ENG);
+        return new AnnotationCard(param, lang);
     } else if (type == "song") {
         return new AnnotationSong(param);
     } else if (type == "mem") {
@@ -133,6 +131,6 @@ class AnnotationSkillText extends AbstractAnnotation {
 }
 
 const Annotation = {
-    AbstractAnnotation, getAnnotation, annotationPattern
+    AbstractAnnotation, makeAnnotation: getAnnotation, annotationPattern
 };
 export default Annotation;

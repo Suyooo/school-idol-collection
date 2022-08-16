@@ -31,10 +31,10 @@ export default class CardMemberIdolizePieceExtraInfo extends Model {
     @AllowNull(false)
     @ForeignKey(() => CardMemberExtraInfo)
     @Column
-    cardMemberExtraInfoId: string;
+    cardMemberExtraInfoId!: string;
 
     @BelongsTo(() => CardMemberExtraInfo)
-    cardMemberExtraInfo: CardMemberExtraInfo;
+    cardMemberExtraInfo!: CardMemberExtraInfo;
 
     get card(): CardMember {
         return <CardMember>this.cardMemberExtraInfo.card;

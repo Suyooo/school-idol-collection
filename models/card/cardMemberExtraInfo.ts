@@ -49,10 +49,10 @@ export default class CardMemberExtraInfo extends Model {
     @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
-    cardId: string;
+    cardId!: string;
 
     @BelongsTo(() => Card)
-    card: Card; // TODO: getter
+    card!: Card; // TODO: getter
 
     @AllowNull(false)
     @Column(DataType.NUMBER)

@@ -9,6 +9,7 @@ import {
     Scopes,
     Table
 } from "sequelize-typescript";
+import {Op} from "sequelize";
 import DB from "../db";
 
 import CardMemberExtraInfo from "./cardMemberExtraInfo";
@@ -23,6 +24,10 @@ import TranslationSkill from "../translations/skill";
 import CardType from "../../types/cardType";
 import CardSongRequirementType from "../../types/cardSongRequirementType";
 import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
+import PieceInfo from "../../types/pieceInfo";
+import Attribute from "../../types/attribute";
+import {CardMemberRarity} from "../../types/cardRarity";
+import CardMemberGroup from "./memberGroup";
 
 @Scopes(() => ({
     members: {
@@ -50,6 +55,22 @@ import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
             DB.TranslationGroupSkill
         ]
     },
+    before: (cardNo) => ({
+        where: {
+            cardNo: {
+                [Op.lt]: cardNo
+            }
+        },
+        order: [["cardNo", "DESC"]]
+    }),
+    after: (cardNo) => ({
+        where: {
+            cardNo: {
+                [Op.gt]: cardNo
+            }
+        },
+        order: [["cardNo", "ASC"]]
+    }),
     linkAttributes: {
         attributes: ["cardNo", "id", "name", "nameOEn"],
         include: [DB.TranslationName]

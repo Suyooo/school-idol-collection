@@ -1,4 +1,4 @@
-import PieceInfo from "../cards/pieceInfo";
+import PieceInfo from "../types/pieceInfo";
 
 export function pieceFormat(pieces: PieceInfo): string {
     let s = "";

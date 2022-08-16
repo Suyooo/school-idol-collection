@@ -34,7 +34,7 @@ export default class Trigger {
         if (jpnMemoryAlt) map.set(jpnMemoryAlt, this);
     }
 
-    private static map = (() => {
+    private static readonly map = (() => {
         const map = new Map<MappedValue, Trigger>();
 
         new Trigger(map, 0, "entry", "Entry", "登場時");

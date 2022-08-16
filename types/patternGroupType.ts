@@ -22,7 +22,7 @@ export default class PatternGroupType {
         this.getExtraReplacements = getExtraReplacements;
     }
 
-    static map = (() => {
+    private static readonly map = (() => {
         const map: PatternGroupType[] = [];
 
         // Name or Group

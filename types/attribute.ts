@@ -41,7 +41,7 @@ export default class Attribute {
         if (pajn) map.set(pajn, this);
     }
 
-    private static map = (() => {
+    private static readonly map = (() => {
         const map = new Map<MappedValue, Attribute>();
 
         new Attribute(map, 0, "all", "Yellow", "黄", "Neutral", "オール", "ALL", "オール");

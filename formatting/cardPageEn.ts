@@ -3,7 +3,6 @@ import {RarityMember, RaritySong} from "../cards/rarity";
 import UnimplementedError from "../errors/unimplemented";
 import WrongTypeError from "../errors/wrongType";
 import {CardMemberGroupType} from "../cards/cardMemberGroup";
-import {cardNoExists, loadFirstCardFromId} from "../cards/loader";
 import DatabaseError from "../errors/database";
 import PieceInfo, {PieceNameEng, PieceNameJpn} from "../cards/pieceInfo";
 import Annotation from "../annotator/annotation";
@@ -11,7 +10,7 @@ import Trigger from "../consts/triggers";
 import {num} from "../translate/skills/regex";
 import Language from "../consts/language";
 import Attribute from "../consts/attributes";
-import {skillFormat} from "./skillFormat";
+import {skillFormat} from "./skillFormatter";
 import {pieceFormat} from "./pieceFormat";
 
 
