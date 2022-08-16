@@ -40,21 +40,12 @@ import CardMemberGroup from "./memberGroup";
         where: {type: CardType.MEMORY}
     },
 
-    full: {
-        include: [
-            DB.CardMemberExtraInfo,
-            DB.CardMemberGroup,
-            DB.CardMemberIdolizePieceExtraInfo,
-            DB.CardSongExtraInfo,
-            DB.CardSongAnyReqExtraInfo,
-            DB.CardSongAttrReqExtraInfo,
-            DB.CardFAQLink,
-            DB.TranslationName,
-            DB.TranslationSkill,
-            DB.TranslationCostume,
-            DB.TranslationGroupSkill
-        ]
-    },
+    id: (id) => ({
+        where: {
+            id: id
+        }
+    }),
+
     before: (cardNo) => ({
         where: {
             cardNo: {
@@ -71,6 +62,22 @@ import CardMemberGroup from "./memberGroup";
         },
         order: [["cardNo", "ASC"]]
     }),
+
+    full: {
+        include: [
+            DB.CardMemberExtraInfo,
+            DB.CardMemberGroup,
+            DB.CardMemberIdolizePieceExtraInfo,
+            DB.CardSongExtraInfo,
+            DB.CardSongAnyReqExtraInfo,
+            DB.CardSongAttrReqExtraInfo,
+            DB.CardFAQLink,
+            DB.TranslationName,
+            DB.TranslationSkill,
+            DB.TranslationCostume,
+            DB.TranslationGroupSkill
+        ]
+    },
     linkAttributes: {
         attributes: ["cardNo", "id", "name", "nameOEn"],
         include: [DB.TranslationName]

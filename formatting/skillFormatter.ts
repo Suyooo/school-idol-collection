@@ -27,10 +27,13 @@ export default class SkillFormatter {
     private readonly lang: Language;
     private readonly regexes: { [K in SkillFormatterRegexes]: RegExp };
     private readonly templates: { [K in SkillFormatterTemplates]: string };
+
     private readonly leftRoundBracket: string;
-    private readonly rightRoundBracket: string;
     private readonly leftSquareBracket: string;
     private readonly rightSquareBracket: string;
+    private readonly nullLine: string;
+    private readonly triggerNameProperty: keyof Trigger;
+    private readonly pieceNameProperty: keyof Attribute;
 
     private constructor(lang: Language,
                         regexes: { [K in SkillFormatterRegexes]: RegExp },
@@ -38,15 +41,19 @@ export default class SkillFormatter {
         this.lang = lang;
         this.regexes = regexes;
         this.templates = templates;
+
         this.leftRoundBracket = (lang === Language.JPN) ? "（" : "(";
-        this.rightRoundBracket = (lang === Language.JPN) ? "）" : ")";
         this.leftSquareBracket = (lang === Language.JPN) ? "【" : "[";
         this.rightSquareBracket = (lang === Language.JPN) ? "】" : "]";
+        this.nullLine = (lang === Language.JPN) ? "[skill line missing]" : "[translation missing]";
+        this.triggerNameProperty = (lang === Language.JPN) ? "jpn" : "eng";
+        this.pieceNameProperty = (lang === Language.JPN) ? "pieceAttributeJpn" : "pieceAttributeEng";
     }
 
-    private resolveAnnotation(match: string, pre: string, type: string, param: string, post: string): string {
+    private async resolveAnnotation(match: string, pre: string, type: string, param: string, post: string): Promise<string> {
         const annotation = Annotation.makeAnnotation(type, param, this.lang);
-        return "<a href='" + annotation.getHTMLLink() + "'>" + pre + annotation.getHTMLText() + post + '</a>';
+        if (annotation === undefined) return match;
+        return "<a href='" + (await annotation.getHTMLLink()) + "'>" + pre + (await annotation.getHTMLText()) + post + '</a>';
     }
 
     private resolveFullSkill(match: string, triggers: string, skillLine: string) {
@@ -58,7 +65,7 @@ export default class SkillFormatter {
         }
         const triggerObjects = triggers.split("/").map(s => Trigger.get(s.substring(1, s.length - 1) as (TriggerJpnName | TriggerEngName)));
         return triggerObjects
-                .map(t => "<span class='skill " + t.cssClassName + "'>" + t[this.lang === Language.JPN ? "jpn" : "eng"] + "</span>")
+                .map(t => "<span class='skill " + t.cssClassName + "'>" + t[this.triggerNameProperty] + "</span>")
                 .join("/")
             + skillLine
             + ((skillLine.length > 0 && triggerObjects.indexOf(Trigger.get("Special Practice")) !== -1)
@@ -85,12 +92,8 @@ export default class SkillFormatter {
                 .split(this.rightSquareBracket + this.leftSquareBracket)
                 .map(attrsSplit => {
                     const attr = Attribute.get(attrsSplit as (PieceAttributeJpnName | PieceAttributeEngName));
-                    return "<span class='piece "
-                        + attr.cssClassName
-                        + "'>"
-                        + this.leftSquareBracket
-                        + attr[this.lang === Language.JPN ? "pieceAttributeJpn" : "pieceAttributeEng"]
-                        + this.rightSquareBracket
+                    return "<span class='piece " + attr.cssClassName + "'>"
+                        + this.leftSquareBracket + attr[this.pieceNameProperty] + this.rightSquareBracket
                         + "</span>"
                 })
                 .join("")
@@ -105,15 +108,28 @@ export default class SkillFormatter {
             + "</span>";
     }
 
-    format(s: string[] | null, isFullSkillLine: boolean): string {
+    async format(s: string[] | null, isFullSkillLine: boolean): Promise<string> {
         if (s === null) {
             return "ー";
         }
-        return s.map(line => {
-            if (isFullSkillLine && this.regexes.lyrics.test(line)) {
+        const formattedLines: string[] = [];
+        for (const origLine of s) {
+            let line = origLine;
+            if (line === null) {
+                line = this.nullLine;
+            } else if (isFullSkillLine && this.regexes.lyrics.test(line)) {
                 line = "<i>" + line + "</i>";
             } else {
-                line = line.replace(Annotation.annotationPattern, this.resolveAnnotation);
+                let i = line.indexOf("{{");
+                while (i !== -1) {
+                    const match = line.substring(i - 1).match(Annotation.annotationPattern);
+                    if (match !== null) {
+                        const repl = await this.resolveAnnotation(match[0], match[1], match[2], match[3], match[4]);
+                        line = line.replace(Annotation.annotationPattern, repl);
+                    }
+                    i = line.indexOf("{{", i);
+                }
+
                 line = line.replace(this.regexes.pieceGain, "<b class='nowrap'>$&</b>");
                 line = line.replace(this.regexes.idolizedCondition, "<span class='idolized'>$&</span>");
                 if (isFullSkillLine) {
@@ -135,8 +151,9 @@ export default class SkillFormatter {
                     line = line.replace(/」/g, "｣");
                 }
             }
-            return line;
-        }).join("<br>");
+            formattedLines.push(line);
+        }
+        return formattedLines.join("<br>");
     }
 
     static readonly JPN = new SkillFormatter(Language.JPN, {

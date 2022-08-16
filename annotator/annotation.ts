@@ -1,11 +1,10 @@
-import {loadCardsFromId} from "../cards/loader";
-import UnimplementedError from "../errors/unimplemented";
-import {Card} from "../models/card/card";
-import Language from "../consts/language";
+import Card from "../models/card/card";
+import Language from "../types/language";
+import DB from "../models/db";
 
-const annotationPattern = /(.){{(.*?):(.*?)}}(.)/g;
+const annotationPattern = /^(.){{(.*?):(.*?)}}(.)/g;
 
-function getAnnotation(type: string, param: string, lang: Language): AbstractAnnotation {
+function makeAnnotation(type: string, param: string, lang: Language): AbstractAnnotation | undefined {
     if (type == "card") {
         return new AnnotationCard(param, lang);
     } else if (type == "song") {
@@ -17,7 +16,7 @@ function getAnnotation(type: string, param: string, lang: Language): AbstractAnn
     } else if (type == "skilltext") {
         return new AnnotationSkillText(param);
     }
-    throw new UnimplementedError("Unknown annotation type " + type);
+    return undefined;
 }
 
 abstract class AbstractAnnotation {
@@ -27,11 +26,11 @@ abstract class AbstractAnnotation {
         this.param = param;
     }
 
-    abstract getPlainText(): string;
+    abstract getPlainText(): Promise<string>;
 
-    abstract getHTMLText(): string;
+    abstract getHTMLText(): Promise<string>;
 
-    abstract getHTMLLink(): string;
+    abstract getHTMLLink(): Promise<string>;
 }
 
 class AnnotationCard extends AbstractAnnotation {
@@ -43,24 +42,24 @@ class AnnotationCard extends AbstractAnnotation {
         this.lang = lang;
     }
 
-    private assertCard(): void {
-        if (this.card == null) this.card = loadCardsFromId(Number(this.param))[0];
+    private async assertCard(): Promise<void> {
+        if (this.card === undefined) this.card = await DB.Card.scope({ method: ["id", parseInt(this.param)] }).findOne();
     }
 
-    getHTMLLink(): string {
-        this.assertCard();
+    async getHTMLLink() {
+        await this.assertCard();
         if (this.card == undefined) return "???";
-        return "/card/" + this.card.cardno + "/";
+        return "/card/" + this.card.cardNo + "/";
     }
 
-    getPlainText(): string {
-        this.assertCard();
+    async getPlainText() {
+        await this.assertCard();
         if (this.card == undefined) return "???";
         return "#" + this.card.id + " " + (this.lang == Language.ENG ? this.card.nameEn : this.card.name);
     }
 
-    getHTMLText(): string {
-        this.assertCard();
+    async getHTMLText() {
+        await this.assertCard();
         if (this.card == undefined) return "???";
         return "<span class='card-id'>#" + this.card.id + "</span> " + (this.lang == Language.ENG ? this.card.nameEn : this.card.name);
     }
@@ -71,15 +70,15 @@ class AnnotationSong extends AbstractAnnotation {
         super(costumeName);
     }
 
-    getHTMLLink(): string {
+    async getHTMLLink() {
         return "/search/song/name/" + encodeURIComponent(this.param).replace(/'/g, "%27");
     }
 
-    getPlainText(): string {
+    async getPlainText() {
         return this.param;
     }
 
-    getHTMLText: () => string = this.getPlainText;
+    getHTMLText = this.getPlainText;
 }
 
 class AnnotationMem extends AbstractAnnotation {
@@ -87,15 +86,15 @@ class AnnotationMem extends AbstractAnnotation {
         super(costumeName);
     }
 
-    getHTMLLink(): string {
+    async getHTMLLink() {
         return "/search/memory/name/" + encodeURIComponent(this.param).replace(/'/g, "%27");
     }
 
-    getPlainText(): string {
+    async getPlainText() {
         return this.param;
     }
 
-    getHTMLText: () => string = this.getPlainText;
+    getHTMLText = this.getPlainText;
 }
 
 class AnnotationCostume extends AbstractAnnotation {
@@ -103,15 +102,15 @@ class AnnotationCostume extends AbstractAnnotation {
         super(costumeName);
     }
 
-    getHTMLLink(): string {
+    async getHTMLLink() {
         return "/search/member/costume/" + encodeURIComponent(this.param).replace(/'/g, "%27");
     }
 
-    getPlainText(): string {
+    async getPlainText() {
         return this.param;
     }
 
-    getHTMLText: () => string = this.getPlainText;
+    getHTMLText = this.getPlainText;
 }
 
 class AnnotationSkillText extends AbstractAnnotation {
@@ -119,18 +118,18 @@ class AnnotationSkillText extends AbstractAnnotation {
         super(skillText);
     }
 
-    getHTMLLink(): string {
+    async getHTMLLink() {
         return "/search/card/skill/" + encodeURIComponent(this.param).replace(/'/g, "%27");
     }
 
-    getPlainText(): string {
+    async getPlainText() {
         return this.param;
     }
 
-    getHTMLText: () => string = this.getPlainText;
+    getHTMLText = this.getPlainText;
 }
 
 const Annotation = {
-    AbstractAnnotation, makeAnnotation: getAnnotation, annotationPattern
+    AbstractAnnotation, makeAnnotation, annotationPattern
 };
 export default Annotation;
