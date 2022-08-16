@@ -9,6 +9,7 @@ import {
 @Table({timestamps: false})
 export default class TranslateTableName extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @Column
     jpn: string;
 

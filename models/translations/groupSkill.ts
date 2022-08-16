@@ -13,6 +13,7 @@ import CardMemberGroup from "../card/memberGroup";
 @Table({timestamps: false})
 export default class TranslationGroupSkill extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @ForeignKey(() => CardMemberGroup)
     @Column
     groupId: number;

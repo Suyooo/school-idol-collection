@@ -22,7 +22,7 @@ import Attribute from "../../consts/attributes";
 import {pieceInfoGetter, pieceInfoSetter} from "../utils/pieceInfoGetterSetter";
 
 import CardType from "../../enums/cardType";
-import {RarityMember, RaritySong} from "../../enums/rarity";
+import {CardRarityMember, CardRaritySong} from "../../enums/rarity";
 import SongRequirementType from "../../enums/songRequirementType";
 import MemberIdolizeType from "../../enums/memberIdolizeType";
 import TranslationCostume from "../translations/costume";
@@ -32,7 +32,7 @@ import PieceInfo from "../../cards/pieceInfo";
     timestamps: false,
     validate: {
         memberTypeMustHaveMemberExtraInfo() {
-            if ((this.type === CardType.MEMBER) !== (this.memberExtraInfo != null)) {
+            if ((this.type === CardType.MEMBER) !== (this.member != null)) {
                 if (this.type === CardType.MEMBER)
                     throw new Error("Card is a Member card, but does not have a Member Extra Info object");
                 else
@@ -40,7 +40,7 @@ import PieceInfo from "../../cards/pieceInfo";
             }
         },
         songTypeMustHaveSongExtraInfo() {
-            if ((this.type === CardType.SONG) !== (this.songExtraInfo != null)) {
+            if ((this.type === CardType.SONG) !== (this.song != null)) {
                 if (this.type === CardType.SONG)
                     throw new Error("Card is a Song card, but does not have a Song Extra Info object");
                 else
@@ -51,6 +51,7 @@ import PieceInfo from "../../cards/pieceInfo";
 })
 export class Card extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @Column
     cardNo!: string;
 
@@ -96,23 +97,23 @@ export class Card extends Model {
     }
 
     isMemberIdolizable(): this is CardMemberIdolizable {
-        return this.isMember() && this.memberExtraInfo.idolizeType !== MemberIdolizeType.NONE;
+        return this.isMember() && this.member.idolizeType !== MemberIdolizeType.NONE;
     }
 
     hasIdolizationPieces(): this is CardMemberIdolizableWithPieces {
-        return this.isMemberIdolizable() && this.memberExtraInfo.idolizeType === MemberIdolizeType.WITH_PIECES;
+        return this.isMemberIdolizable() && this.member.idolizeType === MemberIdolizeType.WITH_PIECES;
     }
 
     isSong(): this is CardSong {
         return this.type == CardType.SONG;
     }
 
-    hasAnyPieceRequirement(): this is CardSongAnyReq {
-        return this.isSong() && this.songExtraInfo.requirementType == SongRequirementType.ANY_PIECE;
+    hasAnyPieceRequirement(): this is CardSongWithAnyReq {
+        return this.isSong() && this.song.requirementType == SongRequirementType.ANY_PIECE;
     }
 
-    hasAttrPieceRequirement(): this is CardSongAttrReq {
-        return this.isSong() && this.songExtraInfo.requirementType == SongRequirementType.ATTR_PIECE;
+    hasAttrPieceRequirement(): this is CardSongWithAttrReq {
+        return this.isSong() && this.song.requirementType == SongRequirementType.ATTR_PIECE;
     }
 
     isMemory(): this is CardMemory {
@@ -120,57 +121,56 @@ export class Card extends Model {
     }
 
     @HasOne(() => CardMemberExtraInfo)
-    memberExtraInfo!: CardMemberExtraInfo | null;
+    member!: CardMemberExtraInfo | null;
 
     @HasOne(() => CardSongExtraInfo)
-    songExtraInfo!: CardSongExtraInfo | null;
+    song!: CardSongExtraInfo | null;
 }
 
-export type CardMember =
-    Omit<Card, "memberExtraInfo" | "songExtraInfo">
-    & { memberExtraInfo: CardMemberExtraInfo, songExtraInfo: null };
-export type CardMemberIdolizable =
-    Omit<CardMember, "memberExtraInfo">
-    & {
-    memberExtraInfo:
+export class CardMember extends Card {
+    member!: CardMemberExtraInfo;
+    song!: null;
+}
+
+export class CardMemberIdolizable extends CardMember {
+    member!:
         Omit<CardMemberExtraInfo, "idolizeType">
-        & { idolizeType: MemberIdolizeType.NO_PIECES | MemberIdolizeType.WITH_PIECES }
-};
-export type CardMemberIdolizableWithPieces =
-    Omit<CardMember, "memberExtraInfo">
-    & {
-    memberExtraInfo:
-        Omit<CardMemberExtraInfo, "idolizeType" | "memberIdolizePieceExtraInfo">
-        & { idolizeType: MemberIdolizeType.WITH_PIECES, memberIdolizePieceExtraInfo: CardMemberIdolizePieceExtraInfo }
-};
+        & { idolizeType: MemberIdolizeType.NO_PIECES | MemberIdolizeType.WITH_PIECES };
+}
 
-export type CardSong =
-    Omit<Card, "memberExtraInfo" | "songExtraInfo">
-    & { memberExtraInfo: null, songExtraInfo: CardSongExtraInfo };
-export type CardSongAnyReq =
-    Omit<CardSong, "songExtraInfo">
-    & {
-    songExtraInfo:
-        Omit<CardSongExtraInfo, "songAnyReqExtraInfo" | "songAttrReqExtraInfo">
-        & { songAnyReqExtraInfo: CardSongAnyReqExtraInfo, songAttrReqExtraInfo: null }
-};
-export type CardSongAttrReq =
-    Omit<CardSong, "songExtraInfo">
-    & {
-    songExtraInfo:
-        Omit<CardSongExtraInfo, "songAnyReqExtraInfo" | "songAttrReqExtraInfo">
-        & { songAnyReqExtraInfo: null, songAttrReqExtraInfo: CardSongAttrReqExtraInfo }
-};
+export class CardMemberIdolizableWithPieces extends CardMember {
+    member!:
+        Omit<CardMemberExtraInfo, "idolizeType">
+        & { idolizeType: MemberIdolizeType.WITH_PIECES, memberIdolizePieceExtraInfo: CardMemberIdolizePieceExtraInfo };
+}
 
-export type CardMemory =
-    Omit<Card, "memberExtraInfo" | "songExtraInfo">
-    & { memberExtraInfo: null, songExtraInfo: null };
+export class CardSong extends Card {
+    member!: null;
+    song!: CardSongExtraInfo;
+}
+
+export class CardSongWithAnyReq extends CardSong {
+    song!:
+        Omit<CardSongExtraInfo, "anyRequirement" | "attrRequirement">
+        & { anyRequirement: CardSongAnyReqExtraInfo, attrRequirement: null }
+}
+
+export class CardSongWithAttrReq extends CardSong {
+    song!:
+        Omit<CardSongExtraInfo, "anyRequirement" | "attrRequirement">
+        & { anyRequirement: null, attrRequirement: CardSongAttrReqExtraInfo }
+}
+
+export class CardMemory extends Card {
+    member!: null;
+    song!: null;
+}
 
 @Table({
     timestamps: false,
     validate: {
         idolizableWithPiecesMustHaveIdolizePieceExtraInfo() {
-            if ((this.idolizeType === MemberIdolizeType.WITH_PIECES) !== (this.memberIdolizePieceExtraInfo != null)) {
+            if ((this.idolizeType === MemberIdolizeType.WITH_PIECES) !== (this.idolizePieces != null)) {
                 if (this.idolizeType === MemberIdolizeType.WITH_PIECES)
                     throw new Error("Card has Idolization type WITH_PIECES, but does not have an Idolize Pieces Extra Info object");
                 else
@@ -189,6 +189,7 @@ export type CardMemory =
 })
 export class CardMemberExtraInfo extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
     cardId: string;
@@ -198,7 +199,7 @@ export class CardMemberExtraInfo extends Model {
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
-    rarity!: RarityMember;
+    rarity!: CardRarityMember;
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
@@ -237,10 +238,6 @@ export class CardMemberExtraInfo extends Model {
         return pieceInfoGetter("piecesAll", "piecesSmile", "piecesPure", "piecesCool");
     }
 
-    set pieces(pieces: PieceInfo) {
-        pieceInfoSetter(pieces, "piecesAll", "piecesSmile", "piecesPure", "piecesCool");
-    }
-
     @Column(DataType.NUMBER)
     pieceBdayAttribute!: Attribute | null;
 
@@ -267,10 +264,15 @@ export class CardMemberExtraInfo extends Model {
     group!: CardMemberGroup | null;
 
     @HasOne(() => CardMemberIdolizePieceExtraInfo)
-    memberIdolizePieceExtraInfo!: CardMemberIdolizePieceExtraInfo | null;
+    idolizePieces!: CardMemberIdolizePieceExtraInfo | null;
 
     @HasOne(() => TranslationCostume)
-    costumeEn!: string | null; // TODO: getter (return costume instead of the TranslationCostume object)
+    costumeOEn!: TranslationCostume | null; // TODO: getter (return costume instead of the TranslationCostume object)
+
+    get costumeEn(): string | null {
+        if (this.costumeOEn === null) return null;
+        return this.costumeOEn.costume;
+    }
 }
 
 @Table({
@@ -285,16 +287,16 @@ export class CardMemberExtraInfo extends Model {
 })
 export class CardMemberIdolizePieceExtraInfo extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @ForeignKey(() => CardMemberExtraInfo)
     @Column
-    cardId: string;
+    cardMemberExtraInfoId: string;
 
     @BelongsTo(() => CardMemberExtraInfo)
+    cardMemberExtraInfo: CardMemberExtraInfo;
+
     get card(): CardMember {
-        return this.getDataValue("card").card;
-    }
-    set card(newCard: CardMember) {
-        this.setDataValue("card", newCard.memberExtraInfo);
+        return <CardMember> this.cardMemberExtraInfo.card;
     }
 
     @AllowNull(false)
@@ -321,17 +323,13 @@ export class CardMemberIdolizePieceExtraInfo extends Model {
     get pieces(): PieceInfo {
         return pieceInfoGetter("piecesAll", "piecesSmile", "piecesPure", "piecesCool");
     }
-
-    set pieces(pieces: PieceInfo) {
-        pieceInfoSetter(pieces, "piecesAll", "piecesSmile", "piecesPure", "piecesCool");
-    }
 }
 
 @Table({
     timestamps: false,
     validate: {
         anyReqTypeMustHaveSongAnyReqExtraInfo() {
-            if ((this.requirementType === SongRequirementType.ANY_PIECE) !== (this.songAnyReqExtraInfo != null)) {
+            if ((this.requirementType === SongRequirementType.ANY_PIECE) !== (this.anyRequirement != null)) {
                 if (this.requirementType === SongRequirementType.ANY_PIECE)
                     throw new Error("Song has an Any Piece Requirement type, but does not have an Any Piece Extra Info object");
                 else
@@ -339,7 +337,7 @@ export class CardMemberIdolizePieceExtraInfo extends Model {
             }
         },
         attrReqTypeMustHaveSongAttrReqExtraInfo() {
-            if ((this.requirementType === SongRequirementType.ATTR_PIECE) !== (this.songAttrReqExtraInfo != null)) {
+            if ((this.requirementType === SongRequirementType.ATTR_PIECE) !== (this.attrRequirement != null)) {
                 if (this.requirementType === SongRequirementType.ATTR_PIECE)
                     throw new Error("Song has an Attribute Piece Requirement type, but does not have an Attribute Piece Extra Info object");
                 else
@@ -350,6 +348,7 @@ export class CardMemberIdolizePieceExtraInfo extends Model {
 })
 export class CardSongExtraInfo extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
     cardId: string;
@@ -359,7 +358,7 @@ export class CardSongExtraInfo extends Model {
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
-    rarity!: RaritySong;
+    rarity!: CardRaritySong;
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
@@ -377,26 +376,25 @@ export class CardSongExtraInfo extends Model {
     requirementType!: SongRequirementType;
 
     @HasOne(() => CardSongAnyReqExtraInfo)
-    songAnyReqExtraInfo!: Awaited<CardSongAnyReqExtraInfo>;
+    anyRequirement!: Awaited<CardSongAnyReqExtraInfo> | null;
 
     @HasOne(() => CardSongAttrReqExtraInfo)
-    songAttrReqExtraInfo!: Awaited<CardSongAttrReqExtraInfo>;
+    attrRequirement!: Awaited<CardSongAttrReqExtraInfo> | null;
 }
 
 @Table({timestamps: false})
 export class CardSongAnyReqExtraInfo extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @ForeignKey(() => CardSongExtraInfo)
     @Column
-    cardId: string;
+    cardSongExtraInfoId: string;
 
     @BelongsTo(() => CardSongExtraInfo)
-    get card(): CardSong {
-        return this.getDataValue("card").card;
-    }
+    cardSongExtraInfo: CardSongExtraInfo;
 
-    set card(newCard: CardSong) {
-        this.setDataValue("card", newCard.songExtraInfo);
+    get card(): CardSong {
+        return <CardSong> this.cardSongExtraInfo.card;
     }
 
     @AllowNull(false)
@@ -407,26 +405,21 @@ export class CardSongAnyReqExtraInfo extends Model {
     get pieces(): PieceInfo {
         return pieceInfoGetter("piecesAll");
     }
-
-    set pieces(pieces: PieceInfo) {
-        pieceInfoSetter(pieces, "piecesAll");
-    }
 }
 
 @Table({timestamps: false})
 export class CardSongAttrReqExtraInfo extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @ForeignKey(() => CardSongExtraInfo)
     @Column
-    cardId: string;
+    cardSongExtraInfoId: string;
 
     @BelongsTo(() => CardSongExtraInfo)
-    get card(): CardSong {
-        return this.getDataValue("card").card;
-    }
+    cardSongExtraInfo: CardSongExtraInfo;
 
-    set card(newCard: CardSong) {
-        this.setDataValue("card", newCard.songExtraInfo);
+    get card(): CardSong {
+        return <CardSong> this.cardSongExtraInfo.card;
     }
 
     @AllowNull(false)
@@ -446,9 +439,5 @@ export class CardSongAttrReqExtraInfo extends Model {
 
     get pieces(): PieceInfo {
         return pieceInfoGetter(undefined, "piecesSmile", "piecesPure", "piecesCool");
-    }
-
-    set pieces(pieces: PieceInfo) {
-        pieceInfoSetter(pieces, undefined, "piecesSmile", "piecesPure", "piecesCool");
     }
 }

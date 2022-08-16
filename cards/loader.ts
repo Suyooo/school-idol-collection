@@ -1,4 +1,4 @@
-import {Card, CardMember, CardMemberIdolizable, CardMemory, CardSongAnyReq, CardSongAttrReq} from "../models/card/card";
+import {Card, CardMember, CardMemberIdolizable, CardMemory, CardSongWithAnyReq, CardSongWithAttrReq} from "../models/card/card";
 import DB, {
     cardsMembersIdolizedpiecesRow,
     cardsMembersRow,
@@ -91,11 +91,11 @@ export function loadCardFromRow(row: cardsRow): Card | undefined {
         const songRow: cardsSongsRow = getCardSongStmt.get(row.cardno);
         if (songRow.req_type == SongRequirementType.ANY_PIECE) {
             const reqRow: cardsSongsAnyreqRow = getCardSongAnyReqStmt.get(row.cardno);
-            return new CardSongAnyReq(row.cardno, row.id, row.name, row.skill, row.copyright, songRow.rarity, Attribute[songRow.attribute],
+            return new CardSongWithAnyReq(row.cardno, row.id, row.name, row.skill, row.copyright, songRow.rarity, Attribute[songRow.attribute],
                 songRow.lp_base, songRow.lp_bonus, reqRow.pieces);
         } else if (songRow.req_type == SongRequirementType.ATTR_PIECE) {
             const reqRow: cardsSongsAttrreqRow = getCardSongAttrReqStmt.get(row.cardno);
-            return new CardSongAttrReq(row.cardno, row.id, row.name, row.skill, row.copyright, songRow.rarity, Attribute[songRow.attribute],
+            return new CardSongWithAttrReq(row.cardno, row.id, row.name, row.skill, row.copyright, songRow.rarity, Attribute[songRow.attribute],
                 songRow.lp_base, songRow.lp_bonus, new PieceInfo(0, reqRow.pieces_smile, reqRow.pieces_pure, reqRow.pieces_cool));
         } else {
             throw new UnimplementedError("Unknown ReqType " + songRow.req_type);

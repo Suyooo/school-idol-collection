@@ -12,6 +12,7 @@ import {Card} from "../card/card";
 @Table({timestamps: false})
 export default class TranslationName extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
     cardId: string;

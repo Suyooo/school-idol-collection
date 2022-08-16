@@ -13,6 +13,7 @@ import TranslateTablePattern from "../translatetables/pattern";
 @Table({timestamps: false})
 export default class TranslationSkill extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
     cardId: string;

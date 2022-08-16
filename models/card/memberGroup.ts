@@ -17,6 +17,7 @@ import {CardMemberGroupType} from "../../enums/memberGroupType";
 @Table({timestamps: false})
 export default class CardMemberGroup extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @AutoIncrement
     @Column
     id: number;
@@ -26,18 +27,15 @@ export default class CardMemberGroup extends Model {
     type: CardMemberGroupType;
 
     @HasMany(() => CardMemberExtraInfo)
-    get members(): CardMember[] {
-        return this.getDataValue("members").map((extraInfo: CardMemberExtraInfo) => extraInfo.card);
-    }
+    memberExtraInfos: CardMemberExtraInfo[];
 
-    set members(newMembers: CardMember[]) {
-        this.setDataValue("members", newMembers.map(card => card.memberExtraInfo));
+    get members(): CardMember[] {
+        return this.memberExtraInfos.map((extraInfo: CardMemberExtraInfo) => <CardMember>extraInfo.card);
     }
 
     addMember(card: CardMember) {
-        const newMembers = this.getDataValue("members");
-        newMembers.push(card.memberExtraInfo)
-        this.setDataValue("members", newMembers);
+        this.memberExtraInfos.push(card.member);
+        this.changed("memberExtraInfos", true);
     }
 
     @Column(DataType.TEXT)
@@ -45,6 +43,7 @@ export default class CardMemberGroup extends Model {
 
     @HasMany(() => TranslationGroupSkill)
     skillsEn!: TranslationGroupSkill[];
+
     get skillEn(): string {
         return this.skillsEn.map(sk => sk.skill).join("\n");
     }

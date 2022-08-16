@@ -12,16 +12,16 @@ import {CardMember, CardMemberExtraInfo} from "../card/card";
 @Table({timestamps: false})
 export default class TranslationCostume extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @ForeignKey(() => CardMemberExtraInfo)
     @Column
-    cardId: string;
+    cardMemberExtraInfoId: string;
 
     @BelongsTo(() => CardMemberExtraInfo)
+    cardMemberExtraInfo: CardMemberExtraInfo;
+
     get card(): CardMember {
-        return this.getDataValue("card").card;
-    }
-    set card(newCard: CardMember) {
-        this.setDataValue("card", newCard.memberExtraInfo);
+        return <CardMember> this.cardMemberExtraInfo.card;
     }
 
     @AllowNull(false)

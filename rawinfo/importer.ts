@@ -1,7 +1,7 @@
 // noinspection JSNonASCIINames,NonAsciiCharacters
 
 import * as fs from "fs";
-import {Card, CardMember, CardMemberIdolizable, CardMemory, CardSongAnyReq, CardSongAttrReq} from "../models/card/card";
+import {Card, CardMember, CardMemberIdolizable, CardMemory, CardSongWithAnyReq, CardSongWithAttrReq} from "../models/card/card";
 import UnimplementedError from "../errors/unimplemented";
 import {RarityMember, RaritySong} from "../cards/rarity";
 import PieceInfo, {PieceNameJpn} from "../cards/pieceInfo";
@@ -125,10 +125,10 @@ export function loadCardFromRawInfo(path: string): Card {
         const lpBase = Number(lpMatch[1]), lpBonus = lpMatch[2];
         if (isEmpty(rawdata["共通スコア"])) {
             const pieces = new PieceInfo(0, Number(rawdata["赤スコア"]), Number(rawdata["緑スコア"]), Number(rawdata["青スコア"]));
-            return new CardSongAttrReq(cardno, id, name, skill, copyright, RaritySong.M, attribute, lpBase, lpBonus, pieces);
+            return new CardSongWithAttrReq(cardno, id, name, skill, copyright, RaritySong.M, attribute, lpBase, lpBonus, pieces);
         } else {
             const pieces = Number(rawdata["共通スコア"]);
-            return new CardSongAnyReq(cardno, id, name, skill, copyright, RaritySong.M, attribute, lpBase, lpBonus, pieces);
+            return new CardSongWithAnyReq(cardno, id, name, skill, copyright, RaritySong.M, attribute, lpBase, lpBonus, pieces);
         }
     } else if (rawdata["type"] == "メモリー") {
         return new CardMemory(cardno, id, name, skill, copyright);

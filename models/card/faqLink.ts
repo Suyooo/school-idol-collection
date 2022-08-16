@@ -13,6 +13,7 @@ import {Card} from "./card";
 @Table({timestamps: false})
 export default class CardFAQLink extends Model {
     @PrimaryKey
+    @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
     cardId: number;
