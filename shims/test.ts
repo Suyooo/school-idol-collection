@@ -22,5 +22,5 @@ DB.awaitSync.then(() => {
             abilityLive: false,
             idolizeType: 0
         }
-    }, {include: [DB.Card.associations.member]})
+    }, {include: [DB.CardMemberExtraInfo]})
 });

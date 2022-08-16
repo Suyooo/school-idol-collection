@@ -49,10 +49,9 @@ export default class PatternGroupType {
 
         // Mem Name
         map.push(new PatternGroupType(3, async function (match: string): Promise<string> {
-            const n = (await DB.Card.findOne({
+            const n = (await DB.Card.scope(["memories", "linkAttributes"]).findOne({
                 where: {
-                    name: match,
-                    type: CardType.MEMORY
+                    name: match
                 }
             }))?.nameEn;
             if (n === undefined) throw new NotFoundError(match + " is not a known memory");

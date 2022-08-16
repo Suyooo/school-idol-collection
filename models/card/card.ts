@@ -1,4 +1,15 @@
-import {AllowNull, Column, DataType, HasMany, HasOne, Model, PrimaryKey, Table} from "sequelize-typescript";
+import {
+    AllowNull,
+    Column,
+    DataType,
+    HasMany,
+    HasOne,
+    Model,
+    PrimaryKey,
+    Scopes,
+    Table
+} from "sequelize-typescript";
+import DB from "../db";
 
 import CardMemberExtraInfo from "./cardMemberExtraInfo";
 import CardMemberIdolizePieceExtraInfo from "./cardMemberIdolizePieceExtraInfo";
@@ -13,6 +24,41 @@ import CardType from "../../types/cardType";
 import CardSongRequirementType from "../../types/cardSongRequirementType";
 import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
 
+@Scopes(() => ({
+    members: {
+        where: {type: CardType.MEMBER}
+    },
+    songs: {
+        where: {type: CardType.SONG}
+    },
+    memories: {
+        where: {type: CardType.MEMORY}
+    },
+
+    full: {
+        include: [
+            DB.CardMemberExtraInfo,
+            DB.CardMemberGroup,
+            DB.CardMemberIdolizePieceExtraInfo,
+            DB.CardSongExtraInfo,
+            DB.CardSongAnyReqExtraInfo,
+            DB.CardSongAttrReqExtraInfo,
+            DB.CardFAQLink,
+            DB.TranslationName,
+            DB.TranslationSkill,
+            DB.TranslationCostume,
+            DB.TranslationGroupSkill
+        ]
+    },
+    linkAttributes: {
+        attributes: ["cardNo", "id", "name", "nameOEn"],
+        include: [DB.TranslationName]
+    },
+    listAttributes: {
+        attributes: ["cardNo", "id", "type", "name", "nameOEn"],
+        include: [DB.TranslationName]
+    }
+}))
 @Table({
     timestamps: false,
     validate: {
