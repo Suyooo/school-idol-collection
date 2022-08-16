@@ -16,17 +16,16 @@ import CardFAQLink from "./faqLink";
 import CardMemberGroup from "./memberGroup";
 import TranslationName from "../translations/name";
 import TranslationSkill from "../translations/skill";
-
-import Attribute from "../../consts/attributes";
-
-import {pieceInfoGetter, pieceInfoSetter} from "../utils/pieceInfoGetterSetter";
-
-import CardType from "../../enums/cardType";
-import {CardMemberRarity, CardSongRarity} from "../../enums/cardRarity";
-import CardSongRequirementType from "../../enums/cardSongRequirementType";
-import CardMemberIdolizeType from "../../enums/cardMemberIdolizeType";
 import TranslationCostume from "../translations/costume";
-import PieceInfo from "../../cards/pieceInfo";
+
+import {pieceInfoGetter} from "../utils/pieceInfoGetterSetter";
+
+import CardType from "../../types/cardType";
+import {CardMemberRarity, CardSongRarity} from "../../types/cardRarity";
+import CardSongRequirementType from "../../types/cardSongRequirementType";
+import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
+import Attribute from "../../types/attribute";
+import PieceInfo from "../../types/pieceInfo";
 
 @Table({
     timestamps: false,
@@ -296,7 +295,7 @@ export class CardMemberIdolizePieceExtraInfo extends Model {
     cardMemberExtraInfo: CardMemberExtraInfo;
 
     get card(): CardMember {
-        return <CardMember> this.cardMemberExtraInfo.card;
+        return <CardMember>this.cardMemberExtraInfo.card;
     }
 
     @AllowNull(false)
@@ -394,7 +393,7 @@ export class CardSongAnyReqExtraInfo extends Model {
     cardSongExtraInfo: CardSongExtraInfo;
 
     get card(): CardSong {
-        return <CardSong> this.cardSongExtraInfo.card;
+        return <CardSong>this.cardSongExtraInfo.card;
     }
 
     @AllowNull(false)
@@ -419,7 +418,7 @@ export class CardSongAttrReqExtraInfo extends Model {
     cardSongExtraInfo: CardSongExtraInfo;
 
     get card(): CardSong {
-        return <CardSong> this.cardSongExtraInfo.card;
+        return <CardSong>this.cardSongExtraInfo.card;
     }
 
     @AllowNull(false)

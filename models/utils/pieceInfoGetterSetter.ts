@@ -1,4 +1,4 @@
-import PieceInfo from "../../cards/pieceInfo";
+import PieceInfo from "../../types/pieceInfo";
 
 export function pieceInfoGetter(allKeyName?: string, smileKeyName?: string, pureKeyName?: string, coolKeyName?: string) {
     return new PieceInfo(

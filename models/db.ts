@@ -17,7 +17,7 @@ import TranslationGroupSkill from "./translations/groupSkill";
 import TranslationName from "./translations/name";
 import TranslationSkill from "./translations/skill";
 
-const DB = new Sequelize({
+const sequelize = new Sequelize({
     dialect: "sqlite",
     storage: "cardlist2.db",
     logging: Log.debug.bind(Log, "DB"),
@@ -32,6 +32,24 @@ const DB = new Sequelize({
     ]
 });
 
-DB.sync();
+sequelize.sync();
+
+const DB = {
+    Card: <typeof Card>sequelize.models.Card,
+    CardMemberExtraInfo: <typeof CardMemberExtraInfo>sequelize.models.CardMemberExtraInfo,
+    CardMemberIdolizePieceExtraInfo: <typeof CardMemberIdolizePieceExtraInfo>sequelize.models.CardMemberIdolizePieceExtraInfo,
+    CardSongExtraInfo: <typeof CardSongExtraInfo>sequelize.models.CardSongExtraInfo,
+    CardSongAnyReqExtraInfo: <typeof CardSongAnyReqExtraInfo>sequelize.models.CardSongAnyReqExtraInfo,
+    CardSongAttrReqExtraInfo: <typeof CardSongAttrReqExtraInfo>sequelize.models.CardSongAttrReqExtraInfo,
+    CardFAQLink: <typeof CardFAQLink>sequelize.models.CardFAQLink,
+    CardMemberGroup: <typeof CardMemberGroup>sequelize.models.CardMemberGroup,
+    TranslationName: <typeof TranslationName>sequelize.models.TranslationName,
+    TranslationSkill: <typeof TranslationSkill>sequelize.models.TranslationSkill,
+    TranslationGroupSkill: <typeof TranslationGroupSkill>sequelize.models.TranslationGroupSkill,
+    TranslationCostume: <typeof TranslationCostume>sequelize.models.TranslationCostume,
+    TranslateTableName: <typeof TranslateTableName>sequelize.models.TranslateTableName,
+    TranslateTableSong: <typeof TranslateTableSong>sequelize.models.TranslateTableSong,
+    TranslateTablePattern: <typeof TranslateTablePattern>sequelize.models.TranslateTablePattern
+};
 
 export default DB;

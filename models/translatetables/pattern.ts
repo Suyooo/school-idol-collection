@@ -1,6 +1,6 @@
 import {AllowNull, AutoIncrement, Column, DataType, Model, PrimaryKey, Table} from "sequelize-typescript";
-import Trigger from "../../consts/triggers";
-import PatternGroupType from "../../translate/skills/patternGroupTypes";
+import Trigger, {TriggerID} from "../../types/trigger";
+import PatternGroupType, {PatternGroupTypeID} from "../../types/patternGroupType";
 
 /*export function addPattern(patternid: number | undefined, triggers: [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], regex: string, template: string, grouptypes: string) {
 
@@ -26,8 +26,8 @@ export default class TranslateTablePattern extends Model {
         const triggers: Trigger[] = [];
         let triggerBitmask: number = this.triggers;
         let i: number = 0;
-        while (triggerBitmask > 0) {
-            if ((triggerBitmask & 1) == 1) triggers.push(Trigger[i]);
+        while (triggerBitmask > 0 && i < 8) {
+            if ((triggerBitmask & 1) == 1) triggers.push(Trigger.get(<TriggerID>i));
             i++;
             triggerBitmask = triggerBitmask >> 1;
         }
@@ -40,7 +40,7 @@ export default class TranslateTablePattern extends Model {
 
     @AllowNull(false)
     @Column
-    pattern: string;
+    regex: string;
 
     @AllowNull(false)
     @Column
@@ -55,7 +55,7 @@ export default class TranslateTablePattern extends Model {
         let typeString: string = this.groupTypes;
         for (let i: number = 0; i < typeString.length; i++) {
             const n: number = parseInt(typeString.charAt(i));
-            types.push(PatternGroupType[n]);
+            types.push(PatternGroupType.get(<PatternGroupTypeID>n));
         }
         return types;
     }

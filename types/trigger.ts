@@ -9,7 +9,7 @@ export type TriggerEngName =
     | "Special Practice";
 export type TriggerJpnName = "登場時" | "ライブ参加時" | "ライブ成功時" | "ライブ中" | "スタート時" | "オート" | "自動" | "待機中" | "特別練習";
 export type TriggerCssClassName = "entry" | "join" | "success" | "live" | "start" | "auto" | "standby" | "sp";
-type TriggerID = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type TriggerID = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 type MappedValue = TriggerID | TriggerEngName | TriggerJpnName;
 
 export default class Trigger {

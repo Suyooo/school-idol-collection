@@ -5,7 +5,7 @@ export type SongAttributeJpnName = "オール" | "スマイル" | "ピュア" | 
 export type PieceAttributeEngName = "ALL" | "SMILE" | "PURE" | "COOL";
 export type PieceAttributeJpnName = "オール" | "赤" | "緑" | "青";
 export type AttributeCssClassName = "all" | "smile" | "pure" | "cool" | "orange";
-type AttributeID = 0 | 1 | 2 | 3 | 4;
+export type AttributeID = 0 | 1 | 2 | 3 | 4;
 type MappedValue = AttributeID | ColorEngName | ColorJpnName | SongAttributeEngName | SongAttributeJpnName | PieceAttributeEngName | PieceAttributeJpnName;
 
 export default class Attribute {
