@@ -22,9 +22,9 @@ import Attribute from "../../consts/attributes";
 import {pieceInfoGetter, pieceInfoSetter} from "../utils/pieceInfoGetterSetter";
 
 import CardType from "../../enums/cardType";
-import {CardRarityMember, CardRaritySong} from "../../enums/rarity";
-import SongRequirementType from "../../enums/songRequirementType";
-import MemberIdolizeType from "../../enums/memberIdolizeType";
+import {CardMemberRarity, CardSongRarity} from "../../enums/cardRarity";
+import CardSongRequirementType from "../../enums/cardSongRequirementType";
+import CardMemberIdolizeType from "../../enums/cardMemberIdolizeType";
 import TranslationCostume from "../translations/costume";
 import PieceInfo from "../../cards/pieceInfo";
 
@@ -97,11 +97,11 @@ export class Card extends Model {
     }
 
     isMemberIdolizable(): this is CardMemberIdolizable {
-        return this.isMember() && this.member.idolizeType !== MemberIdolizeType.NONE;
+        return this.isMember() && this.member.idolizeType !== CardMemberIdolizeType.NONE;
     }
 
     hasIdolizationPieces(): this is CardMemberIdolizableWithPieces {
-        return this.isMemberIdolizable() && this.member.idolizeType === MemberIdolizeType.WITH_PIECES;
+        return this.isMemberIdolizable() && this.member.idolizeType === CardMemberIdolizeType.WITH_PIECES;
     }
 
     isSong(): this is CardSong {
@@ -109,11 +109,11 @@ export class Card extends Model {
     }
 
     hasAnyPieceRequirement(): this is CardSongWithAnyReq {
-        return this.isSong() && this.song.requirementType == SongRequirementType.ANY_PIECE;
+        return this.isSong() && this.song.requirementType == CardSongRequirementType.ANY_PIECE;
     }
 
     hasAttrPieceRequirement(): this is CardSongWithAttrReq {
-        return this.isSong() && this.song.requirementType == SongRequirementType.ATTR_PIECE;
+        return this.isSong() && this.song.requirementType == CardSongRequirementType.ATTR_PIECE;
     }
 
     isMemory(): this is CardMemory {
@@ -135,13 +135,13 @@ export class CardMember extends Card {
 export class CardMemberIdolizable extends CardMember {
     member!:
         Omit<CardMemberExtraInfo, "idolizeType">
-        & { idolizeType: MemberIdolizeType.NO_PIECES | MemberIdolizeType.WITH_PIECES };
+        & { idolizeType: CardMemberIdolizeType.NO_PIECES | CardMemberIdolizeType.WITH_PIECES };
 }
 
 export class CardMemberIdolizableWithPieces extends CardMember {
     member!:
         Omit<CardMemberExtraInfo, "idolizeType">
-        & { idolizeType: MemberIdolizeType.WITH_PIECES, memberIdolizePieceExtraInfo: CardMemberIdolizePieceExtraInfo };
+        & { idolizeType: CardMemberIdolizeType.WITH_PIECES, memberIdolizePieceExtraInfo: CardMemberIdolizePieceExtraInfo };
 }
 
 export class CardSong extends Card {
@@ -170,8 +170,8 @@ export class CardMemory extends Card {
     timestamps: false,
     validate: {
         idolizableWithPiecesMustHaveIdolizePieceExtraInfo() {
-            if ((this.idolizeType === MemberIdolizeType.WITH_PIECES) !== (this.idolizePieces != null)) {
-                if (this.idolizeType === MemberIdolizeType.WITH_PIECES)
+            if ((this.idolizeType === CardMemberIdolizeType.WITH_PIECES) !== (this.idolizePieces != null)) {
+                if (this.idolizeType === CardMemberIdolizeType.WITH_PIECES)
                     throw new Error("Card has Idolization type WITH_PIECES, but does not have an Idolize Pieces Extra Info object");
                 else
                     throw new Error("Card has an Idolize Pieces Extra Info object, but is not of Idolization type WITH_PIECES");
@@ -199,7 +199,7 @@ export class CardMemberExtraInfo extends Model {
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
-    rarity!: CardRarityMember;
+    rarity!: CardMemberRarity;
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
@@ -254,7 +254,7 @@ export class CardMemberExtraInfo extends Model {
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
-    idolizeType!: MemberIdolizeType;
+    idolizeType!: CardMemberIdolizeType;
 
     @ForeignKey(() => CardMemberGroup)
     @Column(DataType.NUMBER)
@@ -329,16 +329,16 @@ export class CardMemberIdolizePieceExtraInfo extends Model {
     timestamps: false,
     validate: {
         anyReqTypeMustHaveSongAnyReqExtraInfo() {
-            if ((this.requirementType === SongRequirementType.ANY_PIECE) !== (this.anyRequirement != null)) {
-                if (this.requirementType === SongRequirementType.ANY_PIECE)
+            if ((this.requirementType === CardSongRequirementType.ANY_PIECE) !== (this.anyRequirement != null)) {
+                if (this.requirementType === CardSongRequirementType.ANY_PIECE)
                     throw new Error("Song has an Any Piece Requirement type, but does not have an Any Piece Extra Info object");
                 else
                     throw new Error("Song has an Any Piece Extra Info object, but does not have an Any Piece Requirement type");
             }
         },
         attrReqTypeMustHaveSongAttrReqExtraInfo() {
-            if ((this.requirementType === SongRequirementType.ATTR_PIECE) !== (this.attrRequirement != null)) {
-                if (this.requirementType === SongRequirementType.ATTR_PIECE)
+            if ((this.requirementType === CardSongRequirementType.ATTR_PIECE) !== (this.attrRequirement != null)) {
+                if (this.requirementType === CardSongRequirementType.ATTR_PIECE)
                     throw new Error("Song has an Attribute Piece Requirement type, but does not have an Attribute Piece Extra Info object");
                 else
                     throw new Error("Song has an Attribute Piece Extra Info object, but does not have an Attribute Piece Requirement type");
@@ -358,7 +358,7 @@ export class CardSongExtraInfo extends Model {
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
-    rarity!: CardRaritySong;
+    rarity!: CardSongRarity;
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
@@ -373,7 +373,7 @@ export class CardSongExtraInfo extends Model {
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
-    requirementType!: SongRequirementType;
+    requirementType!: CardSongRequirementType;
 
     @HasOne(() => CardSongAnyReqExtraInfo)
     anyRequirement!: Awaited<CardSongAnyReqExtraInfo> | null;

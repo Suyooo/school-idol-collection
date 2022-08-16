@@ -1,4 +1,4 @@
-const enum CardRarityMember {
+const enum CardMemberRarity {
     R = 0,
     SR = 1,
     HR = 2,
@@ -9,9 +9,9 @@ const enum CardRarityMember {
     SSR = 7
 }
 
-const enum CardRaritySong {
+const enum CardSongRarity {
     M = 0,
     GR = 1
 }
 
-export {CardRarityMember, CardRaritySong};
+export {CardMemberRarity, CardSongRarity};

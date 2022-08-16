@@ -104,8 +104,8 @@ span.skill.auto {
     background-image: url("/images/card/skill_auto.png");
 }
 
-span.skill.wait {
-    background-image: url("/images/card/skill_wait.png");
+span.skill.standby {
+    background-image: url("/images/card/skill_standby.png");
 }
 
 span.skill.sp {

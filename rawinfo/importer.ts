@@ -5,7 +5,7 @@ import {Card, CardMember, CardMemberIdolizable, CardMemory, CardSongWithAnyReq, 
 import UnimplementedError from "../errors/unimplemented";
 import {RarityMember, RaritySong} from "../cards/rarity";
 import PieceInfo, {PieceNameJpn} from "../cards/pieceInfo";
-import Attribute, {AttributeJpnName} from "../consts/attributes";
+import Attribute, {SongAttributeJpnName} from "../consts/attributes";
 import {ColourJpnName} from "../consts/colours";
 import DB from "../utils/db";
 import RawInfoError from "../errors/rawInfo";
@@ -15,7 +15,7 @@ import ImpossibleError from "../errors/impossible";
 import WrongTypeError from "../errors/wrongType";
 
 type Empty = "―" | "－" | "─" | "-";
-type RawAttr = AttributeJpnName & Empty;
+type RawAttr = SongAttributeJpnName & Empty;
 
 type RawDataMember = {
     "type": "メンバー", "レアリティ": keyof typeof RarityMember, "誕生日": string, "学年": string, "コスト": string,
@@ -23,7 +23,7 @@ type RawDataMember = {
 };
 
 type RawDataSongOrMemory = {
-    "枠属性": AttributeJpnName, "ライブP": string, "赤スコア": string, "緑スコア": string, "青スコア": string, "共通スコア": string, "カードの色": ColourJpnName
+    "枠属性": SongAttributeJpnName, "ライブP": string, "赤スコア": string, "緑スコア": string, "青スコア": string, "共通スコア": string, "カードの色": ColourJpnName
 };
 
 type RawDataSong = { "type": "楽曲" } & RawDataSongOrMemory;

@@ -12,7 +12,7 @@ import {
 import {CardMember, CardMemberExtraInfo} from "./card";
 import TranslationGroupSkill from "../translations/groupSkill";
 
-import {CardMemberGroupType} from "../../enums/memberGroupType";
+import {CardMemberGroupType} from "../../enums/cardMemberGroupType";
 
 @Table({timestamps: false})
 export default class CardMemberGroup extends Model {

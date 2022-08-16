@@ -76,7 +76,7 @@ function resolveSkillIconEng(match: string, triggerName: string) {
 
 function resolvePiece(lang: string, leftBracket: string, rightBracket: string, attrs: Attribute[]) {
     // @ts-ignore
-    return "<b>" + attrs.map(attr => "<span class='piece " + attr.className + "'>" + leftBracket + attr[lang].toUpperCase() + rightBracket + "</span>").join("") + "</b>";
+    return "<b>" + attrs.map(attr => "<span class='piece " + attr.cssClassName + "'>" + leftBracket + attr[lang].toUpperCase() + rightBracket + "</span>").join("") + "</b>";
 }
 
 function resolvePieceJpn(match: string) {
