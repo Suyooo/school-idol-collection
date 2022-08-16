@@ -48,4 +48,8 @@ export default class Trigger {
 
         return map;
     })();
+
+    static get(key: MappedValue): Trigger {
+        return Trigger.map.get(key) as Trigger;
+    }
 }
