@@ -98,8 +98,8 @@ export default class SkillFormatter {
             + "</span>";
     }
 
-    async format(s: string[] | null, isFullSkillLine: boolean): Promise<string> {
-        if (s === null) {
+    async format(s: string[], isFullSkillLine: boolean): Promise<string> {
+        if (s.length === 0) {
             return "ー";
         }
         const formattedLines: string[] = [];

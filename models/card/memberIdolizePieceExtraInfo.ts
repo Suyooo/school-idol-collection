@@ -10,7 +10,7 @@ import {
 } from "sequelize-typescript";
 
 import {CardMember} from "./card";
-import CardMemberExtraInfo from "./cardMemberExtraInfo";
+import CardMemberExtraInfo from "./memberExtraInfo";
 
 import {pieceInfoGetter} from "../utils/pieceInfoGetterSetter";
 

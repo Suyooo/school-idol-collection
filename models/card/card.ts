@@ -12,11 +12,11 @@ import {
 import {Op} from "sequelize";
 import DB from "../db";
 
-import CardMemberExtraInfo from "./cardMemberExtraInfo";
-import CardMemberIdolizePieceExtraInfo from "./cardMemberIdolizePieceExtraInfo";
-import CardSongExtraInfo from "./cardSongExtraInfo";
-import CardSongAnyReqExtraInfo from "./cardSongAnyReqExtraInfo";
-import CardSongAttrReqExtraInfo from "./cardSongAttrReqExtraInfo";
+import CardMemberExtraInfo from "./memberExtraInfo";
+import CardMemberIdolizePieceExtraInfo from "./memberIdolizePieceExtraInfo";
+import CardSongExtraInfo from "./songExtraInfo";
+import CardSongAnyReqExtraInfo from "./songAnyReqExtraInfo";
+import CardSongAttrReqExtraInfo from "./songAttrReqExtraInfo";
 import CardFAQLink from "./faqLink";
 import TranslationName from "../translations/name";
 import TranslationSkill from "../translations/skill";
@@ -24,9 +24,7 @@ import TranslationSkill from "../translations/skill";
 import CardType from "../../types/cardType";
 import CardSongRequirementType from "../../types/cardSongRequirementType";
 import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
-import PieceInfo from "../../types/pieceInfo";
 import Attribute from "../../types/attribute";
-import {CardMemberRarity} from "../../types/cardRarity";
 import CardMemberGroup from "./memberGroup";
 
 @Scopes(() => ({
@@ -78,11 +76,14 @@ import CardMemberGroup from "./memberGroup";
             DB.TranslationGroupSkill
         ]
     },
-    linkAttributes: {
+    cardNoOnly: {
+        attributes: ["cardNo"]
+    },
+    forLink: {
         attributes: ["cardNo", "id", "name", "nameOEn"],
         include: [DB.TranslationName]
     },
-    listAttributes: {
+    forList: {
         attributes: ["cardNo", "id", "type", "name", "nameOEn"],
         include: [DB.TranslationName]
     }
@@ -122,35 +123,6 @@ export default class Card extends Model {
     @Column(DataType.NUMBER)
     type!: CardType;
 
-    @AllowNull(false)
-    @Column
-    name!: string;
-
-    @Column(DataType.TEXT)
-    skill!: string | null;
-
-    @AllowNull(false)
-    @Column(DataType.TEXT)
-    copyright!: string;
-
-    @HasMany(() => CardFAQLink, {sourceKey: "id"})
-    faqs!: CardFAQLink[];
-
-    @HasOne(() => TranslationName)
-    nameOEn!: TranslationName | null;
-
-    get nameEn(): string | null {
-        if (this.nameOEn === null) return null;
-        return this.nameOEn.name;
-    }
-
-    @HasMany(() => TranslationSkill)
-    skillsEn!: TranslationSkill[];
-
-    get skillEn(): string {
-        return this.skillsEn.map(sk => sk.skill).join("\n");
-    }
-
     isMember(): this is CardMember {
         return this.type == CardType.MEMBER;
     }
@@ -159,7 +131,7 @@ export default class Card extends Model {
         return this.isMember() && this.member.idolizeType !== CardMemberIdolizeType.NONE;
     }
 
-    hasIdolizationPieces(): this is CardMemberIdolizableWithPieces {
+    hasIdolizationPieces(): this is CardMemberHasIdolizePieces {
         return this.isMemberIdolizable() && this.member.idolizeType === CardMemberIdolizeType.WITH_PIECES;
     }
 
@@ -184,11 +156,52 @@ export default class Card extends Model {
 
     @HasOne(() => CardSongExtraInfo)
     song!: CardSongExtraInfo | null;
+
+    @AllowNull(false)
+    @Column
+    name!: string;
+
+    @HasOne(() => TranslationName)
+    _nameEng!: TranslationName | null;
+
+    get nameEng(): string | null {
+        if (this._nameEng === null) return null;
+        return this._nameEng.name;
+    }
+
+    @Column(DataType.TEXT)
+    skill!: string | null;
+
+    get skillLines(): string[] {
+        if (this.skill === null) return [];
+        return this.skill.split("\n");
+    }
+
+    @HasMany(() => TranslationSkill)
+    _skillLinesEng!: TranslationSkill[];
+
+    get skillLinesEng(): string[] {
+        return this._skillLinesEng.map(sk => sk.skill);
+    }
+
+    @AllowNull(false)
+    @Column(DataType.TEXT)
+    copyright!: string;
+
+    @HasMany(() => CardFAQLink, {sourceKey: "id"})
+    faqs!: CardFAQLink[];
 }
 
 export class CardMember extends Card {
+    type!: CardType.MEMBER;
     member!: CardMemberExtraInfo;
     song!: null;
+}
+
+export class CardMemberHasBirthdayPieces extends CardMember {
+    member!:
+        Omit<CardMemberExtraInfo, "pieceBdayAttribute">
+        & { pieceBdayAttribute: Attribute };
 }
 
 export class CardMemberIdolizable extends CardMember {
@@ -197,13 +210,20 @@ export class CardMemberIdolizable extends CardMember {
         & { idolizeType: CardMemberIdolizeType.NO_PIECES | CardMemberIdolizeType.WITH_PIECES };
 }
 
-export class CardMemberIdolizableWithPieces extends CardMember {
+export class CardMemberHasIdolizePieces extends CardMember {
     member!:
-        Omit<CardMemberExtraInfo, "idolizeType">
-        & { idolizeType: CardMemberIdolizeType.WITH_PIECES, memberIdolizePieceExtraInfo: CardMemberIdolizePieceExtraInfo };
+        Omit<CardMemberExtraInfo, "idolizeType" | "idolizeBonus">
+        & { idolizeType: CardMemberIdolizeType.WITH_PIECES, idolizeBonus: CardMemberIdolizePieceExtraInfo };
+}
+
+export class CardMemberHasGroup extends CardMember {
+    member!:
+        Omit<CardMemberExtraInfo, "group">
+        & { group: CardMemberGroup };
 }
 
 export class CardSong extends Card {
+    type!: CardType.SONG;
     member!: null;
     song!: CardSongExtraInfo;
 }
@@ -221,6 +241,7 @@ export class CardSongWithAttrReq extends CardSong {
 }
 
 export class CardMemory extends Card {
+    type!: CardType.MEMORY;
     member!: null;
     song!: null;
 }

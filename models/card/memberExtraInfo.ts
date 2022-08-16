@@ -12,7 +12,7 @@ import {
 } from "sequelize-typescript";
 
 import Card from "./card";
-import CardMemberIdolizePieceExtraInfo from "./cardMemberIdolizePieceExtraInfo";
+import CardMemberIdolizePieceExtraInfo from "./memberIdolizePieceExtraInfo";
 import CardMemberGroup from "./memberGroup";
 import TranslationCostume from "../translations/costume";
 
@@ -121,13 +121,13 @@ export default class CardMemberExtraInfo extends Model {
     group!: CardMemberGroup | null;
 
     @HasOne(() => CardMemberIdolizePieceExtraInfo)
-    idolizePieces!: CardMemberIdolizePieceExtraInfo | null;
+    idolizeBonus!: CardMemberIdolizePieceExtraInfo | null;
 
     @HasOne(() => TranslationCostume)
-    costumeOEn!: TranslationCostume | null; // TODO: getter (return costume instead of the TranslationCostume object)
+    _costumeEng!: TranslationCostume | null; // TODO: getter (return costume instead of the TranslationCostume object)
 
-    get costumeEn(): string | null {
-        if (this.costumeOEn === null) return null;
-        return this.costumeOEn.costume;
+    get costumeEng(): string | null {
+        if (this._costumeEng === null) return null;
+        return this._costumeEng.costume;
     }
 }

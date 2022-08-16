@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import EJSCardPage from "../formatting/cardPageEn";
+import SiteCardFormattingWrapper from "../formatting/siteCardFormattingWrapper";
 import translateSkill, {
     assignSkills,
     getAssignableSkills,
@@ -100,7 +100,7 @@ app.get("/", (req, res) => {
 app.get("/set/:set/", (req, res) => {
     res.render("set", {
         "set": req.params.set,
-        "cards": loadCardSet(req.params.set).map(c => new EJSCardPage(c)).filter(c => req.params.set != "EX15" || c.cardnoInSet() <= 54 || c.cardno().startsWith("EX15-E"))
+        "cards": loadCardSet(req.params.set).map(c => new SiteCardFormattingWrapper(c)).filter(c => req.params.set != "EX15" || c.cardnoInSet() <= 54 || c.cardno().startsWith("EX15-E"))
     });
 });
 
@@ -108,7 +108,7 @@ app.get("/search/card/skill/:query", (req, res) => {
     res.render("search", {
         "cardType": "Cards",
         "query": req.params.query,
-        "cards": searchSkill(req.params.query).map(c => new EJSCardPage(c))
+        "cards": searchSkill(req.params.query).map(c => new SiteCardFormattingWrapper(c))
     });
 });
 
@@ -116,7 +116,7 @@ app.get("/search/member/costume/:query", (req, res) => {
     res.render("search", {
         "cardType": "Members",
         "query": req.params.query,
-        "cards": searchCostume(req.params.query).map(c => new EJSCardPage(c))
+        "cards": searchCostume(req.params.query).map(c => new SiteCardFormattingWrapper(c))
     });
 });
 
@@ -124,7 +124,7 @@ app.get("/search/song/name/:query", (req, res) => {
     res.render("search", {
         "cardType": "Songs",
         "query": req.params.query,
-        "cards": searchTypeName(1, req.params.query).map(c => new EJSCardPage(c))
+        "cards": searchTypeName(1, req.params.query).map(c => new SiteCardFormattingWrapper(c))
     });
 });
 
@@ -132,7 +132,7 @@ app.get("/search/memory/name/:query", (req, res) => {
     res.render("search", {
         "cardType": "Memories",
         "query": req.params.query,
-        "cards": searchTypeName(2, req.params.query).map(c => new EJSCardPage(c))
+        "cards": searchTypeName(2, req.params.query).map(c => new SiteCardFormattingWrapper(c))
     });
 });
 
@@ -151,8 +151,8 @@ app.get("/card/:cardno/", async (req, res) => {
             }
         });
         res.render("card", {
-            "f": new EJSCardPage(card),
-            "sameId": sameIdCards.map(c => new EJSCardPage(c))
+            "f": new SiteCardFormattingWrapper(card),
+            "sameId": sameIdCards.map(c => new SiteCardFormattingWrapper(c))
         });
     }
 });

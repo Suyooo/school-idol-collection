@@ -43,7 +43,7 @@ class AnnotationCard extends AbstractAnnotation {
     }
 
     private async loadCard(): Promise<void> {
-        if (this.card === undefined) this.card = await DB.Card.scope({ method: ["id", parseInt(this.param)] }).findOne();
+        if (this.card === undefined) this.card = await DB.Card.scope([{method: ["id", parseInt(this.param)]}, "forLink"]).findOne();
     }
 
     async getHTMLLink() {
@@ -55,13 +55,13 @@ class AnnotationCard extends AbstractAnnotation {
     async getPlainText() {
         await this.loadCard();
         if (this.card == undefined) return "???";
-        return "#" + this.card.id + " " + (this.lang == Language.ENG ? this.card.nameEn : this.card.name);
+        return "#" + this.card.id + " " + (this.lang == Language.ENG ? this.card.nameEng : this.card.name);
     }
 
     async getHTMLText() {
         await this.loadCard();
         if (this.card == undefined) return "???";
-        return "<span class='card-id'>#" + this.card.id + "</span> " + (this.lang == Language.ENG ? this.card.nameEn : this.card.name);
+        return "<span class='card-id'>#" + this.card.id + "</span> " + (this.lang == Language.ENG ? this.card.nameEng : this.card.name);
     }
 }
 

@@ -10,7 +10,7 @@ import {
 } from "sequelize-typescript";
 
 import {CardMember} from "./card";
-import CardMemberExtraInfo from "./cardMemberExtraInfo";
+import CardMemberExtraInfo from "./memberExtraInfo";
 import TranslationGroupSkill from "../translations/groupSkill";
 
 import CardMemberGroupType from "../../types/cardMemberGroupType";
@@ -42,10 +42,15 @@ export default class CardMemberGroup extends Model {
     @Column(DataType.TEXT)
     skill!: string | null;
 
-    @HasMany(() => TranslationGroupSkill)
-    skillsEn!: TranslationGroupSkill[];
+    get skillLines(): string[] {
+        if (this.skill === null) return [];
+        return this.skill.split("\n");
+    }
 
-    get skillEn(): string {
-        return this.skillsEn.map(sk => sk.skill).join("\n");
+    @HasMany(() => TranslationGroupSkill)
+    _skillLinesEng!: TranslationGroupSkill[];
+
+    get skillLinesEng(): string[] {
+        return this._skillLinesEng.map(sk => sk.skill);
     }
 }

@@ -1,4 +1,6 @@
-const enum CardMemberRarity {
+/* These enums are not const so the rarity names can be looked up at runtime */
+
+enum CardMemberRarity {
     R = 0,
     SR = 1,
     HR = 2,
@@ -9,7 +11,7 @@ const enum CardMemberRarity {
     SSR = 7
 }
 
-const enum CardSongRarity {
+enum CardSongRarity {
     M = 0,
     GR = 1
 }

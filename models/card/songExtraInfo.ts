@@ -13,8 +13,8 @@ import CardSongRequirementType from "../../types/cardSongRequirementType";
 import {CardSongRarity} from "../../types/cardRarity";
 import Attribute from "../../types/attribute";
 import Card from "./card";
-import CardSongAnyReqExtraInfo from "./cardSongAnyReqExtraInfo";
-import CardSongAttrReqExtraInfo from "./cardSongAttrReqExtraInfo";
+import CardSongAnyReqExtraInfo from "./songAnyReqExtraInfo";
+import CardSongAttrReqExtraInfo from "./songAttrReqExtraInfo";
 
 @Table({
     timestamps: false,

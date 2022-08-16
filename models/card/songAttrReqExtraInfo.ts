@@ -8,15 +8,16 @@ import {
     PrimaryKey,
     Table
 } from "sequelize-typescript";
+
 import {CardSong} from "./card";
-import CardSongExtraInfo from "./cardSongExtraInfo";
+import CardSongExtraInfo from "./songExtraInfo";
 
 import {pieceInfoGetter} from "../utils/pieceInfoGetterSetter";
 
 import PieceInfo from "../../types/pieceInfo";
 
 @Table({timestamps: false})
-export default class CardSongAnyReqExtraInfo extends Model {
+export default class CardSongAttrReqExtraInfo extends Model {
     @PrimaryKey
     @AllowNull(false)
     @ForeignKey(() => CardSongExtraInfo)
@@ -33,9 +34,19 @@ export default class CardSongAnyReqExtraInfo extends Model {
     @AllowNull(false)
     @Min(0)
     @Column
-    piecesAll!: number;
+    piecesSmile!: number;
+
+    @AllowNull(false)
+    @Min(0)
+    @Column
+    piecesPure!: number;
+
+    @AllowNull(false)
+    @Min(0)
+    @Column
+    piecesCool!: number;
 
     get pieces(): PieceInfo {
-        return pieceInfoGetter("piecesAll");
+        return pieceInfoGetter(undefined, "piecesSmile", "piecesPure", "piecesCool");
     }
 }

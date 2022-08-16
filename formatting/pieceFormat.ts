@@ -2,7 +2,7 @@ import PieceInfo from "../types/pieceInfo";
 import Language from "../types/language";
 import Attribute from "../types/attribute";
 
-export function pieceFormat(pieces: PieceInfo, lang: Language): string {
+export default function pieceFormat(pieces: PieceInfo, lang: Language): string {
     let s = "";
     let comma = "";
     if (pieces.all > 0) {

@@ -10,11 +10,11 @@ import TranslationCostume from "./translations/costume";
 import TranslationGroupSkill from "./translations/groupSkill";
 import TranslationName from "./translations/name";
 import TranslationSkill from "./translations/skill";
-import CardMemberExtraInfo from "./card/cardMemberExtraInfo";
-import CardMemberIdolizePieceExtraInfo from "./card/cardMemberIdolizePieceExtraInfo";
-import CardSongExtraInfo from "./card/cardSongExtraInfo";
-import CardSongAnyReqExtraInfo from "./card/cardSongAnyReqExtraInfo";
-import CardSongAttrReqExtraInfo from "./card/cardSongAttrReqExtraInfo";
+import CardMemberExtraInfo from "./card/memberExtraInfo";
+import CardMemberIdolizePieceExtraInfo from "./card/memberIdolizePieceExtraInfo";
+import CardSongExtraInfo from "./card/songExtraInfo";
+import CardSongAnyReqExtraInfo from "./card/songAnyReqExtraInfo";
+import CardSongAttrReqExtraInfo from "./card/songAttrReqExtraInfo";
 
 const sequelize = new Sequelize({
     dialect: "sqlite",
