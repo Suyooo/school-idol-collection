@@ -7,7 +7,8 @@ import {
     PrimaryKey,
     Table
 } from "sequelize-typescript";
-import {CardMember, CardMemberExtraInfo} from "../card/card";
+import {CardMember} from "../card/card";
+import CardMemberExtraInfo from "../card/cardMemberExtraInfo";
 
 @Table({timestamps: false})
 export default class TranslationCostume extends Model {

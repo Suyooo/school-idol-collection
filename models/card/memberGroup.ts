@@ -9,10 +9,11 @@ import {
     Table
 } from "sequelize-typescript";
 
-import {CardMember, CardMemberExtraInfo} from "./card";
+import {CardMember} from "./card";
+import CardMemberExtraInfo from "./cardMemberExtraInfo";
 import TranslationGroupSkill from "../translations/groupSkill";
 
-import {CardMemberGroupType} from "../../enums/cardMemberGroupType";
+import CardMemberGroupType from "../../types/cardMemberGroupType";
 
 @Table({timestamps: false})
 export default class CardMemberGroup extends Model {

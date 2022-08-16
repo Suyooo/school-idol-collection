@@ -7,7 +7,7 @@ import {
     PrimaryKey,
     Table
 } from "sequelize-typescript";
-import {Card} from "../card/card";
+import Card from "../card/card";
 
 @Table({timestamps: false})
 export default class TranslationName extends Model {

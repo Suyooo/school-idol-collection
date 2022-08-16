@@ -1,14 +1,14 @@
-import {AllowNull, AutoIncrement, Column, DataType, Model, PrimaryKey, Table} from "sequelize-typescript";
+import {
+    AllowNull,
+    AutoIncrement,
+    Column,
+    Model,
+    PrimaryKey,
+    Table
+} from "sequelize-typescript";
+
 import Trigger, {TriggerID} from "../../types/trigger";
 import PatternGroupType, {PatternGroupTypeID} from "../../types/patternGroupType";
-
-/*export function addPattern(patternid: number | undefined, triggers: [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], regex: string, template: string, grouptypes: string) {
-
-    const res = patternid === undefined
-        ? insertPatternStmt.run(trigBitmask, regex, template, grouptypes)
-        : updatePatternStmt.run(patternid, trigBitmask, regex, template, grouptypes);
-    return res.lastInsertRowid;
-}*/
 
 @Table({timestamps: false})
 export default class TranslateTablePattern extends Model {

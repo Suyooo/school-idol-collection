@@ -3,4 +3,4 @@ const enum CardMemberGroupType {
     TRIO = 1
 }
 
-export {CardMemberGroupType};
+export default CardMemberGroupType;

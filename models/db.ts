@@ -1,12 +1,6 @@
 import {Sequelize} from "sequelize-typescript";
 import Log from "../utils/logger";
-import {
-    Card,
-    CardMemberExtraInfo,
-    CardMemberIdolizePieceExtraInfo,
-    CardSongAnyReqExtraInfo, CardSongAttrReqExtraInfo,
-    CardSongExtraInfo
-} from "./card/card";
+import Card from "./card/card";
 import CardFAQLink from "./card/faqLink";
 import CardMemberGroup from "./card/memberGroup";
 import TranslateTablePattern from "./translatetables/pattern";
@@ -16,6 +10,11 @@ import TranslationCostume from "./translations/costume";
 import TranslationGroupSkill from "./translations/groupSkill";
 import TranslationName from "./translations/name";
 import TranslationSkill from "./translations/skill";
+import CardMemberExtraInfo from "./card/cardMemberExtraInfo";
+import CardMemberIdolizePieceExtraInfo from "./card/cardMemberIdolizePieceExtraInfo";
+import CardSongExtraInfo from "./card/cardSongExtraInfo";
+import CardSongAnyReqExtraInfo from "./card/cardSongAnyReqExtraInfo";
+import CardSongAttrReqExtraInfo from "./card/cardSongAttrReqExtraInfo";
 
 const sequelize = new Sequelize({
     dialect: "sqlite",
@@ -32,9 +31,8 @@ const sequelize = new Sequelize({
     ]
 });
 
-sequelize.sync();
-
 const DB = {
+    awaitSync: sequelize.sync(),
     Card: <typeof Card>sequelize.models.Card,
     CardMemberExtraInfo: <typeof CardMemberExtraInfo>sequelize.models.CardMemberExtraInfo,
     CardMemberIdolizePieceExtraInfo: <typeof CardMemberIdolizePieceExtraInfo>sequelize.models.CardMemberIdolizePieceExtraInfo,

@@ -7,7 +7,7 @@ import {
     PrimaryKey,
     Table
 } from "sequelize-typescript";
-import {Card} from "../card/card";
+import Card from "../card/card";
 import TranslateTablePattern from "../translatetables/pattern";
 
 @Table({timestamps: false})

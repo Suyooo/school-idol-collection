@@ -1,9 +1,7 @@
 import DB from "../models/db";
-import PieceInfo from "../cards/pieceInfo";
-import {Card, CardMember, CardMemberExtraInfo} from "../models/card/card";
 
-DB.sync().then(() => {
-    DB.models.Card.create({
+DB.awaitSync.then(() => {
+    DB.Card.create({
         cardNo: "EX01-001",
         id: 1,
         type: 0,
@@ -24,5 +22,5 @@ DB.sync().then(() => {
             abilityLive: false,
             idolizeType: 0
         }
-    }, {include: [DB.models.Card.associations.member]})
+    }, {include: [DB.Card.associations.member]})
 });
