@@ -42,24 +42,24 @@ class AnnotationCard extends AbstractAnnotation {
         this.lang = lang;
     }
 
-    private async assertCard(): Promise<void> {
+    private async loadCard(): Promise<void> {
         if (this.card === undefined) this.card = await DB.Card.scope({ method: ["id", parseInt(this.param)] }).findOne();
     }
 
     async getHTMLLink() {
-        await this.assertCard();
+        await this.loadCard();
         if (this.card == undefined) return "???";
         return "/card/" + this.card.cardNo + "/";
     }
 
     async getPlainText() {
-        await this.assertCard();
+        await this.loadCard();
         if (this.card == undefined) return "???";
         return "#" + this.card.id + " " + (this.lang == Language.ENG ? this.card.nameEn : this.card.name);
     }
 
     async getHTMLText() {
-        await this.assertCard();
+        await this.loadCard();
         if (this.card == undefined) return "???";
         return "<span class='card-id'>#" + this.card.id + "</span> " + (this.lang == Language.ENG ? this.card.nameEn : this.card.name);
     }

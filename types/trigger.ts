@@ -1,4 +1,5 @@
-export type TriggerEngName =
+export type TriggerNameJpn = "登場時" | "ライブ参加時" | "ライブ成功時" | "ライブ中" | "スタート時" | "オート" | "自動" | "待機中" | "特別練習";
+export type TriggerNameEng =
     "Entry"
     | "Live Join"
     | "Live Success"
@@ -7,26 +8,25 @@ export type TriggerEngName =
     | "Auto"
     | "On Stand-By"
     | "Special Practice";
-export type TriggerJpnName = "登場時" | "ライブ参加時" | "ライブ成功時" | "ライブ中" | "スタート時" | "オート" | "自動" | "待機中" | "特別練習";
 export type TriggerCssClassName = "entry" | "join" | "success" | "live" | "start" | "auto" | "standby" | "sp";
 export type TriggerID = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
-type MappedValue = TriggerID | TriggerEngName | TriggerJpnName;
+type MappedValue = TriggerID | TriggerNameEng | TriggerNameJpn;
 
 export default class Trigger {
     readonly id: number;
-    readonly eng: TriggerEngName;
-    readonly jpn: TriggerJpnName;
-    readonly jpnMemory: TriggerJpnName;
+    readonly nameEng: TriggerNameEng;
+    readonly nameJpn: TriggerNameJpn;
+    readonly nameJpnMemory: TriggerNameJpn;
     readonly cssClassName: TriggerCssClassName;
 
     private constructor(map: Map<MappedValue, Trigger>,
                         id: TriggerID, className: TriggerCssClassName,
-                        eng: TriggerEngName, jpn: TriggerJpnName, jpnMemoryAlt?: TriggerJpnName) {
+                        eng: TriggerNameEng, jpn: TriggerNameJpn, jpnMemoryAlt?: TriggerNameJpn) {
         this.id = id;
         this.cssClassName = className;
-        this.eng = eng;
-        this.jpn = jpn;
-        this.jpnMemory = jpnMemoryAlt ? jpnMemoryAlt : jpn
+        this.nameEng = eng;
+        this.nameJpn = jpn;
+        this.nameJpnMemory = jpnMemoryAlt ? jpnMemoryAlt : jpn
 
         map.set(id, this);
         map.set(eng, this);

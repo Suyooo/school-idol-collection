@@ -1,44 +1,44 @@
-export type ColorEngName = "Yellow" | "Red" | "Green" | "Blue" | "Orange";
-export type ColorJpnName = "黄" | "赤" | "緑" | "青" | "オレンジ";
-export type SongAttributeEngName = "Neutral" | "Smile" | "Pure" | "Cool" | "Orange";
-export type SongAttributeJpnName = "オール" | "スマイル" | "ピュア" | "クール" | "オレンジ";
-export type PieceAttributeEngName = "ALL" | "SMILE" | "PURE" | "COOL";
+export type ColorNameJpn = "黄" | "赤" | "緑" | "青" | "オレンジ";
+export type ColorNameEng = "Yellow" | "Red" | "Green" | "Blue" | "Orange";
+export type SongAttributeNameJpn = "オール" | "スマイル" | "ピュア" | "クール" | "オレンジ";
+export type SongAttributeNameEng = "Neutral" | "Smile" | "Pure" | "Cool" | "Orange";
 export type PieceAttributeJpnName = "オール" | "赤" | "緑" | "青";
+export type PieceAttributeEngName = "ALL" | "SMILE" | "PURE" | "COOL";
 export type AttributeCssClassName = "all" | "smile" | "pure" | "cool" | "orange";
 export type AttributeID = 0 | 1 | 2 | 3 | 4;
-type MappedValue = AttributeID | ColorEngName | ColorJpnName | SongAttributeEngName | SongAttributeJpnName | PieceAttributeEngName | PieceAttributeJpnName;
+type MappedValue = AttributeID | ColorNameEng | ColorNameJpn | SongAttributeNameEng | SongAttributeNameJpn | PieceAttributeEngName | PieceAttributeJpnName;
 
 export default class Attribute {
     readonly id: number;
-    readonly colorEng: ColorEngName;
-    readonly colorJpn: ColorJpnName;
-    readonly songAttributeEng: SongAttributeEngName;
-    readonly songAttributeJpn: SongAttributeJpnName;
-    readonly pieceAttributeEng: PieceAttributeEngName | undefined;
-    readonly pieceAttributeJpn: PieceAttributeJpnName | undefined;
+    readonly colorNameJpn: ColorNameJpn;
+    readonly colorNameEng: ColorNameEng;
+    readonly songAttributeNameJpn: SongAttributeNameJpn;
+    readonly songAttributeNameEng: SongAttributeNameEng;
+    readonly pieceAttributeNameJpn: PieceAttributeJpnName | undefined;
+    readonly pieceAttributeNameEng: PieceAttributeEngName | undefined;
     readonly cssClassName: AttributeCssClassName;
 
     private constructor(map: Map<MappedValue, Attribute>,
                         id: AttributeID, className: AttributeCssClassName,
-                        cen: ColorEngName, cjn: ColorJpnName,
-                        saen: SongAttributeEngName, sajn: SongAttributeJpnName,
-                        paen?: PieceAttributeEngName, pajn?: PieceAttributeJpnName) {
+                        colorNameEng: ColorNameEng, colorNameJpn: ColorNameJpn,
+                        songAttributeNameEng: SongAttributeNameEng, songAttributeNameJpn: SongAttributeNameJpn,
+                        pieceAttributeNameEng?: PieceAttributeEngName, pieceAttributeNameJpn?: PieceAttributeJpnName) {
         this.id = id;
         this.cssClassName = className;
-        this.colorEng = cen;
-        this.colorJpn = cjn;
-        this.songAttributeEng = saen;
-        this.songAttributeJpn = sajn;
-        this.pieceAttributeEng = paen;
-        this.pieceAttributeJpn = pajn;
+        this.colorNameEng = colorNameEng;
+        this.colorNameJpn = colorNameJpn;
+        this.songAttributeNameEng = songAttributeNameEng;
+        this.songAttributeNameJpn = songAttributeNameJpn;
+        this.pieceAttributeNameEng = pieceAttributeNameEng;
+        this.pieceAttributeNameJpn = pieceAttributeNameJpn;
 
         map.set(id, this);
-        map.set(cen, this);
-        map.set(cjn, this);
-        map.set(saen, this);
-        map.set(sajn, this);
-        if (paen) map.set(paen, this);
-        if (pajn) map.set(pajn, this);
+        map.set(colorNameEng, this);
+        map.set(colorNameJpn, this);
+        map.set(songAttributeNameEng, this);
+        map.set(songAttributeNameJpn, this);
+        if (pieceAttributeNameEng) map.set(pieceAttributeNameEng, this);
+        if (pieceAttributeNameJpn) map.set(pieceAttributeNameJpn, this);
     }
 
     private static readonly map = (() => {

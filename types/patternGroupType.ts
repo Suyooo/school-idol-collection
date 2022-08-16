@@ -98,7 +98,7 @@ export default class PatternGroupType {
         map.push(new PatternGroupType(7, async function (match: string): Promise<string> {
             let s = "";
             for (const pieceMatch of match.matchAll(Regex.piecesPattern)) {
-                s += "[" + Attribute.get(pieceMatch[1] as PieceAttributeJpnName).pieceAttributeEng + "]";
+                s += "[" + Attribute.get(pieceMatch[1] as PieceAttributeJpnName).pieceAttributeNameEng + "]";
             }
             return s;
         }, generateNoReplacements));

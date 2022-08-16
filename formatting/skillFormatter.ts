@@ -1,6 +1,6 @@
 import Language from "../types/language";
 import Annotation from "../annotator/annotation";
-import Trigger, {TriggerEngName, TriggerJpnName} from "../types/trigger";
+import Trigger, {TriggerNameEng, TriggerNameJpn} from "../types/trigger";
 import Attribute, {PieceAttributeEngName, PieceAttributeJpnName} from "../types/attribute";
 import PieceInfo from "../types/pieceInfo";
 import {num} from "../translate/skills/regex";
@@ -28,12 +28,7 @@ export default class SkillFormatter {
     private readonly regexes: { [K in SkillFormatterRegexes]: RegExp };
     private readonly templates: { [K in SkillFormatterTemplates]: string };
 
-    private readonly leftRoundBracket: string;
-    private readonly leftSquareBracket: string;
-    private readonly rightSquareBracket: string;
     private readonly nullLine: string;
-    private readonly triggerNameProperty: keyof Trigger;
-    private readonly pieceNameProperty: keyof Attribute;
 
     private constructor(lang: Language,
                         regexes: { [K in SkillFormatterRegexes]: RegExp },
@@ -42,12 +37,7 @@ export default class SkillFormatter {
         this.regexes = regexes;
         this.templates = templates;
 
-        this.leftRoundBracket = (lang === Language.JPN) ? "（" : "(";
-        this.leftSquareBracket = (lang === Language.JPN) ? "【" : "[";
-        this.rightSquareBracket = (lang === Language.JPN) ? "】" : "]";
         this.nullLine = (lang === Language.JPN) ? "[skill line missing]" : "[translation missing]";
-        this.triggerNameProperty = (lang === Language.JPN) ? "jpn" : "eng";
-        this.pieceNameProperty = (lang === Language.JPN) ? "pieceAttributeJpn" : "pieceAttributeEng";
     }
 
     private async resolveAnnotation(match: string, pre: string, type: string, param: string, post: string): Promise<string> {
@@ -58,14 +48,14 @@ export default class SkillFormatter {
 
     private resolveFullSkill(match: string, triggers: string, skillLine: string) {
         let postSkillLine = "";
-        const i = skillLine.indexOf(this.leftRoundBracket);
+        const i = skillLine.indexOf(this.lang.leftRoundBracket);
         if (i !== -1) {
             postSkillLine = skillLine.substring(i, skillLine.length);
             skillLine = skillLine.substring(0, i);
         }
-        const triggerObjects = triggers.split("/").map(s => Trigger.get(s.substring(1, s.length - 1) as (TriggerJpnName | TriggerEngName)));
+        const triggerObjects = triggers.split("/").map(s => Trigger.get(s.substring(1, s.length - 1) as (TriggerNameJpn | TriggerNameEng)));
         return triggerObjects
-                .map(t => "<span class='skill " + t.cssClassName + "'>" + t[this.triggerNameProperty] + "</span>")
+                .map(t => "<span class='skill " + t.cssClassName + "'>" + t[this.lang.triggerNameProperty] + "</span>")
                 .join("/")
             + skillLine
             + ((skillLine.length > 0 && triggerObjects.indexOf(Trigger.get("Special Practice")) !== -1)
@@ -78,9 +68,9 @@ export default class SkillFormatter {
         return '<span class="ability ' + abilityType.toLowerCase() + '">' + match + '</span>';
     }
 
-    private static resolveTrigger(match: string, triggerFunc: (label: TriggerJpnName | TriggerEngName) => Trigger, triggerName: string) {
+    private static resolveTrigger(match: string, triggerFunc: (label: TriggerNameJpn | TriggerNameEng) => Trigger, triggerName: string) {
         try {
-            return "<span class='skill " + triggerFunc(triggerName as (TriggerJpnName | TriggerEngName)).cssClassName + "'>" + match + "</span>";
+            return "<span class='skill " + triggerFunc(triggerName as (TriggerNameJpn | TriggerNameEng)).cssClassName + "'>" + match + "</span>";
         } catch (e) {
             return match;
         }
@@ -89,11 +79,11 @@ export default class SkillFormatter {
     private resolvePiece(match: string) {
         return "<b>"
             + match.substring(1, match.length - 1)
-                .split(this.rightSquareBracket + this.leftSquareBracket)
+                .split(this.lang.rightSquareBracket + this.lang.leftSquareBracket)
                 .map(attrsSplit => {
                     const attr = Attribute.get(attrsSplit as (PieceAttributeJpnName | PieceAttributeEngName));
                     return "<span class='piece " + attr.cssClassName + "'>"
-                        + this.leftSquareBracket + attr[this.pieceNameProperty] + this.rightSquareBracket
+                        + this.lang.leftSquareBracket + attr[this.lang.pieceNameProperty] + this.lang.rightSquareBracket
                         + "</span>"
                 })
                 .join("")
@@ -102,9 +92,9 @@ export default class SkillFormatter {
 
     private resolveAttrRequirement(smile: string, pure: string, cool: string) {
         return "<span class='attrreq nowrap'>"
-            + this.leftSquareBracket
-            + pieceFormat(new PieceInfo(0, num(smile), num(pure), num(cool)))
-            + this.rightSquareBracket
+            + this.lang.leftSquareBracket
+            + pieceFormat(new PieceInfo(0, num(smile), num(pure), num(cool)), this.lang)
+            + this.lang.rightSquareBracket
             + "</span>";
     }
 
