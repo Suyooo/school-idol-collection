@@ -59,6 +59,7 @@ h5 {
     display: inline-block;
     width: 1em;
     text-align: center;
+    color: var(--orange2);
 }
 
 .piecelabel > span {

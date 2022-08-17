@@ -120,7 +120,7 @@ export default class SiteCardFormattingWrapper {
         this.birthday = (this.card.member.birthMonth === null) ? "ー"
             : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][this.card.member.birthMonth - 1] +
             " " + this.card.member.birthDay;
-        this.cost = "<span>🟊</span>".repeat(this.card.member.cost) + "<span>・</span>".repeat(3 - this.card.member.cost);
+        this.cost = "<span>&starf;</span>".repeat(this.card.member.cost) + "<span>&#12539;</span>".repeat(3 - this.card.member.cost);
         this.year = (this.card.member.year === null) ? "ー"
             : ["1st", "2nd", "3rd"][this.card.member.year - 1] + " Year";
         this.ability = this.card.member.abilityRush
