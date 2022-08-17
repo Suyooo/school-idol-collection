@@ -18,7 +18,7 @@ app.use("/style", express.static("frontend/static/style"));
 app.use("/images", express.static("frontend/static/images"));
 app.use("/vendor/jquery", express.static("node_modules/jquery/dist"));
 
-app.locals.skillFormat = (skill: string) => SkillFormatter.ENG.format([skill], false);
+app.locals.skillFormat = (skill: string) => SkillFormatter.ENG.formatText([skill])
 
 const cardnoPattern = /^(?:PR-\d\d\d[AB]?|(?:LL|EX)\d\d-[\dE]\d\d)$/;
 const setPattern = /^(?:PR|(?:LL|EX)\d\d)$/;
@@ -220,19 +220,6 @@ app.get("/faq/:faq/", (req, res) => {
     if (faqpages.indexOf(req.params.faq) === -1) req.params.faq = "index";
     res.render("faq/" + req.params.faq);
 });
-
-/*
- * AJAX garbo
- */
-
-/*app.put('/pattern/add/', (req, res, next) => {
-    res.json({"patternId": addPattern(req.body.patternid, req.body.triggers, req.body.regex, req.body.template, req.body.grouptypes)});
-});
-
-app.put('/pattern/set/', (req, res, next) => {
-    assignSkills(req.body.pattern, req.body.cards);
-    res.json({"success": true});
-});*/
 
 app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}`)

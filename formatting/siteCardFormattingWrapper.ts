@@ -99,8 +99,8 @@ export default class SiteCardFormattingWrapper {
             this.nextCardNo = nextCard.cardNo;
         }
 
-        this.skillJpn = await SkillFormatter.JPN.format(this.card.skillLines, true);
-        this.skillEng = await SkillFormatter.ENG.format(this.card.skillLinesEng, true);
+        this.skillJpn = await SkillFormatter.JPN.formatCardSkill(this.card.skillLines);
+        this.skillEng = await SkillFormatter.ENG.formatCardSkill(this.card.skillLinesEng);
 
         if (this.isMember() && this.hasGroup()) {
             await this.prepareGroupAsyncProperties();
@@ -170,8 +170,8 @@ export default class SiteCardFormattingWrapper {
 
             this.prepareGroupAsyncProperties = async () => {
                 assertIsFormattingMemberWithGroup(this);
-                this.groupSkillJpn = await SkillFormatter.JPN.format(this.card.member.group.skillLines, true);
-                this.groupSkillEng = await SkillFormatter.ENG.format(this.card.member.group.skillLinesEng, true);
+                this.groupSkillJpn = await SkillFormatter.JPN.formatCardSkill(this.card.member.group.skillLines);
+                this.groupSkillEng = await SkillFormatter.ENG.formatCardSkill(this.card.member.group.skillLinesEng);
             }
 
             return true;

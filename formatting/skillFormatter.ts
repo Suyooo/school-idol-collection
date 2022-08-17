@@ -28,16 +28,13 @@ export default class SkillFormatter {
     private readonly regexes: { [K in SkillFormatterRegexes]: RegExp };
     private readonly templates: { [K in SkillFormatterTemplates]: string };
 
-    private readonly nullLine: string;
-
     private constructor(lang: Language,
                         regexes: { [K in SkillFormatterRegexes]: RegExp },
                         templates: { [K in SkillFormatterTemplates]: string }) {
         this.lang = lang;
         this.regexes = regexes;
         this.templates = templates;
-
-        this.nullLine = (lang === Language.JPN) ? "[skill line missing]" : "[translation missing]";
+        console.log(this.lang);
     }
 
     private async resolveAnnotation(match: string, pre: string, type: string, param: string, post: string): Promise<string> {
@@ -98,15 +95,37 @@ export default class SkillFormatter {
             + "</span>";
     }
 
-    async format(s: string[], isFullSkillLine: boolean): Promise<string> {
+    private doRegex(line: string, isCardSkill: boolean) {
+        line = line.replace(this.regexes.pieceGain, "<b class='nowrap'>$&</b>");
+        line = line.replace(this.regexes.idolizedCondition, "<span class='idolized'>$&</span>");
+        if (isCardSkill) {
+            line = line.replace(this.regexes.name, "<span class='redtext'>$&</span>");
+            line = line.replace(this.regexes.fullSkillWithTrigger, this.resolveFullSkill.bind(this));
+        }
+        line = line.replace(this.regexes.lpBonus, "<span class='redtext nowrap'>$&</span>");
+        line = line.replace(this.regexes.lpMalus, "<span class='bluetext nowrap'>$&</span>");
+        line = line.replace(this.regexes.attrRequirement, this.resolveAttrRequirement.bind(this));
+        line = line.replace(this.regexes.abilityRushOrLive, this.templates.rushOrLive);
+        line = line.replace(this.regexes.ability, SkillFormatter.resolveAbility);
+        line = line.replace(this.regexes.trigger, SkillFormatter.resolveTrigger);
+        line = line.replace(this.regexes.piece, this.resolvePiece.bind(this));
+        line = line.replace(this.regexes.stars, this.templates.stars);
+        line = line.replace(this.regexes.action, "<b>⟪$1⟫</b>");
+        if (this.lang == Language.JPN) {
+            // unify things a little by replacing full-width quotation marks with half-width ones
+            line = line.replace(/「/g, "｢");
+            line = line.replace(/」/g, "｣");
+        }
+        return line;
+    }
+
+    async formatCardSkill(s: string[]): Promise<string> {
         if (s.length === 0) {
             return "ー";
         }
-        const formattedLines: string[] = [];
-        for (const origLine of s) {
-            let line = origLine;
-            if (isFullSkillLine && this.regexes.lyrics.test(line)) {
-                line = "<i>" + line + "</i>";
+        return (await Promise.all(s.map(async line => {
+            if (this.regexes.lyrics.test(line)) {
+                return "<i>" + line + "</i>";
             } else {
                 let i = line.indexOf("{{");
                 while (i !== -1) {
@@ -117,31 +136,16 @@ export default class SkillFormatter {
                     }
                     i = line.indexOf("{{", i);
                 }
-
-                line = line.replace(this.regexes.pieceGain, "<b class='nowrap'>$&</b>");
-                line = line.replace(this.regexes.idolizedCondition, "<span class='idolized'>$&</span>");
-                if (isFullSkillLine) {
-                    line = line.replace(this.regexes.name, "<span class='redtext'>$&</span>");
-                    line = line.replace(this.regexes.fullSkillWithTrigger, this.resolveFullSkill);
-                }
-                line = line.replace(this.regexes.lpBonus, "<span class='redtext nowrap'>$&</span>");
-                line = line.replace(this.regexes.lpMalus, "<span class='bluetext nowrap'>$&</span>");
-                line = line.replace(this.regexes.attrRequirement, this.resolveAttrRequirement);
-                line = line.replace(this.regexes.abilityRushOrLive, this.templates.rushOrLive);
-                line = line.replace(this.regexes.ability, SkillFormatter.resolveAbility);
-                line = line.replace(this.regexes.trigger, SkillFormatter.resolveTrigger);
-                line = line.replace(this.regexes.piece, this.resolvePiece);
-                line = line.replace(this.regexes.stars, this.templates.stars);
-                line = line.replace(this.regexes.action, "<b>⟪$1⟫</b>");
-                if (this.lang == Language.JPN) {
-                    // unify things a little by replacing full-width quotation marks with half-width ones
-                    line = line.replace(/「/g, "｢");
-                    line = line.replace(/」/g, "｣");
-                }
+                return this.doRegex(line, true);
             }
-            formattedLines.push(line);
+        }))).join("<br>");
+    }
+
+    formatText(s: string[]): string {
+        if (s.length === 0) {
+            return "ー";
         }
-        return formattedLines.join("<br>");
+        return s.map(line => this.doRegex(line, false)).join("<br>");
     }
 
     static readonly JPN = new SkillFormatter(Language.JPN, {

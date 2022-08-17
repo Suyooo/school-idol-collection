@@ -57,13 +57,13 @@
                 What is the "On Stand-By" state?
             </div>
             <div class="answer">
-                <%- skillFormat("When a Member has ⟪ENTER⟫ed the Stage, but hasn't joined a ⟪LIVE⟫ yet. The moment a Member ⟪ENTER⟫s, they are \"On Stand-By\".", 1, false) %>
+                <%- skillFormat("When a Member has ⟪ENTER⟫ed the Stage, but hasn't joined a ⟪LIVE⟫ yet. The moment a Member ⟪ENTER⟫s, they are \"On Stand-By\".") %>
             </div>
             <div class="question" id="stand_by_self">
-                <%- skillFormat("If an [Entry] Skill says \"Members on Stand-By\", does that include the Member that just ⟪ENTER⟫ed the Stage (the one who owns that Skill)?", 1, false) %>
+                <%- skillFormat("If an [Entry] Skill says \"Members on Stand-By\", does that include the Member that just ⟪ENTER⟫ed the Stage (the one who owns that Skill)?") %>
             </div>
             <div class="answer">
-                <%- skillFormat("Yes. A Member is always in the \"On Stand-By\" state when they ⟪ENTER⟫.", 1, false) %>
+                <%- skillFormat("Yes. A Member is always in the \"On Stand-By\" state when they ⟪ENTER⟫.") %>
             </div>
 
             <h5>What does "Members on Stage" mean?</h5>
@@ -85,7 +85,7 @@
                 numbers or IDs. On the other hand, "X differently named Members" means that you only count Members with
                 different names in their profiles.<br>
                 When counting "differently named Members", count how many of the Member cards have different Names. For
-                example, if you perform a <%- skillFormat("⟪LIVE⟫", 1, false) %> with Member cards of <span
+                example, if you perform a <%- skillFormat("⟪LIVE⟫") %> with Member cards of <span
                         class="redtext">"Honoka"</span>, <span class="redtext">"Honoka"</span>, <span class="redtext">"Honoka"</span>,
                 <span class="redtext">"Kotori"</span>, <span class="redtext">"Kotori"</span> and <span class="redtext">"Umi"</span>
                 joining, you will have 6 Members, but only 3 differently named Members.
@@ -98,7 +98,7 @@
             <div class="answer">
                 If your Deck runs out, keep playing! Do your best to reach the Live Points goal with the Members on your
                 Stage and in your
-                Hand! <%- skillFormat("If you're unable to ⟪ENTER⟫ a card, ⟪SCOUT⟫ or perform a ⟪LIVE⟫", 1, false) %>,
+                Hand! <%- skillFormat("If you're unable to ⟪ENTER⟫ a card, ⟪SCOUT⟫ or perform a ⟪LIVE⟫") %>,
                 you must pass
                 your turn. If every player had to pass in a round, the match ends in a draw for the remaining players.
             </div>
@@ -133,7 +133,7 @@
                 If you have unpaired Members on Stand-By whose ID and name match with those written in the Skill, place
                 the two cards side by side. This state is called "Paired". Paired Members will be able to use their Pair
                 Skill (the lower field that goes across both cards). Also, the two Members of a Pair must perform in
-                <%- skillFormat("⟪LIVE⟫", 1, false) %>s together.
+                <%- skillFormat("⟪LIVE⟫") %>s together.
             </div>
             <div class="question" id="group_counting">
                 When counting Members, how are Paired Members counted?
@@ -169,20 +169,20 @@
                 What do [Special Practice] Skills do?
             </div>
             <div class="answer">
-                <%- skillFormat("If you Enter a Member with a [Special Practice] Skill, you can use that Skill by stacking on top of another Member card that matches the requirements. When ⟪ENTER⟫ing a Member with [Special Practice], you can flip an Unidolized Member on Stand-By who matches the name or other requirements listed next to the [Special Practice] icon facedown and place the ⟪ENTER⟫ing Member on top of them. Members that are stacked on top of another \"Member\" card are Idolized Members.", 1, false) %>
+                <%- skillFormat("If you Enter a Member with a [Special Practice] Skill, you can use that Skill by stacking on top of another Member card that matches the requirements. When ⟪ENTER⟫ing a Member with [Special Practice], you can flip an Unidolized Member on Stand-By who matches the name or other requirements listed next to the [Special Practice] icon facedown and place the ⟪ENTER⟫ing Member on top of them. Members that are stacked on top of another \"Member\" card are Idolized Members.") %>
             </div>
             <div class="question" id="special_practice_optional">
-                Can I choose not to perform <%- skillFormat("[Special Practice]", 1, false) %>, even if there are
+                Can I choose not to perform <%- skillFormat("[Special Practice]") %>, even if there are
                 matching Members on Stage?
             </div>
             <div class="answer">
-                Yes. You can freely decide whether you want to use <%- skillFormat("[Special Practice]", 1, false) %> or
+                Yes. You can freely decide whether you want to use <%- skillFormat("[Special Practice]") %> or
                 not.
             </div>
             <div class="question" id="special_practice_always">
-                Can I perform <%- skillFormat("[Special Practice]", 1, false) %> both when
-                I <%- skillFormat("⟪ENTER⟫ ", 1, false) %> a card through an action on my turn and when I
-                <%- skillFormat("⟪ENTER⟫ ", 1, false) %> a card through a Skill?
+                Can I perform <%- skillFormat("[Special Practice]") %> both when
+                I <%- skillFormat("⟪ENTER⟫ ") %> a card through an action on my turn and when I
+                <%- skillFormat("⟪ENTER⟫ ") %> a card through a Skill?
             </div>
             <div class="answer">
                 Yes, both work.
@@ -194,31 +194,31 @@
             </div>
             <div class="answer">
                 Members that are stacked on top of another Member card are Idolized. Members who are not Idolized,
-                including those who do not have a <%- skillFormat("[Special Practice]", 1, false) %> Skill, are
+                including those who do not have a <%- skillFormat("[Special Practice]") %> Skill, are
                 Unidolized.
             </div>
 
             <div class="question" id="idolized_no_pieces">
-                Can Members who do not have <%- skillFormat("[Idolized (Piece Bonus)] ", 1, false) %>, such as <a
+                Can Members who do not have <%- skillFormat("[Idolized (Piece Bonus)]") %>, such as <a
                         href="/card/LL15-050/">LL15-050 "Kanan
                     Matsuura"</a>, be Idolized? What happens if they are Idolized?
             </div>
             <div class="answer">
                 Yes, Members that are stacked on top of other Member cards are Idolized even if they don't have
-                <%- skillFormat("[Idolized (Piece Bonus)]", 1, false) %>. In these cases, the Idolized state might still
+                <%- skillFormat("[Idolized (Piece Bonus)]") %>. In these cases, the Idolized state might still
                 be referred to in the Member's
                 Skills, or can be used with a Song card's Skill.
             </div>
             <div class="question" id="idolized_live">
-                When an Idolized Member performs in a <%- skillFormat("⟪LIVE⟫", 1, false) %>, what should I do with the
+                When an Idolized Member performs in a <%- skillFormat("⟪LIVE⟫") %>, what should I do with the
                 face-down card they're stacked on
                 top of?
             </div>
             <div class="answer">
                 The face-down card remains below the Idolized Member when performing in
-                the <%- skillFormat("⟪LIVE⟫", 1, false) %> and is stays
+                the <%- skillFormat("⟪LIVE⟫") %> and is stays
                 face-down. Be careful not to mix up the face-down card with the other Members performing in
-                the <%- skillFormat("⟪LIVE⟫.", 1, false) %>
+                the <%- skillFormat("⟪LIVE⟫.") %>
             </div>
             <div class="question" id="idolized_move">
                 An Idolized Member is being moved from the Stage to my Deck or Hand. What happens to the face-down card
@@ -245,14 +245,14 @@
     <div class="panel">
         <div class="panel-inner">
             <h4>Skills</h4>
-            <h5>Can I use my Starting Members' <%- skillFormat("[Entry]", 1, false) %> Skill?</h5>
+            <h5>Can I use my Starting Members' <%- skillFormat("[Entry]") %> Skill?</h5>
             <div class="question" id="entry_at_start">
                 When the Starting Members are turned face-up at the start of the match, can I
-                use <%- skillFormat("that card's [RUSH] or [Entry] Skill", 1, false) %>?
+                use <%- skillFormat("that card's [RUSH] or [Entry] Skill") %>?
             </div>
             <div class="answer">
-                No, <%- skillFormat("the card's [RUSH] and [Entry]", 1, false) %> Skill will not be activated.<br>
-                If all players agree, you can play with Starting Members' <%- skillFormat("[Entry]", 1, false) %> Skills
+                No, <%- skillFormat("the card's [RUSH] and [Entry]") %> Skill will not be activated.<br>
+                If all players agree, you can play with Starting Members' <%- skillFormat("[Entry]") %> Skills
                 being activated as a house
                 rule. If all of these Skills are activated at the beginning, picking a good Starting Member can give you
                 a head start!
@@ -272,11 +272,11 @@
             <div class="question" id="skill_impossible">
                 What if I can't do something a Skill tells me to do? For example:
                 <ul>
-                    <li>"<%- skillFormat("⟪SCOUT⟫", 1, false) %>" or "Draw three cards", but there's not enough cards in
+                    <li>"<%- skillFormat("⟪SCOUT⟫") %>" or "Draw three cards", but there's not enough cards in
                         the Deck
                     </li>
-                    <li>"<%- skillFormat("⟪ENTER⟫", 1, false) %> one Member", but there's no Members able
-                        to <%- skillFormat("⟪ENTER⟫", 1, false) %></li>
+                    <li>"<%- skillFormat("⟪ENTER⟫") %> one Member", but there's no Members able
+                        to <%- skillFormat("⟪ENTER⟫") %></li>
                 </ul>
             </div>
             <div class="answer">
@@ -284,22 +284,22 @@
                 cards" but you only have two in your deck, draw those two cards and continue.
             </div>
 
-            <h5>What happens if I do <%- skillFormat("[RUSH]→[RUSH] or [RUSH]→[LIVE]", 1, false) %>?</h5>
+            <h5>What happens if I do <%- skillFormat("[RUSH]→[RUSH] or [RUSH]→[LIVE]") %>?</h5>
             <div class="question" id="multiple_entry_abilities">
-                <%- skillFormat("I ⟪ENTER⟫ed a Member with [RUSH], and used it to ⟪ENTER⟫ another Member with [RUSH] or [LIVE]. Can I use their [RUSH]/[LIVE] now?", 1, false) %>
+                <%- skillFormat("I ⟪ENTER⟫ed a Member with [RUSH], and used it to ⟪ENTER⟫ another Member with [RUSH] or [LIVE]. Can I use their [RUSH]/[LIVE] now?") %>
             </div>
             <div class="answer">
-                <%- skillFormat("You can only use one [RUSH] per turn, so you cannot use a second [RUSH].<br> You can use a [LIVE] to immediately perform a ⟪LIVE⟫ ♪", 1, false) %>
+                <%- skillFormat("You can only use one [RUSH] per turn, so you cannot use a second [RUSH].<br> You can use a [LIVE] to immediately perform a ⟪LIVE⟫ ♪") %>
             </div>
 
             <h5>What should I do if I have to turn the top card of my Deck face-up?</h5>
             <div class="question" id="top_deck_card_faceup">
                 A Skill made me turn the top card of my Deck face-up, without adding it to my hand
-                or <%- skillFormat("⟪ENTER⟫", 1, false) %>ing it. What
+                or <%- skillFormat("⟪ENTER⟫") %>ing it. What
                 should I do?
             </div>
             <div class="answer">
-                Leave the card face-up. Once you can draw the card (by <%- skillFormat("⟪SCOUT⟫", 1, false) %>ing, etc.),
+                Leave the card face-up. Once you can draw the card (by <%- skillFormat("⟪SCOUT⟫") %>ing, etc.),
                 you can hide the card from the
                 other players again.
             </div>
@@ -310,9 +310,9 @@
             </div>
             <div class="answer">
                 No. Make sure to perform everything in the order written. For example, if you activate
-                the <%- skillFormat("[Entry]", 1, false) %>
+                the <%- skillFormat("[Entry]") %>
                 Skill of <a href="/card/LL05-046/">LL05-046 "Chika Takami"</a> with no cards in your Hand and no Members
-                used for Lives, you must draw cards before you perform a <%- skillFormat("⟪LIVE⟫", 1, false) %>.
+                used for Lives, you must draw cards before you perform a <%- skillFormat("⟪LIVE⟫") %>.
             </div>
 
             <h5>What if a Member card has two or more Skills?</h5>
@@ -322,7 +322,7 @@
             </div>
             <div class="answer">
                 Yes. You can use multiple Skills. For example, <a href="/card/LL01-063/">LL01-063 "Niko Yazawa"</a>
-                can use both the <%- skillFormat("[Entry] and [Live Join]", 1, false) %> Skills, as long as the
+                can use both the <%- skillFormat("[Entry] and [Live Join]") %> Skills, as long as the
                 conditions are met at those times.
                 <br>
                 Also, if a Member has two or more Skills with the same icon, such as <a href="/card/LL05-049/">LL05-049
@@ -351,13 +351,13 @@
             <div class="answer">
                 Between the two effects, ① and ②, choose the one you'd like to perform. (If it says "Do either", you
                 must pick one of the two.)<br>
-                For example, in the <%- skillFormat("[Entry]", 1, false) %> Skill of <a href="/card/LL15-051/">LL15-051
+                For example, in the <%- skillFormat("[Entry]") %> Skill of <a href="/card/LL15-051/">LL15-051
                     "Dia Kurosawa"</a>, you can
                 choose whichever effect you want between the two listed effects. (If the Member is Idolized, it's
                 recommended to pick ②.)
             </div>
             <div class="question" id="do_either_conditions">
-                For Skills like the <%- skillFormat("[Entry]", 1, false) %> Skill of <a href="/card/LL15-051/">LL15-051
+                For Skills like the <%- skillFormat("[Entry]") %> Skill of <a href="/card/LL15-051/">LL15-051
                     "Dia Kurosawa"</a>, where it
                 says "② If this Member is Idolized" - can I pick effects with conditions even if they are not met?
             </div>
@@ -370,58 +370,58 @@
     <div class="panel">
         <div class="panel-inner">
             <h4>Lives</h4>
-            <h5>Can I perform a <%- skillFormat("⟪LIVE⟫", 1, false) %> with more Pieces than the requirement?</h5>
+            <h5>Can I perform a <%- skillFormat("⟪LIVE⟫") %> with more Pieces than the requirement?</h5>
             <div class="question" id="live_non_exact">
                 Using the Members I have on Stage, I can't match the requirements of a Song card exactly. I won't be
-                able to perform a <%- skillFormat("⟪LIVE⟫", 1, false) %> this way, right?
+                able to perform a <%- skillFormat("⟪LIVE⟫") %> this way, right?
             </div>
             <div class="answer">
-                No, you can perform a <%- skillFormat("⟪LIVE⟫", 1, false) %> even if your total Pieces exceed the
+                No, you can perform a <%- skillFormat("⟪LIVE⟫") %> even if your total Pieces exceed the
                 requirement! However, you won't be
                 able to use the excess Pieces for other Lives, so be careful not to run out of Pieces you need for more
                 Lives.<br>
                 As one example, it's alright if you just have every Member you have on Stand-By join when performing
-                a <%- skillFormat("⟪LIVE⟫", 1, false) %> that will hit the Live Points goal ♪ It's a big deal, so let's
+                a <%- skillFormat("⟪LIVE⟫") %> that will hit the Live Points goal ♪ It's a big deal, so let's
                 have them all perform together
                 for the big, exciting finale!
             </div>
 
-            <h5>What happens to Pieces that were gained/changed using a <%- skillFormat("[Live Join]", 1, false) %>
+            <h5>What happens to Pieces that were gained/changed using a <%- skillFormat("[Live Join]") %>
                 Skill?</h5>
             <div class="question" id="live_join_pieces">
                 A Member has gained additional Pieces or changed Pieces due to the effects of
-                a <%- skillFormat("[Live Join]", 1, false) %> Skill.
-                What happens to those Pieces after a successful <%- skillFormat("⟪LIVE⟫", 1, false) %>?
+                a <%- skillFormat("[Live Join]") %> Skill.
+                What happens to those Pieces after a successful <%- skillFormat("⟪LIVE⟫") %>?
             </div>
             <div class="answer">
-                Pieces that have been added or changed through a <%- skillFormat("[Live Join]", 1, false) %> Skill will
+                Pieces that have been added or changed through a <%- skillFormat("[Live Join]") %> Skill will
                 remain like that afterwards,
-                for the rest of the match. So if, for example, you perform a <%- skillFormat("⟪LIVE⟫", 1, false) %>
+                for the rest of the match. So if, for example, you perform a <%- skillFormat("⟪LIVE⟫") %>
                 using <a href="/card/EX11-047/">
                     EX11-047 "Angelic Angel"</a> as the Song card, its Skill will count
-                the <%- skillFormat("[ALL]", 1, false) %> the Members gained
-                from <%- skillFormat("[Live Join]", 1, false) %> Skills, too.
+                the <%- skillFormat("[ALL]") %> the Members gained
+                from <%- skillFormat("[Live Join]") %> Skills, too.
             </div>
 
-            <h5>What is the order for <%- skillFormat("[Live Join] / [Live Success]", 1, false) %> Skills?</h5>
+            <h5>What is the order for <%- skillFormat("[Live Join] / [Live Success]") %> Skills?</h5>
             <div class="question" id="join_success_order">
-                When performing a <%- skillFormat("⟪LIVE⟫", 1, false) %>, if both a joining Member and the Song card
-                have a <%- skillFormat("[Live Join]", 1, false) %> Skill, which one
+                When performing a <%- skillFormat("⟪LIVE⟫") %>, if both a joining Member and the Song card
+                have a <%- skillFormat("[Live Join]") %> Skill, which one
                 goes first?
             </div>
             <div class="answer">
                 You can perform them in any order you like. This also applies
-                to <%- skillFormat("[Live Success]", 1, false) %> Skills. For example,
+                to <%- skillFormat("[Live Success]") %> Skills. For example,
                 if you only have three cards in your Hand, but then have <a href="/card/LL03-059/">LL03-059 "Rin
                     Hoshizora"</a> join a Live with <a href="/card/LL06-062/">LL06-062 "Waku-Waku-Week!"</a> as the Song
-                card, you can perform the Member's <%- skillFormat("[Live Join]", 1, false) %> Skill first so you can
+                card, you can perform the Member's <%- skillFormat("[Live Join]") %> Skill first so you can
                 have four cards in your hand, to
-                meet the conditions of the <%- skillFormat("[Live Join]", 1, false) %> Skill of <span class="redtext">"Waku-Waku-Week!"</span>.
-                Additionally, the following <%- skillFormat("[Auto]", 1, false) %>
-                Skills apply at the same time as <%- skillFormat("[Live Join] or [Live Success]", 1, false) %> Skills,
+                meet the conditions of the <%- skillFormat("[Live Join]") %> Skill of <span class="redtext">"Waku-Waku-Week!"</span>.
+                Additionally, the following <%- skillFormat("[Auto]") %>
+                Skills apply at the same time as <%- skillFormat("[Live Join] or [Live Success]") %> Skills,
                 so you can also use them in any
                 order you like.
-                <br><br><%- skillFormat("[Live Join]", 1, false) %>
+                <br><br><%- skillFormat("[Live Join]") %>
                 <ul>
                     <li><a href="/card/LL13-065/">LL13-065 "µ's Holiday Stories Eli Ayase"</a></li>
                     <li><a href="/card/LL13-066/">LL13-066 "µ's Holiday Stories Kotori Minami"</a></li>
@@ -429,7 +429,7 @@
                     <li><a href="/card/LL14-069/">LL14-069 "Guidance of Angel Yohane"</a></li>
                     <li><a href="/card/LL14-073/">LL14-073 "Student Council President, Tsuki Watanabe"</a></li>
                 </ul>
-                <br><%- skillFormat("[Live Success]", 1, false) %>
+                <br><%- skillFormat("[Live Success]") %>
                 <ul>
                     <li><a href="/card/LL11-070/">LL11-070 "#6 Aqours WAVE"</a></li>
                     <li><a href="/card/LL11-071/">LL11-071 "#9 Awaken the power"</a></li>
@@ -447,15 +447,15 @@
             </div>
 
             <h5>Between flipping over a new Song card from the Set List and
-                the <%- skillFormat("[Live Success]", 1, false) %> Skills, which one should
+                the <%- skillFormat("[Live Success]") %> Skills, which one should
                 go first?</h5>
             <div class="question" id="flip_before_skills">
-                When performing a <%- skillFormat("⟪LIVE⟫", 1, false) %>, what should be performed first - flipping over
-                a new Song card, or the <%- skillFormat("[Live Success]", 1, false) %> Skills?
+                When performing a <%- skillFormat("⟪LIVE⟫") %>, what should be performed first - flipping over
+                a new Song card, or the <%- skillFormat("[Live Success]") %> Skills?
             </div>
             <div class="answer">
                 Flip a new Song card face-up first.<br>For example, when performing
-                a <%- skillFormat("⟪LIVE⟫", 1, false) %> using
+                a <%- skillFormat("⟪LIVE⟫") %> using
                 <a href="/card/LL06-061/">LL06-061 "Sora mo Kokoro mo Hareru kara"</a>, you reveal a new Song card
                 before performing the Skill and turning one of the cards face-down.
             </div>
@@ -463,18 +463,18 @@
             <h5>What happens if there's additional face-up cards in the Set List?</h5>
             <div class="question" id="more_faceup_songs">
                 There are currently three or more face-up Song cards in my Set List through Skills. If I perform
-                a <%- skillFormat("⟪LIVE⟫", 1, false) %>
+                a <%- skillFormat("⟪LIVE⟫") %>
                 now, can I still flip over a new Song card?
             </div>
             <div class="answer">
                 Yes. Regardless of how many face-up Song cards there are, if you perform
-                a <%- skillFormat("⟪LIVE⟫", 1, false) %>, you flip one of the
+                a <%- skillFormat("⟪LIVE⟫") %>, you flip one of the
                 face-down Song cards in your Set List face-up.
             </div>
 
             <h5>What should I do if I have to flip a Song card in my Set List face-down?</h5>
             <div class="question" id="no_shuffle_facedown_song">
-                The <%- skillFormat("[Live Success]", 1, false) %> Skill of <a href="/card/LL06-061/">LL06-061 "Sora mo
+                The <%- skillFormat("[Live Success]") %> Skill of <a href="/card/LL06-061/">LL06-061 "Sora mo
                     Kokoro mo Hareru kara"</a> says
                 I should flip a face-up Song card face-down. How exactly should I do that?
             </div>
@@ -484,7 +484,7 @@
             </div>
             <div class="question" id="may_flip_other_facedown_song">
                 After flipping a Song card face-down through a Skill, if I perform
-                a <%- skillFormat("⟪LIVE⟫", 1, false) %> or can flip a Song card
+                a <%- skillFormat("⟪LIVE⟫") %> or can flip a Song card
                 face-up using another Skill, which Song card should I flip?
             </div>
             <div class="answer">
