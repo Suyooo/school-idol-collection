@@ -1,5 +1,4 @@
-// noinspection JSNonASCIINames,NonAsciiCharacters
-
+/*
 import * as fs from "fs";
 import {Card, CardMember, CardMemberIdolizable, CardMemory, CardSongWithAnyReq, CardSongWithAttrReq} from "../models/card/card";
 import UnimplementedError from "../errors/unimplemented";
@@ -189,3 +188,4 @@ for (const pack of fs.readdirSync("/home/chris/gdrive/Projekte/school-idol-colle
         }
     }
 }
+*/
