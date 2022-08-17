@@ -7,8 +7,10 @@ import {
     Table
 } from "sequelize-typescript";
 
-import Trigger, {TriggerID} from "../../types/trigger";
+import Trigger, {TriggerID, TriggerNameJpn} from "../../types/trigger";
 import PatternGroupType, {PatternGroupTypeID} from "../../types/patternGroupType";
+import DB from "../db";
+import {escapeForRegex} from "../../utils/regex";
 
 @Table({timestamps: false})
 export default class TranslateTablePattern extends Model {
@@ -66,6 +68,31 @@ export default class TranslateTablePattern extends Model {
             typeString += types[i].id;
         }
         this.groupTypes = typeString;
+    }
+
+    static readonly skillPattern = /^(【[^【】]*?】(?:\/【[^【】]*?】)*)(.*?)$/;
+
+    static buildSkeletonFromSkill(skill: string): TranslateTablePattern {
+        const isSkill = TranslateTablePattern.skillPattern.exec(skill);
+        if (isSkill === null) {
+            // Probably lyrics
+            return DB.TranslateTablePattern.build({
+                triggers: 0,
+                regex: "^" + escapeForRegex(skill) + "$",
+                template: skill,
+                groupTypes: ""
+            });
+        } else {
+            const triggers = isSkill[1].split("/").map(t => Trigger.get(t.substring(1, t.length - 1) as TriggerNameJpn));
+            const skel = DB.TranslateTablePattern.build({
+                triggers: 0,
+                regex: "^" + escapeForRegex(isSkill[2]) + "$",
+                template: isSkill[2],
+                groupTypes: ""
+            });
+            skel.triggerArray = triggers;
+            return skel;
+        }
     }
 
     /*testSkill(skill: string): boolean {

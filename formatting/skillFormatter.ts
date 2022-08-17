@@ -3,7 +3,7 @@ import Annotation from "../types/annotation";
 import Trigger, {TriggerNameEng, TriggerNameJpn} from "../types/trigger";
 import Attribute, {PieceAttributeEngName, PieceAttributeJpnName} from "../types/attribute";
 import PieceInfo from "../types/pieceInfo";
-import {num} from "../utils/regex";
+import {toNumWithFullwidth} from "../utils/regex";
 import pieceFormat from "./pieceFormat";
 
 type SkillFormatterRegexes =
@@ -90,7 +90,7 @@ export default class SkillFormatter {
     private resolveAttrRequirement(smile: string, pure: string, cool: string) {
         return "<span class='attrreq nowrap'>"
             + this.lang.leftSquareBracket
-            + pieceFormat(new PieceInfo(0, num(smile), num(pure), num(cool)), this.lang)
+            + pieceFormat(new PieceInfo(0, toNumWithFullwidth(smile), toNumWithFullwidth(pure), toNumWithFullwidth(cool)), this.lang)
             + this.lang.rightSquareBracket
             + "</span>";
     }

@@ -1,10 +1,13 @@
-const allDigitsPattern = /^[０-９]*$/;
-const piecesPattern = /【(オール|赤|緑|青)】/g;
+const regexSpecialCharacters = /[-[\]{}()*+?.,\\^$|#\s]/g;
 
-function num(fw: string): number {
-    return Number(fw.normalize('NFKC'));
+function toNumWithFullwidth(fw: string): number {
+    return parseInt(fw.normalize('NFKC'));
+}
+
+function escapeForRegex(s: string): string {
+    return s.replace(regexSpecialCharacters, "\\$&");
 }
 
 export {
-    allDigitsPattern, piecesPattern, num
+    toNumWithFullwidth, escapeForRegex
 }

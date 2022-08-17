@@ -16,7 +16,7 @@
                     <tr>
                         <th><a href="/card/<%= a.cardNo %>"><%= a.cardNo %></a></th>
                         <td><%- a.skill.replace(/\n/g, "<br>") %></td>
-                        <td><a href="/pattern/create/<%= a.cardNo %>/<%= a.line %>/">Pattern</a></td>
+                        <td><a href="/pattern/create/<%= a.cardNo %>/<%= a.line %>/">Create</a></td>
                     </tr>
                 <% }); %>
                 </tbody>

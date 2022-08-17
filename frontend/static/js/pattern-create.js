@@ -7,12 +7,12 @@ const templateError = $("#template_error");
 const groupMatches = [...new Array(15)].map(i => $("#group" + (i + 1) + "_match"));
 
 function tryPattern() {
-    if (example[0] === undefined) {
-        submitBtn.show();
+    submitBtn.hide();
+    if (example.val() === "") {
+        regexError.text("enter an example skill").show();
         return;
     }
 
-    submitBtn.hide();
     if (regex.val() === "") {
         regexError.hide();
         return;
@@ -144,13 +144,12 @@ function submit() {
     submitBtn.hide();
     const groupCount = (regex.val().match(/(?<!\\)\((?!\?:)/g) || []).length;
     const data = {
-        patternid: patternid,
-        triggers: $("#trigDiv input").toArray().map(e => $(e).prop("checked")),
+        id: patternid,
+        triggerIds: [...new Array(8)].map((_, i) => i).filter(i => $("#trig" + i).prop("checked")),
         regex: regex.val(),
         template: template.val(),
-        grouptypes: [...new Array(groupCount)]
-            .map((g, i) => $("input[name='group" + (i + 1) + "']:checked").attr("id") || alert("Group #" + (i + 1) + " has no type set."))
-            .map(s => s.charAt(s.length - 1)).join("")
+        groupTypeIds: [...new Array(groupCount)]
+            .map(i => $("input[name='group" + (i + 1) + "']:checked").attr("id").at(-1))
     }
     $.ajax({
         type: "PUT",
@@ -158,7 +157,7 @@ function submit() {
         contentType: "application/json",
         data: JSON.stringify(data)
     }).done((res) => {
-        window.location.href = "/pattern/assign/" + res.patternId + "/";
+        window.location.href = "/pattern/assign/" + res.id + "/";
     }).fail((jqxhr, textStatus, error) => {
         alert("Error while saving: " + error);
         submitBtn.show();

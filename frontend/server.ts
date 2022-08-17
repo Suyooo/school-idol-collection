@@ -5,6 +5,9 @@ import {listUntranslatedSkills} from "../translation/skills";
 import DB from "../models/db";
 import {Op} from "sequelize";
 import SkillFormatter from "../formatting/skillFormatter";
+import TranslateTablePattern from "../models/translatetables/pattern";
+import Trigger, {TriggerID} from "../types/trigger";
+import PatternGroupType, {PatternGroupTypeID} from "../types/patternGroupType";
 
 const app = express();
 const port = 3000;
@@ -155,48 +158,76 @@ app.get("/card/:cardno/", async (req, res) => {
     }
 });
 
-/*app.get("/pattern/create/:cardno?/:line?/", (req, res) => {
-    const skill = req.params.cardno ? loadSkillDetails(req.params.cardno, Number(req.params.line)) : undefined;
-    if (skill === undefined) {
-        res.render("pattern/create", {
-            patternid: undefined,
-            example: undefined,
-            triggers: [false, false, false, false, false, false, false, false],
-            pattern: "",
-            template: "",
-            groupTypes: []
-        });
-    } else {
-        res.render("pattern/create", {
-            patternid: undefined,
-            example: skill.skill,
-            triggers: skill.triggers,
-            pattern: skill.skill,
-            template: skill.skill,
-            groupTypes: []
-        });
-    }
+app.get("/pattern/create/", async (req, res) => {
+    res.render("pattern/create", {
+        id: "undefined",
+        example: "",
+        triggerIds: [],
+        regex: "^$",
+        template: "",
+        groupTypeIds: []
+    });
 });
 
-app.get("/pattern/edit/:patternno/", (req, res) => {
-    const patternid = parseInt(req.params.patternno);
-    const pattern = getPattern(patternid);
-    if (pattern === undefined) {
+app.get("/pattern/create/:cardno/:line/", async (req, res) => {
+    const card = await DB.Card.findByPk(req.params.cardno, {attributes: ["skill"]});
+    const skill = card?.skill?.split("\n")[parseInt(req.params.line)];
+    if (skill === undefined) {
         res.status(404);
         res.send("");
-    } else {
-        res.render("pattern/create", {
-            patternid: patternid,
-            example: undefined,
-            triggers: [...new Array(8)].map((e, i) => pattern.triggers.indexOf(Trigger[i]) !== -1),
-            pattern: pattern.pattern.source,
-            template: pattern.template,
-            groupTypes: pattern.groupTypes.map(g => g.id)
-        });
+        return;
     }
+
+    const pattern = TranslateTablePattern.buildSkeletonFromSkill(skill);
+    res.render("pattern/create", {
+        id: "undefined",
+        example: skill,
+        triggerIds: pattern.triggerArray.map(t => t.id),
+        regex: pattern.regex,
+        template: pattern.template,
+        groupTypeIds: pattern.groupTypeArray.map(g => g.id)
+    });
 });
 
-app.get("/pattern/assign/:patternid/", (req, res) => {
+app.get("/pattern/edit/:patternno/", async (req, res) => {
+    const pattern = await DB.TranslateTablePattern.findByPk(parseInt(req.params.patternno));
+    if (pattern === null) {
+        res.status(404);
+        res.send("");
+        return;
+    }
+
+    res.render("pattern/create", {
+        id: pattern.id,
+        example: "",
+        triggerIds: pattern.triggerArray.map(t => t.id),
+        regex: pattern.regex,
+        template: pattern.template,
+        groupTypeIds: pattern.groupTypeArray.map(g => g.id)
+    });
+});
+
+app.get("/pattern/edit/:patternno/:cardno/:line", async (req, res) => {
+    const pattern = await DB.TranslateTablePattern.findByPk(parseInt(req.params.patternno));
+    const card = await DB.Card.findByPk(req.params.cardno, {attributes: ["skill"]});
+    const skill = card?.skill?.split("\n")[parseInt(req.params.line)];
+    if (pattern === null || skill === undefined) {
+        res.status(404);
+        res.send("");
+        return;
+    }
+
+    res.render("pattern/create", {
+        id: pattern.id,
+        example: skill,
+        triggerIds: pattern.triggerArray.map(t => t.id),
+        regex: pattern.regex,
+        template: pattern.template,
+        groupTypeIds: pattern.groupTypeArray.map(g => g.id)
+    });
+});
+
+/*app.get("/pattern/assign/:patternid/", (req, res) => {
     res.render("pattern/assign", {
         patternid: Number(req.params.patternid),
         assigns: getAssignableSkills(Number(req.params.patternid))
@@ -220,6 +251,34 @@ app.get("/faq/:faq/", (req, res) => {
     if (faqpages.indexOf(req.params.faq) === -1) req.params.faq = "index";
     res.render("faq/" + req.params.faq);
 });
+
+/*
+ * JSON
+ */
+
+app.put('/pattern/add/', async (req, res, next) => {
+    let pattern;
+    if (req.body.id === undefined) {
+        pattern = DB.TranslateTablePattern.build(req.body);
+    } else {
+        pattern = await DB.TranslateTablePattern.findByPk(req.body.id);
+        if (pattern === null) {
+            res.status(404);
+            res.send("");
+            return;
+        }
+        pattern.set(req.body);
+    }
+    pattern.triggerArray = req.body.triggerIds.map((t: TriggerID) => Trigger.get(t));
+    pattern.groupTypeArray = req.body.groupTypeIds.map((g: PatternGroupTypeID) => PatternGroupType.get(g));
+    await pattern.save();
+    res.json({success: true, id: pattern.id});
+});
+
+/*app.put('/pattern/set/', (req, res, next) => {
+    assignSkills(req.body.pattern, req.body.cards);
+    res.json({"success": true});
+});*/
 
 app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}`)

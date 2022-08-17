@@ -61,12 +61,12 @@ export default class PatternGroupType {
 
         // Number
         map.push(new PatternGroupType(4, async function (match: string): Promise<string> {
-            return Regex.num(match).toFixed(0);
+            return Regex.toNumWithFullwidth(match).toFixed(0);
         }, generateNumberReplacements));
 
         // Number Text
         map.push(new PatternGroupType(5, async function (match: string): Promise<string> {
-            const n = Regex.num(match);
+            const n = Regex.toNumWithFullwidth(match);
             if (n === 0) return "zero";
             if (n === 1) return "one";
             if (n === 2) return "two";
@@ -85,7 +85,7 @@ export default class PatternGroupType {
 
         // Ordinal
         map.push(new PatternGroupType(6, async function (match: string): Promise<string> {
-            const n = Regex.num(match);
+            const n = Regex.toNumWithFullwidth(match);
             const nMod10 = n % 10;
             const nMod100 = n % 100;
             if (nMod10 === 1 && nMod100 !== 11) return n + "st";
@@ -97,8 +97,8 @@ export default class PatternGroupType {
         // Pieces
         map.push(new PatternGroupType(7, async function (match: string): Promise<string> {
             let s = "";
-            for (const pieceMatch of match.matchAll(Regex.piecesPattern)) {
-                s += "[" + Attribute.get(pieceMatch[1] as PieceAttributeJpnName).pieceAttributeNameEng + "]";
+            for (const jpnPieceName of match.substring(1, match.length - 1).split("】【")) {
+                s += "[" + Attribute.get(jpnPieceName as PieceAttributeJpnName).pieceAttributeNameEng + "]";
             }
             return s;
         }, generateNoReplacements));
@@ -118,7 +118,7 @@ function generateAOrAnReplacements(match: string, thisNum: number, allReplacemen
 }
 
 function generateNumberReplacements(match: string, thisNum: number, allReplacements: string[]): Map<string, string> {
-    const n = Regex.num(match);
+    const n = Regex.toNumWithFullwidth(match);
     const isOne = (n === 1);
     return new Map<string, string>([
         ["<" + thisNum + "s>", isOne ? "" : "s"],
