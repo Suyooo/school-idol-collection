@@ -1,6 +1,6 @@
-import {loadCardFromCardNo} from "../cards/loader";
-import {Card} from "../models/card/card";
 import fs from "fs";
+import Card from "../models/card/card";
+import DB from "../models/db";
 
 const faqname = "LL06";
 let tlresult = `- LL06-028 SR [Chika Takami] ~ LL06-036 SR [Ruby Kurosawa]
@@ -124,62 +124,66 @@ let faqresult = `<%- include("../partials/header", {"title": "${faqname} FAQ &bu
             <h4>${faqname} Frequenty Asked Questions</h4>
 `;
 
-let cursetno: string | undefined = undefined;
-while (tlresult.length > 0) {
-    let nlindex = tlresult.indexOf("\n");
-    const line = (nlindex !== -1) ? tlresult.substring(0, nlindex) : tlresult;
+(async () => {
+    let cursetno: string | undefined = undefined;
+    while (tlresult.length > 0) {
+        let nlindex = tlresult.indexOf("\n");
+        const line = (nlindex !== -1) ? tlresult.substring(0, nlindex) : tlresult;
 
-    if (line.startsWith("●LL") || line.startsWith("●EX") || line.startsWith("●PR")) {
-        cursetno = undefined;
-        if (line.indexOf("~") !== -1) {
-            faqresult += "\n            <h5>" + line.substring(1).split("~").map(cardname => {
-                const cardno = cardname.split(" ")[0];
-                if (cursetno === undefined) cursetno = cardno.split("-")[1];
-                const c: Card | undefined = loadCardFromCardNo(cardno);
-                if (c === undefined) {
-                    return "<a href=\"/card/" + cardno + "/\">" + cardno + "\"</a>";
-                } else {
-                    return "<a href=\"/card/" + cardno + "/\">" + c.cardno + " \"" + c.nameEn + "\"</a>";
+        if (line.startsWith("●LL") || line.startsWith("●EX") || line.startsWith("●PR")) {
+            cursetno = undefined;
+            if (line.indexOf("~") !== -1) {
+                const links = [];
+                for (const cardname of line.substring(1).split("~")) {
+                    const cardno = cardname.split(" ")[0];
+                    if (cursetno === undefined) cursetno = cardno.split("-")[1];
+                    const c: Card | null = await DB.Card.findByPk(cardno);
+                    if (c === null) {
+                        links.push("<a href=\"/card/" + cardno + "/\">" + cardno + "\"</a>");
+                    } else {
+                        links.push("<a href=\"/card/" + cardno + "/\">" + c.cardNo + " \"" + c.nameEng + "\"</a>");
+                    }
                 }
-            }).join(" to ") + "</h5>\n";
-        } else {
-            const cardno = line.substring(1).split(" ")[0];
-            cursetno = cardno.split("-")[1];
-            const c: Card | undefined = loadCardFromCardNo(cardno);
-            if (c === undefined) {
-                faqresult += "\n            <h5><a href=\"/card/" + cardno + "/\">" + cardno + "\"</a></h5>\n";
+                faqresult += "\n            <h5>"+links.join(" to ") + "</h5>\n";
             } else {
-                faqresult += "\n            <h5><a href=\"/card/" + cardno + "/\">" + c.cardno + " \"" + c.nameEn + "\"</a></h5>\n";
+                const cardno = line.substring(1).split(" ")[0];
+                cursetno = cardno.split("-")[1];
+                const c: Card | null = await DB.Card.findByPk(cardno);
+                if (c === null) {
+                    faqresult += "\n            <h5><a href=\"/card/" + cardno + "/\">" + cardno + "\"</a></h5>\n";
+                } else {
+                    faqresult += "\n            <h5><a href=\"/card/" + cardno + "/\">" + c.cardNo + " \"" + c.nameEng + "\"</a></h5>\n";
+                }
             }
-        }
-    } else if (line.startsWith("●")) {
-        faqresult += `            <div class="seealso">
+        } else if (line.startsWith("●")) {
+            faqresult += `            <div class="seealso">
                 See also: <a href="/faq/general#">${line.substring(1)}</a>
             </div>
 `;
-    } else if (line.startsWith("Q.")) {
-        const aindex = tlresult.indexOf("\nA.");
-        const question = tlresult.substring(2, aindex).replace(/\n/g,"<br>\n                ");
-        const nqindex = tlresult.indexOf("\nQ.", aindex + 1);
-        const nbindex = tlresult.indexOf("\n●", aindex + 1);
-        nlindex = (nqindex === -1) ? nbindex : ((nbindex === -1) ? nqindex : Math.min(nqindex, nbindex));
-        const answer = tlresult.substring(aindex + 3, nlindex === -1 ? undefined : nlindex).replace(/\n/g,"<br>\n                ");
+        } else if (line.startsWith("Q.")) {
+            const aindex = tlresult.indexOf("\nA.");
+            const question = tlresult.substring(2, aindex).replace(/\n/g, "<br>\n                ");
+            const nqindex = tlresult.indexOf("\nQ.", aindex + 1);
+            const nbindex = tlresult.indexOf("\n●", aindex + 1);
+            nlindex = (nqindex === -1) ? nbindex : ((nbindex === -1) ? nqindex : Math.min(nqindex, nbindex));
+            const answer = tlresult.substring(aindex + 3, nlindex === -1 ? undefined : nlindex).replace(/\n/g, "<br>\n                ");
 
-        faqresult += `            <div class="question" id="${cursetno}">
+            faqresult += `            <div class="question" id="${cursetno}">
                 ${question}
             </div>
             <div class="answer">
                 ${answer}
             </div>
 `;
+        }
+
+        tlresult = (nlindex !== -1) ? tlresult.substring(nlindex + 1) : "";
     }
 
-    tlresult = (nlindex !== -1) ? tlresult.substring(nlindex + 1) : "";
-}
-
-faqresult += `        </div>
+    faqresult += `        </div>
     </div>
 </div>
 <%- include("../partials/footer", {"jquery": false, "scripts": []}); %>`;
 
-fs.writeFileSync("frontend/views/faq/" + faqname.toLowerCase() + ".ejs", faqresult);
+    fs.writeFileSync("frontend/views/faq/" + faqname.toLowerCase() + ".ejs", faqresult);
+})();
