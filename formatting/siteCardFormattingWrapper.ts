@@ -33,34 +33,38 @@ function assertIsFormattingMemberWithGroup(obj: unknown): asserts obj is SiteCar
 export default class SiteCardFormattingWrapper {
     readonly card: Card;
 
-    constructor(card: Card) {
+    constructor(card: Card, forGridDisplay: boolean = false) {
         this.card = card;
         this.cardNo = card.cardNo;
         this.set = card.cardNo.split("-")[0];
         this.id = card.id.toString();
-        this.copyright = card.copyright;
-        this.faqs = card.faqs;
+        if (!forGridDisplay) {
+            this.copyright = card.copyright;
+            this.faqs = card.faqs;
+        }
 
         if (card.isMember()) {
             this.type = "Member";
-            this.rarity = CardMemberRarity[card.member.rarity];
+            if (!forGridDisplay) this.rarity = CardMemberRarity[card.member.rarity];
         } else if (card.isSong()) {
             this.type = "Song";
-            this.rarity = CardSongRarity[card.song.rarity];
+            if (!forGridDisplay) this.rarity = CardSongRarity[card.song.rarity];
         } else if (card.isMemory()) {
             this.type = "Memory";
-            this.rarity = "ME";
+            if (!forGridDisplay) this.rarity = "ME";
         }
 
         this.nameJpn = card.name;
         this.nameEng = card.nameEng;
         this.name = this.nameEng || this.nameJpn;
 
-        this.nameJpnWithQuot = card.name.split("／").map(s => '"' + s + '"').join("／");
-        this.nameEngWithQuot = card.nameEng === null ? null
-            : card.nameEng.split(" / ").map(s => '"' + s + '"').join(" / ");
-        this.nameWithQuot = this.nameEngWithQuot || this.nameJpnWithQuot;
-        this.title = "<span class='card-id'>" + this.cardNo + "</span> " + this.nameWithQuot;
+        if (!forGridDisplay) {
+            this.nameJpnWithQuot = card.name.split("／").map(s => '"' + s + '"').join("／");
+            this.nameEngWithQuot = card.nameEng === null ? null
+                : card.nameEng.split(" / ").map(s => '"' + s + '"').join(" / ");
+            this.nameWithQuot = this.nameEngWithQuot || this.nameJpnWithQuot;
+            this.title = "<span class='card-id'>" + this.cardNo + "</span> " + this.nameWithQuot;
+        }
     }
 
     readonly cardNo: string;

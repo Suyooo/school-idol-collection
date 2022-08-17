@@ -1,12 +1,12 @@
-<a href="/card/<%= f.cardno() %>/" class="grid-item">
+<a href="/card/<%= f.cardNo %>/" class="grid-item">
     <div class="imgcont">
-        <img src="/images/<%= f.set() %>/<%= f.cardno() %>-front.jpg">
-        <img src="/images/<%= f.set() %>/<%= f.cardno() %>-back.jpg">
+        <img src="/images/<%= f.set %>/<%= f.cardNo %>-front.jpg">
+        <img src="/images/<%= f.set %>/<%= f.cardNo %>-back.jpg">
     </div>
     <div class="namecont">
-        <span>▶</span><span><%= f.name() %></span>
+        <span>▶</span><span><%= f.name %></span>
     </div>
     <div class="linecont">
-        <span><%= f.cardno() %></span><span><%= f.type() %></span>
+        <span><%= f.cardNo %></span><span><%= f.type %></span>
     </div>
 </a>

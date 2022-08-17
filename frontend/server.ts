@@ -92,14 +92,15 @@ app.get("/", (req, res) => {
     });
 });
 
-/*app.get("/set/:set/", (req, res) => {
+app.get("/set/:set/", async (req, res) => {
     res.render("set", {
         "set": req.params.set,
-        "cards": loadCardSet(req.params.set).map(c => new SiteCardFormattingWrapper(c)).filter(c => req.params.set != "EX15" || c.cardnoInSet() <= 54 || c.cardno().startsWith("EX15-E"))
+        "cards": (await DB.Card.scope(["forGrid", {method: ["set", req.params.set]}]).findAll())
+            .map(c => new SiteCardFormattingWrapper(c, true))
     });
 });
 
-app.get("/search/card/skill/:query", (req, res) => {
+/*app.get("/search/card/skill/:query", (req, res) => {
     res.render("search", {
         "cardType": "Cards",
         "query": req.params.query,

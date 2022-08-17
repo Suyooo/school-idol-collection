@@ -1,7 +1,7 @@
 import {
     AllowNull,
     Column,
-    DataType,
+    DataType, DefaultScope,
     HasMany,
     HasOne,
     Model,
@@ -27,6 +27,9 @@ import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
 import Attribute from "../../types/attribute";
 import CardMemberGroup from "./memberGroup";
 
+@DefaultScope(() => ({
+    order: [["cardNo", "ASC"]]
+}))
 @Scopes(() => ({
     members: {
         where: {type: CardType.MEMBER}
@@ -43,6 +46,13 @@ import CardMemberGroup from "./memberGroup";
             id: id
         }
     }),
+    set: (set) => ({
+        where: {
+            cardNo: {
+                [Op.like]: set + "-%"
+            }
+        }
+    }),
 
     before: (cardNo) => ({
         where: {
@@ -57,8 +67,7 @@ import CardMemberGroup from "./memberGroup";
             cardNo: {
                 [Op.gt]: cardNo
             }
-        },
-        order: [["cardNo", "ASC"]]
+        }
     }),
 
     full: () => ({
@@ -93,7 +102,7 @@ import CardMemberGroup from "./memberGroup";
         attributes: ["cardNo", "id", "name"],
         include: [DB.TranslationName]
     }),
-    forList: () => ({
+    forGrid: () => ({
         attributes: ["cardNo", "id", "type", "name"],
         include: [DB.TranslationName]
     })
