@@ -1,4 +1,4 @@
-<%- include("partials/header", {"title": "Create Pattern", "styles": ["pattern-create"]}); %>
+<%- include("../partials/header", {"title": "Create Pattern", "styles": ["pattern-create"]}); %>
 <div class="content">
     <% if (example) { %>
         <h5>Example Skill</h5>
@@ -140,4 +140,4 @@
     </div>
 </div>
 <script>const patternid = <%- patternid %>;</script>
-<%- include("partials/footer", {"jquery": true, "scripts": ["pattern-create"]}); %>
+<%- include("../partials/footer", {"jquery": true, "scripts": ["pattern-create"]}); %>

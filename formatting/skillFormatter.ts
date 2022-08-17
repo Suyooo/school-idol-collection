@@ -1,9 +1,9 @@
 import Language from "../types/language";
-import Annotation from "../annotator/annotation";
+import Annotation from "../types/annotation";
 import Trigger, {TriggerNameEng, TriggerNameJpn} from "../types/trigger";
 import Attribute, {PieceAttributeEngName, PieceAttributeJpnName} from "../types/attribute";
 import PieceInfo from "../types/pieceInfo";
-import {num} from "../translate/skills/regex";
+import {num} from "../utils/regex";
 import pieceFormat from "./pieceFormat";
 
 type SkillFormatterRegexes =

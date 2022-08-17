@@ -1,12 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import SiteCardFormattingWrapper from "../formatting/siteCardFormattingWrapper";
-import translateSkill, {
-    assignSkills,
-    getAssignableSkills,
-    listUntranslatedSkills,
-    loadSkillDetails
-} from "../translate/skills/translateSkill";
+import {listUntranslatedSkills} from "../translation/skills";
 import DB from "../models/db";
 import {Op} from "sequelize";
 import SkillFormatter from "../formatting/skillFormatter";
@@ -162,7 +157,7 @@ app.get("/card/:cardno/", async (req, res) => {
 /*app.get("/pattern/create/:cardno?/:line?/", (req, res) => {
     const skill = req.params.cardno ? loadSkillDetails(req.params.cardno, Number(req.params.line)) : undefined;
     if (skill === undefined) {
-        res.render("pattern-create", {
+        res.render("pattern/create", {
             patternid: undefined,
             example: undefined,
             triggers: [false, false, false, false, false, false, false, false],
@@ -171,7 +166,7 @@ app.get("/card/:cardno/", async (req, res) => {
             groupTypes: []
         });
     } else {
-        res.render("pattern-create", {
+        res.render("pattern/create", {
             patternid: undefined,
             example: skill.skill,
             triggers: skill.triggers,
@@ -189,7 +184,7 @@ app.get("/pattern/edit/:patternno/", (req, res) => {
         res.status(404);
         res.send("");
     } else {
-        res.render("pattern-create", {
+        res.render("pattern/create", {
             patternid: patternid,
             example: undefined,
             triggers: [...new Array(8)].map((e, i) => pattern.triggers.indexOf(Trigger[i]) !== -1),
@@ -201,17 +196,17 @@ app.get("/pattern/edit/:patternno/", (req, res) => {
 });
 
 app.get("/pattern/assign/:patternid/", (req, res) => {
-    res.render("pattern-assign", {
+    res.render("pattern/assign", {
         patternid: Number(req.params.patternid),
         assigns: getAssignableSkills(Number(req.params.patternid))
     });
-});
-
-app.get("/pattern/untranslated/", (req, res) => {
-    res.render("pattern-untranslated", {
-        untranslated: listUntranslatedSkills()
-    });
 });*/
+
+app.get("/pattern/untranslated/", async (req, res) => {
+    res.render("pattern/untranslated", {
+        untranslated: await listUntranslatedSkills()
+    });
+});
 
 const faqpages = ["general", "rules", "ll01", "ll02", "ll03", "ll04", "ll05", "ll06"];
 

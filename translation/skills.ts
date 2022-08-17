@@ -1,25 +1,32 @@
-import DB, {patternRow} from "../../utils/db";
-import {getPattern, Pattern} from "./pattern";
-import Log from "../../utils/logger";
-import Trigger from "../../consts/triggers";
-import ErrorWithCause from "../../errors/errorWithCause";
-import ParseError from "../../errors/parse";
-import {loadCardFromCardNo} from "../../cards/loader";
-
-const getAllPatternsStmt = DB.prepare("SELECT * FROM patterns");
-const getAllCardsStmt = DB.prepare("SELECT cardno, skill FROM cards");
-const getCardStmt = DB.prepare("SELECT skill FROM cards WHERE cardno = ?");
-const insertCardsTranslationStmt = DB.prepare("INSERT OR REPLACE INTO cards_translation_skill VALUES(?,?,?,?)");
-const getAllGroupsStmt = DB.prepare("SELECT id, skill FROM cards_members_groups");
-const insertGroupsTranslationStmt = DB.prepare("INSERT OR REPLACE INTO cards_translation_group_skill VALUES(?,?,?,?)");
-const getUntranslatedStmt = DB.prepare("SELECT cardno, skill, (LENGTH(skill)-LENGTH(REPLACE(skill,X'0A',''))+1) as skill_count, (SELECT COUNT(*) FROM cards_translation_skill WHERE cards_m_cardno = cardno) as translation_count FROM cards WHERE translation_count != skill_count");
+import Log from "../utils/logger";
+import DB from "../models/db";
+import {Op} from "sequelize";
 
 const skillPattern = /^(【[^【】]*?】(?:\/【[^【】]*?】)*)(.*?)$/;
 
-export function listUntranslatedSkills() {
-    return getUntranslatedStmt.all();
+export async function listUntranslatedSkills() {
+    const allSkillCards = await DB.Card.findAll({
+        attributes: ["cardNo", "skill"],
+        where: {
+            skill: {
+                [Op.not]: null
+            }
+        },
+        include: [DB.TranslationSkill]
+    });
+    return allSkillCards.flatMap(card => {
+        const skillLineCount = card.skillLines.length;
+        const translatedLineCount = card._skillLinesEng.length;
+        if (skillLineCount === translatedLineCount) return [];
+        const translatedLineIds = card._skillLinesEng.map(s => s.line);
+        return card.skillLines.map((s,i) => ({
+            cardNo: card.cardNo,
+            skill: s,
+            line: i
+        })).filter(s => translatedLineIds.indexOf(s.line) === -1);
+    });
 }
-
+/*
 export function loadSkillDetails(cardno: string, line: number): { triggers: [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean], skill: string } | undefined {
     const card = loadCardFromCardNo(cardno);
     if (card == undefined || card.skill == undefined) return undefined;
@@ -158,4 +165,4 @@ function translateLine(skill: string): { usedPattern: number | undefined, skill:
 
 export default function translateSkill(skill: string): { usedPattern: number | undefined, skill: string }[] {
     return skill.split("\n").map(line => translateLine(line));
-}
+}*/

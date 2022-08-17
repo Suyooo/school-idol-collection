@@ -1,5 +1,5 @@
-import * as Grammar from "../translate/skills/grammar";
-import * as Regex from "../translate/skills/regex";
+import * as Grammar from "../utils/grammar";
+import * as Regex from "../utils/regex";
 import CardType from "./cardType";
 import Attribute, {PieceAttributeJpnName} from "./attribute";
 import DB from "../models/db";
