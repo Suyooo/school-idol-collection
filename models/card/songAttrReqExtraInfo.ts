@@ -47,6 +47,6 @@ export default class CardSongAttrReqExtraInfo extends Model {
     piecesCool!: number;
 
     get pieces(): PieceInfo {
-        return pieceInfoGetter(undefined, "piecesSmile", "piecesPure", "piecesCool");
+        return pieceInfoGetter(this,undefined, "piecesSmile", "piecesPure", "piecesCool");
     }
 }

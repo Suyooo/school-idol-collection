@@ -4,7 +4,7 @@ import Trigger, {TriggerNameEng, TriggerNameJpn} from "../types/trigger";
 import Attribute, {PieceAttributeEngName, PieceAttributeJpnName} from "../types/attribute";
 import PieceInfo from "../types/pieceInfo";
 import {num} from "../translate/skills/regex";
-import {pieceFormat} from "./pieceFormat";
+import pieceFormat from "./pieceFormat";
 
 type SkillFormatterRegexes =
     "lyrics"
@@ -105,9 +105,7 @@ export default class SkillFormatter {
         const formattedLines: string[] = [];
         for (const origLine of s) {
             let line = origLine;
-            if (line === null) {
-                line = this.nullLine;
-            } else if (isFullSkillLine && this.regexes.lyrics.test(line)) {
+            if (isFullSkillLine && this.regexes.lyrics.test(line)) {
                 line = "<i>" + line + "</i>";
             } else {
                 let i = line.indexOf("{{");

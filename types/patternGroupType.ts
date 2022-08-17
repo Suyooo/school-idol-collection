@@ -53,7 +53,7 @@ export default class PatternGroupType {
                 where: {
                     name: match
                 }
-            }))?.nameEn;
+            }))?.nameEng;
             if (n === undefined) throw new NotFoundError(match + " is not a known memory");
             if (n === null) throw new MissingTranslationError(match + " has no English translation");
             return n;

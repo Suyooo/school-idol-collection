@@ -36,6 +36,6 @@ export default class CardSongAnyReqExtraInfo extends Model {
     piecesAll!: number;
 
     get pieces(): PieceInfo {
-        return pieceInfoGetter("piecesAll");
+        return pieceInfoGetter(this,"piecesAll");
     }
 }

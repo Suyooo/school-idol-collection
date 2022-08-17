@@ -61,32 +61,42 @@ import CardMemberGroup from "./memberGroup";
         order: [["cardNo", "ASC"]]
     }),
 
-    full: {
+    full: () => ({
         include: [
-            DB.CardMemberExtraInfo,
-            DB.CardMemberGroup,
-            DB.CardMemberIdolizePieceExtraInfo,
-            DB.CardSongExtraInfo,
-            DB.CardSongAnyReqExtraInfo,
-            DB.CardSongAttrReqExtraInfo,
+            {
+                model: DB.CardMemberExtraInfo,
+                include: [
+                    {
+                        model: DB.CardMemberGroup,
+                        include: [DB.TranslationGroupSkill]
+                    },
+                    DB.CardMemberIdolizePieceExtraInfo,
+                    DB.TranslationCostume
+                ]
+            },
+            {
+                model: DB.CardSongExtraInfo,
+                include: [
+                    DB.CardSongAnyReqExtraInfo,
+                    DB.CardSongAttrReqExtraInfo
+                ]
+            },
             DB.CardFAQLink,
             DB.TranslationName,
-            DB.TranslationSkill,
-            DB.TranslationCostume,
-            DB.TranslationGroupSkill
+            DB.TranslationSkill
         ]
-    },
+    }),
     cardNoOnly: {
         attributes: ["cardNo"]
     },
-    forLink: {
-        attributes: ["cardNo", "id", "name", "nameOEn"],
+    forLink: () => ({
+        attributes: ["cardNo", "id", "name"],
         include: [DB.TranslationName]
-    },
-    forList: {
-        attributes: ["cardNo", "id", "type", "name", "nameOEn"],
+    }),
+    forList: () => ({
+        attributes: ["cardNo", "id", "type", "name"],
         include: [DB.TranslationName]
-    }
+    })
 }))
 @Table({
     timestamps: false,

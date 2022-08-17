@@ -7,9 +7,9 @@ import translateSkill, {
     listUntranslatedSkills,
     loadSkillDetails
 } from "../translate/skills/translateSkill";
-import {skillFormat} from "../formatting/skillFormatter";
 import DB from "../models/db";
 import {Op} from "sequelize";
+import SkillFormatter from "../formatting/skillFormatter";
 
 const app = express();
 const port = 3000;
@@ -23,7 +23,7 @@ app.use("/style", express.static("frontend/static/style"));
 app.use("/images", express.static("frontend/static/images"));
 app.use("/vendor/jquery", express.static("node_modules/jquery/dist"));
 
-app.locals.skillFormat = skillFormat;
+app.locals.skillFormat = (skill: string) => SkillFormatter.ENG.format([skill], false);
 
 const cardnoPattern = /^(?:PR-\d\d\d[AB]?|(?:LL|EX)\d\d-[\dE]\d\d)$/;
 const setPattern = /^(?:PR|(?:LL|EX)\d\d)$/;
@@ -97,7 +97,7 @@ app.get("/", (req, res) => {
     });
 });
 
-app.get("/set/:set/", (req, res) => {
+/*app.get("/set/:set/", (req, res) => {
     res.render("set", {
         "set": req.params.set,
         "cards": loadCardSet(req.params.set).map(c => new SiteCardFormattingWrapper(c)).filter(c => req.params.set != "EX15" || c.cardnoInSet() <= 54 || c.cardno().startsWith("EX15-E"))
@@ -134,15 +134,15 @@ app.get("/search/memory/name/:query", (req, res) => {
         "query": req.params.query,
         "cards": searchTypeName(2, req.params.query).map(c => new SiteCardFormattingWrapper(c))
     });
-});
+});*/
 
 app.get("/card/:cardno/", async (req, res) => {
-    const card = await DB.Card.findByPk(req.params.cardno);
+    const card = await DB.Card.scope(["full"]).findByPk(req.params.cardno);
     if (card == undefined) {
         res.status(404);
         res.send("Card not found.");
     } else {
-        const sameIdCards = await DB.Card.findAll({
+        const sameIdCards = await DB.Card.scope(["forLink"]).findAll({
             where: {
                 id: card.id,
                 cardNo: {
@@ -150,14 +150,16 @@ app.get("/card/:cardno/", async (req, res) => {
                 }
             }
         });
+        const formattingWrapper = new SiteCardFormattingWrapper(card);
+        await formattingWrapper.prepareAsyncProperties();
         res.render("card", {
-            "f": new SiteCardFormattingWrapper(card),
+            "f": formattingWrapper,
             "sameId": sameIdCards.map(c => new SiteCardFormattingWrapper(c))
         });
     }
 });
 
-app.get("/pattern/create/:cardno?/:line?/", (req, res) => {
+/*app.get("/pattern/create/:cardno?/:line?/", (req, res) => {
     const skill = req.params.cardno ? loadSkillDetails(req.params.cardno, Number(req.params.line)) : undefined;
     if (skill === undefined) {
         res.render("pattern-create", {
@@ -209,7 +211,7 @@ app.get("/pattern/untranslated/", (req, res) => {
     res.render("pattern-untranslated", {
         untranslated: listUntranslatedSkills()
     });
-});
+});*/
 
 const faqpages = ["general", "rules", "ll01", "ll02", "ll03", "ll04", "ll05", "ll06"];
 
@@ -227,33 +229,14 @@ app.get("/faq/:faq/", (req, res) => {
  * AJAX garbo
  */
 
-app.put('/pattern/add/', (req, res, next) => {
+/*app.put('/pattern/add/', (req, res, next) => {
     res.json({"patternId": addPattern(req.body.patternid, req.body.triggers, req.body.regex, req.body.template, req.body.grouptypes)});
 });
 
 app.put('/pattern/set/', (req, res, next) => {
     assignSkills(req.body.pattern, req.body.cards);
     res.json({"success": true});
-});
-
-/*
-app.get('/songs/', (req, res, next) => {
-    res.json(models.songList());
-});
-
-app.get('/songs/:songid/', (req, res, next) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(models.getSongRaw(req.songid));
-});
-
-app.put('/songs/', (req, res, next) => {
-    res.json({"songid": models.newSong(req.body)});
-});
-
-app.delete('/songs/:songid/', (req, res, next) => {
-    res.send("TODO");
-});
-*/
+});*/
 
 app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}`)

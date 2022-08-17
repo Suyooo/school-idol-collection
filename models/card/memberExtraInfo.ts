@@ -92,7 +92,7 @@ export default class CardMemberExtraInfo extends Model {
     piecesCool!: number;
 
     get pieces(): PieceInfo {
-        return pieceInfoGetter("piecesAll", "piecesSmile", "piecesPure", "piecesCool");
+        return pieceInfoGetter(this, "piecesAll", "piecesSmile", "piecesPure", "piecesCool");
     }
 
     @Column(DataType.NUMBER)

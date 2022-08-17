@@ -15,250 +15,174 @@ import DB from "../models/db";
 import CardMemberIdolizeType from "../types/cardMemberIdolizeType";
 import CardSongAttrReqExtraInfo from "../models/card/songAttrReqExtraInfo";
 
-export class SiteCardFormattingWrapper {
+function assertIsFormattingMember(obj: unknown): asserts obj is SiteCardMemberFormattingWrapper {
+}
+
+function assertIsFormattingSong(obj: unknown): asserts obj is SiteCardSongFormattingWrapper {
+}
+
+function assertIsFormattingMemberWithBirthdayPieces(obj: unknown): asserts obj is SiteCardMemberWithBirthdayPiecesFormattingWrapper {
+}
+
+function assertIsFormattingMemberWithIdolizePieces(obj: unknown): asserts obj is SiteCardMemberWithIdolizePiecesFormattingWrapper {
+}
+
+function assertIsFormattingMemberWithGroup(obj: unknown): asserts obj is SiteCardMemberWithGroupFormattingWrapper {
+}
+
+export default class SiteCardFormattingWrapper {
     readonly card: Card;
 
     constructor(card: Card) {
         this.card = card;
+        this.cardNo = card.cardNo;
+        this.set = card.cardNo.split("-")[0];
+        this.id = card.id.toString();
+        this.copyright = card.copyright;
+        this.faqs = card.faqs;
+
+        if (card.isMember()) {
+            this.type = "Member";
+            this.rarity = CardMemberRarity[card.member.rarity];
+        } else if (card.isSong()) {
+            this.type = "Song";
+            this.rarity = CardSongRarity[card.song.rarity];
+        } else if (card.isMemory()) {
+            this.type = "Memory";
+            this.rarity = "ME";
+        }
+
+        this.nameJpn = card.name;
+        this.nameEng = card.nameEng;
+        this.name = this.nameEng || this.nameJpn;
+
+        this.nameJpnWithQuot = card.name.split("／").map(s => '"' + s + '"').join("／");
+        this.nameEngWithQuot = card.nameEng === null ? null
+            : card.nameEng.split(" / ").map(s => '"' + s + '"').join(" / ");
+        this.nameWithQuot = this.nameEngWithQuot || this.nameJpnWithQuot;
+        this.title = "<span class='card-id'>" + this.cardNo + "</span> " + this.nameWithQuot;
     }
 
-    isMember(): this is SiteCardMemberFormattingWrapper {
-        return this.card.isMember();
-    }
+    readonly cardNo: string;
+    readonly set: string;
+    readonly id: string;
+    readonly type: string;
+    readonly copyright: string;
+    readonly rarity: string;
+    readonly faqs: { link: string; label: string }[];
 
-    isSong(): this is { card: CardSong } {
-        return this.card.isMember();
-    }
+    readonly nameJpn: string;
+    readonly nameEng: string | null;
+    readonly name: string;
 
-    isMemory(): this is { card: CardMemory } {
-        return this.card.isMember();
-    }
+    readonly nameEngWithQuot: string | null;
+    readonly nameJpnWithQuot: string;
+    readonly nameWithQuot: string;
+    readonly title: string;
 
-    get cardNo(): string {
-        return this.card.cardNo;
-    }
-
-    get set(): string {
-        return this.card.cardNo.split("-")[0];
-    }
-
-    get id(): string {
-        return this.card.id.toString();
-    }
-
-    get type(): string {
-        if (this.card.isMember()) return "Member";
-        else if (this.card.isSong()) return "Song";
-        else /*if (this.card.isMemory())*/ return "Memory";
-    }
-
-    get nameEng(): string | null {
-        return this.card.nameEng;
-    }
-
-    get nameJpn(): string {
-        return this.card.name;
-    }
-
-    get name(): string {
-        return this.nameEng || this.nameJpn;
-    }
-
-    get nameEngWithQuot(): string | null {
-        if (this.card.nameEng === null) return null;
-        return this.card.nameEng.split(" / ").map(s => '"' + s + '"').join(" / ");
-    }
-
-    get nameJpnWithQuot(): string {
-        return this.card.name.split("／").map(s => '"' + s + '"').join("／");
-    }
-
-    get nameWithQuot(): string {
-        return this.nameEngWithQuot || this.nameJpnWithQuot;
-    }
-
-    get title(): string {
-        return "<span class='card-id'>" + this.cardNo + "</span> " + this.nameWithQuot;
-    }
-
-    get copyright(): string {
-        return this.card.copyright;
-    }
-
-    get rarity(): string {
-        if (this.card.isMember()) return CardMemberRarity[this.card.member.rarity];
-        else if (this.card.isSong()) return CardSongRarity[this.card.song.rarity];
-        else /*if (this.card.isMemory())*/ return "ME";
-    }
-
-    get faqs(): { link: string; label: string }[] {
-        return this.card.faqs;
-    }
-
-    readonly readyPromise: Promise<void>;
-
-    async prepareForDisplay() {
+    async prepareAsyncProperties() {
         const prevCard = await DB.Card.scope([{method: ["before", this.cardNo]}, "cardNoOnly"]).findOne();
         if (prevCard === null || this.set !== prevCard.cardNo.split("-")[0]) {
-            this._prevCardNo = null;
+            this.prevCardNo = null;
         } else {
-            this._prevCardNo = prevCard.cardNo;
+            this.prevCardNo = prevCard.cardNo;
         }
 
         const nextCard = await DB.Card.scope([{method: ["after", this.cardNo]}, "cardNoOnly"]).findOne();
         if (nextCard === null || this.set !== nextCard.cardNo.split("-")[0]) {
-            this._nextCardNo = null;
+            this.nextCardNo = null;
         } else {
-            this._nextCardNo = nextCard.cardNo;
+            this.nextCardNo = nextCard.cardNo;
         }
 
-        this._skillEng = await SkillFormatter.ENG.format(this.card.skillLinesEng, true);
-        this._skillJpn = await SkillFormatter.JPN.format(this.card.skillLines, true);
+        this.skillJpn = await SkillFormatter.JPN.format(this.card.skillLines, true);
+        this.skillEng = await SkillFormatter.ENG.format(this.card.skillLinesEng, true);
 
         if (this.isMember() && this.hasGroup()) {
-            await this.prepareGroupForDisplay();
+            await this.prepareGroupAsyncProperties();
         }
     }
 
-    private _prevCardNo!: string | null;
-    get prevCardNo(): string | null {
-        return this._prevCardNo;
-    }
+    prevCardNo: string | null;
+    nextCardNo: string | null;
+    skillJpn: string;
+    skillEng: string;
 
-    private _nextCardNo!: string | null;
-    get nextCardNo(): string | null {
-        return this._nextCardNo;
-    }
+    isMember(): this is SiteCardMemberFormattingWrapper {
+        if (!this.card.isMember()) return false;
+        assertIsFormattingMember(this);
+        if (this.birthday !== undefined) return true;
 
-    private _skillEng!: string;
-    get skillEng(): string {
-        return this._skillEng;
-    }
-
-    private _skillJpn!: string;
-    get skillJpn(): string {
-        return this._skillJpn
-    }
-}
-
-export class SiteCardMemberFormattingWrapper {
-    readonly card: CardMember;
-
-    get birthday(): string {
-        if (this.card.member.birthMonth === null) {
-            return "ー";
-        }
-        return ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][this.card.member.birthMonth - 1] +
+        this.birthday = (this.card.member.birthMonth === null) ? "ー"
+            : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][this.card.member.birthMonth - 1] +
             " " + this.card.member.birthDay;
-    }
-
-    get cost(): string {
-        return "<span>🟊</span>".repeat(this.card.member.cost) + "<span>・</span>".repeat(3 - this.card.member.cost);
-    }
-
-    get year(): string {
-        if (this.card.member.year === null) {
-            return "ー";
-        }
-        return ["1st", "2nd", "3rd"][this.card.member.year - 1] + " Year";
-    }
-
-    get ability(): string {
-        return this.card.member.abilityRush
+        this.cost = "<span>🟊</span>".repeat(this.card.member.cost) + "<span>・</span>".repeat(3 - this.card.member.cost);
+        this.year = (this.card.member.year === null) ? "ー"
+            : ["1st", "2nd", "3rd"][this.card.member.year - 1] + " Year";
+        this.ability = this.card.member.abilityRush
             ? "<span class='ability rush'>[RUSH]</span>" +
             (this.card.member.abilityLive ? "<span class='ability or'>/</span><span class='ability live'>[LIVE]</span>" : "")
             : (this.card.member.abilityLive ? "<span class='ability live'>[LIVE]</span>" : "ー");
-    }
+        this.pieces = pieceFormat(this.card.member.pieces, Language.ENG);
 
-    get pieces(): string {
-        return pieceFormat(this.card.member.pieces, Language.ENG);
-    }
+        this.costumeEng = this.card.member.costumeEng || "ー";
+        this.costumeJpn = this.card.member.costume || "ー";
+        this.costume = this.costumeEng || this.costumeJpn;
 
-    hasBirthdayPieces(): this is SiteCardMemberHasBirthdayPiecesFormattingWrapper {
-        return this.card.member.pieceBdayAttribute !== null;
-    }
+        this.hasBirthdayPieces = (): this is SiteCardMemberWithBirthdayPiecesFormattingWrapper => {
+            if (this.card.member!.pieceBdayAttribute === null) return false;
+            assertIsFormattingMemberWithBirthdayPieces(this);
+            if (this.piecesBirthday !== undefined) return true;
 
-    hasIdolizePieces(): this is SiteCardMemberHasIdolizePiecesFormattingWrapper {
-        return this.card.member.idolizeType === CardMemberIdolizeType.WITH_PIECES;
-    }
+            this.piecesBirthday = "<b>+</b> "
+                + pieceFormat(new PieceInfo(0, 0, 0, 0)
+                    .addPiece(this.card.member.pieceBdayAttribute), Language.ENG);
 
-    hasGroup(): this is SiteCardMemberHasGroupFormattingWrapper {
-        return this.card.member.group !== null;
-    }
-
-    get costumeEng(): string {
-        return this.card.member.costumeEng || "ー";
-    }
-
-    get costumeJpn(): string {
-        return this.card.member.costume || "ー";
-    }
-
-    get costume(): string {
-        return this.costumeEng || this.costumeJpn || "ー";
-    }
-}
-
-export class SiteCardMemberHasBirthdayPiecesFormattingWrapper {
-    readonly card: CardMemberHasBirthdayPieces;
-
-    get piecesBirthday(): string {
-        return "<b>+</b> "
-            + pieceFormat(new PieceInfo(0, 0, 0, 0)
-                .addPiece(this.card.member.pieceBdayAttribute), Language.ENG);
-    }
-}
-
-export class SiteCardMemberHasIdolizePiecesFormattingWrapper {
-    readonly card: CardMemberHasIdolizePieces;
-
-    get piecesIdolized(): string {
-        return "<b>+</b> " + pieceFormat(this.card.member.idolizeBonus.pieces, Language.ENG);
-    }
-}
-
-export class SiteCardMemberHasGroupFormattingWrapper {
-    readonly card: CardMemberHasGroup;
-
-    get groupMembers(): string {
-        const memberLinks = [];
-        for (const member of this.card.member.group.members) {
-            if (member.id === this.card.id) continue;
-            memberLinks.push('<a href="/card/' + member.cardNo + '/">' + new SiteCardFormattingWrapper(member).title + '</a>');
+            return true;
         }
-        return memberLinks.join(" ");
+
+        this.hasIdolizePieces = (): this is SiteCardMemberWithIdolizePiecesFormattingWrapper => {
+            if (this.card.member!.idolizeType !== CardMemberIdolizeType.WITH_PIECES) return false;
+            assertIsFormattingMemberWithIdolizePieces(this);
+            if (this.piecesIdolized !== undefined) return true;
+
+            this.piecesIdolized = "<b>+</b> " + pieceFormat(this.card.member.idolizeBonus.pieces, Language.ENG);
+
+            return true;
+        }
+
+        this.hasGroup = (): this is SiteCardMemberWithGroupFormattingWrapper => {
+            if (this.card.member!.group === null) return false;
+            assertIsFormattingMemberWithGroup(this);
+            if (this.groupMembers !== undefined) return true;
+
+            const memberLinks = [];
+            for (const member of this.card.member.group.members) {
+                if (member.id === this.card.id) continue;
+                memberLinks.push('<a href="/card/' + member.cardNo + '/">' + new SiteCardFormattingWrapper(member).title + '</a>');
+            }
+            this.groupMembers = memberLinks.join(" ");
+            this.groupType = this.card.member.group.type == CardMemberGroupType.PAIR ? "Pair" : "Type";
+
+            this.prepareGroupAsyncProperties = async () => {
+                assertIsFormattingMemberWithGroup(this);
+                this.groupSkillJpn = await SkillFormatter.JPN.format(this.card.member.group.skillLines, true);
+                this.groupSkillEng = await SkillFormatter.ENG.format(this.card.member.group.skillLinesEng, true);
+            }
+
+            return true;
+        }
+
+        return true;
     }
 
-    get groupType(): string {
-        return this.card.member.group.type == CardMemberGroupType.PAIR ? "Pair" : "Type";
-    }
+    isSong(): this is SiteCardSongFormattingWrapper {
+        if (!this.card.isSong()) return false;
+        assertIsFormattingSong(this);
+        if (this.attribute !== undefined) return true;
 
-    async prepareGroupForDisplay() {
-        this._groupSkillEng = await SkillFormatter.ENG.format(this.card.member.group.skillLinesEng, true);
-        this._groupSkillJpn = await SkillFormatter.JPN.format(this.card.member.group.skillLines, true);
-    }
+        this.attribute = this.card.song.attribute.songAttributeNameEng;
 
-    private _groupSkillEng!: string;
-
-    get groupSkillEng(): string {
-        return this._groupSkillEng;
-    }
-
-    private _groupSkillJpn!: string;
-
-    get groupSkillJpn(): string {
-        return this._groupSkillJpn;
-    }
-}
-
-export class SiteCardSongFormattingWrapper {
-    readonly card: CardSong;
-
-    get attribute(): string {
-        return this.card.song.attribute.songAttributeNameEng;
-    }
-
-    get livePoints(): string {
         let lpBonus: string = "";
         if (this.card.song.lpBonus !== null) {
             if (this.card.song.lpBonus === "X") lpBonus = "+X";
@@ -266,15 +190,71 @@ export class SiteCardSongFormattingWrapper {
             else if (this.card.song.lpBonus < 0) lpBonus = this.card.song.lpBonus.toString();
             else lpBonus = "+" + this.card.song.lpBonus.toString();
         }
+        this.livePoints = this.card.song.lpBase + lpBonus;
 
-        return this.card.song.lpBase + lpBonus;
-    }
-
-    get requirement(): string {
         if (this.card.hasAnyPieceRequirement()) {
-            return pieceFormat(this.card.song.anyRequirement.pieces, Language.ENG);
+            this.requirement = pieceFormat(this.card.song.anyRequirement.pieces, Language.ENG);
         } else /*if (this.card.hasAttrPieceRequirement())*/ {
-            return pieceFormat((<CardSongAttrReqExtraInfo>this.card.song.attrRequirement).pieces, Language.ENG);
+            this.requirement = pieceFormat((<CardSongAttrReqExtraInfo>this.card.song.attrRequirement).pieces, Language.ENG);
         }
+
+        return true;
     }
+
+    isMemory(): this is SiteCardMemoryFormattingWrapper {
+        return this.card.isMemory();
+    }
+}
+
+interface SiteCardMemberFormattingWrapper {
+    readonly card: CardMember;
+
+    birthday: string;
+    cost: string;
+    year: string;
+    ability: string;
+    pieces: string;
+    costumeJpn: string;
+    costumeEng: string;
+    costume: string;
+
+    hasBirthdayPieces: () => this is SiteCardMemberWithBirthdayPiecesFormattingWrapper;
+    hasIdolizePieces: () => this is SiteCardMemberWithIdolizePiecesFormattingWrapper;
+    hasGroup: () => this is SiteCardMemberWithGroupFormattingWrapper;
+}
+
+interface SiteCardMemberWithBirthdayPiecesFormattingWrapper extends SiteCardMemberFormattingWrapper {
+    readonly card: CardMemberHasBirthdayPieces;
+
+    piecesBirthday: string;
+}
+
+interface SiteCardMemberWithIdolizePiecesFormattingWrapper extends SiteCardMemberFormattingWrapper {
+    readonly card: CardMemberHasIdolizePieces;
+
+    piecesIdolized: string;
+}
+
+interface SiteCardMemberWithGroupFormattingWrapper extends SiteCardMemberFormattingWrapper {
+    readonly card: CardMemberHasGroup;
+
+    groupMembers: string;
+    groupType: string;
+
+    prepareGroupAsyncProperties: () => Promise<void>;
+
+    groupSkillJpn: string;
+    groupSkillEng: string;
+}
+
+interface SiteCardSongFormattingWrapper extends SiteCardFormattingWrapper {
+    readonly card: CardSong;
+
+    attribute: string;
+    livePoints: string;
+    requirement: string;
+}
+
+interface SiteCardMemoryFormattingWrapper extends SiteCardFormattingWrapper {
+    readonly card: CardMemory;
 }

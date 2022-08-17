@@ -1,69 +1,69 @@
-<%- include("partials/header", {"title": f.cardno() + " " + f.nameWithQuot(), "styles": ["card","skill"]}); %>
+<%- include("partials/header", {"title": f.cardNo + " " + f.nameWithQuot, "styles": ["card","skill"]}); %>
 <div class="content">
     <div class="row">
         <div class="three columns imgcont">
-            <div><img src="/images/<%= f.cardno().split("-")[0] %>/<%= f.cardno() %>-front.jpg"></div>
-            <div><img src="/images/<%= f.cardno().split("-")[0] %>/<%= f.cardno() %>-back.jpg"></div>
+            <div><img src="/images/<%= f.cardNo.split("-")[0] %>/<%= f.cardNo %>-front.jpg"></div>
+            <div><img src="/images/<%= f.cardNo.split("-")[0] %>/<%= f.cardNo %>-back.jpg"></div>
         </div>
         <div class="nine columns">
             <div class="panel">
                 <div class="panel-inner">
                     <div class="row">
-                        <h5><%- f.title() %></h5>
+                        <h5><%- f.title %></h5>
                     </div>
                     <div class="row first">
                         <div class="one-half column inforow first">
                             <div>Card ID</div>
-                            <div>#<%= f.id() %></div>
+                            <div><%= f.id %></div>
                         </div>
                         <div class="one-half column inforow">
                             <div>Type</div>
-                            <div><%= f.type() %></div>
+                            <div><%= f.type %></div>
                         </div>
                     </div>
-                    <% if (f.card.isMember()) { %>
+                    <% if (f.isMember()) { %>
                         <div class="row">
                             <div class="one-half column inforow">
                                 <div>Rarity</div>
-                                <div><%= f.rarity() %></div>
+                                <div><%= f.rarity %></div>
                             </div>
                             <div class="one-half column inforow">
                                 <div>Cost</div>
-                                <div class="cost"><%- f.cost() %></div>
+                                <div class="cost"><%- f.cost %></div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="one-half column inforow">
                                 <div>Birthday</div>
-                                <div><%= f.birthday() %></div>
+                                <div><%= f.birthday %></div>
                             </div>
                             <div class="one-half column inforow">
                                 <div>Year</div>
-                                <div><%= f.year() %></div>
+                                <div><%= f.year %></div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="one-half column inforow">
                                 <div>Ability</div>
-                                <div><%- f.ability() %></div>
+                                <div><%- f.ability %></div>
                             </div>
                             <div class="one-half column inforow">
                                 <div class="piecelabel">Pieces
-                                    <% if (f.card.idolizeType === 2) { %><br><span>Idolized</span>
+                                    <% if (f.hasIdolizePieces()) { %><br><span>Idolized</span>
                                     <% } %>
-                                    <% if (f.card.piecesBdayType) { %><br><span>Birthday</span>
+                                    <% if (f.hasBirthdayPieces()) { %><br><span>Birthday</span>
                                     <% } %>
                                 </div>
-                                <div><%- f.pieces() %>
-                                    <%- f.card.idolizeType === 2 ? "<br>" + f.piecesIdolized() : "" %>
-                                    <%- f.card.piecesBdayType ? "<br>" + f.piecesBirthday() : "" %></div>
+                                <div><%- f.pieces %>
+                                    <%- f.hasIdolizePieces() ? "<br>" + f.piecesIdolized : "" %>
+                                    <%- f.hasBirthdayPieces() ? "<br>" + f.piecesBirthday : "" %></div>
                             </div>
                         </div>
                         <div class="row inforow">
                             <div>Costume</div>
-                            <div><%= f.costume() %></div>
+                            <div><%= f.costume %></div>
                         </div>
-                    <% } else if (f.card.isSong()) { %>
+                    <% } else if (f.isSong()) { %>
                         <div class="row">
                             <div class="one-half column inforow">
                                 <div>Rarity</div>
@@ -87,58 +87,58 @@
                     <% } %>
                     <div class="row inforow">
                         <div>Skill</div>
-                        <div><%- f.skill() %></div>
+                        <div><%- f.skillJpn %></div>
                     </div>
                     <div class="row inforow">
                         <div>&nbsp;</div>
-                        <div><%- f.skillEn() %></div>
+                        <div><%- f.skillEng %></div>
                     </div>
                     <% if (f.card.group) { %>
                         <div class="row inforow">
-                            <div><%= f.groupType() %> With</div>
-                            <div><%- f.groupMembers() %></div>
+                            <div><%= f.groupType %> With</div>
+                            <div><%- f.groupMembers %></div>
                         </div>
                         <div class="row inforow">
-                            <div><%= f.groupType() %> Skill</div>
-                            <div><%- f.groupSkill() %></div>
+                            <div><%= f.groupType %> Skill</div>
+                            <div><%- f.groupSkillJpn %></div>
                         </div>
                         <div class="row inforow">
                             <div>&nbsp;</div>
-                            <div><%- f.groupSkillEn() %></div>
+                            <div><%- f.groupSkillEng %></div>
                         </div>
                     <% } %>
                     <% if (sameId.length > 0) { %>
                         <div class="row inforow">
                             <div>Shared ID</div>
                             <div>
-                                <%- sameId.map(card => '<a href="/card/' + card.cardno() + '/">' + card.cardno() + ' (' + card.rarity() + ')</a>').join(", "); %>
+                                <%- sameId.map(card => '<a href="/card/' + card.cardNo + '/">' + card.cardNo + ' (' + card.rarity + ')</a>').join(", "); %>
                             </div>
                         </div>
                     <% } %>
-                    <% if (f.faqs().length > 0) { %>
+                    <% if (f.faqs.length > 0) { %>
                         <div class="row inforow">
                             <div>Related FAQ</div>
                             <div class="faqs">
-                                <% for(var i = 0; i < f.faqs().length; i++) { %>
-                                    <a href="<%- f.faqs()[i].link %>"><%- skillFormat(f.faqs()[i].label) %></a>
+                                <% for(var i = 0; i < f.faqs.length; i++) { %>
+                                    <a href="<%- f.faqs[i].link %>"><%- skillFormat(f.faqs[i].label) %></a>
                                 <% } %>
                             </div>
                         </div>
                     <% } %>
                 </div>
             </div>
-            <div class="cardcopyright"><%= f.copyright() %></div>
+            <div class="cardcopyright"><%= f.copyright %></div>
             <div class="buttons">
                 <div class="buttonrow">
-                    <% if (f.hasPrevCard()) { %>
-                        <a class="button button-primary" href="/card/<%= f.prevCardno() %>/">&#129152;</a>
+                    <% if (f.prevCardNo !== null) { %>
+                        <a class="button button-primary" href="/card/<%= f.prevCardNo %>/">&#129152;</a>
                     <% } %>
-                    <% if (f.hasNextCard()) { %>
-                        <a class="button button-primary" href="/card/<%= f.nextCardno() %>/">&#129154;</a>
+                    <% if (f.nextCardNo !== null) { %>
+                        <a class="button button-primary" href="/card/<%= f.nextCardNo %>/">&#129154;</a>
                     <% } %>
                 </div>
                 <div class="buttonrow">
-                    <a class="button" href="/set/<%= f.set() %>/">View Set</a>
+                    <a class="button" href="/set/<%= f.set %>/">View Set</a>
                 </div>
                 <div class="buttonrow">
                     <a class="button" href="/">View Full Card List</a>

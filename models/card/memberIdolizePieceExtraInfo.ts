@@ -62,6 +62,6 @@ export default class CardMemberIdolizePieceExtraInfo extends Model {
     piecesCool!: number;
 
     get pieces(): PieceInfo {
-        return pieceInfoGetter("piecesAll", "piecesSmile", "piecesPure", "piecesCool");
+        return pieceInfoGetter(this,"piecesAll", "piecesSmile", "piecesPure", "piecesCool")
     }
 }
