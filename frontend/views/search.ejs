@@ -1,11 +1,15 @@
 <%- include("partials/header", {"title": "Search", "styles": ["grid", "grid-cards"]}); %>
-<h5>Search for <%= cardType %> containing "<%= query %>"</h5>
+<h5>Search: <%= queries.join(", ") %></h5>
 <div class="content">
-    <div class="panel grid">
-        <% for(var i = 0; i < cards.length; i++) { %>
-            <%- include("partials/grid-card", {f: cards[i]}); %>
-        <% } %>
-    </div>
+    <% if (cards.length === 0) { %>
+        No results.
+    <% } else { %>
+        <div class="panel grid">
+            <% for(var i = 0; i < cards.length; i++) { %>
+                <%- include("partials/grid-card", {f: cards[i]}); %>
+            <% } %>
+        </div>
+    <% } %>
 </div>
 <a class="button" href="/" style="margin-top:1em;float:right">View Full Card List</a>
 <%- include("partials/footer", {"jquery": false, "scripts": []}); %>

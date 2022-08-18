@@ -107,11 +107,11 @@ import CardMemberGroup from "./memberGroup";
     },
     forLink: () => ({
         attributes: ["cardNo", "id", "name"],
-        include: [DB.TranslationName]
+        include: [{ model: DB.TranslationName, attributes: ["name"]}]
     }),
     forGrid: () => ({
         attributes: ["cardNo", "id", "type", "name"],
-        include: [DB.TranslationName]
+        include: [{ model: DB.TranslationName, attributes: ["name"]}]
     })
 }))
 @Table({

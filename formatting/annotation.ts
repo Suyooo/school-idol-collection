@@ -71,7 +71,7 @@ class AnnotationSong extends AbstractAnnotation {
     }
 
     async getHTMLLink() {
-        return "/search/song/name/" + encodeURIComponent(this.param).replace(/'/g, "%27");
+        return "/search/song/name:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";
     }
 
     async getPlainText() {
@@ -87,7 +87,7 @@ class AnnotationMem extends AbstractAnnotation {
     }
 
     async getHTMLLink() {
-        return "/search/memory/name/" + encodeURIComponent(this.param).replace(/'/g, "%27");
+        return "/search/memory/name:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";
     }
 
     async getPlainText() {
@@ -103,7 +103,7 @@ class AnnotationCostume extends AbstractAnnotation {
     }
 
     async getHTMLLink() {
-        return "/search/member/costume/" + encodeURIComponent(this.param).replace(/'/g, "%27");
+        return "/search/member/costume:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";
     }
 
     async getPlainText() {
@@ -119,7 +119,7 @@ class AnnotationSkillText extends AbstractAnnotation {
     }
 
     async getHTMLLink() {
-        return "/search/card/skill/" + encodeURIComponent(this.param).replace(/'/g, "%27");
+        return "/search/card/skill:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";
     }
 
     async getPlainText() {

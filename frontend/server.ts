@@ -8,11 +8,14 @@ import {
     splitTriggersFromSkill
 } from "../translation/skills";
 import DB from "../models/db";
-import {Op} from "sequelize";
+import {ModelType} from "sequelize-typescript";
+import {Includeable, Op} from "sequelize";
 import SkillFormatter from "../formatting/skillFormatter";
 import TranslateTablePattern from "../models/translatetables/pattern";
 import Trigger, {TriggerID} from "../types/trigger";
 import PatternGroupType, {PatternGroupTypeID} from "../types/patternGroupType";
+import CardType from "../types/cardType";
+import SearchFilterError from "../errors/searchFilterError";
 
 const app = express();
 const port = 3000;
@@ -108,42 +111,128 @@ app.get("/set/:set/", async (req, res) => {
     });
 });
 
-/*app.get("/search/card/skill/:query", (req, res) => {
+function makeIncludable(model: ModelType<any, any>, includables?: Includeable[], required: boolean = true): Includeable {
+    const ret: any = {
+        model: model,
+        attributes: [],
+        required: required
+    };
+    if (includables !== undefined) {
+        ret.include = includables;
+    }
+    return ret;
+}
+
+app.get("/search/*/", async (req, res) => {
+    let where: any = {};
+    const queries: string[] = [];
+    const includes = {
+        "translationSkill": false,
+        "member": false,
+        "translationCostume": false
+    };
+
+    const setConditions = (filter: string, conditions: any) => {
+        where = {...where, ...conditions};
+    }
+
+    try {
+        const filters = (req.params as { "0": string })["0"].split("/");
+        if (filters.length === 0) {
+            throw new SearchFilterError("No filters specified", "missing");
+        }
+
+        for (const filter of filters) {
+            if (filter.length === 0) continue;
+            const splitAt = filter.split(":");
+            if (splitAt.length === 1) {
+                if (filter === "member") {
+                    setConditions(filter, {"type": CardType.MEMBER});
+                    queries.push("Members");
+                } else if (filter === "song") {
+                    setConditions(filter, {"type": CardType.SONG});
+                    queries.push("Song");
+                } else if (filter === "memory") {
+                    setConditions(filter, {"type": CardType.MEMORY});
+                    queries.push("Memory");
+                } else {
+                    throw new SearchFilterError("Unknown filter or wrong number of arguments", filter);
+                }
+            } else if (splitAt.length === 2) {
+                const [key, value] = splitAt;
+                if (key === "") {
+                    throw new SearchFilterError("Filter has an empty name", filter);
+                }
+                if (value === "") {
+                    throw new SearchFilterError("Filter has an empty argument", filter);
+                }
+                if (key === "name") {
+                    setConditions(filter, {
+                        [Op.or]: [
+                            {"name": {[Op.like]: "%" + value + "%"}},
+                            {"$_nameEng.name$": {[Op.like]: "%" + value + "%"}}
+                        ]
+                    });
+                    queries.push("Name contains \"" + value + "\"");
+                } else if (key === "costume") {
+                    setConditions(filter, {
+                        [Op.or]: [
+                            {"$member.costume$": {[Op.like]: "%" + value + "%"}},
+                            {"$member._costumeEng.costume$": {[Op.like]: "%" + value + "%"}}
+                        ]
+                    });
+                    queries.push("Costume contains \"" + value + "\"");
+                    includes.member = true;
+                    includes.translationCostume = true;
+                } else if (key === "skill") {
+                    setConditions(filter, {
+                        [Op.or]: [
+                            {"skill": {[Op.like]: "%" + value + "%"}},
+                            {"$_skillLinesEng.skill$": {[Op.like]: "%" + value + "%"}}
+                        ]
+                    });
+                    queries.push("Skill contains \"" + value + "\"");
+                    includes.translationSkill = true;
+                } else {
+                    throw new SearchFilterError("Unknown filter or wrong number of arguments", filter);
+                }
+            } else {
+                throw new SearchFilterError("Unknown filter or wrong number of arguments", filter);
+            }
+        }
+    } catch (e) {
+        if (e instanceof SearchFilterError) {
+            res.status(404);
+            res.send(e.message);
+            return;
+        } else {
+            throw e;
+        }
+    }
+
+    const includeArr = [];
+    if (includes.translationSkill) {
+        includeArr.push(makeIncludable(DB.TranslationSkill, undefined, false));
+    }
+    if (includes.member) {
+        includeArr.push(makeIncludable(DB.CardMemberExtraInfo, includes.translationCostume
+            ? [makeIncludable(DB.TranslationCostume, undefined, false)]
+            : undefined));
+    }
+
     res.render("search", {
-        "cardType": "Cards",
-        "query": req.params.query,
-        "cards": searchSkill(req.params.query).map(c => new SiteCardFormattingWrapper(c))
+        "queries": queries,
+        "cards": (await DB.Card.scope(["forGrid"]).findAll({
+            where: where,
+            include: includeArr,
+            order: [["cardNo", "ASC"]]
+        })).map(c => new SiteCardFormattingWrapper(c, true))
     });
 });
-
-app.get("/search/member/costume/:query", (req, res) => {
-    res.render("search", {
-        "cardType": "Members",
-        "query": req.params.query,
-        "cards": searchCostume(req.params.query).map(c => new SiteCardFormattingWrapper(c))
-    });
-});
-
-app.get("/search/song/name/:query", (req, res) => {
-    res.render("search", {
-        "cardType": "Songs",
-        "query": req.params.query,
-        "cards": searchTypeName(1, req.params.query).map(c => new SiteCardFormattingWrapper(c))
-    });
-});
-
-app.get("/search/memory/name/:query", (req, res) => {
-    res.render("search", {
-        "cardType": "Memories",
-        "query": req.params.query,
-        "cards": searchTypeName(2, req.params.query).map(c => new SiteCardFormattingWrapper(c))
-    });
-});*/
 
 app.get("/card/:cardno/", async (req, res) => {
     const card = await DB.Card.scope(["full"]).findByPk(req.params.cardno);
     if (card == undefined) {
-        console.log("card not found");
         res.status(404);
         res.send("Card not found.");
     } else {
@@ -219,7 +308,7 @@ app.get("/pattern/edit/:patternno/", async (req, res) => {
     });
 });
 
-app.get("/pattern/edit/:patternno/:cardno/:line", async (req, res) => {
+app.get("/pattern/edit/:patternno/:cardno/:line/", async (req, res) => {
     const pattern = await DB.TranslateTablePattern.findByPk(parseInt(req.params.patternno));
     const card = await DB.Card.findByPk(req.params.cardno, {attributes: ["skill"]});
     const skillLine = card?.skill?.split("\n")[parseInt(req.params.line)];
