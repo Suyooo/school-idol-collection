@@ -1,5 +1,5 @@
 import Language from "../types/language";
-import Annotation from "../types/annotation";
+import Annotation from "./annotation";
 import Trigger, {TriggerNameEng, TriggerNameJpn} from "../types/trigger";
 import Attribute, {PieceAttributeEngName, PieceAttributeJpnName} from "../types/attribute";
 import PieceInfo from "../types/pieceInfo";
@@ -129,12 +129,12 @@ export default class SkillFormatter {
             } else {
                 let i = line.indexOf("{{");
                 while (i !== -1) {
-                    const match = line.substring(i - 1).match(Annotation.annotationPattern);
+                    const match = Annotation.annotationPattern.exec(line.substring(i - 1));
                     if (match !== null) {
                         const repl = await this.resolveAnnotation(match[0], match[1], match[2], match[3], match[4]);
-                        line = line.replace(Annotation.annotationPattern, repl);
+                        line = line.substring(0, i - 1) + repl + line.substring(i - 1 + match[0].length);
                     }
-                    i = line.indexOf("{{", i);
+                    i = line.indexOf("{{", i + 1);
                 }
                 return this.doRegex(line, true);
             }

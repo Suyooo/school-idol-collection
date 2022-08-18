@@ -2,7 +2,7 @@ import Card from "../models/card/card";
 import Language from "../types/language";
 import DB from "../models/db";
 
-const annotationPattern = /^(.){{(.*?):(.*?)}}(.)/g;
+const annotationPattern = /^(.){{(.*?):(.*?)}}(.)/;
 
 function makeAnnotation(type: string, param: string, lang: Language): AbstractAnnotation | undefined {
     if (type == "card") {

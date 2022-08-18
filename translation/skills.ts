@@ -128,7 +128,7 @@ async function applyPatternOrNull(skill: string, triggers: Trigger[], pattern: T
         return null;
     }
 
-    const match = new RegExp(pattern.regex, "g").exec(skill);
+    const match = new RegExp(pattern.regex).exec(skill);
     if (match === null) {
         return null;
     }

@@ -6,7 +6,7 @@ import DB from "../models/db";
 import NotFoundError from "../errors/notFoundError";
 import MissingTranslationError from "../errors/missingTranslationError";
 
-const skilltextPattern = /{{skilltext:([^}]*?)}}/g;
+const skilltextPattern = /{{skilltext:([^}]*?)}}/;
 
 export type PatternGroupTypeID = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
