@@ -34,7 +34,6 @@ export default class SkillFormatter {
         this.lang = lang;
         this.regexes = regexes;
         this.templates = templates;
-        console.log(this.lang);
     }
 
     private async resolveAnnotation(match: string, pre: string, type: string, param: string, post: string): Promise<string> {

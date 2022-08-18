@@ -3,6 +3,8 @@
 import * as fs from "fs";
 import Chokidar from "chokidar";
 import {Mutex} from "async-mutex";
+import {ModelStatic, ModelType} from "sequelize-typescript";
+import {Op} from "sequelize";
 
 import Attribute, {ColorNameJpn, PieceAttributeJpnName, SongAttributeNameJpn} from "../types/attribute";
 import {CardMemberRarity, CardSongRarity} from "../types/cardRarity";
@@ -11,10 +13,10 @@ import ImportError from "../errors/importError";
 import PieceInfo from "../types/pieceInfo";
 import DB from "../models/db";
 import CardType from "../types/cardType";
-import ErrorWithCause from "../errors/errorWithCause";
 import CardMemberIdolizeType from "../types/cardMemberIdolizeType";
-import {Op} from "sequelize";
 import CardMemberGroupType from "../types/cardMemberGroupType";
+import {tryAllPatterns} from "../translation/skills";
+import autoAnnotateSkill from "./autoAnnotate";
 
 type Empty = "―" | "－" | "─" | "-";
 type RawAttr = SongAttributeNameJpn & Empty;
@@ -48,10 +50,21 @@ const watcher = Chokidar.watch("importer/rawinfo", {
 const mutex = new Mutex();
 
 watcher.on("add", (path) => {
-    mutex.runExclusive(() => {
-        Log.info("IMPORT", "New file added, importing: " + path);
-        return importCard(path).catch(e => Log.error("IMPORT", e.message + e.stack));
-    });
+    if (path.endsWith(".json")) {
+        mutex.runExclusive(() => {
+            Log.info("IMPORT", "New raw info file added, importing: " + path);
+            return importCard(path).catch(e => Log.error("IMPORT", e.stack));
+        }).catch(e => Log.error("IMPORT", "Mutex problem: " + e.stack));
+    } else if (path.endsWith(".jpg")) {
+        Log.info("IMPORT", "New image added, moving to correct location: " + path);
+        const filename = path.split("/").at(-1)!;
+        const folder = "frontend/static/images/" + filename.split("-")[0];
+        if (!fs.existsSync(folder)) fs.mkdirSync(folder);
+        fs.copyFileSync(path, folder + "/" + filename)
+        fs.unlinkSync(path);
+    } else {
+        Log.error("IMPORT", "New file added but unrecognized file extension, ignoring: " + path);
+    }
 })
 
 const birthdayPattern = /^(\d*)月(\d*)日$/;
@@ -64,6 +77,11 @@ const trioSkillPattern = /\n?<トリオスキル>\n?/;
 
 export async function importCard(path: string) {
     const rawdata: RawData = JSON.parse(fs.readFileSync(path).toString());
+    const defer = {
+        translationName: <any>undefined,
+        translationCostume: <any>undefined,
+        translationSkill: <any>undefined
+    }
 
     const card: any = {
         cardNo: rawdata["カードNo."],
@@ -73,8 +91,29 @@ export async function importCard(path: string) {
         copyright: rawdata["コピーライト"]
     };
 
+    if (card.skill !== null) {
+        const checkSkillPattern = await Promise.all(card.skill.split("\n").map((s: string) => tryAllPatterns(autoAnnotateSkill(s))));
+        if (checkSkillPattern.some(s => s !== null)) {
+            defer.translationSkill = checkSkillPattern.map((p, i) => ({
+                cardNo: card.cardNo,
+                line: i,
+                skill: p?.skill,
+                patternId: p?.pattern.id
+            })).filter(p => p.skill !== null);
+        }
+    }
+
     if (rawdata["type"] == "メンバー") {
         card.type = CardType.MEMBER;
+
+        const checkNameTable = await DB.TranslateTableName.findByPk(card.name);
+        if (checkNameTable !== null) {
+            defer.translationName = {
+                cardNo: card.cardNo,
+                name: checkNameTable.eng
+            };
+        }
+
         card.member = {};
         card.member.rarity = CardMemberRarity[rawdata["レアリティ"]];
         card.member.cost = isEmpty(rawdata["コスト"]) ? 0 : rawdata["コスト"].length;
@@ -85,9 +124,17 @@ export async function importCard(path: string) {
             card.member.birthMonth = parseInt(bdMatch[1]);
         }
         card.member.year = isEmpty(rawdata["学年"]) ? null : parseInt(rawdata["学年"].charAt(0));
-        card.member.costume = isEmpty(rawdata["衣装"]) ? null : rawdata["衣装"];
         card.member.abilityRush = rawdata["特技"].indexOf("RUSH") !== -1;
         card.member.abilityLive = rawdata["特技"].indexOf("LIVE") !== -1;
+        card.member.costume = isEmpty(rawdata["衣装"]) ? null : rawdata["衣装"];
+
+        const checkCostumeTable = await DB.TranslateTableSong.findByPk(card.costume);
+        if (checkCostumeTable !== null) {
+            defer.translationCostume = {
+                cardNo: card.cardNo,
+                costume: checkCostumeTable.eng
+            };
+        }
 
         let pieces = new PieceInfo(0, 0, 0, 0);
         if (!isEmpty(rawdata["ピース1"])) pieces = pieces.addPiece(Attribute.get(rawdata["ピース1"]));
@@ -132,9 +179,9 @@ export async function importCard(path: string) {
         // CardMemberGroup.expectedMemberIds is storing the IDs read from the leader. That way, if importing a non-
         // leader card, we can simply check if their ID appears in that column to add it to a known group.
         const groupMatch = pairPattern.exec(card.skill) || trioPattern.exec(card.skill);
-        if (groupMatch != null) {
+        if (groupMatch !== null) {
             const group: any = {};
-            card.skill = card.skill.substring(0, groupMatch.index);
+            card.skill = card.skill!.substring(0, groupMatch.index);
             group.skill = card.skill.substring(groupMatch.index + groupMatch[0].length);
 
             let memberIds: number[];
@@ -148,6 +195,19 @@ export async function importCard(path: string) {
             group.expectedMemberIds = "|" + memberIds.sort().join("|") + "|";
 
             card.member.groupId = (await DB.CardMemberGroup.create(group)).id;
+
+            if (group.skill !== null) {
+                const checkSkillPattern = (await Promise.all(group.skill.split("\n").map((s: string) => tryAllPatterns(autoAnnotateSkill(s)))))
+                    .map((p, i) => ({
+                    groupId: card.member.groupId,
+                    line: i,
+                    skill: p?.skill,
+                    patternId: p?.pattern.id
+                })).filter(p => p.skill !== null);
+                for (const obj of checkSkillPattern) {
+                    await DB.TranslationGroupSkill.create(obj);
+                }
+            }
         } else {
             const group = await DB.CardMemberGroup.findOne({
                 where: {
@@ -161,6 +221,15 @@ export async function importCard(path: string) {
         }
     } else if (rawdata["type"] == "楽曲") {
         card.type = CardType.SONG;
+
+        const checkSongTable = await Promise.all(card.name.split("／").map((s: string) => DB.TranslateTableName.findByPk(s)));
+        if (checkSongTable.every(s => s !== null)) {
+            defer.translationCostume = {
+                cardNo: card.cardNo,
+                name: checkSongTable.map(s => s.eng).join("/")
+            };
+        }
+
         card.song = {};
         card.song.rarity = CardSongRarity.M;
         card.song.attribute = Attribute.get(rawdata["枠属性"]);
@@ -202,6 +271,17 @@ export async function importCard(path: string) {
             }
         ]
     });
+
+    if (defer.translationName !== undefined) {
+        await DB.TranslationName.create(defer.translationName);
+    }
+    if (defer.translationCostume !== undefined) {
+        await DB.TranslationCostume.create(defer.translationCostume);
+    }
+    if (defer.translationSkill !== undefined) {
+        await Promise.all(defer.translationSkill.map((s: any) => DB.TranslationSkill.create(s)));
+    }
+
     Log.info("IMPORT", "Successfully imported " + path + ", deleting");
     fs.unlinkSync(path);
 }

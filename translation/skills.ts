@@ -121,6 +121,17 @@ export async function applyPatternToSkills(pattern: TranslateTablePattern, apply
     }
 }
 
+export async function tryAllPatterns(skillLine: string): Promise<{ skill: string, pattern: TranslateTablePattern } | null> {
+    const {skill, triggers} = splitTriggersFromSkill(skillLine);
+    for (const pattern of (await DB.TranslateTablePattern.findAll())) {
+        const res = applyPatternOrNull(skill, triggers, pattern);
+        if (res !== null) {
+            return {skill, pattern};
+        }
+    }
+    return null;
+}
+
 async function applyPatternOrNull(skill: string, triggers: Trigger[], pattern: TranslateTablePattern): Promise<string | null> {
     // If this is a skill without triggers (tutorial text or lyrics), only patterns without triggers can be applied
     // Otherwise, check for at least one overlapping trigger
