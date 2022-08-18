@@ -214,7 +214,8 @@ export default class Card extends Model {
     @Column(DataType.TEXT)
     copyright!: string;
 
-    @HasMany(() => CardFAQLink, {sourceKey: "id"})
+    // constraints = false because standard SQL doesn't support foreign keys being non-unique
+    @HasMany(() => CardFAQLink, {foreignKey: "cardId", sourceKey: "id", constraints: false})
     faqs!: CardFAQLink[];
 }
 

@@ -15,9 +15,10 @@ export default class CardFAQLink extends Model {
     @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
-    cardNo!: number;
+    cardId!: number;
 
-    @BelongsTo(() => Card)
+    // constraints = false because standard SQL doesn't support foreign keys being non-unique
+    @BelongsTo(() => Card, {foreignKey: "cardId", targetKey: "id", constraints: false})
     card!: Card;
 
     @PrimaryKey

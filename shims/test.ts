@@ -1,6 +1,6 @@
 import DB from "../models/db";
 
-DB.awaitSync.then(() => {
+DB.syncPromise.then(() => {
     DB.Card.create({
         cardNo: "EX01-001",
         id: 1,

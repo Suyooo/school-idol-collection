@@ -27,7 +27,7 @@ import PieceInfo from "../../types/pieceInfo";
     timestamps: false,
     validate: {
         idolizableWithPiecesMustHaveIdolizePieceExtraInfo() {
-            if ((this.idolizeType === CardMemberIdolizeType.WITH_PIECES) !== (this.idolizePieces != null)) {
+            if ((this.idolizeType === CardMemberIdolizeType.WITH_PIECES) !== (this.idolizeBonus != null)) {
                 if (this.idolizeType === CardMemberIdolizeType.WITH_PIECES)
                     throw new Error("Card has Idolization type WITH_PIECES, but does not have an Idolize Pieces Extra Info object");
                 else
@@ -117,7 +117,7 @@ export default class CardMemberExtraInfo extends Model {
     @Column(DataType.NUMBER)
     groupId!: number | null;
 
-    @BelongsTo(() => CardMemberGroup, {targetKey: "id"})
+    @BelongsTo(() => CardMemberGroup)
     group!: CardMemberGroup | null;
 
     @HasOne(() => CardMemberIdolizePieceExtraInfo)

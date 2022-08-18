@@ -1,4 +1,4 @@
 (async () => {
-    await require("./models/db").awaitSync;
+    await require("./models/db").syncPromise;
     require("./frontend/server");
 })();

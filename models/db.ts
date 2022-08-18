@@ -18,8 +18,9 @@ import CardSongAttrReqExtraInfo from "./card/songAttrReqExtraInfo";
 
 const sequelize = new Sequelize({
     dialect: "sqlite",
-    storage: "cardlist2.db",
+    storage: "cardlist.db",
     logging: Log.debug.bind(Log, "DB"),
+    logQueryParameters: true,
     models: [
         Card,
         CardMemberExtraInfo, CardMemberIdolizePieceExtraInfo,
@@ -32,7 +33,8 @@ const sequelize = new Sequelize({
 });
 
 const DB = {
-    awaitSync: sequelize.sync(),
+    syncPromise: sequelize.sync(),
+    sequelize: sequelize,
     Card: <typeof Card>sequelize.models.Card,
     CardMemberExtraInfo: <typeof CardMemberExtraInfo>sequelize.models.CardMemberExtraInfo,
     CardMemberIdolizePieceExtraInfo: <typeof CardMemberIdolizePieceExtraInfo>sequelize.models.CardMemberIdolizePieceExtraInfo,
