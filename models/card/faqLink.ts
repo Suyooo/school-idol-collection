@@ -15,7 +15,7 @@ export default class CardFAQLink extends Model {
     @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
-    cardId!: number;
+    cardNo!: number;
 
     @BelongsTo(() => Card)
     card!: Card;

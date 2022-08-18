@@ -16,7 +16,7 @@ export default class TranslationSkill extends Model {
     @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
-    cardId: string;
+    cardNo: string;
 
     @BelongsTo(() => Card)
     card: Card;

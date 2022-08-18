@@ -12,22 +12,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <% applicableCards.forEach(function(a) { %>
+                <% applicable.forEach(function(a) { %>
                     <tr>
-                        <th><a href="/card/<%= a.cardNo %>/"><%= a.cardNo %></a></th>
+                        <% if (a.hasOwnProperty("cardNo")) { %>
+                            <th><a href="/card/<%= a.cardNo %>/"><%= a.cardNo %></a></th>
+                        <% } else { %>
+                            <th><a href="/card/<%= a.firstCardNo %>/">Group #<%= a.groupId %></a></th>
+                        <% } %>
                         <td><%= a.skillJpn %></td>
                         <td><%= a.skillEng %></td>
-                        <td><input class="assign assign-card" type="checkbox" data-cardno="<%= a.cardNo %>"
-                                   data-line="<%= a.line %>"></td>
-                    </tr>
-                <% }); %>
-                <% applicableGroups.forEach(function(a) { %>
-                    <tr>
-                        <th><%= a.groupId %></th>
-                        <td><%= a.skillJpn %></td>
-                        <td><%= a.skillEng %></td>
-                        <td><input class="assign assign-group" type="checkbox" data-groupid="<%= a.groupId %>"
-                                   data-line="<%= a.line %>"></td>
+                        <% if (a.hasOwnProperty("cardNo")) { %>
+                            <td><input class="assign assign-card" type="checkbox" data-cardno="<%= a.cardNo %>"
+                                       data-line="<%= a.line %>"></td>
+                        <% } else { %>
+                            <td><input class="assign assign-group" type="checkbox" data-groupid="<%= a.groupId %>"
+                                       data-line="<%= a.line %>"></td>
+                        <% } %>
                     </tr>
                 <% }); %>
                 <tr>
@@ -40,7 +40,7 @@
             </table>
             <a class="button button-primary" id="submit" style="float: right">Submit</a>
             <a class="button button-primary" id="edit"
-               href="/pattern/edit/<%- id %><% if (applicableCards.length > 0) { %>/<%- applicableCards[0].cardNo %>/<%- applicableCards[0].line %> <% } %>"
+               href="/pattern/edit/<%- id %><% if (applicable.length > 0 && applicable[0].hasOwnProperty("cardNo")) { %>/<%- applicable[0].cardNo %>/<%- applicable[0].line %> <% } %>"
                style="float: left">Edit</a>
         </div>
     </div>

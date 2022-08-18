@@ -22,7 +22,7 @@ export default class CardSongAttrReqExtraInfo extends Model {
     @AllowNull(false)
     @ForeignKey(() => CardSongExtraInfo)
     @Column
-    cardSongExtraInfoId!: string;
+    cardSongExtraInfoCardNo!: string;
 
     @BelongsTo(() => CardSongExtraInfo)
     cardSongExtraInfo!: CardSongExtraInfo;

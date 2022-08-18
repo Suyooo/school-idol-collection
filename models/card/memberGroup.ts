@@ -5,7 +5,7 @@ import {
     DataType,
     HasMany,
     Model,
-    PrimaryKey,
+    PrimaryKey, Scopes,
     Table
 } from "sequelize-typescript";
 
@@ -14,7 +14,17 @@ import CardMemberExtraInfo from "./memberExtraInfo";
 import TranslationGroupSkill from "../translations/groupSkill";
 
 import CardMemberGroupType from "../../types/cardMemberGroupType";
+import {Op} from "sequelize";
 
+@Scopes(() => ({
+    hasSkill: {
+        where: {
+            skill: {
+                [Op.not]: null
+            }
+        }
+    }
+}))
 @Table({timestamps: false})
 export default class CardMemberGroup extends Model {
     @PrimaryKey

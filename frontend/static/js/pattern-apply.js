@@ -1,16 +1,17 @@
 function submit() {
     const data = {
         id: patternid,
-        cards: $("input.assign-card[type=checkbox]:checked").toArray().map(e => {
-            return {
-                cardNo: $(e).data("cardno"),
-                line: parseInt($(e).data("line"))
-            }
-        }),
-        groups: $("input.assign-group[type=checkbox]:checked").toArray().map(e => {
-            return {
-                groupId: $(e).data("groupid"),
-                line: parseInt($(e).data("line"))
+        cards: $("input.assign[type=checkbox]:checked").toArray().map(e => {
+            if ($(e).hasClass("assign-card")) {
+                return {
+                    cardNo: $(e).data("cardno"),
+                    line: parseInt($(e).data("line"))
+                }
+            } else {
+                return {
+                    groupId: $(e).data("groupid"),
+                    line: parseInt($(e).data("line"))
+                }
             }
         })
     };

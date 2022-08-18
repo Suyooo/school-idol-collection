@@ -40,6 +40,13 @@ import CardMemberGroup from "./memberGroup";
     memories: {
         where: {type: CardType.MEMORY}
     },
+    hasSkill: {
+        where: {
+            skill: {
+                [Op.not]: null
+            }
+        }
+    },
 
     id: (id) => ({
         where: {

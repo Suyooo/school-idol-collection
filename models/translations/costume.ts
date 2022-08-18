@@ -16,7 +16,7 @@ export default class TranslationCostume extends Model {
     @AllowNull(false)
     @ForeignKey(() => CardMemberExtraInfo)
     @Column
-    cardMemberExtraInfoId: string;
+    cardMemberExtraInfoCardNo: string;
 
     @BelongsTo(() => CardMemberExtraInfo)
     cardMemberExtraInfo: CardMemberExtraInfo;

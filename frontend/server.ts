@@ -2,10 +2,10 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import SiteCardFormattingWrapper from "../formatting/siteCardFormattingWrapper";
 import {
-    applyPatternToCardSkills, applyPatternToGroupSkills,
-    getApplicableCardSkills,
-    getApplicableGroupSkills,
-    listUntranslatedCardSkills, listUntranslatedGroupSkills, splitTriggersFromSkill
+    listUntranslatedSkills,
+    getApplicableSkills,
+    applyPatternToSkills,
+    splitTriggersFromSkill
 } from "../translation/skills";
 import DB from "../models/db";
 import {Op} from "sequelize";
@@ -243,16 +243,13 @@ app.get("/pattern/apply/:patternid/", async (req, res) => {
     }
 
     res.render("pattern/apply", {
-        id: pattern.id,
-        applicableCards: await getApplicableCardSkills(pattern),
-        applicableGroups: await getApplicableGroupSkills(pattern)
+        id: pattern.id, applicable: await getApplicableSkills(pattern)
     });
 });
 
 app.get("/pattern/untranslated/", async (req, res) => {
     res.render("pattern/untranslated", {
-        untranslatedCards: await listUntranslatedCardSkills(),
-        untranslatedGroups: await listUntranslatedGroupSkills()
+        untranslated: await listUntranslatedSkills()
     });
 });
 
@@ -299,8 +296,7 @@ app.put('/pattern/apply/', async (req, res, next) => {
         return;
     }
 
-    await applyPatternToCardSkills(pattern, req.body.cards);
-    await applyPatternToGroupSkills(pattern, req.body.groups);
+    await applyPatternToSkills(pattern, req.body);
     res.json({success: true});
 });
 
