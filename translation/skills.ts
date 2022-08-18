@@ -20,7 +20,7 @@ export function splitTriggersFromSkill(skillLine: string): { skill: string, trig
     }
 }
 
-export async function listUntranslatedSkills() {
+export async function listUntranslatedCardSkills() {
     const allSkillCards = await DB.Card.findAll({
         attributes: ["cardNo", "skill"],
         where: {
@@ -37,6 +37,29 @@ export async function listUntranslatedSkills() {
         const translatedLineIds = card._skillLinesEng.map(s => s.line);
         return card.skillLines.map((s, i) => ({
             cardNo: card.cardNo,
+            skill: s,
+            line: i
+        })).filter(s => translatedLineIds.indexOf(s.line) === -1);
+    });
+}
+
+export async function listUntranslatedGroupSkills() {
+    const allSkillGroups = await DB.CardMemberGroup.findAll({
+        attributes: ["id", "skill"],
+        where: {
+            skill: {
+                [Op.not]: null
+            }
+        },
+        include: [DB.TranslationGroupSkill]
+    });
+    return allSkillGroups.flatMap(group => {
+        const skillLineCount = group.skillLines.length;
+        const translatedLineCount = group._skillLinesEng.length;
+        if (skillLineCount === translatedLineCount) return [];
+        const translatedLineIds = group._skillLinesEng.map(s => s.line);
+        return group.skillLines.map((s, i) => ({
+            groupId: group.id,
             skill: s,
             line: i
         })).filter(s => translatedLineIds.indexOf(s.line) === -1);

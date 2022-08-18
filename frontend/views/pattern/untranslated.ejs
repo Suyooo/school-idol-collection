@@ -1,6 +1,6 @@
 <%- include("../partials/header", {"title": "Untranslated", "styles": []}); %>
 <div class="content">
-    <h5><%= untranslated.length %> Untranslated Card Skill(s)</h5>
+    <h5><%= untranslatedCards.length + untranslatedGroups.length %> Untranslated Skill(s)</h5>
     <div class="panel">
         <div class="panel-inner">
             <table>
@@ -12,11 +12,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <% untranslated.forEach(function(a) { %>
+                <% untranslatedCards.forEach(function(a) { %>
                     <tr>
                         <th><a href="/card/<%= a.cardNo %>"><%= a.cardNo %></a></th>
                         <td><%- a.skill.replace(/\n/g, "<br>") %></td>
                         <td><a href="/pattern/create/<%= a.cardNo %>/<%= a.line %>/">Create</a></td>
+                    </tr>
+                <% }); %>
+                <% untranslatedGroups.forEach(function(a) { %>
+                    <tr>
+                        <th><%= a.groupId %></th>
+                        <td><%- a.skill.replace(/\n/g, "<br>") %></td>
+                        <td><a href="/pattern/create">Create</a></td>
                     </tr>
                 <% }); %>
                 </tbody>

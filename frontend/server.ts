@@ -5,7 +5,7 @@ import {
     applyPatternToCardSkills, applyPatternToGroupSkills,
     getApplicableCardSkills,
     getApplicableGroupSkills,
-    listUntranslatedSkills, splitTriggersFromSkill
+    listUntranslatedCardSkills, listUntranslatedGroupSkills, splitTriggersFromSkill
 } from "../translation/skills";
 import DB from "../models/db";
 import {Op} from "sequelize";
@@ -251,7 +251,8 @@ app.get("/pattern/apply/:patternid/", async (req, res) => {
 
 app.get("/pattern/untranslated/", async (req, res) => {
     res.render("pattern/untranslated", {
-        untranslated: await listUntranslatedSkills()
+        untranslatedCards: await listUntranslatedCardSkills(),
+        untranslatedGroups: await listUntranslatedGroupSkills()
     });
 });
 
