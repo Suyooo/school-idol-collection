@@ -1,4 +1,4 @@
-const regexSpecialCharacters = /[-[\]{}()*+?.,\\^$|#\s]/g;
+const regexSpecialCharacters = /[-[\]{}()*+?.,\\^$|#]/g;
 
 function toNumWithFullwidth(fw: string): number {
     return parseInt(fw.normalize('NFKC'));

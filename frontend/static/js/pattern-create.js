@@ -149,15 +149,15 @@ function submit() {
         regex: regex.val(),
         template: template.val(),
         groupTypeIds: [...new Array(groupCount)]
-            .map(i => $("input[name='group" + (i + 1) + "']:checked").attr("id").at(-1))
+            .map((_, i) => $("input[name='group" + (i + 1) + "']:checked").attr("id").at(-1))
     }
     $.ajax({
         type: "PUT",
-        url: "/pattern/add/",
+        url: "/pattern/",
         contentType: "application/json",
         data: JSON.stringify(data)
     }).done((res) => {
-        window.location.href = "/pattern/assign/" + res.id + "/";
+        window.location.href = "/pattern/apply/" + res.id + "/";
     }).fail((jqxhr, textStatus, error) => {
         alert("Error while saving: " + error);
         submitBtn.show();

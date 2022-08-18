@@ -1,0 +1,49 @@
+<%- include("../partials/header", {"title": "Apply Pattern", "styles": []}); %>
+<div class="content">
+    <div class="panel">
+        <div class="panel-inner">
+            <table>
+                <thead>
+                <tr>
+                    <th>Card</th>
+                    <th>JPN</th>
+                    <th>ENG</th>
+                    <th>Apply</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% applicableCards.forEach(function(a) { %>
+                    <tr>
+                        <th><a href="/card/<%= a.cardNo %>/"><%= a.cardNo %></a></th>
+                        <td><%= a.skillJpn %></td>
+                        <td><%= a.skillEng %></td>
+                        <td><input class="assign assign-card" type="checkbox" data-cardno="<%= a.cardNo %>"
+                                   data-line="<%= a.line %>"></td>
+                    </tr>
+                <% }); %>
+                <% applicableGroups.forEach(function(a) { %>
+                    <tr>
+                        <th><%= a.groupId %></th>
+                        <td><%= a.skillJpn %></td>
+                        <td><%= a.skillEng %></td>
+                        <td><input class="assign assign-group" type="checkbox" data-groupid="<%= a.groupId %>"
+                                   data-line="<%= a.line %>"></td>
+                    </tr>
+                <% }); %>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td><input id="all" type="checkbox"> <label for="all">All</label></td>
+                </tr>
+                </tbody>
+            </table>
+            <a class="button button-primary" id="submit" style="float: right">Submit</a>
+            <a class="button button-primary" id="edit"
+               href="/pattern/edit/<%- id %><% if (applicableCards.length > 0) { %>/<%- applicableCards[0].cardNo %>/<%- applicableCards[0].line %> <% } %>"
+               style="float: left">Edit</a>
+        </div>
+    </div>
+</div>
+<script>const patternid = <%= id %>;</script>
+<%- include("../partials/footer", {"jquery": true, "scripts": ["pattern-apply"]}); %>

@@ -11,6 +11,7 @@ import Trigger, {TriggerID, TriggerNameJpn} from "../../types/trigger";
 import PatternGroupType, {PatternGroupTypeID} from "../../types/patternGroupType";
 import DB from "../db";
 import {escapeForRegex} from "../../utils/regex";
+import {splitTriggersFromSkill} from "../../translation/skills";
 
 @Table({timestamps: false})
 export default class TranslateTablePattern extends Model {
@@ -70,93 +71,16 @@ export default class TranslateTablePattern extends Model {
         this.groupTypes = typeString;
     }
 
-    static readonly skillPattern = /^(【[^【】]*?】(?:\/【[^【】]*?】)*)(.*?)$/;
 
-    static buildSkeletonFromSkill(skill: string): TranslateTablePattern {
-        const isSkill = TranslateTablePattern.skillPattern.exec(skill);
-        if (isSkill === null) {
-            // Probably lyrics
-            return DB.TranslateTablePattern.build({
-                triggers: 0,
-                regex: "^" + escapeForRegex(skill) + "$",
-                template: skill,
-                groupTypes: ""
-            });
-        } else {
-            const triggers = isSkill[1].split("/").map(t => Trigger.get(t.substring(1, t.length - 1) as TriggerNameJpn));
-            const skel = DB.TranslateTablePattern.build({
-                triggers: 0,
-                regex: "^" + escapeForRegex(isSkill[2]) + "$",
-                template: isSkill[2],
-                groupTypes: ""
-            });
-            skel.triggerArray = triggers;
-            return skel;
-        }
+    static buildSkeletonFromSkill(skillLine: string): TranslateTablePattern {
+        const { skill, triggers } = splitTriggersFromSkill(skillLine);
+        const skel = DB.TranslateTablePattern.build({
+            triggers: 0,
+            regex: "^" + escapeForRegex(skill) + "$",
+            template: skill,
+            groupTypes: ""
+        });
+        skel.triggerArray = triggers;
+        return skel;
     }
-
-    /*testSkill(skill: string): boolean {
-        return this.pattern.test(skill);
-    }
-
-    translateSkill(skill: string): string {
-        const match = this.pattern.exec(skill);
-        if (match === null) {
-            throw new ParseError("Pattern is not applicable");
-        }
-        if (match.length - 1 != this.groupTypes.length)
-            Log.warn("PATTERN", "Pattern #" + this.id + " has " + (match.length - 1) + " groups but " + this.groupTypes.length + " types");
-
-        const allRepls: string[] = new Array(this.groupTypes.length);
-        try {
-            for (let gi = 0; gi < this.groupTypes.length; gi++) {
-                allRepls[gi] = this.groupTypes[gi].getReplacement(match[gi + 1]);
-            }
-        } catch (e) {
-            throw new ErrorWithCause("Error while getting replacements: " + e.message, e);
-        }
-
-        let res = this.template;
-        for (let gi = 0; gi < this.groupTypes.length; gi++) {
-            let thisRes = res;
-            thisRes = thisRes.replace(new RegExp("<" + (gi + 1) + ">", "g"), allRepls[gi]);
-            for (const [from, to] of this.groupTypes[gi].getExtraReplacements(match[gi + 1], gi + 1, allRepls)) {
-                thisRes = thisRes.replace(new RegExp(from, "g"), to);
-            }
-
-            if (thisRes == res) {
-                Log.warn("PATTERN", "Replacements for Group #" + (gi + 1) + " in Pattern #" + this.id + " had no effect");
-                Log.warn("PATTERN", "Skill: " + skill);
-                Log.warn("PATTERN", "Pattern: " + this.pattern.source);
-                Log.warn("PATTERN", "Template: " + this.template);
-            }
-            res = thisRes;
-        }
-
-        if (res.indexOf("<") !== -1) {
-            Log.warn("PATTERN", "Pattern #" + this.id + " seems to have unused replacement tokens");
-            Log.warn("PATTERN", "Result: " + res);
-            Log.warn("PATTERN", "Pattern: " + this.pattern.source);
-            Log.warn("PATTERN", "Template: " + this.template);
-        }
-        if (res.indexOf("undefined") !== -1) {
-            Log.warn("PATTERN", "Pattern #" + this.id + " contains \"undefined\", something might have broken");
-            Log.warn("PATTERN", "Result: " + res);
-            Log.warn("PATTERN", "Pattern: " + this.pattern.source);
-            Log.warn("PATTERN", "Template: " + this.template);
-        }
-        if (res.indexOf("NaN") !== -1) {
-            Log.warn("PATTERN", "Pattern #" + this.id + " contains \"NaN\", something might have broken");
-            Log.warn("PATTERN", "Result: " + res);
-            Log.warn("PATTERN", "Pattern: " + this.pattern.source);
-            Log.warn("PATTERN", "Template: " + this.template);
-        }
-        if (res.search(/[０−９]/) !== -1) {
-            Log.warn("PATTERN", "Pattern #" + this.id + " contains fullwidth digits, something might have broken");
-            Log.warn("PATTERN", "Result: " + res);
-            Log.warn("PATTERN", "Pattern: " + this.pattern.source);
-            Log.warn("PATTERN", "Template: " + this.template);
-        }
-        return res;
-    }*/
 }

@@ -21,6 +21,7 @@ export default class TranslationSkill extends Model {
     @BelongsTo(() => Card)
     card: Card;
 
+    @PrimaryKey
     @AllowNull(false)
     @Column
     line: number;

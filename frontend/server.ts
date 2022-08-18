@@ -1,7 +1,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import SiteCardFormattingWrapper from "../formatting/siteCardFormattingWrapper";
-import {listUntranslatedSkills} from "../translation/skills";
+import {
+    applyPatternToCardSkills, applyPatternToGroupSkills,
+    getApplicableCardSkills,
+    getApplicableGroupSkills,
+    listUntranslatedSkills, splitTriggersFromSkill
+} from "../translation/skills";
 import DB from "../models/db";
 import {Op} from "sequelize";
 import SkillFormatter from "../formatting/skillFormatter";
@@ -171,14 +176,15 @@ app.get("/pattern/create/", async (req, res) => {
 
 app.get("/pattern/create/:cardno/:line/", async (req, res) => {
     const card = await DB.Card.findByPk(req.params.cardno, {attributes: ["skill"]});
-    const skill = card?.skill?.split("\n")[parseInt(req.params.line)];
-    if (skill === undefined) {
+    const skillLine = card?.skill?.split("\n")[parseInt(req.params.line)];
+    if (skillLine === undefined) {
         res.status(404);
         res.send("");
         return;
     }
 
-    const pattern = TranslateTablePattern.buildSkeletonFromSkill(skill);
+    const pattern = TranslateTablePattern.buildSkeletonFromSkill(skillLine);
+    const {skill} = splitTriggersFromSkill(skillLine);
     res.render("pattern/create", {
         id: "undefined",
         example: skill,
@@ -210,13 +216,14 @@ app.get("/pattern/edit/:patternno/", async (req, res) => {
 app.get("/pattern/edit/:patternno/:cardno/:line", async (req, res) => {
     const pattern = await DB.TranslateTablePattern.findByPk(parseInt(req.params.patternno));
     const card = await DB.Card.findByPk(req.params.cardno, {attributes: ["skill"]});
-    const skill = card?.skill?.split("\n")[parseInt(req.params.line)];
-    if (pattern === null || skill === undefined) {
+    const skillLine = card?.skill?.split("\n")[parseInt(req.params.line)];
+    if (pattern === null || skillLine === undefined) {
         res.status(404);
         res.send("");
         return;
     }
 
+    const {skill} = splitTriggersFromSkill(skillLine);
     res.render("pattern/create", {
         id: pattern.id,
         example: skill,
@@ -227,12 +234,20 @@ app.get("/pattern/edit/:patternno/:cardno/:line", async (req, res) => {
     });
 });
 
-/*app.get("/pattern/assign/:patternid/", (req, res) => {
-    res.render("pattern/assign", {
-        patternid: Number(req.params.patternid),
-        assigns: getAssignableSkills(Number(req.params.patternid))
+app.get("/pattern/apply/:patternid/", async (req, res) => {
+    const pattern = await DB.TranslateTablePattern.findByPk(parseInt(req.params.patternid));
+    if (pattern === null) {
+        res.status(404);
+        res.send("");
+        return;
+    }
+
+    res.render("pattern/apply", {
+        id: pattern.id,
+        applicableCards: await getApplicableCardSkills(pattern),
+        applicableGroups: await getApplicableGroupSkills(pattern)
     });
-});*/
+});
 
 app.get("/pattern/untranslated/", async (req, res) => {
     res.render("pattern/untranslated", {
@@ -256,7 +271,7 @@ app.get("/faq/:faq/", (req, res) => {
  * JSON
  */
 
-app.put('/pattern/add/', async (req, res, next) => {
+app.put('/pattern/', async (req, res, next) => {
     let pattern;
     if (req.body.id === undefined) {
         pattern = DB.TranslateTablePattern.build(req.body);
@@ -264,7 +279,7 @@ app.put('/pattern/add/', async (req, res, next) => {
         pattern = await DB.TranslateTablePattern.findByPk(req.body.id);
         if (pattern === null) {
             res.status(404);
-            res.send("");
+            res.json({success: false});
             return;
         }
         pattern.set(req.body);
@@ -275,10 +290,18 @@ app.put('/pattern/add/', async (req, res, next) => {
     res.json({success: true, id: pattern.id});
 });
 
-/*app.put('/pattern/set/', (req, res, next) => {
-    assignSkills(req.body.pattern, req.body.cards);
-    res.json({"success": true});
-});*/
+app.put('/pattern/apply/', async (req, res, next) => {
+    const pattern = await DB.TranslateTablePattern.findByPk(req.body.id);
+    if (pattern === null) {
+        res.status(404);
+        res.json({success: false});
+        return;
+    }
+
+    await applyPatternToCardSkills(pattern, req.body.cards);
+    await applyPatternToGroupSkills(pattern, req.body.groups);
+    res.json({success: true});
+});
 
 app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}`)

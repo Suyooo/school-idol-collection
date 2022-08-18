@@ -21,6 +21,7 @@ export default class TranslationGroupSkill extends Model {
     @BelongsTo(() => CardMemberGroup)
     group: CardMemberGroup;
 
+    @PrimaryKey
     @AllowNull(false)
     @Column
     line: number;
