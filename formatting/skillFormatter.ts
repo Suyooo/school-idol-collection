@@ -65,9 +65,9 @@ export default class SkillFormatter {
         return '<span class="ability ' + abilityType.toLowerCase() + '">' + match + '</span>';
     }
 
-    private static resolveTrigger(match: string, triggerFunc: (label: TriggerNameJpn | TriggerNameEng) => Trigger, triggerName: string) {
+    private static resolveTrigger(match: string, triggerName: string) {
         try {
-            return "<span class='skill " + triggerFunc(triggerName as (TriggerNameJpn | TriggerNameEng)).cssClassName + "'>" + match + "</span>";
+            return "<span class='skill " + Trigger.get(triggerName as (TriggerNameJpn | TriggerNameEng)).cssClassName + "'>" + match + "</span>";
         } catch (e) {
             return match;
         }
