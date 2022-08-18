@@ -1,7 +1,7 @@
 function submit() {
     const data = {
         id: patternid,
-        cards: $("input.assign[type=checkbox]:checked").toArray().map(e => {
+        applyTo: $("input.assign[type=checkbox]:checked").toArray().map(e => {
             if ($(e).hasClass("assign-card")) {
                 return {
                     cardNo: $(e).data("cardno"),
@@ -22,7 +22,7 @@ function submit() {
         contentType: "application/json",
         data: JSON.stringify(data)
     }).done((res) => {
-        alert("Pattern successfully applied to " + (data.cards.length + data.groups.length) + " Skill(s).")
+        alert("Pattern successfully applied to " + (data.applyTo.length) + " Skill(s).")
     }).fail((jqxhr, textStatus, error) => {
         alert("Error while saving: " + error);
     });

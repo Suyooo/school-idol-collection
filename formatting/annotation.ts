@@ -119,7 +119,7 @@ class AnnotationSkillText extends AbstractAnnotation {
     }
 
     async getHTMLLink() {
-        return "/search/card/skill:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";
+        return "/search/skill:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";
     }
 
     async getPlainText() {

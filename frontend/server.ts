@@ -391,7 +391,7 @@ app.put('/pattern/apply/', async (req, res, next) => {
         return;
     }
 
-    await applyPatternToSkills(pattern, req.body);
+    await applyPatternToSkills(pattern, req.body.applyTo);
     res.json({success: true});
 });
 

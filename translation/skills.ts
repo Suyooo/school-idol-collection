@@ -50,7 +50,7 @@ export async function getApplicableSkills(pattern: TranslateTablePattern)
         attributes: ["cardNo", "skill"], include: [DB.TranslationSkill]
     });
     allSkills.concat(await DB.CardMemberGroup.scope(["hasSkill"]).findAll({
-        attributes: ["cardNo", "skill"], include: [DB.TranslationGroupSkill, DB.CardMemberExtraInfo]
+        attributes: ["id", "skill"], include: [DB.TranslationGroupSkill, DB.CardMemberExtraInfo]
     }));
     for (const skillObj of allSkills) {
         let i = 0;
@@ -105,7 +105,7 @@ export async function applyPatternToSkills(pattern: TranslateTablePattern, apply
 
         if (isCardApplication) {
             await DB.TranslationSkill.upsert({
-                cardId: application.cardNo,
+                cardNo: application.cardNo,
                 line: application.line,
                 skill: triggers.map(t => "[" + t.nameEng + "]").join("/") + " " + translatedSkill,
                 patternId: pattern.id
