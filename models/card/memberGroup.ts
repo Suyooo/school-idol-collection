@@ -49,6 +49,9 @@ export default class CardMemberGroup extends Model {
         this.changed("memberExtraInfos", true);
     }
 
+    @Column(DataType.STRING)
+    expectedMemberIds: string;
+
     @Column(DataType.TEXT)
     skill!: string | null;
 

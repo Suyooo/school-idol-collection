@@ -5,3 +5,4 @@ package-lock.json
 frontend/static/images/LL*
 frontend/static/images/EX*
 frontend/static/images/PR*
+importer/rawinfo/*
