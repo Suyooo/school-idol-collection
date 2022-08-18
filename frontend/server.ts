@@ -143,6 +143,7 @@ app.get("/search/memory/name/:query", (req, res) => {
 app.get("/card/:cardno/", async (req, res) => {
     const card = await DB.Card.scope(["full"]).findByPk(req.params.cardno);
     if (card == undefined) {
+        console.log("card not found");
         res.status(404);
         res.send("Card not found.");
     } else {
