@@ -152,7 +152,12 @@ app.get("/card/:cardno/", async (req, res) => {
                 cardNo: {
                     [Op.not]: card.cardNo
                 }
-            }
+            },
+            attributes: ["cardNo", "type"],
+            include: [
+                {model: DB.CardMemberExtraInfo, attributes: ["rarity"]},
+                {model: DB.CardSongExtraInfo, attributes: ["rarity"]}
+            ]
         });
         const formattingWrapper = new SiteCardFormattingWrapper(card);
         await formattingWrapper.prepareAsyncProperties();
