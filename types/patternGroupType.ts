@@ -49,7 +49,7 @@ export default class PatternGroupType {
 
         // Mem Name
         map.push(new PatternGroupType(3, async function (match: string): Promise<string> {
-            const n = (await DB.Card.scope(["memories", "linkAttributes"]).findOne({
+            const n = (await DB.Card.scope(["memories", "forLink"]).findOne({
                 where: {
                     name: match
                 }
