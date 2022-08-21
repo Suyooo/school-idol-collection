@@ -16,24 +16,26 @@ import CardSongExtraInfo from "./card/songExtraInfo";
 import CardSongAnyReqExtraInfo from "./card/songAnyReqExtraInfo";
 import CardSongAttrReqExtraInfo from "./card/songAttrReqExtraInfo";
 
+const modelList = [
+    Card,
+    CardMemberExtraInfo, CardMemberIdolizePieceExtraInfo,
+    CardSongExtraInfo, CardSongAnyReqExtraInfo, CardSongAttrReqExtraInfo,
+    CardFAQLink, CardMemberGroup,
+    TranslationName, TranslationSkill, TranslationGroupSkill, TranslationCostume,
+    TranslateTableName, TranslateTableSong,
+    TranslateTablePattern
+];
+
 const sequelize = new Sequelize({
     dialect: "sqlite",
     storage: "cardlist.db",
     logging: Log.debug.bind(Log, "DB"),
     logQueryParameters: true,
-    models: [
-        Card,
-        CardMemberExtraInfo, CardMemberIdolizePieceExtraInfo,
-        CardSongExtraInfo, CardSongAnyReqExtraInfo, CardSongAttrReqExtraInfo,
-        CardFAQLink, CardMemberGroup,
-        TranslationName, TranslationSkill, TranslationGroupSkill, TranslationCostume,
-        TranslateTableName, TranslateTableSong,
-        TranslateTablePattern
-    ]
+    models: modelList
 });
 
 const DB = {
-    syncPromise: sequelize.sync(),
+    syncPromise: Promise.all(modelList.map(m => m.sync())),
     sequelize: sequelize,
     Card: <typeof Card>sequelize.models.Card,
     CardMemberExtraInfo: <typeof CardMemberExtraInfo>sequelize.models.CardMemberExtraInfo,

@@ -3,7 +3,6 @@
 import * as fs from "fs";
 import Chokidar from "chokidar";
 import {Mutex} from "async-mutex";
-import {ModelStatic, ModelType} from "sequelize-typescript";
 import {Op} from "sequelize";
 
 import Attribute, {ColorNameJpn, PieceAttributeJpnName, SongAttributeNameJpn} from "../types/attribute";
@@ -17,6 +16,7 @@ import CardMemberIdolizeType from "../types/cardMemberIdolizeType";
 import CardMemberGroupType from "../types/cardMemberGroupType";
 import {tryAllPatterns} from "../translation/skills";
 import autoAnnotateSkill from "./autoAnnotate";
+import CardSongRequirementType from "../types/cardSongRequirementType";
 
 type Empty = "―" | "－" | "─" | "-";
 type RawAttr = SongAttributeNameJpn & Empty;
@@ -53,8 +53,8 @@ watcher.on("add", (path) => {
     if (path.endsWith(".json")) {
         mutex.runExclusive(() => {
             Log.info("IMPORT", "New raw info file added, importing: " + path);
-            return importCard(path).catch(e => Log.error("IMPORT", e.stack));
-        }).catch(e => Log.error("IMPORT", "Mutex problem: " + e.stack));
+            return importCard(path).catch(e => Log.error("IMPORT", e.message + e.stack));
+        }).catch(e => Log.error("IMPORT", "Mutex problem: " + e.message + e.stack));
     } else if (path.endsWith(".jpg")) {
         Log.info("IMPORT", "New image added, moving to correct location: " + path);
         const filename = path.split("/").at(-1)!;
@@ -71,9 +71,9 @@ const birthdayPattern = /^(\d*)月(\d*)日$/;
 const lpPattern = /^(\d*)([+-][\dX∞]*)?$/;
 const idolizedPiecesPattern = /<覚醒>(【(?:オール|赤|緑|青)】(?:\/【(?:オール|赤|緑|青)】?)*)/;
 const pairPattern = /[【「](\d*?) (.*?)[】」]とペアになる。/;
-const pairSkillPattern = /\n?<ペアスキル>\n?/;
+const pairSkillPattern = /\n?<ペアスキル>\n?(.*)/d;
 const trioPattern = /[【「](\d*?) (.*?)[】」][【「](\d*?) (.*?)[】」]とトリオになる。/;
-const trioSkillPattern = /\n?<トリオスキル>\n?/;
+const trioSkillPattern = /\n?<トリオスキル>\n?(.*)/d;
 
 export async function importCard(path: string) {
     const rawdata: RawData = JSON.parse(fs.readFileSync(path).toString());
@@ -94,12 +94,12 @@ export async function importCard(path: string) {
     if (card.skill !== null) {
         const checkSkillPattern = await Promise.all(card.skill.split("\n").map((s: string) => tryAllPatterns(autoAnnotateSkill(s))));
         if (checkSkillPattern.some(s => s !== null)) {
-            defer.translationSkill = checkSkillPattern.map((p, i) => ({
+            defer.translationSkill = checkSkillPattern.map((p, i) => (p ? {
                 cardNo: card.cardNo,
                 line: i,
-                skill: p?.skill,
-                patternId: p?.pattern.id
-            })).filter(p => p.skill !== null);
+                skill: p.skill,
+                patternId: p.pattern.id
+            } : null)).filter(p => p !== null);
         }
     }
 
@@ -169,54 +169,83 @@ export async function importCard(path: string) {
             card.member.idolizeType = CardMemberIdolizeType.NONE;
         }
 
-        // Group handling on import is slightly wacky: usually, only one of the cards contains the group info ("leader")
+        // Before handling groups, check whether the group Skill is on this card's Skill
+        // Has to be cut off, whether it's the first imported card of the group or not
+
+        const splitMatch = pairSkillPattern.exec(card.skill) || trioSkillPattern.exec(card.skill);
+        if (splitMatch) {
+            card.skill = card.skill!.substring(0, splitMatch.index);
+        }
+
+        // Group handling on import is slightly wacky: often, only one of the cards contains the group info ("leader")
         // That means there's three possibilites:
         // - we are importing a non-leader card, and the group is not known yet: we cannot know it is a grouped card,
         //   so we simply import it as if it was a non-grouped card
-        // - we are importing the leader card: the group is now known - store the group skill and read the IDs used in
+        // - we are importing a leader card: the group is now known - store the group skill and read the IDs used in
         //   this group. Check whether cards with those IDs have been imported before - if so, set their group now
         // - we are importing a non-leader card after the group is known: we can add the card to it right away
         // CardMemberGroup.expectedMemberIds is storing the IDs read from the leader. That way, if importing a non-
         // leader card, we can simply check if their ID appears in that column to add it to a known group.
-        const groupMatch = pairPattern.exec(card.skill) || trioPattern.exec(card.skill);
-        if (groupMatch !== null) {
-            const group: any = {};
-            card.skill = card.skill!.substring(0, groupMatch.index);
-            group.skill = card.skill.substring(groupMatch.index + groupMatch[0].length);
 
-            let memberIds: number[];
-            if (groupMatch[3]) {
-                memberIds = [card.id, parseInt(groupMatch[1]), parseInt(groupMatch[3])];
-                group.type = CardMemberGroupType.TRIO;
-            } else {
-                memberIds = [card.id, parseInt(groupMatch[1])];
-                group.type = CardMemberGroupType.PAIR;
-            }
-            group.expectedMemberIds = "|" + memberIds.sort().join("|") + "|";
-
-            card.member.groupId = (await DB.CardMemberGroup.create(group)).id;
-
-            if (group.skill !== null) {
-                const checkSkillPattern = (await Promise.all(group.skill.split("\n").map((s: string) => tryAllPatterns(autoAnnotateSkill(s)))))
-                    .map((p, i) => ({
-                    groupId: card.member.groupId,
-                    line: i,
-                    skill: p?.skill,
-                    patternId: p?.pattern.id
-                })).filter(p => p.skill !== null);
-                for (const obj of checkSkillPattern) {
-                    await DB.TranslationGroupSkill.create(obj);
-                }
-            }
+        const findExistingGroup = await DB.CardMemberGroup.findOne({
+            where: {
+                expectedMemberIds: {[Op.like]: "%|" + card.id + "|%"}
+            },
+            attributes: ["id"]
+        });
+        if (findExistingGroup !== null) {
+            card.member.groupId = findExistingGroup.id;
         } else {
-            const group = await DB.CardMemberGroup.findOne({
-                where: {
-                    expectedMemberIds: {[Op.like]: "%|" + card.id + "|%"}
-                },
-                attributes: ["id"]
-            });
-            if (group !== null) {
-                card.member.groupId = group.id;
+            const groupMatch = pairPattern.exec(card.skill) || trioPattern.exec(card.skill);
+            if (groupMatch !== null) {
+                const group: any = {};
+
+                let memberIds: number[];
+                if (groupMatch[3]) {
+                    memberIds = [card.id, parseInt(groupMatch[1]), parseInt(groupMatch[3])];
+                    group.type = CardMemberGroupType.TRIO;
+                } else {
+                    memberIds = [card.id, parseInt(groupMatch[1])];
+                    group.type = CardMemberGroupType.PAIR;
+                }
+
+                group.expectedMemberIds = "|" + memberIds.sort().join("|") + "|";
+                if (splitMatch) {
+                    group.skill = splitMatch[1];
+                } else {
+                    group.skill = null;
+                }
+
+                card.member.groupId = (await DB.CardMemberGroup.create(group)).id;
+                const existingMembers = await DB.Card.scope(["cardNoOnly"]).findAll({
+                    where: {
+                        id: {
+                            [Op.in]: memberIds
+                        }
+                    }
+                });
+                if (existingMembers.length > 0) {
+                    await DB.CardMemberExtraInfo.update({groupId: card.member.groupId}, {
+                        where: {
+                            cardNo: {
+                                [Op.in]: existingMembers.map(c => c.cardNo)
+                            }
+                        }
+                    });
+                }
+
+                if (group.skill !== null) {
+                    const checkSkillPattern = (await Promise.all(group.skill.split("\n").map((s: string) => tryAllPatterns(autoAnnotateSkill(s)))))
+                        .map((p, i) => (p ? {
+                            groupId: card.member.groupId,
+                            line: i,
+                            skill: p.skill,
+                            patternId: p.pattern.id
+                        } : null)).filter(p => p !== null);
+                    for (const obj of checkSkillPattern) {
+                        await DB.TranslationGroupSkill.create(obj!);
+                    }
+                }
             }
         }
     } else if (rawdata["type"] == "楽曲") {
@@ -239,12 +268,14 @@ export async function importCard(path: string) {
         card.song.lpBonus = lpMatch[2] === "+X" ? "X" : (lpMatch[2] === "+∞" ? "∞" : parseInt(lpMatch[2]));
 
         if (isEmpty(rawdata["共通スコア"])) {
+            card.song.requirementType = CardSongRequirementType.ATTR_PIECE;
             card.song.attrRequirement = {
                 piecesSmile: parseInt(rawdata["赤スコア"]),
                 piecesPure: parseInt(rawdata["緑スコア"]),
                 piecesCool: parseInt(rawdata["青スコア"])
             };
         } else {
+            card.song.requirementType = CardSongRequirementType.ANY_PIECE;
             card.song.anyRequirement = {
                 piecesAll: parseInt(rawdata["共通スコア"])
             };
