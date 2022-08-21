@@ -13,8 +13,19 @@
                     </div>
                     <div class="row first">
                         <div class="one-half column inforow first">
-                            <div>Card ID</div>
-                            <div><%= f.id %></div>
+                            <div>
+                                Card ID
+                                <% if (sameId.length > 0) { %>
+                                    <br><span>Shared With</span>
+                                <% } %>
+                            </div>
+                            <div>
+                                <%= f.id %>
+                                <% if (sameId.length > 0) { %>
+                                    <br>
+                                    <%- sameId.map(card => '<a href="/card/' + card.cardNo + '/">' + card.cardNo + ' (' + card.rarity + ')</a>').join("<br>"); %>
+                                <% } %>
+                            </div>
                         </div>
                         <div class="one-half column inforow">
                             <div>Type</div>
@@ -48,7 +59,7 @@
                                 <div><%- f.ability %></div>
                             </div>
                             <div class="one-half column inforow">
-                                <div class="piecelabel">Pieces
+                                <div>Pieces
                                     <% if (f.hasIdolizePieces()) { %><br><span>Idolized</span>
                                     <% } %>
                                     <% if (f.hasBirthdayPieces()) { %><br><span>Birthday</span>
@@ -93,8 +104,9 @@
                         <div>&nbsp;</div>
                         <div><%- f.skillEng %></div>
                     </div>
+
                     <% if (f.isMember() && f.hasGroup()) { %>
-                        <div class="row inforow">
+                        <div class="row inforow first">
                             <div><%= f.groupType %> With</div>
                             <div><%- f.groupMembers %></div>
                         </div>
@@ -107,16 +119,9 @@
                             <div><%- f.groupSkillEng %></div>
                         </div>
                     <% } %>
-                    <% if (sameId.length > 0) { %>
-                        <div class="row inforow">
-                            <div>Shared ID</div>
-                            <div>
-                                <%- sameId.map(card => '<a href="/card/' + card.cardNo + '/">' + card.cardNo + ' (' + card.rarity + ')</a>').join(", "); %>
-                            </div>
-                        </div>
-                    <% } %>
+
                     <% if (f.faqs.length > 0) { %>
-                        <div class="row inforow">
+                        <div class="row inforow first">
                             <div>Related FAQ</div>
                             <div class="faqs">
                                 <% for(var i = 0; i < f.faqs.length; i++) { %>

@@ -62,7 +62,11 @@ h5 {
     color: var(--orange2);
 }
 
-.piecelabel > span {
+.inforow.first {
+    margin-top: 1em;
+}
+
+.inforow > div:first-child > span {
     float: right;
     font-weight: normal;
 }
