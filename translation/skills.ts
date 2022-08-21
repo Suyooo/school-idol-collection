@@ -24,10 +24,9 @@ export function splitTriggersFromSkill(skillLine: string): { skill: string, trig
 
 export async function listUntranslatedSkills()
     : Promise<({ cardNo: string, skill: string, line: number } | { groupId: number, firstCardNo: string, skill: string, line: number })[]> {
-    const allSkills: (Card | CardMemberGroup)[] = await DB.Card.scope(["hasSkill"]).findAll({
+    const allSkills: (Card | CardMemberGroup)[] = (await DB.Card.scope(["hasSkill"]).findAll({
         attributes: ["cardNo", "skill"], include: [DB.TranslationSkill]
-    });
-    allSkills.concat(await DB.CardMemberGroup.scope(["hasSkill"]).findAll({
+    }) as (Card | CardMemberGroup)[]).concat(await DB.CardMemberGroup.scope(["hasSkill"]).findAll({
         attributes: ["id", "skill"], include: [DB.TranslationGroupSkill, DB.CardMemberExtraInfo]
     }));
     return allSkills.flatMap(skillObj => {
@@ -46,10 +45,9 @@ export async function listUntranslatedSkills()
 export async function getApplicableSkills(pattern: TranslateTablePattern)
     : Promise<({ cardNo: string, line: number, skillJpn: string, skillEng: string } | { groupId: number, firstCardNo: string, line: number, skillJpn: string, skillEng: string })[]> {
     const res = [];
-    const allSkills: (Card | CardMemberGroup)[] = await DB.Card.scope(["hasSkill"]).findAll({
+    const allSkills: (Card | CardMemberGroup)[] = (await DB.Card.scope(["hasSkill"]).findAll({
         attributes: ["cardNo", "skill"], include: [DB.TranslationSkill]
-    });
-    allSkills.concat(await DB.CardMemberGroup.scope(["hasSkill"]).findAll({
+    }) as (Card | CardMemberGroup)[]).concat(await DB.CardMemberGroup.scope(["hasSkill"]).findAll({
         attributes: ["id", "skill"], include: [DB.TranslationGroupSkill, DB.CardMemberExtraInfo]
     }));
     for (const skillObj of allSkills) {

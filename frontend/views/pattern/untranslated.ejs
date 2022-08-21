@@ -14,13 +14,13 @@
                 <tbody>
                 <% untranslated.forEach(function(a) { %>
                     <tr>
-                        <% if (a.hasOwnProperty(cardNo)) { %>
+                        <% if (a.hasOwnProperty("cardNo")) { %>
                             <th><a href="/card/<%= a.cardNo %>"><%= a.cardNo %></a></th>
                         <% } else { %>
                             <th><a href="/card/<%= a.firstCardNo %>">Group #<%= a.groupId %></a></th>
                         <% } %>
                         <td><%- a.skill.replace(/\n/g, "<br>") %></td>
-                        <% if (a.hasOwnProperty(cardNo)) { %>
+                        <% if (a.hasOwnProperty("cardNo")) { %>
                             <td><a href="/pattern/create/<%= a.cardNo %>/<%= a.line %>">Create</a></td>
                         <% } else { %>
                             <td><a href="/pattern/create">Create (Blank)</a></td>

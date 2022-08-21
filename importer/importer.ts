@@ -71,9 +71,9 @@ const birthdayPattern = /^(\d*)月(\d*)日$/;
 const lpPattern = /^(\d*)([+-][\dX∞]*)?$/;
 const idolizedPiecesPattern = /<覚醒>(【(?:オール|赤|緑|青)】(?:\/【(?:オール|赤|緑|青)】?)*)/;
 const pairPattern = /[【「](\d*?) (.*?)[】」]とペアになる。/;
-const pairSkillPattern = /\n?<ペアスキル>\n?(.*)/d;
+const pairSkillPattern = /\n?<ペアスキル>\n?(.*)/s;
 const trioPattern = /[【「](\d*?) (.*?)[】」][【「](\d*?) (.*?)[】」]とトリオになる。/;
-const trioSkillPattern = /\n?<トリオスキル>\n?(.*)/d;
+const trioSkillPattern = /\n?<トリオスキル>\n?(.*)/s;
 
 export async function importCard(path: string) {
     const rawdata: RawData = JSON.parse(fs.readFileSync(path).toString());
