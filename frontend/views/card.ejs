@@ -63,6 +63,20 @@
                             <div>Costume</div>
                             <div><%= f.costume %></div>
                         </div>
+                        <% if (f.hasGroup()) { %>
+                            <div class="row inforow">
+                                <div><%= f.groupType %> With</div>
+                                <div><%- f.groupMembers %></div>
+                            </div>
+                            <div class="row inforow">
+                                <div><%= f.groupType %> Skill</div>
+                                <div><%- f.groupSkillJpn %></div>
+                            </div>
+                            <div class="row inforow">
+                                <div>&nbsp;</div>
+                                <div><%- f.groupSkillEng %></div>
+                            </div>
+                        <% } %>
                     <% } else if (f.isSong()) { %>
                         <div class="row">
                             <div class="one-half column inforow">
@@ -93,20 +107,6 @@
                         <div>&nbsp;</div>
                         <div><%- f.skillEng %></div>
                     </div>
-                    <% if (f.card.group) { %>
-                        <div class="row inforow">
-                            <div><%= f.groupType %> With</div>
-                            <div><%- f.groupMembers %></div>
-                        </div>
-                        <div class="row inforow">
-                            <div><%= f.groupType %> Skill</div>
-                            <div><%- f.groupSkillJpn %></div>
-                        </div>
-                        <div class="row inforow">
-                            <div>&nbsp;</div>
-                            <div><%- f.groupSkillEng %></div>
-                        </div>
-                    <% } %>
                     <% if (sameId.length > 0) { %>
                         <div class="row inforow">
                             <div>Shared ID</div>

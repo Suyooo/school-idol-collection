@@ -84,7 +84,18 @@ import CardMemberGroup from "./memberGroup";
                 include: [
                     {
                         model: DB.CardMemberGroup,
-                        include: [DB.TranslationGroupSkill]
+                        include: [
+                            DB.TranslationGroupSkill,
+                            {
+                                model: DB.CardMemberExtraInfo,
+                                include: [
+                                    {
+                                        model: DB.Card,
+                                        include: [DB.CardMemberExtraInfo, DB.TranslationName]
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     DB.CardMemberIdolizePieceExtraInfo,
                     DB.TranslationCostume
@@ -107,11 +118,11 @@ import CardMemberGroup from "./memberGroup";
     },
     forLink: () => ({
         attributes: ["cardNo", "id", "name"],
-        include: [{ model: DB.TranslationName, attributes: ["name"]}]
+        include: [{model: DB.TranslationName, attributes: ["name"]}]
     }),
     forGrid: () => ({
         attributes: ["cardNo", "id", "type", "name"],
-        include: [{ model: DB.TranslationName, attributes: ["name"]}]
+        include: [{model: DB.TranslationName, attributes: ["name"]}]
     })
 }))
 @Table({

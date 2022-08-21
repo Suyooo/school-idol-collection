@@ -166,7 +166,7 @@ export default class SiteCardFormattingWrapper {
                 memberLinks.push('<a href="/card/' + member.cardNo + '/">' + new SiteCardFormattingWrapper(member).title + '</a>');
             }
             this.groupMembers = memberLinks.join(" ");
-            this.groupType = this.card.member.group.type == CardMemberGroupType.PAIR ? "Pair" : "Type";
+            this.groupType = this.card.member.group.type == CardMemberGroupType.PAIR ? "Pair" : "Trio";
 
             this.prepareGroupAsyncProperties = async () => {
                 assertIsFormattingMemberWithGroup(this);
