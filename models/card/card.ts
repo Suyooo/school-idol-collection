@@ -27,9 +27,6 @@ import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
 import Attribute from "../../types/attribute";
 import CardMemberGroup from "./memberGroup";
 
-@DefaultScope(() => ({
-    order: [["cardNo", "ASC"]]
-}))
 @Scopes(() => ({
     members: {
         where: {type: CardType.MEMBER}
@@ -74,7 +71,8 @@ import CardMemberGroup from "./memberGroup";
             cardNo: {
                 [Op.gt]: cardNo
             }
-        }
+        },
+        order: [["cardNo", "ASC"]]
     }),
 
     full: () => ({
@@ -122,7 +120,8 @@ import CardMemberGroup from "./memberGroup";
     }),
     forGrid: () => ({
         attributes: ["cardNo", "id", "type", "name"],
-        include: [{model: DB.TranslationName, attributes: ["name"]}]
+        include: [{model: DB.TranslationName, attributes: ["name"]}],
+        order: [["cardNo", "ASC"]]
     })
 }))
 @Table({

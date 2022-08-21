@@ -224,8 +224,7 @@ app.get("/search/*/", async (req, res) => {
         "queries": queries,
         "cards": (await DB.Card.scope(["forGrid"]).findAll({
             where: where,
-            include: includeArr,
-            order: [["cardNo", "ASC"]]
+            include: includeArr
         })).map(c => new SiteCardFormattingWrapper(c, true))
     });
 });
