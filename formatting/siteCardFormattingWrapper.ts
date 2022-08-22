@@ -33,38 +33,53 @@ function assertIsFormattingMemberWithGroup(obj: unknown): asserts obj is SiteCar
 export default class SiteCardFormattingWrapper {
     readonly card: Card;
 
-    constructor(card: Card, forGridDisplay: boolean = false) {
+    constructor(card: Card, reducedAttributes: boolean = false) {
         this.card = card;
         this.cardNo = card.cardNo;
         this.set = card.cardNo.split("-")[0];
         this.id = card.id.toString();
-        if (!forGridDisplay) {
+        if (!reducedAttributes) {
             this.copyright = card.copyright;
             this.faqs = card.faqs;
         }
 
         if (card.isMember()) {
             this.type = "Member";
-            if (!forGridDisplay) this.rarity = CardMemberRarity[card.member.rarity];
+            if (!reducedAttributes) this.rarity = CardMemberRarity[card.member.rarity];
         } else if (card.isSong()) {
             this.type = "Song";
-            if (!forGridDisplay) this.rarity = CardSongRarity[card.song.rarity];
+            if (!reducedAttributes) this.rarity = CardSongRarity[card.song.rarity];
         } else if (card.isMemory()) {
             this.type = "Memory";
-            if (!forGridDisplay) this.rarity = "ME";
+            if (!reducedAttributes) this.rarity = "ME";
         }
 
         this.nameJpn = card.name;
         this.nameEng = card.nameEng;
         this.name = this.nameEng || this.nameJpn;
 
-        if (!forGridDisplay) {
-            this.nameJpnWithQuot = card.name.split("／").map(s => '"' + s + '"').join("／");
-            this.nameEngWithQuot = card.nameEng === null ? null
-                : card.nameEng.split(" / ").map(s => '"' + s + '"').join(" / ");
-            this.nameWithQuot = this.nameEngWithQuot || this.nameJpnWithQuot;
-            this.title = "<span class='card-id'>" + this.cardNo + "</span> " + this.nameWithQuot;
+        this.nameJpnWithQuot = card.name.split("／").map(s => '"' + s + '"').join("／");
+        this.nameEngWithQuot = card.nameEng === null ? null
+            : card.nameEng.split(" / ").map(s => '"' + s + '"').join(" / ");
+        this.nameWithQuot = this.nameEngWithQuot || this.nameJpnWithQuot;
+        this.title = "<span class='card-id'>" + this.cardNo + "</span> " + this.nameWithQuot;
+
+        const backlinkSet: Set<[number,string]> = new Set();
+        if (card.linkedBy) {
+            for (const linkingCard of card.linkedBy) {
+                backlinkSet.add([linkingCard.id,
+                    "<a href='/card/" + linkingCard.cardNo + "'>" + new SiteCardFormattingWrapper(linkingCard, true).title + "</a>"]);
+            }
         }
+        if (card.linkedByGroup) {
+            for (const linkingGroup of card.linkedByGroup) {
+                for (const linkingCard of linkingGroup.members) {
+                    backlinkSet.add([linkingCard.id,
+                        "<a href='/card/" + linkingCard.cardNo + "'>" + new SiteCardFormattingWrapper(linkingCard, true).title + "</a>"]);
+                }
+            }
+        }
+        this.backlinks = [...backlinkSet.values()].sort((a,b) => a[0] - b[0]).map(e => e[1]);
     }
 
     readonly cardNo: string;
@@ -83,6 +98,8 @@ export default class SiteCardFormattingWrapper {
     readonly nameJpnWithQuot: string;
     readonly nameWithQuot: string;
     readonly title: string;
+
+    readonly backlinks: string[];
 
     async prepareAsyncProperties() {
         const prevCard = await DB.Card.scope([{method: ["before", this.cardNo]}, "cardNoOnly"]).findOne();

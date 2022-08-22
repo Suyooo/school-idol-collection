@@ -120,8 +120,17 @@
                         </div>
                     <% } %>
 
-                    <% if (f.faqs.length > 0) { %>
+                    <% if (f.backlinks.length > 0) { %>
                         <div class="row inforow first">
+                            <div>See Also</div>
+                            <div>
+                                <%- f.backlinks.join("<br>") %>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <% if (f.faqs.length > 0) { %>
+                        <div class="row inforow<%- (f.backlinks.length > 0) ? "" : " first" %>">
                             <div>Related FAQ</div>
                             <div class="faqs">
                                 <% for(var i = 0; i < f.faqs.length; i++) { %>
