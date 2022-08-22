@@ -1,24 +1,13 @@
 function submit() {
     const data = {
         id: patternid,
-        applyTo: $("input.assign[type=checkbox]:checked").toArray().map(e => {
-            if ($(e).hasClass("assign-card")) {
-                return {
-                    cardNo: $(e).data("cardno"),
-                    line: parseInt($(e).data("line"))
-                }
-            } else {
-                return {
-                    groupId: $(e).data("groupid"),
-                    line: parseInt($(e).data("line"))
-                }
-            }
-        })
+        applyTo: $("input.assign[type=checkbox]:checked").toArray()
+            .map(e => [parseInt($(e).data("skill")), parseInt($(e).data("line"))])
     };
 
     $.ajax({
         type: "PUT",
-        url: "/pattern/apply/",
+        url: "/api/pattern/apply/",
         contentType: "application/json",
         data: JSON.stringify(data)
     }).done((res) => {

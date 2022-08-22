@@ -11,11 +11,11 @@ import {
 
 import Card, {CardMember} from "./card";
 import CardMemberExtraInfo from "./memberExtraInfo";
-import TranslationGroupSkill from "../translations/groupSkill";
 
 import CardMemberGroupType from "../../types/cardMemberGroupType";
 import {Op} from "sequelize";
 import CardMemberGroupLink from "./memberGroupLink";
+import Skill from "../skill/skill";
 
 @Scopes(() => ({
     hasSkill: {
@@ -48,20 +48,8 @@ export default class CardMemberGroup extends Model {
     @Column(DataType.STRING)
     expectedMemberIds: string;
 
-    @Column(DataType.TEXT)
-    skill!: string | null;
-
-    get skillLines(): string[] {
-        if (this.skill === null) return [];
-        return this.skill.split("\n");
-    }
-
-    @HasMany(() => TranslationGroupSkill)
-    _skillLinesEng!: TranslationGroupSkill[];
-
-    get skillLinesEng(): string[] {
-        return this._skillLinesEng.map(sk => sk.skill);
-    }
+    @HasMany(() => Skill, {foreignKey: "groupId"})
+    skills!: Skill[];
 
     @BelongsToMany(() => Card, {through: {model: () => CardMemberGroupLink, unique: false}, foreignKey: "fromGroupId"})
     linksTo!: Array<Card & { CardMemberGroupLink: CardMemberGroupLink }>;

@@ -19,8 +19,6 @@ import CardSongExtraInfo from "./songExtraInfo";
 import CardSongAnyReqExtraInfo from "./songAnyReqExtraInfo";
 import CardSongAttrReqExtraInfo from "./songAttrReqExtraInfo";
 import CardFAQLink from "./faqLink";
-import TranslationName from "../translations/name";
-import TranslationSkill from "../translations/skill";
 
 import CardType from "../../types/cardType";
 import CardSongRequirementType from "../../types/cardSongRequirementType";
@@ -29,6 +27,7 @@ import Attribute from "../../types/attribute";
 import CardMemberGroup from "./memberGroup";
 import CardLink from "./cardLink";
 import CardMemberGroupLink from "./memberGroupLink";
+import Skill from "../skill/skill";
 
 export const CardOrder = (col: string) =>
     <OrderItem[]><unknown>[[literal(col + " LIKE 'LL%' DESC, " + col)]];
@@ -44,11 +43,7 @@ export const CardOrder = (col: string) =>
         where: {type: CardType.MEMORY}
     }),
     hasSkill: () => ({
-        where: {
-            skill: {
-                [Op.not]: null
-            }
-        }
+        include: [{model: DB.Skill, required: true}]
     }),
 
     id: (id) => ({
@@ -83,26 +78,26 @@ export const CardOrder = (col: string) =>
 
     full: () => ({
         include: [
+            DB.Skill,
             {
                 model: DB.CardMemberExtraInfo,
                 include: [
                     {
                         model: DB.CardMemberGroup,
                         include: [
-                            DB.TranslationGroupSkill,
+                            DB.Skill,
                             {
                                 model: DB.CardMemberExtraInfo,
                                 include: [
                                     {
                                         model: DB.Card,
-                                        include: [DB.CardMemberExtraInfo, DB.TranslationName]
+                                        include: [DB.CardMemberExtraInfo]
                                     }
                                 ]
                             }
                         ]
                     },
-                    DB.CardMemberIdolizePieceExtraInfo,
-                    DB.TranslationCostume
+                    DB.CardMemberIdolizePieceExtraInfo
                 ]
             },
             {
@@ -115,7 +110,6 @@ export const CardOrder = (col: string) =>
             {
                 model: DB.Card,
                 as: "linkedBy",
-                include: [DB.TranslationName],
                 order: CardOrder("`linkedBy->CardLink`.`fromCardNo`")
             },
             {
@@ -127,28 +121,24 @@ export const CardOrder = (col: string) =>
                         include: [
                             {
                                 model: DB.Card,
-                                include: [DB.CardMemberExtraInfo, DB.TranslationName]
+                                include: [DB.CardMemberExtraInfo]
                             }
                         ]
                     }
                 ],
                 order: CardOrder("`linkedByGroup->memberExtraInfos->card`.`cardNo`")
             },
-            DB.CardFAQLink,
-            DB.TranslationName,
-            DB.TranslationSkill
+            DB.CardFAQLink
         ]
     }),
     cardNoOnly: () => ({
         attributes: ["cardNo"]
     }),
     forLink: () => ({
-        attributes: ["cardNo", "id", "name"],
-        include: [{model: DB.TranslationName, attributes: ["name"]}]
+        attributes: ["cardNo", "id", "nameJpn", "nameEng"]
     }),
     forGrid: () => ({
-        attributes: ["cardNo", "id", "type", "name"],
-        include: [{model: DB.TranslationName, attributes: ["name"]}],
+        attributes: ["cardNo", "id", "type", "nameJpn", "nameEng"],
         order: CardOrder("`Card`.`cardNo`")
     })
 }))
@@ -223,30 +213,13 @@ export default class Card extends Model {
 
     @AllowNull(false)
     @Column
-    name!: string;
+    nameJpn!: string;
 
-    @HasOne(() => TranslationName)
-    _nameEng!: TranslationName | null;
+    @Column(DataType.STRING)
+    nameEng: string | null;
 
-    get nameEng(): string | null {
-        if (this._nameEng === null) return null;
-        return this._nameEng.name;
-    }
-
-    @Column(DataType.TEXT)
-    skill!: string | null;
-
-    get skillLines(): string[] {
-        if (this.skill === null) return [];
-        return this.skill.split("\n");
-    }
-
-    @HasMany(() => TranslationSkill)
-    _skillLinesEng!: TranslationSkill[];
-
-    get skillLinesEng(): string[] {
-        return this._skillLinesEng.map(sk => sk.skill);
-    }
+    @HasMany(() => Skill, {foreignKey: "cardNo"})
+    skills!: Skill[];
 
     @AllowNull(false)
     @Column(DataType.TEXT)

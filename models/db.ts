@@ -8,22 +8,19 @@ import CardMemberGroup from "./card/memberGroup";
 import TranslateTablePattern from "./translatetables/pattern";
 import TranslateTableName from "./translatetables/name";
 import TranslateTableSong from "./translatetables/song";
-import TranslationCostume from "./translations/costume";
-import TranslationGroupSkill from "./translations/groupSkill";
-import TranslationName from "./translations/name";
-import TranslationSkill from "./translations/skill";
 import CardMemberExtraInfo from "./card/memberExtraInfo";
 import CardMemberIdolizePieceExtraInfo from "./card/memberIdolizePieceExtraInfo";
 import CardSongExtraInfo from "./card/songExtraInfo";
 import CardSongAnyReqExtraInfo from "./card/songAnyReqExtraInfo";
 import CardSongAttrReqExtraInfo from "./card/songAttrReqExtraInfo";
+import Skill from "./skill/skill";
 
 const modelList = [
     Card,
     CardMemberExtraInfo, CardMemberIdolizePieceExtraInfo,
     CardSongExtraInfo, CardSongAnyReqExtraInfo, CardSongAttrReqExtraInfo,
     CardLink, CardMemberGroupLink, CardFAQLink, CardMemberGroup,
-    TranslationName, TranslationSkill, TranslationGroupSkill, TranslationCostume,
+    Skill,
     TranslateTableName, TranslateTableSong,
     TranslateTablePattern
 ];
@@ -49,10 +46,7 @@ const DB = {
     CardLink: <typeof CardLink>sequelize.models.CardLink,
     CardMemberGroupLink: <typeof CardMemberGroupLink>sequelize.models.CardMemberGroupLink,
     CardFAQLink: <typeof CardFAQLink>sequelize.models.CardFAQLink,
-    TranslationName: <typeof TranslationName>sequelize.models.TranslationName,
-    TranslationSkill: <typeof TranslationSkill>sequelize.models.TranslationSkill,
-    TranslationGroupSkill: <typeof TranslationGroupSkill>sequelize.models.TranslationGroupSkill,
-    TranslationCostume: <typeof TranslationCostume>sequelize.models.TranslationCostume,
+    Skill: <typeof Skill>sequelize.models.Skill,
     TranslateTableName: <typeof TranslateTableName>sequelize.models.TranslateTableName,
     TranslateTableSong: <typeof TranslateTableSong>sequelize.models.TranslateTableSong,
     TranslateTablePattern: <typeof TranslateTablePattern>sequelize.models.TranslateTablePattern

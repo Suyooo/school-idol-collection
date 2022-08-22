@@ -21,13 +21,8 @@
                         <% } %>
                         <td><%= a.skillJpn %></td>
                         <td><%= a.skillEng %></td>
-                        <% if (a.hasOwnProperty("cardNo")) { %>
-                            <td><input class="assign assign-card" type="checkbox" data-cardno="<%= a.cardNo %>"
-                                       data-line="<%= a.line %>"></td>
-                        <% } else { %>
-                            <td><input class="assign assign-group" type="checkbox" data-groupid="<%= a.groupId %>"
-                                       data-line="<%= a.line %>"></td>
-                        <% } %>
+                        <td><input class="assign" type="checkbox" data-skill="<%= a.skillId %>"
+                                   data-line="<%= a.line %>"></td>
                     </tr>
                 <% }); %>
                 <tr>
@@ -46,4 +41,4 @@
     </div>
 </div>
 <script>const patternid = <%= id %>;</script>
-<%- include("../partials/footer", {"jquery": true, "scripts": ["pattern-apply"]}); %>
+<%- include("../partials/footer", {"jquery": true, "scripts": ["pattern/apply"]}); %>

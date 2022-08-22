@@ -56,13 +56,13 @@ class AnnotationCard extends AbstractAnnotation {
     async getPlainText() {
         await this.loadCard();
         if (this.card == undefined) return "???";
-        return "#" + this.card.id + " " + (this.lang == Language.ENG ? this.card.nameEng : this.card.name);
+        return "#" + this.card.id + " " + (this.lang == Language.ENG ? this.card.nameEng : this.card.nameJpn);
     }
 
     async getHTMLText() {
         await this.loadCard();
         if (this.card == undefined) return "???";
-        return "<span class='card-id'>#" + this.card.id + "</span> " + (this.lang == Language.ENG ? this.card.nameEng : this.card.name);
+        return "<span class='card-id'>#" + this.card.id + "</span> " + (this.lang == Language.ENG ? this.card.nameEng : this.card.nameJpn);
     }
 }
 
@@ -75,11 +75,10 @@ class AnnotationSong extends AbstractAnnotation {
         const res = await DB.Card.scope(["songs", "cardNoOnly"]).findAll({
             where: {
                 [Op.or]: [
-                    {"name": {[Op.like]: "%" + this.param + "%"}},
-                    {"$_nameEng.name$": {[Op.like]: "%" + this.param + "%"}}
+                    {"nameJpn": {[Op.like]: "%" + this.param + "%"}},
+                    {"nameEng": {[Op.like]: "%" + this.param + "%"}}
                 ]
-            },
-            include: [{model: DB.TranslationName, required: false}]
+            }
         });
         if (res.length === 1) return "/card/" + res[0].cardNo + "/";
         return "/search/song/name:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";
@@ -101,11 +100,10 @@ class AnnotationMem extends AbstractAnnotation {
         const res = await DB.Card.scope(["memories", "cardNoOnly"]).findAll({
             where: {
                 [Op.or]: [
-                    {"name": {[Op.like]: "%" + this.param + "%"}},
-                    {"$_nameEng.name$": {[Op.like]: "%" + this.param + "%"}}
+                    {"nameJpn": {[Op.like]: "%" + this.param + "%"}},
+                    {"nameEng": {[Op.like]: "%" + this.param + "%"}}
                 ]
-            },
-            include: [{model: DB.TranslationName, required: false}]
+            }
         });
         if (res.length === 1) return "/card/" + res[0].cardNo + "/";
         return "/search/memory/name:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";
@@ -127,11 +125,11 @@ class AnnotationCostume extends AbstractAnnotation {
         const res = await DB.Card.scope(["memories", "cardNoOnly"]).findAll({
             where: {
                 [Op.or]: [
-                    {"$member.costume$": {[Op.like]: "%" + this.param + "%"}},
-                    {"$member._costumeEng.costume$": {[Op.like]: "%" + this.param + "%"}}
+                    {"$member.costumeJpn$": {[Op.like]: "%" + this.param + "%"}},
+                    {"$member.costumeEng$": {[Op.like]: "%" + this.param + "%"}}
                 ]
             },
-            include: [{model: DB.CardMemberExtraInfo, include: [{model: DB.TranslationCostume, required: false}]}]
+            include: [DB.CardMemberExtraInfo]
         });
         if (res.length === 1) return "/card/" + res[0].cardNo + "/";
         return "/search/member/costume:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";

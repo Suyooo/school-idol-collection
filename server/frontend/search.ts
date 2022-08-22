@@ -25,9 +25,7 @@ SearchRouter.get("/*/", async (req, res) => {
     let where: any = {};
     const queries: string[] = [];
     const includes = {
-        "translationSkill": false,
-        "member": false,
-        "translationCostume": false
+        "member": false
     };
 
     const setConditions = (filter: string, conditions: any) => {
@@ -67,30 +65,28 @@ SearchRouter.get("/*/", async (req, res) => {
                 if (key === "name") {
                     setConditions(filter, {
                         [Op.or]: [
-                            {"name": {[Op.like]: "%" + value + "%"}},
-                            {"$_nameEng.name$": {[Op.like]: "%" + value + "%"}}
+                            {"nameJpn": {[Op.like]: "%" + value + "%"}},
+                            {"nameEng": {[Op.like]: "%" + value + "%"}}
                         ]
                     });
                     queries.push("Name contains \"" + value + "\"");
                 } else if (key === "costume") {
                     setConditions(filter, {
                         [Op.or]: [
-                            {"$member.costume$": {[Op.like]: "%" + value + "%"}},
-                            {"$member._costumeEng.costume$": {[Op.like]: "%" + value + "%"}}
+                            {"$member.costumeJpn$": {[Op.like]: "%" + value + "%"}},
+                            {"$member.costumeEng": {[Op.like]: "%" + value + "%"}}
                         ]
                     });
                     queries.push("Costume contains \"" + value + "\"");
                     includes.member = true;
-                    includes.translationCostume = true;
                 } else if (key === "skill") {
                     setConditions(filter, {
                         [Op.or]: [
-                            {"skill": {[Op.like]: "%" + value + "%"}},
-                            {"$_skillLinesEng.skill$": {[Op.like]: "%" + value + "%"}}
+                            {"$skills.jpn$": {[Op.like]: "%" + value + "%"}},
+                            {"$skills.eng$": {[Op.like]: "%" + value + "%"}}
                         ]
                     });
                     queries.push("Skill contains \"" + value + "\"");
-                    includes.translationSkill = true;
                 } else {
                     throw new SearchFilterError("Unknown filter or wrong number of arguments", filter);
                 }
@@ -109,13 +105,8 @@ SearchRouter.get("/*/", async (req, res) => {
     }
 
     const includeArr = [];
-    if (includes.translationSkill) {
-        includeArr.push(makeIncludable(DB.TranslationSkill, undefined, false));
-    }
     if (includes.member) {
-        includeArr.push(makeIncludable(DB.CardMemberExtraInfo, includes.translationCostume
-            ? [makeIncludable(DB.TranslationCostume, undefined, false)]
-            : undefined));
+        includeArr.push(makeIncludable(DB.CardMemberExtraInfo));
     }
 
     res.render("search", {

@@ -17,6 +17,9 @@ import CardMemberGroupType from "../types/cardMemberGroupType";
 import {tryAllPatterns} from "../translation/skills";
 import autoAnnotateSkill from "./autoAnnotate";
 import CardSongRequirementType from "../types/cardSongRequirementType";
+import Card from "../models/card/card";
+import CardMemberGroup from "../models/card/memberGroup";
+import CardMemberExtraInfo from "../models/card/memberExtraInfo";
 
 type Empty = "―" | "－" | "─" | "-";
 type RawAttr = SongAttributeNameJpn & Empty;
@@ -77,84 +80,42 @@ const trioSkillPattern = /\n?<トリオスキル>\n?(.*)/s;
 
 export async function importCard(path: string) {
     const rawdata: RawData = JSON.parse(fs.readFileSync(path).toString());
-    const defer = {
-        translationName: <any>undefined,
-        translationCostume: <any>undefined,
-        translationSkill: <any>undefined,
-        linkedCards: <[number,string][]>[]
-    }
 
-    const card: any = {
-        cardNo: rawdata["カードNo."],
-        id: parseInt(rawdata["ID"]),
-        name: rawdata["name"],
-        skill: isEmpty(rawdata["スキル"]) ? null : rawdata["スキル"].replace(/\n\n/g, "\n"),
+    const card: Omit<Partial<Card>,"member"|"song"> & { member?: any, song?: any, skills?: any[] } = {
+        cardNo: rawdata["カードNo."]!,
+        id: parseInt(rawdata["ID"])!,
+        nameJpn: rawdata["name"]!,
         copyright: rawdata["コピーライト"]
     };
-
-    if (card.skill !== null) {
-        const skillLines: { skill: string, song: string[], costume: string[] }[] = card.skill.split("\n").map((s: string) => autoAnnotateSkill(s));
-        const checkSkillPattern = await Promise.all(skillLines.map(s => tryAllPatterns(s.skill)));
-        if (checkSkillPattern.some(s => s !== null)) {
-            defer.translationSkill = checkSkillPattern.map((p, i) => (p ? {
-                cardNo: card.cardNo,
-                line: i,
-                skill: p.skill,
-                patternId: p.pattern.id
-            } : null)).filter(p => p !== null);
-        }
-
-        for (let i = 0; i < skillLines.length; i++) {
-            const skillLine = skillLines[i];
-            for (const songName of skillLine.song) {
-                defer.linkedCards = defer.linkedCards.concat((await DB.Card.scope(["songs", "cardNoOnly"]).findAll({
-                    where: {
-                        name: {[Op.like]: "%" + songName + "%"}
-                    }
-                })).map(c => [i, c.cardNo]));
-            }
-            for (const costumeName of skillLine.costume) {
-                defer.linkedCards = defer.linkedCards.concat((await DB.Card.scope(["members", "cardNoOnly"]).findAll({
-                    where: {
-                        "$member.costume$": {[Op.like]: "%" + costumeName + "%"}
-                    },
-                    include: [DB.CardMemberExtraInfo]
-                })).map(c => [i, c.cardNo]));
-            }
-        }
-    }
+    let skillText = isEmpty(rawdata["スキル"]) ? null : rawdata["スキル"].replace(/\n\n/g, "\n");
 
     if (rawdata["type"] == "メンバー") {
         card.type = CardType.MEMBER;
 
-        const checkNameTable = await DB.TranslateTableName.findByPk(card.name);
+        const checkNameTable = await DB.TranslateTableName.findByPk(card.nameJpn);
         if (checkNameTable !== null) {
-            defer.translationName = {
-                cardNo: card.cardNo,
-                name: checkNameTable.eng
-            };
+            card.nameEng = checkNameTable.eng;
         }
 
-        card.member = {};
+        card.member = {} as Partial<CardMemberExtraInfo>;
         card.member.rarity = CardMemberRarity[rawdata["レアリティ"]];
-        card.member.cost = isEmpty(rawdata["コスト"]) ? 0 : rawdata["コスト"].length;
+        card.member.cost = (isEmpty(rawdata["コスト"]) ? 0 : rawdata["コスト"].length) as 0|1|2|3;
         if (rawdata["誕生日"] !== "？？？") {
             const bdMatch = birthdayPattern.exec(rawdata["誕生日"]);
             if (bdMatch === null) throw new ImportError("Invalid birthday scraped from website", path);
-            card.member.birthDay = parseInt(bdMatch[2]);
-            card.member.birthMonth = parseInt(bdMatch[1]);
+            card.member.birthDay = parseInt(bdMatch[2]) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31;
+            card.member.birthMonth = parseInt(bdMatch[1]) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
         }
-        card.member.year = isEmpty(rawdata["学年"]) ? null : parseInt(rawdata["学年"].charAt(0));
+        card.member.year = (isEmpty(rawdata["学年"]) ? null : parseInt(rawdata["学年"].charAt(0))) as 1|2|3|null;
         card.member.abilityRush = rawdata["特技"].indexOf("RUSH") !== -1;
         card.member.abilityLive = rawdata["特技"].indexOf("LIVE") !== -1;
-        card.member.costume = isEmpty(rawdata["衣装"]) ? null : rawdata["衣装"];
+        card.member.costumeJpn = isEmpty(rawdata["衣装"]) ? null : rawdata["衣装"];
 
-        const checkCostumeTable = await DB.TranslateTableSong.findByPk(card.costume);
-        if (checkCostumeTable !== null) {
-            defer.translationCostume = {
-                cardNo: card.cardNo,
-                costume: checkCostumeTable.eng
-            };
+        if (card.member.costumeJpn) {
+            const checkCostumeTable = await DB.TranslateTableSong.findByPk(card.member.costumeJpn);
+            if (checkCostumeTable !== null) {
+                card.member.costumeEng = checkCostumeTable.eng;
+            }
         }
 
         let pieces = new PieceInfo(0, 0, 0, 0);
@@ -168,11 +129,11 @@ export async function importCard(path: string) {
         card.member.piecesCool = pieces.cool;
         card.member.pieceBdayAttribute = isEmpty(rawdata["ボーナス"]) ? null : Attribute.get(rawdata["ボーナス"]);
 
-        if (card.skill !== null && card.skill.indexOf("【特別練習】") !== -1) {
-            if (card.skill.indexOf("<覚醒>") !== -1) {
+        if (skillText !== null && skillText.indexOf("【特別練習】") !== -1) {
+            if (skillText.indexOf("<覚醒>") !== -1) {
                 card.member.idolizeBonus = {};
                 card.member.idolizeType = CardMemberIdolizeType.WITH_PIECES;
-                const idolPieceMatch = idolizedPiecesPattern.exec(card.skill);
+                const idolPieceMatch = idolizedPiecesPattern.exec(skillText);
                 if (idolPieceMatch === null) throw new ImportError("Can't read Idolized Pieces scraped from website", path);
                 let idolizationPieces = new PieceInfo(0, 0, 0, 0);
                 for (const piece of idolPieceMatch[1].split("/")) {
@@ -182,7 +143,7 @@ export async function importCard(path: string) {
                 card.member.idolizeBonus.piecesSmile = idolizationPieces.smile;
                 card.member.idolizeBonus.piecesPure = idolizationPieces.pure;
                 card.member.idolizeBonus.piecesCool = idolizationPieces.cool;
-                card.skill = card.skill.substring(0, idolPieceMatch.index);
+                skillText = skillText.substring(0, idolPieceMatch.index);
             } else {
                 card.member.idolizeType = CardMemberIdolizeType.NO_PIECES;
             }
@@ -193,9 +154,12 @@ export async function importCard(path: string) {
         // Before handling groups, check whether the group Skill is on this card's Skill
         // Has to be cut off, whether it's the first imported card of the group or not
 
-        const splitMatch = pairSkillPattern.exec(card.skill) || trioSkillPattern.exec(card.skill);
-        if (splitMatch) {
-            card.skill = card.skill!.substring(0, splitMatch.index);
+        let splitMatch;
+        if (skillText !== null) {
+            splitMatch = pairSkillPattern.exec(skillText) || trioSkillPattern.exec(skillText);
+            if (splitMatch) {
+                skillText = skillText!.substring(0, splitMatch.index);
+            }
         }
 
         // Group handling on import is slightly wacky: often, only one of the cards contains the group info ("leader")
@@ -216,26 +180,37 @@ export async function importCard(path: string) {
         });
         if (findExistingGroup !== null) {
             card.member.groupId = findExistingGroup.id;
-            defer.linkedCards
-        } else {
-            const groupMatch = pairPattern.exec(card.skill) || trioPattern.exec(card.skill);
+        } else if (skillText !== null) {
+            const groupMatch = pairPattern.exec(skillText) || trioPattern.exec(skillText);
             if (groupMatch !== null) {
-                const group: any = {};
+                const group: Partial<CardMemberGroup> & {skills?: any[]} = {};
 
                 let memberIds: number[];
                 if (groupMatch[3]) {
-                    memberIds = [card.id, parseInt(groupMatch[1]), parseInt(groupMatch[3])];
+                    memberIds = [card.id!, parseInt(groupMatch[1]), parseInt(groupMatch[3])];
                     group.type = CardMemberGroupType.TRIO;
                 } else {
-                    memberIds = [card.id, parseInt(groupMatch[1])];
+                    memberIds = [card.id!, parseInt(groupMatch[1])];
                     group.type = CardMemberGroupType.PAIR;
                 }
 
                 group.expectedMemberIds = "|" + memberIds.sort().join("|") + "|";
+
                 if (splitMatch) {
-                    group.skill = splitMatch[1];
-                } else {
-                    group.skill = null;
+                    const skillLines: { skill: string, song: string[], costume: string[] }[]
+                        = splitMatch[1].split("\n").map((s: string) => autoAnnotateSkill(s));
+                    const checkSkillPattern = await Promise.all(skillLines.map(s => tryAllPatterns(s.skill)));
+
+                    group.skills = [];
+                    for (let i = 0; i < skillLines.length; i++) {
+                        const skillLine = skillLines[i];
+                        group.skills.push({
+                            line: i,
+                            patternId: checkSkillPattern[i]?.pattern.id || null,
+                            jpn: skillLine.skill,
+                            eng: checkSkillPattern[i]?.skill || null,
+                        });
+                    }
                 }
 
                 card.member.groupId = (await DB.CardMemberGroup.create(group)).id;
@@ -255,59 +230,14 @@ export async function importCard(path: string) {
                         }
                     });
                 }
-
-                if (group.skill !== null) {
-                    const skillLines: { skill: string, song: string[], costume: string[] }[] = group.skill.split("\n").map((s: string) => autoAnnotateSkill(s));
-                    const checkSkillPattern = (await Promise.all(skillLines.map((s => tryAllPatterns(s.skill)))))
-                        .map((p, i) => (p ? {
-                            groupId: card.member.groupId,
-                            line: i,
-                            skill: p.skill,
-                            patternId: p.pattern.id
-                        } : null)).filter(p => p !== null);
-                    for (const obj of checkSkillPattern) {
-                        await DB.TranslationGroupSkill.create(obj!);
-                    }
-
-                    let groupLinkedCardNos: [number,string][] = []
-                    for (let i = 0; i < skillLines.length; i++) {
-                        const skillLine = skillLines[i];
-                        for (const songName of skillLine.song) {
-                            groupLinkedCardNos = groupLinkedCardNos.concat((await DB.Card.scope(["songs", "cardNoOnly"]).findAll({
-                                where: {
-                                    name: {[Op.like]: "%" + songName + "%"}
-                                }
-                            })).map(c => [i, c.cardNo]));
-                        }
-                        for (const costumeName of skillLine.costume) {
-                            groupLinkedCardNos = groupLinkedCardNos.concat((await DB.Card.scope(["members", "cardNoOnly"]).findAll({
-                                where: {
-                                    "$member.costume$": {[Op.like]: "%" + costumeName + "%"}
-                                },
-                                include: [DB.CardMemberExtraInfo]
-                            })).map(c => [i, c.cardNo]));
-                        }
-                    }
-
-                    for (const c of groupLinkedCardNos) {
-                        await DB.CardMemberGroupLink.create({
-                            fromGroupId: card.member.groupId,
-                            skillLine: c[0],
-                            toCardNo: c[1]
-                        });
-                    }
-                }
             }
         }
     } else if (rawdata["type"] == "楽曲") {
         card.type = CardType.SONG;
 
-        const checkSongTable = await Promise.all(card.name.split("／").map((s: string) => DB.TranslateTableName.findByPk(s)));
+        const checkSongTable = await Promise.all(card.nameJpn!.split("／").map((s: string) => DB.TranslateTableName.findByPk(s)));
         if (checkSongTable.every(s => s !== null)) {
-            defer.translationCostume = {
-                cardNo: card.cardNo,
-                name: checkSongTable.map(s => s.eng).join("/")
-            };
+            card.nameEng = checkSongTable.map(s => s!.eng).join("/");
         }
 
         card.song = {};
@@ -335,6 +265,24 @@ export async function importCard(path: string) {
         card.type = CardType.MEMORY;
     }
 
+    if (skillText !== null && skillText.trim() !== "") {
+        const skillLines: { skill: string, song: string[], costume: string[] }[]
+            = skillText.split("\n").map((s: string) => autoAnnotateSkill(s));
+        const checkSkillPattern = await Promise.all(skillLines.map(s => tryAllPatterns(s.skill)));
+
+        card.skills = [];
+        for (let i = 0; i < skillLines.length; i++) {
+            const skillLine = skillLines[i];
+            card.skills.push({
+                cardNo: card.cardNo!,
+                line: i,
+                patternId: checkSkillPattern[i]?.pattern.id || null,
+                jpn: skillLine.skill,
+                eng: checkSkillPattern[i]?.skill || null,
+            })
+        }
+    }
+
     await DB.Card.create(card, {
         include: [
             {
@@ -353,23 +301,6 @@ export async function importCard(path: string) {
             }
         ]
     });
-
-    if (defer.translationName !== undefined) {
-        await DB.TranslationName.create(defer.translationName);
-    }
-    if (defer.translationCostume !== undefined) {
-        await DB.TranslationCostume.create(defer.translationCostume);
-    }
-    if (defer.translationSkill !== undefined) {
-        await Promise.all(defer.translationSkill.map((s: any) => DB.TranslationSkill.create(s)));
-    }
-    for (const c of defer.linkedCards) {
-        await DB.CardLink.create({
-            fromCardNo: card.cardNo,
-            skillLine: c[0],
-            toCardNo: c[1]
-        });
-    }
 
     Log.info("IMPORT", "Successfully imported " + path + ", deleting");
     fs.unlinkSync(path);

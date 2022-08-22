@@ -54,11 +54,11 @@ export default class SiteCardFormattingWrapper {
             if (!reducedAttributes) this.rarity = "ME";
         }
 
-        this.nameJpn = card.name;
+        this.nameJpn = card.nameJpn;
         this.nameEng = card.nameEng;
         this.name = this.nameEng || this.nameJpn;
 
-        this.nameJpnWithQuot = card.name.split("／").map(s => '"' + s + '"').join("／");
+        this.nameJpnWithQuot = card.nameJpn.split("／").map(s => '"' + s + '"').join("／");
         this.nameEngWithQuot = card.nameEng === null ? null
             : card.nameEng.split(" / ").map(s => '"' + s + '"').join(" / ");
         this.nameWithQuot = this.nameEngWithQuot || this.nameJpnWithQuot;
@@ -116,8 +116,8 @@ export default class SiteCardFormattingWrapper {
             this.nextCardNo = nextCard.cardNo;
         }
 
-        this.skillJpn = await SkillFormatter.JPN.formatCardSkill(this.card.skillLines);
-        this.skillEng = await SkillFormatter.ENG.formatCardSkill(this.card.skillLinesEng);
+        this.skillJpn = await SkillFormatter.JPN.formatCardSkill(this.card.skills.map(s => s.jpn));
+        this.skillEng = await SkillFormatter.ENG.formatCardSkill(this.card.skills.map(s => s.eng || "ー"));
 
         if (this.isMember() && this.hasGroup()) {
             await this.prepareGroupAsyncProperties();
@@ -146,12 +146,12 @@ export default class SiteCardFormattingWrapper {
             : (this.card.member.abilityLive ? "<span class='ability live'>[LIVE]</span>" : "ー");
         this.pieces = pieceFormat(this.card.member.pieces, Language.ENG);
 
-        this.costumeEng = this.card.member.costumeEng === null ? "ー": "<a href='/search/member/costume:"
+        this.costumeEng = this.card.member.costumeEng === null ? "ー" : "<a href='/search/member/costume:"
             + encodeURIComponent(this.card.member.costumeEng).replace(/'/g, "%27") + "'>"
             + this.card.member.costumeEng + "</a>";
-        this.costumeJpn = this.card.member.costume === null ? "ー": "<a href='/search/member/costume:"
-            + encodeURIComponent(this.card.member.costume).replace(/'/g, "%27") + "'>"
-            + this.card.member.costume + "</a>";
+        this.costumeJpn = this.card.member.costumeJpn === null ? "ー" : "<a href='/search/member/costume:"
+            + encodeURIComponent(this.card.member.costumeJpn).replace(/'/g, "%27") + "'>"
+            + this.card.member.costumeJpn + "</a>";
         this.costume = this.costumeEng || this.costumeJpn;
 
         this.hasBirthdayPieces = (): this is SiteCardMemberWithBirthdayPiecesFormattingWrapper => {
@@ -191,8 +191,8 @@ export default class SiteCardFormattingWrapper {
 
             this.prepareGroupAsyncProperties = async () => {
                 assertIsFormattingMemberWithGroup(this);
-                this.groupSkillJpn = await SkillFormatter.JPN.formatCardSkill(this.card.member.group.skillLines);
-                this.groupSkillEng = await SkillFormatter.ENG.formatCardSkill(this.card.member.group.skillLinesEng);
+                this.groupSkillJpn = await SkillFormatter.JPN.formatCardSkill(this.card.member.group.skills.map(s => s.jpn));
+                this.groupSkillEng = await SkillFormatter.ENG.formatCardSkill(this.card.member.group.skills.map(s => s.eng || "ー"));
             }
 
             return true;

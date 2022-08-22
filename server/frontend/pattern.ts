@@ -1,6 +1,5 @@
 import DB from "../../models/db";
 import express from "express";
-import SiteCardFormattingWrapper from "../../formatting/siteCardFormattingWrapper";
 import TranslateTablePattern from "../../models/translatetables/pattern";
 import {getApplicableSkills, listUntranslatedSkills, splitTriggersFromSkill} from "../../translation/skills";
 
@@ -20,7 +19,7 @@ PatternRouter.get("/create/", async (req, res) => {
 
 PatternRouter.get("/create/:cardno/:line/", async (req, res) => {
     const card = await DB.Card.findByPk(req.params.cardno, {attributes: ["skill"]});
-    const skillLine = card?.skill?.split("\n")[parseInt(req.params.line)];
+    const skillLine = card?.skills[parseInt(req.params.line)].jpn;
     if (skillLine === undefined) {
         res.status(404);
         res.send("");
@@ -60,7 +59,7 @@ PatternRouter.get("/edit/:patternno/", async (req, res) => {
 PatternRouter.get("/edit/:patternno/:cardno/:line/", async (req, res) => {
     const pattern = await DB.TranslateTablePattern.findByPk(parseInt(req.params.patternno));
     const card = await DB.Card.findByPk(req.params.cardno, {attributes: ["skill"]});
-    const skillLine = card?.skill?.split("\n")[parseInt(req.params.line)];
+    const skillLine = card?.skills[parseInt(req.params.line)].jpn;
     if (pattern === null || skillLine === undefined) {
         res.status(404);
         res.send("");

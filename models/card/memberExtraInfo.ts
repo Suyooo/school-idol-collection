@@ -14,7 +14,6 @@ import {
 import Card from "./card";
 import CardMemberIdolizePieceExtraInfo from "./memberIdolizePieceExtraInfo";
 import CardMemberGroup from "./memberGroup";
-import TranslationCostume from "../translations/costume";
 
 import {pieceInfoGetter} from "../utils/pieceInfoGetterSetter";
 
@@ -99,7 +98,10 @@ export default class CardMemberExtraInfo extends Model {
     pieceBdayAttribute!: Attribute | null;
 
     @Column(DataType.STRING)
-    costume!: string | null;
+    costumeJpn!: string | null;
+
+    @Column(DataType.STRING)
+    costumeEng!: string | null;
 
     @AllowNull(false)
     @Column(DataType.BOOLEAN)
@@ -122,12 +124,4 @@ export default class CardMemberExtraInfo extends Model {
 
     @HasOne(() => CardMemberIdolizePieceExtraInfo)
     idolizeBonus!: CardMemberIdolizePieceExtraInfo | null;
-
-    @HasOne(() => TranslationCostume)
-    _costumeEng!: TranslationCostume | null; // TODO: getter (return costume instead of the TranslationCostume object)
-
-    get costumeEng(): string | null {
-        if (this._costumeEng === null) return null;
-        return this._costumeEng.costume;
-    }
 }

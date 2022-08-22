@@ -157,7 +157,7 @@ function submit() {
         contentType: "application/json",
         data: JSON.stringify(data)
     }).done((res) => {
-        window.location.href = "/pattern/apply/" + res.id + "/";
+        window.location.href = "/api/pattern/apply/" + res.id + "/";
     }).fail((jqxhr, textStatus, error) => {
         alert("Error while saving: " + error);
         submitBtn.show();
