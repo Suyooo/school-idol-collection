@@ -2,7 +2,7 @@
 build
 node_modules
 package-lock.json
-frontend/static/images/LL*
-frontend/static/images/EX*
-frontend/static/images/PR*
+server/frontend/static/images/LL*
+server/frontend/static/images/EX*
+server/frontend/static/images/PR*
 importer/rawinfo/*

@@ -1,7 +1,8 @@
 import {
-    AllowNull, BelongsToMany,
+    AllowNull,
+    BelongsToMany,
     Column,
-    DataType, DefaultScope,
+    DataType,
     HasMany,
     HasOne,
     Model,
@@ -9,7 +10,7 @@ import {
     Scopes,
     Table
 } from "sequelize-typescript";
-import {Op} from "sequelize";
+import {literal, Op, OrderItem} from "sequelize";
 import DB from "../db";
 
 import CardMemberExtraInfo from "./memberExtraInfo";
@@ -28,6 +29,9 @@ import Attribute from "../../types/attribute";
 import CardMemberGroup from "./memberGroup";
 import CardLink from "./cardLink";
 import CardMemberGroupLink from "./memberGroupLink";
+
+export const CardOrder = (col: string) =>
+    <OrderItem[]><unknown>[[literal(col + " LIKE 'LL%' DESC, " + col)]];
 
 @Scopes(() => ({
     members: () => ({
@@ -111,7 +115,8 @@ import CardMemberGroupLink from "./memberGroupLink";
             {
                 model: DB.Card,
                 as: "linkedBy",
-                include: [ DB.TranslationName ]
+                include: [DB.TranslationName],
+                order: CardOrder("`linkedBy->CardLink`.`fromCardNo`")
             },
             {
                 model: DB.CardMemberGroup,
@@ -126,7 +131,8 @@ import CardMemberGroupLink from "./memberGroupLink";
                             }
                         ]
                     }
-                ]
+                ],
+                order: CardOrder("`linkedByGroup->memberExtraInfos->card`.`cardNo`")
             },
             DB.CardFAQLink,
             DB.TranslationName,
@@ -143,7 +149,7 @@ import CardMemberGroupLink from "./memberGroupLink";
     forGrid: () => ({
         attributes: ["cardNo", "id", "type", "name"],
         include: [{model: DB.TranslationName, attributes: ["name"]}],
-        order: [["cardNo", "ASC"]]
+        order: CardOrder("`Card`.`cardNo`")
     })
 }))
 @Table({

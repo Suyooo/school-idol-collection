@@ -2,6 +2,7 @@ import DB from "../../models/db";
 import express from "express";
 import {Op} from "sequelize";
 import SiteCardFormattingWrapper from "../../formatting/siteCardFormattingWrapper";
+import {CardOrder} from "../../models/card/card";
 
 const CardRouter = express.Router();
 export default CardRouter;
@@ -23,7 +24,8 @@ CardRouter.get("/:cardno/", async (req, res) => {
             include: [
                 {model: DB.CardMemberExtraInfo, attributes: ["rarity"]},
                 {model: DB.CardSongExtraInfo, attributes: ["rarity"]}
-            ]
+            ],
+            order: CardOrder("`Card`.`CardNo`")
         });
         const formattingWrapper = new SiteCardFormattingWrapper(card);
         await formattingWrapper.prepareAsyncProperties();
