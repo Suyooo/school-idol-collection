@@ -64,7 +64,7 @@ export default class SiteCardFormattingWrapper {
         this.nameWithQuot = this.nameEngWithQuot || this.nameJpnWithQuot;
         this.title = "<span class='card-id'>" + this.cardNo + "</span> " + this.nameWithQuot;
 
-        const backlinkSet: Set<[number,string]> = new Set();
+        const backlinkSet: Set<[number, string]> = new Set();
         if (card.linkedBy) {
             for (const linkingCard of card.linkedBy) {
                 backlinkSet.add([linkingCard.id,
@@ -79,7 +79,7 @@ export default class SiteCardFormattingWrapper {
                 }
             }
         }
-        this.backlinks = [...backlinkSet.values()].sort((a,b) => a[0] - b[0]).map(e => e[1]);
+        this.backlinks = [...backlinkSet.values()].sort((a, b) => a[0] - b[0]).map(e => e[1]);
     }
 
     readonly cardNo: string;
@@ -146,8 +146,12 @@ export default class SiteCardFormattingWrapper {
             : (this.card.member.abilityLive ? "<span class='ability live'>[LIVE]</span>" : "ー");
         this.pieces = pieceFormat(this.card.member.pieces, Language.ENG);
 
-        this.costumeEng = this.card.member.costumeEng || "ー";
-        this.costumeJpn = this.card.member.costume || "ー";
+        this.costumeEng = this.card.member.costumeEng === null ? "ー": "<a href='/search/member/costume:"
+            + encodeURIComponent(this.card.member.costumeEng).replace(/'/g, "%27") + "'>"
+            + this.card.member.costumeEng + "</a>";
+        this.costumeJpn = this.card.member.costume === null ? "ー": "<a href='/search/member/costume:"
+            + encodeURIComponent(this.card.member.costume).replace(/'/g, "%27") + "'>"
+            + this.card.member.costume + "</a>";
         this.costume = this.costumeEng || this.costumeJpn;
 
         this.hasBirthdayPieces = (): this is SiteCardMemberWithBirthdayPiecesFormattingWrapper => {
