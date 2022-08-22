@@ -1,6 +1,7 @@
 import Card from "../models/card/card";
 import Language from "../types/language";
 import DB from "../models/db";
+import {Op} from "sequelize";
 
 const annotationPattern = /^(.){{(.*?):(.*?)}}(.)/;
 
@@ -66,11 +67,21 @@ class AnnotationCard extends AbstractAnnotation {
 }
 
 class AnnotationSong extends AbstractAnnotation {
-    constructor(costumeName: string) {
-        super(costumeName);
+    constructor(songName: string) {
+        super(songName);
     }
 
     async getHTMLLink() {
+        const res = await DB.Card.scope(["songs", "cardNoOnly"]).findAll({
+            where: {
+                [Op.or]: [
+                    {"name": {[Op.like]: "%" + this.param + "%"}},
+                    {"$_nameEng.name$": {[Op.like]: "%" + this.param + "%"}}
+                ]
+            },
+            include: [{model: DB.TranslationName, required: false}]
+        });
+        if (res.length === 1) return "/card/" + res[0].cardNo + "/";
         return "/search/song/name:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";
     }
 
@@ -82,11 +93,21 @@ class AnnotationSong extends AbstractAnnotation {
 }
 
 class AnnotationMem extends AbstractAnnotation {
-    constructor(costumeName: string) {
-        super(costumeName);
+    constructor(memName: string) {
+        super(memName);
     }
 
     async getHTMLLink() {
+        const res = await DB.Card.scope(["memories", "cardNoOnly"]).findAll({
+            where: {
+                [Op.or]: [
+                    {"name": {[Op.like]: "%" + this.param + "%"}},
+                    {"$_nameEng.name$": {[Op.like]: "%" + this.param + "%"}}
+                ]
+            },
+            include: [{model: DB.TranslationName, required: false}]
+        });
+        if (res.length === 1) return "/card/" + res[0].cardNo + "/";
         return "/search/memory/name:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";
     }
 
@@ -103,6 +124,16 @@ class AnnotationCostume extends AbstractAnnotation {
     }
 
     async getHTMLLink() {
+        const res = await DB.Card.scope(["memories", "cardNoOnly"]).findAll({
+            where: {
+                [Op.or]: [
+                    {"$member.costume$": {[Op.like]: "%" + this.param + "%"}},
+                    {"$member._costumeEng.costume$": {[Op.like]: "%" + this.param + "%"}}
+                ]
+            },
+            include: [{model: DB.CardMemberExtraInfo, include: [{model: DB.TranslationCostume, required: false}]}]
+        });
+        if (res.length === 1) return "/card/" + res[0].cardNo + "/";
         return "/search/member/costume:" + encodeURIComponent(this.param).replace(/'/g, "%27") + "/";
     }
 
