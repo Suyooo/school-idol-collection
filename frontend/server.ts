@@ -347,7 +347,7 @@ app.get("/pattern/untranslated/", async (req, res) => {
     });
 });
 
-const faqpages = ["general", "rules", "ll01", "ll02", "ll03", "ll04", "ll05", "ll06"];
+const faqpages = ["general", "rules", "ll01", "ll02", "ll03", "ll04", "ll05", "ll06", "ll07", "ll08", "ll09", "ll10", "ll11", "ll12", "ll13", "ll14", "ll15", "ll16", "ll17"];
 
 app.get("/faq/", (req, res) => {
     res.render("faq/index");

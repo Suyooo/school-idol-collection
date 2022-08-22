@@ -1,6 +1,6 @@
 import {
     AllowNull,
-    AutoIncrement,
+    AutoIncrement, BelongsToMany,
     Column,
     DataType,
     HasMany,
@@ -9,12 +9,13 @@ import {
     Table
 } from "sequelize-typescript";
 
-import {CardMember} from "./card";
+import Card, {CardMember} from "./card";
 import CardMemberExtraInfo from "./memberExtraInfo";
 import TranslationGroupSkill from "../translations/groupSkill";
 
 import CardMemberGroupType from "../../types/cardMemberGroupType";
 import {Op} from "sequelize";
+import CardMemberGroupLink from "./memberGroupLink";
 
 @Scopes(() => ({
     hasSkill: {
@@ -44,11 +45,6 @@ export default class CardMemberGroup extends Model {
         return this.memberExtraInfos.map((extraInfo: CardMemberExtraInfo) => <CardMember>extraInfo.card);
     }
 
-    addMember(card: CardMember) {
-        this.memberExtraInfos.push(card.member);
-        this.changed("memberExtraInfos", true);
-    }
-
     @Column(DataType.STRING)
     expectedMemberIds: string;
 
@@ -66,4 +62,7 @@ export default class CardMemberGroup extends Model {
     get skillLinesEng(): string[] {
         return this._skillLinesEng.map(sk => sk.skill);
     }
+
+    @BelongsToMany(() => Card, {through: {model: () => CardMemberGroupLink, unique: false}, foreignKey: "fromGroupId"})
+    linksTo!: Array<Card & { CardMemberGroupLink: CardMemberGroupLink }>;
 }

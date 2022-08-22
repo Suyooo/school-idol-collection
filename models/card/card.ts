@@ -1,5 +1,5 @@
 import {
-    AllowNull,
+    AllowNull, BelongsToMany,
     Column,
     DataType, DefaultScope,
     HasMany,
@@ -26,24 +26,26 @@ import CardSongRequirementType from "../../types/cardSongRequirementType";
 import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
 import Attribute from "../../types/attribute";
 import CardMemberGroup from "./memberGroup";
+import CardLink from "./cardLink";
+import CardMemberGroupLink from "./memberGroupLink";
 
 @Scopes(() => ({
-    members: {
+    members: () => ({
         where: {type: CardType.MEMBER}
-    },
-    songs: {
+    }),
+    songs: () => ({
         where: {type: CardType.SONG}
-    },
-    memories: {
+    }),
+    memories: () => ({
         where: {type: CardType.MEMORY}
-    },
-    hasSkill: {
+    }),
+    hasSkill: () => ({
         where: {
             skill: {
                 [Op.not]: null
             }
         }
-    },
+    }),
 
     id: (id) => ({
         where: {
@@ -106,14 +108,34 @@ import CardMemberGroup from "./memberGroup";
                     DB.CardSongAttrReqExtraInfo
                 ]
             },
+            {
+                model: DB.Card,
+                as: "linkedBy",
+                include: [ DB.TranslationName ]
+            },
+            {
+                model: DB.CardMemberGroup,
+                as: "linkedByGroup",
+                include: [
+                    {
+                        model: DB.CardMemberExtraInfo,
+                        include: [
+                            {
+                                model: DB.Card,
+                                include: [DB.CardMemberExtraInfo, DB.TranslationName]
+                            }
+                        ]
+                    }
+                ]
+            },
             DB.CardFAQLink,
             DB.TranslationName,
             DB.TranslationSkill
         ]
     }),
-    cardNoOnly: {
+    cardNoOnly: () => ({
         attributes: ["cardNo"]
-    },
+    }),
     forLink: () => ({
         attributes: ["cardNo", "id", "name"],
         include: [{model: DB.TranslationName, attributes: ["name"]}]
@@ -227,6 +249,16 @@ export default class Card extends Model {
     // constraints = false because standard SQL doesn't support foreign keys being non-unique
     @HasMany(() => CardFAQLink, {foreignKey: "cardId", sourceKey: "id", constraints: false})
     faqs!: CardFAQLink[];
+
+    @BelongsToMany(() => Card, {through: {model: () => CardLink, unique: false}, foreignKey: "fromCardNo"})
+    linksTo!: Array<Card & { CardLink: CardLink }>;
+    @BelongsToMany(() => Card, {through: {model: () => CardLink, unique: false}, foreignKey: "toCardNo"})
+    linkedBy!: Array<Card & { CardLink: CardLink }>;
+    @BelongsToMany(() => CardMemberGroup, {
+        through: {model: () => CardMemberGroupLink, unique: false},
+        foreignKey: "toCardNo"
+    })
+    linkedByGroup!: Array<CardMemberGroup & { CardMemberGroupLink: CardMemberGroupLink }>;
 }
 
 export class CardMember extends Card {

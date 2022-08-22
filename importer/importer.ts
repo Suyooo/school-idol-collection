@@ -80,7 +80,8 @@ export async function importCard(path: string) {
     const defer = {
         translationName: <any>undefined,
         translationCostume: <any>undefined,
-        translationSkill: <any>undefined
+        translationSkill: <any>undefined,
+        linkedCards: <[number,string][]>[]
     }
 
     const card: any = {
@@ -92,7 +93,8 @@ export async function importCard(path: string) {
     };
 
     if (card.skill !== null) {
-        const checkSkillPattern = await Promise.all(card.skill.split("\n").map((s: string) => tryAllPatterns(autoAnnotateSkill(s))));
+        const skillLines: { skill: string, song: string[], costume: string[] }[] = card.skill.split("\n").map((s: string) => autoAnnotateSkill(s));
+        const checkSkillPattern = await Promise.all(skillLines.map(s => tryAllPatterns(s.skill)));
         if (checkSkillPattern.some(s => s !== null)) {
             defer.translationSkill = checkSkillPattern.map((p, i) => (p ? {
                 cardNo: card.cardNo,
@@ -100,6 +102,25 @@ export async function importCard(path: string) {
                 skill: p.skill,
                 patternId: p.pattern.id
             } : null)).filter(p => p !== null);
+        }
+
+        for (let i = 0; i < skillLines.length; i++) {
+            const skillLine = skillLines[i];
+            for (const songName of skillLine.song) {
+                defer.linkedCards = defer.linkedCards.concat((await DB.Card.scope(["songs", "cardNoOnly"]).findAll({
+                    where: {
+                        name: {[Op.like]: "%" + songName + "%"}
+                    }
+                })).map(c => [i, c.cardNo]));
+            }
+            for (const costumeName of skillLine.costume) {
+                defer.linkedCards = defer.linkedCards.concat((await DB.Card.scope(["members", "cardNoOnly"]).findAll({
+                    where: {
+                        "$member.costume$": {[Op.like]: "%" + costumeName + "%"}
+                    },
+                    include: [DB.CardMemberExtraInfo]
+                })).map(c => [i, c.cardNo]));
+            }
         }
     }
 
@@ -195,6 +216,7 @@ export async function importCard(path: string) {
         });
         if (findExistingGroup !== null) {
             card.member.groupId = findExistingGroup.id;
+            defer.linkedCards
         } else {
             const groupMatch = pairPattern.exec(card.skill) || trioPattern.exec(card.skill);
             if (groupMatch !== null) {
@@ -235,7 +257,8 @@ export async function importCard(path: string) {
                 }
 
                 if (group.skill !== null) {
-                    const checkSkillPattern = (await Promise.all(group.skill.split("\n").map((s: string) => tryAllPatterns(autoAnnotateSkill(s)))))
+                    const skillLines: { skill: string, song: string[], costume: string[] }[] = group.skill.split("\n").map((s: string) => autoAnnotateSkill(s));
+                    const checkSkillPattern = (await Promise.all(skillLines.map((s => tryAllPatterns(s.skill)))))
                         .map((p, i) => (p ? {
                             groupId: card.member.groupId,
                             line: i,
@@ -244,6 +267,34 @@ export async function importCard(path: string) {
                         } : null)).filter(p => p !== null);
                     for (const obj of checkSkillPattern) {
                         await DB.TranslationGroupSkill.create(obj!);
+                    }
+
+                    let groupLinkedCardNos: [number,string][] = []
+                    for (let i = 0; i < skillLines.length; i++) {
+                        const skillLine = skillLines[i];
+                        for (const songName of skillLine.song) {
+                            groupLinkedCardNos = groupLinkedCardNos.concat((await DB.Card.scope(["songs", "cardNoOnly"]).findAll({
+                                where: {
+                                    name: {[Op.like]: "%" + songName + "%"}
+                                }
+                            })).map(c => [i, c.cardNo]));
+                        }
+                        for (const costumeName of skillLine.costume) {
+                            groupLinkedCardNos = groupLinkedCardNos.concat((await DB.Card.scope(["members", "cardNoOnly"]).findAll({
+                                where: {
+                                    "$member.costume$": {[Op.like]: "%" + costumeName + "%"}
+                                },
+                                include: [DB.CardMemberExtraInfo]
+                            })).map(c => [i, c.cardNo]));
+                        }
+                    }
+
+                    for (const c of groupLinkedCardNos) {
+                        await DB.CardMemberGroupLink.create({
+                            fromGroupId: card.member.groupId,
+                            skillLine: c[0],
+                            toCardNo: c[1]
+                        });
                     }
                 }
             }
@@ -311,6 +362,13 @@ export async function importCard(path: string) {
     }
     if (defer.translationSkill !== undefined) {
         await Promise.all(defer.translationSkill.map((s: any) => DB.TranslationSkill.create(s)));
+    }
+    for (const c of defer.linkedCards) {
+        await DB.CardLink.create({
+            fromCardNo: card.cardNo,
+            skillLine: c[0],
+            toCardNo: c[1]
+        });
     }
 
     Log.info("IMPORT", "Successfully imported " + path + ", deleting");

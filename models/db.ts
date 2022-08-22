@@ -1,6 +1,8 @@
 import {Sequelize} from "sequelize-typescript";
 import Log from "../utils/logger";
 import Card from "./card/card";
+import CardLink from "./card/cardLink";
+import CardMemberGroupLink from "./card/memberGroupLink";
 import CardFAQLink from "./card/faqLink";
 import CardMemberGroup from "./card/memberGroup";
 import TranslateTablePattern from "./translatetables/pattern";
@@ -20,7 +22,7 @@ const modelList = [
     Card,
     CardMemberExtraInfo, CardMemberIdolizePieceExtraInfo,
     CardSongExtraInfo, CardSongAnyReqExtraInfo, CardSongAttrReqExtraInfo,
-    CardFAQLink, CardMemberGroup,
+    CardLink, CardMemberGroupLink, CardFAQLink, CardMemberGroup,
     TranslationName, TranslationSkill, TranslationGroupSkill, TranslationCostume,
     TranslateTableName, TranslateTableSong,
     TranslateTablePattern
@@ -40,11 +42,13 @@ const DB = {
     Card: <typeof Card>sequelize.models.Card,
     CardMemberExtraInfo: <typeof CardMemberExtraInfo>sequelize.models.CardMemberExtraInfo,
     CardMemberIdolizePieceExtraInfo: <typeof CardMemberIdolizePieceExtraInfo>sequelize.models.CardMemberIdolizePieceExtraInfo,
+    CardMemberGroup: <typeof CardMemberGroup>sequelize.models.CardMemberGroup,
     CardSongExtraInfo: <typeof CardSongExtraInfo>sequelize.models.CardSongExtraInfo,
     CardSongAnyReqExtraInfo: <typeof CardSongAnyReqExtraInfo>sequelize.models.CardSongAnyReqExtraInfo,
     CardSongAttrReqExtraInfo: <typeof CardSongAttrReqExtraInfo>sequelize.models.CardSongAttrReqExtraInfo,
+    CardLink: <typeof CardLink>sequelize.models.CardLink,
+    CardMemberGroupLink: <typeof CardMemberGroupLink>sequelize.models.CardMemberGroupLink,
     CardFAQLink: <typeof CardFAQLink>sequelize.models.CardFAQLink,
-    CardMemberGroup: <typeof CardMemberGroup>sequelize.models.CardMemberGroup,
     TranslationName: <typeof TranslationName>sequelize.models.TranslationName,
     TranslationSkill: <typeof TranslationSkill>sequelize.models.TranslationSkill,
     TranslationGroupSkill: <typeof TranslationGroupSkill>sequelize.models.TranslationGroupSkill,
