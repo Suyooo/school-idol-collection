@@ -14,7 +14,7 @@ import {escapeForRegex} from "../../utils/regex";
 import {splitTriggersFromSkill} from "../../translation/skills";
 
 @Table({timestamps: false})
-export default class TranslateTablePattern extends Model {
+export default class TranslationPattern extends Model {
     @PrimaryKey
     @AllowNull(false)
     @AutoIncrement
@@ -72,9 +72,9 @@ export default class TranslateTablePattern extends Model {
     }
 
 
-    static buildSkeletonFromSkill(skillLine: string): TranslateTablePattern {
+    static buildSkeletonFromSkill(skillLine: string): TranslationPattern {
         const { skill, triggers } = splitTriggersFromSkill(skillLine);
-        const skel = DB.TranslateTablePattern.build({
+        const skel = DB.TranslationPattern.build({
             triggers: 0,
             regex: "^" + escapeForRegex(skill) + "$",
             template: skill,

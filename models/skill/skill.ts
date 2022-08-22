@@ -11,7 +11,7 @@ import {
 } from "sequelize-typescript";
 import Card from "../card/card";
 import CardMemberGroup from "../card/memberGroup";
-import TranslateTablePattern from "../translatetables/pattern";
+import TranslationPattern from "../translation/pattern";
 
 @Table({timestamps: false})
 export default class Skill extends Model {
@@ -38,12 +38,12 @@ export default class Skill extends Model {
     @Column
     line!: number;
 
-    @ForeignKey(() => TranslateTablePattern)
+    @ForeignKey(() => TranslationPattern)
     @Column(DataType.NUMBER)
     patternId: number | null;
 
-    @BelongsTo(() => TranslateTablePattern)
-    pattern: TranslateTablePattern;
+    @BelongsTo(() => TranslationPattern)
+    pattern: TranslationPattern;
 
     @AllowNull(false)
     @Column

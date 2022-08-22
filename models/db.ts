@@ -5,9 +5,9 @@ import CardLink from "./card/cardLink";
 import CardMemberGroupLink from "./card/memberGroupLink";
 import CardFAQLink from "./card/faqLink";
 import CardMemberGroup from "./card/memberGroup";
-import TranslateTablePattern from "./translatetables/pattern";
-import TranslateTableName from "./translatetables/name";
-import TranslateTableSong from "./translatetables/song";
+import TranslationPattern from "./translation/pattern";
+import TranslationName from "./translation/name";
+import TranslationSong from "./translation/song";
 import CardMemberExtraInfo from "./card/memberExtraInfo";
 import CardMemberIdolizePieceExtraInfo from "./card/memberIdolizePieceExtraInfo";
 import CardSongExtraInfo from "./card/songExtraInfo";
@@ -16,13 +16,11 @@ import CardSongAttrReqExtraInfo from "./card/songAttrReqExtraInfo";
 import Skill from "./skill/skill";
 
 const modelList = [
-    Card,
+    Card, CardMemberGroup, CardFAQLink,
     CardMemberExtraInfo, CardMemberIdolizePieceExtraInfo,
     CardSongExtraInfo, CardSongAnyReqExtraInfo, CardSongAttrReqExtraInfo,
-    CardLink, CardMemberGroupLink, CardFAQLink, CardMemberGroup,
-    Skill,
-    TranslateTableName, TranslateTableSong,
-    TranslateTablePattern
+    Skill, CardLink, CardMemberGroupLink,
+    TranslationName, TranslationSong, TranslationPattern
 ];
 
 const sequelize = new Sequelize({
@@ -47,9 +45,9 @@ const DB = {
     CardMemberGroupLink: <typeof CardMemberGroupLink>sequelize.models.CardMemberGroupLink,
     CardFAQLink: <typeof CardFAQLink>sequelize.models.CardFAQLink,
     Skill: <typeof Skill>sequelize.models.Skill,
-    TranslateTableName: <typeof TranslateTableName>sequelize.models.TranslateTableName,
-    TranslateTableSong: <typeof TranslateTableSong>sequelize.models.TranslateTableSong,
-    TranslateTablePattern: <typeof TranslateTablePattern>sequelize.models.TranslateTablePattern
+    TranslationName: <typeof TranslationName>sequelize.models.TranslationName,
+    TranslationSong: <typeof TranslationSong>sequelize.models.TranslationSong,
+    TranslationPattern: <typeof TranslationPattern>sequelize.models.TranslationPattern
 };
 
 export default DB;

@@ -28,21 +28,21 @@ export default class PatternGroupType {
         // Name or Group
         map.push(new PatternGroupType(0, async function (match: string): Promise<string> {
             const skilltext = skilltextPattern.exec(match)?.[1];
-            const n = (await DB.TranslateTableName.findByPk(match))?.eng;
+            const n = (await DB.TranslationName.findByPk(match))?.eng;
             if (n === undefined) throw new NotFoundError(match + " is not a known name");
             return skilltext ? "{{skilltext:" + n + "}}" : n;
         }, generateAOrAnReplacements));
 
         // Song Name
         map.push(new PatternGroupType(1, async function (match: string): Promise<string> {
-            const n = (await DB.TranslateTableSong.findByPk(match))?.eng;
+            const n = (await DB.TranslationSong.findByPk(match))?.eng;
             if (n === undefined) throw new NotFoundError(match + " is not a known song");
             return n;
         }, generateAOrAnReplacements));
 
         // Costume Name
         map.push(new PatternGroupType(2, async function (match: string): Promise<string> {
-            const n = (await DB.TranslateTableSong.findByPk(match))?.eng;
+            const n = (await DB.TranslationSong.findByPk(match))?.eng;
             if (n === undefined) throw new NotFoundError(match + " is not a known song");
             return n;
         }, generateAOrAnReplacements));

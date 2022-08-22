@@ -10,9 +10,9 @@ export default APIPatternRouter;
 APIPatternRouter.put("/", async (req, res) => {
     let pattern;
     if (req.body.id === undefined) {
-        pattern = DB.TranslateTablePattern.build(req.body);
+        pattern = DB.TranslationPattern.build(req.body);
     } else {
-        pattern = await DB.TranslateTablePattern.findByPk(req.body.id);
+        pattern = await DB.TranslationPattern.findByPk(req.body.id);
         if (pattern === null) {
             res.status(404);
             res.json({success: false});
@@ -27,7 +27,7 @@ APIPatternRouter.put("/", async (req, res) => {
 });
 
 APIPatternRouter.put("/apply/", async (req, res) => {
-    const pattern = await DB.TranslateTablePattern.findByPk(req.body.id);
+    const pattern = await DB.TranslationPattern.findByPk(req.body.id);
     if (pattern === null) {
         res.status(404);
         res.json({success: false});

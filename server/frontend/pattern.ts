@@ -1,6 +1,6 @@
 import DB from "../../models/db";
 import express from "express";
-import TranslateTablePattern from "../../models/translatetables/pattern";
+import TranslationPattern from "../../models/translation/pattern";
 import {getApplicableSkills, listUntranslatedSkills, splitTriggersFromSkill} from "../../translation/skills";
 
 const PatternRouter = express.Router();
@@ -26,7 +26,7 @@ PatternRouter.get("/create/:cardno/:line/", async (req, res) => {
         return;
     }
 
-    const pattern = TranslateTablePattern.buildSkeletonFromSkill(skillLine);
+    const pattern = TranslationPattern.buildSkeletonFromSkill(skillLine);
     const {skill} = splitTriggersFromSkill(skillLine);
     res.render("pattern/create", {
         id: "undefined",
@@ -39,7 +39,7 @@ PatternRouter.get("/create/:cardno/:line/", async (req, res) => {
 });
 
 PatternRouter.get("/edit/:patternno/", async (req, res) => {
-    const pattern = await DB.TranslateTablePattern.findByPk(parseInt(req.params.patternno));
+    const pattern = await DB.TranslationPattern.findByPk(parseInt(req.params.patternno));
     if (pattern === null) {
         res.status(404);
         res.send("");
@@ -57,7 +57,7 @@ PatternRouter.get("/edit/:patternno/", async (req, res) => {
 });
 
 PatternRouter.get("/edit/:patternno/:cardno/:line/", async (req, res) => {
-    const pattern = await DB.TranslateTablePattern.findByPk(parseInt(req.params.patternno));
+    const pattern = await DB.TranslationPattern.findByPk(parseInt(req.params.patternno));
     const card = await DB.Card.findByPk(req.params.cardno, {attributes: ["skill"]});
     const skillLine = card?.skills[parseInt(req.params.line)].jpn;
     if (pattern === null || skillLine === undefined) {
@@ -78,7 +78,7 @@ PatternRouter.get("/edit/:patternno/:cardno/:line/", async (req, res) => {
 });
 
 PatternRouter.get("/apply/:patternid/", async (req, res) => {
-    const pattern = await DB.TranslateTablePattern.findByPk(parseInt(req.params.patternid));
+    const pattern = await DB.TranslationPattern.findByPk(parseInt(req.params.patternid));
     if (pattern === null) {
         res.status(404);
         res.send("");

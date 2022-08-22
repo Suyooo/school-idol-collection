@@ -7,7 +7,7 @@ import {
 } from "sequelize-typescript";
 
 @Table({timestamps: false})
-export default class TranslateTableSong extends Model {
+export default class TranslationName extends Model {
     @PrimaryKey
     @AllowNull(false)
     @Column

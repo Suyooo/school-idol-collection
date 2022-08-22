@@ -92,7 +92,7 @@ export async function importCard(path: string) {
     if (rawdata["type"] == "メンバー") {
         card.type = CardType.MEMBER;
 
-        const checkNameTable = await DB.TranslateTableName.findByPk(card.nameJpn);
+        const checkNameTable = await DB.TranslationName.findByPk(card.nameJpn);
         if (checkNameTable !== null) {
             card.nameEng = checkNameTable.eng;
         }
@@ -112,7 +112,7 @@ export async function importCard(path: string) {
         card.member.costumeJpn = isEmpty(rawdata["衣装"]) ? null : rawdata["衣装"];
 
         if (card.member.costumeJpn) {
-            const checkCostumeTable = await DB.TranslateTableSong.findByPk(card.member.costumeJpn);
+            const checkCostumeTable = await DB.TranslationSong.findByPk(card.member.costumeJpn);
             if (checkCostumeTable !== null) {
                 card.member.costumeEng = checkCostumeTable.eng;
             }
@@ -235,7 +235,7 @@ export async function importCard(path: string) {
     } else if (rawdata["type"] == "楽曲") {
         card.type = CardType.SONG;
 
-        const checkSongTable = await Promise.all(card.nameJpn!.split("／").map((s: string) => DB.TranslateTableName.findByPk(s)));
+        const checkSongTable = await Promise.all(card.nameJpn!.split("／").map((s: string) => DB.TranslationName.findByPk(s)));
         if (checkSongTable.every(s => s !== null)) {
             card.nameEng = checkSongTable.map(s => s!.eng).join("/");
         }
