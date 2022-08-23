@@ -25,7 +25,7 @@ import Skill from "./skill";
         }
     }
 })
-export default class AnnotationRecord extends Model {
+export default class Annotation extends Model {
     @PrimaryKey
     @AllowNull(false)
     @AutoIncrement

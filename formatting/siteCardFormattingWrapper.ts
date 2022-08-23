@@ -109,8 +109,8 @@ export default class SiteCardFormattingWrapper {
             this.nextCardNo = nextCard.cardNo;
         }
 
-        this.skillJpn = await SkillFormatter.JPN.formatCardSkill(this.card.skills.map(s => s.jpn));
-        this.skillEng = await SkillFormatter.ENG.formatCardSkill(this.card.skills.map(s => s.eng || "ー"));
+        this.skillJpn = this.card.skills.map(s => SkillFormatter.JPN.formatCardSkill(s.jpn, s.annotations.filter(a => !a.isEng))).join("<br>") || "ー";
+        this.skillEng = this.card.skills.map(s => SkillFormatter.ENG.formatCardSkill(s.eng, s.annotations.filter(a => a.isEng))).join("<br>") || "ー";
 
         if (this.isMember() && this.hasGroup()) {
             await this.prepareGroupAsyncProperties();
@@ -184,8 +184,8 @@ export default class SiteCardFormattingWrapper {
 
             this.prepareGroupAsyncProperties = async () => {
                 assertIsFormattingMemberWithGroup(this);
-                this.groupSkillJpn = await SkillFormatter.JPN.formatCardSkill(this.card.member.group.skills.map(s => s.jpn));
-                this.groupSkillEng = await SkillFormatter.ENG.formatCardSkill(this.card.member.group.skills.map(s => s.eng || "ー"));
+                this.groupSkillJpn = this.card.member.group.skills.map(s => SkillFormatter.JPN.formatCardSkill(s.jpn, s.annotations.filter(a => !a.isEng))).join("<br>") || "ー";
+                this.groupSkillEng = this.card.member.group.skills.map(s => SkillFormatter.ENG.formatCardSkill(s.eng, s.annotations.filter(a => a.isEng))).join("<br>") || "ー";
             }
 
             return true;

@@ -24,7 +24,7 @@ app.use("/style", express.static("server/frontend/static/style"));
 app.use("/images", express.static("server/frontend/static/images"));
 app.use("/vendor/jquery", express.static("node_modules/jquery/dist"));
 
-app.locals.skillFormat = (skill: string) => SkillFormatter.ENG.formatText([skill]);
+app.locals.skillFormat = (skill: string) => SkillFormatter.ENG.formatText(skill);
 
 /*
  * Frontends

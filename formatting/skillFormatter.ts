@@ -1,10 +1,11 @@
 import Language from "../types/language";
-import Annotation from "./annotation";
 import Trigger, {TriggerNameEng, TriggerNameJpn} from "../translation/trigger";
 import Attribute, {PieceAttributeEngName, PieceAttributeJpnName} from "../types/attribute";
 import PieceInfo from "../types/pieceInfo";
-import {toNumWithFullwidth} from "../utils/convert";
+import {escapeForRegex, toNumWithFullwidth} from "../utils/convert";
 import pieceFormat from "./pieceFormat";
+import Annotation from "../models/skill/annotation";
+import AnnotationType from "../types/annotationType";
 
 type SkillFormatterRegexes =
     "lyrics"
@@ -34,12 +35,6 @@ export default class SkillFormatter {
         this.lang = lang;
         this.regexes = regexes;
         this.templates = templates;
-    }
-
-    private async resolveAnnotation(match: string, pre: string, type: string, param: string, post: string): Promise<string> {
-        const annotation = Annotation.makeAnnotation(type, param, this.lang);
-        if (annotation === undefined) return match;
-        return "<a href='" + (await annotation.getHTMLLink()) + "'>" + pre + (await annotation.getHTMLText()) + post + '</a>';
     }
 
     private resolveFullSkill(match: string, triggers: string, skillLine: string) {
@@ -118,33 +113,30 @@ export default class SkillFormatter {
         return line;
     }
 
-    async formatCardSkill(s: string[]): Promise<string> {
-        if (s.length === 0) {
+    formatCardSkill(line: string | null, annotations: Annotation[]): string {
+        if (line === null) {
             return "ー";
         }
-        return (await Promise.all(s.map(async line => {
-            if (this.regexes.lyrics.test(line)) {
-                return "<i>" + line + "</i>";
-            } else {
-                let i = line.indexOf("{{");
-                while (i !== -1) {
-                    const match = Annotation.annotationPattern.exec(line.substring(i - 1));
-                    if (match !== null) {
-                        const repl = await this.resolveAnnotation(match[0], match[1], match[2], match[3], match[4]);
-                        line = line.substring(0, i - 1) + repl + line.substring(i - 1 + match[0].length);
-                    }
-                    i = line.indexOf("{{", i + 1);
-                }
-                return this.doRegex(line, true);
+
+        if (this.regexes.lyrics.test(line)) {
+            return "<i>" + line + "</i>";
+        } else {
+            for (const annotation of annotations) {
+                const type = AnnotationType.get(annotation.type);
+                const from = new RegExp("(.)" + escapeForRegex("{{" + type.key + ":" + annotation.parameter + "}}") + "(.)", "g");
+                const to = "<a href='" + type.getLinkTarget(annotation.parameter, annotation.linksTo) + "'>$1"
+                    + type.getLinkLabel(annotation.parameter, annotation.linksTo) + "$2</a>";
+                line = line.replace(from, to);
             }
-        }))).join("<br>");
+            return this.doRegex(line, true);
+        }
     }
 
-    formatText(s: string[]): string {
-        if (s.length === 0) {
+    formatText(line: string | null): string {
+        if (line === null) {
             return "ー";
         }
-        return s.map(line => this.doRegex(line, false)).join("<br>");
+        return this.doRegex(line, false);
     }
 
     static readonly JPN = new SkillFormatter(Language.JPN, {

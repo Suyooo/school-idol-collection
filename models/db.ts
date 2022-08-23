@@ -12,14 +12,14 @@ import CardSongExtraInfo from "./card/songExtraInfo";
 import CardSongAnyReqExtraInfo from "./card/songAnyReqExtraInfo";
 import CardSongAttrReqExtraInfo from "./card/songAttrReqExtraInfo";
 import Skill from "./skill/skill";
-import AnnotationRecord from "./skill/annotationRecord";
+import Annotation from "./skill/annotation";
 import Link from "./skill/link";
 
 const modelList = [
     Card, CardMemberGroup, CardFAQLink,
     CardMemberExtraInfo, CardMemberIdolizePieceExtraInfo,
     CardSongExtraInfo, CardSongAnyReqExtraInfo, CardSongAttrReqExtraInfo,
-    Skill, Link, AnnotationRecord,
+    Skill, Link, Annotation,
     TranslationName, TranslationSong, TranslationPattern
 ];
 
@@ -48,7 +48,7 @@ const DB = {
 
     Skill: <typeof Skill>sequelize.models.Skill,
     Link: <typeof Link>sequelize.models.Link,
-    AnnotationRecord: <typeof AnnotationRecord>sequelize.models.AnnotationRecord,
+    Annotation: <typeof Annotation>sequelize.models.Annotation,
 
     TranslationName: <typeof TranslationName>sequelize.models.TranslationName,
     TranslationSong: <typeof TranslationSong>sequelize.models.TranslationSong,

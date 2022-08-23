@@ -8,7 +8,7 @@ import {
     Table
 } from "sequelize-typescript";
 import Card from "../card/card";
-import AnnotationRecord from "./annotationRecord";
+import Annotation from "./annotation";
 
 @Table({timestamps: false})
 export default class Link extends Model {
@@ -19,7 +19,7 @@ export default class Link extends Model {
     id!: number;
 
     @AllowNull(false)
-    @ForeignKey(() => AnnotationRecord)
+    @ForeignKey(() => Annotation)
     @Column
     from!: number;
 

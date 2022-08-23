@@ -27,7 +27,7 @@ import Attribute, {AttributeID} from "../../types/attribute";
 import CardMemberGroup from "./memberGroup";
 import Skill from "../skill/skill";
 import Link from "../skill/link";
-import AnnotationRecord from "../skill/annotationRecord";
+import Annotation from "../skill/annotation";
 import AnnotationType from "../../types/annotationType";
 
 export const CardOrder = (col: string) =>
@@ -82,7 +82,7 @@ export const CardOrder = (col: string) =>
             {
                 model: DB.Skill,
                 include: [{
-                    model: DB.AnnotationRecord,
+                    model: DB.Annotation,
                     include: [DB.Card]
                 }]
             },
@@ -95,7 +95,7 @@ export const CardOrder = (col: string) =>
                             {
                                 model: DB.Skill,
                                 include: [{
-                                    model: DB.AnnotationRecord,
+                                    model: DB.Annotation,
                                     include: [DB.Card]
                                 }]
                             },
@@ -122,7 +122,7 @@ export const CardOrder = (col: string) =>
             },
             DB.CardFAQLink,
             {
-                model: DB.AnnotationRecord,
+                model: DB.Annotation,
                 where: {
                     type: {
                         [Op.in]: [AnnotationType.get("song").id, AnnotationType.get("costume").id, AnnotationType.get("mem").id]
@@ -241,8 +241,8 @@ export default class Card extends Model {
     @HasMany(() => CardFAQLink, {foreignKey: "cardId", sourceKey: "id", constraints: false})
     faqs!: CardFAQLink[];
 
-    @BelongsToMany(() => AnnotationRecord, {through: {model: () => Link, unique: false}})
-    linkedBy: Array<AnnotationRecord & { Link: Link }> | undefined;
+    @BelongsToMany(() => Annotation, {through: {model: () => Link, unique: false}})
+    linkedBy: Array<Annotation & { Link: Link }> | undefined;
 }
 
 export class CardMember extends Card {
