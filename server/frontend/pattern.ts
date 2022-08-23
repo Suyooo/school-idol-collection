@@ -2,6 +2,7 @@ import DB from "../../models/db";
 import express from "express";
 import TranslationPattern from "../../models/translation/pattern";
 import {getApplicableSkills, listUntranslatedSkills, splitTriggersFromSkill} from "../../translation/skills";
+import Skill from "../../models/skill/skill";
 
 const PatternRouter = express.Router();
 export default PatternRouter;
@@ -58,7 +59,7 @@ PatternRouter.get("/edit/:patternno/", async (req, res) => {
 
 PatternRouter.get("/edit/:patternno/:cardno/:line/", async (req, res) => {
     const pattern = await DB.TranslationPattern.findByPk(parseInt(req.params.patternno));
-    const card = await DB.Card.findByPk(req.params.cardno, {attributes: ["skill"]});
+    const card = await DB.Card.findByPk(req.params.cardno, {include: [DB.Skill]});
     const skillLine = card?.skills[parseInt(req.params.line)].jpn;
     if (pattern === null || skillLine === undefined) {
         res.status(404);

@@ -13,7 +13,7 @@ export type TriggerID = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 type MappedValue = TriggerID | TriggerNameEng | TriggerNameJpn;
 
 export default class Trigger {
-    readonly id: number;
+    readonly id: TriggerID;
     readonly nameEng: TriggerNameEng;
     readonly nameJpn: TriggerNameJpn;
     readonly nameJpnMemory: TriggerNameJpn;
@@ -26,7 +26,7 @@ export default class Trigger {
         this.cssClassName = className;
         this.nameEng = eng;
         this.nameJpn = jpn;
-        this.nameJpnMemory = jpnMemoryAlt ? jpnMemoryAlt : jpn
+        this.nameJpnMemory = jpnMemoryAlt ? jpnMemoryAlt : jpn;
 
         map.set(id, this);
         map.set(eng, this);

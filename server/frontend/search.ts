@@ -25,7 +25,8 @@ SearchRouter.get("/*/", async (req, res) => {
     let where: any = {};
     const queries: string[] = [];
     const includes = {
-        "member": false
+        "member": false,
+        "skills": false
     };
 
     const setConditions = (filter: string, conditions: any) => {
@@ -87,6 +88,7 @@ SearchRouter.get("/*/", async (req, res) => {
                         ]
                     });
                     queries.push("Skill contains \"" + value + "\"");
+                    includes.skills = true;
                 } else {
                     throw new SearchFilterError("Unknown filter or wrong number of arguments", filter);
                 }
@@ -107,6 +109,9 @@ SearchRouter.get("/*/", async (req, res) => {
     const includeArr = [];
     if (includes.member) {
         includeArr.push(makeIncludable(DB.CardMemberExtraInfo));
+    }
+    if (includes.skills) {
+        includeArr.push(makeIncludable(DB.Skill));
     }
 
     res.render("search", {

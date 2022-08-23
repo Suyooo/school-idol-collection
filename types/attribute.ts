@@ -9,7 +9,7 @@ export type AttributeID = 0 | 1 | 2 | 3 | 4;
 type MappedValue = AttributeID | ColorNameEng | ColorNameJpn | SongAttributeNameEng | SongAttributeNameJpn | PieceAttributeEngName | PieceAttributeJpnName;
 
 export default class Attribute {
-    readonly id: number;
+    readonly id: AttributeID;
     readonly colorNameJpn: ColorNameJpn;
     readonly colorNameEng: ColorNameEng;
     readonly songAttributeNameJpn: SongAttributeNameJpn;

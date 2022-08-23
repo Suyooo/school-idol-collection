@@ -7,11 +7,11 @@ import {
     PrimaryKey,
     Table
 } from "sequelize-typescript";
-import Card from "./card";
-import CardMemberGroup from "./memberGroup";
+import Card from "../card/card";
+import AnnotationRecord from "./annotationRecord";
 
 @Table({timestamps: false})
-export default class CardMemberGroupLink extends Model {
+export default class Link extends Model {
     @PrimaryKey
     @AllowNull(false)
     @AutoIncrement
@@ -19,9 +19,9 @@ export default class CardMemberGroupLink extends Model {
     id!: number;
 
     @AllowNull(false)
-    @ForeignKey(() => CardMemberGroup)
+    @ForeignKey(() => AnnotationRecord)
     @Column
-    fromGroupId!: number;
+    from!: number;
 
     @AllowNull(false)
     @Column
@@ -30,5 +30,5 @@ export default class CardMemberGroupLink extends Model {
     @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
-    toCardNo!: string;
+    to!: string;
 }

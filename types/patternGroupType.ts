@@ -5,6 +5,7 @@ import Attribute, {PieceAttributeJpnName} from "./attribute";
 import DB from "../models/db";
 import NotFoundError from "../errors/notFoundError";
 import MissingTranslationError from "../errors/missingTranslationError";
+import {Op} from "sequelize";
 
 const skilltextPattern = /{{skilltext:([^}]*?)}}/;
 
@@ -51,7 +52,7 @@ export default class PatternGroupType {
         map.push(new PatternGroupType(3, async function (match: string): Promise<string> {
             const n = (await DB.Card.scope(["memories", "forLink"]).findOne({
                 where: {
-                    name: match
+                    nameJpn: match
                 }
             }))?.nameEng;
             if (n === undefined) throw new NotFoundError(match + " is not a known memory");

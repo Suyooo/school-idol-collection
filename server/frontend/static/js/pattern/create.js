@@ -153,11 +153,11 @@ function submit() {
     }
     $.ajax({
         type: "PUT",
-        url: "/pattern/",
+        url: "/api/pattern/",
         contentType: "application/json",
         data: JSON.stringify(data)
     }).done((res) => {
-        window.location.href = "/api/pattern/apply/" + res.id + "/";
+        window.location.href = "/pattern/apply/" + res.id + "/";
     }).fail((jqxhr, textStatus, error) => {
         alert("Error while saving: " + error);
         submitBtn.show();

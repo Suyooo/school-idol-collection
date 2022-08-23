@@ -25,8 +25,6 @@ import CardSongRequirementType from "../../types/cardSongRequirementType";
 import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
 import Attribute from "../../types/attribute";
 import CardMemberGroup from "./memberGroup";
-import CardLink from "./cardLink";
-import CardMemberGroupLink from "./memberGroupLink";
 import Skill from "../skill/skill";
 
 export const CardOrder = (col: string) =>
@@ -106,27 +104,6 @@ export const CardOrder = (col: string) =>
                     DB.CardSongAnyReqExtraInfo,
                     DB.CardSongAttrReqExtraInfo
                 ]
-            },
-            {
-                model: DB.Card,
-                as: "linkedBy",
-                order: CardOrder("`linkedBy->CardLink`.`fromCardNo`")
-            },
-            {
-                model: DB.CardMemberGroup,
-                as: "linkedByGroup",
-                include: [
-                    {
-                        model: DB.CardMemberExtraInfo,
-                        include: [
-                            {
-                                model: DB.Card,
-                                include: [DB.CardMemberExtraInfo]
-                            }
-                        ]
-                    }
-                ],
-                order: CardOrder("`linkedByGroup->memberExtraInfos->card`.`cardNo`")
             },
             DB.CardFAQLink
         ]
@@ -228,16 +205,6 @@ export default class Card extends Model {
     // constraints = false because standard SQL doesn't support foreign keys being non-unique
     @HasMany(() => CardFAQLink, {foreignKey: "cardId", sourceKey: "id", constraints: false})
     faqs!: CardFAQLink[];
-
-    @BelongsToMany(() => Card, {through: {model: () => CardLink, unique: false}, foreignKey: "fromCardNo"})
-    linksTo!: Array<Card & { CardLink: CardLink }>;
-    @BelongsToMany(() => Card, {through: {model: () => CardLink, unique: false}, foreignKey: "toCardNo"})
-    linkedBy!: Array<Card & { CardLink: CardLink }>;
-    @BelongsToMany(() => CardMemberGroup, {
-        through: {model: () => CardMemberGroupLink, unique: false},
-        foreignKey: "toCardNo"
-    })
-    linkedByGroup!: Array<CardMemberGroup & { CardMemberGroupLink: CardMemberGroupLink }>;
 }
 
 export class CardMember extends Card {

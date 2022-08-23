@@ -64,7 +64,7 @@ export default class SiteCardFormattingWrapper {
         this.nameWithQuot = this.nameEngWithQuot || this.nameJpnWithQuot;
         this.title = "<span class='card-id'>" + this.cardNo + "</span> " + this.nameWithQuot;
 
-        const backlinkSet: Set<[number, string]> = new Set();
+        /*const backlinkSet: Set<[number, string]> = new Set();
         if (card.linkedBy) {
             for (const linkingCard of card.linkedBy) {
                 backlinkSet.add([linkingCard.id,
@@ -79,7 +79,8 @@ export default class SiteCardFormattingWrapper {
                 }
             }
         }
-        this.backlinks = [...backlinkSet.values()].sort((a, b) => a[0] - b[0]).map(e => e[1]);
+        this.backlinks = [...backlinkSet.values()].sort((a, b) => a[0] - b[0]).map(e => e[1]);*/
+        this.backlinks = [];
     }
 
     readonly cardNo: string;
