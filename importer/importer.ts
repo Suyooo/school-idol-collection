@@ -20,6 +20,8 @@ import CardSongRequirementType from "../types/cardSongRequirementType";
 import Card from "../models/card/card";
 import CardMemberGroup from "../models/card/memberGroup";
 import CardMemberExtraInfo from "../models/card/memberExtraInfo";
+import {makeFindOptionsFromFilters} from "../search/query";
+import AnnotationType from "../types/annotationType";
 
 type Empty = "―" | "－" | "─" | "-";
 type RawAttr = SongAttributeNameJpn & Empty;
@@ -81,7 +83,7 @@ const trioSkillPattern = /\n?<トリオスキル>\n?(.*)/s;
 export async function importCard(path: string) {
     const rawdata: RawData = JSON.parse(fs.readFileSync(path).toString());
 
-    const card: Omit<Partial<Card>,"member"|"song"> & { member?: any, song?: any, skills?: any[] } = {
+    const card: Omit<Partial<Card>, "member" | "song"> & { member?: any, song?: any, skills?: any[] } = {
         cardNo: rawdata["カードNo."]!,
         id: parseInt(rawdata["ID"])!,
         nameJpn: rawdata["name"]!,
@@ -99,14 +101,14 @@ export async function importCard(path: string) {
 
         card.member = {} as Partial<CardMemberExtraInfo>;
         card.member.rarity = CardMemberRarity[rawdata["レアリティ"]];
-        card.member.cost = (isEmpty(rawdata["コスト"]) ? 0 : rawdata["コスト"].length) as 0|1|2|3;
+        card.member.cost = (isEmpty(rawdata["コスト"]) ? 0 : rawdata["コスト"].length) as 0 | 1 | 2 | 3;
         if (rawdata["誕生日"] !== "？？？") {
             const bdMatch = birthdayPattern.exec(rawdata["誕生日"]);
             if (bdMatch === null) throw new ImportError("Invalid birthday scraped from website", path);
             card.member.birthDay = parseInt(bdMatch[2]) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31;
             card.member.birthMonth = parseInt(bdMatch[1]) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
         }
-        card.member.year = (isEmpty(rawdata["学年"]) ? null : parseInt(rawdata["学年"].charAt(0))) as 1|2|3|null;
+        card.member.year = (isEmpty(rawdata["学年"]) ? null : parseInt(rawdata["学年"].charAt(0))) as 1 | 2 | 3 | null;
         card.member.abilityRush = rawdata["特技"].indexOf("RUSH") !== -1;
         card.member.abilityLive = rawdata["特技"].indexOf("LIVE") !== -1;
         card.member.costumeJpn = isEmpty(rawdata["衣装"]) ? null : rawdata["衣装"];
@@ -183,7 +185,7 @@ export async function importCard(path: string) {
         } else if (skillText !== null) {
             const groupMatch = pairPattern.exec(skillText) || trioPattern.exec(skillText);
             if (groupMatch !== null) {
-                const group: Partial<CardMemberGroup> & {skills?: any[]} = {};
+                const group: Partial<CardMemberGroup> & { skills?: any[] } = {};
 
                 let memberIds: number[];
                 if (groupMatch[3]) {
@@ -197,9 +199,8 @@ export async function importCard(path: string) {
                 group.expectedMemberIds = "|" + memberIds.sort().join("|") + "|";
 
                 if (splitMatch) {
-                    const skillLines: { skill: string, song: string[], costume: string[] }[]
-                        = splitMatch[1].split("\n").map((s: string) => autoAnnotateSkill(s));
-                    const checkSkillPattern = await Promise.all(skillLines.map(s => tryAllPatterns(s.skill)));
+                    const skillLines = splitMatch[1].split("\n").map((s: string) => autoAnnotateSkill(s));
+                    const checkSkillPattern = await Promise.all(skillLines.map(s => tryAllPatterns(s)));
 
                     group.skills = [];
                     for (let i = 0; i < skillLines.length; i++) {
@@ -207,13 +208,13 @@ export async function importCard(path: string) {
                         group.skills.push({
                             line: i,
                             patternId: checkSkillPattern[i]?.pattern.id || null,
-                            jpn: skillLine.skill,
+                            jpn: skillLine,
                             eng: checkSkillPattern[i]?.skill || null,
                         });
                     }
                 }
 
-                card.member.groupId = (await DB.CardMemberGroup.create(group)).id;
+                card.member.groupId = (await DB.CardMemberGroup.create(group, {include: [DB.Skill]})).id;
                 const existingMembers = await DB.Card.scope(["cardNoOnly"]).findAll({
                     where: {
                         id: {
@@ -266,9 +267,8 @@ export async function importCard(path: string) {
     }
 
     if (skillText !== null && skillText.trim() !== "") {
-        const skillLines: { skill: string, song: string[], costume: string[] }[]
-            = skillText.split("\n").map((s: string) => autoAnnotateSkill(s));
-        const checkSkillPattern = await Promise.all(skillLines.map(s => tryAllPatterns(s.skill)));
+        const skillLines = skillText.split("\n").map((s: string) => autoAnnotateSkill(s));
+        const checkSkillPattern = await Promise.all(skillLines.map(s => tryAllPatterns(s)));
 
         card.skills = [];
         for (let i = 0; i < skillLines.length; i++) {
@@ -277,7 +277,7 @@ export async function importCard(path: string) {
                 cardNo: card.cardNo!,
                 line: i,
                 patternId: checkSkillPattern[i]?.pattern.id || null,
-                jpn: skillLine.skill,
+                jpn: skillLine,
                 eng: checkSkillPattern[i]?.skill || null,
             })
         }
@@ -288,7 +288,6 @@ export async function importCard(path: string) {
             {
                 model: DB.CardMemberExtraInfo,
                 include: [
-                    DB.CardMemberGroup,
                     DB.CardMemberIdolizePieceExtraInfo
                 ]
             },
@@ -298,9 +297,22 @@ export async function importCard(path: string) {
                     DB.CardSongAnyReqExtraInfo,
                     DB.CardSongAttrReqExtraInfo
                 ]
-            }
+            },
+            DB.Skill
         ]
     });
+
+    for (const annotation of await DB.Annotation.findAll()) {
+        const type = AnnotationType.get(annotation.type);
+        const options = makeFindOptionsFromFilters(type.getSearchFilters(annotation.parameter));
+        options.where = { ...options.where, cardNo: card.cardNo };
+        if (await DB.Card.findOne(options) !== null) {
+            await DB.Link.create({
+                from: annotation.id,
+                to: card.cardNo
+            });
+        }
+    }
 
     Log.info("IMPORT", "Successfully imported " + path + ", deleting");
     fs.unlinkSync(path);

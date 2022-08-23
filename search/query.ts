@@ -3,7 +3,7 @@ import Card, {CardOrder} from "../models/card/card";
 import DB from "../models/db";
 import {Attributes, FindOptions, IncludeOptions, Model, ProjectionAlias, WhereOptions} from "sequelize";
 
-export default async function searchQuery(filters: SearchFilter[], scope: string, options?: FindOptions<Attributes<Card>>): Promise<Card[]> {
+export function makeFindOptionsFromFilters(filters: SearchFilter[]): FindOptions<Attributes<Card>> {
     let where: WhereOptions = {};
     const include: Map<any, IncludeOptions> = new Map();
 
@@ -30,10 +30,13 @@ export default async function searchQuery(filters: SearchFilter[], scope: string
         }
     }
 
+    return {where, include: [...include.values()]}
+}
+
+export default async function searchQuery(filters: SearchFilter[], scope: string, options?: FindOptions<Attributes<Card>>): Promise<Card[]> {
     return await DB.Card.scope([scope]).findAll({
+        ...makeFindOptionsFromFilters(filters),
         ...options,
-        where,
-        include: [...include.values()],
         order: CardOrder("`Card`.`cardNo`")
     });
 }

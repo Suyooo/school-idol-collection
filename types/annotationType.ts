@@ -18,7 +18,7 @@ type MappedValue = AnnotationTypeID | AnnotationTypeKey;
 export default class AnnotationType {
     readonly id: AnnotationTypeID;
     readonly key: AnnotationTypeKey;
-    private readonly getSearchFilters: (parameter: string) => SearchFilter[];
+    readonly getSearchFilters: (parameter: string) => SearchFilter[];
     private readonly getLinkTargetOverride?: (parameter: string, cards: Card[]) => string;
     private readonly getLinkLabelOverride?: (parameter: string, cards: Card[]) => string;
 
