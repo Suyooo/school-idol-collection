@@ -24,10 +24,6 @@ export default class Link extends Model {
     from!: number;
 
     @AllowNull(false)
-    @Column
-    skillLine!: number;
-
-    @AllowNull(false)
     @ForeignKey(() => Card)
     @Column
     to!: string;

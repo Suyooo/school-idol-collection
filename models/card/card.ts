@@ -26,6 +26,9 @@ import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
 import Attribute, {AttributeID} from "../../types/attribute";
 import CardMemberGroup from "./memberGroup";
 import Skill from "../skill/skill";
+import Link from "../skill/link";
+import AnnotationRecord from "../skill/annotationRecord";
+import AnnotationType from "../../types/annotationType";
 
 export const CardOrder = (col: string) =>
     <OrderItem[]><unknown>[[literal(col + " LIKE 'LL%' DESC, " + col)]];
@@ -76,14 +79,26 @@ export const CardOrder = (col: string) =>
 
     full: () => ({
         include: [
-            DB.Skill,
+            {
+                model: DB.Skill,
+                include: [{
+                    model: DB.AnnotationRecord,
+                    include: [DB.Card]
+                }]
+            },
             {
                 model: DB.CardMemberExtraInfo,
                 include: [
                     {
                         model: DB.CardMemberGroup,
                         include: [
-                            DB.Skill,
+                            {
+                                model: DB.Skill,
+                                include: [{
+                                    model: DB.AnnotationRecord,
+                                    include: [DB.Card]
+                                }]
+                            },
                             {
                                 model: DB.CardMemberExtraInfo,
                                 include: [
@@ -105,8 +120,28 @@ export const CardOrder = (col: string) =>
                     DB.CardSongAttrReqExtraInfo
                 ]
             },
-            DB.CardFAQLink
-        ]
+            DB.CardFAQLink,
+            {
+                model: DB.AnnotationRecord,
+                where: {
+                    type: {
+                        [Op.in]: [AnnotationType.get("song").id, AnnotationType.get("costume").id, AnnotationType.get("mem").id]
+                    }
+                },
+                required: false,
+                include: [{
+                    model: DB.Skill,
+                    include: [
+                        DB.Card,
+                        {
+                            model: DB.CardMemberGroup,
+                            include: [DB.CardMemberExtraInfo]
+                        }
+                    ]
+                }]
+            }
+        ],
+        order: [literal("`linkedBy->skill`.`groupId`"), ...CardOrder("`linkedBy->skill`.`cardNo`")]
     }),
     cardNoOnly: () => ({
         attributes: ["cardNo"]
@@ -205,6 +240,9 @@ export default class Card extends Model {
     // constraints = false because standard SQL doesn't support foreign keys being non-unique
     @HasMany(() => CardFAQLink, {foreignKey: "cardId", sourceKey: "id", constraints: false})
     faqs!: CardFAQLink[];
+
+    @BelongsToMany(() => AnnotationRecord, {through: {model: () => Link, unique: false}})
+    linkedBy: Array<AnnotationRecord & { Link: Link }> | undefined;
 }
 
 export class CardMember extends Card {

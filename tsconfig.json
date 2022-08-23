@@ -4,13 +4,12 @@
     "emitDecoratorMetadata": true,
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "es6",
+    "target": "es2021",
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "build",
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "strictNullChecks": true
-  },
-  "lib": ["es2015"]
+  }
 }

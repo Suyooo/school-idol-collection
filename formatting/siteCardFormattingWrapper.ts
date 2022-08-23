@@ -1,7 +1,6 @@
 import Card, {
     CardMember,
     CardMemberHasBirthdayPieces, CardMemberHasGroup, CardMemberHasIdolizePieces,
-    CardMemberIdolizable,
     CardMemory,
     CardSong
 } from "../models/card/card";
@@ -42,6 +41,16 @@ export default class SiteCardFormattingWrapper {
         if (!reducedAttributes) {
             this.copyright = card.copyright;
             this.faqs = card.faqs;
+
+            if (card.linkedBy !== undefined) {
+                const backlinkSet: Set<string> = new Set();
+                for (const annotation of card.linkedBy) {
+                    for (const c of (annotation.skill.cardNo !== null ? [annotation.skill.card] : annotation.skill.group.members)) {
+                        backlinkSet.add("<a href='/card/" + c.cardNo + "'>" + new SiteCardFormattingWrapper(c, true).title + "</a>");
+                    }
+                }
+                this.backlinks = [...backlinkSet.values()];
+            }
         }
 
         if (card.isMember()) {
@@ -64,24 +73,6 @@ export default class SiteCardFormattingWrapper {
             : card.nameEng.split(" / ").map(s => '"' + s + '"').join(" / ");
         this.nameWithQuot = this.nameEngWithQuot || this.nameJpnWithQuot;
         this.title = "<span class='card-id'>" + this.cardNo + "</span> " + this.nameWithQuot;
-
-        /*const backlinkSet: Set<[number, string]> = new Set();
-        if (card.linkedBy) {
-            for (const linkingCard of card.linkedBy) {
-                backlinkSet.add([linkingCard.id,
-                    "<a href='/card/" + linkingCard.cardNo + "'>" + new SiteCardFormattingWrapper(linkingCard, true).title + "</a>"]);
-            }
-        }
-        if (card.linkedByGroup) {
-            for (const linkingGroup of card.linkedByGroup) {
-                for (const linkingCard of linkingGroup.members) {
-                    backlinkSet.add([linkingCard.id,
-                        "<a href='/card/" + linkingCard.cardNo + "'>" + new SiteCardFormattingWrapper(linkingCard, true).title + "</a>"]);
-                }
-            }
-        }
-        this.backlinks = [...backlinkSet.values()].sort((a, b) => a[0] - b[0]).map(e => e[1]);*/
-        this.backlinks = [];
     }
 
     readonly cardNo: string;

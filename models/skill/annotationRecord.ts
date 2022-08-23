@@ -1,6 +1,7 @@
 import {
     AllowNull,
     AutoIncrement,
+    BelongsTo,
     BelongsToMany,
     Column,
     DataType,
@@ -35,6 +36,9 @@ export default class AnnotationRecord extends Model {
     @AllowNull(false)
     @Column
     skillId!: number;
+
+    @BelongsTo(() => Skill)
+    skill!: Skill;
 
     @AllowNull(false)
     @Column

@@ -8,6 +8,7 @@ import {
     Column,
     DataType,
     ForeignKey,
+    HasMany,
     Min,
     Model,
     PrimaryKey,
@@ -21,6 +22,7 @@ import CardMemberGroup from "../card/memberGroup";
 import TranslationPattern from "../translation/pattern";
 
 import AnnotationType, {AnnotationTypeKey} from "../../types/annotationType";
+import AnnotationRecord from "./annotationRecord";
 
 @Table({timestamps: false})
 export default class Skill extends Model {
@@ -61,6 +63,9 @@ export default class Skill extends Model {
     @Column(DataType.STRING)
     eng: string | null;
 
+    @HasMany(() => AnnotationRecord)
+    annotations!: AnnotationRecord[];
+
     @BeforeUpdate
     static async clearAnnotations(skill: Skill, options: QueryOptions) {
         if (skill.changed("jpn"))
@@ -80,22 +85,32 @@ export default class Skill extends Model {
     static async recordAnnotations(skill: Skill, options: QueryOptions) {
         if (skill.changed("jpn")) {
             for (const [_, key, parameter] of skill.jpn.matchAll(/{{(.*?):(.*?)}}/g)) {
-                await DB.AnnotationRecord.create({
+                const type = AnnotationType.get(key as AnnotationTypeKey);
+                const annotation = await DB.AnnotationRecord.create({
                     skillId: skill.id,
                     isEng: false,
-                    type: AnnotationType.get(key as AnnotationTypeKey).id,
+                    type: type.id,
                     parameter
                 }, {transaction: options.transaction});
+                await DB.Link.bulkCreate((await type.getCards(parameter)).map(c => ({
+                    from: annotation.id,
+                    to: c.cardNo
+                })), {transaction: options.transaction});
             }
         }
         if (skill.changed("eng") && skill.eng !== null) {
             for (const [_, key, parameter] of skill.eng.matchAll(/{{(.*?):(.*?)}}/g)) {
-                await DB.AnnotationRecord.create({
+                const type = AnnotationType.get(key as AnnotationTypeKey);
+                const annotation = await DB.AnnotationRecord.create({
                     skillId: skill.id,
                     isEng: true,
-                    type: AnnotationType.get(key as AnnotationTypeKey).id,
+                    type: type.id,
                     parameter
                 }, {transaction: options.transaction});
+                await DB.Link.bulkCreate((await type.getCards(parameter)).map(c => ({
+                    from: annotation.id,
+                    to: c.cardNo
+                })), {transaction: options.transaction});
             }
         }
     }
