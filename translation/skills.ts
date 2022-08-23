@@ -4,6 +4,7 @@ import PatternApplyError from "../errors/patternApplyError";
 import Trigger, {TriggerNameJpn} from "./trigger";
 import CardMemberGroup from "../models/card/memberGroup";
 import Card from "../models/card/card";
+import {QueryOptions} from "sequelize";
 
 export const checkTriggersPattern = /^(【[^【】]*?】(?:\/【[^【】]*?】)*)(.*?)$/;
 
@@ -39,17 +40,18 @@ export async function listUntranslatedSkills()
     );
 }
 
-export async function getApplicableSkills(pattern: TranslationPattern)
+export async function getApplicableSkills(pattern: TranslationPattern, options?: QueryOptions)
     : Promise<({ cardNo: string, skillId: number, skillJpn: string, skillEng: string } |
     { groupId: number, firstCardNo: string, skillId: number, skillJpn: string, skillEng: string })[]> {
     const res = [];
     const allSkills = await DB.Skill.findAll({
+        ...options,
         include: [{model: DB.CardMemberGroup, include: [{model: DB.CardMemberExtraInfo, attributes: ["cardNo"]}]}]
     });
 
     for (const skillObj of allSkills) {
         const {skill, triggers} = splitTriggersFromSkill(skillObj.jpn);
-        const appliedPattern = await applyPatternOrNull(skill, triggers, pattern);
+        const appliedPattern = await applyPatternOrNull(skill, triggers, pattern, options);
         if (appliedPattern !== null) {
             res.push(skillObj.cardNo !== null
                 ? {
@@ -71,28 +73,30 @@ export async function getApplicableSkills(pattern: TranslationPattern)
 }
 
 export async function applyPatternToSkills(pattern: TranslationPattern, applyTo: number[]) {
-    for (const application of applyTo) {
-        const skillObj = await DB.Skill.findByPk(application);
-        if (skillObj === null) {
-            throw new PatternApplyError(Error("Pattern should be applied to Skill #" + application + ", but it does not exist"), pattern, "---");
-        }
+    await DB.sequelize.transaction(async (transaction) => {
+        for (const application of applyTo) {
+            const skillObj = await DB.Skill.findByPk(application, {transaction});
+            if (skillObj === null) {
+                throw new PatternApplyError(Error("Pattern should be applied to Skill #" + application + ", but it does not exist"), pattern, "---");
+            }
 
-        const {skill, triggers} = splitTriggersFromSkill(skillObj.jpn);
-        const translatedSkill = await applyPatternOrNull(skill, triggers, pattern);
-        if (translatedSkill === null) {
-            throw new PatternApplyError(Error("Pattern should be applied to Skill #" + application + ", but its regex does not match the Skill"), pattern, skillObj.jpn);
-        }
+            const {skill, triggers} = splitTriggersFromSkill(skillObj.jpn);
+            const translatedSkill = await applyPatternOrNull(skill, triggers, pattern, {transaction});
+            if (translatedSkill === null) {
+                throw new PatternApplyError(Error("Pattern should be applied to Skill #" + application + ", but its regex does not match the Skill"), pattern, skillObj.jpn);
+            }
 
-        skillObj.eng = triggers.map(t => "[" + t.nameEng + "]").join("/") + " " + translatedSkill;
-        skillObj.patternId = pattern.id;
-        await skillObj.save();
-    }
+            skillObj.eng = triggers.map(t => "[" + t.nameEng + "]").join("/") + " " + translatedSkill;
+            skillObj.patternId = pattern.id;
+            await skillObj.save({transaction});
+        }
+    });
 }
 
-export async function tryAllPatterns(skillLine: string): Promise<{ skill: string, pattern: TranslationPattern } | null> {
+export async function tryAllPatterns(skillLine: string, options?: QueryOptions): Promise<{ skill: string, pattern: TranslationPattern } | null> {
     const {skill, triggers} = splitTriggersFromSkill(skillLine);
-    for (const pattern of (await DB.TranslationPattern.findAll())) {
-        const res = applyPatternOrNull(skill, triggers, pattern);
+    for (const pattern of (await DB.TranslationPattern.findAll(options))) {
+        const res = await applyPatternOrNull(skill, triggers, pattern, options);
         if (res !== null) {
             return {skill, pattern};
         }
@@ -100,7 +104,7 @@ export async function tryAllPatterns(skillLine: string): Promise<{ skill: string
     return null;
 }
 
-async function applyPatternOrNull(skill: string, triggers: Trigger[], pattern: TranslationPattern): Promise<string | null> {
+async function applyPatternOrNull(skill: string, triggers: Trigger[], pattern: TranslationPattern, options?: QueryOptions): Promise<string | null> {
     // If this is a skill without triggers (tutorial text or lyrics), only patterns without triggers can be applied
     // Otherwise, check for at least one overlapping trigger
     if (pattern.triggers > 0 && (triggers.length === 0 || pattern.triggerArray.every(t => triggers.indexOf(t) === -1))) {
@@ -116,7 +120,7 @@ async function applyPatternOrNull(skill: string, triggers: Trigger[], pattern: T
     const allRepls: string[] = new Array(groupTypeArray.length);
     try {
         for (let gi = 0; gi < groupTypeArray.length; gi++) {
-            allRepls[gi] = await groupTypeArray[gi].getReplacement(match[gi + 1]);
+            allRepls[gi] = await groupTypeArray[gi].getReplacement(match[gi + 1], options);
         }
     } catch (e) {
         throw new PatternApplyError(e, pattern, skill);

@@ -92,7 +92,7 @@ export default class Skill extends Model {
                     type: type.id,
                     parameter
                 }, {transaction: options.transaction});
-                await DB.Link.bulkCreate((await type.getCards(parameter)).map(c => ({
+                await DB.Link.bulkCreate((await type.getCards(parameter, {transaction: options.transaction})).map(c => ({
                     from: annotation.id,
                     to: c.cardNo
                 })), {transaction: options.transaction});
@@ -107,7 +107,7 @@ export default class Skill extends Model {
                     type: type.id,
                     parameter
                 }, {transaction: options.transaction});
-                await DB.Link.bulkCreate((await type.getCards(parameter)).map(c => ({
+                await DB.Link.bulkCreate((await type.getCards(parameter, {transaction: options.transaction})).map(c => ({
                     from: annotation.id,
                     to: c.cardNo
                 })), {transaction: options.transaction});

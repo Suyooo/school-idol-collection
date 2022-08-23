@@ -4,6 +4,7 @@ import Attribute, {PieceAttributeJpnName} from "../types/attribute";
 import DB from "../models/db";
 import NotFoundError from "../errors/notFoundError";
 import MissingTranslationError from "../errors/missingTranslationError";
+import {QueryOptions} from "sequelize";
 
 const skilltextPattern = /{{skilltext:([^}]*?)}}/;
 
@@ -11,10 +12,10 @@ export type PatternGroupTypeID = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export default class PatternGroupType {
     readonly id: PatternGroupTypeID;
-    readonly getReplacement: (match: string) => Promise<string>;
+    readonly getReplacement: (match: string, options?: QueryOptions) => Promise<string>;
     readonly getExtraReplacements: (match: string, thisNum: number, allRepls: string[]) => Map<string, string>;
 
-    private constructor(id: PatternGroupTypeID, getReplacement: (match: string) => Promise<string>,
+    private constructor(id: PatternGroupTypeID, getReplacement: (match: string, options?: QueryOptions) => Promise<string>,
                         getExtraReplacements: (match: string, thisNum: number, allRepls: string[]) => Map<string, string>) {
         this.id = id;
         this.getReplacement = getReplacement;
@@ -25,30 +26,31 @@ export default class PatternGroupType {
         const map: PatternGroupType[] = [];
 
         // Name or Group
-        map.push(new PatternGroupType(0, async function (match: string): Promise<string> {
+        map.push(new PatternGroupType(0, async function (match: string, options?: QueryOptions) {
             const skilltext = skilltextPattern.exec(match)?.[1];
-            const n = (await DB.TranslationName.findByPk(match))?.eng;
+            const n = (await DB.TranslationName.findByPk(match, options))?.eng;
             if (n === undefined) throw new NotFoundError(match + " is not a known name");
             return skilltext ? "{{skilltext:" + n + "}}" : n;
         }, generateAOrAnReplacements));
 
         // Song Name
-        map.push(new PatternGroupType(1, async function (match: string): Promise<string> {
-            const n = (await DB.TranslationSong.findByPk(match))?.eng;
+        map.push(new PatternGroupType(1, async function (match: string, options?: QueryOptions) {
+            const n = (await DB.TranslationSong.findByPk(match, options))?.eng;
             if (n === undefined) throw new NotFoundError(match + " is not a known song");
             return n;
         }, generateAOrAnReplacements));
 
         // Costume Name
-        map.push(new PatternGroupType(2, async function (match: string): Promise<string> {
-            const n = (await DB.TranslationSong.findByPk(match))?.eng;
+        map.push(new PatternGroupType(2, async function (match: string, options?: QueryOptions) {
+            const n = (await DB.TranslationSong.findByPk(match, options))?.eng;
             if (n === undefined) throw new NotFoundError(match + " is not a known song");
             return n;
         }, generateAOrAnReplacements));
 
         // Mem Name
-        map.push(new PatternGroupType(3, async function (match: string): Promise<string> {
+        map.push(new PatternGroupType(3, async function (match: string, options?: QueryOptions) {
             const n = (await DB.Card.scope(["memories", "forLink"]).findOne({
+                ...options,
                 where: {
                     nameJpn: match
                 }
@@ -59,12 +61,12 @@ export default class PatternGroupType {
         }, generateAOrAnReplacements));
 
         // Number
-        map.push(new PatternGroupType(4, async function (match: string): Promise<string> {
+        map.push(new PatternGroupType(4, async function (match: string) {
             return Regex.toNumWithFullwidth(match).toFixed(0);
         }, generateNumberReplacements));
 
         // Number Text
-        map.push(new PatternGroupType(5, async function (match: string): Promise<string> {
+        map.push(new PatternGroupType(5, async function (match: string) {
             const n = Regex.toNumWithFullwidth(match);
             if (n === 0) return "zero";
             if (n === 1) return "one";
@@ -83,7 +85,7 @@ export default class PatternGroupType {
         }, generateNumberReplacements));
 
         // Ordinal
-        map.push(new PatternGroupType(6, async function (match: string): Promise<string> {
+        map.push(new PatternGroupType(6, async function (match: string) {
             const n = Regex.toNumWithFullwidth(match);
             const nMod10 = n % 10;
             const nMod100 = n % 100;
@@ -94,7 +96,7 @@ export default class PatternGroupType {
         }, generateNoReplacements));
 
         // Pieces
-        map.push(new PatternGroupType(7, async function (match: string): Promise<string> {
+        map.push(new PatternGroupType(7, async function (match: string) {
             let s = "";
             for (const jpnPieceName of match.substring(1, match.length - 1).split("】【")) {
                 s += "[" + Attribute.get(jpnPieceName as PieceAttributeJpnName).pieceAttributeNameEng + "]";
