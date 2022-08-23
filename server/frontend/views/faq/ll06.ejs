@@ -38,7 +38,7 @@
 
             <h5><a href="/card/LL06-048/">LL06-048 "Kanan Matsuura"</a></h5>
             <div class="question" id="048">
-                What happens if I <%- skillFormat("⟪ENTER⟫") %> with two or less cards in my Deck?
+                What happens if I <%- skillFormat("⟪ENTER⟫") %> this card with two or less cards in my Deck?
             </div>
             <div class="answer">
                 If you have two cards in your Deck, show those two cards, pick one of them to add to your Hand, and return the other to the bottom of your Deck.<br>
@@ -66,130 +66,129 @@
                 What does "three or more different Live Costumes" mean?
             </div>
             <div class="answer">
-                Count how many different Live Costumes your Member cards have (in the lower left).
+                Count how many different Live Costumes your Member cards have (in the lower left).<br>
                 For example, if you have Member cards with the Live Costumes <span class="redtext">"Aozora Jumping Heart"</span>, <span class="redtext">"Aozora Jumping Heart"</span>, <span class="redtext">"Kimi no Kokoro wa Kagayaiteru kai?"</span>, <span class="redtext">"Kimi no Kokoro wa Kagayaiteru kai?"</span> and <span class="redtext">"Koi ni Naritai AQUARIUM"</span>, you have three different Live Costumes.
             </div>
             <div class="question" id="050_live">
-                When performing a Live with this card's skill, do I have to participate in the live costume "Week" that I referred to?
+                If I perform a <%- skillFormat("⟪LIVE⟫") %> using this card's Skill, do the <span class="redtext">"You"</span> cards I counted for the requirement have to join?
             </div>
             <div class="answer">
-                No. Participation is not required.
+                No. They do not have to join the <%- skillFormat("⟪LIVE⟫") %>.
             </div>
             <div class="question" id="050_order">
-                Not all of the waiting members are "Week", but there are 3 or more types of live costumes for "Week".
-                In this case, can I 《Live》 with this skill?
+                Not all of my Members on my Stage are <span class="redtext">"You"</span> cards, but the <span class="redtext">"You"</span> cards have three or more different Live Costumes. Can I use this Skill to perform a <%- skillFormat("⟪LIVE⟫") %>?
             </div>
             <div class="answer">
-                No. If the first condition is not satisfied, nothing will be done after "further ~".
+                No. If the first part of the requirement is not met, you cannot use the second part of the Skill past the "Then...".
             </div>
 
             <h5><a href="/card/LL06-051/">LL06-051 "Yoshiko Tsushima"</a></h5>
             <div class="seealso">
-                See also: <a href="/faq/general#">What if a member has more than one skill?</a>
+                See also: <a href="/faq/general#skill_order_multiple_skills">What if a Member card has two or more
+                    Skills?</a>
             </div>
             <div class="seealso">
-                See also: <a href="/faq/general#">How should I count the number of members?</a>
+                See also: <a href="/faq/general#member_counting">How do I count Members?</a>
             </div>
-            <div class="question" id="051">
-                What do you mean by "If you weren't resting your turn in this game" or "If you weren't resting your turn"?
-            </div>
-            <div class="answer">
-                Mainly by card skills (example: LL01-071 "No brand girls" / "START: DASH!!", LL04-051 "Yoshiko Tsushima")
-                "Rest one (or more) of your turns. ] more than once,
-                It will be "I was resting my turn in this game". Conversely, if you didn't go, it means you didn't rest your turn.
-            </div>
-            <div class="question" id="051">
-                Can I 'rest my turn' by intentionally not performing an action on my turn?
+            <div class="question" id="051_skip">
+                What does "skipped a turn" or "haven't skipped a turn" mean?
             </div>
             <div class="answer">
-                No. Please do either "appearance", "invitation" or "live".
+                You might have to skip a turn due to some Skills (such as <a href="/card/LL01-071/">LL01-071 "No brand girls" / "START:DASH!!"</a> and <a href="/card/LL04-051/">LL04-051 "Yoshiko Tsushima"</a>). If you were affects by such a Skill at least once in this match, you have "skipped a turn". Otherwise, if you haven't had a Skill like that affect you in this match so far, you "haven't skipped a turn".
+            </div>
+            <div class="question" id="051_intent">
+                Can I intentionally skip a turn by not choosing an action on my turn?
+            </div>
+            <div class="answer">
+                No. You must either <%- skillFormat("⟪SCOUT⟫, ⟪ENTER⟫ a card or perform a ⟪LIVE⟫") %>.
             </div>
 
             <h5><a href="/card/LL06-052/">LL06-052 "Hanamaru Kunikida"</a></h5>
             <div class="seealso">
-                See also: <a href="/faq/general#">[When participating in the live] [When the live is successful] What is the order of skills?</a>
+                See also: <a href="/faq/general#join_success_order">What is the order for <%- skillFormat("[Live Join]/[Live Success]") %> Skills?</a>
             </div>
             <div class="question" id="052">
-                If 2 or more of this card participate in the same 《Live》, will all of those pieces become 【All】?
+                If two or more of this card join the same <%- skillFormat("⟪LIVE⟫") %>, can I treat their Pieces as <%- skillFormat("[ALL]") %>, too?
             </div>
             <div class="answer">
-                yes. Each makes the 【Smile】 of the other "Hanamaru" into 【All】, so in the end all the "Hanamaru" pieces become 【All】.
+                Yes. Their Skills will affect each other's <%- skillFormat("[SMILE]") %>, so this results in treating all Pieces of all <span class="redtext">"Hanamaru"</span> cards as <%- skillFormat("[ALL]") %>.
             </div>
 
             <h5><a href="/card/LL06-053/">LL06-053 "Mari Ohara"</a></h5>
             <div class="seealso">
-                See also: <a href="/faq/general#">What if a member has more than one skill?</a>
+                See also: <a href="/faq/general#skill_order_multiple_skills">What if a Member card has two or more
+                    Skills?</a>
             </div>
             <div class="seealso">
-                See also: <a href="/faq/general#">What if the top card of the deck is turned face up?</a>
+                See also: <a href="/faq/general#top_deck_card_faceup">What should I do if I have to turn the top card of my Deck face-up?</a>
             </div>
             <div class="seealso">
-                See also: <a href="/faq/general#">[When participating in the live] [When the live is successful] What is the order of skills?</a>
+                See also: <a href="/faq/general#join_success_order">What is the order for <%- skillFormat("[Live Join]/[Live Success]") %> Skills?</a>
             </div>
 
             <h5><a href="/card/LL06-054/">LL06-054 "Ruby Kurosawa"</a></h5>
             <div class="question" id="054">
-                Does "Appear from the deck" include "Appear" by skills such as LL04-054 "Ruby Kurosawa"?
+                Does the "<%- skillFormat("⟪ENTER⟫") %>ed from your Deck" requirement also count <%- skillFormat("⟪ENTER⟫") %>ing using Skills such as <a href="/card/LL04-054/">LL04-054 "Ruby Kurosawa"</a>?
             </div>
             <div class="answer">
-                yes. This includes not only "Appearance" as an action performed on the turn, but also by skill.
+                Yes. The requirement is not only met if you pick <%- skillFormat("⟪ENTER⟫") %> as your turn action, but also if you use a Skill to <%- skillFormat("⟪ENTER⟫") %> this card.
             </div>
             <div class="question" id="054">
-                If I use Ruby's skill to 《Enter》 from my deck, can I still 《Enter》 the card I drew first?
+                If I <%- skillFormat("⟪ENTER⟫") %> this card using a <span class="redtext">"Ruby"</span> card's Skill, can the card I <%- skillFormat("⟪ENTER⟫") %> from my Hand be one of the cards I drew from the first part of the Skill?
             </div>
             <div class="answer">
-                yes. You can 《appear》.
+                Yes. The drawn cards can be <%- skillFormat("⟪ENTER⟫") %>ed.
             </div>
 
             <h5><a href="/card/LL06-058/">LL06-058 "Jingle Bells ga Tomaranai"</a></h5>
             <div class="seealso">
-                See also: <a href="/faq/general#">Which comes first, opening the song or the [Successful Live] skill?</a>
+                See also: <a href="/faq/general#flip_before_skills">Between flipping over a new Song card from the Set List and the [Live Success] Skills, which one should go first?</a>
             </div>
-            <div class="question" id="058">
-                What does "Member with the fewest member cards participating in this [Live]" mean?
-            </div>
-            <div class="answer">
-                Count the number of participating member cards for each member with a different name participating in this "live".
-                For example, if "Chika" has 3 cards, "You" has 2 cards, and "Riko" has 1 card, "Riko" will be the member with the fewest participating member cards.
-            </div>
-            <div class="question" id="058">
-                Can I choose 0 members for "Member with the fewest participating member cards"?
+            <div class="question" id="058_lowest">
+                What does "Member with the lowest number of cards in this <%- skillFormat("⟪LIVE⟫") %>" mean?
             </div>
             <div class="answer">
-                No. You cannot choose a member who has not participated in even one card.
+                Count how many cards of each differently named Member you have used for this <%- skillFormat("⟪LIVE⟫") %>.<br>
+                For example, if there are three <span class="redtext">"Chika"</span> cards, two <span class="redtext">"You"</span> cards, and one <span class="redtext">"Riko"</span> card joining a <%- skillFormat("⟪LIVE⟫") %>, <span class="redtext">"Riko"</span> is the Member with the lowest number of cards in this <%- skillFormat("⟪LIVE⟫") %>.
             </div>
-            <div class="question" id="058">
-                If there are multiple "members with the fewest participating member cards", can multiple members with different names be selected and "appeared"?
+            <div class="question" id="058_none">
+                When choosing a "Member with the lowest number of cards in this <%- skillFormat("⟪LIVE⟫") %>", can I pick a Member with no cards in this <%- skillFormat("⟪LIVE⟫") %>?
             </div>
             <div class="answer">
-                No. Please choose one member from among the fewest members. Other members cannot 《Appear》.
+                No. You cannot choose a Member who didn't join the <%- skillFormat("⟪LIVE⟫") %> at all.
+            </div>
+            <div class="question" id="058_tie">
+                If there are multiple Members who meet the "Member with the lowest number of cards in this <%- skillFormat("⟪LIVE⟫") %>" requirement, can I pick and <%- skillFormat("⟪ENTER⟫") %> cards for each of them?
+            </div>
+            <div class="answer">
+                No. You must choose one of the tied Members. You cannot <%- skillFormat("⟪ENTER⟫") %> cards of the other Members.
             </div>
 
             <h5><a href="/card/LL06-059/">LL06-059 "Seinaru Hi no Inori"</a></h5>
-            <div class="question" id="059">
-                In a two-player game, can the second player use skills?
+            <div class="question" id="059_two">
+                In a two-player game, can the second player use this Skill?
             </div>
             <div class="answer">
-                yes. Regardless of how many people are participating in the game, the condition is satisfied if the order to take the turn is the last.
+                Yes. No matter how many people are playing in the match, the requirement is met for whoever is the last to take their turn.
             </div>
-            <div class="question" id="059">
-                The game was played by 3 people, and the 3rd player won. After that, can the 2nd player use the skill?
+            <div class="question" id="059_move">
+                There are three players in the match, and the third player in the turn order won. Can the second player now use this Skill?
             </div>
             <div class="answer">
-                No. We only look at the order decided in the game preparation, so the last player will not be moved up by winning.
+                No. Only the order as it was decided during setup counts, so the player who is last in the turn order doesn't change.
             </div>
 
             <h5><a href="/card/LL06-061/">LL06-061 "Sora mo Kokoro mo Hareru kara"</a></h5>
             <div class="seealso">
-                See also: <a href="/faq/general#">What if you use a skill to turn face-up cards in the set list face-down?</a>
+                See also: <a href="/faq/general#no_shuffle_facedown_song">What should I do if I have to flip a Song card in my Set List face-down?</a>
             </div>
             <div class="seealso">
-                See also: <a href="/faq/general#">[When participating in the live] [When the live is successful] What is the order of skills?</a>
+                See also: <a href="/faq/general#join_success_order">What is the order for <%- skillFormat("[Live Join]/[Live Success]") %> Skills?</a>
             </div>
 
             <h5><a href="/card/LL06-062/">LL06-062 "Waku-Waku-Week!"</a></h5>
             <div class="seealso">
-                See also: <a href="/faq/general#">[When participating in the live] [When the live is successful] What is the order of skills?</a>
+                See also: <a href="/faq/general#join_success_order">What is the order for <%- skillFormat("[Live Join]/[Live Success]") %> Skills?</a>
             </div>
         </div>
     </div>

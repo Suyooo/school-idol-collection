@@ -125,6 +125,7 @@ let faqresult = `<%- include("../partials/header", {"title": "${faqname} FAQ &bu
 `;
 
 (async () => {
+    await DB.syncPromise;
     let cursetno: string | undefined = undefined;
     while (tlresult.length > 0) {
         let nlindex = tlresult.indexOf("\n");

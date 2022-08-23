@@ -2,10 +2,10 @@ import DB from "../models/db";
 import * as fs from "fs";
 import Card from "../models/card/card";
 
-const faqpage = "/faq/LL05";
-let faqtext = fs.readFileSync("frontend/views/faq/ll05.ejs").toString();
+const faqpage = "/faq/LL06";
+let faqtext = fs.readFileSync("server/frontend/views/faq/ll06.ejs").toString();
 
-faqtext = faqtext.replace(/<%- skillFormat\("([\s\S]*?)", ?1, ?false\) %>/g, (match, p1) => p1.replace(/\\"/g, "\""));
+faqtext = faqtext.replace(/<%- skillFormat\("([\s\S]*?)"\) %>/g, (match, p1) => p1.replace(/\\"/g, "\""));
 faqtext = faqtext.replace(/<%- ([\s\S]*?) %>/g, "");
 faqtext = faqtext.replace(/<span class="redtext">([\s\S]*?)<\/span>/g, "$1");
 faqtext = faqtext.replace(/<a href="\/card\/[\s\S]*?">([\s\S]*?)<\/a>/g, "$1");
@@ -19,6 +19,7 @@ faqtext = faqtext.replace(/\n/g, " ");
 let currentIds: number[] = [];
 let count = 1;
 (async () => {
+    await DB.syncPromise;
     while (faqtext.length > 0) {
         if (faqtext.startsWith("<h5>")) {
             let content = "";
