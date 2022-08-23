@@ -57,20 +57,19 @@ PatternRouter.get("/edit/:patternno/", async (req, res) => {
     });
 });
 
-PatternRouter.get("/edit/:patternno/:cardno/:line/", async (req, res) => {
+PatternRouter.get("/edit/:patternno/:skillno/", async (req, res) => {
     const pattern = await DB.TranslationPattern.findByPk(parseInt(req.params.patternno));
-    const card = await DB.Card.findByPk(req.params.cardno, {include: [DB.Skill]});
-    const skillLine = card?.skills[parseInt(req.params.line)].jpn;
-    if (pattern === null || skillLine === undefined) {
+    const skill = await DB.Skill.findByPk(req.params.skillno);
+    if (pattern === null || skill === null) {
         res.status(404);
         res.send("");
         return;
     }
 
-    const {skill} = splitTriggersFromSkill(skillLine);
+    const {skill: example} = splitTriggersFromSkill(skill.jpn);
     res.render("pattern/create", {
         id: pattern.id,
-        example: skill,
+        example: example,
         triggerIds: pattern.triggerArray.map(t => t.id),
         regex: pattern.regex,
         template: pattern.template,

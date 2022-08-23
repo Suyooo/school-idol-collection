@@ -2,7 +2,7 @@ function submit() {
     const data = {
         id: patternid,
         applyTo: $("input.assign[type=checkbox]:checked").toArray()
-            .map(e => [parseInt($(e).data("skill")), parseInt($(e).data("line"))])
+            .map(e => parseInt($(e).data("skill")))
     };
 
     $.ajax({

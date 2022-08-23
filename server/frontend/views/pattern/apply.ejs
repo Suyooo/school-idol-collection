@@ -12,7 +12,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <% applicable.forEach(function(a) { %>
+                <% for (const a of applicable) { %>
                     <tr>
                         <% if (a.hasOwnProperty("cardNo")) { %>
                             <th><a href="/card/<%= a.cardNo %>/"><%= a.cardNo %></a></th>
@@ -21,10 +21,9 @@
                         <% } %>
                         <td><%= a.skillJpn %></td>
                         <td><%= a.skillEng %></td>
-                        <td><input class="assign" type="checkbox" data-skill="<%= a.skillId %>"
-                                   data-line="<%= a.line %>"></td>
+                        <td><input class="assign" type="checkbox" data-skill="<%= a.skillId %>"></td>
                     </tr>
-                <% }); %>
+                <% } %>
                 <tr>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
@@ -35,7 +34,7 @@
             </table>
             <a class="button button-primary" id="submit" style="float: right">Submit</a>
             <a class="button button-primary" id="edit"
-               href="/pattern/edit/<%- id %><% if (applicable.length > 0 && applicable[0].hasOwnProperty("cardNo")) { %>/<%- applicable[0].cardNo %>/<%- applicable[0].line %> <% } %>"
+               href="/pattern/edit/<%- id %>/<%- applicable[0]?.skillId %>/"
                style="float: left">Edit</a>
         </div>
     </div>

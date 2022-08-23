@@ -21,80 +21,71 @@ export function splitTriggersFromSkill(skillLine: string): { skill: string, trig
 }
 
 export async function listUntranslatedSkills()
-    : Promise<({ cardNo: string, skill: string, line: number } | { groupId: number, firstCardNo: string, skill: string, line: number })[]> {
-    const allSkills: (Card | CardMemberGroup)[] = (await DB.Card.scope(["hasSkill"]).findAll({
-        attributes: ["cardNo"], include: [DB.Skill]
-    }) as (Card | CardMemberGroup)[]).concat(await DB.CardMemberGroup.scope(["hasSkill"]).findAll({
-        attributes: ["id"], include: [DB.Skill, DB.CardMemberExtraInfo]
-    }));
-    return allSkills.flatMap(skillObj => {
-        const skillLineCount = skillObj.skills.length;
-        const translatedLineIds = skillObj.skills.filter(s => s.eng !== null).map(s => s.line);
-        if (skillLineCount === translatedLineIds.length) return [];
-
-        return skillObj.skills
-            .filter((s, i) => translatedLineIds.indexOf(i) === -1)
-            .map((s, i) => <{ cardNo: string, skill: string, line: number } | { groupId: number, firstCardNo: string, skill: string, line: number }>
-                (skillObj instanceof Card
-                    ? {cardNo: skillObj.cardNo, skill: s.jpn, line: i}
-                    : {groupId: skillObj.id, firstCardNo: skillObj.memberExtraInfos[0].cardNo, skill: s.jpn, line: i}));
+    : Promise<({ cardNo: string, skill: string, skillId: number } | { groupId: number, firstCardNo: string, skill: string, skillId: number })[]> {
+    const allSkills = await DB.Skill.findAll({
+        where: {eng: null},
+        include: [{model: DB.CardMemberGroup, include: [{model: DB.CardMemberExtraInfo, attributes: ["cardNo"]}]}]
     });
+
+    return allSkills.map(skillObj => (<{ cardNo: string, skill: string, skillId: number } | { groupId: number, firstCardNo: string, skill: string, skillId: number }>
+        (skillObj.cardNo !== null
+            ? {cardNo: skillObj.cardNo, skill: skillObj.jpn, skillId: skillObj.id}
+            : {
+                groupId: skillObj.groupId,
+                firstCardNo: skillObj.group.memberExtraInfos[0].cardNo,
+                skill: skillObj.jpn,
+                skillId: skillObj.id
+            }))
+    );
 }
 
 export async function getApplicableSkills(pattern: TranslationPattern)
-    : Promise<({ cardNo: string, line: number, skillId: number, skillJpn: string, skillEng: string } |
-    { groupId: number, firstCardNo: string, line: number, skillId: number, skillJpn: string, skillEng: string })[]> {
+    : Promise<({ cardNo: string, skillId: number, skillJpn: string, skillEng: string } |
+    { groupId: number, firstCardNo: string, skillId: number, skillJpn: string, skillEng: string })[]> {
     const res = [];
-    const allSkills: (Card | CardMemberGroup)[] = (await DB.Card.scope(["hasSkill"]).findAll({
-        attributes: ["cardNo"], include: [DB.Skill]
-    }) as (Card | CardMemberGroup)[]).concat(await DB.CardMemberGroup.scope(["hasSkill"]).findAll({
-        attributes: ["id"], include: [DB.Skill, DB.CardMemberExtraInfo]
-    }));
+    const allSkills = await DB.Skill.findAll({
+        include: [{model: DB.CardMemberGroup, include: [{model: DB.CardMemberExtraInfo, attributes: ["cardNo"]}]}]
+    });
+
     for (const skillObj of allSkills) {
-        let i = 0;
-        for (const skillLine of skillObj.skills) {
-            const {skill, triggers} = splitTriggersFromSkill(skillLine.jpn);
-            const appliedPattern = await applyPatternOrNull(skill, triggers, pattern);
-            if (appliedPattern !== null) {
-                res.push(skillObj instanceof Card
-                    ? {
-                        cardNo: skillObj.cardNo,
-                        line: i,
-                        skillId: skillLine.id,
-                        skillJpn: skill,
-                        skillEng: appliedPattern
-                    }
-                    : {
-                        groupId: skillObj.id,
-                        firstCardNo: skillObj.memberExtraInfos[0].cardNo,
-                        line: i,
-                        skillId: skillLine.id,
-                        skillJpn: skill,
-                        skillEng: appliedPattern
-                    });
-            }
-            i++;
+        const {skill, triggers} = splitTriggersFromSkill(skillObj.jpn);
+        const appliedPattern = await applyPatternOrNull(skill, triggers, pattern);
+        if (appliedPattern !== null) {
+            res.push(skillObj.cardNo !== null
+                ? {
+                    cardNo: skillObj.cardNo,
+                    skillId: skillObj.id,
+                    skillJpn: skill,
+                    skillEng: appliedPattern
+                }
+                : {
+                    groupId: skillObj.id,
+                    firstCardNo: skillObj.group.memberExtraInfos[0].cardNo,
+                    skillId: skillObj.id,
+                    skillJpn: skill,
+                    skillEng: appliedPattern
+                });
         }
     }
     return res;
 }
 
-export async function applyPatternToSkills(pattern: TranslationPattern, applyTo: [number, number][]) {
+export async function applyPatternToSkills(pattern: TranslationPattern, applyTo: number[]) {
     for (const application of applyTo) {
-        const skillLine = await DB.Skill.findOne({where: {id: application[0], line: application[1]}});
-        if (skillLine === null) {
-            throw new PatternApplyError(Error("Pattern should be applied to Skill #" + application.join(", line") + ", but it does not exist"), pattern, "---");
+        const skillObj = await DB.Skill.findByPk(application);
+        if (skillObj === null) {
+            throw new PatternApplyError(Error("Pattern should be applied to Skill #" + application + ", but it does not exist"), pattern, "---");
         }
 
-        const {skill, triggers} = splitTriggersFromSkill(skillLine.jpn);
+        const {skill, triggers} = splitTriggersFromSkill(skillObj.jpn);
         const translatedSkill = await applyPatternOrNull(skill, triggers, pattern);
         if (translatedSkill === null) {
-            throw new PatternApplyError(Error("Pattern should be applied to Skill #" + application.join(", line ") + ", but its regex does not match the Skill"), pattern, skillLine.jpn);
+            throw new PatternApplyError(Error("Pattern should be applied to Skill #" + application + ", but its regex does not match the Skill"), pattern, skillObj.jpn);
         }
 
-        skillLine.eng = triggers.map(t => "[" + t.nameEng + "]").join("/") + " " + translatedSkill;
-        skillLine.patternId = pattern.id;
-        await skillLine.save();
+        skillObj.eng = triggers.map(t => "[" + t.nameEng + "]").join("/") + " " + translatedSkill;
+        skillObj.patternId = pattern.id;
+        await skillObj.save();
     }
 }
 
