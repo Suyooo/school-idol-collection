@@ -42,6 +42,11 @@ export default class SiteCardFormattingWrapper {
             this.copyright = card.copyright;
             this.faqs = card.faqs;
 
+            if (this.card.skills !== undefined) {
+                this.skillJpn = this.card.skills.map(s => SkillFormatter.JPN.formatCardSkill(s.jpn, s.annotations.filter(a => !a.isEng))).join("<br>") || "ー";
+                this.skillEng = this.card.skills.map(s => SkillFormatter.ENG.formatCardSkill(s.eng, s.annotations.filter(a => a.isEng))).join("<br>") || "ー";
+            }
+
             if (card.linkedBy !== undefined) {
                 const backlinkSet: Set<string> = new Set();
                 for (const annotation of card.linkedBy) {
@@ -108,13 +113,6 @@ export default class SiteCardFormattingWrapper {
         } else {
             this.nextCardNo = nextCard.cardNo;
         }
-
-        this.skillJpn = this.card.skills.map(s => SkillFormatter.JPN.formatCardSkill(s.jpn, s.annotations.filter(a => !a.isEng))).join("<br>") || "ー";
-        this.skillEng = this.card.skills.map(s => SkillFormatter.ENG.formatCardSkill(s.eng, s.annotations.filter(a => a.isEng))).join("<br>") || "ー";
-
-        if (this.isMember() && this.hasGroup()) {
-            await this.prepareGroupAsyncProperties();
-        }
     }
 
     prevCardNo: string | null;
@@ -177,16 +175,13 @@ export default class SiteCardFormattingWrapper {
             const memberLinks = [];
             for (const member of this.card.member.group.members) {
                 if (member.id === this.card.id) continue;
-                memberLinks.push('<a href="/card/' + member.cardNo + '/">' + new SiteCardFormattingWrapper(member).title + '</a>');
+                memberLinks.push('<a href="/card/' + member.cardNo + '/">' + new SiteCardFormattingWrapper(member, true).title + '</a>');
             }
             this.groupMembers = memberLinks.join(" ");
             this.groupType = this.card.member.group.type == CardMemberGroupType.PAIR ? "Pair" : "Trio";
 
-            this.prepareGroupAsyncProperties = async () => {
-                assertIsFormattingMemberWithGroup(this);
-                this.groupSkillJpn = this.card.member.group.skills.map(s => SkillFormatter.JPN.formatCardSkill(s.jpn, s.annotations.filter(a => !a.isEng))).join("<br>") || "ー";
-                this.groupSkillEng = this.card.member.group.skills.map(s => SkillFormatter.ENG.formatCardSkill(s.eng, s.annotations.filter(a => a.isEng))).join("<br>") || "ー";
-            }
+            this.groupSkillJpn = this.card.member.group.skills.map(s => SkillFormatter.JPN.formatCardSkill(s.jpn, s.annotations.filter(a => !a.isEng))).join("<br>") || "ー";
+            this.groupSkillEng = this.card.member.group.skills.map(s => SkillFormatter.ENG.formatCardSkill(s.eng, s.annotations.filter(a => a.isEng))).join("<br>") || "ー";
 
             return true;
         }
@@ -258,8 +253,6 @@ interface SiteCardMemberWithGroupFormattingWrapper extends SiteCardMemberFormatt
 
     groupMembers: string;
     groupType: string;
-
-    prepareGroupAsyncProperties: () => Promise<void>;
 
     groupSkillJpn: string;
     groupSkillEng: string;

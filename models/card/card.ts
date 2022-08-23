@@ -135,7 +135,10 @@ export const CardOrder = (col: string) =>
                         DB.Card,
                         {
                             model: DB.CardMemberGroup,
-                            include: [DB.CardMemberExtraInfo]
+                            include: [{
+                                model: DB.CardMemberExtraInfo,
+                                include: [DB.Card]
+                            }]
                         }
                     ]
                 }]
