@@ -11,7 +11,7 @@ import {
 } from "sequelize-typescript";
 import CardSongRequirementType from "../../types/cardSongRequirementType";
 import {CardSongRarity} from "../../types/cardRarity";
-import Attribute from "../../types/attribute";
+import Attribute, {AttributeID} from "../../types/attribute";
 import Card from "./card";
 import CardSongAnyReqExtraInfo from "./songAnyReqExtraInfo";
 import CardSongAttrReqExtraInfo from "./songAttrReqExtraInfo";
@@ -53,7 +53,7 @@ export default class CardSongExtraInfo extends Model {
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
-    attribute!: Attribute;
+    attribute!: AttributeID;
 
     @AllowNull(false)
     @Column

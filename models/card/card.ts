@@ -23,7 +23,7 @@ import CardFAQLink from "./faqLink";
 import CardType from "../../types/cardType";
 import CardSongRequirementType from "../../types/cardSongRequirementType";
 import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
-import Attribute from "../../types/attribute";
+import Attribute, {AttributeID} from "../../types/attribute";
 import CardMemberGroup from "./memberGroup";
 import Skill from "../skill/skill";
 
@@ -216,7 +216,7 @@ export class CardMember extends Card {
 export class CardMemberHasBirthdayPieces extends CardMember {
     member!:
         Omit<CardMemberExtraInfo, "pieceBdayAttribute">
-        & { pieceBdayAttribute: Attribute };
+        & { pieceBdayAttribute: AttributeID };
 }
 
 export class CardMemberIdolizable extends CardMember {

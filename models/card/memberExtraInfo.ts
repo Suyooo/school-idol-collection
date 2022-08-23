@@ -17,7 +17,7 @@ import CardMemberGroup from "./memberGroup";
 
 import {pieceInfoGetter} from "../utils/pieceInfoGetterSetter";
 
-import Attribute from "../../types/attribute";
+import Attribute, {AttributeID} from "../../types/attribute";
 import CardMemberIdolizeType from "../../types/cardMemberIdolizeType";
 import {CardMemberRarity} from "../../types/cardRarity";
 import PieceInfo from "../../types/pieceInfo";
@@ -95,7 +95,7 @@ export default class CardMemberExtraInfo extends Model {
     }
 
     @Column(DataType.NUMBER)
-    pieceBdayAttribute!: Attribute | null;
+    pieceBdayAttribute!: AttributeID | null;
 
     @Column(DataType.STRING)
     costumeJpn!: string | null;

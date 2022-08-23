@@ -12,7 +12,7 @@ import {
 import Card from "../card/card";
 import Link from "./link";
 import CardMemberGroup from "../card/memberGroup";
-import AnnotationType, {AnnotationKey} from "../../types/annotationType";
+import AnnotationType, {AnnotationTypeID, AnnotationTypeKey} from "../../types/annotationType";
 import Annotation from "../../formatting/annotation";
 import DB from "../db";
 import Skill from "./skill";
@@ -45,7 +45,7 @@ export default class AnnotationRecord extends Model {
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
-    type!: AnnotationType;
+    type!: AnnotationTypeID;
 
     @AllowNull(false)
     @Column

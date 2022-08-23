@@ -1,13 +1,13 @@
-export type AnnotationKey = "card" | "song" | "mem" | "costume" | "skilltext";
-export type AnnotationID = 0 | 1 | 2 | 3 | 4;
-type MappedValue = AnnotationID | AnnotationKey;
+export type AnnotationTypeKey = "card" | "song" | "mem" | "costume" | "skilltext";
+export type AnnotationTypeID = 0 | 1 | 2 | 3 | 4;
+type MappedValue = AnnotationTypeID | AnnotationTypeKey;
 
 export default class AnnotationType {
-    readonly id: AnnotationID;
-    readonly key: AnnotationKey;
+    readonly id: AnnotationTypeID;
+    readonly key: AnnotationTypeKey;
 
     private constructor(map: Map<MappedValue, AnnotationType>,
-                        id: AnnotationID, key: AnnotationKey) {
+                        id: AnnotationTypeID, key: AnnotationTypeKey) {
         this.id = id;
         this.key = key;
 
@@ -27,7 +27,7 @@ export default class AnnotationType {
         return map;
     })();
 
-    static get(key: AnnotationKey): AnnotationType {
+    static get(key: AnnotationTypeKey): AnnotationType {
         return AnnotationType.map.get(key) as AnnotationType;
     }
 }

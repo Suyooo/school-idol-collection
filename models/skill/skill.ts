@@ -1,21 +1,26 @@
 import {
-    AfterCreate, AfterSave, AfterUpdate, AfterUpsert,
+    AfterCreate,
+    AfterUpdate,
     AllowNull,
-    AutoIncrement, BeforeSave, BeforeUpdate, BeforeUpsert,
+    AutoIncrement,
+    BeforeUpdate,
     BelongsTo,
-    Column, DataType,
+    Column,
+    DataType,
     ForeignKey,
     Min,
     Model,
     PrimaryKey,
     Table
 } from "sequelize-typescript";
+import {QueryOptions} from "sequelize";
+import DB from "../db";
+
 import Card from "../card/card";
 import CardMemberGroup from "../card/memberGroup";
 import TranslationPattern from "../translation/pattern";
-import DB from "../db";
-import AnnotationType, {AnnotationKey} from "../../types/annotationType";
-import {QueryOptions} from "sequelize";
+
+import AnnotationType, {AnnotationTypeKey} from "../../types/annotationType";
 
 @Table({timestamps: false})
 export default class Skill extends Model {
@@ -59,9 +64,15 @@ export default class Skill extends Model {
     @BeforeUpdate
     static async clearAnnotations(skill: Skill, options: QueryOptions) {
         if (skill.changed("jpn"))
-            await DB.AnnotationRecord.destroy({where: {skillId: skill.id, isEng: false}, transaction: options.transaction });
+            await DB.AnnotationRecord.destroy({
+                where: {skillId: skill.id, isEng: false},
+                transaction: options.transaction
+            });
         if (skill.changed("eng"))
-            await DB.AnnotationRecord.destroy({where: {skillId: skill.id, isEng: true}, transaction: options.transaction});
+            await DB.AnnotationRecord.destroy({
+                where: {skillId: skill.id, isEng: true},
+                transaction: options.transaction
+            });
     }
 
     @AfterCreate
@@ -69,24 +80,22 @@ export default class Skill extends Model {
     static async recordAnnotations(skill: Skill, options: QueryOptions) {
         if (skill.changed("jpn")) {
             for (const [_, key, parameter] of skill.jpn.matchAll(/{{(.*?):(.*?)}}/g)) {
-                console.log(key, parameter);
                 await DB.AnnotationRecord.create({
                     skillId: skill.id,
                     isEng: false,
-                    type: AnnotationType.get(key as AnnotationKey).id,
+                    type: AnnotationType.get(key as AnnotationTypeKey).id,
                     parameter
                 }, {transaction: options.transaction});
             }
         }
         if (skill.changed("eng") && skill.eng !== null) {
             for (const [_, key, parameter] of skill.eng.matchAll(/{{(.*?):(.*?)}}/g)) {
-                console.log(key,parameter);
                 await DB.AnnotationRecord.create({
                     skillId: skill.id,
                     isEng: true,
-                    type: AnnotationType.get(key as AnnotationKey).id,
+                    type: AnnotationType.get(key as AnnotationTypeKey).id,
                     parameter
-                }, { transaction: options.transaction });
+                }, {transaction: options.transaction});
             }
         }
     }

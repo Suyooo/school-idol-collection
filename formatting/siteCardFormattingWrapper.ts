@@ -14,6 +14,7 @@ import pieceFormat from "./pieceFormat";
 import DB from "../models/db";
 import CardMemberIdolizeType from "../types/cardMemberIdolizeType";
 import CardSongAttrReqExtraInfo from "../models/card/songAttrReqExtraInfo";
+import Attribute from "../types/attribute";
 
 function assertIsFormattingMember(obj: unknown): asserts obj is SiteCardMemberFormattingWrapper {
 }
@@ -162,7 +163,7 @@ export default class SiteCardFormattingWrapper {
 
             this.piecesBirthday = "<b>+</b> "
                 + pieceFormat(new PieceInfo(0, 0, 0, 0)
-                    .addPiece(this.card.member.pieceBdayAttribute), Language.ENG);
+                    .addPiece(Attribute.get(this.card.member.pieceBdayAttribute)), Language.ENG);
 
             return true;
         }
@@ -207,7 +208,7 @@ export default class SiteCardFormattingWrapper {
         assertIsFormattingSong(this);
         if (this.attribute !== undefined) return true;
 
-        this.attribute = this.card.song.attribute.songAttributeNameEng;
+        this.attribute = Attribute.get(this.card.song.attribute).songAttributeNameEng;
 
         let lpBonus: string = "";
         if (this.card.song.lpBonus !== null) {
