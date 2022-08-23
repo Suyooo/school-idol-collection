@@ -28,6 +28,6 @@ export default class AnnotationType {
     })();
 
     static get(key: AnnotationTypeKey): AnnotationType {
-        return AnnotationType.map.get(key) as AnnotationType;
+        return AnnotationType.map.get(key)!;
     }
 }

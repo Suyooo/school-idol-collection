@@ -1,4 +1,4 @@
-import Trigger from "./trigger";
+import Trigger from "../translation/trigger";
 import Attribute from "./attribute";
 
 export default class Language {

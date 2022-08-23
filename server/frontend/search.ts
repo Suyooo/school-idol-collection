@@ -5,96 +5,25 @@ import {ModelType} from "sequelize-typescript";
 import {Includeable, Op} from "sequelize";
 import SearchFilterError from "../../errors/searchFilterError";
 import CardType from "../../types/cardType";
+import {getSearchFilter} from "../../search/options";
+import searchQuery from "../../search/query";
 
 const SearchRouter = express.Router();
 export default SearchRouter;
 
-function makeIncludable(model: ModelType<any, any>, includables?: Includeable[], required: boolean = true): Includeable {
-    const ret: any = {
-        model: model,
-        attributes: [],
-        required: required
-    };
-    if (includables !== undefined) {
-        ret.include = includables;
-    }
-    return ret;
-}
-
 SearchRouter.get("/*/", async (req, res) => {
-    let where: any = {};
-    const queries: string[] = [];
-    const includes = {
-        "member": false,
-        "skills": false
-    };
-
-    const setConditions = (filter: string, conditions: any) => {
-        where = {...where, ...conditions};
-    }
+    const filters = [];
 
     try {
-        const filters = (req.params as { "0": string })["0"].split("/");
-        if (filters.length === 0) {
+        const filterStrings = (req.params as { "0": string })["0"].split("/");
+        if (filterStrings.length === 0) {
             throw new SearchFilterError("No filters specified", "missing");
         }
 
-        for (const filter of filters) {
-            if (filter.length === 0) continue;
-            const splitAt = filter.split(":");
-            if (splitAt.length === 1) {
-                if (filter === "member") {
-                    setConditions(filter, {"type": CardType.MEMBER});
-                    queries.push("Members");
-                } else if (filter === "song") {
-                    setConditions(filter, {"type": CardType.SONG});
-                    queries.push("Song");
-                } else if (filter === "memory") {
-                    setConditions(filter, {"type": CardType.MEMORY});
-                    queries.push("Memory");
-                } else {
-                    throw new SearchFilterError("Unknown filter or wrong number of arguments", filter);
-                }
-            } else if (splitAt.length === 2) {
-                const [key, value] = splitAt;
-                if (key === "") {
-                    throw new SearchFilterError("Filter has an empty name", filter);
-                }
-                if (value === "") {
-                    throw new SearchFilterError("Filter has an empty argument", filter);
-                }
-                if (key === "name") {
-                    setConditions(filter, {
-                        [Op.or]: [
-                            {"nameJpn": {[Op.like]: "%" + value + "%"}},
-                            {"nameEng": {[Op.like]: "%" + value + "%"}}
-                        ]
-                    });
-                    queries.push("Name contains \"" + value + "\"");
-                } else if (key === "costume") {
-                    setConditions(filter, {
-                        [Op.or]: [
-                            {"$member.costumeJpn$": {[Op.like]: "%" + value + "%"}},
-                            {"$member.costumeEng": {[Op.like]: "%" + value + "%"}}
-                        ]
-                    });
-                    queries.push("Costume contains \"" + value + "\"");
-                    includes.member = true;
-                } else if (key === "skill") {
-                    setConditions(filter, {
-                        [Op.or]: [
-                            {"$skills.jpn$": {[Op.like]: "%" + value + "%"}},
-                            {"$skills.eng$": {[Op.like]: "%" + value + "%"}}
-                        ]
-                    });
-                    queries.push("Skill contains \"" + value + "\"");
-                    includes.skills = true;
-                } else {
-                    throw new SearchFilterError("Unknown filter or wrong number of arguments", filter);
-                }
-            } else {
-                throw new SearchFilterError("Unknown filter or wrong number of arguments", filter);
-            }
+        for (const filterString of filterStrings) {
+            if (filterString.length === 0) continue;
+            const split = filterString.split(":");
+            filters.push(new (getSearchFilter(split[0]))(split));
         }
     } catch (e) {
         if (e instanceof SearchFilterError) {
@@ -106,19 +35,8 @@ SearchRouter.get("/*/", async (req, res) => {
         }
     }
 
-    const includeArr = [];
-    if (includes.member) {
-        includeArr.push(makeIncludable(DB.CardMemberExtraInfo));
-    }
-    if (includes.skills) {
-        includeArr.push(makeIncludable(DB.Skill));
-    }
-
     res.render("search", {
-        "queries": queries,
-        "cards": (await DB.Card.scope(["forGrid"]).findAll({
-            where: where,
-            include: includeArr
-        })).map(c => new SiteCardFormattingWrapper(c, true))
+        "queries": filters.map(f => f.getExplainString()),
+        "cards": (await searchQuery(filters)).map(c => new SiteCardFormattingWrapper(c, true))
     });
 });

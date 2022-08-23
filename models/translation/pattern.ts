@@ -7,8 +7,8 @@ import {
     Table
 } from "sequelize-typescript";
 
-import Trigger, {TriggerID, TriggerNameJpn} from "../../types/trigger";
-import PatternGroupType, {PatternGroupTypeID} from "../../types/patternGroupType";
+import Trigger, {TriggerID} from "../../translation/trigger";
+import PatternGroupType, {PatternGroupTypeID} from "../../translation/patternGroupType";
 import DB from "../db";
 import {escapeForRegex} from "../../utils/regex";
 import {splitTriggersFromSkill} from "../../translation/skills";

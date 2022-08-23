@@ -1,11 +1,9 @@
 import * as Grammar from "../utils/grammar";
 import * as Regex from "../utils/regex";
-import CardType from "./cardType";
-import Attribute, {PieceAttributeJpnName} from "./attribute";
+import Attribute, {PieceAttributeJpnName} from "../types/attribute";
 import DB from "../models/db";
 import NotFoundError from "../errors/notFoundError";
 import MissingTranslationError from "../errors/missingTranslationError";
-import {Op} from "sequelize";
 
 const skilltextPattern = /{{skilltext:([^}]*?)}}/;
 
@@ -108,7 +106,7 @@ export default class PatternGroupType {
     })();
 
     static get(key: PatternGroupTypeID): PatternGroupType {
-        return PatternGroupType.map[key] as PatternGroupType;
+        return PatternGroupType.map[key]!;
     }
 }
 

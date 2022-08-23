@@ -50,6 +50,6 @@ export default class Trigger {
     })();
 
     static get(key: MappedValue): Trigger {
-        return Trigger.map.get(key) as Trigger;
+        return Trigger.map.get(key)!;
     }
 }

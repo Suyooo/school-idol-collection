@@ -1,7 +1,7 @@
 import DB from "../../models/db";
 import express from "express";
-import Trigger, {TriggerID} from "../../types/trigger";
-import PatternGroupType, {PatternGroupTypeID} from "../../types/patternGroupType";
+import Trigger, {TriggerID} from "../../translation/trigger";
+import PatternGroupType, {PatternGroupTypeID} from "../../translation/patternGroupType";
 import {applyPatternToSkills} from "../../translation/skills";
 
 const APIPatternRouter = express.Router();

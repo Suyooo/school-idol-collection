@@ -1,7 +1,7 @@
 import DB from "../models/db";
 import TranslationPattern from "../models/translation/pattern";
 import PatternApplyError from "../errors/patternApplyError";
-import Trigger, {TriggerNameJpn} from "../types/trigger";
+import Trigger, {TriggerNameJpn} from "./trigger";
 import CardMemberGroup from "../models/card/memberGroup";
 import Card from "../models/card/card";
 

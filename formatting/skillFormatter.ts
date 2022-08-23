@@ -1,6 +1,6 @@
 import Language from "../types/language";
 import Annotation from "./annotation";
-import Trigger, {TriggerNameEng, TriggerNameJpn} from "../types/trigger";
+import Trigger, {TriggerNameEng, TriggerNameJpn} from "../translation/trigger";
 import Attribute, {PieceAttributeEngName, PieceAttributeJpnName} from "../types/attribute";
 import PieceInfo from "../types/pieceInfo";
 import {toNumWithFullwidth} from "../utils/regex";

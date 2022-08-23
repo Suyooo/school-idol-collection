@@ -54,6 +54,6 @@ export default class Attribute {
     })();
 
     static get(key: MappedValue): Attribute {
-        return Attribute.map.get(key) as Attribute;
+        return Attribute.map.get(key)!;
     }
 }
