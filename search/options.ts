@@ -28,7 +28,7 @@ export abstract class SearchFilter0 extends SearchFilter {
 }
 
 export abstract class SearchFilter1 extends SearchFilter {
-    param: any;
+    param: string;
 
     constructor(split?: string[]) {
         super(split);
@@ -64,6 +64,14 @@ export class SearchFilterMemory extends SearchFilterCardType {
     readonly key = "memory";
     readonly type = CardType.MEMORY;
     getExplainString = () => "Memories";
+}
+
+export class SearchFilterCardID extends SearchFilter1 {
+    readonly key = "id";
+
+    getWhereOptions = () => ({id: parseInt(this.param)});
+    getIncludeOptions = () => <IncludeOptions[]>[];
+    getExplainString = () => "Card ID " + this.param;
 }
 
 export abstract class SearchFilterTranslatableLike extends SearchFilter1 {
@@ -108,6 +116,7 @@ const map = new Map<string, new (split?: string[]) => SearchFilter>([
     ["member", SearchFilterMember],
     ["song", SearchFilterSong],
     ["memory", SearchFilterMemory],
+    ["id", SearchFilterCardID],
     ["name", SearchFilterName],
     ["costume", SearchFilterCostume],
     ["skill", SearchFilterSkill]

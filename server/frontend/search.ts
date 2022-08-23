@@ -37,6 +37,6 @@ SearchRouter.get("/*/", async (req, res) => {
 
     res.render("search", {
         "queries": filters.map(f => f.getExplainString()),
-        "cards": (await searchQuery(filters)).map(c => new SiteCardFormattingWrapper(c, true))
+        "cards": (await searchQuery(filters, "forGrid")).map(c => new SiteCardFormattingWrapper(c, true))
     });
 });

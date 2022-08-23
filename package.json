@@ -28,7 +28,6 @@
     "winston": "^3.6.0"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.5.0",
     "@types/express": "^4.17.13",
     "@types/jquery": "^3.5.11",
     "@types/winston": "^2.4.4",

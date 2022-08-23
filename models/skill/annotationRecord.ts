@@ -11,10 +11,7 @@ import {
 } from "sequelize-typescript";
 import Card from "../card/card";
 import Link from "./link";
-import CardMemberGroup from "../card/memberGroup";
-import AnnotationType, {AnnotationTypeID, AnnotationTypeKey} from "../../types/annotationType";
-import Annotation from "../../formatting/annotation";
-import DB from "../db";
+import AnnotationType, {AnnotationTypeID} from "../../types/annotationType";
 import Skill from "./skill";
 
 @Table({
@@ -53,4 +50,8 @@ export default class AnnotationRecord extends Model {
 
     @BelongsToMany(() => Card, {through: {model: () => Link, unique: false}})
     linksTo!: Array<Card & { Link: Link }>;
+
+    getAnnotationString() {
+        return "{{" + AnnotationType.get(this.type).key + ":" + this.parameter + "}}";
+    }
 }
