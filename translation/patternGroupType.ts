@@ -1,5 +1,5 @@
 import * as Grammar from "../utils/grammar";
-import * as Regex from "../utils/regex";
+import * as Regex from "../utils/convert";
 import Attribute, {PieceAttributeJpnName} from "../types/attribute";
 import DB from "../models/db";
 import NotFoundError from "../errors/notFoundError";

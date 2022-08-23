@@ -2,9 +2,12 @@ import CardType from "../types/cardType";
 import SearchFilterError from "../errors/searchFilterError";
 import {IncludeOptions, Op, WhereOptions} from "sequelize";
 import DB from "../models/db";
+import {escapeForUrl} from "../utils/convert";
 
 export default abstract class SearchFilter {
-    protected constructor(split: string[]) {
+    abstract readonly key: string;
+
+    protected constructor(split?: string[]) {
     }
 
     abstract getWhereOptions(): WhereOptions;
@@ -12,22 +15,30 @@ export default abstract class SearchFilter {
     abstract getIncludeOptions(): IncludeOptions[];
 
     abstract getExplainString(): string;
+
+    abstract getFilterString(): string;
 }
 
 export abstract class SearchFilter0 extends SearchFilter {
-    constructor(split: string[]) {
+    constructor(split?: string[]) {
         super(split);
     }
+
+    getFilterString = () => this.key;
 }
 
 export abstract class SearchFilter1 extends SearchFilter {
     param: any;
 
-    constructor(split: string[]) {
+    constructor(split?: string[]) {
         super(split);
-        this.param = split.slice(1).join(":");
-        if (this.param.trim() === "") throw new SearchFilterError("Missing parameter", split.join(":"));
+        if (split !== undefined) {
+            this.param = split.slice(1).join(":");
+            if (this.param.trim() === "") throw new SearchFilterError("Missing parameter", split.join(":"));
+        }
     }
+
+    getFilterString = () => this.key + ":" + escapeForUrl(this.param);
 }
 
 export abstract class SearchFilterCardType extends SearchFilter0 {
@@ -38,16 +49,19 @@ export abstract class SearchFilterCardType extends SearchFilter0 {
 }
 
 export class SearchFilterMember extends SearchFilterCardType {
+    readonly key = "member";
     readonly type = CardType.MEMBER;
     getExplainString = () => "Members";
 }
 
 export class SearchFilterSong extends SearchFilterCardType {
+    readonly key = "song";
     readonly type = CardType.SONG;
     getExplainString = () => "Songs";
 }
 
 export class SearchFilterMemory extends SearchFilterCardType {
+    readonly key = "memory";
     readonly type = CardType.MEMORY;
     getExplainString = () => "Memories";
 }
@@ -65,11 +79,13 @@ export abstract class SearchFilterTranslatableLike extends SearchFilter1 {
 }
 
 export class SearchFilterName extends SearchFilterTranslatableLike {
+    readonly key = "name";
     readonly columnNames = ["nameJpn", "nameEng"];
     readonly explainName = "Name";
 }
 
 export class SearchFilterCostume extends SearchFilterTranslatableLike {
+    readonly key = "costume";
     readonly columnNames = ["$member.costumeJpn$", "$member.costumeEng$"];
     readonly explainName = "Costume";
 
@@ -81,13 +97,14 @@ export class SearchFilterCostume extends SearchFilterTranslatableLike {
 }
 
 export class SearchFilterSkill extends SearchFilterTranslatableLike {
+    readonly key = "skill";
     readonly columnNames = ["$skills.jpn$", "$skills.eng$"];
     readonly explainName = "Skill";
 
     getIncludeOptions = () => [{model: DB.Skill, required: true, attributes: ["jpn", "eng"]}];
 }
 
-const map = new Map<string, new (split: string[]) => SearchFilter>([
+const map = new Map<string, new (split?: string[]) => SearchFilter>([
     ["member", SearchFilterMember],
     ["song", SearchFilterSong],
     ["memory", SearchFilterMemory],

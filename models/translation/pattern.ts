@@ -10,7 +10,7 @@ import {
 import Trigger, {TriggerID} from "../../translation/trigger";
 import PatternGroupType, {PatternGroupTypeID} from "../../translation/patternGroupType";
 import DB from "../db";
-import {escapeForRegex} from "../../utils/regex";
+import {escapeForRegex} from "../../utils/convert";
 import {splitTriggersFromSkill} from "../../translation/skills";
 
 @Table({timestamps: false})

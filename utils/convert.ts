@@ -8,6 +8,10 @@ function escapeForRegex(s: string): string {
     return s.replace(regexSpecialCharacters, "\\$&");
 }
 
+function escapeForUrl (s: string): string {
+    return encodeURIComponent(s).replace(/'/g, "%27");
+}
+
 export {
-    toNumWithFullwidth, escapeForRegex
+    toNumWithFullwidth, escapeForRegex, escapeForUrl
 }

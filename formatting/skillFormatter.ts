@@ -3,7 +3,7 @@ import Annotation from "./annotation";
 import Trigger, {TriggerNameEng, TriggerNameJpn} from "../translation/trigger";
 import Attribute, {PieceAttributeEngName, PieceAttributeJpnName} from "../types/attribute";
 import PieceInfo from "../types/pieceInfo";
-import {toNumWithFullwidth} from "../utils/regex";
+import {toNumWithFullwidth} from "../utils/convert";
 import pieceFormat from "./pieceFormat";
 
 type SkillFormatterRegexes =
