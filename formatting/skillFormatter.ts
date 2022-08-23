@@ -81,12 +81,12 @@ export default class SkillFormatter {
             + "</b>";
     }
 
-    private resolveAttrRequirement(smile: string, pure: string, cool: string) {
-        return "<span class='attrreq nowrap'>"
+    private resolveAttrRequirement(match: string, smile: string, pure: string, cool: string) {
+        return "<b class='attrreq nowrap'>"
             + this.lang.leftSquareBracket
             + pieceFormat(new PieceInfo(0, toNumWithFullwidth(smile), toNumWithFullwidth(pure), toNumWithFullwidth(cool)), this.lang)
             + this.lang.rightSquareBracket
-            + "</span>";
+            + "</b>";
     }
 
     private doRegex(line: string, isCardSkill: boolean) {

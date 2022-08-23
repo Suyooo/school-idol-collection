@@ -42,7 +42,7 @@ span.pieceno:not(:last-child) {
     margin-right: 1em;
 }
 
-span.attrreq span.pieceno:not(:last-child) {
+.attrreq span.pieceno:not(:last-child) {
     margin-right: .2em;
 }
 

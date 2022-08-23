@@ -101,7 +101,7 @@
                         <div><%- f.skillJpn %></div>
                     </div>
                     <div class="row inforow">
-                        <div>&nbsp;</div>
+                        <div><%- (f.card.skills ? f.card.skills.map(s => "<a href='/pattern/apply/"+s.patternId+"/'>🖉</a>").join(" ") : "") %>&nbsp;</div>
                         <div><%- f.skillEng %></div>
                     </div>
 
