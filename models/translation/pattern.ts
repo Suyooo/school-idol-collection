@@ -1,4 +1,5 @@
 import {
+    AfterUpdate,
     AllowNull,
     AutoIncrement,
     Column,
@@ -12,6 +13,7 @@ import PatternGroupType, {PatternGroupTypeID} from "../../translation/patternGro
 import DB from "../db";
 import {escapeForRegex} from "../../utils/convert";
 import {splitTriggersFromSkill} from "../../translation/skills";
+import {QueryOptions} from "sequelize";
 
 @Table({timestamps: false})
 export default class TranslationPattern extends Model {
@@ -73,7 +75,7 @@ export default class TranslationPattern extends Model {
 
 
     static buildSkeletonFromSkill(skillLine: string): TranslationPattern {
-        const { skill, triggers } = splitTriggersFromSkill(skillLine);
+        const {skill, triggers} = splitTriggersFromSkill(skillLine);
         const skel = DB.TranslationPattern.build({
             triggers: 0,
             regex: "^" + escapeForRegex(skill) + "$",
@@ -82,5 +84,15 @@ export default class TranslationPattern extends Model {
         });
         skel.triggerArray = triggers;
         return skel;
+    }
+
+    @AfterUpdate
+    static async purgeTranslations(pattern: TranslationPattern, options: QueryOptions) {
+        await DB.Skill.update(
+            {eng: null, pattern: null},
+            {
+                where: {pattern: pattern.id},
+                transaction: options.transaction
+            });
     }
 }
