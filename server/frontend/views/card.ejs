@@ -97,11 +97,15 @@
                         </div>
                     <% } %>
                     <div class="row inforow">
-                        <div>Skill</div>
+                        <div>Skill<br>
+                            <%- (f.card.skills ? f.card.skills.map(s => "<a href='/annotate/edit/" + s.id + "/'>🖉</a>").join(" ") : "") %>
+                        </div>
                         <div><%- f.skillJpn %></div>
                     </div>
                     <div class="row inforow">
-                        <div><%- (f.card.skills ? f.card.skills.map(s => "<a href='/pattern/apply/"+s.patternId+"/'>🖉</a>").join(" ") : "") %>&nbsp;</div>
+                        <div>
+                            <%- (f.card.skills ? f.card.skills.map(s => "<a href='/pattern/apply/" + s.patternId + "/'>🖉</a>").join(" ") : "") %>
+                        </div>
                         <div><%- f.skillEng %></div>
                     </div>
 

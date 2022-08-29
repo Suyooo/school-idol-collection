@@ -171,3 +171,4 @@ submitBtn.on("click", submit);
 $("input[type='radio']").on("click", tryPattern);
 $("#regex_div .pill").on("click", regexPill);
 $("#template_div .pill").on("click", templatePill);
+tryPattern();

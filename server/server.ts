@@ -7,9 +7,11 @@ import IndexHandler from "./frontend/index";
 import CardRouter from "./frontend/card";
 import SetRouter from "./frontend/set";
 import SearchRouter from "./frontend/search";
+import AnnotateRouter from "./frontend/annotate";
 import PatternRouter from "./frontend/pattern";
 import FAQRouter from "./frontend/faq";
 
+import APIAnnotateRouter from "./backend/annotate";
 import APIPatternRouter from "./backend/pattern";
 
 const app = express();
@@ -37,12 +39,14 @@ app.use("/card", CardRouter);
 app.use("/search", SearchRouter);
 app.use("/faq", FAQRouter);
 
+app.use("/annotate", AnnotateRouter);
 app.use("/pattern", PatternRouter);
 
 /*
  * Backends
  */
 
+app.use("/api/annotate", APIAnnotateRouter);
 app.use("/api/pattern", APIPatternRouter);
 
 app.listen(port, () => {

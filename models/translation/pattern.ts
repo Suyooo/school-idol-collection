@@ -89,7 +89,7 @@ export default class TranslationPattern extends Model {
     @AfterUpdate
     static async purgeTranslations(pattern: TranslationPattern, options: QueryOptions) {
         await DB.Skill.update(
-            {eng: null, pattern: null},
+            {eng: null, patternId: null},
             {
                 where: {pattern: pattern.id},
                 transaction: options.transaction
