@@ -1,8 +1,8 @@
 .idea
-build
+dist
 node_modules
 package-lock.json
-server/frontend/static/images/LL*
-server/frontend/static/images/EX*
-server/frontend/static/images/PR*
-importer/rawinfo/*
+src/server/frontend/static/images/LL*
+src/server/frontend/static/images/EX*
+src/server/frontend/static/images/PR*
+import/*

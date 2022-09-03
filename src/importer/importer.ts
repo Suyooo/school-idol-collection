@@ -46,8 +46,8 @@ function isEmpty(x: string): x is Empty {
     return x == "―" || x == "－" || x == "─" || x == "-";
 }
 
-if (!fs.existsSync("importer/rawinfo")) fs.mkdirSync("importer/rawinfo");
-const watcher = Chokidar.watch("importer/rawinfo", {
+if (!fs.existsSync("import")) fs.mkdirSync("import");
+const watcher = Chokidar.watch("import", {
     ignored: /(^|[\/\\])\../,
     persistent: true,
     awaitWriteFinish: true
