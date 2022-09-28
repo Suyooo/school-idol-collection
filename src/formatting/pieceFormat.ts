@@ -6,7 +6,7 @@ export default function pieceFormat(pieces: PieceInfo, lang: Language): string {
     let s = "";
     let comma = "";
     if (pieces.all > 0) {
-        s += "<span class='pieceno'><span class='piece all'>"
+        s += "<span class='pieceno'><span class='piece all' title='" + Attribute.get("ALL")[lang.pieceNameProperty] + "'>"
             + lang.leftSquareBracket
             + Attribute.get("ALL")[lang.pieceNameProperty]
             + lang.rightSquareBracket + lang.times
@@ -14,7 +14,7 @@ export default function pieceFormat(pieces: PieceInfo, lang: Language): string {
         comma = ", ";
     }
     if (pieces.smile > 0) {
-        s += "<span class='pieceno'><span class='piece smile'>"
+        s += "<span class='pieceno'><span class='piece smile' title='" + Attribute.get("SMILE")[lang.pieceNameProperty] + "'>"
             + comma + lang.leftSquareBracket
             + Attribute.get("SMILE")[lang.pieceNameProperty]
             + lang.rightSquareBracket + lang.times
@@ -22,7 +22,7 @@ export default function pieceFormat(pieces: PieceInfo, lang: Language): string {
         comma = ", ";
     }
     if (pieces.pure > 0) {
-        s += "<span class='pieceno'><span class='piece pure'>"
+        s += "<span class='pieceno'><span class='piece pure' title='" + Attribute.get("PURE")[lang.pieceNameProperty] + "'>"
             + comma + lang.leftSquareBracket
             + Attribute.get("PURE")[lang.pieceNameProperty]
             + lang.rightSquareBracket + lang.times
@@ -30,7 +30,7 @@ export default function pieceFormat(pieces: PieceInfo, lang: Language): string {
         comma = ", ";
     }
     if (pieces.cool > 0) {
-        s += "<span class='pieceno'><span class='piece cool'>"
+        s += "<span class='pieceno'><span class='piece cool' title='" + Attribute.get("COOL")[lang.pieceNameProperty] + "'>"
             + comma + lang.leftSquareBracket
             + Attribute.get("COOL")[lang.pieceNameProperty]
             + lang.rightSquareBracket + lang.times

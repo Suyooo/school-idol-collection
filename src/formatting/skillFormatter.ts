@@ -46,7 +46,7 @@ export default class SkillFormatter {
         }
         const triggerObjects = triggers.split("/").map(s => Trigger.get(s.substring(1, s.length - 1) as (TriggerNameJpn | TriggerNameEng)));
         return triggerObjects
-                .map(t => "<span class='skill " + t.cssClassName + "'>" + t[this.lang.triggerNameProperty] + "</span>")
+                .map(t => "<span class='skill " + t.cssClassName + "' title='" + t[this.lang.triggerNameProperty] + "'>" + t[this.lang.triggerNameProperty] + "</span>")
                 .join("/")
             + skillLine
             + ((skillLine.length > 0 && triggerObjects.indexOf(Trigger.get("Special Practice")) !== -1)
@@ -56,12 +56,12 @@ export default class SkillFormatter {
     }
 
     private static resolveAbility(match: string, abilityType: string) {
-        return '<span class="ability ' + abilityType.toLowerCase() + '">' + match + '</span>';
+        return '<span class="ability ' + abilityType.toLowerCase() + '" title="' + match + '">' + match + '</span>';
     }
 
     private static resolveTrigger(match: string, triggerName: string) {
         try {
-            return "<span class='skill " + Trigger.get(triggerName as (TriggerNameJpn | TriggerNameEng)).cssClassName + "'>" + match + "</span>";
+            return "<span class='skill " + Trigger.get(triggerName as (TriggerNameJpn | TriggerNameEng)).cssClassName + "' title='" + match + "'>" + match + "</span>";
         } catch (e) {
             return match;
         }
@@ -73,7 +73,7 @@ export default class SkillFormatter {
                 .split(this.lang.rightSquareBracket + this.lang.leftSquareBracket)
                 .map(attrsSplit => {
                     const attr = Attribute.get(attrsSplit as (PieceAttributeJpnName | PieceAttributeEngName));
-                    return "<span class='piece " + attr.cssClassName + "'>"
+                    return "<span class='piece " + attr.cssClassName + "' title='" + attr[this.lang.pieceNameProperty] + "'>"
                         + this.lang.leftSquareBracket + attr[this.lang.pieceNameProperty] + this.lang.rightSquareBracket
                         + "</span>"
                 })
@@ -91,7 +91,7 @@ export default class SkillFormatter {
 
     private doRegex(line: string, isCardSkill: boolean) {
         line = line.replace(this.regexes.pieceGain, "<b class='nowrap'>$&</b>");
-        line = line.replace(this.regexes.idolizedCondition, "<span class='idolized'>$&</span>");
+        line = line.replace(this.regexes.idolizedCondition, "<span class='idolized' title='$&'>$&</span>");
         if (isCardSkill) {
             line = line.replace(this.regexes.name, "<span class='redtext'>$&</span>");
             line = line.replace(this.regexes.fullSkillWithTrigger, this.resolveFullSkill.bind(this));
@@ -155,8 +155,8 @@ export default class SkillFormatter {
         stars: /【☆】/g,
         action: /《([^《》]*?)》/g
     }, {
-        rushOrLive: "<span class='nowrap'><span class=\"ability rush\">【RUSH】</span><span class=\"ability or\">/</span><span class=\"ability live\">【LIVE】</span></span>",
-        stars: "<span class='star'>$&</span>"
+        rushOrLive: "<span class='nowrap'><span class=\"ability rush\" title='【RUSH】 or 【LIVE】'>【RUSH】</span><span class=\"ability or\" title='【RUSH】 or 【LIVE】'>/</span><span class=\"ability live\" title='【RUSH】 or 【LIVE】'>【LIVE】</span></span>",
+        stars: "<span class='star' title='$&'>$&</span>"
     });
 
     static readonly ENG = new SkillFormatter(Language.ENG, {
@@ -175,7 +175,7 @@ export default class SkillFormatter {
         stars: /(1|2|3|one|two|three|has|each|more|no|with|without) (Stars?)/g,
         action: /⟪([^⟪⟫]*?)⟫/g
     }, {
-        rushOrLive: "<span class='nowrap'><span class=\"ability rush\">[RUSH]</span><span class=\"ability or\">/</span><span class=\"ability live\">[LIVE]</span></span>",
-        stars: "<span class='nowrap'>$1 <span class='star'>$2</span></span>"
+        rushOrLive: "<span class='nowrap'><span class=\"ability rush\" title='[RUSH] or [LIVE]'>[RUSH]</span><span class=\"ability or\" title='[RUSH] or [LIVE]'>/</span><span class=\"ability live\" title='[RUSH] or [LIVE]'>[LIVE]</span></span>",
+        stars: "<span class='nowrap'>$1 <span class='star' title='$2'>$2</span></span>"
     });
 }
