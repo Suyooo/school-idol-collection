@@ -2,8 +2,8 @@ import DB from "../models/db";
 import * as fs from "fs";
 import Card from "../models/card/card";
 
-const faqpage = "/faq/LL06";
-let faqtext = fs.readFileSync("server/frontend/views/faq/ll06.ejs").toString();
+const faqpage = "/faq/LL07";
+let faqtext = fs.readFileSync("src/server/frontend/views/faq/ll07.ejs").toString();
 
 faqtext = faqtext.replace(/<%- skillFormat\("([\s\S]*?)"\) %>/g, (match, p1) => p1.replace(/\\"/g, "\""));
 faqtext = faqtext.replace(/<%- ([\s\S]*?) %>/g, "");

@@ -18,12 +18,12 @@ const app = express();
 const port = 3000;
 
 app.set("view engine", "ejs");
-app.set("views", "server/frontend/views");
+app.set("views", "src/server/frontend/views");
 app.use(bodyParser.json());
 
-app.use("/js", express.static("server/frontend/static/js"));
-app.use("/style", express.static("server/frontend/static/style"));
-app.use("/images", express.static("server/frontend/static/images"));
+app.use("/js", express.static("src/server/frontend/static/js"));
+app.use("/style", express.static("src/server/frontend/static/style"));
+app.use("/images", express.static("src/server/frontend/static/images"));
 app.use("/vendor/jquery", express.static("node_modules/jquery/dist"));
 
 app.locals.skillFormat = (skill: string) => SkillFormatter.ENG.formatText(skill);

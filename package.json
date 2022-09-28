@@ -6,7 +6,7 @@
     "start:prod": "node dist/server.js",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --fix --ext .ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "faqtexttosql": "ts-node src/utils/faqtexttosql.ts"
   },
   "dependencies": {
     "async-mutex": "^0.3.2",
