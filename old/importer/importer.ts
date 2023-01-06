@@ -63,7 +63,7 @@ watcher.on("add", (path) => {
     } else if (path.endsWith(".jpg")) {
         Log.info("IMPORT", "New image added, moving to correct location: " + path);
         const filename = path.split("/").at(-1)!;
-        const folder = "frontend/static/images/" + filename.split("-")[0];
+        const folder = "src/server/frontend/static/images/" + filename.split("-")[0];
         if (!fs.existsSync(folder)) fs.mkdirSync(folder);
         fs.copyFileSync(path, folder + "/" + filename)
         fs.unlinkSync(path);
