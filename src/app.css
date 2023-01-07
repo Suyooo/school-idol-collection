@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-a {
+a.not(.button) {
     @apply text-accent-400 underline;
 
     &:focus, &:hover {
@@ -10,8 +10,8 @@ a {
     }
 }
 
-button {
-    @apply text-white bg-primary-700 rounded uppercase px-2 py-1 cursor-pointer text-xs;
+a.button {
+    @apply text-white bg-primary-700 rounded uppercase px-4 py-2 cursor-pointer text-sm tracking-wide;
 
     &:hover, &:focus {
         @apply bg-primary-500;

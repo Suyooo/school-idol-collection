@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-    <title>Index &bull; SIC</title>
+    <title>Card List &bull; SIC</title>
 </svelte:head>
 
 {#each data.categories as cat}

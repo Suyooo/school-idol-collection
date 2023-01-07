@@ -31,7 +31,8 @@ const modelList = [
 const sequelize = new Sequelize({
     dialect: "sqlite",
     storage: "cardlist.db",
-    models: modelList
+    models: modelList,
+    logQueryParameters: true
 });
 
 export interface DBObject {

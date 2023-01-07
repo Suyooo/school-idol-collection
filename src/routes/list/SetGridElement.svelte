@@ -9,26 +9,16 @@
         <img src="/images/{set.setId}/set.jpg" alt="{set.setId}">
     </div>
     <div class="namecont">
-        <span>▶</span><span>{set.eng}</span>
+        <span>⏵</span><span>{set.eng}</span>
     </div>
 </a>
 
 <style lang="postcss">
     .grid-item > .imgcont {
-        display: flex;
-        justify-content: center;
-        flex-basis: 8em;
-        width: 100%;
-        border-radius: .75em;
-        padding: .5em 0;
-        margin-bottom: .2em;
-        background-color: white;
-        overflow: hidden;
+        @apply bg-white;
 
         & > img {
-            max-width: 100%;
-            max-height: 8em;
-            object-fit: contain;
+            @apply max-w-full;
         }
     }
 </style>
