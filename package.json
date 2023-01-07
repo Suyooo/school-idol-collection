@@ -23,6 +23,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"postcss-nesting": "^10.2.0"
+		"postcss-nesting": "^10.2.0",
+		"sequelize-typescript": "^2.1.5",
+		"sqlite3": "^5.1.4"
 	}
 }

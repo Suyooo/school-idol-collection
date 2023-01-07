@@ -52,7 +52,7 @@ span.card-id {
 }
 
 h1,h2,h3,h4,h5,h6 {
-    @apply mt-4; /**/
+    @apply text-accent-400 font-bold uppercase tracking-widest text-2xl mt-4 mb-1; /**/
 }
 
 .panel h6 {

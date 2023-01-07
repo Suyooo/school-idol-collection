@@ -186,7 +186,7 @@ export default class Card extends Model {
 
     @AllowNull(false)
     @Column
-    id!: number;
+    id: number;
 
     @AllowNull(false)
     @Column(DataType.NUMBER)

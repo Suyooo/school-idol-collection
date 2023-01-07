@@ -1,0 +1,43 @@
+.panel {
+    @apply p-0 overflow-hidden bg-none;
+}
+
+.grid-container {
+    @apply grid grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] gap-4;
+}
+
+.grid-item {
+    @apply no-underline flex flex-col bg-primary-500 p-1 rounded-2xl;
+
+    & > * {
+        @apply flex-grow-0 flex-shrink-0 basis-0;
+    }
+
+    & > .namecont {
+        @apply flex-grow;
+    }
+}
+
+.namecont, .linecont {
+    @apply flex font-bold pr-2;
+}
+
+.namecont > span, .linecont > span {
+    @apply pl-2 flex-grow-0 flex-shrink-0 basis-0;
+}
+
+.namecont > span:first-child, .linecont > span {
+    @apply text-white;
+}
+
+.namecont > span:last-child, .linecont > span {
+    @apply flex-grow;
+}
+
+.linecont > span {
+    @apply text-center text-xs uppercase tracking-widest;
+}
+
+.namecont > span:last-child {
+    @apply underline;
+}
