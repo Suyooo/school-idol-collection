@@ -26,7 +26,8 @@ import CardSongRequirementType from "$types/cardSongRequirementType";
 import CardMemberIdolizeType from "$types/cardMemberIdolizeType";
 import type {AttributeID} from "$types/attribute";
 import type CardMemberGroup from "$models/card/memberGroup";
-import Skill from "$models/skill/skill";
+import type Skill from "$models/skill/skill";
+import {SkillBase} from "$models/skill/skill";
 import Link from "$models/skill/link";
 import Annotation from "$models/skill/annotation";
 import AnnotationType from "$types/annotationType";
@@ -158,6 +159,7 @@ export const CardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + 
     })
 }))
 @Table({
+    modelName: "Card",
     timestamps: false,
     validate: {
         memberTypeMustHaveMemberExtraInfo(this: Card) {
@@ -178,7 +180,7 @@ export const CardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + 
         }
     }
 })
-export default class Card extends Model {
+export class CardBase extends Model {
     @PrimaryKey
     @AllowNull(false)
     @Column
@@ -233,7 +235,7 @@ export default class Card extends Model {
     @Column(DataType.STRING)
     nameEng!: string | null;
 
-    @HasMany(() => Skill, {foreignKey: "cardNo"})
+    @HasMany(() => SkillBase, {foreignKey: "cardNo"})
     skills!: Skill[];
 
     @AllowNull(false)
@@ -248,7 +250,7 @@ export default class Card extends Model {
     linkedBy: Array<Annotation & { Link: Link }> | undefined;
 }
 
-export class CardMember extends Card {
+export class CardMember extends CardBase {
     declare type: CardType.MEMBER;
     declare member: CardMemberExtraInfo;
     declare song: null;
@@ -278,26 +280,31 @@ export class CardMemberHasGroup extends CardMember {
         & { group: CardMemberGroup };
 }
 
-export class CardSong extends Card {
+export class CardSongBase extends CardBase {
     declare type: CardType.SONG;
     declare member: null;
     declare song: CardSongExtraInfo;
 }
 
-export class CardSongWithAnyReq extends CardSong {
+export class CardSongWithAnyReq extends CardSongBase {
     declare song:
         Omit<CardSongExtraInfo, "anyRequirement" | "attrRequirement">
         & { anyRequirement: CardSongAnyReqExtraInfo, attrRequirement: null }
 }
 
-export class CardSongWithAttrReq extends CardSong {
+export class CardSongWithAttrReq extends CardSongBase {
     declare song:
         Omit<CardSongExtraInfo, "anyRequirement" | "attrRequirement">
         & { anyRequirement: null, attrRequirement: CardSongAttrReqExtraInfo }
 }
 
-export class CardMemory extends Card {
+export type CardSong = CardSongWithAnyReq | CardSongWithAttrReq;
+
+export class CardMemory extends CardBase {
     declare type: CardType.MEMORY;
     declare member: null;
     declare song: null;
 }
+
+type Card = CardMember | CardSong | CardMemory;
+export default Card;

@@ -15,8 +15,8 @@ export default class Language {
 
     private constructor(leftRoundBracket: string, rightRoundBracket: string,
                         leftSquareBracket: string, rightSquareBracket: string, times: string,
-                        triggerNameProperty: keyof Trigger, colorNameProperty: keyof Attribute,
-                        songAttributeNameProperty: keyof Attribute, pieceNameProperty: keyof Attribute) {
+                        triggerNameProperty: keyof Trigger, _colorNameProperty: keyof Attribute,
+                        _songAttributeNameProperty: keyof Attribute, pieceNameProperty: keyof Attribute) {
         this.leftRoundBracket = leftRoundBracket;
         this.rightRoundBracket = rightRoundBracket;
         this.leftSquareBracket = leftSquareBracket;

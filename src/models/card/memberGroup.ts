@@ -9,12 +9,13 @@ import {
     Table
 } from "sequelize-typescript";
 
+import DB from "$models/db";
 import type {CardMember} from "$models/card/card";
 import CardMemberExtraInfo from "$models/card/memberExtraInfo";
 
 import type CardMemberGroupType from "$types/cardMemberGroupType";
-import Skill from "$models/skill/skill";
-import DB from "$models/db";
+import type Skill from "$models/skill/skill";
+import {SkillBase} from "$models/skill/skill";
 
 @Scopes(() => ({
     hasSkill: () => ({
@@ -43,6 +44,6 @@ export default class CardMemberGroup extends Model {
     @Column(DataType.STRING)
     expectedMemberIds!: string;
 
-    @HasMany(() => Skill, {foreignKey: "groupId"})
+    @HasMany(() => SkillBase, {foreignKey: "groupId"})
     skills!: Skill[];
 }

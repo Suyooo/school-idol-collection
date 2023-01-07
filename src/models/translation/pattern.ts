@@ -8,11 +8,13 @@ import {
     Table
 } from "sequelize-typescript";
 
-import Trigger, {TriggerID} from "../../translation/trigger";
-import PatternGroupType, {PatternGroupTypeID} from "../../translation/patternGroupType";
 import DB from "../db";
-import {escapeForRegex} from "../../utils/convert";
-import {splitTriggersFromSkill} from "../../translation/skills";
+import Trigger from "$translation/trigger";
+import type {TriggerID} from "$translation/trigger";
+import PatternGroupType from "$translation/patternGroupType";
+import type {PatternGroupTypeID} from "$translation/patternGroupType";
+import {escapeForRegex} from "$utils/convert";
+import {splitTriggersFromSkill} from "$translation/skills";
 import type {QueryOptions} from "sequelize";
 
 @Table({timestamps: false})

@@ -11,7 +11,8 @@ import {
     Table
 } from "sequelize-typescript";
 
-import Card from "$models/card/card";
+import type Card from "$models/card/card";
+import {CardBase} from "$models/card/card";
 import CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo";
 import CardMemberGroup from "$models/card/memberGroup";
 
@@ -46,11 +47,11 @@ import type PieceInfo from "$types/pieceInfo";
 export default class CardMemberExtraInfo extends Model {
     @PrimaryKey
     @AllowNull(false)
-    @ForeignKey(() => Card)
+    @ForeignKey(() => CardBase)
     @Column
     cardNo!: string;
 
-    @BelongsTo(() => Card)
+    @BelongsTo(() => CardBase)
     card!: Card; // TODO: getter
 
     @AllowNull(false)

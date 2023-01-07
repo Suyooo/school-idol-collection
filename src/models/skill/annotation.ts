@@ -10,11 +10,13 @@ import {
     PrimaryKey,
     Table
 } from "sequelize-typescript";
-import Card from "$models/card/card";
+import type Card from "$models/card/card";
 import Link from "$models/skill/link";
 import AnnotationType from "$types/annotationType";
 import type {AnnotationTypeID} from "$types/annotationType";
-import Skill from "$models/skill/skill";
+import type Skill from "$models/skill/skill";
+import {SkillBase} from "$models/skill/skill";
+import {CardBase} from "$models/card/card";
 
 @Table({timestamps: false})
 export default class Annotation extends Model {
@@ -24,12 +26,12 @@ export default class Annotation extends Model {
     @Column({field: "id"})
     annoId!: number;
 
-    @ForeignKey(() => Skill)
+    @ForeignKey(() => SkillBase)
     @AllowNull(false)
     @Column
     skillId!: number;
 
-    @BelongsTo(() => Skill)
+    @BelongsTo(() => SkillBase)
     skill!: Skill;
 
     @AllowNull(false)
@@ -44,7 +46,7 @@ export default class Annotation extends Model {
     @Column
     parameter!: string;
 
-    @BelongsToMany(() => Card, {through: {model: () => Link, unique: false}})
+    @BelongsToMany(() => CardBase, {through: {model: () => Link, unique: false}})
     linksTo!: Array<Card & { Link: Link }>;
 
     getAnnotationString() {

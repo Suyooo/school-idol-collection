@@ -1,6 +1,7 @@
 import {Sequelize} from "sequelize-typescript";
 import type {ModelCtor} from "sequelize-typescript";
-import Card from "./card/card";
+import type Card from "./card/card";
+import {CardBase} from "./card/card";
 import CardFAQLink from "./card/faqLink";
 import CardMemberGroup from "./card/memberGroup";
 import TranslationPattern from "./translation/pattern";
@@ -11,17 +12,18 @@ import CardMemberIdolizePieceExtraInfo from "./card/memberIdolizePieceExtraInfo"
 import CardSongExtraInfo from "./card/songExtraInfo";
 import CardSongAnyReqExtraInfo from "./card/songAnyReqExtraInfo";
 import CardSongAttrReqExtraInfo from "./card/songAttrReqExtraInfo";
-import Skill from "./skill/skill";
+import type Skill from "./skill/skill";
+import {SkillBase} from "./skill/skill";
 import Annotation from "./skill/annotation";
 import Link from "./skill/link";
 import Set from "$models/set/set";
 import SetCategory from "$models/set/category";
 
 const modelList = [
-    Card, CardMemberGroup, CardFAQLink,
+    CardBase, CardMemberGroup, CardFAQLink,
     CardMemberExtraInfo, CardMemberIdolizePieceExtraInfo,
     CardSongExtraInfo, CardSongAnyReqExtraInfo, CardSongAttrReqExtraInfo,
-    Skill, Link, Annotation,
+    SkillBase, Link, Annotation,
     TranslationName, TranslationSong, TranslationPattern,
     Set, SetCategory
 ];
@@ -64,7 +66,7 @@ const DB: DBObject = {
     syncPromise: Promise.all(modelList.map(m => m.sync())),
     sequelize: sequelize,
 
-    Card: <ModelCtor<Card>>sequelize.models.Card,
+    Card: <ModelCtor<Card>>sequelize.models.CardBase,
     CardMemberGroup: <ModelCtor<CardMemberGroup>>sequelize.models.CardMemberGroup,
     CardFAQLink: <ModelCtor<CardFAQLink>>sequelize.models.CardFAQLink,
 
@@ -75,7 +77,7 @@ const DB: DBObject = {
     CardSongAnyReqExtraInfo: <ModelCtor<CardSongAnyReqExtraInfo>>sequelize.models.CardSongAnyReqExtraInfo,
     CardSongAttrReqExtraInfo: <ModelCtor<CardSongAttrReqExtraInfo>>sequelize.models.CardSongAttrReqExtraInfo,
 
-    Skill: <ModelCtor<Skill>>sequelize.models.Skill,
+    Skill: <ModelCtor<Skill>>sequelize.models.SkillBase,
     Link: <ModelCtor<Link>>sequelize.models.Link,
     Annotation: <ModelCtor<Annotation>>sequelize.models.Annotation,
 

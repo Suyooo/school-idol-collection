@@ -7,18 +7,19 @@ import {
     PrimaryKey,
     Table
 } from "sequelize-typescript";
-import Card from "$models/card/card";
+import type Card from "$models/card/card";
+import {CardBase} from "$models/card/card";
 
 @Table({timestamps: false})
 export default class CardFAQLink extends Model {
     @PrimaryKey
     @AllowNull(false)
-    @ForeignKey(() => Card)
+    @ForeignKey(() => CardBase)
     @Column
     cardId!: number;
 
     // constraints = false because standard SQL doesn't support foreign keys being non-unique
-    @BelongsTo(() => Card, {foreignKey: "cardId", targetKey: "id", constraints: false})
+    @BelongsTo(() => CardBase, {foreignKey: "cardId", targetKey: "id", constraints: false})
     card!: Card;
 
     @PrimaryKey

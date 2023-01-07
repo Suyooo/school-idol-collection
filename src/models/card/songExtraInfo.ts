@@ -12,7 +12,8 @@ import {
 import CardSongRequirementType from "$types/cardSongRequirementType";
 import type {CardSongRarity} from "$types/cardRarity";
 import type {AttributeID} from "$types/attribute";
-import Card from "$models/card/card";
+import type Card from "$models/card/card";
+import {CardBase} from "$models/card/card";
 import CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo";
 import CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo";
 
@@ -40,11 +41,11 @@ import CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo";
 export default class CardSongExtraInfo extends Model {
     @PrimaryKey
     @AllowNull(false)
-    @ForeignKey(() => Card)
+    @ForeignKey(() => CardBase)
     @Column
     cardId!: string;
 
-    @BelongsTo(() => Card)
+    @BelongsTo(() => CardBase)
     card!: Card;
 
     @AllowNull(false)

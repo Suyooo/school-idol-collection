@@ -7,6 +7,7 @@ import SearchFilter, {
     SearchFilterName, SearchFilterSkill,
     SearchFilterSong
 } from "../search/options";
+import {cardTitle} from "$utils/conventions";
 
 export type AnnotationTypeKey = "card" | "song" | "mem" | "costume" | "skilltext";
 export type AnnotationTypeID = 0 | 1 | 2 | 3 | 4;
@@ -66,9 +67,8 @@ export default class AnnotationType {
                 f.param = parameter;
                 return [f];
             },
-            (parameter, cards) => "/card/" + cards[0].cardNo + "/",
-            (parameter, cards) =>
-                new SiteCardFormattingWrapper(cards[0], true).title);
+            (_parameter, cards) => "/card/" + cards[0].cardNo + "/",
+            (_parameter, cards) => cardTitle(cards[0]));
         new AnnotationType(map, 1, "song",
             (parameter) => {
                 const f = new SearchFilterName();
