@@ -12,12 +12,13 @@ import {
 import CardSongRequirementType from "$types/cardSongRequirementType";
 import type {CardSongRarity} from "$types/cardRarity";
 import type {AttributeID} from "$types/attribute";
-import type Card from "$models/card/card";
+import type {CardSong} from "$models/card/card";
 import {CardBase} from "$models/card/card";
 import CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo";
 import CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo";
 
 @Table({
+    modelName: "CardSongExtraInfo",
     timestamps: false,
     validate: {
         anyReqTypeMustHaveSongAnyReqExtraInfo(this: CardSongExtraInfo) {
@@ -42,29 +43,29 @@ export default class CardSongExtraInfo extends Model {
     @PrimaryKey
     @AllowNull(false)
     @ForeignKey(() => CardBase)
-    @Column
+    @Column(DataType.INTEGER)
     cardId!: string;
 
     @BelongsTo(() => CardBase)
-    card!: Card;
+    card!: CardSong;
 
     @AllowNull(false)
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     rarity!: CardSongRarity;
 
     @AllowNull(false)
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     attribute!: AttributeID;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.INTEGER)
     lpBase!: number;
 
     @Column(DataType.STRING(2))
     lpBonus!: number | "X" | "∞" | null;
 
     @AllowNull(false)
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     requirementType!: CardSongRequirementType;
 
     @HasOne(() => CardSongAnyReqExtraInfo)

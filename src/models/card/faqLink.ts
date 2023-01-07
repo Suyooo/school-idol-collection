@@ -10,22 +10,25 @@ import {
 import type Card from "$models/card/card";
 import {CardBase} from "$models/card/card";
 
-@Table({timestamps: false})
+@Table({
+    modelName: "CardFAQLink",
+    timestamps: false
+})
 export default class CardFAQLink extends Model {
     @PrimaryKey
     @AllowNull(false)
     @ForeignKey(() => CardBase)
-    @Column
+    @Column(DataType.INTEGER)
     cardId!: number;
 
     // constraints = false because standard SQL doesn't support foreign keys being non-unique
-    @BelongsTo(() => CardBase, {foreignKey: "cardId", targetKey: "id", constraints: false})
+    @BelongsTo(() => CardBase, {foreignKey: "cardId", targetKey: "cardId", constraints: false})
     card!: Card;
 
     @PrimaryKey
     @Min(1)
     @AllowNull(false)
-    @Column
+    @Column(DataType.INTEGER)
     displayOrder!: number;
 
     @AllowNull(false)
@@ -33,6 +36,6 @@ export default class CardFAQLink extends Model {
     label!: string;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.STRING)
     link!: string;
 }

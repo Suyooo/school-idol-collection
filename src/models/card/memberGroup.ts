@@ -22,16 +22,19 @@ import {SkillBase} from "$models/skill/skill";
         include: [{model: DB.Skill, required: true}]
     })
 }))
-@Table({timestamps: false})
+@Table({
+    modelName: "CardMemberGroup",
+    timestamps: false
+})
 export default class CardMemberGroup extends Model {
     @PrimaryKey
     @AllowNull(false)
     @AutoIncrement
-    @Column({field: "id"})
+    @Column({field: "id", type: DataType.INTEGER})
     cardId!: number;
 
     @AllowNull(false)
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     type!: CardMemberGroupType;
 
     @HasMany(() => CardMemberExtraInfo)

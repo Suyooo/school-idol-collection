@@ -14,8 +14,8 @@ import {
     PrimaryKey,
     Table
 } from "sequelize-typescript";
-import type {QueryOptions} from "sequelize";
 import DB from "$models/db";
+import type {QueryOptions} from "sequelize";
 
 import type Card from "$models/card/card";
 import CardMemberGroup from "$models/card/memberGroup";
@@ -44,7 +44,7 @@ export class SkillBase extends Model {
     @PrimaryKey
     @AllowNull(false)
     @AutoIncrement
-    @Column
+    @Column(DataType.INTEGER)
     skillId!: number;
 
     @ForeignKey(() => CardBase)
@@ -58,7 +58,7 @@ export class SkillBase extends Model {
     }
 
     @ForeignKey(() => CardMemberGroup)
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     groupId!: number | null;
     @BelongsTo(() => CardMemberGroup)
     group!: CardMemberGroup | null;
@@ -69,18 +69,18 @@ export class SkillBase extends Model {
 
     @AllowNull(false)
     @Min(0)
-    @Column
+    @Column(DataType.INTEGER)
     line!: number;
 
     @ForeignKey(() => TranslationPattern)
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     patternId!: number | null;
 
     @BelongsTo(() => TranslationPattern)
     pattern!: TranslationPattern | null;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.STRING)
     jpn!: string;
 
     @Column(DataType.STRING)

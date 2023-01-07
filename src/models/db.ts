@@ -31,7 +31,6 @@ const modelList = [
 const sequelize = new Sequelize({
     dialect: "sqlite",
     storage: "cardlist.db",
-    logQueryParameters: true,
     models: modelList
 });
 
@@ -66,7 +65,7 @@ const DB: DBObject = {
     syncPromise: Promise.all(modelList.map(m => m.sync())),
     sequelize: sequelize,
 
-    Card: <ModelCtor<Card>>sequelize.models.CardBase,
+    Card: <ModelCtor<Card>>sequelize.models.Card,
     CardMemberGroup: <ModelCtor<CardMemberGroup>>sequelize.models.CardMemberGroup,
     CardFAQLink: <ModelCtor<CardFAQLink>>sequelize.models.CardFAQLink,
 
@@ -77,7 +76,7 @@ const DB: DBObject = {
     CardSongAnyReqExtraInfo: <ModelCtor<CardSongAnyReqExtraInfo>>sequelize.models.CardSongAnyReqExtraInfo,
     CardSongAttrReqExtraInfo: <ModelCtor<CardSongAttrReqExtraInfo>>sequelize.models.CardSongAttrReqExtraInfo,
 
-    Skill: <ModelCtor<Skill>>sequelize.models.SkillBase,
+    Skill: <ModelCtor<Skill>>sequelize.models.Skill,
     Link: <ModelCtor<Link>>sequelize.models.Link,
     Annotation: <ModelCtor<Annotation>>sequelize.models.Annotation,
 

@@ -1,8 +1,12 @@
-import { sveltekit } from '@sveltejs/kit/vite';
-import type { UserConfig } from 'vite';
+import {sveltekit} from '@sveltejs/kit/vite';
+import {defineConfig} from "vite";
 
-const config: UserConfig = {
-	plugins: [sveltekit()]
-};
-
-export default config;
+export default defineConfig(({command}) => {
+    const indev = command !== "build";
+    return {
+        plugins: [sveltekit()],
+        define: {
+            INDEV: indev
+        }
+    };
+});

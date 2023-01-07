@@ -2,7 +2,7 @@ import {
     AfterUpdate,
     AllowNull,
     AutoIncrement,
-    Column,
+    Column, DataType,
     Model,
     PrimaryKey,
     Table
@@ -17,16 +17,19 @@ import {escapeForRegex} from "$utils/convert";
 import {splitTriggersFromSkill} from "$translation/skills";
 import type {QueryOptions} from "sequelize";
 
-@Table({timestamps: false})
+@Table({
+    modelName: "TranslationPattern",
+    timestamps: false
+})
 export default class TranslationPattern extends Model {
     @PrimaryKey
     @AllowNull(false)
     @AutoIncrement
-    @Column
+    @Column(DataType.INTEGER)
     pattId!: number;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.INTEGER)
     triggers!: number;
 
     get triggerArray(): Trigger[] {
@@ -46,15 +49,15 @@ export default class TranslationPattern extends Model {
     }
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.STRING)
     regex!: string;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.STRING)
     template!: string;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.STRING)
     groupTypes!: string;
 
     get groupTypeArray(): PatternGroupType[] {

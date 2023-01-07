@@ -13,6 +13,7 @@ const config = {
 			"$errors": "src/modules/errors",
 			"$lib": "src/lib",
 			"$models": "src/models",
+			"$search": "src/modules/search",
 			"$style": "src/style",
 			"$translation": "src/modules/translation",
 			"$types": "src/modules/types",

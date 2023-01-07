@@ -32,7 +32,7 @@ import Link from "$models/skill/link";
 import Annotation from "$models/skill/annotation";
 import AnnotationType from "$types/annotationType";
 
-export const CardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + " LIKE 'LL%' DESC, " + col)]];
+export const cardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + " LIKE 'LL%' DESC, " + col)]];
 
 @Scopes(() => ({
     members: () => ({
@@ -145,7 +145,7 @@ export const CardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + 
                 }]
             }
         ],
-        order: [literal("`linkedBy->skill`.`groupId`"), ...CardOrder("`linkedBy->skill`.`cardNo`")]
+        order: [literal("`linkedBy->skill`.`groupId`"), ...cardOrder("`linkedBy->skill`.`cardNo`")]
     }),
     cardNoOnly: () => ({
         attributes: ["cardNo"]
@@ -155,7 +155,7 @@ export const CardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + 
     }),
     forGrid: () => ({
         attributes: ["cardNo", "id", "type", "nameJpn", "nameEng"],
-        order: CardOrder("`Card`.`cardNo`")
+        order: cardOrder("`Card`.`cardNo`")
     })
 }))
 @Table({
@@ -183,15 +183,15 @@ export const CardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + 
 export class CardBase extends Model {
     @PrimaryKey
     @AllowNull(false)
-    @Column
+    @Column(DataType.STRING)
     cardNo!: string;
 
     @AllowNull(false)
-    @Column({field: "id"})
+    @Column({field: "id", type: DataType.INTEGER})
     cardId!: number;
 
     @AllowNull(false)
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     type!: CardType;
 
     isMember(): this is CardMember {
@@ -229,7 +229,7 @@ export class CardBase extends Model {
     song!: CardSongExtraInfo | null;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.STRING)
     nameJpn!: string;
 
     @Column(DataType.STRING)
@@ -243,7 +243,7 @@ export class CardBase extends Model {
     copyright!: string;
 
     // constraints = false because standard SQL doesn't support foreign keys being non-unique
-    @HasMany(() => CardFAQLink, {foreignKey: "cardId", sourceKey: "id", constraints: false})
+    @HasMany(() => CardFAQLink, {foreignKey: "cardId", sourceKey: "cardId", constraints: false})
     faqs!: CardFAQLink[];
 
     @BelongsToMany(() => Annotation, {through: {model: () => Link, unique: false}})

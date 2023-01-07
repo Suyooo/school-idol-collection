@@ -7,7 +7,10 @@ import {
 } from "sequelize-typescript";
 import SetCategory from "$models/set/category";
 
-@Table({timestamps: false})
+@Table({
+    modelName: "Set",
+    timestamps: false
+})
 export default class Set extends Model {
     @PrimaryKey
     @AllowNull(false)

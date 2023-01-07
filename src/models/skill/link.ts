@@ -1,7 +1,7 @@
 import {
     AllowNull,
     AutoIncrement,
-    Column,
+    Column, DataType,
     ForeignKey,
     Model,
     PrimaryKey,
@@ -15,16 +15,16 @@ export default class Link extends Model {
     @PrimaryKey
     @AllowNull(false)
     @AutoIncrement
-    @Column({field: "id"})
+    @Column({field: "id", type: DataType.INTEGER})
     linkId!: number;
 
     @AllowNull(false)
     @ForeignKey(() => Annotation)
-    @Column
+    @Column(DataType.INTEGER)
     from!: number;
 
     @AllowNull(false)
     @ForeignKey(() => CardBase)
-    @Column
+    @Column(DataType.STRING)
     to!: string;
 }

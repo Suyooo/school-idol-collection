@@ -18,24 +18,27 @@ import type Skill from "$models/skill/skill";
 import {SkillBase} from "$models/skill/skill";
 import {CardBase} from "$models/card/card";
 
-@Table({timestamps: false})
+@Table({
+    modelName: "Annotation",
+    timestamps: false
+})
 export default class Annotation extends Model {
     @PrimaryKey
     @AllowNull(false)
     @AutoIncrement
-    @Column({field: "id"})
+    @Column({field: "id", type: DataType.INTEGER})
     annoId!: number;
 
     @ForeignKey(() => SkillBase)
     @AllowNull(false)
-    @Column
+    @Column(DataType.INTEGER)
     skillId!: number;
 
     @BelongsTo(() => SkillBase)
     skill!: Skill;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.BOOLEAN)
     isEng!: boolean;
 
     @AllowNull(false)
@@ -43,7 +46,7 @@ export default class Annotation extends Model {
     type!: AnnotationTypeID;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.STRING)
     parameter!: string;
 
     @BelongsToMany(() => CardBase, {through: {model: () => Link, unique: false}})

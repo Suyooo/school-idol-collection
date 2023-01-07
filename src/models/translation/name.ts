@@ -1,19 +1,22 @@
 import {
     AllowNull,
-    Column,
+    Column, DataType,
     Model,
     PrimaryKey,
     Table
 } from "sequelize-typescript";
 
-@Table({timestamps: false})
+@Table({
+    modelName: "TranslationName",
+    timestamps: false
+})
 export default class TranslationName extends Model {
     @PrimaryKey
     @AllowNull(false)
-    @Column
+    @Column(DataType.STRING)
     jpn!: string;
 
     @AllowNull(false)
-    @Column
+    @Column(DataType.STRING)
     eng!: string;
 }

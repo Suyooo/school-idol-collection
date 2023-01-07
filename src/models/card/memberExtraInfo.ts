@@ -11,7 +11,7 @@ import {
     Table
 } from "sequelize-typescript";
 
-import type Card from "$models/card/card";
+import type {CardMember} from "$models/card/card";
 import {CardBase} from "$models/card/card";
 import CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo";
 import CardMemberGroup from "$models/card/memberGroup";
@@ -24,6 +24,7 @@ import type {CardMemberRarity} from "$types/cardRarity";
 import type PieceInfo from "$types/pieceInfo";
 
 @Table({
+    modelName: "CardMemberExtraInfo",
     timestamps: false,
     validate: {
         idolizableWithPiecesMustHaveIdolizePieceExtraInfo(this: CardMemberExtraInfo) {
@@ -48,54 +49,54 @@ export default class CardMemberExtraInfo extends Model {
     @PrimaryKey
     @AllowNull(false)
     @ForeignKey(() => CardBase)
-    @Column
+    @Column(DataType.INTEGER)
     cardNo!: string;
 
     @BelongsTo(() => CardBase)
-    card!: Card; // TODO: getter
+    card!: CardMember;
 
     @AllowNull(false)
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     rarity!: CardMemberRarity;
 
     @AllowNull(false)
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     cost!: 0 | 1 | 2 | 3;
 
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     birthDay!: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | null;
 
     @Column(DataType.NUMBER)
     birthMonth!: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | null;
 
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     year!: 1 | 2 | 3 | null;
 
     @AllowNull(false)
     @Min(0)
-    @Column
+    @Column(DataType.INTEGER)
     piecesAll!: number;
 
     @AllowNull(false)
     @Min(0)
-    @Column
+    @Column(DataType.INTEGER)
     piecesSmile!: number;
 
     @AllowNull(false)
     @Min(0)
-    @Column
+    @Column(DataType.INTEGER)
     piecesPure!: number;
 
     @AllowNull(false)
     @Min(0)
-    @Column
+    @Column(DataType.INTEGER)
     piecesCool!: number;
 
     get pieces(): PieceInfo {
         return pieceInfoGetter(this, "piecesAll", "piecesSmile", "piecesPure", "piecesCool");
     }
 
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     pieceBdayAttribute!: AttributeID | null;
 
     @Column(DataType.STRING)
@@ -113,11 +114,11 @@ export default class CardMemberExtraInfo extends Model {
     abilityLive!: boolean;
 
     @AllowNull(false)
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     idolizeType!: CardMemberIdolizeType;
 
     @ForeignKey(() => CardMemberGroup)
-    @Column(DataType.NUMBER)
+    @Column(DataType.INTEGER)
     groupId!: number | null;
 
     @BelongsTo(() => CardMemberGroup)

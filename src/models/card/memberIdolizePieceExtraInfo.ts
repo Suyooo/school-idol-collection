@@ -1,7 +1,7 @@
 import {
     AllowNull,
     BelongsTo,
-    Column,
+    Column, DataType,
     ForeignKey,
     Min,
     Model,
@@ -17,6 +17,7 @@ import {pieceInfoGetter} from "$models/utils/pieceInfoGetterSetter";
 import type PieceInfo from "$types/pieceInfo";
 
 @Table({
+    modelName: "CardMemberIdolizePieceExtraInfo",
     timestamps: false,
     validate: {
         hasPieces(this: CardMemberIdolizePieceExtraInfo) {
@@ -30,35 +31,34 @@ export default class CardMemberIdolizePieceExtraInfo extends Model {
     @PrimaryKey
     @AllowNull(false)
     @ForeignKey(() => CardMemberExtraInfo)
-    @Column
+    @Column(DataType.STRING)
     cardMemberExtraInfoCardNo!: string;
 
     @BelongsTo(() => CardMemberExtraInfo)
     cardMemberExtraInfo!: CardMemberExtraInfo;
 
     get card(): CardMember {
-        return <CardMember>this.cardMemberExtraInfo.card;
+        return this.cardMemberExtraInfo.card;
     }
 
     @AllowNull(false)
     @Min(0)
-    @Column
+    @Column(DataType.INTEGER)
     piecesAll!: number;
 
-    @Column
     @AllowNull(false)
     @Min(0)
-    @Column
+    @Column(DataType.INTEGER)
     piecesSmile!: number;
 
     @AllowNull(false)
     @Min(0)
-    @Column
+    @Column(DataType.INTEGER)
     piecesPure!: number;
 
     @AllowNull(false)
     @Min(0)
-    @Column
+    @Column(DataType.INTEGER)
     piecesCool!: number;
 
     get pieces(): PieceInfo {
