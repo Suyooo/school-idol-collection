@@ -10,9 +10,10 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			"$models": "src/models",
 			"$lib": "src/lib",
-			"$style": "src/style"
+			"$models": "src/models",
+			"$style": "src/style",
+			"$types": "src/modules/types"
 		}
 	}
 };

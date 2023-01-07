@@ -1,6 +1,6 @@
 import {Sequelize} from "sequelize-typescript";
-//import Log from "../utils/logger";
-/*import Card from "./card/card";
+import type {ModelCtor} from "sequelize-typescript";
+import Card from "./card/card";
 import CardFAQLink from "./card/faqLink";
 import CardMemberGroup from "./card/memberGroup";
 import TranslationPattern from "./translation/pattern";
@@ -13,52 +13,78 @@ import CardSongAnyReqExtraInfo from "./card/songAnyReqExtraInfo";
 import CardSongAttrReqExtraInfo from "./card/songAttrReqExtraInfo";
 import Skill from "./skill/skill";
 import Annotation from "./skill/annotation";
-import Link from "./skill/link";*/
+import Link from "./skill/link";
 import Set from "$models/set/set";
 import SetCategory from "$models/set/category";
 
 const modelList = [
-    /*Card, CardMemberGroup, CardFAQLink,
+    Card, CardMemberGroup, CardFAQLink,
     CardMemberExtraInfo, CardMemberIdolizePieceExtraInfo,
     CardSongExtraInfo, CardSongAnyReqExtraInfo, CardSongAttrReqExtraInfo,
     Skill, Link, Annotation,
-    TranslationName, TranslationSong, TranslationPattern*/
+    TranslationName, TranslationSong, TranslationPattern,
     Set, SetCategory
 ];
 
 const sequelize = new Sequelize({
     dialect: "sqlite",
     storage: "cardlist.db",
-//    logging: Log.debug.bind(Log, "DB"),
     logQueryParameters: true,
     models: modelList
 });
 
-const DB = {
+export interface DBObject {
+    syncPromise: Promise<any>,
+    sequelize: Sequelize,
+
+    Card: ModelCtor<Card>
+    CardMemberGroup: ModelCtor<CardMemberGroup>
+    CardFAQLink: ModelCtor<CardFAQLink>
+
+    CardMemberExtraInfo: ModelCtor<CardMemberExtraInfo>
+    CardMemberIdolizePieceExtraInfo: ModelCtor<CardMemberIdolizePieceExtraInfo>
+
+    CardSongExtraInfo: ModelCtor<CardSongExtraInfo>
+    CardSongAnyReqExtraInfo: ModelCtor<CardSongAnyReqExtraInfo>
+    CardSongAttrReqExtraInfo: ModelCtor<CardSongAttrReqExtraInfo>
+
+    Skill: ModelCtor<Skill>
+    Link: ModelCtor<Link>
+    Annotation: ModelCtor<Annotation>
+
+    TranslationName: ModelCtor<TranslationName>
+    TranslationSong: ModelCtor<TranslationSong>
+    TranslationPattern: ModelCtor<TranslationPattern>
+
+    Set: ModelCtor<Set>
+    SetCategory: ModelCtor<SetCategory>
+}
+
+const DB: DBObject = {
     syncPromise: Promise.all(modelList.map(m => m.sync())),
     sequelize: sequelize,
 
-    /*Card: <typeof Card>sequelize.models.Card,
-    CardMemberGroup: <typeof CardMemberGroup>sequelize.models.CardMemberGroup,
-    CardFAQLink: <typeof CardFAQLink>sequelize.models.CardFAQLink,
+    Card: <ModelCtor<Card>>sequelize.models.Card,
+    CardMemberGroup: <ModelCtor<CardMemberGroup>>sequelize.models.CardMemberGroup,
+    CardFAQLink: <ModelCtor<CardFAQLink>>sequelize.models.CardFAQLink,
 
-    CardMemberExtraInfo: <typeof CardMemberExtraInfo>sequelize.models.CardMemberExtraInfo,
-    CardMemberIdolizePieceExtraInfo: <typeof CardMemberIdolizePieceExtraInfo>sequelize.models.CardMemberIdolizePieceExtraInfo,
+    CardMemberExtraInfo: <ModelCtor<CardMemberExtraInfo>>sequelize.models.CardMemberExtraInfo,
+    CardMemberIdolizePieceExtraInfo: <ModelCtor<CardMemberIdolizePieceExtraInfo>>sequelize.models.CardMemberIdolizePieceExtraInfo,
 
-    CardSongExtraInfo: <typeof CardSongExtraInfo>sequelize.models.CardSongExtraInfo,
-    CardSongAnyReqExtraInfo: <typeof CardSongAnyReqExtraInfo>sequelize.models.CardSongAnyReqExtraInfo,
-    CardSongAttrReqExtraInfo: <typeof CardSongAttrReqExtraInfo>sequelize.models.CardSongAttrReqExtraInfo,
+    CardSongExtraInfo: <ModelCtor<CardSongExtraInfo>>sequelize.models.CardSongExtraInfo,
+    CardSongAnyReqExtraInfo: <ModelCtor<CardSongAnyReqExtraInfo>>sequelize.models.CardSongAnyReqExtraInfo,
+    CardSongAttrReqExtraInfo: <ModelCtor<CardSongAttrReqExtraInfo>>sequelize.models.CardSongAttrReqExtraInfo,
 
-    Skill: <typeof Skill>sequelize.models.Skill,
-    Link: <typeof Link>sequelize.models.Link,
-    Annotation: <typeof Annotation>sequelize.models.Annotation,
+    Skill: <ModelCtor<Skill>>sequelize.models.Skill,
+    Link: <ModelCtor<Link>>sequelize.models.Link,
+    Annotation: <ModelCtor<Annotation>>sequelize.models.Annotation,
 
-    TranslationName: <typeof TranslationName>sequelize.models.TranslationName,
-    TranslationSong: <typeof TranslationSong>sequelize.models.TranslationSong,
-    TranslationPattern: <typeof TranslationPattern>sequelize.models.TranslationPattern,*/
+    TranslationName: <ModelCtor<TranslationName>>sequelize.models.TranslationName,
+    TranslationSong: <ModelCtor<TranslationSong>>sequelize.models.TranslationSong,
+    TranslationPattern: <ModelCtor<TranslationPattern>>sequelize.models.TranslationPattern,
 
-    Set: <typeof Set>sequelize.models.Set,
-    SetCategory: <typeof SetCategory>sequelize.models.SetCategory
+    Set: <ModelCtor<Set>>sequelize.models.Set,
+    SetCategory: <ModelCtor<SetCategory>>sequelize.models.SetCategory
 };
 
 export default DB;

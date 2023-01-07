@@ -1,17 +1,13 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 // and what to do when importing types
-import SetCategory from "$models/set/category";
-import type {ModelCtor} from "sequelize-typescript";
+import type {DBObject} from "$models/db";
 
 declare global {
     namespace App {
         // interface Error {}
         interface Locals {
-            db: {
-                Set: ModelCtor<Set>,
-                SetCategory: ModelCtor<SetCategory>
-            }
+            db: DBObject
         }
 
         // interface PageData {}
