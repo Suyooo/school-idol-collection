@@ -184,15 +184,15 @@ export class CardBase extends Model {
     @PrimaryKey
     @AllowNull(false)
     @Column(DataType.STRING)
-    cardNo!: string;
+    declare cardNo: string;
 
     @AllowNull(false)
     @Column({field: "id", type: DataType.INTEGER})
-    cardId!: number;
+    declare cardId: number;
 
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    type!: CardType;
+    declare type: CardType;
 
     isMember(): this is CardMember {
         return this.type == CardType.MEMBER;
@@ -223,31 +223,31 @@ export class CardBase extends Model {
     }
 
     @HasOne(() => CardMemberExtraInfo)
-    member!: CardMemberExtraInfo | null;
+    declare member: CardMemberExtraInfo | null;
 
     @HasOne(() => CardSongExtraInfo)
-    song!: CardSongExtraInfo | null;
+    declare song: CardSongExtraInfo | null;
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    nameJpn!: string;
+    declare nameJpn: string;
 
     @Column(DataType.STRING)
-    nameEng!: string | null;
+    declare nameEng: string | null;
 
     @HasMany(() => SkillBase, {foreignKey: "cardNo"})
-    skills!: Skill[];
+    declare skills: Skill[];
 
     @AllowNull(false)
     @Column(DataType.TEXT)
-    copyright!: string;
+    declare copyright: string;
 
     // constraints = false because standard SQL doesn't support foreign keys being non-unique
     @HasMany(() => CardFAQLink, {foreignKey: "cardId", sourceKey: "cardId", constraints: false})
-    faqs!: CardFAQLink[];
+    declare faqs: CardFAQLink[];
 
     @BelongsToMany(() => Annotation, {through: {model: () => Link, unique: false}})
-    linkedBy: Array<Annotation & { Link: Link }> | undefined;
+    declare linkedBy: Array<Annotation & { Link: Link }> | undefined;
 }
 
 export class CardMember extends CardBase {

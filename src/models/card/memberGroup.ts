@@ -31,22 +31,22 @@ export default class CardMemberGroup extends Model {
     @AllowNull(false)
     @AutoIncrement
     @Column({field: "id", type: DataType.INTEGER})
-    cardId!: number;
+    declare cardId: number;
 
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    type!: CardMemberGroupType;
+    declare type: CardMemberGroupType;
 
     @HasMany(() => CardMemberExtraInfo)
-    memberExtraInfos!: CardMemberExtraInfo[];
+    declare memberExtraInfos: CardMemberExtraInfo[];
 
     get members(): CardMember[] {
         return this.memberExtraInfos.map((extraInfo: CardMemberExtraInfo) => <CardMember>extraInfo.card);
     }
 
     @Column(DataType.STRING)
-    expectedMemberIds!: string;
+    declare expectedMemberIds: string;
 
     @HasMany(() => SkillBase, {foreignKey: "groupId"})
-    skills!: Skill[];
+    declare skills: Skill[];
 }

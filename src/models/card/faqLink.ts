@@ -19,23 +19,23 @@ export default class CardFAQLink extends Model {
     @AllowNull(false)
     @ForeignKey(() => CardBase)
     @Column(DataType.INTEGER)
-    cardId!: number;
+    declare cardId: number;
 
     // constraints = false because standard SQL doesn't support foreign keys being non-unique
     @BelongsTo(() => CardBase, {foreignKey: "cardId", targetKey: "cardId", constraints: false})
-    card!: Card;
+    declare card: Card;
 
     @PrimaryKey
     @Min(1)
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    displayOrder!: number;
+    declare displayOrder: number;
 
     @AllowNull(false)
     @Column(DataType.TEXT)
-    label!: string;
+    declare label: string;
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    link!: string;
+    declare link: string;
 }

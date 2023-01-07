@@ -32,10 +32,10 @@ export default class CardMemberIdolizePieceExtraInfo extends Model {
     @AllowNull(false)
     @ForeignKey(() => CardMemberExtraInfo)
     @Column(DataType.STRING)
-    cardMemberExtraInfoCardNo!: string;
+    declare cardMemberExtraInfoCardNo: string;
 
     @BelongsTo(() => CardMemberExtraInfo)
-    cardMemberExtraInfo!: CardMemberExtraInfo;
+    declare cardMemberExtraInfo: CardMemberExtraInfo;
 
     get card(): CardMember {
         return this.cardMemberExtraInfo.card;
@@ -44,22 +44,22 @@ export default class CardMemberIdolizePieceExtraInfo extends Model {
     @AllowNull(false)
     @Min(0)
     @Column(DataType.INTEGER)
-    piecesAll!: number;
+    declare piecesAll: number;
 
     @AllowNull(false)
     @Min(0)
     @Column(DataType.INTEGER)
-    piecesSmile!: number;
+    declare piecesSmile: number;
 
     @AllowNull(false)
     @Min(0)
     @Column(DataType.INTEGER)
-    piecesPure!: number;
+    declare piecesPure: number;
 
     @AllowNull(false)
     @Min(0)
     @Column(DataType.INTEGER)
-    piecesCool!: number;
+    declare piecesCool: number;
 
     get pieces(): PieceInfo {
         return pieceInfoGetter(this,"piecesAll", "piecesSmile", "piecesPure", "piecesCool")

@@ -16,15 +16,15 @@ export default class Link extends Model {
     @AllowNull(false)
     @AutoIncrement
     @Column({field: "id", type: DataType.INTEGER})
-    linkId!: number;
+    declare linkId: number;
 
     @AllowNull(false)
     @ForeignKey(() => Annotation)
     @Column(DataType.INTEGER)
-    from!: number;
+    declare from: number;
 
     @AllowNull(false)
     @ForeignKey(() => CardBase)
     @Column(DataType.STRING)
-    to!: string;
+    declare to: string;
 }

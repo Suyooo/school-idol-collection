@@ -27,30 +27,30 @@ export default class Annotation extends Model {
     @AllowNull(false)
     @AutoIncrement
     @Column({field: "id", type: DataType.INTEGER})
-    annoId!: number;
+    declare annoId: number;
 
     @ForeignKey(() => SkillBase)
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    skillId!: number;
+    declare skillId: number;
 
     @BelongsTo(() => SkillBase)
-    skill!: Skill;
+    declare skill: Skill;
 
     @AllowNull(false)
     @Column(DataType.BOOLEAN)
-    isEng!: boolean;
+    declare isEng: boolean;
 
     @AllowNull(false)
     @Column(DataType.NUMBER)
-    type!: AnnotationTypeID;
+    declare type: AnnotationTypeID;
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    parameter!: string;
+    declare parameter: string;
 
     @BelongsToMany(() => CardBase, {through: {model: () => Link, unique: false}})
-    linksTo!: Array<Card & { Link: Link }>;
+    declare linksTo: Array<Card & { Link: Link }>;
 
     getAnnotationString() {
         return "{{" + AnnotationType.get(this.type).key + ":" + this.parameter + "}}";

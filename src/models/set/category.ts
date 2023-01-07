@@ -16,16 +16,16 @@ export default class SetCategory extends Model {
     @AllowNull(false)
     @AutoIncrement
     @Column({field: "id", type: DataType.INTEGER})
-    catId!: number;
+    declare catId: number;
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    jpn!: string;
+    declare jpn: string;
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    eng!: string;
+    declare eng: string;
 
     @HasMany(() => Set)
-    sets!: Set[];
+    declare sets: Set[];
 }

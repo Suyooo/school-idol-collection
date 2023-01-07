@@ -44,33 +44,33 @@ export default class CardSongExtraInfo extends Model {
     @AllowNull(false)
     @ForeignKey(() => CardBase)
     @Column(DataType.INTEGER)
-    cardId!: string;
+    declare cardId: string;
 
     @BelongsTo(() => CardBase)
-    card!: CardSong;
+    declare card: CardSong;
 
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    rarity!: CardSongRarity;
+    declare rarity: CardSongRarity;
 
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    attribute!: AttributeID;
+    declare attribute: AttributeID;
 
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    lpBase!: number;
+    declare lpBase: number;
 
     @Column(DataType.STRING(2))
-    lpBonus!: number | "X" | "∞" | null;
+    declare lpBonus: number | "X" | "∞" | null;
 
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    requirementType!: CardSongRequirementType;
+    declare requirementType: CardSongRequirementType;
 
     @HasOne(() => CardSongAnyReqExtraInfo)
-    anyRequirement!: CardSongAnyReqExtraInfo | null;
+    declare anyRequirement: CardSongAnyReqExtraInfo | null;
 
     @HasOne(() => CardSongAttrReqExtraInfo)
-    attrRequirement!: CardSongAttrReqExtraInfo | null;
+    declare attrRequirement: CardSongAttrReqExtraInfo | null;
 }

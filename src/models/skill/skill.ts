@@ -45,13 +45,13 @@ export class SkillBase extends Model {
     @AllowNull(false)
     @AutoIncrement
     @Column(DataType.INTEGER)
-    skillId!: number;
+    declare skillId: number;
 
     @ForeignKey(() => CardBase)
     @Column(DataType.STRING)
-    cardNo!: string | null;
+    declare cardNo: string | null;
     @BelongsTo(() => CardBase)
-    card!: Card | null;
+    declare card: Card | null;
 
     isCardSkill(): this is SkillCard {
         return this.cardNo !== null;
@@ -59,9 +59,9 @@ export class SkillBase extends Model {
 
     @ForeignKey(() => CardMemberGroup)
     @Column(DataType.INTEGER)
-    groupId!: number | null;
+    declare groupId: number | null;
     @BelongsTo(() => CardMemberGroup)
-    group!: CardMemberGroup | null;
+    declare group: CardMemberGroup | null;
 
     isGroupSkill(): this is SkillGroup {
         return this.groupId !== null;
@@ -70,24 +70,24 @@ export class SkillBase extends Model {
     @AllowNull(false)
     @Min(0)
     @Column(DataType.INTEGER)
-    line!: number;
+    declare line: number;
 
     @ForeignKey(() => TranslationPattern)
     @Column(DataType.INTEGER)
-    patternId!: number | null;
+    declare patternId: number | null;
 
     @BelongsTo(() => TranslationPattern)
-    pattern!: TranslationPattern | null;
+    declare pattern: TranslationPattern | null;
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    jpn!: string;
+    declare jpn: string;
 
     @Column(DataType.STRING)
-    eng!: string | null;
+    declare eng: string | null;
 
     @HasMany(() => Annotation)
-    annotations!: Annotation[];
+    declare annotations: Annotation[];
 
     @BeforeUpdate
     static async clearAnnotations(skill: Skill, options: QueryOptions) {

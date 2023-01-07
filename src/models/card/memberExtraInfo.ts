@@ -50,80 +50,80 @@ export default class CardMemberExtraInfo extends Model {
     @AllowNull(false)
     @ForeignKey(() => CardBase)
     @Column(DataType.INTEGER)
-    cardNo!: string;
+    declare cardNo: string;
 
     @BelongsTo(() => CardBase)
-    card!: CardMember;
+    declare card: CardMember;
 
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    rarity!: CardMemberRarity;
+    declare rarity: CardMemberRarity;
 
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    cost!: 0 | 1 | 2 | 3;
+    declare cost: 0 | 1 | 2 | 3;
 
     @Column(DataType.INTEGER)
-    birthDay!: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | null;
+    declare birthDay: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | null;
 
     @Column(DataType.NUMBER)
-    birthMonth!: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | null;
+    declare birthMonth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | null;
 
     @Column(DataType.INTEGER)
-    year!: 1 | 2 | 3 | null;
-
-    @AllowNull(false)
-    @Min(0)
-    @Column(DataType.INTEGER)
-    piecesAll!: number;
+    declare year: 1 | 2 | 3 | null;
 
     @AllowNull(false)
     @Min(0)
     @Column(DataType.INTEGER)
-    piecesSmile!: number;
+    declare piecesAll: number;
 
     @AllowNull(false)
     @Min(0)
     @Column(DataType.INTEGER)
-    piecesPure!: number;
+    declare piecesSmile: number;
 
     @AllowNull(false)
     @Min(0)
     @Column(DataType.INTEGER)
-    piecesCool!: number;
+    declare piecesPure: number;
+
+    @AllowNull(false)
+    @Min(0)
+    @Column(DataType.INTEGER)
+    declare piecesCool: number;
 
     get pieces(): PieceInfo {
         return pieceInfoGetter(this, "piecesAll", "piecesSmile", "piecesPure", "piecesCool");
     }
 
     @Column(DataType.INTEGER)
-    pieceBdayAttribute!: AttributeID | null;
+    declare pieceBdayAttribute: AttributeID | null;
 
     @Column(DataType.STRING)
-    costumeJpn!: string | null;
+    declare costumeJpn: string | null;
 
     @Column(DataType.STRING)
-    costumeEng!: string | null;
+    declare costumeEng: string | null;
 
     @AllowNull(false)
     @Column(DataType.BOOLEAN)
-    abilityRush!: boolean;
+    declare abilityRush: boolean;
 
     @AllowNull(false)
     @Column(DataType.BOOLEAN)
-    abilityLive!: boolean;
+    declare abilityLive: boolean;
 
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    idolizeType!: CardMemberIdolizeType;
+    declare idolizeType: CardMemberIdolizeType;
 
     @ForeignKey(() => CardMemberGroup)
     @Column(DataType.INTEGER)
-    groupId!: number | null;
+    declare groupId: number | null;
 
     @BelongsTo(() => CardMemberGroup)
-    group!: CardMemberGroup | null;
+    declare group: CardMemberGroup | null;
 
     @HasOne(() => CardMemberIdolizePieceExtraInfo)
-    idolizeBonus!: CardMemberIdolizePieceExtraInfo | null;
+    declare idolizeBonus: CardMemberIdolizePieceExtraInfo | null;
 }

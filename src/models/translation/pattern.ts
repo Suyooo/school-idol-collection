@@ -25,12 +25,12 @@ export default class TranslationPattern extends Model {
     @PrimaryKey
     @AllowNull(false)
     @AutoIncrement
-    @Column(DataType.INTEGER)
-    pattId!: number;
+    @Column({field: "id", type: DataType.INTEGER})
+    declare pattId: number;
 
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    triggers!: number;
+    declare triggers: number;
 
     get triggerArray(): Trigger[] {
         const triggers: Trigger[] = [];
@@ -50,15 +50,15 @@ export default class TranslationPattern extends Model {
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    regex!: string;
+    declare regex: string;
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    template!: string;
+    declare template: string;
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    groupTypes!: string;
+    declare groupTypes: string;
 
     get groupTypeArray(): PatternGroupType[] {
         const types = [];

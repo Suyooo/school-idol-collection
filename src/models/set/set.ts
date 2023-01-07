@@ -15,25 +15,25 @@ export default class Set extends Model {
     @PrimaryKey
     @AllowNull(false)
     @Column({field: "id", type: DataType.STRING})
-    setId!: string;
+    declare setId: string;
 
     @AllowNull(false)
     @ForeignKey(() => SetCategory)
     @Column(DataType.INTEGER)
-    categoryId!: number;
+    declare categoryId: number;
 
     @BelongsTo(() => SetCategory)
-    category!: SetCategory | null;
+    declare category: SetCategory | null;
 
     @AllowNull(false)
     @Column(DataType.INTEGER)
-    order!: number;
+    declare order: number;
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    jpn!: string;
+    declare jpn: string;
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    eng!: string;
+    declare eng: string;
 }

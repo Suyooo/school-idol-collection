@@ -14,9 +14,9 @@ export default class TranslationName extends Model {
     @PrimaryKey
     @AllowNull(false)
     @Column(DataType.STRING)
-    jpn!: string;
+    declare jpn: string;
 
     @AllowNull(false)
     @Column(DataType.STRING)
-    eng!: string;
+    declare eng: string;
 }

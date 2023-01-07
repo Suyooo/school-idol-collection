@@ -23,10 +23,10 @@ export default class CardSongAttrReqExtraInfo extends Model {
     @AllowNull(false)
     @ForeignKey(() => CardSongExtraInfo)
     @Column(DataType.STRING)
-    cardSongExtraInfoCardNo!: string;
+    declare cardSongExtraInfoCardNo: string;
 
     @BelongsTo(() => CardSongExtraInfo)
-    cardSongExtraInfo!: CardSongExtraInfo;
+    declare cardSongExtraInfo: CardSongExtraInfo;
 
     get card(): CardSong {
         return this.cardSongExtraInfo.card;
@@ -35,17 +35,17 @@ export default class CardSongAttrReqExtraInfo extends Model {
     @AllowNull(false)
     @Min(0)
     @Column(DataType.INTEGER)
-    piecesSmile!: number;
+    declare piecesSmile: number;
 
     @AllowNull(false)
     @Min(0)
     @Column(DataType.INTEGER)
-    piecesPure!: number;
+    declare piecesPure: number;
 
     @AllowNull(false)
     @Min(0)
     @Column(DataType.INTEGER)
-    piecesCool!: number;
+    declare piecesCool: number;
 
     get pieces(): PieceInfo {
         return pieceInfoGetter(this,undefined, "piecesSmile", "piecesPure", "piecesCool");
