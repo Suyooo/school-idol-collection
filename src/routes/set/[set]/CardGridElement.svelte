@@ -1,22 +1,25 @@
 <script lang="ts">
     import type Card from "$models/card/card";
-    import CardType from "$types/cardType";
+    import {cardType} from "$lib/card/strings.js";
+    import {cardIsMember, cardIsMemory} from "$lib/card/types.js";
 
     export let card: Card;
-    const set = card.cardNo.split("-")[0];
-    const typeString = card.type === CardType.MEMBER ? "Member" : card.type === CardType.SONG ? "Song" : "Memory";
+    let set: string;
+    $: set = card.cardNo.split("-")[0];
 </script>
 
-<a href="/card/{card.cardNo}/" class="grid-item">
+<a href="/card/{card.cardNo}" class="grid-item">
     <div class="imgcont">
-        <img src="/images/{set}/{card.cardNo}-front.jpg" alt="{card.cardNo} Front Illustration">
-        <img src="/images/{set}/{card.cardNo}-back.jpg" alt="{card.cardNo} Back Illustration">
+        <img src="/images/{set}/{card.cardNo}-front.jpg" alt="{card.cardNo} Front Illustration"
+             class:card-h={!cardIsMember(card)}>
+        <img src="/images/{set}/{card.cardNo}-back.jpg" alt="{card.cardNo} Back Illustration"
+             class:card-h={cardIsMemory(card)}>
     </div>
     <div class="namecont">
         <span>⏵</span><span>{card.nameEng || card.nameJpn}</span>
     </div>
     <div class="linecont">
-        <span>{card.cardNo}</span><span>{typeString}</span>
+        <span>{card.cardNo}</span><span>{cardType(card)}</span>
     </div>
 </a>
 
@@ -26,7 +29,7 @@
             @apply bg-primary-700 gap-2;
 
             & > img {
-                @apply max-w-[50%] rounded-[4px] basis-0;
+                @apply max-w-[50%] rounded-card basis-0;
             }
         }
 

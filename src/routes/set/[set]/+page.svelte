@@ -14,10 +14,10 @@
 <h5>{$page.params.set}</h5>
 <div class="content">
     <div class="panel grid-container">
-        {#each data.cards as card}
+        {#each data.cards as card (card.cardNo)}
             <CardGridElement {card}/>
         {/each}
     </div>
 </div>
 
-<a class="button button-primary my-4 float-right" href="/list/">View Full Card List</a>
+<a class="button button-primary my-4 float-right" href="/list">View Full Card List</a>

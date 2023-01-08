@@ -4,7 +4,7 @@
     export let set: Set;
 </script>
 
-<a href="/set/{set.setId}/" class="grid-item">
+<a href="/set/{set.setId}" class="grid-item">
     <div class="imgcont">
         <img src="/images/{set.setId}/set.jpg" alt="{set.setId}">
     </div>

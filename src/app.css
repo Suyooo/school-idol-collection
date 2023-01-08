@@ -2,28 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-a.not(.button) {
+a {
     @apply text-accent-400 underline;
 
-    &:focus, &:hover {
-        @apply text-accent-200;
-    }
+&
+:focus,
+
+&
+:hover {
+    @apply text-accent-200;
+}
+
 }
 
 a.button {
     @apply text-white bg-primary-700 rounded uppercase px-4 py-2 cursor-pointer text-sm tracking-wide;
 
-    &:hover, &:focus {
-        @apply bg-primary-500;
-    }
+&
+:hover,
 
-    &.button-primary {
-        @apply bg-accent-600;
+&
+:focus {
+    @apply bg-primary-500;
+}
 
-        &:hover, &:focus {
-            @apply bg-accent-400;
-        }
-    }
+&
+.button-primary {
+    @apply bg-accent-600;
+
+&
+:hover,
+
+&
+:focus {
+    @apply bg-accent-400;
+}
+
+}
 
 }
 
@@ -31,8 +46,28 @@ body {
     @apply bg-background text-white font-sans;
 }
 
-.container {
-    @apply w-full max-w-screen-lg mx-auto p-4;
+.cont {
+    @apply w-full max-w-screen-xl mx-auto p-4;
+}
+
+.row {
+    @apply lg:flex;
+}
+
+.row > * {
+    @apply flex-grow-0 flex-shrink-0 w-full;
+}
+
+.row > .col-quarter {
+    @apply lg:basis-[25%];
+}
+
+.row > .col-half {
+    @apply lg:basis-[50%];
+}
+
+.row > .col-threequarters {
+    @apply lg:basis-[75%];
 }
 
 .content {
@@ -51,20 +86,24 @@ span.card-id {
     @apply text-primary-200 font-bold;
 }
 
-h1,h2,h3,h4,h5,h6 {
-    @apply text-accent-400 font-bold uppercase tracking-widest text-2xl mt-4 mb-1; /**/
+h1, h2, h3, h4, h5, h6 {
+    @apply text-accent-400 font-bold uppercase tracking-widest text-2xl mt-4 mb-1;
+    /**/
 }
 
 .panel h6 {
-    @apply m-0; /**/
+    @apply m-0;
+    /**/
 }
 
 input, textarea {
-    @apply bg-primary-900 border-primary-100 m-0; /**/
+    @apply bg-primary-900 border-primary-100 m-0;
+    /**/
 }
 
 label {
-    @apply inline m-0; /**/
+    @apply inline m-0;
+    /**/
 }
 
 input[type="text"], textarea {
@@ -81,4 +120,15 @@ textarea {
 
 tr > th {
     @apply whitespace-nowrap;
+}
+
+@layer utilities {
+    .rounded-card {
+        &:not(.card-h) {
+            @apply rounded-card-v;
+        }
+        &.card-h {
+            @apply rounded-card-h;
+        }
+    }
 }

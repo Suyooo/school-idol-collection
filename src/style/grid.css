@@ -34,12 +34,12 @@
     @apply pl-2 flex-grow-0 flex-shrink-0 basis-0;
 }
 
-.namecont > span:first-child, .linecont > span {
-    @apply text-white;
+.namecont > span:last-child {
+    @apply underline;
 }
 
-.namecont > span:last-child {
-    @apply underline text-accent-400;
+.namecont > span:first-child, .linecont > span {
+    @apply text-white;
 }
 
 .namecont > span:last-child, .linecont > span {

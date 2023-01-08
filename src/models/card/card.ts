@@ -22,8 +22,7 @@ import type CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo";
 import CardFAQLink from "$models/card/faqLink";
 
 import CardType from "$types/cardType";
-import CardSongRequirementType from "$types/cardSongRequirementType";
-import CardMemberIdolizeType from "$types/cardMemberIdolizeType";
+import type CardMemberIdolizeType from "$types/cardMemberIdolizeType";
 import type {AttributeID} from "$types/attribute";
 import type CardMemberGroup from "$models/card/memberGroup";
 import type Skill from "$models/skill/skill";
@@ -194,34 +193,6 @@ export class CardBase extends Model {
     @Column(DataType.INTEGER)
     declare type: CardType;
 
-    isMember(): this is CardMember {
-        return this.type == CardType.MEMBER;
-    }
-
-    isMemberIdolizable(): this is CardMemberIdolizable {
-        return this.isMember() && this.member.idolizeType !== CardMemberIdolizeType.NONE;
-    }
-
-    hasIdolizationPieces(): this is CardMemberHasIdolizePieces {
-        return this.isMemberIdolizable() && this.member.idolizeType === CardMemberIdolizeType.WITH_PIECES;
-    }
-
-    isSong(): this is CardSong {
-        return this.type == CardType.SONG;
-    }
-
-    hasAnyPieceRequirement(): this is CardSongWithAnyReq {
-        return this.isSong() && this.song.requirementType == CardSongRequirementType.ANY_PIECE;
-    }
-
-    hasAttrPieceRequirement(): this is CardSongWithAttrReq {
-        return this.isSong() && this.song.requirementType == CardSongRequirementType.ATTR_PIECE;
-    }
-
-    isMemory(): this is CardMemory {
-        return this.type == CardType.MEMORY;
-    }
-
     @HasOne(() => CardMemberExtraInfo)
     declare member: CardMemberExtraInfo | null;
 
@@ -247,7 +218,7 @@ export class CardBase extends Model {
     declare faqs: CardFAQLink[];
 
     @BelongsToMany(() => Annotation, {through: {model: () => Link, unique: false}})
-    declare linkedBy: Array<Annotation & { Link: Link }> | undefined;
+    declare linkedBy: (Annotation & { Link: Link })[];
 }
 
 export class CardMember extends CardBase {
@@ -256,7 +227,7 @@ export class CardMember extends CardBase {
     declare song: null;
 }
 
-export class CardMemberHasBirthdayPieces extends CardMember {
+export class CardMemberWithBirthdayPieces extends CardMember {
     declare member:
         Omit<CardMemberExtraInfo, "pieceBdayAttribute">
         & { pieceBdayAttribute: AttributeID };
@@ -268,13 +239,13 @@ export class CardMemberIdolizable extends CardMember {
         & { idolizeType: CardMemberIdolizeType.NO_PIECES | CardMemberIdolizeType.WITH_PIECES };
 }
 
-export class CardMemberHasIdolizePieces extends CardMember {
+export class CardMemberWithIdolizePieces extends CardMember {
     declare member:
         Omit<CardMemberExtraInfo, "idolizeType" | "idolizeBonus">
         & { idolizeType: CardMemberIdolizeType.WITH_PIECES, idolizeBonus: CardMemberIdolizePieceExtraInfo };
 }
 
-export class CardMemberHasGroup extends CardMember {
+export class CardMemberWithGroup extends CardMember {
     declare member:
         Omit<CardMemberExtraInfo, "group">
         & { group: CardMemberGroup };

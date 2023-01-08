@@ -7,7 +7,7 @@ import SearchFilter, {
     SearchFilterName, SearchFilterSkill,
     SearchFilterSong
 } from "../search/options";
-import {cardTitle} from "$utils/conventions";
+import {cardTitle} from "$lib/card/strings";
 
 export type AnnotationTypeKey = "card" | "song" | "mem" | "costume" | "skilltext";
 export type AnnotationTypeID = 0 | 1 | 2 | 3 | 4;
@@ -52,7 +52,7 @@ export default class AnnotationType {
         if (this.getLinkTargetOverride !== undefined) {
             return this.getLinkTargetOverride(parameter, cards);
         } else if (cards.length === 1) {
-            return "/card/" + cards[0].cardNo + "/";
+            return "/card/" + cards[0].cardNo;
         } else {
             return "/search/" + this.getSearchFilters(parameter).map(f => f.getFilterString()).join("/") + "/";
         }
@@ -67,8 +67,8 @@ export default class AnnotationType {
                 f.param = parameter;
                 return [f];
             },
-            (_parameter, cards) => "/card/" + cards[0].cardNo + "/",
-            (_parameter, cards) => cardTitle(cards[0]));
+            (_parameter, cards) => "/card/" + cards[0].cardNo,
+            (_parameter, cards) => cardTitle(cards[0], true));
         new AnnotationType(map, 1, "song",
             (parameter) => {
                 const f = new SearchFilterName();

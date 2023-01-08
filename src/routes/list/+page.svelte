@@ -10,11 +10,11 @@
     <title>Card List &bull; SIC</title>
 </svelte:head>
 
-{#each data.categories as cat}
+{#each data.categories as cat (cat.catId)}
     <h5>{cat.eng}</h5>
     <div class="content">
         <div class="panel grid-container">
-            {#each cat.sets as set}
+            {#each cat.sets as set (set.setId)}
                 <SetGridElement {set} />
             {/each}
         </div>

@@ -44,7 +44,7 @@ export class SkillBase extends Model {
     @PrimaryKey
     @AllowNull(false)
     @AutoIncrement
-    @Column(DataType.INTEGER)
+    @Column({field: "id", type: DataType.INTEGER})
     declare skillId: number;
 
     @ForeignKey(() => CardBase)

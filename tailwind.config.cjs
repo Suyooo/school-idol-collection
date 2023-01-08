@@ -17,6 +17,8 @@ module.exports = {
         }
       },
       borderRadius: {
+        "card-v": "4.66% / 3.33%",
+        "card-h": "3.33% / 4.66%",
         "4xl": "2rem"
       }
     }
