@@ -75,14 +75,6 @@ h1, h2, h3, h4, h5, h6 {
     /**/
 }
 
-.rounded-card:not(.card-h) {
-    @apply rounded-card-v;
-}
-
-.rounded-card.card-h {
-    @apply rounded-card-h;
-}
-
 input,
 textarea {
     @apply bg-primary-900 border-primary-100 m-0;

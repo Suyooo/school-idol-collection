@@ -1,4 +1,5 @@
 <script lang="ts">
+    import CardImage from "$lib/format/CardImage.svelte";
     import PieceCount from "$lib/format/PieceCount.svelte";
     import Attribute from "$types/attribute.js";
     import CardSongRequirementType from "$types/cardSongRequirementType.js";
@@ -37,12 +38,10 @@
     <div class="row lg:flex">
         <div class="col-quarter imgcont">
             <div>
-                <img src="/images/{card.cardSet}/{card.cardNo}-front.jpg" alt="{card.cardNo} Front Illustration"
-                     class="rounded-card" class:card-h={!cardIsMember(card)}>
+                <CardImage cardNo={card.cardNo} cardSet={card.cardSet} front/>
             </div>
             <div>
-                <img src="/images/{card.cardSet}/{card.cardNo}-back.jpg" alt="{card.cardNo} Back Illustration"
-                     class="rounded-card" class:card-h={cardIsMemory(card)}>
+                <CardImage cardNo={card.cardNo} cardSet={card.cardSet}/>
             </div>
         </div>
         <div class="col-threequarters">
@@ -159,13 +158,19 @@
                             </div>
                             <div class="col-half inforow">
                                 <div>Attribute</div>
-                                <div>{card.song.attribute}</div>
+                                <div>{Attribute.get(card.song.attribute).songAttributeNameEng}</div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-half inforow">
                                 <div>Live Points</div>
-                                <div>{card.song.lpBase} {card.song.lpBonus ? card.song.lpBonus : ""}</div>
+                                <div>
+                                    {card.song.lpBase}
+                                    {#if card.song.lpBonus}
+                                        (
+                                        {#if card.song.lpBonus.charAt(0) !== "-"}+{/if}{card.song.lpBonus})
+                                    {/if}
+                                </div>
                             </div>
                             <div class="col-half inforow">
                                 <div>Requirement</div>
@@ -286,14 +291,14 @@
 <style lang="postcss">
     .imgcont {
         @apply flex gap-2 justify-center items-center lg:flex-col lg:justify-start mb-4 lg:mt-14 lg:mb-0;
-    }
 
-    .imgcont > div {
-        @apply mx-4;
-    }
+        & > div {
+            @apply mx-4;
 
-    .imgcont > div > img {
-        @apply max-w-full object-contain;
+            & > :global(img) {
+                @apply max-w-full;
+            }
+        }
     }
 
     .row > h5 {
@@ -302,50 +307,50 @@
 
     .inforow {
         @apply flex;
-    }
 
-    .inforow div {
-        @apply border-t border-primary-700;
-    }
+        & div {
+            @apply border-t border-primary-700;
+        }
 
-    .inforow > div {
-        @apply px-2 py-1;
-    }
+        & > div {
+            @apply px-2 py-1;
 
-    .inforow > div:first-child {
-        @apply bg-primary-500 font-bold text-xs uppercase tracking-widest leading-5 basis-[30%] flex-grow-0 flex-shrink-0;
-    }
+            &:first-child {
+                @apply bg-primary-500 font-bold text-xs uppercase tracking-widest leading-5 basis-[30%] flex-grow-0 flex-shrink-0;
 
-    .row.inforow > div:first-child {
-        @apply lg:basis-[15%]
-    }
+                & > span {
+                    @apply float-right font-normal;
+                }
+            }
 
-    .inforow > div:last-child {
-        @apply flex-grow flex-shrink;
-    }
-
-    .cost > span {
-        @apply inline-block w-4 text-center text-accent-300;
+            &:last-child {
+                @apply flex-grow flex-shrink;
+            }
+        }
     }
 
     .gap {
         @apply mt-4;
     }
 
-    .inforow > div:first-child > span {
-        @apply float-right font-normal;
+    .row.inforow > div:first-child {
+        @apply lg:basis-[15%]
     }
 
-    .cardcopyright {
-        @apply text-right text-xs text-primary-500 mt-2 mb-1;
+    .cost > span {
+        @apply inline-block w-4 text-center text-accent-300;
     }
 
     .faqs > a {
         @apply relative pl-4 block;
+
+        &:before {
+            @apply absolute top-0 left-0 text-primary-500 font-bold;
+            content: "⏵";
+        }
     }
 
-    .faqs > a:before {
-        @apply absolute top-0 left-0 text-primary-500 font-bold;
-        content: "⏵";
+    .cardcopyright {
+        @apply text-right text-xs text-primary-500 mt-2 mb-1;
     }
 </style>

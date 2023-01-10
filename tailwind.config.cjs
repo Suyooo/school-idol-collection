@@ -19,6 +19,7 @@ module.exports = {
       borderRadius: {
         "card-v": "4.66% / 3.33%",
         "card-h": "3.33% / 4.66%",
+        "card-fallback": "6px",
         "4xl": "2rem"
       },
       textIndent: {
