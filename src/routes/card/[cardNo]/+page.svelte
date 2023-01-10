@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Pieces from "$lib/format/Pieces.svelte";
+    import PieceCount from "$lib/format/PieceCount.svelte";
     import Attribute from "$types/attribute.js";
     import CardSongRequirementType from "$types/cardSongRequirementType.js";
     import type {PageData} from './$types.js';
@@ -130,14 +130,14 @@
                                     {/if}
                                 </div>
                                 <div>
-                                    <Pieces pieces={card.member}/>
+                                    <PieceCount pieces={card.member}/>
                                     {#if cardIsIdolizable(card) && cardHasIdolizationPieces(card)}
                                         <br>
-                                        <Pieces pieces={card.member.idolizeBonus}/>
+                                        <PieceCount pieces={card.member.idolizeBonus}/>
                                     {/if}
                                     {#if cardHasBirthdayPieces(card)}
                                         <br>
-                                        <Pieces pieces={{
+                                        <PieceCount pieces={{
                                             piecesAll: card.member.pieceBdayAttribute === Attribute.ALL ? 1 : 0,
                                             piecesSmile: card.member.pieceBdayAttribute === Attribute.SMILE ? 1 : 0,
                                             piecesPure: card.member.pieceBdayAttribute === Attribute.PURE ? 1 : 0,
@@ -171,9 +171,9 @@
                                 <div>Requirement</div>
                                 <div>
                                     {#if card.song.requirementType === CardSongRequirementType.ATTR_PIECE}
-                                        <Pieces pieces={{...card.song.attrRequirement, ...{piecesAll: null}}}/>
+                                        <PieceCount pieces={{...card.song.attrRequirement, ...{piecesAll: null}}}/>
                                     {:else}
-                                        <Pieces pieces={{piecesAll: card.song.anyRequirement.piecesAll}}/>
+                                        <PieceCount pieces={{piecesAll: card.song.anyRequirement.piecesAll}}/>
                                     {/if}
                                 </div>
                             </div>

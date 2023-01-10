@@ -1,5 +1,5 @@
-<!--suppress JSUnusedGlobalSymbols -->
 <script lang="ts">
+    import Piece from "$lib/format/Piece.svelte";
     import Attribute from "$types/attribute.js";
     import Language from "$types/language.js";
 
@@ -26,36 +26,14 @@
 {#each attrKeys as attrKey, i}
     {#if display[i] !== null}
         {@const attr = Attribute.get(attrKey.toUpperCase())}
-        <span class="pieceno">
-            <span class="piece {attrKey.toLowerCase()}" title={attr[lang.pieceNameProperty]}>
-                {lang.leftSquareBracket}{attr[lang.pieceNameProperty]}{lang.rightSquareBracket}{lang.times}
-            </span>
+        <span class="pieceno {attr.cssClassName}">
+            <Piece {lang} {attr}/>
             <span>{display[i]}</span>
         </span>
     {/if}
 {/each}
 
 <style lang="postcss">
-    span.piece {
-        @apply w-4 h-4 mt-0.5 bg-cover inline-block indent-out overflow-hidden align-top;
-
-        &.all {
-            background-image: url("/images/card/piece_all.png");
-        }
-
-        &.smile {
-            background-image: url("/images/card/piece_smile.png");
-        }
-
-        &.pure {
-            background-image: url("/images/card/piece_pure.png");
-        }
-
-        &.cool {
-            background-image: url("/images/card/piece_cool.png");
-        }
-    }
-
     span.pieceno {
         @apply font-bold whitespace-nowrap;
 
@@ -63,22 +41,20 @@
             @apply mr-4;
         }
 
-        & > span.piece {
-            &.all + span {
-                @apply text-attribute-all;
-            }
+        &.all span {
+            @apply text-attribute-all;
+        }
 
-            &.smile + span {
-                @apply text-attribute-smile;
-            }
+        &.smile span {
+            @apply text-attribute-smile;
+        }
 
-            &.pure + span {
-                @apply text-attribute-pure;
-            }
+        &.pure span {
+            @apply text-attribute-pure;
+        }
 
-            &.cool + span {
-                @apply text-attribute-cool;
-            }
+        &.cool span {
+            @apply text-attribute-cool;
         }
     }
 
