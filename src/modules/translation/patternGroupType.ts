@@ -1,12 +1,12 @@
-import DB from "$models/db";
-import type {QueryOptions} from "sequelize";
+import DB from "$models/db.js";
+import type {QueryOptions} from "@sequelize/core";
 
-import * as Grammar from "$utils/grammar";
-import * as Regex from "$utils/convert";
-import Attribute from "$types/attribute";
-import type {PieceAttributeJpnName} from "$types/attribute";
-import NotFoundError from "$errors/notFoundError";
-import MissingTranslationError from "$errors/missingTranslationError";
+import * as Grammar from "$utils/grammar.js";
+import * as Regex from "$utils/convert.js";
+import Attribute from "$types/attribute.js";
+import type {PieceAttributeJpnName} from "$types/attribute.js";
+import NotFoundError from "$errors/notFoundError.js";
+import MissingTranslationError from "$errors/missingTranslationError.js";
 
 const skilltextPattern = /{{skilltext:([^}]*?)}}/;
 
@@ -51,7 +51,7 @@ export default class PatternGroupType {
 
         // Mem Name
         map.push(new PatternGroupType(3, async function (match: string, options?: QueryOptions) {
-            const n = (await DB.Card.scope(["memories", "forLink"]).findOne({
+            const n = (await DB.Card.withScope(["memories", "forLink"]).findOne({
                 ...options,
                 where: {
                     nameJpn: match

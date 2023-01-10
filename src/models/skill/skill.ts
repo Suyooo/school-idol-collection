@@ -1,30 +1,22 @@
 import {
     AfterCreate,
     AfterUpdate,
-    AllowNull,
-    AutoIncrement,
+    Attribute,
     BeforeUpdate,
     BelongsTo,
-    Column,
-    DataType,
-    ForeignKey,
     HasMany,
-    Min,
-    Model,
-    PrimaryKey,
     Table
-} from "sequelize-typescript";
-import DB from "$models/db";
-import type {QueryOptions} from "sequelize";
+} from "@sequelize/core/decorators-legacy";
+import {DataTypes, Model,} from "@sequelize/core";
+import type {QueryOptions} from "@sequelize/core";
 
-import type Card from "$models/card/card";
-import CardMemberGroup from "$models/card/memberGroup";
-import TranslationPattern from "$models/translation/pattern";
+import type Card from "$models/card/card.js";
+import type CardMemberGroup from "$models/card/memberGroup.js";
+import type TranslationPattern from "$models/translation/pattern.js";
+import type Annotation from "$models/skill/annotation.js";
 
-import AnnotationType from "$types/annotationType";
-import type {AnnotationTypeKey} from "$types/annotationType";
-import Annotation from "$models/skill/annotation";
-import {CardBase} from "$models/card/card";
+import AnnotationType from "$types/annotationType.js";
+import type {AnnotationTypeKey} from "$types/annotationType.js";
 
 @Table({
     modelName: "Skill",
@@ -37,68 +29,86 @@ import {CardBase} from "$models/card/card";
                 else
                     throw new Error("Skill is not assigned to both a card and a group, must be exactly one");
             }
+            return true;
         }
     }
 })
 export class SkillBase extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @AutoIncrement
-    @Column({field: "id", type: DataType.INTEGER})
-    declare skillId: number;
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true
+    })
+    declare id: number;
 
-    @ForeignKey(() => CardBase)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: true
+    })
     declare cardNo: string | null;
-    @BelongsTo(() => CardBase)
+    /* inverse of association in Card */
     declare card: Card | null;
 
     isCardSkill(): this is SkillCard {
         return this.cardNo !== null;
     }
 
-    @ForeignKey(() => CardMemberGroup)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: true
+    })
     declare groupId: number | null;
-    @BelongsTo(() => CardMemberGroup)
+    /* inverse of association in CardMemberGroup */
     declare group: CardMemberGroup | null;
 
     isGroupSkill(): this is SkillGroup {
         return this.groupId !== null;
     }
 
-    @AllowNull(false)
-    @Min(0)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        validate: {min: 0}
+    })
     declare line: number;
 
-    @ForeignKey(() => TranslationPattern)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED
+    })
     declare patternId: number | null;
-
-    @BelongsTo(() => TranslationPattern)
+    @BelongsTo((s) => s.models.TranslationPattern, {
+        as: "pattern", foreignKey: "patternId"
+    })
     declare pattern: TranslationPattern | null;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare jpn: string;
 
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: true
+    })
     declare eng: string | null;
 
-    @HasMany(() => Annotation)
+    @HasMany((s) => s.models.Annotation, {
+        as: "annotation", foreignKey: "skillId", inverse: {as: "skill"}
+    })
     declare annotations: Annotation[];
 
     @BeforeUpdate
     static async clearAnnotations(skill: Skill, options: QueryOptions) {
         if (skill.changed("jpn"))
-            await DB.Annotation.destroy({
-                where: {skillId: skill.skillId, isEng: false},
+            await SkillBase.associations.Annotation.target.destroy({
+                where: {skillId: skill.id, isEng: false},
                 transaction: options.transaction
             });
         if (skill.changed("eng"))
-            await DB.Annotation.destroy({
-                where: {skillId: skill.skillId, isEng: true},
+            await SkillBase.associations.Annotation.target.destroy({
+                where: {skillId: skill.id, isEng: true},
                 transaction: options.transaction
             });
     }
@@ -109,31 +119,33 @@ export class SkillBase extends Model {
         if (skill.changed("jpn")) {
             for (const [_, key, parameter] of skill.jpn.matchAll(/{{(.*?):(.*?)}}/g)) {
                 const type = AnnotationType.get(key as AnnotationTypeKey);
-                const annotation = await DB.Annotation.create({
-                    skillId: skill.skillId,
+                const annotation = <Annotation>await SkillBase.associations.Annotation.target.create({
+                    skillId: skill.id,
                     isEng: false,
                     type: type.id,
                     parameter
                 }, {transaction: options.transaction});
-                await DB.Link.bulkCreate((await type.getCards(parameter, {transaction: options.transaction})).map(c => ({
-                    from: annotation.annoId,
-                    to: c.cardNo
-                })), {transaction: options.transaction});
+                await SkillBase.associations.Link.target
+                    .bulkCreate((await type.getCards(parameter, {transaction: options.transaction})).map(c => ({
+                        from: annotation.id,
+                        to: c.cardNo
+                    })), {transaction: options.transaction});
             }
         }
         if (skill.changed("eng") && skill.eng !== null) {
             for (const [_, key, parameter] of skill.eng.matchAll(/{{(.*?):(.*?)}}/g)) {
                 const type = AnnotationType.get(key as AnnotationTypeKey);
-                const annotation = await DB.Annotation.create({
-                    skillId: skill.skillId,
+                const annotation = <Annotation>await SkillBase.associations.Annotation.target.create({
+                    skillId: skill.id,
                     isEng: true,
                     type: type.id,
                     parameter
                 }, {transaction: options.transaction});
-                await DB.Link.bulkCreate((await type.getCards(parameter, {transaction: options.transaction})).map(c => ({
-                    from: annotation.annoId,
-                    to: c.cardNo
-                })), {transaction: options.transaction});
+                await SkillBase.associations.Link.target
+                    .bulkCreate((await type.getCards(parameter, {transaction: options.transaction})).map(c => ({
+                        from: annotation.id,
+                        to: c.cardNo
+                    })), {transaction: options.transaction});
             }
         }
     }

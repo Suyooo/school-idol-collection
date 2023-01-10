@@ -1,6 +1,6 @@
 <script lang="ts">
     import {page} from "$app/stores";
-    import type {PageData} from './$types';
+    import type {PageData} from './$types.js';
     import "$style/grid.css";
     import CardGridElement from "./CardGridElement.svelte";
 

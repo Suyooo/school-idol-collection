@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type Card from "$models/card/card";
+    import type Card from "$models/card/card.js";
     import {cardType} from "$lib/card/strings.js";
     import {cardIsMember, cardIsMemory} from "$lib/card/types.js";
 
@@ -10,9 +10,9 @@
 
 <a href="/card/{card.cardNo}" class="grid-item">
     <div class="imgcont">
-        <img src="/images/{set}/{card.cardNo}-front.jpg" alt="{card.cardNo} Front Illustration"
+        <img src="/images/{set}/{card.cardNo}-front.jpg" alt="{card.cardNo} Front Illustration" class="rounded-card"
              class:card-h={!cardIsMember(card)}>
-        <img src="/images/{set}/{card.cardNo}-back.jpg" alt="{card.cardNo} Back Illustration"
+        <img src="/images/{set}/{card.cardNo}-back.jpg" alt="{card.cardNo} Back Illustration" class="rounded-card"
              class:card-h={cardIsMemory(card)}>
     </div>
     <div class="namecont">
@@ -29,7 +29,7 @@
             @apply bg-primary-700 gap-2;
 
             & > img {
-                @apply max-w-[50%] rounded-card basis-0;
+                @apply max-w-[50%] basis-0;
             }
         }
 

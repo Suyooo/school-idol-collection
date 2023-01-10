@@ -3,7 +3,7 @@
 }
 
 .grid-container {
-    @apply grid grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] gap-4;
+    @apply grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] gap-4;
 }
 
 .grid-item {

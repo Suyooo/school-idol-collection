@@ -1,22 +1,21 @@
-import {
-    AllowNull,
-    Column, DataType,
-    Model,
-    PrimaryKey,
-    Table
-} from "sequelize-typescript";
+import {Attribute, Table} from "@sequelize/core/decorators-legacy";
+import {DataTypes, Model} from "@sequelize/core";
 
 @Table({
     modelName: "TranslationSong",
     timestamps: false
 })
 export default class TranslationSong extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false
+    })
     declare jpn: string;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare eng: string;
 }

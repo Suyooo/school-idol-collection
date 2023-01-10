@@ -1,13 +1,10 @@
-import type {PageServerLoad} from './$types';
+import type {PageServerLoad} from "./$types.js";
 import {error} from "@sveltejs/kit";
-import type Card from "$models/card/card";
-import {Op} from "sequelize";
-import {cardOrder} from "$models/card/card";
-import type Annotation from "$models/skill/annotation";
-import type Link from "$models/skill/link";
+import {Op} from "@sequelize/core";
+import type Card from "$models/card/card.js";
 
 export const load: PageServerLoad = (async ({params, locals}) => {
-    const card = await locals.db.Card.scope(["full"]).findByPk(params.cardNo);
+    const card = await locals.db.Card.withScope(["viewFull"]).findByPk(params.cardNo);
     if (card === null) {
         throw error(404, {
             message: "This card does not exist."
@@ -15,24 +12,16 @@ export const load: PageServerLoad = (async ({params, locals}) => {
     }
 
     const cardData: Card = card.get({plain: true});
-    cardData.linkedBy = cardData.linkedBy.filter((l, i) => {
+    cardData.linkedBy.filter((l, i) => {
         const ii = cardData.linkedBy.findIndex(ll => l.skill.cardNo === ll.skill.cardNo);
         return i === ii;
     });
 
-    const sameIdCards = await locals.db.Card.scope(["forLink"]).findAll({
+    const sameIdCards = await locals.db.Card.withScope(["viewForLink", "viewRarity", "orderCardNo"]).findAll({
         where: {
-            cardId: cardData.cardId,
-            cardNo: {
-                [Op.not]: cardData.cardNo
-            }
-        },
-        attributes: ["cardNo", "type"],
-        include: [
-            {model: locals.db.CardMemberExtraInfo, attributes: ["rarity"]},
-            {model: locals.db.CardSongExtraInfo, attributes: ["rarity"]}
-        ],
-        order: cardOrder("`Card`.`CardNo`")
+            id: cardData.id,
+            cardNo: { [Op.not]: cardData.cardNo }
+        }
     });
 
     return {card: cardData, sameIdCards: sameIdCards.map((c: Card) => c.get({plain: true}))};

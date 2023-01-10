@@ -1,12 +1,12 @@
 <script lang="ts">
-    import type Set from "$models/set/set";
+    import type Set from "$models/set/set.js";
 
     export let set: Set;
 </script>
 
-<a href="/set/{set.setId}" class="grid-item">
+<a href="/set/{set.id}" class="grid-item">
     <div class="imgcont">
-        <img src="/images/{set.setId}/set.jpg" alt="{set.setId}">
+        <img src="/images/{set.id}/set.jpg" alt="{set.id}">
     </div>
     <div class="namecont">
         <span>⏵</span><span>{set.eng}</span>

@@ -1,21 +1,13 @@
-import {
-    AllowNull,
-    BelongsTo,
-    Column,
-    DataType,
-    ForeignKey,
-    HasOne,
-    Model,
-    PrimaryKey,
-    Table
-} from "sequelize-typescript";
-import CardSongRequirementType from "$types/cardSongRequirementType";
-import type {CardSongRarity} from "$types/cardRarity";
-import type {AttributeID} from "$types/attribute";
-import type {CardSong} from "$models/card/card";
-import {CardBase} from "$models/card/card";
-import CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo";
-import CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo";
+import {Attribute, BelongsTo, HasOne, Table} from "@sequelize/core/decorators-legacy";
+import {DataTypes, Model} from "@sequelize/core";
+
+import type {CardSong} from "$models/card/card.js";
+import type CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";
+import type CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo.js";
+
+import CardSongRequirementType from "$types/cardSongRequirementType.js";
+import type {CardSongRarity} from "$types/cardRarity.js";
+import type {AttributeID} from "$types/attribute.js";
 
 @Table({
     modelName: "CardSongExtraInfo",
@@ -28,6 +20,7 @@ import CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo";
                 else
                     throw new Error("Song has an Any Piece Extra Info object, but does not have an Any Piece Requirement type");
             }
+            return true;
         },
         attrReqTypeMustHaveSongAttrReqExtraInfo(this: CardSongExtraInfo) {
             if ((this.requirementType === CardSongRequirementType.ATTR_PIECE) !== (this.attrRequirement != null)) {
@@ -36,41 +29,61 @@ import CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo";
                 else
                     throw new Error("Song has an Attribute Piece Extra Info object, but does not have an Attribute Piece Requirement type");
             }
+            return true;
         }
     }
 })
 export default class CardSongExtraInfo extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @ForeignKey(() => CardBase)
-    @Column(DataType.INTEGER)
-    declare cardId: string;
-
-    @BelongsTo(() => CardBase)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+    })
+    declare cardNo: string;
+    /* inverse of association in Card */
     declare card: CardSong;
 
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare rarity: CardSongRarity;
 
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare attribute: AttributeID;
 
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare lpBase: number;
 
-    @Column(DataType.STRING(2))
+    @Attribute({
+        type: DataTypes.STRING(2),
+        allowNull: true
+    })
     declare lpBonus: number | "X" | "∞" | null;
 
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare requirementType: CardSongRequirementType;
 
-    @HasOne(() => CardSongAnyReqExtraInfo)
+    @HasOne((s) => s.models.CardSongAnyReqExtraInfo, {
+        as: "anyRequirement",
+        foreignKey: "cardNo",
+        inverse: {as: "cardSongExtraInfo"}
+    })
     declare anyRequirement: CardSongAnyReqExtraInfo | null;
 
-    @HasOne(() => CardSongAttrReqExtraInfo)
+    @HasOne((s) => s.models.CardSongAttrReqExtraInfo, {
+        as: "attrRequirement",
+        foreignKey: "cardNo",
+        inverse: {as: "cardSongExtraInfo"}
+    })
     declare attrRequirement: CardSongAttrReqExtraInfo | null;
 }

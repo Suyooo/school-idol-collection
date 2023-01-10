@@ -1,7 +1,7 @@
-import CardType from "$types/cardType";
-import CardMemberIdolizeType from "$types/cardMemberIdolizeType";
-import CardSongRequirementType from "$types/cardSongRequirementType";
-import type Card from "$models/card/card";
+import CardType from "$types/cardType.js";
+import CardMemberIdolizeType from "$types/cardMemberIdolizeType.js";
+import CardSongRequirementType from "$types/cardSongRequirementType.js";
+import type Card from "$models/card/card.js";
 import type {
     CardSong,
     CardMember,
@@ -9,7 +9,7 @@ import type {
     CardMemberWithBirthdayPieces,
     CardMemberWithGroup, CardMemberWithIdolizePieces,
     CardMemory, CardSongWithAnyReq, CardSongWithAttrReq
-} from "$models/card/card";
+} from "$models/card/card.js";
 
 export function cardIsMember(card: Card): card is CardMember {
     return card.type == CardType.MEMBER;

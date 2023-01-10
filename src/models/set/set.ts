@@ -1,39 +1,42 @@
-import {
-    AllowNull, BelongsTo,
-    Column, DataType, ForeignKey,
-    Model,
-    PrimaryKey,
-    Table
-} from "sequelize-typescript";
-import SetCategory from "$models/set/category";
+import {Attribute, BelongsTo, Table} from "@sequelize/core/decorators-legacy";
+import {DataTypes, Model} from "@sequelize/core";
+import type SetCategory from "$models/set/category.js";
 
 @Table({
     modelName: "Set",
     timestamps: false
 })
 export default class Set extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @Column({field: "id", type: DataType.STRING})
-    declare setId: string;
+    @Attribute({
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false
+    })
+    declare id: string;
 
-    @AllowNull(false)
-    @ForeignKey(() => SetCategory)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare categoryId: number;
-
-    @BelongsTo(() => SetCategory)
+    /* inverse of association in SetCategory */
     declare category: SetCategory | null;
 
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare order: number;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare jpn: string;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare eng: string;
 }

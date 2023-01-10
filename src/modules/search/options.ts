@@ -1,9 +1,9 @@
-import DB from "$models/db";
-import {Op} from "sequelize";
-import type {IncludeOptions, WhereOptions} from "sequelize";
-import CardType from "$types/cardType";
-import SearchFilterError from "$errors/searchFilterError";
-import {escapeForUrl} from "$utils/convert";
+import DB from "$models/db.js";
+import {Op} from "@sequelize/core";
+import type {IncludeOptions, WhereOptions} from "@sequelize/core";
+import CardType from "$types/cardType.js";
+import SearchFilterError from "$errors/searchFilterError.js";
+import {escapeForUrl} from "$utils/convert.js";
 
 export default abstract class SearchFilter {
     abstract readonly key: string;

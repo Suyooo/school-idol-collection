@@ -1,31 +1,34 @@
-import {
-    AllowNull, AutoIncrement,
-    Column, DataType, HasMany,
-    Model,
-    PrimaryKey,
-    Table
-} from "sequelize-typescript";
-import Set from "$models/set/set";
+import {Attribute, HasMany, Table} from "@sequelize/core/decorators-legacy";
+import {DataTypes, Model} from "@sequelize/core";
+import type Set from "$models/set/set.js";
 
 @Table({
     modelName: "SetCategory",
     timestamps: false
 })
 export default class SetCategory extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @AutoIncrement
-    @Column({field: "id", type: DataType.INTEGER})
-    declare catId: number;
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    })
+    declare id: number;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare jpn: string;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare eng: string;
 
-    @HasMany(() => Set)
+    @HasMany((s) => s.models.Set, {
+        as: "sets", foreignKey: "categoryId", inverse: {as: "category"}
+    })
     declare sets: Set[];
 }

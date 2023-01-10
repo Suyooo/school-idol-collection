@@ -1,27 +1,15 @@
-import {
-    AllowNull,
-    BelongsTo,
-    Column,
-    DataType,
-    ForeignKey,
-    HasOne,
-    Min,
-    Model,
-    PrimaryKey,
-    Table
-} from "sequelize-typescript";
+import {Attribute, BelongsTo, HasOne, Table} from "@sequelize/core/decorators-legacy";
+import {DataTypes, Model} from "@sequelize/core";
 
-import type {CardMember} from "$models/card/card";
-import {CardBase} from "$models/card/card";
-import CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo";
-import CardMemberGroup from "$models/card/memberGroup";
+import type {CardMember} from "$models/card/card.js";
+import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo.js";
+import type CardMemberGroup from "$models/card/memberGroup.js";
+import {pieceInfoGetter} from "$models/utils/pieceInfoGetterSetter.js";
 
-import {pieceInfoGetter} from "$models/utils/pieceInfoGetterSetter";
-
-import type {AttributeID} from "$types/attribute";
-import CardMemberIdolizeType from "$types/cardMemberIdolizeType";
-import type {CardMemberRarity} from "$types/cardRarity";
-import type PieceInfo from "$types/pieceInfo";
+import type {AttributeID} from "$types/attribute.js";
+import type {CardMemberRarity} from "$types/cardRarity.js";
+import type PieceInfo from "$types/pieceInfo.js";
+import CardMemberIdolizeType from "$types/cardMemberIdolizeType.js";
 
 @Table({
     modelName: "CardMemberExtraInfo",
@@ -34,6 +22,7 @@ import type PieceInfo from "$types/pieceInfo";
                 else
                     throw new Error("Card has an Idolize Pieces Extra Info object, but is not of Idolization type WITH_PIECES");
             }
+            return true;
         },
         validateBirthDate(this: CardMemberExtraInfo) {
             if ((this.birthDay == null) !== (this.birthMonth == null)) {
@@ -42,88 +31,130 @@ import type PieceInfo from "$types/pieceInfo";
             if (this.birthDay != null && this.birthMonth != null && this.birthDay > [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][this.birthMonth - 1]) {
                 throw new Error("For the birth date, the given day does not exist in the given month");
             }
+            return true;
         }
     }
 })
 export default class CardMemberExtraInfo extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @ForeignKey(() => CardBase)
-    @Column(DataType.INTEGER)
-    declare cardNo: string;
-
-    @BelongsTo(() => CardBase)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+    })
+    declare cardNo: number;
+    /* inverse of association in Card */
     declare card: CardMember;
 
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare rarity: CardMemberRarity;
 
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare cost: 0 | 1 | 2 | 3;
 
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: true
+    })
     declare birthDay: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | null;
 
-    @Column(DataType.NUMBER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: true
+    })
     declare birthMonth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | null;
 
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: true
+    })
     declare year: 1 | 2 | 3 | null;
 
-    @AllowNull(false)
-    @Min(0)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        validate: {min: 0}
+    })
     declare piecesAll: number;
 
-    @AllowNull(false)
-    @Min(0)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        validate: {min: 0}
+    })
     declare piecesSmile: number;
 
-    @AllowNull(false)
-    @Min(0)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        validate: {min: 0}
+    })
     declare piecesPure: number;
 
-    @AllowNull(false)
-    @Min(0)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+        validate: {min: 0}
+    })
     declare piecesCool: number;
 
     get pieces(): PieceInfo {
         return pieceInfoGetter(this, "piecesAll", "piecesSmile", "piecesPure", "piecesCool");
     }
 
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: true
+    })
     declare pieceBdayAttribute: AttributeID | null;
 
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: true
+    })
     declare costumeJpn: string | null;
 
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: true
+    })
     declare costumeEng: string | null;
 
-    @AllowNull(false)
-    @Column(DataType.BOOLEAN)
+    @Attribute({
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    })
     declare abilityRush: boolean;
 
-    @AllowNull(false)
-    @Column(DataType.BOOLEAN)
+    @Attribute({
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    })
     declare abilityLive: boolean;
 
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare idolizeType: CardMemberIdolizeType;
 
-    @ForeignKey(() => CardMemberGroup)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: true
+    })
     declare groupId: number | null;
-
-    @BelongsTo(() => CardMemberGroup)
+    /* inverse of association in CardMemberGroup */
     declare group: CardMemberGroup | null;
 
-    @HasOne(() => CardMemberIdolizePieceExtraInfo)
+    @HasOne((s) => s.models.CardMemberIdolizePieceExtraInfo, {
+        as: "idolizeBonus",
+        foreignKey: "cardNo",
+        inverse: {as: "cardMemberExtraInfo"}
+    })
     declare idolizeBonus: CardMemberIdolizePieceExtraInfo | null;
 }

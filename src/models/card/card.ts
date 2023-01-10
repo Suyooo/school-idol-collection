@@ -1,162 +1,24 @@
-import {
-    AllowNull,
-    BelongsToMany,
-    Column,
-    DataType,
-    HasMany,
-    HasOne,
-    Model,
-    PrimaryKey,
-    Scopes,
-    Table
-} from "sequelize-typescript";
-import {literal, Op} from "sequelize";
-import type {OrderItem} from "sequelize";
-import DB from "$models/db";
+import {DataTypes, literal, Model} from "@sequelize/core";
+import type {OrderItem} from "@sequelize/core";
+import {Attribute, HasMany, HasOne, Table} from "@sequelize/core/decorators-legacy";
 
-import CardMemberExtraInfo from "$models/card/memberExtraInfo";
-import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo";
-import CardSongExtraInfo from "$models/card/songExtraInfo";
-import type CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo";
-import type CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo";
-import CardFAQLink from "$models/card/faqLink";
+import type CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
+import type CardSongExtraInfo from "$models/card/songExtraInfo.js";
+import type Skill from "$models/skill/skill.js";
+import type CardFAQLink from "$models/card/faqLink.js";
+import type Annotation from "$models/skill/annotation.js";
+import type Link from "$models/skill/link.js";
 
-import CardType from "$types/cardType";
-import type CardMemberIdolizeType from "$types/cardMemberIdolizeType";
-import type {AttributeID} from "$types/attribute";
-import type CardMemberGroup from "$models/card/memberGroup";
-import type Skill from "$models/skill/skill";
-import {SkillBase} from "$models/skill/skill";
-import Link from "$models/skill/link";
-import Annotation from "$models/skill/annotation";
-import AnnotationType from "$types/annotationType";
+import type {AttributeID} from "$types/attribute.js";
+import CardType from "$types/cardType.js";
+import type CardMemberIdolizeType from "$types/cardMemberIdolizeType.js";
+import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo.js";
+import type CardMemberGroup from "$models/card/memberGroup.js";
+import type CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";
+import type CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo.js";
 
 export const cardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + " LIKE 'LL%' DESC, " + col)]];
 
-@Scopes(() => ({
-    members: () => ({
-        where: {type: CardType.MEMBER}
-    }),
-    songs: () => ({
-        where: {type: CardType.SONG}
-    }),
-    memories: () => ({
-        where: {type: CardType.MEMORY}
-    }),
-    hasSkill: () => ({
-        include: [{model: DB.Skill, required: true}]
-    }),
-
-    id: (id) => ({
-        where: {
-            id: id
-        }
-    }),
-    set: (set) => ({
-        where: {
-            cardNo: {
-                [Op.like]: set + "-%"
-            }
-        }
-    }),
-
-    before: (cardNo) => ({
-        where: {
-            cardNo: {
-                [Op.lt]: cardNo
-            }
-        },
-        order: [["cardNo", "DESC"]]
-    }),
-    after: (cardNo) => ({
-        where: {
-            cardNo: {
-                [Op.gt]: cardNo
-            }
-        },
-        order: [["cardNo", "ASC"]]
-    }),
-
-    full: () => ({
-        include: [
-            {
-                model: DB.Skill,
-                include: [{
-                    model: DB.Annotation,
-                    include: [DB.Card]
-                }]
-            },
-            {
-                model: DB.CardMemberExtraInfo,
-                include: [
-                    {
-                        model: DB.CardMemberGroup,
-                        include: [
-                            {
-                                model: DB.Skill,
-                                include: [{
-                                    model: DB.Annotation,
-                                    include: [DB.Card]
-                                }]
-                            },
-                            {
-                                model: DB.CardMemberExtraInfo,
-                                include: [
-                                    {
-                                        model: DB.Card,
-                                        include: [DB.CardMemberExtraInfo]
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    DB.CardMemberIdolizePieceExtraInfo
-                ]
-            },
-            {
-                model: DB.CardSongExtraInfo,
-                include: [
-                    DB.CardSongAnyReqExtraInfo,
-                    DB.CardSongAttrReqExtraInfo
-                ]
-            },
-            DB.CardFAQLink,
-            {
-                model: DB.Annotation,
-                where: {
-                    type: {
-                        [Op.in]: [AnnotationType.get("song").id, AnnotationType.get("costume").id, AnnotationType.get("mem").id]
-                    }
-                },
-                required: false,
-                include: [{
-                    model: DB.Skill,
-                    include: [
-                        DB.Card,
-                        {
-                            model: DB.CardMemberGroup,
-                            include: [{
-                                model: DB.CardMemberExtraInfo,
-                                include: [DB.Card]
-                            }]
-                        }
-                    ]
-                }]
-            }
-        ],
-        order: [literal("`linkedBy->skill`.`groupId`"), ...cardOrder("`linkedBy->skill`.`cardNo`")]
-    }),
-    cardNoOnly: () => ({
-        attributes: ["cardNo"]
-    }),
-    forLink: () => ({
-        attributes: ["cardNo", "id", "nameJpn", "nameEng"]
-    }),
-    forGrid: () => ({
-        attributes: ["cardNo", "id", "type", "nameJpn", "nameEng"],
-        order: cardOrder("`Card`.`cardNo`")
-    })
-}))
 @Table({
     modelName: "Card",
     timestamps: false,
@@ -168,6 +30,7 @@ export const cardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + 
                 else
                     throw new Error("Card has a Member Extra Info object, but is not of Member type");
             }
+            return true;
         },
         songTypeMustHaveSongExtraInfo(this: Card) {
             if ((this.type === CardType.SONG) !== (this.song != null)) {
@@ -176,48 +39,75 @@ export const cardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + 
                 else
                     throw new Error("Card has a Song Extra Info object, but is not of Song type");
             }
+            return true;
         }
     }
 })
 export class CardBase extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+    })
     declare cardNo: string;
 
-    @AllowNull(false)
-    @Column({field: "id", type: DataType.INTEGER})
-    declare cardId: number;
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
+    declare id: number;
 
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare type: CardType;
 
-    @HasOne(() => CardMemberExtraInfo)
+    @HasOne((s) => s.models.CardMemberExtraInfo, {
+        as: "member",
+        foreignKey: "cardNo",
+        inverse: {as: "card"}
+    })
     declare member: CardMemberExtraInfo | null;
 
-    @HasOne(() => CardSongExtraInfo)
+    @HasOne((s) => s.models.CardSongExtraInfo, {
+        as: "song",
+        foreignKey: "cardNo",
+        inverse: {as: "card"}
+    })
     declare song: CardSongExtraInfo | null;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare nameJpn: string;
 
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: true
+    })
     declare nameEng: string | null;
 
-    @HasMany(() => SkillBase, {foreignKey: "cardNo"})
+    @HasMany((s) => s.models.Skill, {
+        as: "skills", foreignKey: "cardNo", inverse: {as: "card"}
+    })
     declare skills: Skill[];
 
-    @AllowNull(false)
-    @Column(DataType.TEXT)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare copyright: string;
 
-    // constraints = false because standard SQL doesn't support foreign keys being non-unique
-    @HasMany(() => CardFAQLink, {foreignKey: "cardId", sourceKey: "cardId", constraints: false})
+    // foreignKeyConstraints = false because standard SQL doesn't support foreign keys being non-unique
+    @HasMany((s) => s.models.CardFAQLink, {
+        as: "faqs", foreignKey: "cardId", sourceKey: "id", foreignKeyConstraints: false,
+        inverse: {as: "card"}
+    })
     declare faqs: CardFAQLink[];
 
-    @BelongsToMany(() => Annotation, {through: {model: () => Link, unique: false}})
+    /* inverse of association in Annotation */
     declare linkedBy: (Annotation & { Link: Link })[];
 }
 
@@ -228,27 +118,21 @@ export class CardMember extends CardBase {
 }
 
 export class CardMemberWithBirthdayPieces extends CardMember {
-    declare member:
-        Omit<CardMemberExtraInfo, "pieceBdayAttribute">
-        & { pieceBdayAttribute: AttributeID };
+    declare member: Omit<CardMemberExtraInfo, "pieceBdayAttribute"> & { pieceBdayAttribute: AttributeID };
 }
 
 export class CardMemberIdolizable extends CardMember {
-    declare member:
-        Omit<CardMemberExtraInfo, "idolizeType">
+    declare member: Omit<CardMemberExtraInfo, "idolizeType">
         & { idolizeType: CardMemberIdolizeType.NO_PIECES | CardMemberIdolizeType.WITH_PIECES };
 }
 
 export class CardMemberWithIdolizePieces extends CardMember {
-    declare member:
-        Omit<CardMemberExtraInfo, "idolizeType" | "idolizeBonus">
+    declare member: Omit<CardMemberExtraInfo, "idolizeType" | "idolizeBonus">
         & { idolizeType: CardMemberIdolizeType.WITH_PIECES, idolizeBonus: CardMemberIdolizePieceExtraInfo };
 }
 
 export class CardMemberWithGroup extends CardMember {
-    declare member:
-        Omit<CardMemberExtraInfo, "group">
-        & { group: CardMemberGroup };
+    declare member: Omit<CardMemberExtraInfo, "group"> & { group: CardMemberGroup };
 }
 
 export class CardSongBase extends CardBase {

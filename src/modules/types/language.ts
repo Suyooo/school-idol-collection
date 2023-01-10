@@ -1,5 +1,5 @@
-import type Trigger from "../translation/trigger";
-import type Attribute from "$types/attribute";
+import type Trigger from "../translation/trigger.js";
+import type Attribute from "$types/attribute.js";
 
 export default class Language {
     readonly leftRoundBracket: string;

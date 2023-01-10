@@ -1,9 +1,9 @@
-import type Card from "$models/card/card";
-import type {CardMember, CardMemberWithGroup} from "$models/card/card";
-import {cardIsMember, cardIsSong} from "$lib/card/types";
-import {CardMemberRarity, CardSongRarity} from "$types/cardRarity";
-import {ordinal} from "$utils/grammar";
-import CardMemberGroupType from "$types/cardMemberGroupType";
+import type Card from "$models/card/card.js";
+import type {CardMember, CardMemberWithGroup} from "$models/card/card.js";
+import {cardIsMember, cardIsSong} from "$lib/card/types.js";
+import {CardMemberRarity, CardSongRarity} from "$types/cardRarity.js";
+import {ordinal} from "$utils/grammar.js";
+import CardMemberGroupType from "$types/cardMemberGroupType.js";
 
 export function cardTitle(card: Card, styled: boolean): string {
     const nameWithQuot = card.nameEng === null
@@ -14,7 +14,7 @@ export function cardTitle(card: Card, styled: boolean): string {
 }
 
 export function cardId(card: Card): string {
-    const id = card.cardId.toString();
+    const id = card.id.toString();
     return "0".repeat(4 - id.length) + id;
 }
 

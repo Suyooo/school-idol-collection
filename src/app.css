@@ -122,13 +122,12 @@ tr > th {
     @apply whitespace-nowrap;
 }
 
-@layer utilities {
-    .rounded-card {
-        &:not(.card-h) {
-            @apply rounded-card-v;
-        }
-        &.card-h {
-            @apply rounded-card-h;
-        }
+.rounded-card {
+    &:not(.card-h) {
+        @apply rounded-card-v;
+    }
+
+    &.card-h {
+        @apply rounded-card-h;
     }
 }

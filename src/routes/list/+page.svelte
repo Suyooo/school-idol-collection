@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {PageData} from './$types';
+    import type {PageData} from './$types.js';
     import SetGridElement from "./SetGridElement.svelte";
     import "$style/grid.css";
 

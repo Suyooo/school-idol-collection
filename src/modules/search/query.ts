@@ -1,8 +1,8 @@
-import type SearchFilter from "$search/options";
-import type Card from "$models/card/card";
-import {cardOrder} from "$models/card/card";
-import DB from "$models/db";
-import type {Attributes, FindOptions, IncludeOptions, ProjectionAlias, WhereOptions} from "sequelize";
+import type SearchFilter from "$search/options.js";
+import type Card from "$models/card/card.js";
+import {cardOrder} from "$models/card/card.js";
+import DB from "$models/db.js";
+import type {Attributes, FindOptions, IncludeOptions, ProjectionAlias, WhereOptions} from "@sequelize/core";
 
 export function makeFindOptionsFromFilters(filters: SearchFilter[]): FindOptions<Attributes<Card>> {
     let where: WhereOptions = {};
@@ -35,7 +35,7 @@ export function makeFindOptionsFromFilters(filters: SearchFilter[]): FindOptions
 }
 
 export default async function searchQuery(filters: SearchFilter[], scope: string, options?: FindOptions<Attributes<Card>>): Promise<Card[]> {
-    return await DB.Card.scope([scope]).findAll({
+    return await DB.Card.withScope([scope]).findAll({
         ...makeFindOptionsFromFilters(filters),
         ...options,
         order: cardOrder("`Card`.`cardNo`")

@@ -1,41 +1,38 @@
-import {
-    AllowNull, BelongsTo,
-    Column, DataType,
-    ForeignKey,
-    Min,
-    Model,
-    PrimaryKey,
-    Table
-} from "sequelize-typescript";
-import type Card from "$models/card/card";
-import {CardBase} from "$models/card/card";
+import {DataTypes, Model} from "@sequelize/core";
+import {Attribute, Table} from "@sequelize/core/decorators-legacy";
+import type Card from "$models/card/card.js";
 
 @Table({
     modelName: "CardFAQLink",
     timestamps: false
 })
 export default class CardFAQLink extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @ForeignKey(() => CardBase)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        allowNull: false
+    })
     declare cardId: number;
-
-    // constraints = false because standard SQL doesn't support foreign keys being non-unique
-    @BelongsTo(() => CardBase, {foreignKey: "cardId", targetKey: "cardId", constraints: false})
+    /* inverse of association in Card */
     declare card: Card;
 
-    @PrimaryKey
-    @Min(1)
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        allowNull: false,
+        validate: {min: 1}
+    })
     declare displayOrder: number;
 
-    @AllowNull(false)
-    @Column(DataType.TEXT)
+    @Attribute({
+        type: DataTypes.TEXT,
+        allowNull: false
+    })
     declare label: string;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare link: string;
 }

@@ -1,25 +1,28 @@
-import {Sequelize} from "sequelize-typescript";
-import type {ModelCtor} from "sequelize-typescript";
-import type Card from "./card/card";
-import {CardBase} from "./card/card";
-import CardFAQLink from "./card/faqLink";
-import CardMemberGroup from "./card/memberGroup";
-import TranslationPattern from "./translation/pattern";
-import TranslationName from "./translation/name";
-import TranslationSong from "./translation/song";
-import CardMemberExtraInfo from "./card/memberExtraInfo";
-import CardMemberIdolizePieceExtraInfo from "./card/memberIdolizePieceExtraInfo";
-import CardSongExtraInfo from "./card/songExtraInfo";
-import CardSongAnyReqExtraInfo from "./card/songAnyReqExtraInfo";
-import CardSongAttrReqExtraInfo from "./card/songAttrReqExtraInfo";
-import type Skill from "./skill/skill";
-import {SkillBase} from "./skill/skill";
-import Annotation from "./skill/annotation";
-import Link from "./skill/link";
-import Set from "$models/set/set";
-import SetCategory from "$models/set/category";
+import AnnotationType from "$types/annotationType.js";
+import CardType from "$types/cardType.js";
+import {literal, Op, Sequelize} from "@sequelize/core";
+import type {ModelStatic} from "@sequelize/core";
 
-const modelList = [
+import type Card from "$models/card/card.js";
+import {CardBase, cardOrder} from "$models/card/card.js";
+import CardFAQLink from "$models/card/faqLink.js";
+import CardMemberGroup from "$models/card/memberGroup.js";
+import TranslationPattern from "$models/translation/pattern.js";
+import TranslationName from "$models/translation/name.js";
+import TranslationSong from "$models/translation/song.js";
+import CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
+import CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo.js";
+import CardSongExtraInfo from "$models/card/songExtraInfo.js";
+import CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";
+import CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo.js";
+import type Skill from "$models/skill/skill.js";
+import {SkillBase} from "$models/skill/skill.js";
+import Annotation from "$models/skill/annotation.js";
+import Link from "$models/skill/link.js";
+import Set from "$models/set/set.js";
+import SetCategory from "$models/set/category.js";
+
+const modelList: ModelStatic<any>[] = [
     CardBase, CardMemberGroup, CardFAQLink,
     CardMemberExtraInfo, CardMemberIdolizePieceExtraInfo,
     CardSongExtraInfo, CardSongAnyReqExtraInfo, CardSongAttrReqExtraInfo,
@@ -35,58 +38,184 @@ const sequelize = new Sequelize({
     logQueryParameters: true
 });
 
+async function scopes() {
+    // TODO: Add as decorators once those are implemented? Or move to model files?
+
+    CardBase.addScope("orderCardNo", () => ({
+        order: cardOrder("`Card`.`cardNo`")
+    }));
+    CardBase.addScope("viewCardNoOnly", () => ({
+        attributes: ["cardNo"]
+    }));
+    CardBase.addScope("viewForGrid", () => ({
+        attributes: ["cardNo", "id", "type", "nameJpn", "nameEng"]
+    }));
+    CardBase.addScope("viewForLink", () => ({
+        attributes: ["cardNo", "id", "nameJpn", "nameEng"]
+    }));
+    CardBase.addScope("viewRarity", () => ({
+        include: [
+            {model: sequelize.models.CardMemberExtraInfo, attributes: ["rarity"]},
+            {model: sequelize.models.CardSongExtraInfo, attributes: ["rarity"]}
+        ]
+    }));
+    CardBase.addScope("viewFull", () => ({
+        include: [
+            {
+                model: sequelize.models.Skill,
+                include: [{
+                    model: sequelize.models.Annotation,
+                    include: [{model: sequelize.models.Card}]
+                }]
+            },
+            {
+                model: sequelize.models.CardMemberExtraInfo,
+                include: [
+                    {
+                        model: sequelize.models.CardMemberGroup,
+                        include: [
+                            {
+                                model: sequelize.models.Skill,
+                                include: [{
+                                    model: sequelize.models.Annotation,
+                                    include: [sequelize.models.Card]
+                                }]
+                            },
+                            {
+                                model: sequelize.models.CardMemberExtraInfo,
+                                include: [
+                                    {
+                                        model: sequelize.models.Card,
+                                        include: [sequelize.models.CardMemberExtraInfo]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    sequelize.models.CardMemberIdolizePieceExtraInfo
+                ]
+            },
+            {
+                model: sequelize.models.CardSongExtraInfo,
+                include: [
+                    sequelize.models.CardSongAnyReqExtraInfo,
+                    sequelize.models.CardSongAttrReqExtraInfo
+                ]
+            },
+            {model: sequelize.models.CardFAQLink},
+            {
+                model: sequelize.models.Annotation,
+                where: {
+                    type: {
+                        [Op.in]: [
+                            AnnotationType.get("song").id,
+                            AnnotationType.get("costume").id,
+                            AnnotationType.get("mem").id
+                        ]
+                    }
+                },
+                required: false,
+                include: [{
+                    model: sequelize.models.Skill,
+                    include: [
+                        sequelize.models.Card,
+                        {
+                            model: sequelize.models.CardMemberGroup,
+                            include: [{
+                                model: sequelize.models.CardMemberExtraInfo,
+                                include: [sequelize.models.Card]
+                            }]
+                        }
+                    ]
+                }],
+                order: [literal("`linkedBy->skill`.`groupId`"), ...cardOrder("`linkedBy->skill`.`cardNo`")]
+            }
+        ]
+    }));
+    CardBase.addScope("filterId", (id) => ({
+        where: {id: id}
+    }));
+    CardBase.addScope("filterBefore", (cardNo) => ({
+        where: {cardNo: {[Op.lt]: cardNo}},
+        order: [["cardNo", "DESC"]]
+    }));
+    CardBase.addScope("filterAfter", (cardNo) => ({
+        where: {cardNo: {[Op.gt]: cardNo}},
+        order: [["cardNo", "ASC"]]
+    }));
+    CardBase.addScope("filterSet", (set) => ({
+        where: {cardNo: {[Op.like]: set + "-%"}}
+    }));
+    CardBase.addScope("filterMembers", () => ({
+        where: {type: CardType.MEMBER}
+    }));
+    CardBase.addScope("filterSongs", () => ({
+        where: {type: CardType.SONG}
+    }));
+    CardBase.addScope("filterMemories", () => ({
+        where: {type: CardType.MEMORY}
+    }));
+    CardBase.addScope("filterHasSkill", () => ({
+        include: [{model: DB.Skill, required: true}]
+    }));
+
+    CardMemberGroup.addScope("filterHasSkill", () => ({
+        include: [{model: DB.Skill, required: true}]
+    }));
+}
+
 export interface DBObject {
     syncPromise: Promise<any>,
     sequelize: Sequelize,
 
-    Card: ModelCtor<Card>
-    CardMemberGroup: ModelCtor<CardMemberGroup>
-    CardFAQLink: ModelCtor<CardFAQLink>
+    Card: ModelStatic<Card>
+    CardMemberGroup: ModelStatic<CardMemberGroup>
+    CardFAQLink: ModelStatic<CardFAQLink>
 
-    CardMemberExtraInfo: ModelCtor<CardMemberExtraInfo>
-    CardMemberIdolizePieceExtraInfo: ModelCtor<CardMemberIdolizePieceExtraInfo>
+    CardMemberExtraInfo: ModelStatic<CardMemberExtraInfo>
+    CardMemberIdolizePieceExtraInfo: ModelStatic<CardMemberIdolizePieceExtraInfo>
 
-    CardSongExtraInfo: ModelCtor<CardSongExtraInfo>
-    CardSongAnyReqExtraInfo: ModelCtor<CardSongAnyReqExtraInfo>
-    CardSongAttrReqExtraInfo: ModelCtor<CardSongAttrReqExtraInfo>
+    CardSongExtraInfo: ModelStatic<CardSongExtraInfo>
+    CardSongAnyReqExtraInfo: ModelStatic<CardSongAnyReqExtraInfo>
+    CardSongAttrReqExtraInfo: ModelStatic<CardSongAttrReqExtraInfo>
 
-    Skill: ModelCtor<Skill>
-    Link: ModelCtor<Link>
-    Annotation: ModelCtor<Annotation>
+    Skill: ModelStatic<Skill>
+    Link: ModelStatic<Link>
+    Annotation: ModelStatic<Annotation>
 
-    TranslationName: ModelCtor<TranslationName>
-    TranslationSong: ModelCtor<TranslationSong>
-    TranslationPattern: ModelCtor<TranslationPattern>
+    TranslationName: ModelStatic<TranslationName>
+    TranslationSong: ModelStatic<TranslationSong>
+    TranslationPattern: ModelStatic<TranslationPattern>
 
-    Set: ModelCtor<Set>
-    SetCategory: ModelCtor<SetCategory>
+    Set: ModelStatic<Set>
+    SetCategory: ModelStatic<SetCategory>
 }
 
 const DB: DBObject = {
-    syncPromise: Promise.all(modelList.map(m => m.sync())),
+    syncPromise: Promise.all(modelList.map(m => m.sync())).then(scopes),
     sequelize: sequelize,
 
-    Card: <ModelCtor<Card>>sequelize.models.Card,
-    CardMemberGroup: <ModelCtor<CardMemberGroup>>sequelize.models.CardMemberGroup,
-    CardFAQLink: <ModelCtor<CardFAQLink>>sequelize.models.CardFAQLink,
+    Card: <ModelStatic<Card>>sequelize.models.Card,
+    CardMemberGroup: <ModelStatic<CardMemberGroup>>sequelize.models.CardMemberGroup,
+    CardFAQLink: <ModelStatic<CardFAQLink>>sequelize.models.CardFAQLink,
 
-    CardMemberExtraInfo: <ModelCtor<CardMemberExtraInfo>>sequelize.models.CardMemberExtraInfo,
-    CardMemberIdolizePieceExtraInfo: <ModelCtor<CardMemberIdolizePieceExtraInfo>>sequelize.models.CardMemberIdolizePieceExtraInfo,
+    CardMemberExtraInfo: <ModelStatic<CardMemberExtraInfo>>sequelize.models.CardMemberExtraInfo,
+    CardMemberIdolizePieceExtraInfo: <ModelStatic<CardMemberIdolizePieceExtraInfo>>sequelize.models.CardMemberIdolizePieceExtraInfo,
 
-    CardSongExtraInfo: <ModelCtor<CardSongExtraInfo>>sequelize.models.CardSongExtraInfo,
-    CardSongAnyReqExtraInfo: <ModelCtor<CardSongAnyReqExtraInfo>>sequelize.models.CardSongAnyReqExtraInfo,
-    CardSongAttrReqExtraInfo: <ModelCtor<CardSongAttrReqExtraInfo>>sequelize.models.CardSongAttrReqExtraInfo,
+    CardSongExtraInfo: <ModelStatic<CardSongExtraInfo>>sequelize.models.CardSongExtraInfo,
+    CardSongAnyReqExtraInfo: <ModelStatic<CardSongAnyReqExtraInfo>>sequelize.models.CardSongAnyReqExtraInfo,
+    CardSongAttrReqExtraInfo: <ModelStatic<CardSongAttrReqExtraInfo>>sequelize.models.CardSongAttrReqExtraInfo,
 
-    Skill: <ModelCtor<Skill>>sequelize.models.Skill,
-    Link: <ModelCtor<Link>>sequelize.models.Link,
-    Annotation: <ModelCtor<Annotation>>sequelize.models.Annotation,
+    Skill: <ModelStatic<Skill>>sequelize.models.Skill,
+    Link: <ModelStatic<Link>>sequelize.models.Link,
+    Annotation: <ModelStatic<Annotation>>sequelize.models.Annotation,
 
-    TranslationName: <ModelCtor<TranslationName>>sequelize.models.TranslationName,
-    TranslationSong: <ModelCtor<TranslationSong>>sequelize.models.TranslationSong,
-    TranslationPattern: <ModelCtor<TranslationPattern>>sequelize.models.TranslationPattern,
+    TranslationName: <ModelStatic<TranslationName>>sequelize.models.TranslationName,
+    TranslationSong: <ModelStatic<TranslationSong>>sequelize.models.TranslationSong,
+    TranslationPattern: <ModelStatic<TranslationPattern>>sequelize.models.TranslationPattern,
 
-    Set: <ModelCtor<Set>>sequelize.models.Set,
-    SetCategory: <ModelCtor<SetCategory>>sequelize.models.SetCategory
+    Set: <ModelStatic<Set>>sequelize.models.Set,
+    SetCategory: <ModelStatic<SetCategory>>sequelize.models.SetCategory
 };
 
 export default DB;

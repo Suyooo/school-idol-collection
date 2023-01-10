@@ -1,52 +1,50 @@
-import {
-    AllowNull,
-    AutoIncrement,
-    Column,
-    DataType,
-    HasMany,
-    Model,
-    PrimaryKey, Scopes,
-    Table
-} from "sequelize-typescript";
+import {Attribute, HasMany, Table} from "@sequelize/core/decorators-legacy";
+import {DataTypes, Model} from "@sequelize/core";
 
-import DB from "$models/db";
-import type {CardMember} from "$models/card/card";
-import CardMemberExtraInfo from "$models/card/memberExtraInfo";
+import type {CardMember} from "$models/card/card.js";
+import type CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
 
-import type CardMemberGroupType from "$types/cardMemberGroupType";
-import type Skill from "$models/skill/skill";
-import {SkillBase} from "$models/skill/skill";
+import type CardMemberGroupType from "$types/cardMemberGroupType.js";
+import type Skill from "$models/skill/skill.js";
 
-@Scopes(() => ({
-    hasSkill: () => ({
-        include: [{model: DB.Skill, required: true}]
-    })
-}))
 @Table({
     modelName: "CardMemberGroup",
     timestamps: false
 })
 export default class CardMemberGroup extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @AutoIncrement
-    @Column({field: "id", type: DataType.INTEGER})
-    declare cardId: number;
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true
+    })
+    declare id: number;
 
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare type: CardMemberGroupType;
 
-    @HasMany(() => CardMemberExtraInfo)
+    @HasMany((s) => s.models.CardMemberExtraInfo, {
+        as: "memberExtraInfos",
+        foreignKey: "groupId",
+        inverse: { as: "group" }
+    })
     declare memberExtraInfos: CardMemberExtraInfo[];
 
     get members(): CardMember[] {
         return this.memberExtraInfos.map((extraInfo: CardMemberExtraInfo) => <CardMember>extraInfo.card);
     }
 
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare expectedMemberIds: string;
 
-    @HasMany(() => SkillBase, {foreignKey: "groupId"})
+    @HasMany((s) => s.models.Skill, {
+        as: "skills", foreignKey: "groupId", inverse: {as: "group"}
+    })
     declare skills: Skill[];
 }

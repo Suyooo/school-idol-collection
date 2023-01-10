@@ -1,13 +1,13 @@
-import type {Attributes, FindOptions} from "sequelize";
-import type Card from "$models/card/card";
-import searchQuery from "../search/query";
+import type {Attributes, FindOptions} from "@sequelize/core";
+import type Card from "$models/card/card.js";
+import searchQuery from "../search/query.js";
 import SearchFilter, {
     SearchFilterCardID, SearchFilterCostume,
     SearchFilterMemory,
     SearchFilterName, SearchFilterSkill,
     SearchFilterSong
-} from "../search/options";
-import {cardTitle} from "$lib/card/strings";
+} from "../search/options.js";
+import {cardTitle} from "$lib/card/strings.js";
 
 export type AnnotationTypeKey = "card" | "song" | "mem" | "costume" | "skilltext";
 export type AnnotationTypeID = 0 | 1 | 2 | 3 | 4;

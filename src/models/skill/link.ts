@@ -1,30 +1,28 @@
-import {
-    AllowNull,
-    AutoIncrement,
-    Column, DataType,
-    ForeignKey,
-    Model,
-    PrimaryKey,
-    Table
-} from "sequelize-typescript";
-import {CardBase} from "$models/card/card";
-import Annotation from "$models/skill/annotation";
+import {Attribute, Table} from "@sequelize/core/decorators-legacy";
+import {DataTypes, Model} from "@sequelize/core";
 
-@Table({timestamps: false})
+@Table({
+    modelName: "Link",
+    timestamps: false
+})
 export default class Link extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @AutoIncrement
-    @Column({field: "id", type: DataType.INTEGER})
-    declare linkId: number;
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true
+    })
+    declare id: number;
 
-    @AllowNull(false)
-    @ForeignKey(() => Annotation)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare from: number;
 
-    @AllowNull(false)
-    @ForeignKey(() => CardBase)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare to: string;
 }

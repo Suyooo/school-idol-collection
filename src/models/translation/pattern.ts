@@ -1,35 +1,31 @@
-import {
-    AfterUpdate,
-    AllowNull,
-    AutoIncrement,
-    Column, DataType,
-    Model,
-    PrimaryKey,
-    Table
-} from "sequelize-typescript";
+import {AfterUpdate, Attribute, Table} from "@sequelize/core/decorators-legacy";
+import {DataTypes, Model} from "@sequelize/core";
+import type {QueryOptions} from "@sequelize/core";
 
-import DB from "../db";
-import Trigger from "$translation/trigger";
-import type {TriggerID} from "$translation/trigger";
-import PatternGroupType from "$translation/patternGroupType";
-import type {PatternGroupTypeID} from "$translation/patternGroupType";
-import {escapeForRegex} from "$utils/convert";
-import {splitTriggersFromSkill} from "$translation/skills";
-import type {QueryOptions} from "sequelize";
+import Trigger from "$translation/trigger.js";
+import type {TriggerID} from "$translation/trigger.js";
+import PatternGroupType from "$translation/patternGroupType.js";
+import type {PatternGroupTypeID} from "$translation/patternGroupType.js";
+import {escapeForRegex} from "$utils/convert.js";
+import {splitTriggersFromSkill} from "$translation/skills.js";
 
 @Table({
     modelName: "TranslationPattern",
     timestamps: false
 })
 export default class TranslationPattern extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @AutoIncrement
-    @Column({field: "id", type: DataType.INTEGER})
-    declare pattId: number;
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true
+    })
+    declare id: number;
 
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare triggers: number;
 
     get triggerArray(): Trigger[] {
@@ -48,16 +44,22 @@ export default class TranslationPattern extends Model {
         this.triggers = triggers.map(t => 1 << t.id).reduce((acc, i) => acc + i, 0);
     }
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare regex: string;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare template: string;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare groupTypes: string;
 
     get groupTypeArray(): PatternGroupType[] {
@@ -78,10 +80,9 @@ export default class TranslationPattern extends Model {
         this.groupTypes = typeString;
     }
 
-
     static buildSkeletonFromSkill(skillLine: string): TranslationPattern {
         const {skill, triggers} = splitTriggersFromSkill(skillLine);
-        const skel = DB.TranslationPattern.build({
+        const skel = TranslationPattern.build({
             triggers: 0,
             regex: "^" + escapeForRegex(skill) + "$",
             template: skill,
@@ -93,10 +94,10 @@ export default class TranslationPattern extends Model {
 
     @AfterUpdate
     static async purgeTranslations(pattern: TranslationPattern, options: QueryOptions) {
-        await DB.Skill.update(
+        await TranslationPattern.associations.Skill.target.update(
             {eng: null, patternId: null},
             {
-                where: {pattern: pattern.pattId},
+                where: {pattern: pattern.id},
                 transaction: options.transaction
             });
     }

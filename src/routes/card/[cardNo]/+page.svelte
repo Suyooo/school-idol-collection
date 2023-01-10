@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {PageData} from './$types';
+    import type {PageData} from './$types.js';
     import {
         cardBirthday,
         cardCost,
@@ -10,7 +10,7 @@
         cardType,
         cardYear
     } from "$lib/card/strings.js";
-    import type Card from "$models/card/card";
+    import type Card from "$models/card/card.js";
     import {
         cardHasBirthdayPieces, cardHasGroup,
         cardHasIdolizationPieces,
@@ -35,11 +35,11 @@
         <div class="col-quarter imgcont">
             <div>
                 <img src="/images/{set}/{card.cardNo}-front.jpg" alt="{card.cardNo} Front Illustration"
-                     class:card-h={!cardIsMember(card)}>
+                     class="rounded-card" class:card-h={!cardIsMember(card)}>
             </div>
             <div>
                 <img src="/images/{set}/{card.cardNo}-back.jpg" alt="{card.cardNo} Back Illustration"
-                     class:card-h={cardIsMemory(card)}>
+                     class="rounded-card" class:card-h={cardIsMemory(card)}>
             </div>
         </div>
         <div class="col-threequarters">
@@ -170,14 +170,14 @@
                             <div>
                                 Skill
                                 {#if import.meta.env.DEV}
-                                    {#each card.skills as skill (skill.skillId)}
+                                    {#each card.skills as skill (skill.id)}
                                         <br>
-                                        <a href="/annotate/edit/{skill.skillId}">🖉</a>
+                                        <a href="/annotate/edit/{skill.id}">🖉</a>
                                     {/each}
                                 {/if}
                             </div>
                             <div>
-                                {#each card.skills as skill (skill.skillId)}
+                                {#each card.skills as skill (skill.id)}
                                     {skill.jpn}
                                 {/each}
                             </div>
@@ -186,14 +186,14 @@
                             <div>
                                 &nbsp;
                                 {#if import.meta.env.DEV}
-                                    {#each card.skills as skill (skill.skillId)}
+                                    {#each card.skills as skill (skill.id)}
                                         <br>
                                         <a href="/pattern/apply/{skill.patternId}">🖉</a>
                                     {/each}
                                 {/if}
                             </div>
                             <div>
-                                {#each card.skills as skill (skill.skillId)}
+                                {#each card.skills as skill (skill.id)}
                                     {skill.eng}
                                 {/each}
                             </div>
@@ -214,7 +214,7 @@
                         <div class="row inforow">
                             <div>{cardGroupType(card)} Skill</div>
                             <div>
-                                {#each card.member.group.skills as skill (skill.skillId)}
+                                {#each card.member.group.skills as skill (skill.id)}
                                     {skill.jpn}
                                 {/each}
                             </div>
@@ -222,7 +222,7 @@
                         <div class="row inforow">
                             <div>&nbsp;</div>
                             <div>
-                                {#each card.member.group.skills as skill (skill.skillId)}
+                                {#each card.member.group.skills as skill (skill.id)}
                                     {skill.eng}
                                 {/each}
                             </div>
@@ -233,10 +233,12 @@
                         <div class="row inforow gap">
                             <div>See Also</div>
                             <div>
-                                {#each card.linkedBy as link (link.linkId)}
-                                    <a href="/card/{link.skill.card.cardNo}">
-                                        {@html cardTitle(link.skill.card, true)}
-                                    </a>
+                                {#each card.linkedBy as link (link.id)}
+                                    {#if link.skill.card !== null}
+                                        <a href="/card/{link.skill.card.cardNo}">
+                                            {@html cardTitle(link.skill.card, true)}
+                                        </a>
+                                    {/if}
                                 {/each}
                             </div>
                         </div>
@@ -285,7 +287,7 @@
     }
 
     .imgcont > div > img {
-        @apply rounded-card max-w-full object-contain;
+        @apply max-w-full object-contain;
     }
 
     .row > h5 {

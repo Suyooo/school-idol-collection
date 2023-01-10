@@ -1,5 +1,5 @@
-import type TranslationPattern from "$models/translation/pattern";
-import ErrorWithCause from "$errors/errorWithCause";
+import type TranslationPattern from "$models/translation/pattern.js";
+import ErrorWithCause from "$errors/errorWithCause.js";
 
 export default class PatternApplyError extends ErrorWithCause {
     constructor(cause: any, pattern: TranslationPattern, skill: string) {

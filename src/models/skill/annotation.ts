@@ -1,56 +1,63 @@
-import {
-    AllowNull,
-    AutoIncrement,
-    BelongsTo,
-    BelongsToMany,
-    Column,
-    DataType,
-    ForeignKey,
-    Model,
-    PrimaryKey,
-    Table
-} from "sequelize-typescript";
-import type Card from "$models/card/card";
-import Link from "$models/skill/link";
-import AnnotationType from "$types/annotationType";
-import type {AnnotationTypeID} from "$types/annotationType";
-import type Skill from "$models/skill/skill";
-import {SkillBase} from "$models/skill/skill";
-import {CardBase} from "$models/card/card";
+import {Attribute, BelongsTo, BelongsToMany, Table} from "@sequelize/core/decorators-legacy";
+import {DataTypes, Model} from "@sequelize/core";
+
+import type Card from "$models/card/card.js";
+import type Link from "$models/skill/link.js";
+import type Skill from "$models/skill/skill.js";
+
+import AnnotationType from "$types/annotationType.js";
+import type {AnnotationTypeID} from "$types/annotationType.js";
 
 @Table({
     modelName: "Annotation",
     timestamps: false
 })
 export default class Annotation extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @AutoIncrement
-    @Column({field: "id", type: DataType.INTEGER})
-    declare annoId: number;
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true
+    })
+    declare id: number;
 
-    @ForeignKey(() => SkillBase)
-    @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare skillId: number;
-
-    @BelongsTo(() => SkillBase)
+    /* inverse of association in Skill */
     declare skill: Skill;
 
-    @AllowNull(false)
-    @Column(DataType.BOOLEAN)
+    @Attribute({
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    })
     declare isEng: boolean;
 
-    @AllowNull(false)
-    @Column(DataType.NUMBER)
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
     declare type: AnnotationTypeID;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: false
+    })
     declare parameter: string;
 
-    @BelongsToMany(() => CardBase, {through: {model: () => Link, unique: false}})
-    declare linksTo: Array<Card & { Link: Link }>;
+    @BelongsToMany((s) => s.models.Card, {
+        as: "links",
+        foreignKey: "from",
+        otherKey: "to",
+        inverse: { as: "linkedBy" },
+        through: {
+            model: (s) => s.models.Link,
+            unique: false
+        }
+    })
+    declare links: (Card & { Link: Link })[];
 
     getAnnotationString() {
         return "{{" + AnnotationType.get(this.type).key + ":" + this.parameter + "}}";
