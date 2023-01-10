@@ -12,15 +12,15 @@ import type {
 } from "$models/card/card.js";
 
 export function cardIsMember(card: Card): card is CardMember {
-    return card.type == CardType.MEMBER;
+    return card.type === CardType.MEMBER;
 }
 
 export function cardIsSong(card: Card): card is CardSong {
-    return card.type == CardType.SONG;
+    return card.type === CardType.SONG;
 }
 
 export function cardIsMemory(card: Card): card is CardMemory {
-    return card.type == CardType.MEMORY;
+    return card.type === CardType.MEMORY;
 }
 
 export function cardIsIdolizable(card: CardMember): card is CardMemberIdolizable {

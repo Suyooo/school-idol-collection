@@ -19,11 +19,11 @@
         cardIsSong
     } from "$lib/card/types.js";
     import type CardPageExtraInfo from "$types/cardPageExtraInfo.js";
+    import CardPageButtons from "./CardPageButtons.svelte";
 
     export let data: PageData;
-    let card: Card & CardPageExtraInfo, set: string;
+    let card: Card & CardPageExtraInfo;
     $: card = data.card;
-    $: set = card.cardNo.split("-")[0];
 </script>
 
 <svelte:head>
@@ -34,15 +34,20 @@
     <div class="row lg:flex">
         <div class="col-quarter imgcont">
             <div>
-                <img src="/images/{set}/{card.cardNo}-front.jpg" alt="{card.cardNo} Front Illustration"
+                <img src="/images/{card.cardSet}/{card.cardNo}-front.jpg" alt="{card.cardNo} Front Illustration"
                      class="rounded-card" class:card-h={!cardIsMember(card)}>
             </div>
             <div>
-                <img src="/images/{set}/{card.cardNo}-back.jpg" alt="{card.cardNo} Back Illustration"
+                <img src="/images/{card.cardSet}/{card.cardNo}-back.jpg" alt="{card.cardNo} Back Illustration"
                      class="rounded-card" class:card-h={cardIsMemory(card)}>
             </div>
         </div>
         <div class="col-threequarters">
+            <div class="mb-4">
+                <CardPageButtons prevCardNo={card.prevCardNo} nextCardNo={card.nextCardNo} cardSet={card.cardSet}
+                                 listLinksOnLargeOnly={true}/>
+            </div>
+
             <div class="panel">
                 <div class="panel-inner">
                     <div class="row">
@@ -160,7 +165,7 @@
                             </div>
                         </div>
                     {/if}
-                    {#if card.skills === null}
+                    {#if card.skills.length === 0}
                         <div class="row inforow gap">
                             <div>Skill</div>
                             <div>—</div>
@@ -257,29 +262,16 @@
                 </div>
             </div>
             <div class="cardcopyright">{card.copyright}</div>
-            <!--<div class="buttons">
-                <div class="buttonrow">
-                    <% if (f.prevCardNo !== null) { %>
-                    <a class="button button-primary" href="/card/<%= f.prevCardNo %>">&#129152;</a>
-                    <% } %>
-                    <% if (f.nextCardNo !== null) { %>
-                    <a class="button button-primary" href="/card/<%= f.nextCardNo %>">&#129154;</a>
-                    <% } %>
-                </div>
-                <div class="buttonrow">
-                    <a class="button" href="/set/<%= f.set %>">View Set</a>
-                </div>
-                <div class="buttonrow">
-                    <a class="button" href="/">View Full Card List</a>
-                </div>
-            </div>-->
+            <div class="mt-4">
+                <CardPageButtons prevCardNo={card.prevCardNo} nextCardNo={card.nextCardNo} cardSet={card.cardSet} />
+            </div>
         </div>
     </div>
 </div>
 
 <style lang="postcss">
     .imgcont {
-        @apply flex gap-2 justify-center items-center lg:flex-col lg:justify-start mt-2;
+        @apply flex gap-2 justify-center items-center lg:flex-col lg:justify-start mb-4 lg:mt-14 lg:mb-0;
     }
 
     .imgcont > div {
@@ -291,11 +283,11 @@
     }
 
     .row > h5 {
-        @apply text-center w-full font-bold bg-primary-500 m-0;
+        @apply text-center w-full font-bold bg-primary-500 m-0 px-4 tracking-normal normal-case;
     }
 
     .inforow {
-        display: flex;
+        @apply flex;
     }
 
     .inforow div {
@@ -330,29 +322,6 @@
         @apply float-right font-normal;
     }
 
-    .buttons {
-        width: 100%;
-        text-align: center;
-    }
-
-    .buttons .buttonrow {
-        padding-top: 1em;
-        display: flex;
-        justify-content: center;
-        width: 100%;
-    }
-
-    .buttons .buttonrow .button {
-        flex-grow: 1;
-        flex-shrink: 0;
-        flex-basis: 0;
-        margin: 0 0.5em;
-    }
-
-    .buttons .buttonrow:first-child .button {
-        flex-grow: 0;
-    }
-
     .cardcopyright {
         @apply text-right text-xs text-primary-500 mt-2 mb-1;
     }
@@ -364,12 +333,5 @@
     .faqs > a:before {
         @apply absolute top-0 left-0 text-primary-500 font-bold;
         content: "⏵";
-    }
-
-    @media (min-width: 950px) {
-        .buttons .buttonrow {
-            display: inline-block;
-            width: unset;
-        }
     }
 </style>

@@ -86,8 +86,9 @@ export const GET: RequestHandler = (async ({params, locals}) => {
             message: "This card does not exist."
         });
     }
-
     const cardData: Card & CardPageExtraInfo = card.get({plain: true});
+
+    cardData.cardSet = cardData.cardNo.split("-")[0];
     cardData.linkedBy.filter((l, i) =>
         i === cardData.linkedBy.findIndex(ll => l.skill.cardNo === ll.skill.cardNo));
     cardData.sameId = await locals.DB.Card.withScope(["viewForLink", "viewRarity", "orderCardNo"]).findAll({
@@ -96,8 +97,12 @@ export const GET: RequestHandler = (async ({params, locals}) => {
             cardNo: { [Op.not]: cardData.cardNo }
         }
     });
-
-    // TODO: next/prev card
+    cardData.prevCardNo = (await locals.DB.Card
+        .withScope(["viewCardNoOnly", {method: ["filterBefore", cardData.cardNo]}]).findOne())?.cardNo ?? null;
+    if (cardData.prevCardNo && cardData.prevCardNo.split("-")[0] !== cardData.cardSet) cardData.prevCardNo = null;
+    cardData.nextCardNo = (await locals.DB.Card
+        .withScope(["viewCardNoOnly",  {method: ["filterAfter", cardData.cardNo]}]).findOne())?.cardNo ?? null;
+    if (cardData.nextCardNo && cardData.nextCardNo.split("-")[0] !== cardData.cardSet) cardData.nextCardNo = null;
 
     return json(cardData);
 }) satisfies RequestHandler;

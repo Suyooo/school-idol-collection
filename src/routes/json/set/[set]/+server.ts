@@ -4,7 +4,7 @@ import type Card from "$models/card/card.js";
 
 export const GET: RequestHandler = (async ({params, locals}) => {
     const cards = await locals.DB.Card
-        .withScope(["viewForGrid", "orderCardNo", {method: ["filterSet", params.set]}]).findAll();
+        .withScope(["viewForLink", "orderCardNo", {method: ["filterSet", params.set]}]).findAll();
     if (cards.length === 0) {
         throw error(404, {
             message: "This set does not exist."

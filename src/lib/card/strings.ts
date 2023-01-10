@@ -6,10 +6,12 @@ import {ordinal} from "$utils/grammar.js";
 import CardMemberGroupType from "$types/cardMemberGroupType.js";
 
 export function cardTitle(card: Card, styled: boolean): string {
+    const pre = styled ? '<span class="lg:inline-block">&quot;' : '"';
+    const post = styled ? '&quot;' : '"';
     const nameWithQuot = card.nameEng === null
-        ? card.nameJpn.split("／").map(s => '"' + s + '"').join("／")
-        : card.nameEng.split(" / ").map(s => '"' + s + '"').join(" / ");
-    if (styled) return "<span class='card-id'>" + card.cardNo + "</span> " + nameWithQuot;
+        ? card.nameJpn.split("／").map(s => `${pre}${s}${post}`).join(styled ? "／</span>" : "／")
+        : card.nameEng.split(" / ").map(s => `${pre}${s}${post}`).join(styled ? " / </span>" : " / ");
+    if (styled) return "<span class='card-id'>" + card.cardNo + "</span> " + nameWithQuot + "</span>";
     else return card.cardNo + " " + nameWithQuot;
 }
 
