@@ -8,15 +8,17 @@ export default class Language {
     readonly rightSquareBracket: string;
     readonly times: string;
 
-    triggerNameProperty: keyof Trigger;
-    colorNameProperty: keyof Attribute;
-    songAttributeNameProperty: keyof Attribute;
-    pieceNameProperty: keyof Attribute;
+    triggerNameProperty: Exclude<keyof Trigger, "id">;
+    colorNameProperty: Exclude<keyof Attribute, "id">;
+    songAttributeNameProperty: Exclude<keyof Attribute, "id">;
+    pieceNameProperty: Exclude<keyof Attribute, "id">;
 
     private constructor(leftRoundBracket: string, rightRoundBracket: string,
                         leftSquareBracket: string, rightSquareBracket: string, times: string,
-                        triggerNameProperty: keyof Trigger, _colorNameProperty: keyof Attribute,
-                        _songAttributeNameProperty: keyof Attribute, pieceNameProperty: keyof Attribute) {
+                        triggerNameProperty: Exclude<keyof Trigger, "id">,
+                        colorNameProperty: Exclude<keyof Attribute, "id">,
+                        songAttributeNameProperty: Exclude<keyof Attribute, "id">,
+                        pieceNameProperty: Exclude<keyof Attribute, "id">) {
         this.leftRoundBracket = leftRoundBracket;
         this.rightRoundBracket = rightRoundBracket;
         this.leftSquareBracket = leftSquareBracket;
@@ -24,8 +26,8 @@ export default class Language {
         this.times = times;
 
         this.triggerNameProperty = triggerNameProperty;
-        this.colorNameProperty = pieceNameProperty;
-        this.songAttributeNameProperty = pieceNameProperty;
+        this.colorNameProperty = colorNameProperty;
+        this.songAttributeNameProperty = songAttributeNameProperty;
         this.pieceNameProperty = pieceNameProperty;
     }
 

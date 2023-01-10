@@ -6,25 +6,25 @@ export type PieceAttributeJpnName = "オール" | "赤" | "緑" | "青";
 export type PieceAttributeEngName = "ALL" | "SMILE" | "PURE" | "COOL";
 export type AttributeCssClassName = "all" | "smile" | "pure" | "cool" | "orange";
 export type AttributeID = 0 | 1 | 2 | 3 | 4;
-type MappedValue = AttributeID | ColorNameEng | ColorNameJpn | SongAttributeNameEng | SongAttributeNameJpn | PieceAttributeEngName | PieceAttributeJpnName;
+type MappedValue = AttributeID | AttributeCssClassName | ColorNameEng | ColorNameJpn | SongAttributeNameEng | SongAttributeNameJpn | PieceAttributeEngName | PieceAttributeJpnName;
 
 export default class Attribute {
-    readonly id: AttributeID;
-    readonly colorNameJpn: ColorNameJpn;
-    readonly colorNameEng: ColorNameEng;
-    readonly songAttributeNameJpn: SongAttributeNameJpn;
-    readonly songAttributeNameEng: SongAttributeNameEng;
-    readonly pieceAttributeNameJpn: PieceAttributeJpnName | undefined;
-    readonly pieceAttributeNameEng: PieceAttributeEngName | undefined;
-    readonly cssClassName: AttributeCssClassName;
+    readonly id: number & AttributeID;
+    readonly colorNameJpn: string & ColorNameJpn;
+    readonly colorNameEng: string & ColorNameEng;
+    readonly songAttributeNameJpn: string & SongAttributeNameJpn;
+    readonly songAttributeNameEng: string & SongAttributeNameEng;
+    readonly pieceAttributeNameJpn: (string & PieceAttributeJpnName) | undefined;
+    readonly pieceAttributeNameEng: (string & PieceAttributeEngName) | undefined;
+    readonly cssClassName: string & AttributeCssClassName;
 
     private constructor(map: Map<MappedValue, Attribute>,
-                        id: AttributeID, className: AttributeCssClassName,
+                        id: AttributeID, cssClassName: AttributeCssClassName,
                         colorNameEng: ColorNameEng, colorNameJpn: ColorNameJpn,
                         songAttributeNameEng: SongAttributeNameEng, songAttributeNameJpn: SongAttributeNameJpn,
                         pieceAttributeNameEng?: PieceAttributeEngName, pieceAttributeNameJpn?: PieceAttributeJpnName) {
         this.id = id;
-        this.cssClassName = className;
+        this.cssClassName = cssClassName;
         this.colorNameEng = colorNameEng;
         this.colorNameJpn = colorNameJpn;
         this.songAttributeNameEng = songAttributeNameEng;
@@ -33,6 +33,7 @@ export default class Attribute {
         this.pieceAttributeNameJpn = pieceAttributeNameJpn;
 
         map.set(id, this);
+        map.set(cssClassName, this);
         map.set(colorNameEng, this);
         map.set(colorNameJpn, this);
         map.set(songAttributeNameEng, this);
@@ -53,7 +54,13 @@ export default class Attribute {
         return map;
     })();
 
-    static get(key: MappedValue): Attribute {
-        return Attribute.map.get(key)!;
+    static get(key: string): Attribute {
+        return Attribute.map.get(<MappedValue>key)!;
     }
+
+    static ALL: number = 0;
+    static SMILE: number = 1;
+    static PURE: number = 2;
+    static COOL: number = 3;
+    static ORANGE: number = 4;
 }

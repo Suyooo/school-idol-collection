@@ -1,4 +1,7 @@
 <script lang="ts">
+    import Pieces from "$lib/format/Pieces.svelte";
+    import Attribute from "$types/attribute.js";
+    import CardSongRequirementType from "$types/cardSongRequirementType.js";
     import type {PageData} from './$types.js';
     import {
         cardBirthday,
@@ -127,14 +130,19 @@
                                     {/if}
                                 </div>
                                 <div>
-                                    {card.member.piecesSmile}/{card.member.piecesPure}/{card.member.piecesCool}
-                                    /{card.member.piecesAll}
+                                    <Pieces pieces={card.member}/>
                                     {#if cardIsIdolizable(card) && cardHasIdolizationPieces(card)}
-                                        <br>{card.member.idolizeBonus.piecesSmile}/{card.member.idolizeBonus.piecesPure}
-                                        /{card.member.idolizeBonus.piecesCool}/{card.member.idolizeBonus.piecesAll}
+                                        <br>
+                                        <Pieces pieces={card.member.idolizeBonus}/>
                                     {/if}
                                     {#if cardHasBirthdayPieces(card)}
-                                        <br>{card.member.pieceBdayAttribute}
+                                        <br>
+                                        <Pieces pieces={{
+                                            piecesAll: card.member.pieceBdayAttribute === Attribute.ALL ? 1 : 0,
+                                            piecesSmile: card.member.pieceBdayAttribute === Attribute.SMILE ? 1 : 0,
+                                            piecesPure: card.member.pieceBdayAttribute === Attribute.PURE ? 1 : 0,
+                                            piecesCool: card.member.pieceBdayAttribute === Attribute.COOL ? 1 : 0
+                                        }}/>
                                     {/if}
                                 </div>
                             </div>
@@ -161,7 +169,13 @@
                             </div>
                             <div class="col-half inforow">
                                 <div>Requirement</div>
-                                <div>{card.song.requirementType}</div>
+                                <div>
+                                    {#if card.song.requirementType === CardSongRequirementType.ATTR_PIECE}
+                                        <Pieces pieces={{...card.song.attrRequirement, ...{piecesAll: null}}}/>
+                                    {:else}
+                                        <Pieces pieces={{piecesAll: card.song.anyRequirement.piecesAll}}/>
+                                    {/if}
+                                </div>
                             </div>
                         </div>
                     {/if}
@@ -299,7 +313,7 @@
     }
 
     .inforow > div:first-child {
-        @apply bg-primary-500 font-bold text-xs uppercase tracking-widest leading-6 basis-[30%] flex-grow-0 flex-shrink-0;
+        @apply bg-primary-500 font-bold text-xs uppercase tracking-widest leading-5 basis-[30%] flex-grow-0 flex-shrink-0;
     }
 
     .row.inforow > div:first-child {

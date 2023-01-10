@@ -15,7 +15,7 @@ a:not(.button) .card-id + span {
 }
 
 body {
-    @apply bg-background text-white font-sans;
+    @apply bg-background text-white font-sans leading-5;
 }
 
 .cont {
@@ -64,6 +64,10 @@ body {
 
 span.card-id {
     @apply text-primary-200 font-bold;
+}
+
+span.rarity {
+    @apply text-accent-300 font-bold;
 }
 
 h1, h2, h3, h4, h5, h6 {

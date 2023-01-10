@@ -1,6 +1,7 @@
 <script lang="ts">
+    import {cardRarity} from "$lib/card/strings";
     import type Card from "$models/card/card.js";
-    import {cardType} from "$lib/card/strings.js";
+    import {cardRarityShort, cardType} from "$lib/card/strings.js";
     import {cardIsMember, cardIsMemory} from "$lib/card/types.js";
 
     export let card: Card;
@@ -16,7 +17,13 @@
              class:card-h={cardIsMemory(card)}>
     </div>
     <div class="namecont">
-        <span>⏵</span><span>{card.nameEng || card.nameJpn}</span>
+        <span>⏵</span>
+        <span>
+            {#if cardIsMember(card)}
+                <span class="rarity">{cardRarityShort(card)}</span>
+            {/if}
+            {card.nameEng || card.nameJpn}
+        </span>
     </div>
     <div class="linecont">
         <span>{card.cardNo}</span><span>{cardType(card)}</span>

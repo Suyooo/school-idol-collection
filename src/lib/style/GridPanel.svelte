@@ -45,7 +45,11 @@
                 @apply underline;
             }
 
-            & > :global(.namecont > span:first-child), & > :global(.linecont > span) {
+            & > :global(.namecont > span:first-child) {
+                @apply text-primary-300;
+            }
+
+            & > :global(.linecont > span) {
                 @apply text-white;
             }
 

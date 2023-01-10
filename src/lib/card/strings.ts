@@ -1,9 +1,9 @@
+import {cardIsMember, cardIsSong} from "$lib/card/types.js";
 import type Card from "$models/card/card.js";
 import type {CardMember, CardMemberWithGroup} from "$models/card/card.js";
-import {cardIsMember, cardIsSong} from "$lib/card/types.js";
+import CardMemberGroupType from "$types/cardMemberGroupType.js";
 import {CardMemberRarity, CardSongRarity} from "$types/cardRarity.js";
 import {ordinal} from "$utils/grammar.js";
-import CardMemberGroupType from "$types/cardMemberGroupType.js";
 
 export function cardTitle(card: Card, styled: boolean): string {
     const pre = styled ? '<span class="lg:inline-block">&quot;' : '"';
@@ -34,6 +34,14 @@ export function cardRarity(card: Card): string {
         return CardSongRarity[card.song.rarity];
     }
     return "ME";
+}
+
+export function cardRarityShort(card: Card): string {
+    if (cardIsMember(card)) {
+        if (card.member.rarity === CardMemberRarity.Special) return "SP";
+        if (card.member.rarity === CardMemberRarity.Secret) return "SEC";
+    }
+    return cardRarity(card);
 }
 
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
