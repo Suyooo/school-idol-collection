@@ -2,6 +2,7 @@
     import Ability from "$lib/format/Ability.svelte";
     import CardImage from "$lib/format/CardImage.svelte";
     import PieceCount from "$lib/format/PieceCount.svelte";
+    import Skill from "$lib/format/Skill.svelte";
     import Attribute from "$types/attribute.js";
     import type {PageData} from './$types.js';
     import {
@@ -215,7 +216,7 @@
                             </div>
                             <div>
                                 {#each card.skills as skill (skill.id)}
-                                    {skill.eng}
+                                    <Skill skill={skill.eng}/>
                                 {/each}
                             </div>
                         </div>

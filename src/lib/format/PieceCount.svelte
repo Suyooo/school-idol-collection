@@ -6,6 +6,7 @@
     export let lang: Language = Language.ENG;
     export let pieces: { piecesAll?: number, piecesSmile?: number, piecesPure?: number, piecesCool?: number };
     export let showZero: boolean = false;
+    export let reducedGap: boolean = false;
 
     const attrKeys = ["All", "Smile", "Pure", "Cool"];
     let display: [number | null, number | null, number | null, number | null];
@@ -21,7 +22,7 @@
 {#each attrKeys as attrKey, i}
     {#if display[i] !== null}
         {@const attr = Attribute.get(attrKey.toUpperCase())}
-        <span class="pieceno {attr.cssClassName}">
+        <span class="pieceno {attr.cssClassName}" class:reduced-gap={reducedGap}>
             <Piece {lang} {attr}/>
             <span>{display[i]}</span>
         </span>
@@ -34,6 +35,10 @@
 
         &:not(:last-child) {
             @apply mr-4;
+        }
+
+        &.reduced-gap:not(:last-child) {
+            @apply mr-1;
         }
 
         &.all span {
@@ -52,8 +57,4 @@
             @apply text-attribute-cool;
         }
     }
-
-    /*.attrreq span.pieceno:not(:last-child) {
-        @apply mr-1;
-    }*/
 </style>
