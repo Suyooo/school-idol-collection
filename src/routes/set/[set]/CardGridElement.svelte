@@ -1,9 +1,8 @@
 <script lang="ts">
-    import {cardRarity} from "$lib/card/strings";
     import CardImage from "$lib/format/CardImage.svelte";
     import type Card from "$models/card/card.js";
     import {cardRarityShort, cardType} from "$lib/card/strings.js";
-    import {cardIsMember, cardIsMemory} from "$lib/card/types.js";
+    import {cardIsMember} from "$lib/card/types.js";
 
     export let card: Card;
     let cardSet: string;

@@ -1,18 +1,18 @@
 <script lang="ts">
-    import Attribute from "$types/attribute.js";
+    import type Attribute from "$types/attribute.js";
     import Language from "$types/language.js";
 
     export let lang: Language = Language.ENG;
     export let attr: Attribute;
 </script>
 
-<span class="piece {attr.cssClassName}" title={attr[lang.pieceNameProperty]}>
+<span class="{attr.cssClassName}" title={attr[lang.pieceNameProperty]}>
     {lang.leftSquareBracket}{attr[lang.pieceNameProperty]}{lang.rightSquareBracket}{lang.times}
 </span>
 
 <style lang="postcss">
-    span.piece {
-        @apply w-4 h-4 mt-0.5 bg-cover inline-block indent-out overflow-hidden align-top;
+    span {
+        @apply w-4 h-4 mt-0.5 bg-contain bg-no-repeat inline-block overflow-hidden align-top text-center text-none;
 
         &.all {
             background-image: url("/images/card/piece_all.png");

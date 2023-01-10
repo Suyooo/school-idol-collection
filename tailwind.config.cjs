@@ -12,7 +12,7 @@ module.exports = {
         attribute: {
           all: "#ffd87f",
           smile: "#fa7dca",
-          pure: "#8ec4a6",
+          pure: "#84cc91",
           cool: "#a2e3ff"
         }
       },
@@ -22,8 +22,8 @@ module.exports = {
         "card-fallback": "6px",
         "4xl": "2rem"
       },
-      textIndent: {
-        "out": "1000vw"
+      fontSize: {
+        "none": ["0px", "1.25rem"]
       }
     }
   },

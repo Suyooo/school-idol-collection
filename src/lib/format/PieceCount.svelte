@@ -8,17 +8,12 @@
     export let showZero: boolean = false;
 
     const attrKeys = ["All", "Smile", "Pure", "Cool"];
-    let display: [number | null, number | null, number | null, number | null], lastSetIdx: number = -1;
+    let display: [number | null, number | null, number | null, number | null];
     $: {
-        lastSetIdx = -1;
-        display = <[number | null, number | null, number | null, number | null]>attrKeys.map((attrKey, i) => {
+        display = <[number | null, number | null, number | null, number | null]>attrKeys.map(attrKey => {
             const piecesKey = <keyof typeof pieces>("pieces" + attrKey);
             const pieceCount: number | undefined = pieces[piecesKey];
-            const hide = (pieceCount === undefined || (pieceCount === 0 && !showZero));
-            if (!hide) {
-                lastSetIdx = i;
-            }
-            return hide ? null : pieces[piecesKey];
+            return (pieceCount === undefined || (pieceCount === 0 && !showZero)) ? null : pieces[piecesKey];
         });
     }
 </script>
@@ -58,7 +53,7 @@
         }
     }
 
-    .attrreq span.pieceno:not(:last-child) {
+    /*.attrreq span.pieceno:not(:last-child) {
         @apply mr-1;
-    }
+    }*/
 </style>

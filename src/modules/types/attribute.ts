@@ -54,7 +54,7 @@ export default class Attribute {
         return map;
     })();
 
-    static get(key: string): Attribute {
+    static get(key: string | number): Attribute {
         return Attribute.map.get(<MappedValue>key)!;
     }
 

@@ -1,8 +1,8 @@
 <script lang="ts">
+    import Ability from "$lib/format/Ability.svelte";
     import CardImage from "$lib/format/CardImage.svelte";
     import PieceCount from "$lib/format/PieceCount.svelte";
     import Attribute from "$types/attribute.js";
-    import CardSongRequirementType from "$types/cardSongRequirementType.js";
     import type {PageData} from './$types.js';
     import {
         cardBirthday,
@@ -16,10 +16,11 @@
     } from "$lib/card/strings.js";
     import type Card from "$models/card/card.js";
     import {
+        cardHasAttrPieceRequirement,
         cardHasBirthdayPieces, cardHasGroup,
         cardHasIdolizationPieces,
         cardIsIdolizable,
-        cardIsMember, cardIsMemory,
+        cardIsMember,
         cardIsSong
     } from "$lib/card/types.js";
     import type CardPageExtraInfo from "$types/cardPageExtraInfo.js";
@@ -105,18 +106,7 @@
                         <div class="row">
                             <div class="col-half inforow">
                                 <div>Ability</div>
-                                <div>
-                                    {#if card.member.abilityRush}
-                                        <span class='ability rush'>[RUSH]</span>
-                                        {#if card.member.abilityLive}
-                                            <span class='ability or'>/</span><span class='ability live'>[LIVE]</span>
-                                        {/if}
-                                    {:else if card.member.abilityLive}
-                                        <span class='ability live'>[LIVE]</span>
-                                    {:else}
-                                        —
-                                    {/if}
-                                </div>
+                                <div><Ability rush={card.member.abilityRush} live={card.member.abilityLive}/></div>
                             </div>
                             <div class="col-half inforow">
                                 <div>
@@ -148,9 +138,10 @@
                         </div>
                         <div class="row inforow">
                             <div>Costume</div>
-                            <div>{card.member.costumeJpn ? card.member.costumeJpn || card.member.costumeEng : "—"}</div>
+                            <div>{card.member.costumeEng ? card.member.costumeEng || card.member.costumeJpn : "—"}</div>
                         </div>
                     {:else if cardIsSong(card)}
+                        {@const songAttr = Attribute.get(card.song.attribute)}
                         <div class="row">
                             <div class="col-half inforow">
                                 <div>Rarity</div>
@@ -158,7 +149,7 @@
                             </div>
                             <div class="col-half inforow">
                                 <div>Attribute</div>
-                                <div>{Attribute.get(card.song.attribute).songAttributeNameEng}</div>
+                                <div class="song-attr {songAttr.cssClassName}">{songAttr.songAttributeNameEng}</div>
                             </div>
                         </div>
                         <div class="row">
@@ -168,17 +159,23 @@
                                     {card.song.lpBase}
                                     {#if card.song.lpBonus}
                                         (
-                                        {#if card.song.lpBonus.charAt(0) !== "-"}+{/if}{card.song.lpBonus})
+                                        {#if card.song.lpBonus.toString().charAt(0) !== "-"}+{/if}{card.song.lpBonus})
                                     {/if}
                                 </div>
                             </div>
                             <div class="col-half inforow">
                                 <div>Requirement</div>
                                 <div>
-                                    {#if card.song.requirementType === CardSongRequirementType.ATTR_PIECE}
-                                        <PieceCount pieces={{...card.song.attrRequirement, ...{piecesAll: null}}}/>
+                                    {#if cardHasAttrPieceRequirement(card)}
+                                        <PieceCount pieces={{
+                                            piecesSmile: card.song.attrRequirement.piecesSmile,
+                                            piecesPure: card.song.attrRequirement.piecesPure,
+                                            piecesCool: card.song.attrRequirement.piecesCool,
+                                        }} showZero/>
                                     {:else}
-                                        <PieceCount pieces={{piecesAll: card.song.anyRequirement.piecesAll}}/>
+                                        <PieceCount pieces={{
+                                            piecesAll: card.song.anyRequirement.piecesAll
+                                        }}/>
                                     {/if}
                                 </div>
                             </div>
@@ -339,6 +336,26 @@
 
     .cost > span {
         @apply inline-block w-4 text-center text-accent-300;
+    }
+
+    .song-attr {
+        @apply font-bold;
+
+        &.all {
+            @apply text-attribute-all;
+        }
+
+        &.smile {
+            @apply text-attribute-smile;
+        }
+
+        &.pure {
+            @apply text-attribute-pure;
+        }
+
+        &.cool {
+            @apply text-attribute-cool;
+        }
     }
 
     .faqs > a {

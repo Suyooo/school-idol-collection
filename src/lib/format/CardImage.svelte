@@ -1,7 +1,7 @@
 <script lang="ts">
     export let cardNo: string;
     export let cardSet: string;
-    export let front: boolean;
+    export let front: boolean = false;
 
     let img: HTMLImageElement, isHorizontal: boolean = false, isVertical: boolean = false;
 
