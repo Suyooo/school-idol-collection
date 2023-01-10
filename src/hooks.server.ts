@@ -3,6 +3,6 @@ import DB from "$models/db.js";
 
 export const handle: Handle = (async ({ event, resolve }) => {
     await DB.syncPromise;
-    event.locals.db = DB;
+    event.locals.DB = DB;
     return resolve(event);
 });

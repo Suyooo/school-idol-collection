@@ -1,4 +1,4 @@
-import {Attribute, BelongsTo, HasOne, Table} from "@sequelize/core/decorators-legacy";
+import {Attribute, HasOne, Table} from "@sequelize/core/decorators-legacy";
 import {DataTypes, Model} from "@sequelize/core";
 
 import type {CardSong} from "$models/card/card.js";

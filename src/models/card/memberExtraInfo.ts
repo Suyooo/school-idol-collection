@@ -1,4 +1,4 @@
-import {Attribute, BelongsTo, HasOne, Table} from "@sequelize/core/decorators-legacy";
+import {Attribute, HasOne, Table} from "@sequelize/core/decorators-legacy";
 import {DataTypes, Model} from "@sequelize/core";
 
 import type {CardMember} from "$models/card/card.js";
@@ -41,7 +41,7 @@ export default class CardMemberExtraInfo extends Model {
         allowNull: false,
         primaryKey: true
     })
-    declare cardNo: number;
+    declare cardNo: string;
     /* inverse of association in Card */
     declare card: CardMember;
 

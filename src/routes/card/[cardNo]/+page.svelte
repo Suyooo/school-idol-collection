@@ -18,11 +18,11 @@
         cardIsMember, cardIsMemory,
         cardIsSong
     } from "$lib/card/types.js";
+    import type CardPageExtraInfo from "$types/cardPageExtraInfo.js";
 
     export let data: PageData;
-    let card: Card, sameIdCards: Card[], set: string;
+    let card: Card & CardPageExtraInfo, set: string;
     $: card = data.card;
-    $: sameIdCards = data.sameIdCards;
     $: set = card.cardNo.split("-")[0];
 </script>
 
@@ -52,13 +52,13 @@
                         <div class="col-half inforow">
                             <div>
                                 Card ID
-                                {#if sameIdCards.length > 0}
+                                {#if card.sameId.length > 0}
                                     <br><span>Shared With</span>
                                 {/if}
                             </div>
                             <div>
                                 {cardId(card)}
-                                {#each sameIdCards as sameIdCard (sameIdCard.cardNo)}
+                                {#each card.sameId as sameIdCard (sameIdCard.cardNo)}
                                     <br>
                                     <a href="/card/{sameIdCard.cardNo}">{sameIdCard.cardNo}
                                         ({cardRarity(sameIdCard)})</a>

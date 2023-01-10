@@ -1,10 +1,13 @@
 <script lang="ts">
-    import {page} from "$app/stores";
     import type {PageData} from './$types.js';
-    import "$style/grid.css";
+    import type Card from "$models/card/card.js";
+    import {page} from "$app/stores";
     import CardGridElement from "./CardGridElement.svelte";
+    import "$style/grid.css";
 
     export let data: PageData;
+    let cards: Card[];
+    $: cards = data.cards;
 </script>
 
 <svelte:head>
@@ -14,7 +17,7 @@
 <h5>{$page.params.set}</h5>
 <div class="content">
     <div class="panel grid-container">
-        {#each data.cards as card (card.cardNo)}
+        {#each cards as card (card.cardNo)}
             <CardGridElement {card}/>
         {/each}
     </div>

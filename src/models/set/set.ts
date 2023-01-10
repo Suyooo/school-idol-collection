@@ -1,4 +1,4 @@
-import {Attribute, BelongsTo, Table} from "@sequelize/core/decorators-legacy";
+import {Attribute,  Table} from "@sequelize/core/decorators-legacy";
 import {DataTypes, Model} from "@sequelize/core";
 import type SetCategory from "$models/set/category.js";
 

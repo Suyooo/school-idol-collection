@@ -1,6 +1,5 @@
-import AnnotationType from "$types/annotationType.js";
 import CardType from "$types/cardType.js";
-import {literal, Op, Sequelize} from "@sequelize/core";
+import {Op, Sequelize} from "@sequelize/core";
 import type {ModelStatic} from "@sequelize/core";
 
 import type Card from "$models/card/card.js";
@@ -57,79 +56,6 @@ async function scopes() {
         include: [
             {model: sequelize.models.CardMemberExtraInfo, attributes: ["rarity"]},
             {model: sequelize.models.CardSongExtraInfo, attributes: ["rarity"]}
-        ]
-    }));
-    CardBase.addScope("viewFull", () => ({
-        include: [
-            {
-                model: sequelize.models.Skill,
-                include: [{
-                    model: sequelize.models.Annotation,
-                    include: [{model: sequelize.models.Card}]
-                }]
-            },
-            {
-                model: sequelize.models.CardMemberExtraInfo,
-                include: [
-                    {
-                        model: sequelize.models.CardMemberGroup,
-                        include: [
-                            {
-                                model: sequelize.models.Skill,
-                                include: [{
-                                    model: sequelize.models.Annotation,
-                                    include: [sequelize.models.Card]
-                                }]
-                            },
-                            {
-                                model: sequelize.models.CardMemberExtraInfo,
-                                include: [
-                                    {
-                                        model: sequelize.models.Card,
-                                        include: [sequelize.models.CardMemberExtraInfo]
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    sequelize.models.CardMemberIdolizePieceExtraInfo
-                ]
-            },
-            {
-                model: sequelize.models.CardSongExtraInfo,
-                include: [
-                    sequelize.models.CardSongAnyReqExtraInfo,
-                    sequelize.models.CardSongAttrReqExtraInfo
-                ]
-            },
-            {model: sequelize.models.CardFAQLink},
-            {
-                model: sequelize.models.Annotation,
-                where: {
-                    type: {
-                        [Op.in]: [
-                            AnnotationType.get("song").id,
-                            AnnotationType.get("costume").id,
-                            AnnotationType.get("mem").id
-                        ]
-                    }
-                },
-                required: false,
-                include: [{
-                    model: sequelize.models.Skill,
-                    include: [
-                        sequelize.models.Card,
-                        {
-                            model: sequelize.models.CardMemberGroup,
-                            include: [{
-                                model: sequelize.models.CardMemberExtraInfo,
-                                include: [sequelize.models.Card]
-                            }]
-                        }
-                    ]
-                }],
-                order: [literal("`linkedBy->skill`.`groupId`"), ...cardOrder("`linkedBy->skill`.`cardNo`")]
-            }
         ]
     }));
     CardBase.addScope("filterId", (id) => ({

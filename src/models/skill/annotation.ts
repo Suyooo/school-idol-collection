@@ -1,4 +1,4 @@
-import {Attribute, BelongsTo, BelongsToMany, Table} from "@sequelize/core/decorators-legacy";
+import {Attribute, BelongsToMany, Table} from "@sequelize/core/decorators-legacy";
 import {DataTypes, Model} from "@sequelize/core";
 
 import type Card from "$models/card/card.js";

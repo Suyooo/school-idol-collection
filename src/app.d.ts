@@ -7,7 +7,7 @@ declare global {
     namespace App {
         // interface Error {}
         interface Locals {
-            db: DBObject
+            DB: DBObject
         }
 
         // interface PageData {}
