@@ -1,4 +1,5 @@
 <script lang="ts">
+    import GridPanel from "$lib/grid/GridPanel.svelte";
     import type {PageData} from './$types.js';
     import type Card from "$models/card/card.js";
     import {page} from "$app/stores";
@@ -16,11 +17,9 @@
 
 <h5>{$page.params.set}</h5>
 <div class="content">
-    <div class="panel grid-container">
-        {#each cards as card (card.cardNo)}
-            <CardGridElement {card}/>
-        {/each}
-    </div>
+    <GridPanel items={cards} key="cardNo" let:item={card}>
+        <CardGridElement {card}/>
+    </GridPanel>
 </div>
 
 <a class="button button-primary my-4 float-right" href="/list">View Full Card List</a>

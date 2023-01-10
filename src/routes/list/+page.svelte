@@ -1,4 +1,5 @@
 <script lang="ts">
+    import GridPanel from "$lib/grid/GridPanel.svelte";
     import type {PageData} from './$types.js';
     import type SetCategory from "$models/set/category.js";
     import SetGridElement from "./SetGridElement.svelte";
@@ -16,10 +17,8 @@
 {#each categories as cat (cat.id)}
     <h5>{cat.eng}</h5>
     <div class="content">
-        <div class="panel grid-container">
-            {#each cat.sets as set (set.id)}
-                <SetGridElement {set} />
-            {/each}
-        </div>
+        <GridPanel items={cat.sets} key="id" let:item={set}>
+            <SetGridElement {set} />
+        </GridPanel>
     </div>
 {/each}

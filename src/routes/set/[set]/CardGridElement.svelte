@@ -22,19 +22,3 @@
         <span>{card.cardNo}</span><span>{cardType(card)}</span>
     </div>
 </a>
-
-<style lang="postcss">
-    .grid-item {
-        & > .imgcont {
-            @apply bg-primary-700 gap-2;
-
-            & > img {
-                @apply max-w-[50%] basis-0;
-            }
-        }
-
-        & > .namecont {
-            @apply my-1;
-        }
-    }
-</style>
