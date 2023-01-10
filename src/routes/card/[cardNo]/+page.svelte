@@ -45,7 +45,7 @@
         <div class="col-threequarters">
             <div class="mb-4">
                 <CardPageButtons prevCardNo={card.prevCardNo} nextCardNo={card.nextCardNo} cardSet={card.cardSet}
-                                 listLinksOnLargeOnly={true}/>
+                                 listLinksOnLargeOnly/>
             </div>
 
             <div class="panel">
@@ -263,7 +263,7 @@
             </div>
             <div class="cardcopyright">{card.copyright}</div>
             <div class="mt-4">
-                <CardPageButtons prevCardNo={card.prevCardNo} nextCardNo={card.nextCardNo} cardSet={card.cardSet} />
+                <CardPageButtons prevCardNo={card.prevCardNo} nextCardNo={card.nextCardNo} cardSet={card.cardSet}/>
             </div>
         </div>
     </div>

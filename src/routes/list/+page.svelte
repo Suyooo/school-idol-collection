@@ -1,9 +1,8 @@
 <script lang="ts">
-    import GridPanel from "$lib/grid/GridPanel.svelte";
+    import GridPanel from "$lib/style/GridPanel.svelte";
     import type {PageData} from './$types.js';
     import type SetCategory from "$models/set/category.js";
     import SetGridElement from "./SetGridElement.svelte";
-    import "$style/grid.css";
 
     export let data: PageData;
     let categories: SetCategory[];

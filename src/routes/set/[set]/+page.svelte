@@ -1,10 +1,10 @@
 <script lang="ts">
-    import GridPanel from "$lib/grid/GridPanel.svelte";
+    import Button from "$lib/style/Button.svelte";
+    import GridPanel from "$lib/style/GridPanel.svelte";
     import type {PageData} from './$types.js';
     import type Card from "$models/card/card.js";
     import {page} from "$app/stores";
     import CardGridElement from "./CardGridElement.svelte";
-    import "$style/grid.css";
 
     export let data: PageData;
     let cards: Card[];
@@ -22,4 +22,6 @@
     </GridPanel>
 </div>
 
-<a class="button button-primary my-4 float-right" href="/list">View Full Card List</a>
+<div class="my-4 mr-4 float-right">
+    <Button accent href="/list">View Full Card List</Button>
+</div>

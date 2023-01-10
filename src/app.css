@@ -4,35 +4,14 @@
 
 a {
     @apply text-accent-400 underline;
-
-    &:focus,
-    &:hover {
-        @apply text-accent-200;
-    }
-
-    &:not(.button) .card-id + span {
-        @apply underline;
-    }
 }
 
-.button {
-    @apply text-white bg-primary-700 rounded uppercase px-4 py-2 cursor-pointer text-sm tracking-wide no-underline select-none;
+a:focus, a:hover {
+    @apply text-accent-200;
+}
 
-    &:hover,
-    &:focus {
-        @apply bg-primary-500;
-    }
-
-    &.button-primary {
-        @apply bg-accent-600;
-
-        &:hover,
-        &:focus {
-            @apply bg-accent-400;
-        }
-
-    }
-
+a:not(.button) .card-id + span {
+    @apply underline;
 }
 
 body {
@@ -47,27 +26,27 @@ body {
     @apply lg:flex;
 }
 
-.row>* {
+.row > * {
     @apply flex-grow-0 flex-shrink-0 w-full;
 }
 
-.row>.col-min {
+.row > .col-min {
     @apply lg:basis-0;
 }
 
-.row>.col-quarter {
+.row > .col-quarter {
     @apply lg:basis-[25%];
 }
 
-.row>.col-third {
+.row > .col-third {
     @apply lg:basis-[33%];
 }
 
-.row>.col-half {
+.row > .col-half {
     @apply lg:basis-[50%];
 }
 
-.row>.col-threequarters {
+.row > .col-threequarters {
     @apply lg:basis-[75%];
 }
 
@@ -87,19 +66,17 @@ span.card-id {
     @apply text-primary-200 font-bold;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
     @apply text-accent-400 font-bold uppercase tracking-widest text-2xl mt-4 mb-1;
     /**/
 }
 
-.panel h6 {
-    @apply m-0;
-    /**/
+.rounded-card:not(.card-h) {
+    @apply rounded-card-v;
+}
+
+.rounded-card.card-h {
+    @apply rounded-card-h;
 }
 
 input,
@@ -126,18 +103,6 @@ textarea {
     @apply hidden bg-red-700;
 }
 
-tr>th {
+tr > th {
     @apply whitespace-nowrap;
-}
-
-.rounded-card {
-
-    &:not(.card-h) {
-        @apply rounded-card-v;
-    }
-
-    &.card-h {
-        @apply rounded-card-h;
-    }
-
 }
