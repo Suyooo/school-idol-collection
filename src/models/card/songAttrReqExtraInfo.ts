@@ -5,7 +5,7 @@ import type {CardSong} from "$models/card/card.js";
 import type CardSongExtraInfo from "$models/card/songExtraInfo.js";
 import {pieceInfoGetter} from "$models/utils/pieceInfoGetterSetter.js";
 
-import type PieceInfo from "$types/pieceInfo.js";
+import type PieceInfo from "$lib/types/pieceInfo.js";
 
 @Table({
     modelName: "CardSongAttrReqExtraInfo",

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type Attribute from "$types/attribute.js";
-    import Language from "$types/language.js";
+    import type Attribute from "$lib/types/attribute.js";
+    import Language from "$lib/types/language.js";
 
     export let lang: Language = Language.ENG;
     export let attr: Attribute;

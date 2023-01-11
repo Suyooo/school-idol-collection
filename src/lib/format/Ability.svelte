@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Language from "$types/language.js";
+    import Language from "$lib/types/language.js";
 
     export let lang: Language = Language.ENG;
     export let rush: boolean = false;

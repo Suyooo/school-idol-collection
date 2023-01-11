@@ -6,10 +6,10 @@ import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePiec
 import type CardMemberGroup from "$models/card/memberGroup.js";
 import {pieceInfoGetter} from "$models/utils/pieceInfoGetterSetter.js";
 
-import type {AttributeID} from "$types/attribute.js";
-import type {CardMemberRarity} from "$types/cardRarity.js";
-import type PieceInfo from "$types/pieceInfo.js";
-import CardMemberIdolizeType from "$types/cardMemberIdolizeType.js";
+import type {AttributeID} from "$lib/types/attribute.js";
+import type {CardMemberRarity} from "$lib/types/cardRarity.js";
+import type PieceInfo from "$lib/types/pieceInfo.js";
+import CardMemberIdolizeType from "$lib/types/cardMemberIdolizeType.js";
 
 @Table({
     modelName: "CardMemberExtraInfo",

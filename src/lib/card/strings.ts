@@ -1,9 +1,9 @@
 import {cardIsMember, cardIsSong} from "$lib/card/types.js";
 import type Card from "$models/card/card.js";
 import type {CardMember, CardMemberWithGroup} from "$models/card/card.js";
-import CardMemberGroupType from "$types/cardMemberGroupType.js";
-import {CardMemberRarity, CardSongRarity} from "$types/cardRarity.js";
-import {ordinal} from "$utils/grammar.js";
+import CardMemberGroupType from "$lib/types/cardMemberGroupType.js";
+import {CardMemberRarity, CardSongRarity} from "$lib/types/cardRarity.js";
+import {ordinal} from "$lib/utils/grammar.js";
 
 export function cardTitle(card: Card, styled: boolean): string {
     const pre = styled ? '<span class="lg:inline-block">&quot;' : '"';

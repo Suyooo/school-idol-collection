@@ -5,9 +5,9 @@ import type {CardSong} from "$models/card/card.js";
 import type CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";
 import type CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo.js";
 
-import CardSongRequirementType from "$types/cardSongRequirementType.js";
-import type {CardSongRarity} from "$types/cardRarity.js";
-import type {AttributeID} from "$types/attribute.js";
+import CardSongRequirementType from "$lib/types/cardSongRequirementType.js";
+import type {CardSongRarity} from "$lib/types/cardRarity.js";
+import type {AttributeID} from "$lib/types/attribute.js";
 
 @Table({
     modelName: "CardSongExtraInfo",

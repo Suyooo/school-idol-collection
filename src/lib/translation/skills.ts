@@ -1,8 +1,8 @@
 import DB from "$models/db.js";
 import type TranslationPattern from "$models/translation/pattern.js";
-import PatternApplyError from "$errors/patternApplyError.js";
-import Trigger from "$translation/trigger.js";
-import type {TriggerNameJpn} from "$translation/trigger.js";
+import PatternApplyError from "$lib/errors/patternApplyError.js";
+import Trigger from "$lib/translation/trigger.js";
+import type {TriggerNameJpn} from "$lib/translation/trigger.js";
 import type {QueryOptions} from "@sequelize/core";
 
 export const checkTriggersPattern = /^(【[^【】]*?】(?:\/【[^【】]*?】)*)(.*?)$/;

@@ -1,12 +1,12 @@
 import DB from "$models/db.js";
 import type {QueryOptions} from "@sequelize/core";
 
-import * as Grammar from "$utils/grammar.js";
-import * as Regex from "$utils/convert.js";
-import Attribute from "$types/attribute.js";
-import type {PieceAttributeJpnName} from "$types/attribute.js";
-import NotFoundError from "$errors/notFoundError.js";
-import MissingTranslationError from "$errors/missingTranslationError.js";
+import * as Grammar from "$lib/utils/grammar.js";
+import {toNumWithFullwidth} from "$lib/utils/string.js";
+import Attribute from "$lib/types/attribute.js";
+import type {PieceAttributeJpnName} from "$lib/types/attribute.js";
+import NotFoundError from "$lib/errors/notFoundError.js";
+import MissingTranslationError from "$lib/errors/missingTranslationError.js";
 
 const skilltextPattern = /{{skilltext:([^}]*?)}}/;
 
@@ -64,12 +64,12 @@ export default class PatternGroupType {
 
         // Number
         map.push(new PatternGroupType(4, async function (match: string) {
-            return Regex.toNumWithFullwidth(match).toFixed(0);
+            return toNumWithFullwidth(match).toFixed(0);
         }, generateNumberReplacements));
 
         // Number Text
         map.push(new PatternGroupType(5, async function (match: string) {
-            const n = Regex.toNumWithFullwidth(match);
+            const n = toNumWithFullwidth(match);
             if (n === 0) return "zero";
             if (n === 1) return "one";
             if (n === 2) return "two";
@@ -88,7 +88,7 @@ export default class PatternGroupType {
 
         // Ordinal
         map.push(new PatternGroupType(6, async function (match: string) {
-            const n = Regex.toNumWithFullwidth(match);
+            const n = toNumWithFullwidth(match);
             const nMod10 = n % 10;
             const nMod100 = n % 100;
             if (nMod10 === 1 && nMod100 !== 11) return n + "st";
@@ -121,7 +121,7 @@ function generateAOrAnReplacements(_match: string, thisNum: number, allReplaceme
 }
 
 function generateNumberReplacements(match: string, thisNum: number, allReplacements: string[]): Map<string, string> {
-    const n = Regex.toNumWithFullwidth(match);
+    const n = toNumWithFullwidth(match);
     const isOne = (n === 1);
     return new Map<string, string>([
         ["<" + thisNum + "s>", isOne ? "" : "s"],

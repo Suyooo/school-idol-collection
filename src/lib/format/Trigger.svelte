@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Trigger from "$translation/trigger.js";
-    import Language from "$types/language.js";
+    import Trigger from "$lib/translation/trigger.js";
+    import Language from "$lib/types/language.js";
 
     export let lang: Language = Language.ENG;
     export let trigger: Trigger;

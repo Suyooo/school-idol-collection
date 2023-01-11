@@ -1,4 +1,4 @@
-import type SearchFilter from "$search/options.js";
+import type SearchFilter from "$lib/search/options.js";
 import type Card from "$models/card/card.js";
 import {cardOrder} from "$models/card/card.js";
 import DB from "$models/db.js";

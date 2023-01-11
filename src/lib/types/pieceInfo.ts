@@ -1,4 +1,4 @@
-import type Attribute from "$types/attribute.js";
+import type Attribute from "$lib/types/attribute.js";
 
 export default class PieceInfo {
     readonly all: number;

@@ -1,7 +1,9 @@
+import {parseSkillToRenderNodes} from "$lib/format/format.js";
+import Language from "$lib/types/language.js";
 import type Card from "$models/card/card.js";
 import {cardOrder} from "$models/card/card.js";
-import AnnotationType from "$types/annotationType.js";
-import type CardPageExtraInfo from "$types/cardPageExtraInfo.js";
+import AnnotationType from "$lib/types/annotationType.js";
+import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
 import {literal, Op} from "@sequelize/core";
 import {error, json} from "@sveltejs/kit";
 import type {RequestHandler} from "./$types.js";
@@ -103,6 +105,17 @@ export const GET: RequestHandler = (async ({params, locals}) => {
     cardData.nextCardNo = (await locals.DB.Card
         .withScope(["viewCardNoOnly",  {method: ["filterAfter", cardData.cardNo]}]).findOne())?.cardNo ?? null;
     if (cardData.nextCardNo && cardData.nextCardNo.split("-")[0] !== cardData.cardSet) cardData.nextCardNo = null;
+
+    cardData.skills.forEach(skill => {
+        skill.jpnPrerendered = parseSkillToRenderNodes(skill.jpn, Language.JPN);
+        skill.engPrerendered = skill.eng ? parseSkillToRenderNodes(skill.eng, Language.ENG) : null;
+    });
+    if (cardData.member?.group) {
+        cardData.member.group.skills.forEach(skill => {
+            skill.jpnPrerendered = parseSkillToRenderNodes(skill.jpn, Language.JPN);
+            skill.engPrerendered = skill.eng ? parseSkillToRenderNodes(skill.eng, Language.ENG) : null;
+        });
+    }
 
     return json(cardData);
 }) satisfies RequestHandler;

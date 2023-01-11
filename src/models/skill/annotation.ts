@@ -5,8 +5,8 @@ import type Card from "$models/card/card.js";
 import type Link from "$models/skill/link.js";
 import type Skill from "$models/skill/skill.js";
 
-import AnnotationType from "$types/annotationType.js";
-import type {AnnotationTypeID} from "$types/annotationType.js";
+import AnnotationType from "$lib/types/annotationType.js";
+import type {AnnotationTypeID} from "$lib/types/annotationType.js";
 
 @Table({
     modelName: "Annotation",

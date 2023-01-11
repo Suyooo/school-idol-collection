@@ -1,27 +1,27 @@
 <script lang="ts">
     import Piece from "$lib/format/Piece.svelte";
-    import Attribute from "$types/attribute.js";
-    import Language from "$types/language.js";
+    import Attribute from "$lib/types/attribute.js";
+    import Language from "$lib/types/language.js";
+    import {uppercaseFirst} from "$lib/utils/string.js";
 
     export let lang: Language = Language.ENG;
     export let pieces: { piecesAll?: number, piecesSmile?: number, piecesPure?: number, piecesCool?: number };
     export let showZero: boolean = false;
     export let reducedGap: boolean = false;
 
-    const attrKeys = ["All", "Smile", "Pure", "Cool"];
+    const attrs = Attribute.all.filter(a => a.pieceAttributeNameEng !== undefined);
     let display: [number | null, number | null, number | null, number | null];
     $: {
-        display = <[number | null, number | null, number | null, number | null]>attrKeys.map(attrKey => {
-            const piecesKey = <keyof typeof pieces>("pieces" + attrKey);
+        display = <[number | null, number | null, number | null, number | null]>attrs.map(attr => {
+            const piecesKey = <keyof typeof pieces>("pieces" + uppercaseFirst(attr.cssClassName));
             const pieceCount: number | undefined = pieces[piecesKey];
             return (pieceCount === undefined || (pieceCount === 0 && !showZero)) ? null : pieces[piecesKey];
         });
     }
 </script>
 
-{#each attrKeys as attrKey, i}
+{#each attrs as attr, i}
     {#if display[i] !== null}
-        {@const attr = Attribute.get(attrKey.toUpperCase())}
         <span class="pieceno {attr.cssClassName}" class:reduced-gap={reducedGap}>
             <Piece {lang} {attr}/>
             <span class="text-none">{lang.times}</span>

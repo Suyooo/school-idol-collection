@@ -1,3 +1,4 @@
+import type {RenderNodePrepared} from "$lib/format/format.js";
 import {
     AfterCreate,
     AfterUpdate,
@@ -15,8 +16,8 @@ import type CardMemberGroup from "$models/card/memberGroup.js";
 import type TranslationPattern from "$models/translation/pattern.js";
 import type Annotation from "$models/skill/annotation.js";
 
-import AnnotationType from "$types/annotationType.js";
-import type {AnnotationTypeKey} from "$types/annotationType.js";
+import AnnotationType from "$lib/types/annotationType.js";
+import type {AnnotationTypeKey} from "$lib/types/annotationType.js";
 
 @Table({
     modelName: "Skill",
@@ -87,12 +88,14 @@ export class SkillBase extends Model {
         allowNull: false
     })
     declare jpn: string;
+    declare jpnPrerendered?: RenderNodePrepared[];
 
     @Attribute({
         type: DataTypes.STRING,
         allowNull: true
     })
     declare eng: string | null;
+    declare engPrerendered?: RenderNodePrepared[] | null;
 
     @HasMany((s) => s.models.Annotation, {
         as: "annotation", foreignKey: "skillId", inverse: {as: "skill"}

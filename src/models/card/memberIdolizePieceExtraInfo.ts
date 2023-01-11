@@ -5,7 +5,7 @@ import type {CardMember} from "$models/card/card.js";
 import type CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
 import {pieceInfoGetter} from "$models/utils/pieceInfoGetterSetter.js";
 
-import type PieceInfo from "$types/pieceInfo.js";
+import type PieceInfo from "$lib/types/pieceInfo.js";
 
 @Table({
     modelName: "CardMemberIdolizePieceExtraInfo",

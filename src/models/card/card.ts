@@ -9,9 +9,9 @@ import type CardFAQLink from "$models/card/faqLink.js";
 import type Annotation from "$models/skill/annotation.js";
 import type Link from "$models/skill/link.js";
 
-import type {AttributeID} from "$types/attribute.js";
-import CardType from "$types/cardType.js";
-import type CardMemberIdolizeType from "$types/cardMemberIdolizeType.js";
+import type {AttributeID} from "$lib/types/attribute.js";
+import CardType from "$lib/types/cardType.js";
+import type CardMemberIdolizeType from "$lib/types/cardMemberIdolizeType.js";
 import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo.js";
 import type CardMemberGroup from "$models/card/memberGroup.js";
 import type CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";

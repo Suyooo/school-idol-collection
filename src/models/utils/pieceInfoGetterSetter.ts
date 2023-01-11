@@ -1,4 +1,4 @@
-import PieceInfo from "$types/pieceInfo.js";
+import PieceInfo from "$lib/types/pieceInfo.js";
 
 export function pieceInfoGetter(obj: any, allKeyName?: string, smileKeyName?: string, pureKeyName?: string, coolKeyName?: string) {
     return new PieceInfo(

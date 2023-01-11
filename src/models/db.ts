@@ -1,4 +1,4 @@
-import CardType from "$types/cardType.js";
+import CardType from "$lib/types/cardType.js";
 import {Op, Sequelize} from "@sequelize/core";
 import type {ModelStatic} from "@sequelize/core";
 

@@ -2,12 +2,12 @@ import {AfterUpdate, Attribute, Table} from "@sequelize/core/decorators-legacy";
 import {DataTypes, Model} from "@sequelize/core";
 import type {QueryOptions} from "@sequelize/core";
 
-import Trigger from "$translation/trigger.js";
-import type {TriggerID} from "$translation/trigger.js";
-import PatternGroupType from "$translation/patternGroupType.js";
-import type {PatternGroupTypeID} from "$translation/patternGroupType.js";
-import {escapeForRegex} from "$utils/convert.js";
-import {splitTriggersFromSkill} from "$translation/skills.js";
+import Trigger from "$lib/translation/trigger.js";
+import type {TriggerID} from "$lib/translation/trigger.js";
+import PatternGroupType from "$lib/translation/patternGroupType.js";
+import type {PatternGroupTypeID} from "$lib/translation/patternGroupType.js";
+import {escapeForRegex} from "$lib/utils/string.js";
+import {splitTriggersFromSkill} from "$lib/translation/skills.js";
 
 @Table({
     modelName: "TranslationPattern",

@@ -1,9 +1,9 @@
 <script lang="ts">
-    import Language from "$types/language.js";
-    import type {RenderNode} from "./Skill.svelte";
-    import {isTextNode, isElementNode} from "./Skill.svelte";
+    import Language from "$lib/types/language.js";
+    import type {RenderNodeRenderable} from "$lib/format/format.js";
+    import {isTextNode, isElementNode} from "$lib/format/format.js";
 
-    export let renderNodes: RenderNode[];
+    export let renderNodes: RenderNodeRenderable[];
     export let lang: Language = Language.ENG;
 </script>
 
