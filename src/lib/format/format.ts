@@ -34,105 +34,105 @@ export interface ElementMarkerEndNode {
 }
 
 export interface ElementNode {
-    nodes: RenderNode[];
+    nodes: ParseNode[];
     element: string;
     class?: string;
 }
 
-export type RenderNode = TextNode | ComponentNode | ElementMarkerNode | ElementMarkerEndNode | ElementNode;
-export type RenderNodePrepared = TextNode | ComponentNode | ElementNode;
-export type RenderNodeRenderable =
+export type ParseNode = TextNode | ComponentNode | ElementMarkerNode | ElementMarkerEndNode | ElementNode;
+export type ParseNodePrepared = TextNode | ComponentNode | ElementNode;
+export type ParseNodeRenderable =
     TextNode
     | ComponentNodeRenderable
     | ElementMarkerNode
     | ElementMarkerEndNode
     | ElementNode;
 
-export function isTextNode(node: RenderNode): node is TextNode {
+export function isTextNode(node: ParseNode): node is TextNode {
     return node.hasOwnProperty("text");
 }
 
-export function isComponentNode(node: RenderNode): node is ComponentNode {
+export function isComponentNode(node: ParseNode): node is ComponentNode {
     return node.hasOwnProperty("component");
 }
 
-export function isElementMarkerNode(node: RenderNode): node is ElementMarkerNode {
+export function isElementMarkerNode(node: ParseNode): node is ElementMarkerNode {
     return node.hasOwnProperty("secret") && node.hasOwnProperty("element");
 }
 
-export function isElementMarkerEndNode(node: RenderNode): node is ElementMarkerEndNode {
+export function isElementMarkerEndNode(node: ParseNode): node is ElementMarkerEndNode {
     return node.hasOwnProperty("secret") && !node.hasOwnProperty("element");
 }
 
-export function isElementNode(node: RenderNode): node is ElementNode {
+export function isElementNode(node: ParseNode): node is ElementNode {
     return node.hasOwnProperty("nodes");
 }
 
-export function parseSkillToRenderNodes(skill: string | null, lang: Language = Language.ENG, parseAsHelpText: boolean = false): RenderNodePrepared[] {
-    if (skill === null) return <RenderNodePrepared[]>[{text: "—"}];
-    const renderNodes: RenderNode[] = [{text: skill}];
+export function parseSkillToNodes(skill: string | null, lang: Language = Language.ENG, parseAsHelpText: boolean = false): ParseNodePrepared[] {
+    if (skill === null) return <ParseNodePrepared[]>[{text: "—"}];
+    const nodes: ParseNode[] = [{text: skill}];
 
     if (lang === Language.ENG) {
         if (!parseAsHelpText && skill.charAt(0) === "[") {
             // Only call these applys if this string starts with a trigger (so, it's not flavour or help text)
-            apply(renderNodes, new RegExp("\\[(" + TriggerType.all.map(t => t.nameEng).join("|") + ")]/?([^(]*?)(?= \\(|$)"), triggerWithClose);
-            apply(renderNodes, /"([^"]*?)"/, highlightRed.bind(undefined, "\"", "\""));
-            apply(renderNodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
-            apply(renderNodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
+            apply(nodes, new RegExp("\\[(" + TriggerType.all.map(t => t.nameEng).join("|") + ")]/?([^(]*?)(?= \\(|$)"), triggerWithClose);
+            apply(nodes, /"([^"]*?)"/, highlightRed.bind(undefined, "\"", "\""));
+            apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
+            apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
         }
-        apply(renderNodes, /⟪([^⟪⟫]*?)⟫/, bold.bind(undefined, "⟪", "⟫"));
-        apply(renderNodes, new RegExp("\\+(\\[(?:" + Attribute.all
+        apply(nodes, /⟪([^⟪⟫]*?)⟫/, bold.bind(undefined, "⟪", "⟫"));
+        apply(nodes, new RegExp("\\+(\\[(?:" + Attribute.all
             .filter(t => t.pieceAttributeNameEng !== undefined)
             .map(t => t.pieceAttributeNameEng).join("|") + ")])+"), bold.bind(undefined, "+", ""));
-        apply(renderNodes, /\[Idolized \(Piece Bonus\)]/, idolized);
-        apply(renderNodes, /\[(\d)(\d)(\d)]/, attrRequirement);
-        apply(renderNodes, /\[RUSH\/LIVE]/, abilityBoth);
-        apply(renderNodes, /\[(RUSH|LIVE)]/, abilityOne);
-        apply(renderNodes, new RegExp("\\[(" + TriggerType.all.map(t => t.nameEng).join("|") + ")]/?"), trigger);
-        apply(renderNodes, new RegExp("(?:\\[(?:" + Attribute.all
+        apply(nodes, /\[Idolized \(Piece Bonus\)]/, idolized);
+        apply(nodes, /\[(\d)(\d)(\d)]/, attrRequirement);
+        apply(nodes, /\[RUSH\/LIVE]/, abilityBoth);
+        apply(nodes, /\[(RUSH|LIVE)]/, abilityOne);
+        apply(nodes, new RegExp("\\[(" + TriggerType.all.map(t => t.nameEng).join("|") + ")]/?"), trigger);
+        apply(nodes, new RegExp("(?:\\[(?:" + Attribute.all
             .filter(t => t.pieceAttributeNameEng !== undefined)
             .map(t => t.pieceAttributeNameEng).join("|") + ")])+"), pieces.bind(undefined, "]["));
-        apply(renderNodes, /(1|2|3|one|two|three|has|each|more|no|with|without) (Stars?)/, cost);
+        apply(nodes, /(1|2|3|one|two|three|has|each|more|no|with|without) (Stars?)/, cost);
     } else if (lang === Language.JPN) {
         if (!parseAsHelpText && skill.charAt(0) === "【") {
             // Only call these applys if this string starts with a trigger (so, it's not flavour or help text)
-            apply(renderNodes, new RegExp("【(" + TriggerType.all.map(t => t.nameJpn).join("|") + ")】/?([^（]*?)(?=（|$)"), triggerWithClose);
-            apply(renderNodes, /「([^"]*?)」/, highlightRed.bind(undefined, "「", "」"));
-            apply(renderNodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
-            apply(renderNodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
+            apply(nodes, new RegExp("【(" + TriggerType.all.map(t => t.nameJpn).join("|") + ")】/?([^（]*?)(?=（|$)"), triggerWithClose);
+            apply(nodes, /「([^"]*?)」/, highlightRed.bind(undefined, "「", "」"));
+            apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
+            apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
         }
-        apply(renderNodes, /《([^《》]*?)》/, bold.bind(undefined, "《", "》"));
-        apply(renderNodes, new RegExp("\\+(【(?:" + Attribute.all
+        apply(nodes, /《([^《》]*?)》/, bold.bind(undefined, "《", "》"));
+        apply(nodes, new RegExp("\\+(【(?:" + Attribute.all
             .filter(t => t.pieceAttributeNameJpn !== undefined)
             .map(t => t.pieceAttributeNameJpn).join("|") + ")】)+"), bold.bind(undefined, "+", ""));
-        apply(renderNodes, /【覚醒\(仮\)】/, idolized);
-        apply(renderNodes, /【(\d)(\d)(\d)】/, attrRequirement);
-        apply(renderNodes, /【RUSH\/LIVE】/, abilityBoth);
-        apply(renderNodes, /【(RUSH|LIVE)】/, abilityOne);
-        apply(renderNodes, new RegExp("【(" + TriggerType.all.map(t => t.nameJpn).join("|") + ")】/?"), trigger);
-        apply(renderNodes, new RegExp("(?:【(?:" + Attribute.all
+        apply(nodes, /【覚醒\(仮\)】/, idolized);
+        apply(nodes, /【(\d)(\d)(\d)】/, attrRequirement);
+        apply(nodes, /【RUSH\/LIVE】/, abilityBoth);
+        apply(nodes, /【(RUSH|LIVE)】/, abilityOne);
+        apply(nodes, new RegExp("【(" + TriggerType.all.map(t => t.nameJpn).join("|") + ")】/?"), trigger);
+        apply(nodes, new RegExp("(?:【(?:" + Attribute.all
             .filter(t => t.pieceAttributeNameJpn !== undefined)
             .map(t => t.pieceAttributeNameJpn).join("|") + ")】)+"), pieces.bind(undefined, "】【"));
-        apply(renderNodes, /【☆】/, cost);
+        apply(nodes, /【☆】/, cost);
     }
 
-    compressTextNodes(renderNodes);
-    formElementNodes(renderNodes);
-    return <RenderNodePrepared[]>renderNodes;
+    compressTextNodes(nodes);
+    formElementNodes(nodes);
+    return <ParseNodePrepared[]>nodes;
 }
 
-function apply(renderNodes: RenderNode[], regex: RegExp, replaceFunc: (match: RegExpExecArray) => RenderNode[]) {
+function apply(nodes: ParseNode[], regex: RegExp, replaceFunc: (match: RegExpExecArray) => ParseNode[]) {
     let i = 0;
-    while (i < renderNodes.length) {
-        if (!isTextNode(renderNodes[i])) {
+    while (i < nodes.length) {
+        if (!isTextNode(nodes[i])) {
             i++;
             continue;
         }
 
-        const node = <TextNode>renderNodes[i];
+        const node = <TextNode>nodes[i];
 
         if (node.text === "") {
-            renderNodes.splice(i, 1);
+            nodes.splice(i, 1);
             continue;
         }
 
@@ -142,7 +142,7 @@ function apply(renderNodes: RenderNode[], regex: RegExp, replaceFunc: (match: Re
             continue;
         }
 
-        renderNodes.splice(i, 1,
+        nodes.splice(i, 1,
             {...node, text: node.text.substring(0, match.index)},
             ...replaceFunc(match),
             {...node, text: node.text.substring(match.index + match[0].length)}
@@ -151,7 +151,7 @@ function apply(renderNodes: RenderNode[], regex: RegExp, replaceFunc: (match: Re
     }
 }
 
-function triggerWithClose(match: RegExpExecArray): RenderNode[] {
+function triggerWithClose(match: RegExpExecArray): ParseNode[] {
     const trigger = TriggerType.get(match[1]);
     if (trigger.id === TriggerType.ID_SP) {
         return [
@@ -167,12 +167,12 @@ function triggerWithClose(match: RegExpExecArray): RenderNode[] {
     }
 }
 
-function trigger(match: RegExpExecArray): RenderNode[] {
+function trigger(match: RegExpExecArray): ParseNode[] {
     const trigger = TriggerType.get(match[1]);
     return [{componentName: "Trigger", props: {trigger}}];
 }
 
-function bold(pre: string, post: string, match: RegExpExecArray): RenderNode[] {
+function bold(pre: string, post: string, match: RegExpExecArray): ParseNode[] {
     const secret = Symbol();
     return [
         {secret, element: "span", class: "font-bold inline-block"},
@@ -183,7 +183,7 @@ function bold(pre: string, post: string, match: RegExpExecArray): RenderNode[] {
     ];
 }
 
-function highlightRed(pre: string, post: string, match: RegExpExecArray): RenderNode[] {
+function highlightRed(pre: string, post: string, match: RegExpExecArray): ParseNode[] {
     const secret = Symbol();
     return [
         {secret, element: "span", class: "text-highlight-red"},
@@ -194,7 +194,7 @@ function highlightRed(pre: string, post: string, match: RegExpExecArray): Render
     ];
 }
 
-function highlightRedNoWrap(pre: string, post: string, match: RegExpExecArray): RenderNode[] {
+function highlightRedNoWrap(pre: string, post: string, match: RegExpExecArray): ParseNode[] {
     const secret = Symbol();
     return [
         {secret, element: "span", class: "text-highlight-red inline-block"},
@@ -205,7 +205,7 @@ function highlightRedNoWrap(pre: string, post: string, match: RegExpExecArray): 
     ];
 }
 
-function highlightBlueNoWrap(pre: string, post: string, match: RegExpExecArray): RenderNode[] {
+function highlightBlueNoWrap(pre: string, post: string, match: RegExpExecArray): ParseNode[] {
     const secret = Symbol();
     return [
         {secret, element: "span", class: "text-highlight-blue inline-block"},
@@ -216,11 +216,11 @@ function highlightBlueNoWrap(pre: string, post: string, match: RegExpExecArray):
     ];
 }
 
-function idolized(match: RegExpExecArray): RenderNode[] {
+function idolized(match: RegExpExecArray): ParseNode[] {
     return [{componentName: "Idolized", props: {repl: match[0]}}];
 }
 
-function attrRequirement(match: RegExpExecArray): RenderNode[] {
+function attrRequirement(match: RegExpExecArray): ParseNode[] {
     return [{
         componentName: "PieceCount", props: {
             pieces: {
@@ -234,16 +234,16 @@ function attrRequirement(match: RegExpExecArray): RenderNode[] {
     }];
 }
 
-function abilityBoth(_match: RegExpExecArray): RenderNode[] {
+function abilityBoth(_match: RegExpExecArray): ParseNode[] {
     return [{componentName: "Ability", props: {rush: true, live: true}}];
 }
 
-function abilityOne(match: RegExpExecArray): RenderNode[] {
+function abilityOne(match: RegExpExecArray): ParseNode[] {
     const rush = match[1] === "RUSH";
     return [{componentName: "Ability", props: {rush, live: !rush}}];
 }
 
-function pieces(splitter: string, match: RegExpExecArray): RenderNode[] {
+function pieces(splitter: string, match: RegExpExecArray): ParseNode[] {
     const secret = Symbol();
     const pieces = match[0].substring(1, match[0].length - 1).split(splitter);
     return [
@@ -256,7 +256,7 @@ function pieces(splitter: string, match: RegExpExecArray): RenderNode[] {
     ];
 }
 
-function cost(match: RegExpExecArray): RenderNode[] {
+function cost(match: RegExpExecArray): ParseNode[] {
     const secret = Symbol();
     if (match.length > 1) {
         // count/word match
@@ -272,34 +272,34 @@ function cost(match: RegExpExecArray): RenderNode[] {
     }
 }
 
-function compressTextNodes(renderNodes: RenderNode[]) {
-    for (let i = 0; i < renderNodes.length; i++) {
-        if (isTextNode(renderNodes[i])) {
-            const node = <TextNode>renderNodes[i];
-            while (i + 1 < renderNodes.length && isTextNode(renderNodes[i + 1])) {
-                const other = <TextNode>renderNodes[i + 1];
+function compressTextNodes(nodes: ParseNode[]) {
+    for (let i = 0; i < nodes.length; i++) {
+        if (isTextNode(nodes[i])) {
+            const node = <TextNode>nodes[i];
+            while (i + 1 < nodes.length && isTextNode(nodes[i + 1])) {
+                const other = <TextNode>nodes[i + 1];
                 node.text += other.text;
-                renderNodes.splice(i + 1, 1);
+                nodes.splice(i + 1, 1);
             }
         }
     }
 }
 
-function formElementNodes(renderNodes: RenderNode[]) {
-    for (let i = 0; i < renderNodes.length; i++) {
-        if (isElementMarkerNode(renderNodes[i])) {
-            const start = <ElementMarkerNode>renderNodes[i];
-            for (let len = 1; len < renderNodes.length - i; len++) {
-                if (isElementMarkerEndNode(renderNodes[i + len])) {
-                    const end = <ElementMarkerEndNode>renderNodes[i + len];
+function formElementNodes(nodes: ParseNode[]) {
+    for (let i = 0; i < nodes.length; i++) {
+        if (isElementMarkerNode(nodes[i])) {
+            const start = <ElementMarkerNode>nodes[i];
+            for (let len = 1; len < nodes.length - i; len++) {
+                if (isElementMarkerEndNode(nodes[i + len])) {
+                    const end = <ElementMarkerEndNode>nodes[i + len];
                     if (start.secret === end.secret) {
                         const group: ElementNode = {
-                            nodes: renderNodes.slice(i + 1, i + len),
+                            nodes: nodes.slice(i + 1, i + len),
                             element: start.element,
                             class: start.class
                         };
                         formElementNodes(group.nodes);
-                        renderNodes.splice(i, len + 1, group);
+                        nodes.splice(i, len + 1, group);
                         break;
                     }
                 }
@@ -311,8 +311,8 @@ function formElementNodes(renderNodes: RenderNode[]) {
 const componentDict: { [key: string]: new (...args: any) => SvelteComponentTyped<any> }
     = {Ability, Idolized, Piece, PieceCount, Star, Trigger: TriggerComponent};
 
-export function makeRenderable(renderNodes: RenderNodePrepared[]): RenderNodeRenderable[] {
-    return renderNodes.map(n => {
+export function makeNodesRenderable(nodes: ParseNodePrepared[]): ParseNodeRenderable[] {
+    return nodes.map(n => {
         if (isComponentNode(n)) {
             return {component: componentDict[n.componentName], props: n.props};
         } else {

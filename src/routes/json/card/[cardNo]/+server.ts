@@ -1,4 +1,4 @@
-import {parseSkillToRenderNodes} from "$lib/format/format.js";
+import {parseSkillToNodes} from "$lib/format/format.js";
 import Language from "$lib/types/language.js";
 import type Card from "$models/card/card.js";
 import {cardOrder} from "$models/card/card.js";
@@ -107,13 +107,13 @@ export const GET: RequestHandler = (async ({params, locals}) => {
     if (cardData.nextCardNo && cardData.nextCardNo.split("-")[0] !== cardData.cardSet) cardData.nextCardNo = null;
 
     cardData.skills.forEach(skill => {
-        skill.jpnPrerendered = parseSkillToRenderNodes(skill.jpn, Language.JPN);
-        skill.engPrerendered = skill.eng ? parseSkillToRenderNodes(skill.eng, Language.ENG) : null;
+        skill.jpnPreparsed = parseSkillToNodes(skill.jpn, Language.JPN);
+        skill.engPreparsed = skill.eng ? parseSkillToNodes(skill.eng, Language.ENG) : null;
     });
     if (cardData.member?.group) {
         cardData.member.group.skills.forEach(skill => {
-            skill.jpnPrerendered = parseSkillToRenderNodes(skill.jpn, Language.JPN);
-            skill.engPrerendered = skill.eng ? parseSkillToRenderNodes(skill.eng, Language.ENG) : null;
+            skill.jpnPreparsed = parseSkillToNodes(skill.jpn, Language.JPN);
+            skill.engPreparsed = skill.eng ? parseSkillToNodes(skill.eng, Language.ENG) : null;
         });
     }
 

@@ -1,4 +1,4 @@
-import type {RenderNodePrepared} from "$lib/format/format.js";
+import type {ParseNodePrepared} from "$lib/format/format.js";
 import {
     AfterCreate,
     AfterUpdate,
@@ -88,14 +88,14 @@ export class SkillBase extends Model {
         allowNull: false
     })
     declare jpn: string;
-    declare jpnPrerendered?: RenderNodePrepared[];
+    declare jpnPreparsed?: ParseNodePrepared[];
 
     @Attribute({
         type: DataTypes.STRING,
         allowNull: true
     })
     declare eng: string | null;
-    declare engPrerendered?: RenderNodePrepared[] | null;
+    declare engPreparsed?: ParseNodePrepared[] | null;
 
     @HasMany((s) => s.models.Annotation, {
         as: "annotation", foreignKey: "skillId", inverse: {as: "skill"}

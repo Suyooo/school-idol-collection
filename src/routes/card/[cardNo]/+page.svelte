@@ -201,7 +201,7 @@
                             </div>
                             <div>
                                 {#each card.skills as skill (skill.id)}
-                                    <div><Skill skill={skill.jpnPrerendered ?? skill.jpn} lang={Language.JPN}/></div>
+                                    <div><Skill skill={skill.jpnPreparsed ?? skill.jpn} lang={Language.JPN}/></div>
                                 {/each}
                             </div>
                         </div>
@@ -217,7 +217,7 @@
                             </div>
                             <div>
                                 {#each card.skills as skill (skill.id)}
-                                    <div><Skill skill={skill.engPrerendered ?? skill.eng}/></div>
+                                    <div><Skill skill={skill.engPreparsed ?? skill.eng}/></div>
                                 {/each}
                             </div>
                         </div>
@@ -238,7 +238,7 @@
                             <div>{cardGroupType(card)} Skill</div>
                             <div>
                                 {#each card.member.group.skills as skill (skill.id)}
-                                    <div><Skill skill={skill.jpnPrerendered ?? skill.jpn} lang={Language.JPN}/></div>
+                                    <div><Skill skill={skill.jpnPreparsed ?? skill.jpn} lang={Language.JPN}/></div>
                                 {/each}
                             </div>
                         </div>
@@ -246,7 +246,7 @@
                             <div>&nbsp;</div>
                             <div>
                                 {#each card.member.group.skills as skill (skill.id)}
-                                    <div><Skill skill={skill.engPrerendered ?? skill.eng}/></div>
+                                    <div><Skill skill={skill.engPreparsed ?? skill.eng}/></div>
                                 {/each}
                             </div>
                         </div>
