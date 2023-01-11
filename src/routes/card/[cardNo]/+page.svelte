@@ -5,6 +5,7 @@
     import Skill from "$lib/format/Skill.svelte";
     import Attribute from "$lib/types/attribute.js";
     import Language from "$lib/types/language.js";
+    import {escapeForUrl} from "$lib/utils/string";
     import type {PageData} from './$types.js';
     import {
         cardBirthday,
@@ -108,7 +109,9 @@
                         <div class="row">
                             <div class="col-half inforow">
                                 <div>Ability</div>
-                                <div><Ability rush={card.member.abilityRush} live={card.member.abilityLive}/></div>
+                                <div>
+                                    <Ability rush={card.member.abilityRush} live={card.member.abilityLive}/>
+                                </div>
                             </div>
                             <div class="col-half inforow">
                                 <div>
@@ -140,7 +143,15 @@
                         </div>
                         <div class="row inforow">
                             <div>Costume</div>
-                            <div>{card.member.costumeEng ? card.member.costumeEng || card.member.costumeJpn : "—"}</div>
+                            <div>
+                                {#if card.member.costumeJpn !== null}
+                                    <a href="/search/costume:{escapeForUrl(card.member.costumeEng ?? card.member.costumeJpn)}">
+                                        {card.member.costumeEng ?? card.member.costumeJpn}
+                                    </a>
+                                {:else}
+                                    —
+                                {/if}
+                            </div>
                         </div>
                     {:else if cardIsSong(card)}
                         {@const songAttr = Attribute.get(card.song.attribute)}
@@ -201,7 +212,9 @@
                             </div>
                             <div>
                                 {#each card.skills as skill (skill.id)}
-                                    <div><Skill skill={skill.jpnPreparsed ?? skill.jpn} lang={Language.JPN}/></div>
+                                    <div>
+                                        <Skill skill={skill.jpnPreparsed ?? skill.jpn} lang={Language.JPN}/>
+                                    </div>
                                 {/each}
                             </div>
                         </div>
@@ -217,7 +230,9 @@
                             </div>
                             <div>
                                 {#each card.skills as skill (skill.id)}
-                                    <div><Skill skill={skill.engPreparsed ?? skill.eng}/></div>
+                                    <div>
+                                        <Skill skill={skill.engPreparsed ?? skill.eng}/>
+                                    </div>
                                 {/each}
                             </div>
                         </div>
@@ -238,7 +253,9 @@
                             <div>{cardGroupType(card)} Skill</div>
                             <div>
                                 {#each card.member.group.skills as skill (skill.id)}
-                                    <div><Skill skill={skill.jpnPreparsed ?? skill.jpn} lang={Language.JPN}/></div>
+                                    <div>
+                                        <Skill skill={skill.jpnPreparsed ?? skill.jpn} lang={Language.JPN}/>
+                                    </div>
                                 {/each}
                             </div>
                         </div>
@@ -246,7 +263,9 @@
                             <div>&nbsp;</div>
                             <div>
                                 {#each card.member.group.skills as skill (skill.id)}
-                                    <div><Skill skill={skill.engPreparsed ?? skill.eng}/></div>
+                                    <div>
+                                        <Skill skill={skill.engPreparsed ?? skill.eng}/>
+                                    </div>
                                 {/each}
                             </div>
                         </div>
