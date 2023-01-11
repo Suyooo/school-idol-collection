@@ -138,7 +138,6 @@
 
     function triggerWithClose(match: RegExpExecArray): RenderNode[] {
         const trigger = Trigger.get(match[1]);
-        console.log(match[1], trigger);
         if (trigger.id === Trigger.ID_SP) {
             return [
                 {component: TriggerComponent, props: {trigger}},
@@ -307,5 +306,5 @@
 </script>
 
 {#key renderNodes}
-    <SkillNodeRenderer {renderNodes}/>
+    <SkillNodeRenderer {renderNodes} {lang}/>
 {/key}

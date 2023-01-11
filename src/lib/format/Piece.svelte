@@ -8,7 +8,7 @@
 
 <span class="{attr.cssClassName}"
       title={lang.leftSquareBracket + attr[lang.pieceNameProperty] + lang.rightSquareBracket}>
-    {lang.leftSquareBracket}{attr[lang.pieceNameProperty]}{lang.rightSquareBracket}{lang.times}
+    {lang.leftSquareBracket}{attr[lang.pieceNameProperty]}{lang.rightSquareBracket}
 </span>
 
 <style lang="postcss">

@@ -24,6 +24,7 @@
         {@const attr = Attribute.get(attrKey.toUpperCase())}
         <span class="pieceno {attr.cssClassName}" class:reduced-gap={reducedGap}>
             <Piece {lang} {attr}/>
+            <span class="text-none">{lang.times}</span>
             <span>{display[i]}</span>
         </span>
     {/if}
