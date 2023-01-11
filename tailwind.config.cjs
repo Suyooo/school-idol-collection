@@ -27,7 +27,7 @@ module.exports = {
         "4xl": "2rem"
       },
       fontSize: {
-        "none": ["0px", "1.25rem"]
+        "none": ["0px", "0"]
       }
     }
   },
