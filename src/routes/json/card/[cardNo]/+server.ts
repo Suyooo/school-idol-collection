@@ -91,7 +91,7 @@ export const GET: RequestHandler = (async ({params, locals}) => {
     const cardData: Card & CardPageExtraInfo = card.get({plain: true});
 
     cardData.cardSet = cardData.cardNo.split("-")[0];
-    cardData.linkedBy.filter((l, i) =>
+    cardData.linkedBy = cardData.linkedBy.filter((l, i) =>
         i === cardData.linkedBy.findIndex(ll => l.skill.cardNo === ll.skill.cardNo));
     cardData.sameId = await locals.DB.Card.withScope(["viewForLink", "viewRarity", "orderCardNo"]).findAll({
         where: {

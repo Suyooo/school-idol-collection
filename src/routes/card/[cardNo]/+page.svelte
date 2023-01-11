@@ -277,10 +277,12 @@
                             <div>
                                 {#each card.linkedBy as link (link.id)}
                                     {#if link.skill.card !== null}
-                                        <a href="/card/{link.skill.card.cardNo}">
-                                            {@html cardTitle(link.skill.card, true)}
-                                        </a>
-                                    {/if}
+                                        <div>
+                                            <a href="/card/{link.skill.card.cardNo}">
+                                                {@html cardTitle(link.skill.card, true)}
+                                            </a>
+                                        </div>
+                                    {/if}<!-- TODO: link to groups? -->
                                 {/each}
                             </div>
                         </div>
