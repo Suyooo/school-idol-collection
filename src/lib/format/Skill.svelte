@@ -4,13 +4,13 @@
     import SkillNodeRenderer from "$lib/format/SkillNodeRenderer.svelte";
     import Language from "$lib/types/language.js";
 
-    export let skill: string | ParseNodePrepared[];
+    export let skill: string | ParseNodePrepared[] | null;
     export let lang: Language = Language.ENG;
     export let parseAsHelpText: boolean = false;
 
     let nodes: ParseNodeRenderable[];
     $: {
-        if (typeof skill === "string") {
+        if (typeof skill === "string" || skill === null) {
             nodes = makeNodesRenderable(parseSkillToNodes(skill, lang, parseAsHelpText));
         } else {
             nodes = makeNodesRenderable(skill);

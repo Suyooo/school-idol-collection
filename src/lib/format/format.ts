@@ -39,13 +39,11 @@ export interface ElementNode {
     class?: string;
 }
 
-export type ParseNode = TextNode | ComponentNode | ElementMarkerNode | ElementMarkerEndNode | ElementNode;
+export type ParseNode = TextNode | ComponentNode | ComponentNodeRenderable | ElementMarkerNode | ElementMarkerEndNode | ElementNode;
 export type ParseNodePrepared = TextNode | ComponentNode | ElementNode;
 export type ParseNodeRenderable =
     TextNode
     | ComponentNodeRenderable
-    | ElementMarkerNode
-    | ElementMarkerEndNode
     | ElementNode;
 
 export function isTextNode(node: ParseNode): node is TextNode {
@@ -53,7 +51,7 @@ export function isTextNode(node: ParseNode): node is TextNode {
 }
 
 export function isComponentNode(node: ParseNode): node is ComponentNode {
-    return node.hasOwnProperty("component");
+    return node.hasOwnProperty("componentName");
 }
 
 export function isElementMarkerNode(node: ParseNode): node is ElementMarkerNode {
@@ -315,8 +313,10 @@ export function makeNodesRenderable(nodes: ParseNodePrepared[]): ParseNodeRender
     return nodes.map(n => {
         if (isComponentNode(n)) {
             return {component: componentDict[n.componentName], props: n.props};
-        } else {
-            return <TextNode | ElementNode>n;
+        } else if (isElementNode(n)) {
+            return {...n, nodes: makeNodesRenderable(<ParseNodePrepared[]>n.nodes)};
+        } else  {
+            return n;
         }
-    })
+    });
 }
