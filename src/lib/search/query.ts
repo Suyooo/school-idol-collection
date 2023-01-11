@@ -34,8 +34,8 @@ export function makeFindOptionsFromFilters(filters: SearchFilter[]): FindOptions
     return {where, include: [...include.values()]}
 }
 
-export default async function searchQuery(filters: SearchFilter[], scope: string, options?: FindOptions<Attributes<Card>>): Promise<Card[]> {
-    return await DB.Card.withScope([scope]).findAll({
+export default async function searchQuery(filters: SearchFilter[], scope: string | string[], options?: FindOptions<Attributes<Card>>): Promise<Card[]> {
+    return await DB.Card.withScope(scope).findAll({
         ...makeFindOptionsFromFilters(filters),
         ...options,
         order: cardOrder("`Card`.`cardNo`")

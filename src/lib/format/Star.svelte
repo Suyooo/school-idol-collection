@@ -1,5 +1,8 @@
 <script lang="ts">
+    import Language from "$lib/types/language.js";
+
     export let repl: string;
+    export const lang: Language = Language.ENG;
 </script>
 
 <span title={repl}>{repl}</span>
