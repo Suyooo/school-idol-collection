@@ -3,6 +3,7 @@
     import Idolized from "$lib/format/Idolized.svelte";
     import Piece from "$lib/format/Piece.svelte";
     import PieceCount from "$lib/format/PieceCount.svelte";
+    import Star from "$lib/format/Star.svelte";
     import TriggerComponent from "$lib/format/Trigger.svelte";
     import Trigger from "$translation/trigger.js";
     import Attribute from "$types/attribute.js";
@@ -52,14 +53,14 @@
         return node.hasOwnProperty("nodes");
     }
 
-    export function makeNodes(skill: string | null, lang: Language = Language.ENG, parseAsHelpText: boolean = false) {
+    function makeNodes(skill: string | null, lang: Language = Language.ENG, parseAsHelpText: boolean = false) {
         if (skill === null) return [{text: "—"}];
         const renderNodes: RenderNode[] = [{text: skill}];
 
         if (lang === Language.ENG) {
             if (!parseAsHelpText && skill.charAt(0) === "[") {
                 // Only call these applys if this string starts with a trigger (so, it's not flavour or help text)
-                apply(renderNodes, /^\[([^\]]*?)]\/?([^(]*?)(?= \(|$)/, triggerWithClose);
+                apply(renderNodes, new RegExp("\\[(" + Trigger.all.map(t => t.nameEng).join("|") + ")]/?([^(]*?)(?= \\(|$)"), triggerWithClose);
                 apply(renderNodes, /"([^"]*?)"/, highlightRed.bind(undefined, "\"", "\""));
                 apply(renderNodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
                 apply(renderNodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
@@ -76,9 +77,31 @@
             apply(renderNodes, new RegExp("(?:\\[(?:" + Attribute.all
                 .filter(t => t.pieceAttributeNameEng !== undefined)
                 .map(t => t.pieceAttributeNameEng).join("|") + ")])+"), pieces.bind(undefined, "]["));
-            //apply(renderNodes, /(1|2|3|one|two|three|has|each|more|no|with|without) (Stars?)/, cost);
+            apply(renderNodes, /(1|2|3|one|two|three|has|each|more|no|with|without) (Stars?)/, cost);
+        } else if (lang === Language.JPN) {
+            if (!parseAsHelpText && skill.charAt(0) === "【") {
+                // Only call these applys if this string starts with a trigger (so, it's not flavour or help text)
+                apply(renderNodes, new RegExp("【(" + Trigger.all.map(t => t.nameJpn).join("|") + ")】/?([^（]*?)(?=（|$)"), triggerWithClose);
+                apply(renderNodes, /「([^"]*?)」/, highlightRed.bind(undefined, "「", "」"));
+                apply(renderNodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
+                apply(renderNodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
+            }
+            apply(renderNodes, /《([^《》]*?)》/, bold.bind(undefined, "《", "》"));
+            apply(renderNodes, new RegExp("\\+(【(?:" + Attribute.all
+                .filter(t => t.pieceAttributeNameJpn !== undefined)
+                .map(t => t.pieceAttributeNameJpn).join("|") + ")】)+"), bold.bind(undefined, "+", ""));
+            apply(renderNodes, /【覚醒\(仮\)】/, idolized);
+            apply(renderNodes, /【(\d)(\d)(\d)】/, attrRequirement);
+            apply(renderNodes, /【RUSH\/LIVE】/, abilityBoth);
+            apply(renderNodes, /【(RUSH|LIVE)】/, abilityOne);
+            apply(renderNodes, new RegExp("【(" + Trigger.all.map(t => t.nameJpn).join("|") + ")】/?"), trigger);
+            apply(renderNodes, new RegExp("(?:【(?:" + Attribute.all
+                .filter(t => t.pieceAttributeNameJpn !== undefined)
+                .map(t => t.pieceAttributeNameJpn).join("|") + ")】)+"), pieces.bind(undefined, "】【"));
+            apply(renderNodes, /【☆】/, cost);
         }
 
+        compressTextNodes(renderNodes);
         formElementNodes(renderNodes);
         return renderNodes;
     }
@@ -115,6 +138,7 @@
 
     function triggerWithClose(match: RegExpExecArray): RenderNode[] {
         const trigger = Trigger.get(match[1]);
+        console.log(match[1], trigger);
         if (trigger.id === Trigger.ID_SP) {
             return [
                 {component: TriggerComponent, props: {trigger}},
@@ -216,6 +240,35 @@
             }),
             {secret}
         ];
+    }
+
+    function cost(match: RegExpExecArray): RenderNode[] {
+        const secret = Symbol();
+        if (match.length > 1) {
+            // count/word match
+            return [
+                {secret, element: "span", class: "inline-block"},
+                {text: match[1] + " "},
+                {component: Star, props: {repl: match[2]}},
+                {secret}
+            ];
+        } else {
+            // symbol only
+            return [{component: Star, props: {repl: match[0]}}];
+        }
+    }
+
+    function compressTextNodes(renderNodes: RenderNode[]) {
+        for (let i = 0; i < renderNodes.length; i++) {
+            if (isTextNode(renderNodes[i])) {
+                const node = <TextNode>renderNodes[i];
+                while (i + 1 < renderNodes.length && isTextNode(renderNodes[i + 1])) {
+                    const other = <TextNode>renderNodes[i + 1];
+                    node.text += other.text;
+                    renderNodes.splice(i + 1, 1);
+                }
+            }
+        }
     }
 
     function formElementNodes(renderNodes: RenderNode[]) {

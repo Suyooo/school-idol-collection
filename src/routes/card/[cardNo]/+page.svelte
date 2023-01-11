@@ -4,6 +4,7 @@
     import PieceCount from "$lib/format/PieceCount.svelte";
     import Skill from "$lib/format/Skill.svelte";
     import Attribute from "$types/attribute.js";
+    import Language from "$types/language.js";
     import type {PageData} from './$types.js';
     import {
         cardBirthday,
@@ -200,7 +201,7 @@
                             </div>
                             <div>
                                 {#each card.skills as skill (skill.id)}
-                                    <div>{skill.jpn}</div>
+                                    <div><Skill skill={skill.jpn} lang={Language.JPN}/></div>
                                 {/each}
                             </div>
                         </div>
@@ -237,7 +238,7 @@
                             <div>{cardGroupType(card)} Skill</div>
                             <div>
                                 {#each card.member.group.skills as skill (skill.id)}
-                                    <div>{skill.jpn}</div>
+                                    <div><Skill skill={skill.jpn} lang={Language.JPN}/></div>
                                 {/each}
                             </div>
                         </div>
@@ -245,7 +246,7 @@
                             <div>&nbsp;</div>
                             <div>
                                 {#each card.member.group.skills as skill (skill.id)}
-                                    <div>{skill.eng}</div>
+                                    <div><Skill skill={skill.eng}/></div>
                                 {/each}
                             </div>
                         </div>
