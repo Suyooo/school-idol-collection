@@ -14,6 +14,10 @@ module.exports = {
           smile: "#fa7dca",
           pure: "#84cc91",
           cool: "#a2e3ff"
+        },
+        highlight: {
+          red: "#ff8888",
+          blue: "#88ffff"
         }
       },
       borderRadius: {

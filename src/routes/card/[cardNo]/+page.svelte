@@ -128,10 +128,10 @@
                                     {#if cardHasBirthdayPieces(card)}
                                         <br>
                                         <PieceCount pieces={{
-                                            piecesAll: card.member.pieceBdayAttribute === Attribute.ALL ? 1 : 0,
-                                            piecesSmile: card.member.pieceBdayAttribute === Attribute.SMILE ? 1 : 0,
-                                            piecesPure: card.member.pieceBdayAttribute === Attribute.PURE ? 1 : 0,
-                                            piecesCool: card.member.pieceBdayAttribute === Attribute.COOL ? 1 : 0
+                                            piecesAll: card.member.pieceBdayAttribute === Attribute.ID_ALL ? 1 : 0,
+                                            piecesSmile: card.member.pieceBdayAttribute === Attribute.ID_SMILE ? 1 : 0,
+                                            piecesPure: card.member.pieceBdayAttribute === Attribute.ID_PURE ? 1 : 0,
+                                            piecesCool: card.member.pieceBdayAttribute === Attribute.ID_COOL ? 1 : 0
                                         }}/>
                                     {/if}
                                 </div>
@@ -200,7 +200,7 @@
                             </div>
                             <div>
                                 {#each card.skills as skill (skill.id)}
-                                    {skill.jpn}
+                                    <div>{skill.jpn}</div>
                                 {/each}
                             </div>
                         </div>
@@ -216,7 +216,7 @@
                             </div>
                             <div>
                                 {#each card.skills as skill (skill.id)}
-                                    <Skill skill={skill.eng}/>
+                                    <div><Skill skill={skill.eng}/></div>
                                 {/each}
                             </div>
                         </div>
@@ -237,7 +237,7 @@
                             <div>{cardGroupType(card)} Skill</div>
                             <div>
                                 {#each card.member.group.skills as skill (skill.id)}
-                                    {skill.jpn}
+                                    <div>{skill.jpn}</div>
                                 {/each}
                             </div>
                         </div>
@@ -245,7 +245,7 @@
                             <div>&nbsp;</div>
                             <div>
                                 {#each card.member.group.skills as skill (skill.id)}
-                                    {skill.eng}
+                                    <div>{skill.eng}</div>
                                 {/each}
                             </div>
                         </div>

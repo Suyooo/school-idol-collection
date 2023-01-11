@@ -6,7 +6,8 @@
     export let attr: Attribute;
 </script>
 
-<span class="{attr.cssClassName}" title={attr[lang.pieceNameProperty]}>
+<span class="{attr.cssClassName}"
+      title={lang.leftSquareBracket + attr[lang.pieceNameProperty] + lang.rightSquareBracket}>
     {lang.leftSquareBracket}{attr[lang.pieceNameProperty]}{lang.rightSquareBracket}{lang.times}
 </span>
 

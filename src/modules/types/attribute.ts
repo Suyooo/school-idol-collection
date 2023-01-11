@@ -18,6 +18,8 @@ export default class Attribute {
     readonly pieceAttributeNameEng: (string & PieceAttributeEngName) | undefined;
     readonly cssClassName: string & AttributeCssClassName;
 
+    public static readonly all: Attribute[] = [];
+
     private constructor(map: Map<MappedValue, Attribute>,
                         id: AttributeID, cssClassName: AttributeCssClassName,
                         colorNameEng: ColorNameEng, colorNameJpn: ColorNameJpn,
@@ -40,6 +42,7 @@ export default class Attribute {
         map.set(songAttributeNameJpn, this);
         if (pieceAttributeNameEng) map.set(pieceAttributeNameEng, this);
         if (pieceAttributeNameJpn) map.set(pieceAttributeNameJpn, this);
+        Attribute.all.push(this);
     }
 
     private static readonly map = (() => {
@@ -58,9 +61,9 @@ export default class Attribute {
         return Attribute.map.get(<MappedValue>key)!;
     }
 
-    static ALL: number = 0;
-    static SMILE: number = 1;
-    static PURE: number = 2;
-    static COOL: number = 3;
-    static ORANGE: number = 4;
+    static ID_ALL: number = 0;
+    static ID_SMILE: number = 1;
+    static ID_PURE: number = 2;
+    static ID_COOL: number = 3;
+    static ID_ORANGE: number = 4;
 }

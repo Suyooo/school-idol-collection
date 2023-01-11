@@ -19,6 +19,8 @@ export default class Trigger {
     readonly nameJpnMemory: TriggerNameJpn;
     readonly cssClassName: TriggerCssClassName;
 
+    public static readonly all: Trigger[] = [];
+
     private constructor(map: Map<MappedValue, Trigger>,
                         id: TriggerID, className: TriggerCssClassName,
                         eng: TriggerNameEng, jpn: TriggerNameJpn, jpnMemoryAlt?: TriggerNameJpn) {
@@ -32,6 +34,7 @@ export default class Trigger {
         map.set(eng, this);
         map.set(jpn, this);
         if (jpnMemoryAlt) map.set(jpnMemoryAlt, this);
+        Trigger.all.push(this);
     }
 
     private static readonly map = (() => {
@@ -49,7 +52,16 @@ export default class Trigger {
         return map;
     })();
 
-    static get(key: MappedValue): Trigger {
-        return Trigger.map.get(key)!;
+    static get(key: string | number): Trigger {
+        return Trigger.map.get(<MappedValue>key)!;
     }
+
+    static ID_ENTRY = 0;
+    static ID_JOIN = 1;
+    static ID_SUCCESS = 2;
+    static ID_LIVE = 3;
+    static ID_START = 4;
+    static ID_AUTO = 5;
+    static ID_STANDBY = 6;
+    static ID_SP = 7;
 }
