@@ -7,7 +7,7 @@ import PieceCount from "$lib/format/PieceCount.svelte";
 import Star from "$lib/format/Star.svelte";
 import TriggerComponent from "$lib/format/TriggerComponent.svelte";
 import TriggerEnum from "$lib/enums/trigger.js";
-import AnnotationType from "$lib/types/annotationType.js";
+import AnnotationEnum from "$lib/enums/annotation.js";
 import CardType from "$lib/enums/cardType.js";
 import Language from "$lib/enums/language.js";
 import {toNumWithFullwidth} from "$lib/utils/string.js";
@@ -152,7 +152,7 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
         const annotationNodes: { [annotationKey: string]: ComponentNode } = {};
         for (const ann of skill.annotations) {
             if (ann.isEng !== (lang === Language.ENG)) continue;
-            const annotationKey = AnnotationType.getAnnotationKey(ann);
+            const annotationKey = AnnotationEnum.getAnnotationString(ann);
             if (annotationNodes.hasOwnProperty(annotationKey)) continue;
             annotationNodes[annotationKey] = {
                 componentName: "Annotation",
@@ -205,20 +205,21 @@ function triggerWithClose(match: RegExpExecArray): ParseNode[] {
     const trigger = TriggerEnum.fromName(match[1]);
     if (trigger === TriggerEnum.SP) {
         return [
-            {componentName: "Trigger", props: {triggerName: match[1]}},
+            {componentName: "Trigger", props: {triggerId: trigger.id}},
             {text: match[2]},
-            {componentName: "Trigger", props: {triggerName: match[1], closing: true}}
+            {componentName: "Trigger", props: {triggerId: trigger.id, closing: true}}
         ];
     } else {
         return [
-            {componentName: "Trigger", props: {triggerName: match[1]}},
+            {componentName: "Trigger", props: {triggerId: trigger.id}},
             {text: match[2]}
         ];
     }
 }
 
 function trigger(match: RegExpExecArray): ParseNode[] {
-    return [{componentName: "Trigger", props: {triggerName: match[1]}}];
+    const trigger = TriggerEnum.fromName(match[1]);
+    return [{componentName: "Trigger", props: {triggerName: trigger.id}}];
 }
 
 function bold(pre: string, post: string, match: RegExpExecArray): ParseNode[] {
@@ -302,7 +303,8 @@ function pieces(splitter: string, match: RegExpExecArray): ParseNode[] {
     return [
         {secret, element: "span", class: "inline-block"},
         ...pieces.map(p => {
-            return {componentName: "Piece", props: {attrName: p}};
+            const attr = AttributeEnum.fromPieceAttributeName(p);
+            return {componentName: "Piece", props: {attrId: attr.id}};
         }),
         {secret}
     ];

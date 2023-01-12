@@ -5,7 +5,7 @@ import type Card from "$models/card/card.js";
 import type Link from "$models/skill/link.js";
 import type Skill from "$models/skill/skill.js";
 
-import type {AnnotationTypeID} from "$lib/types/annotationType.js";
+import type {AnnotationID} from "$lib/enums/annotation.js";
 
 @Table({
     modelName: "Annotation",
@@ -38,7 +38,7 @@ export default class Annotation extends Model {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     })
-    declare type: AnnotationTypeID;
+    declare type: AnnotationID;
 
     @Attribute({
         type: DataTypes.STRING,

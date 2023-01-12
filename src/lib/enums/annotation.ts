@@ -1,4 +1,6 @@
+import type {AttributeID} from "$lib/enums/attribute.js";
 import Language from "$lib/enums/language.js";
+import EnumError from "$lib/errors/enumError.js";
 import type Annotation from "$models/skill/annotation.js";
 import type Card from "$models/card/card.js";
 import SearchFilter, {
@@ -8,31 +10,37 @@ import SearchFilter, {
     SearchFilterSong
 } from "$lib/search/options.js";
 
-export type AnnotationTypeKey = "card" | "song" | "mem" | "costume" | "skilltext";
-export type AnnotationTypeID = 0 | 1 | 2 | 3 | 4;
-type MappedValue = AnnotationTypeID | AnnotationTypeKey;
+type Key = "card" | "song" | "mem" | "costume" | "skilltext";
+export type AnnotationID = 0 | 1 | 2 | 3 | 4;
 
-export default class AnnotationType {
-    readonly id: AnnotationTypeID;
-    readonly key: AnnotationTypeKey;
+export default class AnnotationEnum {
+    readonly id: AnnotationID;
+    readonly key: Key;
     readonly getSearchFilters: (parameter: string) => SearchFilter[];
     private readonly getLinkTargetOverride?: (parameter: string, cards: Card[]) => string;
     private readonly getLinkLabelOverride?: (parameter: string, cards: Card[], lang: Language) => string;
 
-    private constructor(map: Map<MappedValue, AnnotationType>,
-                        id: AnnotationTypeID, key: AnnotationTypeKey,
+    private static readonly idMap: Map<AnnotationID, AnnotationEnum> = new Map();
+    private static readonly keyMap: Map<Key, AnnotationEnum> = new Map();
+    static readonly all: AnnotationEnum[] = [];
+    static readonly allShowBacklink: AnnotationEnum[] = [];
+
+    private constructor(id: AnnotationID, key: Key, showBacklink: boolean,
                         getSearchFilters: (parameter: string) => SearchFilter[],
                         getLinkTargetOverride?: (parameter: string, cards: Card[]) => string,
                         getLinkLabelOverride?: (parameter: string, cards: Card[], lang: Language) => string) {
         this.id = id;
         this.key = key;
-
-        map.set(id, this);
-        map.set(key, this);
-
         this.getSearchFilters = getSearchFilters;
         this.getLinkTargetOverride = getLinkTargetOverride;
         this.getLinkLabelOverride = getLinkLabelOverride;
+
+        AnnotationEnum.all.push(this);
+        AnnotationEnum.idMap.set(this.id, this);
+        AnnotationEnum.keyMap.set(this.key, this);
+        if (showBacklink) {
+            AnnotationEnum.allShowBacklink.push(this);
+        }
     }
 
     getLinkLabel(parameter: string, cards: Card[], lang: Language): string {
@@ -53,10 +61,7 @@ export default class AnnotationType {
         }
     }
 
-    private static readonly map = (() => {
-        const map = new Map<MappedValue, AnnotationType>();
-
-        new AnnotationType(map, 0, "card",
+    static CARD = new AnnotationEnum(0, "card", true,
             (parameter) => {
                 const f = new SearchFilterCardID();
                 f.param = parameter;
@@ -72,39 +77,44 @@ export default class AnnotationType {
                 }
                 return cards[0].id + " " + name;
             });
-        new AnnotationType(map, 1, "song",
+    static SONG = new AnnotationEnum(1, "song", true,
             (parameter) => {
                 const f = new SearchFilterName();
                 f.param = parameter;
                 return [new SearchFilterSong(), f];
             });
-        new AnnotationType(map, 2, "mem",
+    static MEM = new AnnotationEnum(2, "mem", true,
             (parameter) => {
                 const f = new SearchFilterName();
                 f.param = parameter;
                 return [new SearchFilterMemory(), f];
             });
-        new AnnotationType(map, 3, "costume",
+    static COSTUME = new AnnotationEnum(3, "costume", true,
             (parameter) => {
                 const f = new SearchFilterCostume();
                 f.param = parameter;
                 return [f];
             });
-        new AnnotationType(map, 4, "skilltext",
+    static SKILLTEXT = new AnnotationEnum(4, "skilltext", false,
             (parameter) => {
                 const f = new SearchFilterSkill();
                 f.param = parameter;
                 return [f];
             });
 
-        return map;
-    })();
-
-    static get(key: MappedValue): AnnotationType {
-        return AnnotationType.map.get(key)!;
+    static fromId(n: number): AnnotationEnum {
+        const a = AnnotationEnum.idMap.get(<AttributeID>n);
+        if (a === undefined) throw new EnumError("Annotation", "ID", n);
+        else return a;
     }
 
-    static getAnnotationKey(ann: Annotation) {
-        return "{{" + AnnotationType.get(ann.type).key + ":" + ann.parameter + "}}";
+    static fromKey(s: string): AnnotationEnum {
+        const a = AnnotationEnum.keyMap.get(<Key>s);
+        if (a === undefined) throw new EnumError("Annotation", "key", s);
+        else return a;
+    }
+
+    static getAnnotationString(ann: Annotation) {
+        return "{{" + AnnotationEnum.fromId(ann.type).key + ":" + ann.parameter + "}}";
     }
 }

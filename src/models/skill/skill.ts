@@ -17,8 +17,7 @@ import type CardMemberGroup from "$models/card/memberGroup.js";
 import type TranslationPattern from "$models/translation/pattern.js";
 import type Annotation from "$models/skill/annotation.js";
 
-import AnnotationType from "$lib/types/annotationType.js";
-import type {AnnotationTypeKey} from "$lib/types/annotationType.js";
+import AnnotationEnum from "$lib/enums/annotation.js";
 
 @Table({
     modelName: "Skill",
@@ -122,7 +121,7 @@ export class SkillBase extends Model {
     static async recordAnnotations(skill: Skill, options: QueryOptions) {
         if (skill.changed("jpn")) {
             for (const [_, key, parameter] of skill.jpn.matchAll(/{{(.*?):(.*?)}}/g)) {
-                const type = AnnotationType.get(key as AnnotationTypeKey);
+                const type = AnnotationEnum.fromKey(key);
                 const annotation = <Annotation>await SkillBase.associations.Annotation.target.create({
                     skillId: skill.id,
                     isEng: false,
@@ -139,7 +138,7 @@ export class SkillBase extends Model {
         }
         if (skill.changed("eng") && skill.eng !== null) {
             for (const [_, key, parameter] of skill.eng.matchAll(/{{(.*?):(.*?)}}/g)) {
-                const type = AnnotationType.get(key as AnnotationTypeKey);
+                const type = AnnotationEnum.fromKey(key);
                 const annotation = <Annotation>await SkillBase.associations.Annotation.target.create({
                     skillId: skill.id,
                     isEng: true,

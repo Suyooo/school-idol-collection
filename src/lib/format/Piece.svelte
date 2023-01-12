@@ -1,17 +1,18 @@
 <script lang="ts">
     import AttributeEnum from "$lib/enums/attribute.js";
+    import type {AttributeID} from "$lib/enums/attribute.js";
     import type CardType from "$lib/enums/cardType.js";
     import Language from "$lib/enums/language.js";
 
     export let attr: AttributeEnum;
-    export let attrName: string | undefined = undefined;
+    export let attrId: AttributeID | undefined = undefined;
     export let noText: boolean = false;
 
     export let lang: Language = Language.ENG;
     export let cardType: CardType | undefined = undefined; cardType;
 
     $: {
-        if (attrName !== undefined) attr = AttributeEnum.fromPieceAttributeName(attrName);
+        if (attrId !== undefined) attr = AttributeEnum.fromId(attrId);
     }
 </script>
 

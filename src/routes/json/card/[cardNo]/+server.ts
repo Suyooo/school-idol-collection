@@ -2,7 +2,7 @@ import {parseSkillToNodes} from "$lib/format/format.js";
 import Language from "$lib/enums/language.js";
 import type Card from "$models/card/card.js";
 import {cardOrder} from "$models/card/card.js";
-import AnnotationType from "$lib/types/annotationType.js";
+import AnnotationEnum from "$lib/enums/annotation.js";
 import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
 import {literal, Op} from "@sequelize/core";
 import {error, json} from "@sveltejs/kit";
@@ -57,12 +57,7 @@ export const GET: RequestHandler = (async ({params, locals}) => {
                 model: locals.DB.Annotation,
                 where: {
                     type: {
-                        [Op.in]: [
-                            AnnotationType.get("card").id,
-                            AnnotationType.get("song").id,
-                            AnnotationType.get("costume").id,
-                            AnnotationType.get("mem").id
-                        ]
+                        [Op.in]: AnnotationEnum.allShowBacklink.map(a => a.id)
                     }
                 },
                 required: false,

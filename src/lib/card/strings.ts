@@ -12,7 +12,7 @@ export function cardName(card: Card, styled: boolean, lang: Language = Language.
     const post = `${quot}`;
     return card.nameEng === null || lang === Language.JPN
         ? card.nameJpn.split("／").map(s => `${pre}${s}${post}`).join(styled ? "／</span>" : "／")
-        : card.nameEng.split(" / ").map(s => `${pre}${s}${post}`).join(styled ? " / </span>" : " / ");
+        : card.nameEng.split(" / ").map(s => `${pre}${s}${post}`).join(styled ? "&nbsp;/</span> " : " / ");
 }
 
 export function cardTitle(card: Card, styled: boolean, lang: Language = Language.ENG): string {
