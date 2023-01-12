@@ -108,13 +108,13 @@ export const GET: RequestHandler = (async ({params, locals}) => {
     if (cardData.nextCardNo && cardData.nextCardNo.split("-")[0] !== cardData.cardSet) cardData.nextCardNo = null;
 
     cardData.skills.forEach(skill => {
-        skill.jpnPreparsed = parseSkillToNodes(skill.jpn, Language.JPN, false, cardIsSong(card));
-        skill.engPreparsed = skill.eng ? parseSkillToNodes(skill.eng, Language.ENG, false, cardIsSong(card)) : null;
+        skill.jpnPreparsed = parseSkillToNodes(skill, Language.JPN, false, cardIsSong(card));
+        skill.engPreparsed = skill.eng ? parseSkillToNodes(skill, Language.ENG, false, cardIsSong(card)) : null;
     });
     if (cardData.member?.group) {
         cardData.member.group.skills.forEach(skill => {
-            skill.jpnPreparsed = parseSkillToNodes(skill.jpn, Language.JPN);
-            skill.engPreparsed = skill.eng ? parseSkillToNodes(skill.eng, Language.ENG) : null;
+            skill.jpnPreparsed = parseSkillToNodes(skill, Language.JPN);
+            skill.engPreparsed = skill.eng ? parseSkillToNodes(skill, Language.ENG) : null;
         });
     }
 

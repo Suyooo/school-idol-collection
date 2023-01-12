@@ -145,7 +145,7 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
             annotationNodes[annotationKey] = {
                 componentName: "Annotation",
                 props: {
-                    type: AnnotationType.get(ann.type),
+                    typeId: ann.type,
                     parameter: ann.parameter,
                     cards: ann.links
                 }
