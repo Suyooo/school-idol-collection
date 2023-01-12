@@ -3,8 +3,7 @@ import type {QueryOptions} from "@sequelize/core";
 
 import * as Grammar from "$lib/utils/grammar.js";
 import {toNumWithFullwidth} from "$lib/utils/string.js";
-import Attribute from "$lib/types/attribute.js";
-import type {PieceAttributeJpnName} from "$lib/types/attribute.js";
+import AttributeEnum from "$lib/enums/attribute.js";
 import NotFoundError from "$lib/errors/notFoundError.js";
 import MissingTranslationError from "$lib/errors/missingTranslationError.js";
 
@@ -101,7 +100,7 @@ export default class PatternGroupType {
         map.push(new PatternGroupType(7, async function (match: string) {
             let s = "";
             for (const jpnPieceName of match.substring(1, match.length - 1).split("】【")) {
-                s += "[" + Attribute.get(jpnPieceName as PieceAttributeJpnName).pieceAttributeNameEng + "]";
+                s += "[" + AttributeEnum.fromPieceAttributeName(jpnPieceName).toPieceAttributeName() + "]";
             }
             return s;
         }, generateNoReplacements));

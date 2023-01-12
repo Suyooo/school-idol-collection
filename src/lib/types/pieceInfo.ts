@@ -1,4 +1,4 @@
-import type Attribute from "$lib/types/attribute.js";
+import type AttributeEnum from "$lib/enums/attribute.js";
 
 export default class PieceInfo {
     readonly all: number;
@@ -25,7 +25,7 @@ export default class PieceInfo {
         return Math.min(this.all, this.smile, this.pure, this.cool);
     }
 
-    addPiece(attr: Attribute): PieceInfo {
+    addPiece(attr: AttributeEnum): PieceInfo {
         return new PieceInfo(this.all + (attr.id === 0 ? 1 : 0), this.smile + (attr.id === 1 ? 1 : 0),
             this.pure + (attr.id === 2 ? 1 : 0), this.cool + (attr.id === 3 ? 1 : 0));
     }

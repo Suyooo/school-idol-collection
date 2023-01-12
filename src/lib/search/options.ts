@@ -82,7 +82,7 @@ export abstract class SearchFilterTranslatableLike extends SearchFilter1 {
         [ops.or]: this.columnNames.map(col => ({[col]: {[ops.like]: "%" + this.param + "%"}}))
     });
 
-    getIncludeOptions = (db: DBObject) => <IncludeOptions[]>[];
+    getIncludeOptions = (_db: DBObject) => <IncludeOptions[]>[];
     getExplainString = () => this.explainName + " contains " + this.param;
 }
 

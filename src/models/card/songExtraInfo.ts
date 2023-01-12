@@ -7,7 +7,7 @@ import type CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo.js"
 
 import CardSongRequirementType from "$lib/types/cardSongRequirementType.js";
 import type {CardSongRarity} from "$lib/types/cardRarity.js";
-import type {AttributeID} from "$lib/types/attribute.js";
+import type {AttributeID} from "$lib/enums/attribute.js";
 
 @Table({
     modelName: "CardSongExtraInfo",

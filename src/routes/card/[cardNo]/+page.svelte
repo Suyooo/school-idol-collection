@@ -3,7 +3,7 @@
     import CardImage from "$lib/format/CardImage.svelte";
     import PieceCount from "$lib/format/PieceCount.svelte";
     import Skill from "$lib/format/Skill.svelte";
-    import Attribute from "$lib/types/attribute.js";
+    import AttributeEnum from "$lib/enums/attribute.js";
     import Language from "$lib/types/language.js";
     import {escapeForUrl} from "$lib/utils/string";
     import type {PageData} from './$types.js';
@@ -132,10 +132,10 @@
                                     {#if cardHasBirthdayPieces(card)}
                                         <br>
                                         <PieceCount pieces={{
-                                            piecesAll: card.member.pieceBdayAttribute === Attribute.ID_ALL ? 1 : 0,
-                                            piecesSmile: card.member.pieceBdayAttribute === Attribute.ID_SMILE ? 1 : 0,
-                                            piecesPure: card.member.pieceBdayAttribute === Attribute.ID_PURE ? 1 : 0,
-                                            piecesCool: card.member.pieceBdayAttribute === Attribute.ID_COOL ? 1 : 0
+                                            piecesAll: card.member.pieceBdayAttribute === AttributeEnum.ALL.id ? 1 : 0,
+                                            piecesSmile: card.member.pieceBdayAttribute === AttributeEnum.SMILE.id ? 1 : 0,
+                                            piecesPure: card.member.pieceBdayAttribute === AttributeEnum.PURE.id ? 1 : 0,
+                                            piecesCool: card.member.pieceBdayAttribute === AttributeEnum.COOL.id ? 1 : 0
                                         }}/>
                                     {/if}
                                 </div>
@@ -154,7 +154,7 @@
                             </div>
                         </div>
                     {:else if cardIsSong(card)}
-                        {@const songAttr = Attribute.get(card.song.attribute)}
+                        {@const songAttr = AttributeEnum.fromId(card.song.attribute)}
                         <div class="row">
                             <div class="col-half inforow">
                                 <div>Rarity</div>

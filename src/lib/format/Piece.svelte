@@ -1,14 +1,20 @@
 <script lang="ts">
-    import type Attribute from "$lib/types/attribute.js";
+    import AttributeEnum from "$lib/enums/attribute.js";
     import Language from "$lib/types/language.js";
 
     export let lang: Language = Language.ENG;
-    export let attr: Attribute;
+    export let attr: AttributeEnum;
+    export let attrName: string | undefined = undefined;
+    export let noText: boolean = false;
+
+    $: {
+        if (attrName !== undefined) attr = AttributeEnum.fromPieceAttributeName(attrName);
+    }
 </script>
 
-<span class="{attr.cssClassName}"
-      title={lang.leftSquareBracket + attr[lang.pieceNameProperty] + lang.rightSquareBracket}>
-    {lang.leftSquareBracket}{attr[lang.pieceNameProperty]}{lang.rightSquareBracket}
+<span class="{attr.toCssClassName()}"
+      title={lang.leftSquareBracket + attr.toPieceAttributeName(lang) + lang.rightSquareBracket}>
+    {#if !noText}{lang.leftSquareBracket}{attr.toPieceAttributeName(lang)}{lang.rightSquareBracket}{/if}
 </span>
 
 <style lang="postcss">

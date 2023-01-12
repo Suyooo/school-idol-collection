@@ -1,5 +1,4 @@
 import type Trigger from "../translation/trigger.js";
-import type Attribute from "$lib/types/attribute.js";
 
 export default class Language {
     readonly name: "jpn" | "eng";
@@ -10,16 +9,10 @@ export default class Language {
     readonly times: string;
 
     triggerNameProperty: Exclude<keyof Trigger, "id">;
-    colorNameProperty: Exclude<keyof Attribute, "id">;
-    songAttributeNameProperty: Exclude<keyof Attribute, "id">;
-    pieceNameProperty: Exclude<keyof Attribute, "id">;
 
     private constructor(name: "jpn" | "eng", leftRoundBracket: string, rightRoundBracket: string,
                         leftSquareBracket: string, rightSquareBracket: string, times: string,
-                        triggerNameProperty: Exclude<keyof Trigger, "id">,
-                        colorNameProperty: Exclude<keyof Attribute, "id">,
-                        songAttributeNameProperty: Exclude<keyof Attribute, "id">,
-                        pieceNameProperty: Exclude<keyof Attribute, "id">) {
+                        triggerNameProperty: Exclude<keyof Trigger, "id">) {
         this.name = name;
         this.leftRoundBracket = leftRoundBracket;
         this.rightRoundBracket = rightRoundBracket;
@@ -28,13 +21,10 @@ export default class Language {
         this.times = times;
 
         this.triggerNameProperty = triggerNameProperty;
-        this.colorNameProperty = colorNameProperty;
-        this.songAttributeNameProperty = songAttributeNameProperty;
-        this.pieceNameProperty = pieceNameProperty;
     }
 
     static readonly JPN = new Language("jpn", "（", "）", "【", "】", "×",
-        "nameJpn", "colorNameJpn", "songAttributeNameJpn", "pieceAttributeNameJpn");
+        "nameJpn");
     static readonly ENG = new Language("eng", "(", ")", "[", "]", " x",
-        "nameEng", "colorNameEng", "songAttributeNameEng", "pieceAttributeNameEng");
+        "nameEng");
 }

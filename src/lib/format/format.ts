@@ -7,8 +7,9 @@ import Star from "$lib/format/Star.svelte";
 import TriggerComponent from "$lib/format/Trigger.svelte";
 import TriggerType from "$lib/translation/trigger.js";
 import AnnotationType from "$lib/types/annotationType.js";
-import Attribute from "$lib/types/attribute.js";
+import AttributeEnum from "$lib/enums/attribute.js";
 import Language from "$lib/types/language.js";
+import {toNumWithFullwidth} from "$lib/utils/string.js";
 import type Skill from "$models/skill/skill.js";
 import type {SvelteComponentTyped} from "svelte";
 
@@ -96,17 +97,17 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
             nodes.push({secret});
         }
         apply(nodes, /⟪([^⟪⟫]*?)⟫/, bold.bind(undefined, "⟪", "⟫"));
-        apply(nodes, new RegExp("\\+(\\[(?:" + Attribute.all
-            .filter(t => t.pieceAttributeNameEng !== undefined)
-            .map(t => t.pieceAttributeNameEng).join("|") + ")])+"), bold.bind(undefined, "+", ""));
+        apply(nodes, new RegExp("\\+(\\[(?:" +
+                AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+"),
+            bold.bind(undefined, "+", ""));
         apply(nodes, /\[Idolized \(Piece Bonus\)]/, idolized);
         apply(nodes, /\[(\d)(\d)(\d)]/, attrRequirement);
         apply(nodes, /\[RUSH\/LIVE]/, abilityBoth);
         apply(nodes, /\[(RUSH|LIVE)]/, abilityOne);
         apply(nodes, new RegExp("\\[(" + TriggerType.all.map(t => t.nameEng).join("|") + ")]/?"), trigger);
-        apply(nodes, new RegExp("(?:\\[(?:" + Attribute.all
-            .filter(t => t.pieceAttributeNameEng !== undefined)
-            .map(t => t.pieceAttributeNameEng).join("|") + ")])+"), pieces.bind(undefined, "]["));
+        apply(nodes, new RegExp("(?:\\[(?:" +
+                AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+"),
+            pieces.bind(undefined, "]["));
         apply(nodes, /(1|2|3|one|two|three|has|each|more|no|with|without) (Stars?)/, cost);
     } else if (lang === Language.JPN) {
         if (!parseAsHelpText && skillString.charAt(0) === "【") {
@@ -122,17 +123,17 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
             nodes.push({secret});
         }
         apply(nodes, /《([^《》]*?)》/, bold.bind(undefined, "《", "》"));
-        apply(nodes, new RegExp("\\+(【(?:" + Attribute.all
-            .filter(t => t.pieceAttributeNameJpn !== undefined)
-            .map(t => t.pieceAttributeNameJpn).join("|") + ")】)+"), bold.bind(undefined, "+", ""));
+        apply(nodes, new RegExp("\\+(【(?:" +
+                AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.JPN)).join("|") + ")】)+"),
+            bold.bind(undefined, "+", ""));
         apply(nodes, /【覚醒\(仮\)】/, idolized);
-        apply(nodes, /【(\d)(\d)(\d)】/, attrRequirement);
+        apply(nodes, /【([０-９])([０-９])([０-９])】/, attrRequirement);
         apply(nodes, /【RUSH\/LIVE】/, abilityBoth);
         apply(nodes, /【(RUSH|LIVE)】/, abilityOne);
         apply(nodes, new RegExp("【(" + TriggerType.all.map(t => t.nameJpn).join("|") + ")】/?"), trigger);
-        apply(nodes, new RegExp("(?:【(?:" + Attribute.all
-            .filter(t => t.pieceAttributeNameJpn !== undefined)
-            .map(t => t.pieceAttributeNameJpn).join("|") + ")】)+"), pieces.bind(undefined, "】【"));
+        apply(nodes, new RegExp("(?:【(?:" +
+                AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.JPN)).join("|") + ")】)+"),
+            pieces.bind(undefined, "】【"));
         apply(nodes, /【☆】/, cost);
     }
 
@@ -259,17 +260,21 @@ function idolized(match: RegExpExecArray): ParseNode[] {
 }
 
 function attrRequirement(match: RegExpExecArray): ParseNode[] {
-    return [{
-        componentName: "PieceCount", props: {
-            pieces: {
-                piecesSmile: parseInt(match[1]),
-                piecesPure: parseInt(match[2]),
-                piecesCool: parseInt(match[3])
-            },
-            showZero: true,
-            reducedGap: true
-        }
-    }];
+    return [
+        {text: "["},
+        {
+            componentName: "PieceCount", props: {
+                pieces: {
+                    piecesSmile: toNumWithFullwidth(match[1]),
+                    piecesPure: toNumWithFullwidth(match[2]),
+                    piecesCool: toNumWithFullwidth(match[3])
+                },
+                showZero: true,
+                isSongReq: true
+            }
+        },
+        {text: "]"}
+    ];
 }
 
 function abilityBoth(_match: RegExpExecArray): ParseNode[] {
@@ -287,8 +292,7 @@ function pieces(splitter: string, match: RegExpExecArray): ParseNode[] {
     return [
         {secret, element: "span", class: "inline-block"},
         ...pieces.map(p => {
-            const attr = Attribute.get(p);
-            return {componentName: "Piece", props: {attr}};
+            return {componentName: "Piece", props: {attrName: p}};
         }),
         {secret}
     ];
