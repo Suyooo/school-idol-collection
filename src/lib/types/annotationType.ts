@@ -1,6 +1,5 @@
 import Language from "$lib/types/language.js";
 import type Annotation from "$models/skill/annotation.js";
-import type {Attributes, FindOptions} from "@sequelize/core";
 import type Card from "$models/card/card.js";
 import SearchFilter, {
     SearchFilterCardID, SearchFilterCostume,
@@ -8,7 +7,6 @@ import SearchFilter, {
     SearchFilterName, SearchFilterSkill,
     SearchFilterSong
 } from "$lib/search/options.js";
-import {cardTitle} from "$lib/card/strings.js";
 
 export type AnnotationTypeKey = "card" | "song" | "mem" | "costume" | "skilltext";
 export type AnnotationTypeID = 0 | 1 | 2 | 3 | 4;
@@ -35,10 +33,6 @@ export default class AnnotationType {
         this.getSearchFilters = getSearchFilters;
         this.getLinkTargetOverride = getLinkTargetOverride;
         this.getLinkLabelOverride = getLinkLabelOverride;
-    }
-
-    async getCards(parameter: string, options?: FindOptions<Attributes<Card>>): Promise<Card[]> {
-        return [];//TODO:await searchQuery(this.getSearchFilters(parameter), "cardNoOnly", options);
     }
 
     getLinkLabel(parameter: string, cards: Card[], lang: Language): string {

@@ -284,7 +284,15 @@
                                                 {@html cardTitle(link.skill.card, true)}
                                             </a>
                                         </div>
-                                    {/if}<!-- TODO: link to groups? -->
+                                    {:else}
+                                        {#each link.skill.group.memberExtraInfos as member}
+                                            <div>
+                                                <a href="/card/{member.card.cardNo}">
+                                                    {@html cardTitle(member.card, true)}
+                                                </a>
+                                            </div>
+                                        {/each}
+                                    {/if}
                                 {/each}
                             </div>
                         </div>

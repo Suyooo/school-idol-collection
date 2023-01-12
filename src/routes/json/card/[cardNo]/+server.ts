@@ -59,6 +59,7 @@ export const GET: RequestHandler = (async ({params, locals}) => {
                 where: {
                     type: {
                         [Op.in]: [
+                            AnnotationType.get("card").id,
                             AnnotationType.get("song").id,
                             AnnotationType.get("costume").id,
                             AnnotationType.get("mem").id
@@ -92,19 +93,25 @@ export const GET: RequestHandler = (async ({params, locals}) => {
     const cardData: Card & CardPageExtraInfo = card.get({plain: true});
 
     cardData.cardSet = cardData.cardNo.split("-")[0];
-    cardData.linkedBy = cardData.linkedBy.filter((l, i) =>
-        l.skill.cardNo !== cardData.cardNo && i === cardData.linkedBy.findIndex(ll => l.skill.cardNo === ll.skill.cardNo));
+    cardData.linkedBy = cardData.linkedBy.filter((l, i) => {
+        // Filter this card itself
+        if (l.skill.cardNo === cardData.cardNo) return false;
+        // Filter duplicates
+        if (i !== cardData.linkedBy.findIndex(ll => l.skill.cardNo === ll.skill.cardNo)) return false;
+        // Filter cards already listed as group partners
+        return !(cardData.member?.group && cardData.member.group.memberExtraInfos.some(m => m.cardNo === l.skill.cardNo));
+    });
     cardData.sameId = await locals.DB.Card.withScope(["viewForLink", "viewRarity", "orderCardNo"]).findAll({
         where: {
             id: cardData.id,
-            cardNo: { [Op.not]: cardData.cardNo }
+            cardNo: {[Op.not]: cardData.cardNo}
         }
     });
     cardData.prevCardNo = (await locals.DB.Card
         .withScope(["viewCardNoOnly", {method: ["filterBefore", cardData.cardNo]}]).findOne())?.cardNo ?? null;
     if (cardData.prevCardNo && cardData.prevCardNo.split("-")[0] !== cardData.cardSet) cardData.prevCardNo = null;
     cardData.nextCardNo = (await locals.DB.Card
-        .withScope(["viewCardNoOnly",  {method: ["filterAfter", cardData.cardNo]}]).findOne())?.cardNo ?? null;
+        .withScope(["viewCardNoOnly", {method: ["filterAfter", cardData.cardNo]}]).findOne())?.cardNo ?? null;
     if (cardData.nextCardNo && cardData.nextCardNo.split("-")[0] !== cardData.cardSet) cardData.nextCardNo = null;
 
     cardData.skills.forEach(skill => {

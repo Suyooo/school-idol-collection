@@ -1,4 +1,5 @@
 import type {ParseNodePrepared} from "$lib/format/format.js";
+import searchQuery from "$lib/search/query.js";
 import {
     AfterCreate,
     AfterUpdate,
@@ -129,10 +130,11 @@ export class SkillBase extends Model {
                     parameter
                 }, {transaction: options.transaction});
                 await SkillBase.associations.Link.target
-                    .bulkCreate((await type.getCards(parameter, {transaction: options.transaction})).map(c => ({
-                        from: annotation.id,
-                        to: c.cardNo
-                    })), {transaction: options.transaction});
+                    .bulkCreate((await searchQuery(type.getSearchFilters(parameter), "viewCardNoOnly", options))
+                        .map(c => ({
+                            from: annotation.id,
+                            to: c.cardNo
+                        })), {transaction: options.transaction});
             }
         }
         if (skill.changed("eng") && skill.eng !== null) {
@@ -145,10 +147,11 @@ export class SkillBase extends Model {
                     parameter
                 }, {transaction: options.transaction});
                 await SkillBase.associations.Link.target
-                    .bulkCreate((await type.getCards(parameter, {transaction: options.transaction})).map(c => ({
-                        from: annotation.id,
-                        to: c.cardNo
-                    })), {transaction: options.transaction});
+                    .bulkCreate((await searchQuery(type.getSearchFilters(parameter), "viewCardNoOnly", options))
+                        .map(c => ({
+                            from: annotation.id,
+                            to: c.cardNo
+                        })), {transaction: options.transaction});
             }
         }
     }
