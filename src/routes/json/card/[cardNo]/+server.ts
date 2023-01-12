@@ -93,7 +93,7 @@ export const GET: RequestHandler = (async ({params, locals}) => {
 
     cardData.cardSet = cardData.cardNo.split("-")[0];
     cardData.linkedBy = cardData.linkedBy.filter((l, i) =>
-        i === cardData.linkedBy.findIndex(ll => l.skill.cardNo === ll.skill.cardNo));
+        l.skill.cardNo !== cardData.cardNo && i === cardData.linkedBy.findIndex(ll => l.skill.cardNo === ll.skill.cardNo));
     cardData.sameId = await locals.DB.Card.withScope(["viewForLink", "viewRarity", "orderCardNo"]).findAll({
         where: {
             id: cardData.id,
