@@ -1,8 +1,11 @@
 <script lang="ts">
-    import Language from "$lib/types/language.js";
+    import type CardType from "$lib/enums/cardType.js";
+    import Language from "$lib/enums/language.js";
 
     export let repl: string;
-    export const lang: Language = Language.ENG;
+
+    export let lang: Language = Language.ENG; lang;
+    export let cardType: CardType | undefined = undefined; cardType;
 </script>
 
 <span title={repl}>{repl}</span>

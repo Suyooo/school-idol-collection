@@ -1,6 +1,6 @@
-import CardType from "$lib/types/cardType.js";
-import CardMemberIdolizeType from "$lib/types/cardMemberIdolizeType.js";
-import CardSongRequirementType from "$lib/types/cardSongRequirementType.js";
+import CardType from "$lib/enums/cardType.js";
+import CardMemberIdolizeType from "$lib/enums/cardMemberIdolizeType.js";
+import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import type Card from "$models/card/card.js";
 import type {
     CardSong,

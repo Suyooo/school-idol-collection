@@ -1,5 +1,5 @@
 import EnumError from "$lib/errors/enumError.js";
-import Language from "$lib/types/language.js";
+import Language from "$lib/enums/language.js";
 
 type NameJpn =
     "登場時" | "ライブ参加時" | "ライブ成功時" | "ライブ中" | "スタート時" | "オート" | "自動" | "待機中" | "特別練習";

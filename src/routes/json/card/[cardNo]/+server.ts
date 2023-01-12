@@ -1,5 +1,5 @@
 import {parseSkillToNodes} from "$lib/format/format.js";
-import Language from "$lib/types/language.js";
+import Language from "$lib/enums/language.js";
 import type Card from "$models/card/card.js";
 import {cardOrder} from "$models/card/card.js";
 import AnnotationType from "$lib/types/annotationType.js";

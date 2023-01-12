@@ -1,12 +1,12 @@
 <script lang="ts">
-    import CardType from "$lib/types/cardType.js";
-    import Language from "$lib/types/language.js";
+    import type CardType from "$lib/enums/cardType.js";
+    import Language from "$lib/enums/language.js";
     import type {ParseNodeRenderable} from "$lib/format/format.js";
     import {isTextNode, isElementNode} from "$lib/format/format.js";
 
     export let nodes: ParseNodeRenderable[];
     export let lang: Language = Language.ENG;
-    export let cardType: CardType | undefined;
+    export let cardType: CardType | undefined = undefined;
 </script>
 
 {#each nodes as node}

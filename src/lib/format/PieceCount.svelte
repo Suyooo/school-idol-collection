@@ -1,13 +1,16 @@
 <script lang="ts">
+    import type CardType from "$lib/enums/cardType.js";
     import Piece from "$lib/format/Piece.svelte";
     import AttributeEnum from "$lib/enums/attribute.js";
-    import Language from "$lib/types/language.js";
+    import Language from "$lib/enums/language.js";
     import {uppercaseFirst} from "$lib/utils/string.js";
 
-    export let lang: Language = Language.ENG;
     export let pieces: { piecesAll?: number, piecesSmile?: number, piecesPure?: number, piecesCool?: number };
     export let showZero: boolean = false;
     export let isSongReq: boolean = false;
+
+    export let lang: Language = Language.ENG;
+    export let cardType: CardType | undefined = undefined; cardType;
 
     const attrs = AttributeEnum.allForPieces;
     let display: [number | null, number | null, number | null, number | null];

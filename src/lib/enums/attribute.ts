@@ -1,5 +1,5 @@
 import EnumError from "$lib/errors/enumError.js";
-import Language from "$lib/types/language.js";
+import Language from "$lib/enums/language.js";
 
 type ColorNameJpn = "黄" | "赤" | "緑" | "青" | "オレンジ";
 type ColorNameEng = "Yellow" | "Red" | "Green" | "Blue" | "Orange";

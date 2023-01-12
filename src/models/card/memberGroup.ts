@@ -4,7 +4,7 @@ import {DataTypes, Model} from "@sequelize/core";
 import type {CardMember} from "$models/card/card.js";
 import type CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
 
-import type CardMemberGroupType from "$lib/types/cardMemberGroupType.js";
+import type CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
 import type Skill from "$models/skill/skill.js";
 
 @Table({

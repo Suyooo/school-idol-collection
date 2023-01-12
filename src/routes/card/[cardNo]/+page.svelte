@@ -4,8 +4,8 @@
     import PieceCount from "$lib/format/PieceCount.svelte";
     import Skill from "$lib/format/Skill.svelte";
     import AttributeEnum from "$lib/enums/attribute.js";
-    import Language from "$lib/types/language.js";
-    import {escapeForUrl} from "$lib/utils/string";
+    import Language from "$lib/enums/language.js";
+    import {escapeForUrl} from "$lib/utils/string.js";
     import type {PageData} from './$types.js';
     import {
         cardBirthday,
@@ -162,7 +162,9 @@
                             </div>
                             <div class="col-half inforow">
                                 <div>Attribute</div>
-                                <div class="song-attr {songAttr.cssClassName}">{songAttr.songAttributeNameEng}</div>
+                                <div class="song-attr {songAttr.toCssClassName()}">
+                                    {songAttr.toSongAttributeName()}
+                                </div>
                             </div>
                         </div>
                         <div class="row">

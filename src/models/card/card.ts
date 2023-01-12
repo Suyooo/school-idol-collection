@@ -10,8 +10,8 @@ import type Annotation from "$models/skill/annotation.js";
 import type Link from "$models/skill/link.js";
 
 import type {AttributeID} from "$lib/enums/attribute.js";
-import CardType from "$lib/types/cardType.js";
-import type CardMemberIdolizeType from "$lib/types/cardMemberIdolizeType.js";
+import CardType from "$lib/enums/cardType.js";
+import type CardMemberIdolizeType from "$lib/enums/cardMemberIdolizeType.js";
 import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo.js";
 import type CardMemberGroup from "$models/card/memberGroup.js";
 import type CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";

@@ -7,9 +7,9 @@ import type CardMemberGroup from "$models/card/memberGroup.js";
 import {pieceInfoGetter} from "$models/utils/pieceInfoGetterSetter.js";
 
 import type {AttributeID} from "$lib/enums/attribute.js";
-import type {CardMemberRarity} from "$lib/types/cardRarity.js";
+import type {CardMemberRarity} from "$lib/enums/cardRarity.js";
 import type PieceInfo from "$lib/types/pieceInfo.js";
-import CardMemberIdolizeType from "$lib/types/cardMemberIdolizeType.js";
+import CardMemberIdolizeType from "$lib/enums/cardMemberIdolizeType.js";
 
 @Table({
     modelName: "CardMemberExtraInfo",

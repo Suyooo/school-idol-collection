@@ -1,6 +1,6 @@
 import type {DBObject} from "$models/db.js";
 import type {Op, IncludeOptions, WhereOptions} from "@sequelize/core";
-import CardType from "$lib/types/cardType.js";
+import CardType from "$lib/enums/cardType.js";
 import SearchFilterError from "$lib/errors/searchFilterError.js";
 import {escapeForUrl} from "$lib/utils/string.js";
 

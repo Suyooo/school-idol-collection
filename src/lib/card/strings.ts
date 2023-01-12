@@ -1,9 +1,9 @@
 import {cardIsMember, cardIsSong} from "$lib/card/types.js";
-import Language from "$lib/types/language.js";
+import Language from "$lib/enums/language.js";
 import type Card from "$models/card/card.js";
 import type {CardMember, CardMemberWithGroup} from "$models/card/card.js";
-import CardMemberGroupType from "$lib/types/cardMemberGroupType.js";
-import {CardMemberRarity, CardSongRarity} from "$lib/types/cardRarity.js";
+import CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
+import {CardMemberRarity, CardSongRarity} from "$lib/enums/cardRarity.js";
 import {ordinal} from "$lib/utils/grammar.js";
 
 export function cardName(card: Card, styled: boolean, lang: Language = Language.ENG): string {

@@ -1,4 +1,4 @@
-import Language from "$lib/types/language.js";
+import Language from "$lib/enums/language.js";
 import DB from "$models/db.js";
 import type TranslationPattern from "$models/translation/pattern.js";
 import PatternApplyError from "$lib/errors/patternApplyError.js";

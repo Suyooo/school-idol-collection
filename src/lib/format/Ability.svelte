@@ -1,9 +1,12 @@
 <script lang="ts">
-    import Language from "$lib/types/language.js";
+    import type CardType from "$lib/enums/cardType.js";
+    import Language from "$lib/enums/language.js";
 
-    export let lang: Language = Language.ENG;
     export let rush: boolean = false;
     export let live: boolean = false;
+
+    export let lang: Language = Language.ENG;
+    export let cardType: CardType | undefined = undefined; cardType;
 
     let lbr: string, rbr: string;
     $: lbr = lang.leftSquareBracket;

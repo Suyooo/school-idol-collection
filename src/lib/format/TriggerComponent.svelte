@@ -1,13 +1,14 @@
 <script lang="ts">
     import TriggerEnum from "$lib/enums/trigger.js";
-    import CardType from "$lib/types/cardType.js";
-    import Language from "$lib/types/language.js";
+    import CardType from "$lib/enums/cardType.js";
+    import Language from "$lib/enums/language.js";
 
-    export let lang: Language = Language.ENG;
-    export let cardType: CardType | undefined;
     export let trigger: TriggerEnum;
     export let triggerName: string | undefined = undefined;
     export let closing: boolean = false;
+
+    export let lang: Language = Language.ENG;
+    export let cardType: CardType | undefined = undefined;
 
     $: {
         if (triggerName !== undefined) trigger = TriggerEnum.fromName(triggerName);

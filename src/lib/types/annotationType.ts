@@ -1,4 +1,4 @@
-import Language from "$lib/types/language.js";
+import Language from "$lib/enums/language.js";
 import type Annotation from "$models/skill/annotation.js";
 import type Card from "$models/card/card.js";
 import SearchFilter, {
