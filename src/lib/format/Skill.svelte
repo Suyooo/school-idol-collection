@@ -8,11 +8,12 @@
     export let skill: string | Skill | null;
     export let lang: Language = Language.ENG;
     export let parseAsHelpText: boolean = false;
+    export let isSongCard: boolean = false;
 
     let nodes: ParseNodeRenderable[];
     $: {
         if (typeof skill === "string" || skill === null || !skill[lang.name + "Prepared"]) {
-            nodes = makeNodesRenderable(parseSkillToNodes(skill, lang, parseAsHelpText));
+            nodes = makeNodesRenderable(parseSkillToNodes(skill, lang, parseAsHelpText, isSongCard));
         } else {
             nodes = makeNodesRenderable(skill[lang.name + "Prepared"]);
         }

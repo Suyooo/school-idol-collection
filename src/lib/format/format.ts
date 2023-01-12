@@ -75,9 +75,8 @@ export function isElementNode(node: ParseNode): node is ElementNode {
     return node.hasOwnProperty("nodes");
 }
 
-export function parseSkillToNodes(skill: string | Skill | null,
-                                  lang: Language = Language.ENG,
-                                  parseAsHelpText: boolean = false): ParseNodePrepared[] {
+export function parseSkillToNodes(skill: string | Skill | null, lang: Language = Language.ENG,
+                                  parseAsHelpText: boolean = false, isSongCard: boolean = false): ParseNodePrepared[] {
     const isSkillObj = skill !== null && typeof skill !== "string";
     const skillString: string | null = isSkillObj ? (lang === Language.ENG ? skill.eng : skill.jpn) : skill;
     if (skillString === null) return <ParseNodePrepared[]>[{text: "—"}];
@@ -90,6 +89,11 @@ export function parseSkillToNodes(skill: string | Skill | null,
             apply(nodes, /"([^"]*?)"/, highlightRed.bind(undefined, "\"", "\""));
             apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
             apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
+        } else if (!parseAsHelpText && (skillString.charAt(0) !== "(" || isSongCard)) {
+            // Help text has brackets - if there are none, this is flavour text. Song cards also don't have help text
+            const secret = Symbol();
+            nodes.unshift({secret, element: "i"});
+            nodes.push({secret});
         }
         apply(nodes, /⟪([^⟪⟫]*?)⟫/, bold.bind(undefined, "⟪", "⟫"));
         apply(nodes, new RegExp("\\+(\\[(?:" + Attribute.all
@@ -111,6 +115,11 @@ export function parseSkillToNodes(skill: string | Skill | null,
             apply(nodes, /「([^"]*?)」/, highlightRed.bind(undefined, "「", "」"));
             apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
             apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
+        } else if (!parseAsHelpText && (skillString.charAt(0) !== "（" || isSongCard)) {
+            // Help text has brackets - if there are none, this is flavour text. Song cards also don't have help text
+            const secret = Symbol();
+            nodes.unshift({secret, element: "i"});
+            nodes.push({secret});
         }
         apply(nodes, /《([^《》]*?)》/, bold.bind(undefined, "《", "》"));
         apply(nodes, new RegExp("\\+(【(?:" + Attribute.all

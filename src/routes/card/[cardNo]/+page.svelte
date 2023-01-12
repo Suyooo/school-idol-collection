@@ -213,7 +213,7 @@
                             <div>
                                 {#each card.skills as skill (skill.id)}
                                     <div>
-                                        <Skill skill={skill} lang={Language.JPN}/>
+                                        <Skill skill={skill} lang={Language.JPN} isSongCard={cardIsSong(card)}/>
                                     </div>
                                 {/each}
                             </div>
@@ -231,7 +231,7 @@
                             <div>
                                 {#each card.skills as skill (skill.id)}
                                     <div>
-                                        <Skill skill={skill}/>
+                                        <Skill skill={skill} isSongCard={cardIsSong(card)}/>
                                     </div>
                                 {/each}
                             </div>
