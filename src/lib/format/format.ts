@@ -1,12 +1,15 @@
 import Ability from "$lib/format/Ability.svelte";
+import AnnotationComponent from "$lib/format/AnnotationComponent.svelte";
 import Idolized from "$lib/format/Idolized.svelte";
 import Piece from "$lib/format/Piece.svelte";
 import PieceCount from "$lib/format/PieceCount.svelte";
 import Star from "$lib/format/Star.svelte";
 import TriggerComponent from "$lib/format/Trigger.svelte";
 import TriggerType from "$lib/translation/trigger.js";
+import AnnotationType from "$lib/types/annotationType.js";
 import Attribute from "$lib/types/attribute.js";
 import Language from "$lib/types/language.js";
+import type Skill from "$models/skill/skill.js";
 import type {SvelteComponentTyped} from "svelte";
 
 export interface TextNode {
@@ -39,7 +42,13 @@ export interface ElementNode {
     class?: string;
 }
 
-export type ParseNode = TextNode | ComponentNode | ComponentNodeRenderable | ElementMarkerNode | ElementMarkerEndNode | ElementNode;
+export type ParseNode =
+    TextNode
+    | ComponentNode
+    | ComponentNodeRenderable
+    | ElementMarkerNode
+    | ElementMarkerEndNode
+    | ElementNode;
 export type ParseNodePrepared = TextNode | ComponentNode | ElementNode;
 export type ParseNodeRenderable =
     TextNode
@@ -66,12 +75,16 @@ export function isElementNode(node: ParseNode): node is ElementNode {
     return node.hasOwnProperty("nodes");
 }
 
-export function parseSkillToNodes(skill: string | null, lang: Language = Language.ENG, parseAsHelpText: boolean = false): ParseNodePrepared[] {
-    if (skill === null) return <ParseNodePrepared[]>[{text: "—"}];
-    const nodes: ParseNode[] = [{text: skill}];
+export function parseSkillToNodes(skill: string | Skill | null,
+                                  lang: Language = Language.ENG,
+                                  parseAsHelpText: boolean = false): ParseNodePrepared[] {
+    const isSkillObj = skill !== null && typeof skill !== "string";
+    const skillString: string | null = isSkillObj ? (lang === Language.ENG ? skill.eng : skill.jpn) : skill;
+    if (skillString === null) return <ParseNodePrepared[]>[{text: "—"}];
+    const nodes: ParseNode[] = [{text: skillString}];
 
     if (lang === Language.ENG) {
-        if (!parseAsHelpText && skill.charAt(0) === "[") {
+        if (!parseAsHelpText && skillString.charAt(0) === "[") {
             // Only call these applys if this string starts with a trigger (so, it's not flavour or help text)
             apply(nodes, new RegExp("\\[(" + TriggerType.all.map(t => t.nameEng).join("|") + ")]/?([^(]*?)(?= \\(|$)"), triggerWithClose);
             apply(nodes, /"([^"]*?)"/, highlightRed.bind(undefined, "\"", "\""));
@@ -92,7 +105,7 @@ export function parseSkillToNodes(skill: string | null, lang: Language = Languag
             .map(t => t.pieceAttributeNameEng).join("|") + ")])+"), pieces.bind(undefined, "]["));
         apply(nodes, /(1|2|3|one|two|three|has|each|more|no|with|without) (Stars?)/, cost);
     } else if (lang === Language.JPN) {
-        if (!parseAsHelpText && skill.charAt(0) === "【") {
+        if (!parseAsHelpText && skillString.charAt(0) === "【") {
             // Only call these applys if this string starts with a trigger (so, it's not flavour or help text)
             apply(nodes, new RegExp("【(" + TriggerType.all.map(t => t.nameJpn).join("|") + ")】/?([^（]*?)(?=（|$)"), triggerWithClose);
             apply(nodes, /「([^"]*?)」/, highlightRed.bind(undefined, "「", "」"));
@@ -112,6 +125,24 @@ export function parseSkillToNodes(skill: string | null, lang: Language = Languag
             .filter(t => t.pieceAttributeNameJpn !== undefined)
             .map(t => t.pieceAttributeNameJpn).join("|") + ")】)+"), pieces.bind(undefined, "】【"));
         apply(nodes, /【☆】/, cost);
+    }
+
+    if (isSkillObj) {
+        const annotationNodes: { [annotationKey: string]: ComponentNode } = {};
+        for (const ann of skill.annotations) {
+            if (ann.isEng !== (lang === Language.ENG)) continue;
+            const annotationKey = AnnotationType.getAnnotationKey(ann);
+            if (annotationNodes.hasOwnProperty(annotationKey)) continue;
+            annotationNodes[annotationKey] = {
+                componentName: "Annotation",
+                props: {
+                    type: AnnotationType.get(ann.type),
+                    parameter: ann.parameter,
+                    cards: ann.links
+                }
+            };
+        }
+        apply(nodes, /\{\{(.*?)}}/, annotation.bind(undefined, annotationNodes));
     }
 
     compressTextNodes(nodes);
@@ -270,6 +301,10 @@ function cost(match: RegExpExecArray): ParseNode[] {
     }
 }
 
+function annotation(annotationNodes: { [annotationKey: string]: ComponentNode }, match: RegExpExecArray): ParseNode[] {
+    return [annotationNodes[match[0]]];
+}
+
 function compressTextNodes(nodes: ParseNode[]) {
     for (let i = 0; i < nodes.length; i++) {
         if (isTextNode(nodes[i])) {
@@ -307,7 +342,7 @@ function formElementNodes(nodes: ParseNode[]) {
 }
 
 const componentDict: { [key: string]: new (...args: any) => SvelteComponentTyped<any> }
-    = {Ability, Idolized, Piece, PieceCount, Star, Trigger: TriggerComponent};
+    = {Annotation: AnnotationComponent, Ability, Idolized, Piece, PieceCount, Star, Trigger: TriggerComponent};
 
 export function makeNodesRenderable(nodes: ParseNodePrepared[]): ParseNodeRenderable[] {
     return nodes.map(n => {
@@ -315,7 +350,7 @@ export function makeNodesRenderable(nodes: ParseNodePrepared[]): ParseNodeRender
             return {component: componentDict[n.componentName], props: n.props};
         } else if (isElementNode(n)) {
             return {...n, nodes: makeNodesRenderable(<ParseNodePrepared[]>n.nodes)};
-        } else  {
+        } else {
             return n;
         }
     });

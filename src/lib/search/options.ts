@@ -1,6 +1,5 @@
-import DB from "$models/db.js";
-import {Op} from "@sequelize/core";
-import type {IncludeOptions, WhereOptions} from "@sequelize/core";
+import type {DBObject} from "$models/db.js";
+import type {Op, IncludeOptions, WhereOptions} from "@sequelize/core";
 import CardType from "$lib/types/cardType.js";
 import SearchFilterError from "$lib/errors/searchFilterError.js";
 import {escapeForUrl} from "$lib/utils/string.js";
@@ -11,9 +10,9 @@ export default abstract class SearchFilter {
     protected constructor(_split?: string[]) {
     }
 
-    abstract getWhereOptions(): WhereOptions;
+    abstract getWhereOptions(ops: typeof Op): WhereOptions;
 
-    abstract getIncludeOptions(): IncludeOptions[];
+    abstract getIncludeOptions(db: DBObject): IncludeOptions[];
 
     abstract getExplainString(): string;
 
@@ -79,11 +78,11 @@ export abstract class SearchFilterTranslatableLike extends SearchFilter1 {
     abstract readonly columnNames: string[];
     abstract readonly explainName: string;
 
-    getWhereOptions = () => ({
-        [Op.or]: this.columnNames.map(col => ({[col]: {[Op.like]: "%" + this.param + "%"}}))
+    getWhereOptions = (ops: typeof Op) => ({
+        [ops.or]: this.columnNames.map(col => ({[col]: {[ops.like]: "%" + this.param + "%"}}))
     });
 
-    getIncludeOptions = () => <IncludeOptions[]>[];
+    getIncludeOptions = (db: DBObject) => <IncludeOptions[]>[];
     getExplainString = () => this.explainName + " contains " + this.param;
 }
 
@@ -98,8 +97,8 @@ export class SearchFilterCostume extends SearchFilterTranslatableLike {
     readonly columnNames = ["$member.costumeJpn$", "$member.costumeEng$"];
     readonly explainName = "Costume";
 
-    getIncludeOptions = () => [{
-        model: DB.CardMemberExtraInfo,
+    getIncludeOptions = (db: DBObject) => [{
+        model: db.CardMemberExtraInfo,
         required: true,
         attributes: ["costumeJpn", "costumeEng"]
     }];
@@ -110,7 +109,7 @@ export class SearchFilterSkill extends SearchFilterTranslatableLike {
     readonly columnNames = ["$skills.jpn$", "$skills.eng$"];
     readonly explainName = "Skill";
 
-    getIncludeOptions = () => [{model: DB.Skill, required: true, attributes: ["jpn", "eng"]}];
+    getIncludeOptions = (db: DBObject) => [{model: db.Skill, required: true, attributes: ["jpn", "eng"]}];
 }
 
 const map = new Map<string, new (split?: string[]) => SearchFilter>([

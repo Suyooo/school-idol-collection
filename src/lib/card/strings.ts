@@ -1,18 +1,23 @@
 import {cardIsMember, cardIsSong} from "$lib/card/types.js";
+import Language from "$lib/types/language.js";
 import type Card from "$models/card/card.js";
 import type {CardMember, CardMemberWithGroup} from "$models/card/card.js";
 import CardMemberGroupType from "$lib/types/cardMemberGroupType.js";
 import {CardMemberRarity, CardSongRarity} from "$lib/types/cardRarity.js";
 import {ordinal} from "$lib/utils/grammar.js";
 
-export function cardTitle(card: Card, styled: boolean): string {
-    const pre = styled ? '<span class="lg:inline-block">&quot;' : '"';
-    const post = styled ? '&quot;' : '"';
-    const nameWithQuot = card.nameEng === null
+export function cardName(card: Card, styled: boolean, lang: Language = Language.ENG): string {
+    const quot = cardIsSong(card) ? (styled ? "&quot;" : `"`) : "";
+    const pre = styled ? `<span class="lg:inline-block">${quot}` : `${quot}`;
+    const post = `${quot}`;
+    return card.nameEng === null || lang === Language.JPN
         ? card.nameJpn.split("／").map(s => `${pre}${s}${post}`).join(styled ? "／</span>" : "／")
         : card.nameEng.split(" / ").map(s => `${pre}${s}${post}`).join(styled ? " / </span>" : " / ");
-    if (styled) return "<span class='card-id'>" + card.cardNo + "</span> " + nameWithQuot + "</span>";
-    else return card.cardNo + " " + nameWithQuot;
+}
+
+export function cardTitle(card: Card, styled: boolean, lang: Language = Language.ENG): string {
+    if (styled) return `<span class='card-id'>${card.cardNo}</span> ${cardName(card, styled, lang)}</span>`;
+    else return card.cardNo + " " + cardName(card, styled, lang);
 }
 
 export function cardId(card: Card): string {

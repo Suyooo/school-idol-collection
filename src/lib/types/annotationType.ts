@@ -1,12 +1,13 @@
+import Language from "$lib/types/language.js";
+import type Annotation from "$models/skill/annotation.js";
 import type {Attributes, FindOptions} from "@sequelize/core";
 import type Card from "$models/card/card.js";
-import searchQuery from "../search/query.js";
 import SearchFilter, {
     SearchFilterCardID, SearchFilterCostume,
     SearchFilterMemory,
     SearchFilterName, SearchFilterSkill,
     SearchFilterSong
-} from "../search/options.js";
+} from "$lib/search/options.js";
 import {cardTitle} from "$lib/card/strings.js";
 
 export type AnnotationTypeKey = "card" | "song" | "mem" | "costume" | "skilltext";
@@ -18,13 +19,13 @@ export default class AnnotationType {
     readonly key: AnnotationTypeKey;
     readonly getSearchFilters: (parameter: string) => SearchFilter[];
     private readonly getLinkTargetOverride?: (parameter: string, cards: Card[]) => string;
-    private readonly getLinkLabelOverride?: (parameter: string, cards: Card[]) => string;
+    private readonly getLinkLabelOverride?: (parameter: string, cards: Card[], lang: Language) => string;
 
     private constructor(map: Map<MappedValue, AnnotationType>,
                         id: AnnotationTypeID, key: AnnotationTypeKey,
                         getSearchFilters: (parameter: string) => SearchFilter[],
                         getLinkTargetOverride?: (parameter: string, cards: Card[]) => string,
-                        getLinkLabelOverride?: (parameter: string, cards: Card[]) => string) {
+                        getLinkLabelOverride?: (parameter: string, cards: Card[], lang: Language) => string) {
         this.id = id;
         this.key = key;
 
@@ -37,12 +38,12 @@ export default class AnnotationType {
     }
 
     async getCards(parameter: string, options?: FindOptions<Attributes<Card>>): Promise<Card[]> {
-        return await searchQuery(this.getSearchFilters(parameter), "cardNoOnly", options);
+        return [];//TODO:await searchQuery(this.getSearchFilters(parameter), "cardNoOnly", options);
     }
 
-    getLinkLabel(parameter: string, cards: Card[]): string {
+    getLinkLabel(parameter: string, cards: Card[], lang: Language): string {
         if (this.getLinkLabelOverride !== undefined) {
-            return this.getLinkLabelOverride(parameter, cards);
+            return this.getLinkLabelOverride(parameter, cards, lang);
         } else {
             return parameter;
         }
@@ -68,7 +69,15 @@ export default class AnnotationType {
                 return [f];
             },
             (_parameter, cards) => "/card/" + cards[0].cardNo,
-            (_parameter, cards) => cardTitle(cards[0], true));
+            (_parameter, cards, lang: Language) => {
+                let name;
+                if (lang === Language.ENG) {
+                    name = (cards[0].nameEng ?? cards[0].nameJpn).split(" ")[0];
+                } else {
+                    name = cards[0].nameJpn.split(" ")[1];
+                }
+                return cards[0].id + " " + name;
+            });
         new AnnotationType(map, 1, "song",
             (parameter) => {
                 const f = new SearchFilterName();
@@ -99,5 +108,9 @@ export default class AnnotationType {
 
     static get(key: MappedValue): AnnotationType {
         return AnnotationType.map.get(key)!;
+    }
+
+    static getAnnotationKey(ann: Annotation) {
+        return "{{" + AnnotationType.get(ann.type).key + ":" + ann.parameter + "}}";
     }
 }

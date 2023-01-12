@@ -58,8 +58,4 @@ export default class Annotation extends Model {
         }
     })
     declare links: (Card & { Link: Link })[];
-
-    getAnnotationString() {
-        return "{{" + AnnotationType.get(this.type).key + ":" + this.parameter + "}}";
-    }
 }

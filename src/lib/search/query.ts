@@ -2,6 +2,7 @@ import type SearchFilter from "$lib/search/options.js";
 import type Card from "$models/card/card.js";
 import {cardOrder} from "$models/card/card.js";
 import DB from "$models/db.js";
+import {Op} from "@sequelize/core";
 import type {Attributes, FindOptions, IncludeOptions, ProjectionAlias, WhereOptions} from "@sequelize/core";
 
 export function makeFindOptionsFromFilters(filters: SearchFilter[]): FindOptions<Attributes<Card>> {
@@ -9,8 +10,8 @@ export function makeFindOptionsFromFilters(filters: SearchFilter[]): FindOptions
     const include: Map<any, IncludeOptions> = new Map();
 
     for (const filter of filters) {
-        where = {...where, ...filter.getWhereOptions()};
-        for (let inclusion of filter.getIncludeOptions()) {
+        where = {...where, ...filter.getWhereOptions(Op)};
+        for (let inclusion of filter.getIncludeOptions(DB)) {
             if (include.has(inclusion.model)) {
                 const inclInMap = include.get(inclusion.model)!;
                 inclInMap.required = inclusion.required || inclInMap.required;

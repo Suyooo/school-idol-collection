@@ -213,7 +213,7 @@
                             <div>
                                 {#each card.skills as skill (skill.id)}
                                     <div>
-                                        <Skill skill={skill.jpnPreparsed ?? skill.jpn} lang={Language.JPN}/>
+                                        <Skill skill={skill} lang={Language.JPN}/>
                                     </div>
                                 {/each}
                             </div>
@@ -231,7 +231,7 @@
                             <div>
                                 {#each card.skills as skill (skill.id)}
                                     <div>
-                                        <Skill skill={skill.engPreparsed ?? skill.eng}/>
+                                        <Skill skill={skill}/>
                                     </div>
                                 {/each}
                             </div>
@@ -244,7 +244,9 @@
                             <div>
                                 {#each card.member.group.memberExtraInfos as member (member.cardNo)}
                                     {#if member.cardNo !== card.cardNo}
-                                        <a href="/card/{member.cardNo}">{@html cardTitle(member.card, true)}</a>
+                                        <div>
+                                            <a href="/card/{member.cardNo}">{@html cardTitle(member.card, true)}</a>
+                                        </div>
                                     {/if}
                                 {/each}
                             </div>
@@ -254,7 +256,7 @@
                             <div>
                                 {#each card.member.group.skills as skill (skill.id)}
                                     <div>
-                                        <Skill skill={skill.jpnPreparsed ?? skill.jpn} lang={Language.JPN}/>
+                                        <Skill skill={skill} lang={Language.JPN}/>
                                     </div>
                                 {/each}
                             </div>
@@ -264,7 +266,7 @@
                             <div>
                                 {#each card.member.group.skills as skill (skill.id)}
                                     <div>
-                                        <Skill skill={skill.engPreparsed ?? skill.eng}/>
+                                        <Skill skill={skill}/>
                                     </div>
                                 {/each}
                             </div>
