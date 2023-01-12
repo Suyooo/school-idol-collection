@@ -12,10 +12,10 @@
 
     let nodes: ParseNodeRenderable[];
     $: {
-        if (typeof skill === "string" || skill === null || !skill[lang.name + "Prepared"]) {
+        if (typeof skill === "string" || skill === null || !skill[lang.name + "Preparsed"]) {
             nodes = makeNodesRenderable(parseSkillToNodes(skill, lang, parseAsHelpText, isSongCard));
         } else {
-            nodes = makeNodesRenderable(skill[lang.name + "Prepared"]);
+            nodes = makeNodesRenderable(skill[lang.name + "Preparsed"]);
         }
     }
 </script>
