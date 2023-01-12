@@ -1,4 +1,3 @@
-import {cardIsSong} from "$lib/card/types.js";
 import {parseSkillToNodes} from "$lib/format/format.js";
 import Language from "$lib/types/language.js";
 import type Card from "$models/card/card.js";
@@ -115,8 +114,8 @@ export const GET: RequestHandler = (async ({params, locals}) => {
     if (cardData.nextCardNo && cardData.nextCardNo.split("-")[0] !== cardData.cardSet) cardData.nextCardNo = null;
 
     cardData.skills.forEach(skill => {
-        skill.jpnPreparsed = parseSkillToNodes(skill, Language.JPN, false, cardIsSong(card));
-        skill.engPreparsed = skill.eng ? parseSkillToNodes(skill, Language.ENG, false, cardIsSong(card)) : null;
+        skill.jpnPreparsed = parseSkillToNodes(skill, Language.JPN, false, card.type);
+        skill.engPreparsed = skill.eng ? parseSkillToNodes(skill, Language.ENG, false, card.type) : null;
     });
     if (cardData.member?.group) {
         cardData.member.group.skills.forEach(skill => {

@@ -2,8 +2,7 @@ import {AfterUpdate, Attribute, Table} from "@sequelize/core/decorators-legacy";
 import {DataTypes, Model} from "@sequelize/core";
 import type {QueryOptions} from "@sequelize/core";
 
-import Trigger from "$lib/translation/trigger.js";
-import type {TriggerID} from "$lib/translation/trigger.js";
+import TriggerEnum from "$lib/enums/trigger.js";
 import PatternGroupType from "$lib/translation/patternGroupType.js";
 import type {PatternGroupTypeID} from "$lib/translation/patternGroupType.js";
 import {escapeForRegex} from "$lib/utils/string.js";
@@ -28,19 +27,19 @@ export default class TranslationPattern extends Model {
     })
     declare triggers: number;
 
-    get triggerArray(): Trigger[] {
-        const triggers: Trigger[] = [];
+    get triggerArray(): TriggerEnum[] {
+        const triggers: TriggerEnum[] = [];
         let triggerBitmask: number = this.triggers;
         let i: number = 0;
         while (triggerBitmask > 0 && i < 8) {
-            if ((triggerBitmask & 1) == 1) triggers.push(Trigger.get(<TriggerID>i));
+            if ((triggerBitmask & 1) == 1) triggers.push(TriggerEnum.fromId(i));
             i++;
             triggerBitmask = triggerBitmask >> 1;
         }
         return triggers;
     }
 
-    set triggerArray(triggers: Trigger[]) {
+    set triggerArray(triggers: TriggerEnum[]) {
         this.triggers = triggers.map(t => 1 << t.id).reduce((acc, i) => acc + i, 0);
     }
 

@@ -1,19 +1,19 @@
+import Language from "$lib/types/language.js";
 import DB from "$models/db.js";
 import type TranslationPattern from "$models/translation/pattern.js";
 import PatternApplyError from "$lib/errors/patternApplyError.js";
-import Trigger from "$lib/translation/trigger.js";
-import type {TriggerNameJpn} from "$lib/translation/trigger.js";
+import TriggerEnum from "$lib/enums/trigger.js";
 import type {QueryOptions} from "@sequelize/core";
 
 export const checkTriggersPattern = /^(【[^【】]*?】(?:\/【[^【】]*?】)*)(.*?)$/;
 
-export function splitTriggersFromSkill(skillLine: string): { skill: string, triggers: Trigger[] } {
+export function splitTriggersFromSkill(skillLine: string): { skill: string, triggers: TriggerEnum[] } {
     const hasTriggersMatch = checkTriggersPattern.exec(skillLine);
     if (hasTriggersMatch) {
         return {
             skill: hasTriggersMatch[2],
             triggers: hasTriggersMatch[1].split("/")
-                .map(t => Trigger.get(t.substring(1, t.length - 1) as TriggerNameJpn))
+                .map(t => TriggerEnum.fromName(t.substring(1, t.length - 1)))
         };
     } else {
         return {skill: skillLine, triggers: []};
@@ -84,7 +84,7 @@ export async function applyPatternToSkills(pattern: TranslationPattern, applyTo:
                 throw new PatternApplyError(Error("Pattern should be applied to Skill #" + application + ", but its regex does not match the Skill"), pattern, skillObj.jpn);
             }
 
-            skillObj.eng = triggers.map(t => "[" + t.nameEng + "]").join("/") + " " + translatedSkill;
+            skillObj.eng = triggers.map(t => "[" + t.toName(Language.ENG) + "]").join("/") + " " + translatedSkill;
             skillObj.patternId = pattern.id;
             await skillObj.save({transaction});
         }
@@ -102,7 +102,7 @@ export async function tryAllPatterns(skillLine: string, options?: QueryOptions):
     return null;
 }
 
-async function applyPatternOrNull(skill: string, triggers: Trigger[], pattern: TranslationPattern, options?: QueryOptions): Promise<string | null> {
+async function applyPatternOrNull(skill: string, triggers: TriggerEnum[], pattern: TranslationPattern, options?: QueryOptions): Promise<string | null> {
     // If this is a skill without triggers (tutorial text or lyrics), only patterns without triggers can be applied
     // Otherwise, check for at least one overlapping trigger
     if (pattern.triggers > 0 && (triggers.length === 0 || pattern.triggerArray.every(t => triggers.indexOf(t) === -1))) {

@@ -10,7 +10,7 @@ type SongAttributeName = SongAttributeNameEng | SongAttributeNameJpn;
 type PieceAttributeNameJpn = "オール" | "赤" | "緑" | "青";
 type PieceAttributeNameEng = "ALL" | "SMILE" | "PURE" | "COOL";
 type PieceAttributeName = PieceAttributeNameEng | PieceAttributeNameJpn;
-type AttributeCssClassName = "all" | "smile" | "pure" | "cool" | "orange";
+type CssClassName = "all" | "smile" | "pure" | "cool" | "orange";
 export type AttributeID = 0 | 1 | 2 | 3 | 4;
 
 export default class AttributeEnum {
@@ -21,7 +21,7 @@ export default class AttributeEnum {
     private readonly songAttributeNameEng: string & SongAttributeNameEng;
     private readonly pieceAttributeNameJpn: (string & PieceAttributeNameJpn) | undefined;
     private readonly pieceAttributeNameEng: (string & PieceAttributeNameEng) | undefined;
-    private readonly cssClassName: string & AttributeCssClassName;
+    private readonly cssClassName: string & CssClassName;
 
     private static readonly idMap: Map<AttributeID, AttributeEnum> = new Map();
     private static readonly colorNameMap: Map<ColorName, AttributeEnum> = new Map();
@@ -30,7 +30,7 @@ export default class AttributeEnum {
     static readonly all: AttributeEnum[] = [];
     static readonly allForPieces: AttributeEnum[] = [];
 
-    private constructor(id: AttributeID, cssClassName: AttributeCssClassName,
+    private constructor(id: AttributeID, cssClassName: CssClassName,
                         colorNameEng: ColorNameEng, colorNameJpn: ColorNameJpn,
                         songAttributeNameEng: SongAttributeNameEng, songAttributeNameJpn: SongAttributeNameJpn,
                         pieceAttributeNameEng?: PieceAttributeNameEng, pieceAttributeNameJpn?: PieceAttributeNameJpn) {

@@ -1,13 +1,14 @@
+import AttributeEnum from "$lib/enums/attribute.js";
 import Ability from "$lib/format/Ability.svelte";
 import AnnotationComponent from "$lib/format/AnnotationComponent.svelte";
 import Idolized from "$lib/format/Idolized.svelte";
 import Piece from "$lib/format/Piece.svelte";
 import PieceCount from "$lib/format/PieceCount.svelte";
 import Star from "$lib/format/Star.svelte";
-import TriggerComponent from "$lib/format/Trigger.svelte";
-import TriggerType from "$lib/translation/trigger.js";
+import TriggerComponent from "$lib/format/TriggerComponent.svelte";
+import TriggerEnum from "$lib/enums/trigger.js";
 import AnnotationType from "$lib/types/annotationType.js";
-import AttributeEnum from "$lib/enums/attribute.js";
+import CardType from "$lib/types/cardType.js";
 import Language from "$lib/types/language.js";
 import {toNumWithFullwidth} from "$lib/utils/string.js";
 import type Skill from "$models/skill/skill.js";
@@ -77,7 +78,7 @@ export function isElementNode(node: ParseNode): node is ElementNode {
 }
 
 export function parseSkillToNodes(skill: string | Skill | null, lang: Language = Language.ENG,
-                                  parseAsHelpText: boolean = false, isSongCard: boolean = false): ParseNodePrepared[] {
+                                  parseAsHelpText: boolean = false, cardType?: CardType): ParseNodePrepared[] {
     const isSkillObj = skill !== null && typeof skill !== "string";
     const skillString: string | null = isSkillObj ? (lang === Language.ENG ? skill.eng : skill.jpn) : skill;
     if (skillString === null) return <ParseNodePrepared[]>[{text: "—"}];
@@ -86,53 +87,63 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
     if (lang === Language.ENG) {
         if (!parseAsHelpText && skillString.charAt(0) === "[") {
             // Only call these applys if this string starts with a trigger (so, it's not flavour or help text)
-            apply(nodes, new RegExp("\\[(" + TriggerType.all.map(t => t.nameEng).join("|") + ")]/?([^(]*?)(?= \\(|$)"), triggerWithClose);
+            apply(nodes, new RegExp("\\[("
+                + TriggerEnum.all.map(t => t.toName(Language.ENG)).join("|")
+                + ")]/?([^(]*?)(?= \\(|$)"), triggerWithClose);
             apply(nodes, /"([^"]*?)"/, highlightRed.bind(undefined, "\"", "\""));
             apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
             apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
-        } else if (!parseAsHelpText && (skillString.charAt(0) !== "(" || isSongCard)) {
+        } else if (!parseAsHelpText && (skillString.charAt(0) !== "(" || cardType === CardType.SONG)) {
             // Help text has brackets - if there are none, this is flavour text. Song cards also don't have help text
             const secret = Symbol();
             nodes.unshift({secret, element: "i"});
             nodes.push({secret});
         }
         apply(nodes, /⟪([^⟪⟫]*?)⟫/, bold.bind(undefined, "⟪", "⟫"));
-        apply(nodes, new RegExp("\\+(\\[(?:" +
-                AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+"),
+        apply(nodes, new RegExp("\\+(\\[(?:"
+                + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+"),
             bold.bind(undefined, "+", ""));
         apply(nodes, /\[Idolized \(Piece Bonus\)]/, idolized);
-        apply(nodes, /\[(\d)(\d)(\d)]/, attrRequirement);
+        apply(nodes, /(\[)(\d)(\d)(\d)(])/, attrRequirement);
         apply(nodes, /\[RUSH\/LIVE]/, abilityBoth);
         apply(nodes, /\[(RUSH|LIVE)]/, abilityOne);
-        apply(nodes, new RegExp("\\[(" + TriggerType.all.map(t => t.nameEng).join("|") + ")]/?"), trigger);
-        apply(nodes, new RegExp("(?:\\[(?:" +
-                AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+"),
+        apply(nodes, new RegExp("\\[("
+            + TriggerEnum.all.map(t => t.toName(Language.ENG)).join("|")
+            + ")]/?"), trigger);
+        apply(nodes, new RegExp("(?:\\[(?:"
+                + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+"),
             pieces.bind(undefined, "]["));
         apply(nodes, /(1|2|3|one|two|three|has|each|more|no|with|without) (Stars?)/, cost);
     } else if (lang === Language.JPN) {
         if (!parseAsHelpText && skillString.charAt(0) === "【") {
             // Only call these applys if this string starts with a trigger (so, it's not flavour or help text)
-            apply(nodes, new RegExp("【(" + TriggerType.all.map(t => t.nameJpn).join("|") + ")】/?([^（]*?)(?=（|$)"), triggerWithClose);
+            apply(nodes, new RegExp("【("
+                + TriggerEnum.all.map(t => t.toName(Language.JPN))
+                    .concat(TriggerEnum.allWithMemoryAlts.map(t => t.toName(Language.JPN, true))).join("|")
+                + ")】/?([^（]*?)(?=（|$)"), triggerWithClose);
             apply(nodes, /「([^"]*?)」/, highlightRed.bind(undefined, "「", "」"));
             apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
             apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
-        } else if (!parseAsHelpText && (skillString.charAt(0) !== "（" || isSongCard)) {
+        } else if (!parseAsHelpText && (skillString.charAt(0) !== "（" || cardType === CardType.SONG)) {
             // Help text has brackets - if there are none, this is flavour text. Song cards also don't have help text
             const secret = Symbol();
             nodes.unshift({secret, element: "i"});
             nodes.push({secret});
         }
         apply(nodes, /《([^《》]*?)》/, bold.bind(undefined, "《", "》"));
-        apply(nodes, new RegExp("\\+(【(?:" +
-                AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.JPN)).join("|") + ")】)+"),
+        apply(nodes, new RegExp("\\+(【(?:"
+                + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.JPN)).join("|") + ")】)+"),
             bold.bind(undefined, "+", ""));
         apply(nodes, /【覚醒\(仮\)】/, idolized);
-        apply(nodes, /【([０-９])([０-９])([０-９])】/, attrRequirement);
+        apply(nodes, /(【)([０-９])([０-９])([０-９])(】)/, attrRequirement);
         apply(nodes, /【RUSH\/LIVE】/, abilityBoth);
         apply(nodes, /【(RUSH|LIVE)】/, abilityOne);
-        apply(nodes, new RegExp("【(" + TriggerType.all.map(t => t.nameJpn).join("|") + ")】/?"), trigger);
-        apply(nodes, new RegExp("(?:【(?:" +
-                AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.JPN)).join("|") + ")】)+"),
+        apply(nodes, new RegExp("【("
+            + TriggerEnum.all.map(t => t.toName(Language.JPN))
+                .concat(TriggerEnum.allWithMemoryAlts.map(t => t.toName(Language.JPN, true))).join("|")
+            + ")】/?"), trigger);
+        apply(nodes, new RegExp("(?:【(?:"
+                + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.JPN)).join("|") + ")】)+"),
             pieces.bind(undefined, "】【"));
         apply(nodes, /【☆】/, cost);
     }
@@ -191,24 +202,23 @@ function apply(nodes: ParseNode[], regex: RegExp, replaceFunc: (match: RegExpExe
 }
 
 function triggerWithClose(match: RegExpExecArray): ParseNode[] {
-    const trigger = TriggerType.get(match[1]);
-    if (trigger.id === TriggerType.ID_SP) {
+    const trigger = TriggerEnum.fromName(match[1]);
+    if (trigger === TriggerEnum.SP) {
         return [
-            {componentName: "Trigger", props: {trigger}},
+            {componentName: "Trigger", props: {triggerName: match[1]}},
             {text: match[2]},
-            {componentName: "Trigger", props: {trigger, closing: true}}
+            {componentName: "Trigger", props: {triggerName: match[1], closing: true}}
         ];
     } else {
         return [
-            {componentName: "Trigger", props: {trigger}},
+            {componentName: "Trigger", props: {triggerName: match[1]}},
             {text: match[2]}
         ];
     }
 }
 
 function trigger(match: RegExpExecArray): ParseNode[] {
-    const trigger = TriggerType.get(match[1]);
-    return [{componentName: "Trigger", props: {trigger}}];
+    return [{componentName: "Trigger", props: {triggerName: match[1]}}];
 }
 
 function bold(pre: string, post: string, match: RegExpExecArray): ParseNode[] {
@@ -261,19 +271,19 @@ function idolized(match: RegExpExecArray): ParseNode[] {
 
 function attrRequirement(match: RegExpExecArray): ParseNode[] {
     return [
-        {text: "["},
+        {text: match[1]},
         {
             componentName: "PieceCount", props: {
                 pieces: {
-                    piecesSmile: toNumWithFullwidth(match[1]),
-                    piecesPure: toNumWithFullwidth(match[2]),
-                    piecesCool: toNumWithFullwidth(match[3])
+                    piecesSmile: toNumWithFullwidth(match[2]),
+                    piecesPure: toNumWithFullwidth(match[3]),
+                    piecesCool: toNumWithFullwidth(match[4])
                 },
                 showZero: true,
                 isSongReq: true
             }
         },
-        {text: "]"}
+        {text: match[5]}
     ];
 }
 

@@ -1,19 +1,26 @@
 <script lang="ts">
-    import type Trigger from "$lib/translation/trigger.js";
+    import TriggerEnum from "$lib/enums/trigger.js";
+    import CardType from "$lib/types/cardType.js";
     import Language from "$lib/types/language.js";
 
     export let lang: Language = Language.ENG;
-    export let trigger: Trigger;
+    export let cardType: CardType | undefined;
+    export let trigger: TriggerEnum;
+    export let triggerName: string | undefined = undefined;
     export let closing: boolean = false;
+
+    $: {
+        if (triggerName !== undefined) trigger = TriggerEnum.fromName(triggerName);
+    }
 
     let lbr: string, rbr: string;
     $: lbr = lang.leftSquareBracket;
     $: rbr = lang.rightSquareBracket;
 </script>
 
-<span class="{trigger.cssClassName}" class:closing
-      title={closing ? undefined : lbr + trigger[lang.triggerNameProperty] + rbr}>
-    {closing ? "" : lbr + trigger[lang.triggerNameProperty] + rbr}
+<span class="{trigger.toCssClassName()}" class:closing
+      title={closing ? undefined : lbr + trigger.toName(lang, cardType === CardType.MEMORY) + rbr}>
+    {closing ? "" : lbr + trigger.toName(lang, cardType === CardType.MEMORY) + rbr}
 </span>
 
 <style lang="postcss">
