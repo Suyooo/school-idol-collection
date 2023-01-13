@@ -7,9 +7,10 @@ import searchQuery from "$lib/search/query.js";
 
 export const GET: RequestHandler = (async ({params}) => {
     const filters = [];
-    const filterStrings = params.query.split("/");
 
     try {
+        const filterStrings = params.query.split("/");
+
         for (const filterString of filterStrings) {
             if (filterString.length === 0) continue;
             const split = filterString.split(":");
@@ -17,10 +18,14 @@ export const GET: RequestHandler = (async ({params}) => {
         }
     } catch (e) {
         if (e instanceof SearchFilterError) {
-            error(404, e.message);
+            throw error(404, { message: e.message });
         } else {
             throw e;
         }
+    }
+
+    if (filters.length === 0) {
+        throw error(404, { message: "No search filters specified" });
     }
 
     return json({

@@ -9,10 +9,11 @@ import {
     HasMany,
     Table
 } from "@sequelize/core/decorators-legacy";
-import {DataTypes, Model,} from "@sequelize/core";
+import {BelongsToMany, DataTypes, Model,} from "@sequelize/core";
 import type {QueryOptions} from "@sequelize/core";
 
 import type Card from "$models/card/card.js";
+import type Link from "$models/skill/link.js";
 import type CardMemberGroup from "$models/card/memberGroup.js";
 import type TranslationPattern from "$models/translation/pattern.js";
 import type Annotation from "$models/skill/annotation.js";
@@ -105,12 +106,12 @@ export class SkillBase extends Model {
     @BeforeUpdate
     static async clearAnnotations(skill: Skill, options: QueryOptions) {
         if (skill.changed("jpn"))
-            await SkillBase.associations.Annotation.target.destroy({
+            await this.associations.annotations.target.destroy({
                 where: {skillId: skill.id, isEng: false},
                 transaction: options.transaction
             });
         if (skill.changed("eng"))
-            await SkillBase.associations.Annotation.target.destroy({
+            await this.associations.annotations.target.destroy({
                 where: {skillId: skill.id, isEng: true},
                 transaction: options.transaction
             });
@@ -122,35 +123,31 @@ export class SkillBase extends Model {
         if (skill.changed("jpn")) {
             for (const [_, key, parameter] of skill.jpn.matchAll(/{{(.*?):(.*?)}}/g)) {
                 const type = AnnotationEnum.fromKey(key);
-                const annotation = <Annotation>await SkillBase.associations.Annotation.target.create({
+                const annotation = <Annotation>await SkillBase.associations.annotations.target.create({
                     skillId: skill.id,
                     isEng: false,
                     type: type.id,
                     parameter
                 }, {transaction: options.transaction});
-                await SkillBase.associations.Link.target
-                    .bulkCreate((await searchQuery(type.getSearchFilters(parameter), "viewCardNoOnly", options))
-                        .map(c => ({
-                            from: annotation.id,
-                            to: c.cardNo
-                        })), {transaction: options.transaction});
+                const cards = (await searchQuery(type.getSearchFilters(parameter), "viewCardNoOnly", options))
+                    .map(c => c.cardNo);
+                await(<BelongsToMany<Annotation,Card,Link>>SkillBase.associations.annotations.target.associations.links)
+                    .add(annotation, cards, {transaction: options.transaction});
             }
         }
         if (skill.changed("eng") && skill.eng !== null) {
             for (const [_, key, parameter] of skill.eng.matchAll(/{{(.*?):(.*?)}}/g)) {
                 const type = AnnotationEnum.fromKey(key);
-                const annotation = <Annotation>await SkillBase.associations.Annotation.target.create({
+                const annotation = <Annotation>await SkillBase.associations.annotations.target.create({
                     skillId: skill.id,
                     isEng: true,
                     type: type.id,
                     parameter
                 }, {transaction: options.transaction});
-                await SkillBase.associations.Link.target
-                    .bulkCreate((await searchQuery(type.getSearchFilters(parameter), "viewCardNoOnly", options))
-                        .map(c => ({
-                            from: annotation.id,
-                            to: c.cardNo
-                        })), {transaction: options.transaction});
+                const cards = (await searchQuery(type.getSearchFilters(parameter), "viewCardNoOnly", options))
+                    .map(c => c.cardNo);
+                await(<BelongsToMany<Annotation,Card,Link>>SkillBase.associations.annotations.target.associations.links)
+                    .add(annotation, cards, {transaction: options.transaction});
             }
         }
     }

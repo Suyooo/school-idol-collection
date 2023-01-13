@@ -1,5 +1,5 @@
 import Language from "$lib/enums/language.js";
-import DB from "$models/db.js";
+import type {DBObject} from "$models/db.js";
 import type TranslationPattern from "$models/translation/pattern.js";
 import PatternApplyError from "$lib/errors/patternApplyError.js";
 import TriggerEnum from "$lib/enums/trigger.js";
@@ -20,27 +20,29 @@ export function splitTriggersFromSkill(skillLine: string): { skill: string, trig
     }
 }
 
-export async function listUntranslatedSkills()
-    : Promise<({skill: string, skillId: number } & ({ cardNo: string } | { groupId: number, firstCardNo: string }))[]> {
+export type ApplicableSkillInfo = { cardNo: string, skillId: number, skillJpn: string, skillEng: string } |
+    { groupId: number, firstCardNo: string, skillId: number, skillJpn: string, skillEng: string };
+
+export async function listUntranslatedSkills(DB: DBObject)
+    : Promise<ApplicableSkillInfo[]> {
     const allSkills = await DB.Skill.findAll({
         where: {eng: null},
         include: [{model: DB.CardMemberGroup, include: [{model: DB.CardMemberExtraInfo, attributes: ["cardNo"]}]}]
     });
 
     return allSkills.map(skillObj => ((skillObj.isCardSkill()
-            ? {cardNo: skillObj.cardNo, skill: skillObj.jpn, skillId: skillObj.id}
+            ? {cardNo: skillObj.cardNo, skillJpn: skillObj.jpn, skillEng: "-", skillId: skillObj.id}
             : {
                 groupId: skillObj.groupId,
                 firstCardNo: skillObj.group.memberExtraInfos[0].cardNo,
-                skill: skillObj.jpn,
+                skillJpn: skillObj.jpn, skillEng: "-",
                 skillId: skillObj.id
             }))
     );
 }
 
-export async function getApplicableSkills(pattern: TranslationPattern, options?: QueryOptions)
-    : Promise<({ cardNo: string, skillId: number, skillJpn: string, skillEng: string } |
-    { groupId: number, firstCardNo: string, skillId: number, skillJpn: string, skillEng: string })[]> {
+export async function getApplicableSkills(DB: DBObject, pattern: TranslationPattern, options?: QueryOptions)
+    : Promise<ApplicableSkillInfo[]> {
     const res = [];
     const allSkills = await DB.Skill.findAll({
         ...options,
@@ -70,7 +72,7 @@ export async function getApplicableSkills(pattern: TranslationPattern, options?:
     return res;
 }
 
-export async function applyPatternToSkills(pattern: TranslationPattern, applyTo: number[]) {
+export async function applyPatternToSkills(DB: DBObject, pattern: TranslationPattern, applyTo: number[]) {
     await DB.sequelize.transaction(async (transaction) => {
         for (const application of applyTo) {
             const skillObj = await DB.Skill.findByPk(application, {transaction});
@@ -91,7 +93,7 @@ export async function applyPatternToSkills(pattern: TranslationPattern, applyTo:
     });
 }
 
-export async function tryAllPatterns(skillLine: string, options?: QueryOptions): Promise<{ skill: string, pattern: TranslationPattern } | null> {
+export async function tryAllPatterns(DB: DBObject, skillLine: string, options?: QueryOptions): Promise<{ skill: string, pattern: TranslationPattern } | null> {
     const {skill, triggers} = splitTriggersFromSkill(skillLine);
     for (const pattern of (await DB.TranslationPattern.findAll(options))) {
         const res = await applyPatternOrNull(skill, triggers, pattern, options);
