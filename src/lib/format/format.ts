@@ -372,7 +372,7 @@ const componentDict: { [key: string]: new (...args: any) => SvelteComponentTyped
 export function makeNodesRenderable(nodes: ParseNodePrepared[]): ParseNodeRenderable[] {
     return nodes.map(n => {
         if (isComponentNode(n)) {
-            return {component: componentDict[n.componentName], props: n.props};
+            return {component: componentDict[n.componentName], props: {...n.props}};
         } else if (isElementNode(n)) {
             return {...n, nodes: makeNodesRenderable(<ParseNodePrepared[]>n.nodes)};
         } else {

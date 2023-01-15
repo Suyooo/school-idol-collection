@@ -6,8 +6,12 @@ import CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
 import {CardMemberRarity, CardSongRarity} from "$lib/enums/cardRarity.js";
 import {ordinal} from "$lib/utils/grammar.js";
 
+export function cardLink(card: Card, lang: Language = Language.ENG): string {
+    return `<a href="/card/${card.cardNo}">${cardTitle(card, true, lang)}</a>`;
+}
+
 export function cardName(card: Card, styled: boolean, lang: Language = Language.ENG): string {
-    const quot = cardIsSong(card) ? (styled ? "&quot;" : `"`) : "";
+    const quot = styled ? "&quot;" : `"`;
     const pre = styled ? `<span class="lg:inline-block">${quot}` : `${quot}`;
     const post = `${quot}`;
     return card.nameEng === null || lang === Language.JPN

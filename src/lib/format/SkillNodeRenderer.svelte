@@ -11,7 +11,7 @@
 
 {#each nodes as node}
     {#if isTextNode(node)}
-        {node.text}
+        {@html node.text}
     {:else if isElementNode(node)}
         <svelte:element this={node.element} class={node.class}><svelte:self nodes={node.nodes} {lang} {cardType}/></svelte:element>
     {:else}

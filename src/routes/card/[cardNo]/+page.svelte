@@ -259,7 +259,7 @@
                             <div>
                                 {#if import.meta.env.DEV}
                                     {#each card.member.group.skills as skill (skill.id)}
-                                        <span><a href="/pattern/edit/{skill.patternId ?? "new"}/{skill.id}">🖉</a></span>
+                                        <span><a href="/pattern/edit/{skill.patternId ?? "new"}/{skill.id}">🖉</a></span><br>
                                     {/each}
                                 {/if}
                             </div>
