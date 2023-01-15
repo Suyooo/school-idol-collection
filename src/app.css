@@ -23,7 +23,7 @@ body {
 }
 
 .row {
-    @apply lg:flex;
+    @apply lg:flex flex-wrap;
 }
 
 .row > * {
@@ -73,30 +73,6 @@ span.rarity {
 h1, h2, h3, h4, h5, h6 {
     @apply text-accent-400 font-bold uppercase tracking-widest text-2xl mt-4 mb-1;
     /**/
-}
-
-input,
-textarea {
-    @apply bg-primary-900 border-primary-100 m-0;
-    /**/
-}
-
-label {
-    @apply inline m-0;
-    /**/
-}
-
-input[type="text"],
-textarea {
-    @apply w-full;
-}
-
-textarea {
-    @apply h-32;
-}
-
-.error {
-    @apply hidden bg-red-700;
 }
 
 tr > th {

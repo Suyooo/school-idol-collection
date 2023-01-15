@@ -1,6 +1,5 @@
-import DB from "$models/db.js";
+import type {DBObject} from "$models/db.js";
 import type {QueryOptions} from "@sequelize/core";
-
 import * as Grammar from "$lib/utils/grammar.js";
 import {toNumWithFullwidth} from "$lib/utils/string.js";
 import AttributeEnum from "$lib/enums/attribute.js";
@@ -13,97 +12,106 @@ export type PatternGroupTypeID = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export default class PatternGroupType {
     readonly id: PatternGroupTypeID;
-    readonly getReplacement: (match: string, options?: QueryOptions) => Promise<string>;
-    readonly getExtraReplacements: (match: string, thisNum: number, allRepls: string[]) => Map<string, string>;
+    readonly name: string;
+    readonly getReplacement: (DB: DBObject | null, match: string, options?: QueryOptions) => Promise<string>;
+    readonly getExtraReplacements: (match: string, thisNum: number) => Map<string, string> | null;
+    static all: PatternGroupType[] = [];
 
-    private constructor(id: PatternGroupTypeID, getReplacement: (match: string, options?: QueryOptions) => Promise<string>,
-                        getExtraReplacements: (match: string, thisNum: number, allRepls: string[]) => Map<string, string>) {
+    private constructor(id: PatternGroupTypeID, name: string,
+                        getReplacement: (DB: DBObject | null, match: string, options?: QueryOptions) => Promise<string>,
+                        getExtraReplacements: ((match: string, thisNum: number) => Map<string, string>) | null) {
         this.id = id;
+        this.name = name;
         this.getReplacement = getReplacement;
-        this.getExtraReplacements = getExtraReplacements;
+        this.getExtraReplacements = getExtraReplacements ?? (() => null);
+        PatternGroupType.all.push(this);
     }
 
     private static readonly map = (() => {
         const map: PatternGroupType[] = [];
 
-        // Name or Group
-        map.push(new PatternGroupType(0, async function (match: string, options?: QueryOptions) {
-            const skilltext = skilltextPattern.exec(match)?.[1];
-            const n = (await DB.TranslationName.findByPk(match, options))?.eng;
-            if (n === undefined) throw new NotFoundError(match + " is not a known name");
-            return skilltext ? "{{skilltext:" + n + "}}" : n;
-        }, generateAOrAnReplacements));
+        map.push(new PatternGroupType(0, "Name or Group",
+            async function (DB: DBObject | null, match: string, options?: QueryOptions) {
+                if (DB === null) return "EXAMPLE NAME";
+                const skilltext = skilltextPattern.exec(match)?.[1];
+                const n = (await DB.TranslationName.findByPk(match, options))?.eng;
+                if (n === undefined) throw new NotFoundError(match + " is not a known name");
+                return skilltext ? "{{skilltext:" + n + "}}" : n;
+            }, generateAOrAnReplacements));
 
-        // Song Name
-        map.push(new PatternGroupType(1, async function (match: string, options?: QueryOptions) {
-            const n = (await DB.TranslationSong.findByPk(match, options))?.eng;
-            if (n === undefined) throw new NotFoundError(match + " is not a known song");
-            return n;
-        }, generateAOrAnReplacements));
+        map.push(new PatternGroupType(1, "Song Name",
+            async function (DB: DBObject | null, match: string, options?: QueryOptions) {
+                if (DB === null) return "EXAMPLE SONG";
+                const n = (await DB.TranslationSong.findByPk(match, options))?.eng;
+                if (n === undefined) throw new NotFoundError(match + " is not a known song");
+                return n;
+            }, generateAOrAnReplacements));
 
-        // Costume Name
-        map.push(new PatternGroupType(2, async function (match: string, options?: QueryOptions) {
-            const n = (await DB.TranslationSong.findByPk(match, options))?.eng;
-            if (n === undefined) throw new NotFoundError(match + " is not a known song");
-            return n;
-        }, generateAOrAnReplacements));
+        map.push(new PatternGroupType(2, "Costume Name",
+            async function (DB: DBObject | null, match: string, options?: QueryOptions) {
+                if (DB === null) return "EXAMPLE COSTUME";
+                const n = (await DB.TranslationSong.findByPk(match, options))?.eng;
+                if (n === undefined) throw new NotFoundError(match + " is not a known song");
+                return n;
+            }, generateAOrAnReplacements));
 
-        // Mem Name
-        map.push(new PatternGroupType(3, async function (match: string, options?: QueryOptions) {
-            const n = (await DB.Card.withScope(["memories", "forLink"]).findOne({
-                ...options,
-                where: {
-                    nameJpn: match
+        map.push(new PatternGroupType(3, "Memory Name",
+            async function (DB: DBObject | null, match: string, options?: QueryOptions) {
+                if (DB === null) return "EXAMPLE MEMORY";
+                const n = (await DB.Card.withScope(["memories", "forLink"]).findOne({
+                    ...options,
+                    where: {
+                        nameJpn: match
+                    }
+                }))?.nameEng;
+                if (n === undefined) throw new NotFoundError(match + " is not a known memory");
+                if (n === null) throw new MissingTranslationError(match + " has no English translation");
+                return n;
+            }, generateAOrAnReplacements));
+
+        map.push(new PatternGroupType(4, "Number (as digits)",
+            async function (_DB: DBObject | null, match: string) {
+                return toNumWithFullwidth(match).toFixed(0);
+            }, generateNumberReplacements));
+
+        map.push(new PatternGroupType(5, "Number (as text)",
+            async function (_DB: DBObject | null, match: string) {
+                const n = toNumWithFullwidth(match);
+                if (n === 0) return "zero";
+                if (n === 1) return "one";
+                if (n === 2) return "two";
+                if (n === 3) return "three";
+                if (n === 4) return "four";
+                if (n === 5) return "five";
+                if (n === 6) return "six";
+                if (n === 7) return "seven";
+                if (n === 8) return "eight";
+                if (n === 9) return "nine";
+                if (n === 10) return "ten";
+                if (n === 11) return "eleven";
+                if (n === 12) return "twelve";
+                return n.toFixed(0);
+            }, generateNumberReplacements));
+
+        map.push(new PatternGroupType(6, "Ordinal",
+            async function (DB: DBObject | null, match: string) {
+                const n = toNumWithFullwidth(match);
+                const nMod10 = n % 10;
+                const nMod100 = n % 100;
+                if (nMod10 === 1 && nMod100 !== 11) return n + "st";
+                if (nMod10 === 2 && nMod100 !== 12) return n + "nd";
+                if (nMod10 === 3 && nMod100 !== 13) return n + "rd";
+                return n + "th";
+            }, null));
+
+        map.push(new PatternGroupType(7, "Pieces",
+            async function (DB: DBObject | null, match: string) {
+                let s = "";
+                for (const jpnPieceName of match.substring(1, match.length - 1).split("】【")) {
+                    s += "[" + AttributeEnum.fromPieceAttributeName(jpnPieceName).toPieceAttributeName() + "]";
                 }
-            }))?.nameEng;
-            if (n === undefined) throw new NotFoundError(match + " is not a known memory");
-            if (n === null) throw new MissingTranslationError(match + " has no English translation");
-            return n;
-        }, generateAOrAnReplacements));
-
-        // Number
-        map.push(new PatternGroupType(4, async function (match: string) {
-            return toNumWithFullwidth(match).toFixed(0);
-        }, generateNumberReplacements));
-
-        // Number Text
-        map.push(new PatternGroupType(5, async function (match: string) {
-            const n = toNumWithFullwidth(match);
-            if (n === 0) return "zero";
-            if (n === 1) return "one";
-            if (n === 2) return "two";
-            if (n === 3) return "three";
-            if (n === 4) return "four";
-            if (n === 5) return "five";
-            if (n === 6) return "six";
-            if (n === 7) return "seven";
-            if (n === 8) return "eight";
-            if (n === 9) return "nine";
-            if (n === 10) return "ten";
-            if (n === 11) return "eleven";
-            if (n === 12) return "twelve";
-            return n.toFixed(0);
-        }, generateNumberReplacements));
-
-        // Ordinal
-        map.push(new PatternGroupType(6, async function (match: string) {
-            const n = toNumWithFullwidth(match);
-            const nMod10 = n % 10;
-            const nMod100 = n % 100;
-            if (nMod10 === 1 && nMod100 !== 11) return n + "st";
-            if (nMod10 === 2 && nMod100 !== 12) return n + "nd";
-            if (nMod10 === 3 && nMod100 !== 13) return n + "rd";
-            return n + "th";
-        }, generateNoReplacements));
-
-        // Pieces
-        map.push(new PatternGroupType(7, async function (match: string) {
-            let s = "";
-            for (const jpnPieceName of match.substring(1, match.length - 1).split("】【")) {
-                s += "[" + AttributeEnum.fromPieceAttributeName(jpnPieceName).toPieceAttributeName() + "]";
-            }
-            return s;
-        }, generateNoReplacements));
+                return s;
+            }, null));
 
         return map;
     })();
@@ -113,23 +121,19 @@ export default class PatternGroupType {
     }
 }
 
-function generateAOrAnReplacements(_match: string, thisNum: number, allReplacements: string[]): Map<string, string> {
+function generateAOrAnReplacements(match: string, thisNum: number): Map<string, string> {
     return new Map<string, string>([
-        ["<" + thisNum + "a>", Grammar.aOrAn(allReplacements[thisNum - 1])]
+        ["<" + thisNum + "a>", Grammar.aOrAn(match)]
     ]);
 }
 
-function generateNumberReplacements(match: string, thisNum: number, allReplacements: string[]): Map<string, string> {
+function generateNumberReplacements(match: string, thisNum: number): Map<string, string> {
     const n = toNumWithFullwidth(match);
     const isOne = (n === 1);
     return new Map<string, string>([
         ["<" + thisNum + "s>", isOne ? "" : "s"],
         ["<" + thisNum + "sr>", isOne ? "s" : ""],
-        ["<" + thisNum + "x> ", isOne ? "" : allReplacements[thisNum - 1] + " "],
-        ["<" + thisNum + "e>", isOne ? "each" : "every " + allReplacements[thisNum - 1]]
+        ["<" + thisNum + "x> ", isOne ? "" : match + " "],
+        ["<" + thisNum + "e>", isOne ? "each" : "every " + match]
     ]);
-}
-
-function generateNoReplacements(): Map<string, string> {
-    return new Map<string, string>([]);
 }

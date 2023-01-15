@@ -24,12 +24,13 @@ import AnnotationEnum from "$lib/enums/annotation.js";
     modelName: "Skill",
     timestamps: false,
     validate: {
-        eitherCardOrGroup(this: Skill) {
+        eitherCardOrGroup(this: SkillBase) {
+            if (this.id === null) return true;
             if ((this.cardNo === null) === (this.groupId === null)) {
                 if (this.cardNo === null)
                     throw new Error("Skill is not assigned to either a card or a group, must be exactly one");
                 else
-                    throw new Error("Skill is not assigned to both a card and a group, must be exactly one");
+                    throw new Error("Skill is assigned to both a card and a group, must be exactly one");
             }
             return true;
         }

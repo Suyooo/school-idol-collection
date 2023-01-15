@@ -205,12 +205,6 @@
                         <div class="row inforow gap">
                             <div>
                                 Skill
-                                {#if import.meta.env.DEV}
-                                    {#each card.skills as skill (skill.id)}
-                                        <br>
-                                        <a href="/annotate/edit/{skill.id}">🖉</a>
-                                    {/each}
-                                {/if}
                             </div>
                             <div>
                                 {#each card.skills as skill (skill.id)}
@@ -222,11 +216,9 @@
                         </div>
                         <div class="row inforow">
                             <div>
-                                &nbsp;
                                 {#if import.meta.env.DEV}
                                     {#each card.skills as skill (skill.id)}
-                                        <br>
-                                        <a href="/pattern/apply/{skill.patternId}">🖉</a>
+                                        <span><a href="/pattern/edit/{skill.patternId ?? "new"}/{skill.id}">🖉</a></span><br>
                                     {/each}
                                 {/if}
                             </div>
@@ -264,7 +256,13 @@
                             </div>
                         </div>
                         <div class="row inforow">
-                            <div>&nbsp;</div>
+                            <div>
+                                {#if import.meta.env.DEV}
+                                    {#each card.member.group.skills as skill (skill.id)}
+                                        <span><a href="/pattern/edit/{skill.patternId ?? "new"}/{skill.id}">🖉</a></span>
+                                    {/each}
+                                {/if}
+                            </div>
                             <div>
                                 {#each card.member.group.skills as skill (skill.id)}
                                     <div>
@@ -356,7 +354,7 @@
             }
 
             &:last-child {
-                @apply flex-grow flex-shrink;
+                @apply flex-grow flex-shrink basis-[70%];
             }
         }
     }
@@ -366,7 +364,11 @@
     }
 
     .row.inforow > div:first-child {
-        @apply lg:basis-[15%]
+        @apply lg:basis-[15%];
+    }
+
+    .row.inforow > div:last-child {
+        @apply lg:basis-[85%];
     }
 
     .cost > span {

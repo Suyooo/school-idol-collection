@@ -5,8 +5,6 @@ import type {QueryOptions} from "@sequelize/core";
 import TriggerEnum from "$lib/enums/trigger.js";
 import PatternGroupType from "$lib/translation/patternGroupType.js";
 import type {PatternGroupTypeID} from "$lib/translation/patternGroupType.js";
-import {escapeForRegex} from "$lib/utils/string.js";
-import {splitTriggersFromSkill} from "$lib/translation/skills.js";
 
 @Table({
     modelName: "TranslationPattern",
@@ -79,24 +77,12 @@ export default class TranslationPattern extends Model {
         this.groupTypes = typeString;
     }
 
-    static buildSkeletonFromSkill(skillLine: string): TranslationPattern {
-        const {skill, triggers} = splitTriggersFromSkill(skillLine);
-        const skel = TranslationPattern.build({
-            triggers: 0,
-            regex: "^" + escapeForRegex(skill) + "$",
-            template: skill,
-            groupTypes: ""
-        });
-        skel.triggerArray = triggers;
-        return skel;
-    }
-
     @AfterUpdate
     static async purgeTranslations(pattern: TranslationPattern, options: QueryOptions) {
-        await TranslationPattern.associations.Skill.target.update(
+        await pattern.sequelize.models.Skill.update(
             {eng: null, patternId: null},
             {
-                where: {pattern: pattern.id},
+                where: {patternId: pattern.id},
                 transaction: options.transaction
             });
     }

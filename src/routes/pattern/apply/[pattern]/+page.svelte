@@ -1,15 +1,15 @@
 <script lang="ts">
     import Button from "$lib/style/Button.svelte";
-    import type {ApplicableSkillInfo} from "$lib/translation/skills.js";
-    import type Skill from "$models/skill/skill.js";
+    import type {ShortSkillInfo} from "$lib/translation/skills.js";
     import type {PageData} from './$types.js';
 
     export let data: PageData;
-    let id: number, applicable: ApplicableSkillInfo[], checkboxes: HTMLInputElement[] = [], disabled: boolean = false;
+    let id: number, applicable: ShortSkillInfo[], checkboxes: HTMLInputElement[] = [], disabled: boolean = false;
     $: id = data.id;
     $: applicable = data.applicable;
 
     function submit() {
+        if (disabled) return;
         disabled = true;
         const applyTo = checkboxes.map((c, i) => c.checked ? applicable[i].skillId : null).filter(v => v !== null);
         if (applyTo.length === 0) {
@@ -78,7 +78,7 @@
                 </tr>
                 </tbody>
             </table>
-            <Button accent style="margin-top:1rem;float:left" href="/pattern/edit/{id}/{applicable[0].id}/">Edit
+            <Button accent style="margin-top:1rem;float:left" href="/pattern/edit/{id}/{applicable[0].skillId}/">Edit
             </Button>
             <Button accent style="margin-top:1rem;float:right" on:click={submit} {disabled}>Apply</Button>
         </div>
@@ -90,7 +90,7 @@
         @apply px-4 py-4;
 
         &:not(:first-child) {
-            @apply border-l;
+            @apply border-l border-primary-300;
         }
     }
 </style>

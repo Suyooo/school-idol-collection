@@ -20,11 +20,11 @@ export function splitTriggersFromSkill(skillLine: string): { skill: string, trig
     }
 }
 
-export type ApplicableSkillInfo = { cardNo: string, skillId: number, skillJpn: string, skillEng: string } |
+export type ShortSkillInfo = { cardNo: string, skillId: number, skillJpn: string, skillEng: string } |
     { groupId: number, firstCardNo: string, skillId: number, skillJpn: string, skillEng: string };
 
 export async function listUntranslatedSkills(DB: DBObject)
-    : Promise<ApplicableSkillInfo[]> {
+    : Promise<ShortSkillInfo[]> {
     const allSkills = await DB.Skill.findAll({
         where: {eng: null},
         include: [{model: DB.CardMemberGroup, include: [{model: DB.CardMemberExtraInfo, attributes: ["cardNo"]}]}]
@@ -42,7 +42,7 @@ export async function listUntranslatedSkills(DB: DBObject)
 }
 
 export async function getApplicableSkills(DB: DBObject, pattern: TranslationPattern, options?: QueryOptions)
-    : Promise<ApplicableSkillInfo[]> {
+    : Promise<ShortSkillInfo[]> {
     const res = [];
     const allSkills = await DB.Skill.findAll({
         ...options,
@@ -51,7 +51,7 @@ export async function getApplicableSkills(DB: DBObject, pattern: TranslationPatt
 
     for (const skillObj of allSkills) {
         const {skill, triggers} = splitTriggersFromSkill(skillObj.jpn);
-        const appliedPattern = await applyPatternOrNull(skill, triggers, pattern, options);
+        const appliedPattern = await applyPatternOrNull(DB, skill, triggers, pattern, options);
         if (appliedPattern !== null) {
             res.push(skillObj.isCardSkill()
                 ? {
@@ -81,7 +81,7 @@ export async function applyPatternToSkills(DB: DBObject, pattern: TranslationPat
             }
 
             const {skill, triggers} = splitTriggersFromSkill(skillObj.jpn);
-            const translatedSkill = await applyPatternOrNull(skill, triggers, pattern, {transaction});
+            const translatedSkill = await applyPatternOrNull(DB, skill, triggers, pattern, {transaction});
             if (translatedSkill === null) {
                 throw new PatternApplyError(Error("Pattern should be applied to Skill #" + application + ", but its regex does not match the Skill"), pattern, skillObj.jpn);
             }
@@ -96,7 +96,7 @@ export async function applyPatternToSkills(DB: DBObject, pattern: TranslationPat
 export async function tryAllPatterns(DB: DBObject, skillLine: string, options?: QueryOptions): Promise<{ skill: string, pattern: TranslationPattern } | null> {
     const {skill, triggers} = splitTriggersFromSkill(skillLine);
     for (const pattern of (await DB.TranslationPattern.findAll(options))) {
-        const res = await applyPatternOrNull(skill, triggers, pattern, options);
+        const res = await applyPatternOrNull(DB, skill, triggers, pattern, options);
         if (res !== null) {
             return {skill, pattern};
         }
@@ -104,7 +104,7 @@ export async function tryAllPatterns(DB: DBObject, skillLine: string, options?: 
     return null;
 }
 
-async function applyPatternOrNull(skill: string, triggers: TriggerEnum[], pattern: TranslationPattern, options?: QueryOptions): Promise<string | null> {
+async function applyPatternOrNull(DB: DBObject, skill: string, triggers: TriggerEnum[], pattern: TranslationPattern, options?: QueryOptions): Promise<string | null> {
     // If this is a skill without triggers (tutorial text or lyrics), only patterns without triggers can be applied
     // Otherwise, check for at least one overlapping trigger
     if (pattern.triggers > 0 && (triggers.length === 0 || pattern.triggerArray.every(t => triggers.indexOf(t) === -1))) {
@@ -120,7 +120,7 @@ async function applyPatternOrNull(skill: string, triggers: TriggerEnum[], patter
     const allRepls: string[] = new Array(groupTypeArray.length);
     try {
         for (let gi = 0; gi < groupTypeArray.length; gi++) {
-            allRepls[gi] = await groupTypeArray[gi].getReplacement(match[gi + 1], options);
+            allRepls[gi] = await groupTypeArray[gi].getReplacement(DB, match[gi + 1], options);
         }
     } catch (e) {
         throw new PatternApplyError(e, pattern, skill);
@@ -129,8 +129,11 @@ async function applyPatternOrNull(skill: string, triggers: TriggerEnum[], patter
     let res = pattern.template;
     for (let gi = 0; gi < groupTypeArray.length; gi++) {
         res = res.replace(new RegExp("<" + (gi + 1) + ">", "g"), allRepls[gi]);
-        for (const [from, to] of groupTypeArray[gi].getExtraReplacements(match[gi + 1], gi + 1, allRepls)) {
-            res = res.replace(new RegExp(from, "g"), to);
+        const extraRepl = groupTypeArray[gi].getExtraReplacements(match[gi + 1], gi + 1);
+        if (extraRepl !== null) {
+            for (const [from, to] of extraRepl) {
+                res = res.replace(new RegExp(from, "g"), to);
+            }
         }
     }
 
