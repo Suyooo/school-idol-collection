@@ -3,11 +3,15 @@
     import type Card from "$models/card/card.js";
 
     export let subjects: (Card | { from: Card, to: Card })[];
+
+    function isMultipleSubjects(s: Card | { from: Card, to: Card }): s is { from: Card, to: Card } {
+        return s.hasOwnProperty("from");
+    }
 </script>
 
 {#each subjects as subject}
     <h5>
-        {#if subject.hasOwnProperty("from")}
+        {#if isMultipleSubjects(subject)}
             {@html cardLink(subject.from)} to {@html cardLink(subject.to)}
         {:else}
             {@html cardLink(subject)}

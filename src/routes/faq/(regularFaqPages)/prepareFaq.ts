@@ -105,7 +105,7 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
         retFaq.cards[card.cardNo] = card.get({plain: true});
     }
 
-    function replReplace(match: string, cardNo: string) {
+    function replReplace(_match: string, cardNo: string) {
         return cardLink(retFaq.cards[cardNo]);
     }
 

@@ -1,5 +1,6 @@
 <script lang="ts">
     import Button from "$lib/style/Button.svelte";
+    import {isCardSkillShortInfo} from "$lib/translation/skills.js";
     import type {ShortSkillInfo} from "$lib/translation/skills.js";
     import type {PageData} from './$types.js';
 
@@ -7,6 +8,10 @@
     let id: number, applicable: ShortSkillInfo[], checkboxes: HTMLInputElement[] = [], disabled: boolean = false;
     $: id = data.id;
     $: applicable = data.applicable;
+
+    function toggleAll(e: Event) {
+        checkboxes.forEach(c => c.checked = ((<HTMLInputElement>e.target).checked));
+    }
 
     function submit() {
         if (disabled) return;
@@ -56,7 +61,7 @@
                 <tbody>
                 {#each applicable as a, i}
                     <tr>
-                        {#if (a.hasOwnProperty("cardNo"))}
+                        {#if isCardSkillShortInfo(a)}
                             <th><a href="/card/{a.cardNo}/">{a.cardNo}</a></th>
                         {:else}
                             <th><a href="/card/{a.firstCardNo}/">Group #{a.groupId}</a></th>
@@ -71,8 +76,7 @@
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
                     <td class="whitespace-nowrap">
-                        <input id="all" type="checkbox"
-                               on:click={(e) => checkboxes.forEach(c => c.checked = e.target.checked)}>
+                        <input id="all" type="checkbox" on:change={toggleAll}>
                         <label for="all">All</label>
                     </td>
                 </tr>

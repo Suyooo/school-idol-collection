@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {isCardSkillShortInfo} from "$lib/translation/skills.js";
     import type {ShortSkillInfo} from "$lib/translation/skills.js";
     import type {PageData} from './$types.js';
 
@@ -30,7 +31,7 @@
                 {/if}
                 {#each untranslated as a}
                     <tr>
-                        {#if (a.hasOwnProperty("cardNo"))}
+                        {#if isCardSkillShortInfo(a)}
                             <th><a href="/card/{a.cardNo}/">{a.cardNo}</a></th>
                         {:else}
                             <th><a href="/card/{a.firstCardNo}/">Group #{a.groupId}</a></th>

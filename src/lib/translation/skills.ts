@@ -20,8 +20,30 @@ export function splitTriggersFromSkill(skillLine: string): { skill: string, trig
     }
 }
 
-export type ShortSkillInfo = { cardNo: string, skillId: number, skillJpn: string, skillEng: string } |
-    { groupId: number, firstCardNo: string, skillId: number, skillJpn: string, skillEng: string };
+export interface ShortSkillInfoCard {
+    cardNo: string,
+    skillId: number,
+    skillJpn: string,
+    skillEng: string
+}
+
+export interface ShortSkillInfoGroup {
+    groupId: number,
+    firstCardNo: string,
+    skillId: number,
+    skillJpn: string,
+    skillEng: string
+}
+
+export type ShortSkillInfo = ShortSkillInfoCard | ShortSkillInfoGroup;
+
+export function isCardSkillShortInfo(s: ShortSkillInfo): s is ShortSkillInfoCard {
+    return s.hasOwnProperty("cardNo");
+}
+
+export function isGroupSkillShortInfo(s: ShortSkillInfo): s is ShortSkillInfoGroup {
+    return s.hasOwnProperty("groupId");
+}
 
 export async function listUntranslatedSkills(DB: DBObject)
     : Promise<ShortSkillInfo[]> {
@@ -31,13 +53,13 @@ export async function listUntranslatedSkills(DB: DBObject)
     });
 
     return allSkills.map(skillObj => ((skillObj.isCardSkill()
-            ? {cardNo: skillObj.cardNo, skillJpn: skillObj.jpn, skillEng: "-", skillId: skillObj.id}
-            : {
-                groupId: skillObj.groupId,
-                firstCardNo: skillObj.group.memberExtraInfos[0].cardNo,
-                skillJpn: skillObj.jpn, skillEng: "-",
-                skillId: skillObj.id
-            }))
+        ? {cardNo: skillObj.cardNo, skillJpn: skillObj.jpn, skillEng: "-", skillId: skillObj.id}
+        : {
+            groupId: skillObj.groupId,
+            firstCardNo: skillObj.group.memberExtraInfos[0].cardNo,
+            skillJpn: skillObj.jpn, skillEng: "-",
+            skillId: skillObj.id
+        }))
     );
 }
 

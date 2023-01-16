@@ -1,6 +1,4 @@
 <script lang="ts">
-    import {makeNodesRenderable} from "$lib/format/format";
-    import SkillNodeRenderer from "$lib/format/SkillNodeRenderer.svelte";
     import Note from "./Note.svelte";
     import Question from "./Question.svelte";
     import Section from "./Section.svelte";

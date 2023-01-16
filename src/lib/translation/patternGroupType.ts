@@ -94,7 +94,7 @@ export default class PatternGroupType {
             }, generateNumberReplacements));
 
         map.push(new PatternGroupType(6, "Ordinal",
-            async function (DB: DBObject | null, match: string) {
+            async function (_DB: DBObject | null, match: string) {
                 const n = toNumWithFullwidth(match);
                 const nMod10 = n % 10;
                 const nMod100 = n % 100;
@@ -105,7 +105,7 @@ export default class PatternGroupType {
             }, null));
 
         map.push(new PatternGroupType(7, "Pieces",
-            async function (DB: DBObject | null, match: string) {
+            async function (_DB: DBObject | null, match: string) {
                 let s = "";
                 for (const jpnPieceName of match.substring(1, match.length - 1).split("】【")) {
                     s += "[" + AttributeEnum.fromPieceAttributeName(jpnPieceName).toPieceAttributeName() + "]";

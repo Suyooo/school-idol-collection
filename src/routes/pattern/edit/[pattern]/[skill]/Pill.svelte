@@ -3,7 +3,7 @@
     let slot: HTMLSpanElement;
 
     function copy() {
-        navigator.clipboard.writeText(slot.textContent);
+        navigator.clipboard.writeText(slot.innerText);
         refocus.focus();
     }
 </script>

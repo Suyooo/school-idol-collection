@@ -3,7 +3,6 @@
     import TriggerEnum from "$lib/enums/trigger.js";
     import Button from "$lib/style/Button.svelte";
     import PatternGroupType from "$lib/translation/patternGroupType.js";
-    import type {HTMLTextareaAttributes} from "svelte/elements";
     import type {PageData} from './$types.js';
     import Pill from "./Pill.svelte";
 
@@ -12,7 +11,7 @@
     let {isNew, patternId, triggers, groupTypeIds, example, regex, template} = data;
 
     let lastMatch: RegExpExecArray = <RegExpExecArray>[""], lastSuccessful: boolean = false, result: string = "",
-        regexTextarea: HTMLTextareaAttributes, templateTextarea: HTMLTextareaAttributes, disabled: boolean,
+        regexTextarea: HTMLTextAreaElement, templateTextarea: HTMLTextAreaElement, disabled: boolean,
         errorRegex: string | undefined, errorTemplate: string | undefined;
 
     $: {
@@ -26,7 +25,7 @@
         let match = null;
         try {
             match = new RegExp(regex).exec(example);
-        } catch (e) {
+        } catch (e: any) {
             errorRegex = e.message;
         }
 
@@ -40,7 +39,7 @@
                 const groupType = PatternGroupType.get(groupTypeIds[i - 1]);
                 const repl = await groupType.getReplacement(null, match[i]);
                 result = result.replace(new RegExp(`<${i}>`, "g"), repl);
-                const extraRepl = await groupType.getExtraReplacements(match[i], i);
+                const extraRepl = groupType.getExtraReplacements(match[i], i);
                 if (extraRepl !== null) {
                     for (const [from, to] of extraRepl) {
                         result = result.replace(new RegExp(from, "g"), to);
