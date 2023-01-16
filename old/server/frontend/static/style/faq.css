@@ -60,27 +60,15 @@ h5 + .question {
     color: black;
 }
 
-/*.question:before, */
 .question:after {
     content: "Q";
     background-color: var(--orange1);
 }
 
-/*.answer:before, */
 .answer:after {
     content: "A";
     background-color: var(--blue1);
 }
-
-/*.question:before, .answer:before {
-    position: absolute;
-    left: 1.55em;
-    top: 0.5em;
-    bottom: 0.25em;
-    width: 0.35em;
-    border-radius: 0.175em;
-    color: rgba(0,0,0,0);
-}*/
 
 @keyframes targethlblink {
     0%, 30%, 60%, 90% {

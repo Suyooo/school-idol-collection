@@ -2,14 +2,22 @@
     import {cardLink} from "$lib/card/strings.js";
     import type Card from "$models/card/card.js";
 
-    export let card: Card;
-    export let rangeEndCard: Card | undefined = undefined;
+    export let subjects: (Card | { from: Card, to: Card })[];
 </script>
 
-<h5>
-    {@html cardLink(card)}
-    {#if rangeEndCard !== undefined}
-        to {@html cardLink(rangeEndCard)}
-    {/if}
-</h5>
+{#each subjects as subject}
+    <h5>
+        {#if subject.hasOwnProperty("from")}
+            {@html cardLink(subject.from)} to {@html cardLink(subject.to)}
+        {:else}
+            {@html cardLink(subject)}
+        {/if}
+    </h5>
+{/each}
 <slot></slot>
+
+<style lang="postcss">
+    h5 + h5 {
+        @apply -mt-3;
+    }
+</style>

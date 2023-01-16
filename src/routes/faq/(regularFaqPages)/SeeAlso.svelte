@@ -1,0 +1,25 @@
+<script lang="ts">
+    import {makeNodesRenderable} from "$lib/format/format";
+    import type {ParseNodePrepared} from "$lib/format/format";
+    import SkillNodeRenderer from "$lib/format/SkillNodeRenderer.svelte";
+
+    export let link: string;
+    export let label: ParseNodePrepared[];
+</script>
+
+<div class="seealso"><b>See also:</b> <a href={link}><SkillNodeRenderer nodes={makeNodesRenderable(label)}/></a></div>
+
+<style lang="postcss">
+    .seealso {
+        @apply mt-2 pl-12 relative;
+
+        &:before {
+            @apply absolute left-4 top-0 w-4 text-center text-accent-500 font-bold;
+            content: "⏵";
+        }
+
+        & + :global(.seealso) {
+            @apply mt-0;
+        }
+    }
+</style>

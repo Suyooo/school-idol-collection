@@ -10,7 +10,7 @@ a:focus, a:hover {
     @apply text-accent-200;
 }
 
-a:not(.button) .card-id + span {
+a:not(.button) .inline-block, a:not(.button) .lg\:inline-block {
     @apply underline;
 }
 
@@ -70,9 +70,20 @@ span.rarity {
     @apply text-accent-300 font-bold;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    @apply text-accent-400 font-bold uppercase tracking-widest text-2xl mt-4 mb-1;
-    /**/
+h1, h2, h3 {
+    @apply text-accent-400 font-bold uppercase tracking-widest text-2xl mt-4 mb-4;
+}
+
+h4 {
+    @apply m-0 py-1 w-full text-2xl text-accent-400 font-bold tracking-widest text-center bg-primary-600 mb-4;
+}
+
+h5 {
+    @apply text-accent-400 mt-4 mb-2 font-bold text-xl;
+}
+
+h6 {
+    @apply text-accent-400 mt-4 mb-2 font-bold text-lg;
 }
 
 tr > th {

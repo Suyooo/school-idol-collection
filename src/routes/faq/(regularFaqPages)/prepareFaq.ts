@@ -8,8 +8,8 @@ import type {DBObject} from "$models/db.js";
 export type Faq = FaqSection[];
 
 export interface FaqSection {
-    cardNo: string;
-    rangeEndCardNo?: string;
+    subjects: (string | {from: string, to: string})[];
+    notes?: string[];
     seeAlso?: string[];
     qa?: FaqQA[];
 }
@@ -26,15 +26,15 @@ export type FaqPrepared = {
 }
 
 export interface FaqSectionPrepared {
-    cardNo: string;
-    rangeEndCardNo?: string;
+    subjects: (string | {from: string, to: string})[];
+    notes?: ParseNodePrepared[][];
     seeAlso?: FaqSeeAlsoPrepared[];
     qa?: FaqQAPrepared[];
 }
 
 export interface FaqSeeAlsoPrepared {
     link: string;
-    label: string;
+    label: ParseNodePrepared[];
 }
 
 export interface FaqQAPrepared {
@@ -54,23 +54,31 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
 
     const retFaq: FaqPrepared = {
         sections: faq.map(section => {
-            cardsToLoad.push(section.cardNo);
-            if (section.rangeEndCardNo) cardsToLoad.push(section.rangeEndCardNo);
-            const keyPrefix = <string>section.cardNo.split("-").at(-1);
+            let keyPrefix: string | undefined = undefined;
+            for (const subject of section.subjects) {
+                if (typeof subject === "string") {
+                    cardsToLoad.push(subject);
+                    if (keyPrefix === undefined) keyPrefix = subject;
+                } else {
+                    cardsToLoad.push(subject.from);
+                    cardsToLoad.push(subject.to);
+                    if (keyPrefix === undefined) keyPrefix = subject.from;
+                }
+            }
+            keyPrefix = keyPrefix!.split("-").at(-1);
 
             return <FaqSectionPrepared>{
-                cardNo: section.cardNo,
-                rangeEndCardNo: section.rangeEndCardNo,
+                subjects: section.subjects,
+                notes: section.notes?.map(n => parseSkillToNodes(n, Language.ENG, true)),
                 seeAlso: section.seeAlso?.map(seeAlso => {
-                    const link = seeAlso.substring(seeAlso.indexOf("/faq/"));
-                    const faqObj = <FaqSeeAlsoPrepared>{
-                        link, label: ""
+                    const faqObj = <Partial<FaqSeeAlsoPrepared>>{
+                        link: seeAlso
                     };
-                    faqPromises.push(DB.CardFAQLink.findOne({where: {link}})
+                    faqPromises.push(DB.CardFAQLink.findOne({where: {link: seeAlso}})
                         .then(faqFromDb => {
-                            faqObj.label = faqFromDb?.label ?? "Unlabeled Link";
+                            faqObj.label = parseSkillToNodes(faqFromDb?.label ?? "Unlabeled Link", Language.ENG, true);
                         }));
-                    return faqObj;
+                    return <FaqSeeAlsoPrepared>faqObj;
                 }),
                 qa: section.qa?.map(qa => {
                     qa.question.replace(/{{link:([^}]*?)}}/g, replFind);
@@ -102,15 +110,17 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
     }
 
     for (const section of retFaq.sections!) {
-        for (const qa of section.qa!) {
-            for (const node of qa.question) {
-                if (isTextNode(node)) {
-                    node.text = node.text.replace(/{{link:([^}]*?)}}/g, replReplace);
+        if (section.qa) {
+            for (const qa of section.qa) {
+                for (const node of qa.question) {
+                    if (isTextNode(node)) {
+                        node.text = node.text.replace(/{{link:([^}]*?)}}/g, replReplace);
+                    }
                 }
-            }
-            for (const node of qa.answer) {
-                if (isTextNode(node)) {
-                    node.text = node.text.replace(/{{link:([^}]*?)}}/g, replReplace);
+                for (const node of qa.answer) {
+                    if (isTextNode(node)) {
+                        node.text = node.text.replace(/{{link:([^}]*?)}}/g, replReplace);
+                    }
                 }
             }
         }

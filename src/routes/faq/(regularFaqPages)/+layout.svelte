@@ -1,10 +1,13 @@
 <script lang="ts">
     import {makeNodesRenderable} from "$lib/format/format";
     import SkillNodeRenderer from "$lib/format/SkillNodeRenderer.svelte";
+    import Note from "./Note.svelte";
+    import Question from "./Question.svelte";
     import Section from "./Section.svelte";
     import {page} from "$app/stores";
     import type Card from "$models/card/card.js";
     import type {FaqSectionPrepared} from "./prepareFaq.js";
+    import SeeAlso from "./SeeAlso.svelte";
 
     let cards: { [key: string]: Card }, sections: FaqSectionPrepared[];
     $: ({cards, sections} = $page.data);
@@ -17,17 +20,23 @@
                 <slot></slot>
             </h4>
             {#each sections as section}
-                <Section card={cards[section.cardNo]}
-                         rangeEndCard={section.rangeEndCardNo ? cards[section.rangeEndCardNo] : undefined}>
+                <Section subjects={section.subjects.map(subject => {
+                    if (typeof subject === "string") return cards[subject];
+                    else return {from: cards[subject.from], to: cards[subject.to]};
+                })}>
+                    {#if section.notes}
+                        {#each section.notes as note}
+                            <Note {note}/>
+                        {/each}
+                    {/if}
                     {#if section.seeAlso}
                         {#each section.seeAlso as seeAlso}
-                            {seeAlso.link}{seeAlso.label}
+                            <SeeAlso {...seeAlso}/>
                         {/each}
                     {/if}
                     {#if section.qa}
                         {#each section.qa as qa}
-                            <div><SkillNodeRenderer nodes={makeNodesRenderable(qa.question)}/></div>
-                            <div><SkillNodeRenderer nodes={makeNodesRenderable(qa.answer)}/></div>
+                            <Question {...qa}/>
                         {/each}
                     {/if}
                 </Section>

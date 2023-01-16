@@ -57,7 +57,7 @@
             <div class="panel">
                 <div class="panel-inner">
                     <div class="row">
-                        <h5>{@html cardTitle(card, true)}</h5>
+                        <h4>{@html cardTitle(card, true)}</h4>
                     </div>
                     <div class="row gap">
                         <div class="col-half inforow">
@@ -303,7 +303,7 @@
                             <div>Related FAQ</div>
                             <div class="faqs">
                                 {#each card.faqs as faq (faq.cardId + "_" + faq.displayOrder)}
-                                    <a href={faq.link}><Skill skill={faq.label} parseAsHelpText/></a>
+                                    <a href={faq.link}><Skill skill={faq.label} parseAsHelpText/></a><!-- TODO: pre-parse? -->
                                 {/each}
                             </div>
                         </div>
@@ -331,8 +331,8 @@
         }
     }
 
-    .row > h5 {
-        @apply text-center w-full font-bold bg-primary-500 m-0 px-4 tracking-normal normal-case;
+    .row > h4 {
+        @apply m-0 tracking-normal;
     }
 
     .inforow {
@@ -399,7 +399,7 @@
         @apply relative pl-4 block;
 
         &:before {
-            @apply absolute top-0 left-0 text-primary-500 font-bold;
+            @apply absolute top-0 left-0 text-accent-500 font-bold;
             content: "⏵";
         }
     }
