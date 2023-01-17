@@ -9,6 +9,7 @@ import {error, json} from "@sveltejs/kit";
 import type {RequestHandler} from "./$types.js";
 
 export const GET: RequestHandler = (async ({params, locals}) => {
+    const options = params.options.split("/");
     const card = await locals.DB.Card.findByPk(params.cardNo, {
         include: [
             {
@@ -108,15 +109,20 @@ export const GET: RequestHandler = (async ({params, locals}) => {
         .withScope(["viewCardNoOnly", {method: ["filterAfter", cardData.cardNo]}]).findOne())?.cardNo ?? null;
     if (cardData.nextCardNo && cardData.nextCardNo.split("-")[0] !== cardData.cardSet) cardData.nextCardNo = null;
 
-    cardData.skills.forEach(skill => {
-        skill.jpnPreparsed = parseSkillToNodes(skill, Language.JPN, false, card.type);
-        skill.engPreparsed = skill.eng ? parseSkillToNodes(skill, Language.ENG, false, card.type) : null;
-    });
-    if (cardData.member?.group) {
-        cardData.member.group.skills.forEach(skill => {
-            skill.jpnPreparsed = parseSkillToNodes(skill, Language.JPN);
-            skill.engPreparsed = skill.eng ? parseSkillToNodes(skill, Language.ENG) : null;
+    if (options.some(o => o === "preparse")) {
+        cardData.skills.forEach(skill => {
+            skill.jpnPreparsed = parseSkillToNodes(skill, Language.JPN, false, card.type);
+            skill.engPreparsed = skill.eng ? parseSkillToNodes(skill, Language.ENG, false, card.type) : null;
         });
+        if (cardData.member?.group) {
+            cardData.member.group.skills.forEach(skill => {
+                skill.jpnPreparsed = parseSkillToNodes(skill, Language.JPN);
+                skill.engPreparsed = skill.eng ? parseSkillToNodes(skill, Language.ENG) : null;
+            });
+        }
+        for (const faq of cardData.faqs) {
+            faq.labelPreparsed = parseSkillToNodes(faq.label, Language.ENG, true);
+        }
     }
 
     return json(cardData);

@@ -1,3 +1,4 @@
+import type {ParseNodePrepared} from "$lib/format/format.js";
 import {DataTypes, Model} from "@sequelize/core";
 import {Attribute, Table} from "@sequelize/core/decorators-legacy";
 import type Card from "$models/card/card.js";
@@ -29,6 +30,7 @@ export default class CardFAQLink extends Model {
         allowNull: false
     })
     declare label: string;
+    declare labelPreparsed?: ParseNodePrepared[];
 
     @Attribute({
         type: DataTypes.STRING,

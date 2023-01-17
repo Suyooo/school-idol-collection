@@ -303,7 +303,9 @@
                             <div>Related FAQ</div>
                             <div class="faqs">
                                 {#each card.faqs as faq (faq.cardId + "_" + faq.displayOrder)}
-                                    <a href={faq.link}><Skill skill={faq.label} parseAsHelpText/></a><!-- TODO: pre-parse? -->
+                                    <a href={faq.link}>
+                                        <Skill skill={faq.labelPreparsed ?? faq.label} parseAsHelpText/>
+                                    </a>
                                 {/each}
                             </div>
                         </div>
