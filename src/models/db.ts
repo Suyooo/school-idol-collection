@@ -34,7 +34,7 @@ const sequelize = new Sequelize({
     dialect: "sqlite",
     storage: "cardlist.db",
     models: modelList,
-    //logging: false,
+    logging: false,
     logQueryParameters: true
 });
 

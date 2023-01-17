@@ -219,7 +219,7 @@ function triggerWithClose(match: RegExpExecArray): ParseNode[] {
 
 function trigger(match: RegExpExecArray): ParseNode[] {
     const trigger = TriggerEnum.fromName(match[1]);
-    return [{componentName: "Trigger", props: {triggerName: trigger.id}}];
+    return [{componentName: "Trigger", props: {triggerId: trigger.id}}];
 }
 
 function bold(pre: string, post: string, match: RegExpExecArray): ParseNode[] {
