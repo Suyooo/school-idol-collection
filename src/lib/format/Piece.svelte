@@ -16,14 +16,14 @@
     }
 </script>
 
-<span class="{attr.toCssClassName()}"
+<span class="skill-icon {attr.toCssClassName()}"
       title={lang.leftSquareBracket + attr.toPieceAttributeName(lang) + lang.rightSquareBracket}>
     {#if !noText}{lang.leftSquareBracket}{attr.toPieceAttributeName(lang)}{lang.rightSquareBracket}{/if}
 </span>
 
 <style lang="postcss">
-    span {
-        @apply w-4 h-4 mt-0.5 bg-contain bg-no-repeat inline-block overflow-hidden align-top text-center text-none;
+    .skill-icon {
+        @apply w-[1em] h-[1em] mt-[.166em];
 
         &.all {
             background-image: url("/images/card/piece_all.png");

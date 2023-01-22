@@ -7,11 +7,11 @@
     export let cardType: CardType | undefined = undefined; cardType;
 </script>
 
-<span title={repl}>{repl}</span>
+<span class="skill-icon" title={repl}>{repl}</span>
 
 <style lang="postcss">
-    span {
-        @apply w-5 h-5 bg-contain bg-no-repeat inline-block overflow-hidden align-top text-center text-none;
+    .skill-icon {
+        @apply w-[1.25em];
         background-image: url("/images/card/star.png");
     }
 </style>

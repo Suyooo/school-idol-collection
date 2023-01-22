@@ -20,14 +20,14 @@
     $: rbr = lang.rightSquareBracket;
 </script>
 
-<span class="{trigger.toCssClassName()}" class:closing
+<span class="skill-icon {trigger.toCssClassName()}" class:closing
       title={closing ? undefined : lbr + trigger.toName(lang, cardType === CardType.MEMORY) + rbr}>
     {closing ? "" : lbr + trigger.toName(lang, cardType === CardType.MEMORY) + rbr}
 </span>
 
 <style lang="postcss">
-    span {
-        @apply w-[3.65rem] h-5 bg-contain bg-no-repeat inline-block overflow-hidden align-top text-center text-none;
+    .skill-icon {
+        @apply w-[3.65em];
 
         &.entry {
             background-image: url("/images/card/skill_entry.png");
@@ -58,11 +58,11 @@
         }
 
         &.sp {
-            @apply w-[4.45rem];
+            @apply w-[4.45em];
             background-image: url("/images/card/skill_sp.png");
 
             &.closing {
-                @apply w-[.8rem] ml-[.2rem];
+                @apply w-[.8em] ml-[.2em];
                 background-image: url("/images/card/skill_sp_end.png");
             }
         }

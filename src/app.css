@@ -10,8 +10,12 @@ a:focus, a:hover {
     @apply text-accent-200;
 }
 
-a:not(.button) .inline-block, a:not(.button) .lg\:inline-block {
-    @apply underline;
+a:not(.button) * {
+    @apply underline decoration-accent-400;
+}
+
+a:focus *, a:hover * {
+    @apply decoration-accent-200;
 }
 
 body {
@@ -51,11 +55,15 @@ body {
 }
 
 .content {
-    @apply bg-blue-800 p-4 rounded-4xl;
+    @apply bg-primary-800 p-4 rounded-4xl;
 }
 
 .panel {
-    @apply bg-blue-700 p-2 rounded-2xl;
+    @apply bg-primary-700 p-2 rounded-2xl;
+}
+
+.panel + .panel {
+    @apply mt-6;
 }
 
 .panel-inner {
@@ -63,19 +71,23 @@ body {
 }
 
 span.card-id {
-    @apply text-primary-200 font-bold;
+    @apply text-primary-100 font-bold;
 }
 
 span.rarity {
     @apply text-accent-300 font-bold;
 }
 
-h1, h2, h3 {
+h1, h2 {
     @apply text-accent-400 font-bold uppercase tracking-widest text-2xl mt-4 mb-4;
 }
 
+h3 {
+    @apply m-0 py-1 w-full text-3xl text-accent-400 font-bold tracking-widest text-center bg-primary-500 mb-4 rounded-2xl;
+}
+
 h4 {
-    @apply m-0 py-1 w-full text-2xl text-accent-400 font-bold tracking-widest text-center bg-primary-600 mb-4;
+    @apply m-0 py-1 w-full text-2xl text-accent-400 font-bold tracking-widest text-center bg-primary-500 mb-4;
 }
 
 h5 {
@@ -88,4 +100,8 @@ h6 {
 
 tr > th {
     @apply whitespace-nowrap;
+}
+
+.skill-icon {
+    @apply h-[1.25em] mt-[0.025em] mb-[-0.025em] bg-contain bg-no-repeat inline-block overflow-hidden align-top text-center indent-[1000vw] cursor-text;
 }

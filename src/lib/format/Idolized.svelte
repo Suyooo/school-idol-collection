@@ -4,15 +4,15 @@
 
     export let repl: string;
 
-    export let lang: Language = Language.ENG; lang;
+    export let lang: Language = Language.ENG; // TODO: JP Language
     export let cardType: CardType | undefined = undefined; cardType;
 </script>
 
-<span title={repl}>{repl}</span>
+<span><span class="skill-icon" title={repl}>{repl}</span>{#if lang === Language.ENG}&nbsp;Pieces{/if}</span>
 
 <style lang="postcss">
-    span {
-        @apply w-[3.285rem] h-5 bg-contain bg-no-repeat inline-block overflow-hidden align-top text-center text-none;
+    .skill-icon {
+        @apply w-[3.285em] mt-[0.03em];
         background-image: url("/images/card/idolized.png");
     }
 </style>
