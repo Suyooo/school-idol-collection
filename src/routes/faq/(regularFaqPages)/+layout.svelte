@@ -1,22 +1,20 @@
 <script lang="ts">
-    import Note from "./Note.svelte";
-    import Question from "./Question.svelte";
-    import Section from "./Section.svelte";
+    import Note from "../Note.svelte";
+    import Question from "../Question.svelte";
+    import Section from "../Section.svelte";
     import {page} from "$app/stores";
     import type Card from "$models/card/card.js";
     import type {FaqSectionPrepared} from "./prepareFaq.js";
-    import SeeAlso from "./SeeAlso.svelte";
+    import SeeAlso from "../SeeAlso.svelte";
 
     let cards: { [key: string]: Card }, sections: FaqSectionPrepared[];
     $: ({cards, sections} = $page.data);
 </script>
 
 <div class="content">
+    <h3><slot></slot></h3>
     <div class="panel">
         <div class="panel-inner">
-            <h4>
-                <slot></slot>
-            </h4>
             {#each sections as section}
                 <Section subjects={section.subjects.map(subject => {
                     if (typeof subject === "string") return cards[subject];

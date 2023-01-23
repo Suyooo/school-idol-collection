@@ -103,7 +103,7 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
         apply(nodes, new RegExp("\\+(\\[(?:"
                 + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+"),
             bold.bind(undefined, "+", ""));
-        apply(nodes, /\[Idolized \(Piece Bonus\)]/, idolized);
+        apply(nodes, /\[Idolized] Pieces/, idolized);
         apply(nodes, /(\[)(\d)(\d)(\d)(])/, attrRequirement);
         apply(nodes, /\[RUSH\/LIVE]/, abilityBoth);
         apply(nodes, /\[(RUSH|LIVE)]/, abilityOne);
@@ -113,7 +113,7 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
         apply(nodes, new RegExp("(?:\\[(?:"
                 + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+"),
             pieces.bind(undefined, "]["));
-        apply(nodes, /(1|2|3|one|two|three|has|each|more|no|with|without) (Stars?)/, cost);
+        apply(nodes, /(1|2|3|one|two|three|has|each|more|no|with|without) (Stars?)(?:\b)/, cost);
     } else if (lang === Language.JPN) {
         if (!parseAsHelpText && skillString.charAt(0) === "【") {
             // Only call these applys if this string starts with a trigger (so, it's not flavour or help text)

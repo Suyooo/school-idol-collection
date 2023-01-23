@@ -401,7 +401,7 @@
         @apply relative pl-4 block;
 
         &:before {
-            @apply absolute top-0 left-0 text-accent-500 font-bold;
+            @apply absolute top-0 left-0 text-primary-300 font-bold;
             content: "⏵";
         }
     }

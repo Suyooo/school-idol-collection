@@ -34,7 +34,7 @@
             }
 
             & > :global(.namecont), & > :global(.linecont) {
-                @apply flex font-bold pr-2;
+                @apply flex font-bold pr-2 no-underline;
             }
 
             & > :global(.namecont > span), & > :global(.linecont > span) {
@@ -46,19 +46,15 @@
             }
 
             & > :global(.namecont > span:first-child) {
-                @apply text-primary-300;
+                @apply text-primary-300 no-underline;
             }
 
             & > :global(.linecont > span) {
-                @apply text-white;
+                @apply text-white text-center text-xs uppercase tracking-widest no-underline;
             }
 
             & > :global(.namecont > span:last-child), & > :global(.linecont > span) {
                 @apply flex-grow;
-            }
-
-            & > :global(.linecont > span) {
-                @apply text-center text-xs uppercase tracking-widest;
             }
         }
     }

@@ -54,18 +54,18 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
 
     const retFaq: FaqPrepared = {
         sections: faq.map(section => {
-            let keyPrefix: string | undefined = undefined;
+            let keyPrefix: string = "";
             for (const subject of section.subjects) {
                 if (typeof subject === "string") {
                     cardsToLoad.push(subject);
-                    if (keyPrefix === undefined) keyPrefix = subject;
+                    if (keyPrefix === "") keyPrefix = subject;
                 } else {
                     cardsToLoad.push(subject.from);
                     cardsToLoad.push(subject.to);
-                    if (keyPrefix === undefined) keyPrefix = subject.from;
+                    if (keyPrefix === "") keyPrefix = subject.from;
                 }
             }
-            keyPrefix = keyPrefix!.split("-").at(-1);
+            keyPrefix = keyPrefix.split("-").at(-1)!;
 
             return <FaqSectionPrepared>{
                 subjects: section.subjects,
@@ -85,7 +85,7 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
                     qa.answer.replace(/{{link:([^}]*?)}}/g, replFind);
 
                     return <FaqQAPrepared>{
-                        key: keyPrefix + (qa.key ? "_" + qa.key : ""),
+                        key: keyPrefix + (qa.key ? (keyPrefix ? "_" : "") + qa.key : ""),
                         question: parseSkillToNodes(
                             qa.question.replace(/{{red:([^}]*?)}}/g, "<span class='text-highlight-red'>$1</span>"),
                             Language.ENG, true),

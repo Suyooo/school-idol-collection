@@ -1,5 +1,5 @@
-import prepareFaq from "../prepareFaq.js";
-import type {Faq} from "../prepareFaq.js";
+import prepareFaq from "../../prepareFaq.js";
+import type {Faq} from "../../prepareFaq.js";
 import type {PageServerLoad} from "./$types.js";
 
 export const json: Faq = [
