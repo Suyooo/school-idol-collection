@@ -10,11 +10,11 @@ a:focus, a:hover {
     @apply text-accent-200;
 }
 
-a:not(.button) * {
+a:not(.button) *, a:not(.button) *:before {
     @apply underline decoration-accent-400;
 }
 
-a:focus *, a:hover * {
+a:focus *, a:hover *, a:focus *:before, a:hover *:before {
     @apply decoration-accent-200;
 }
 
@@ -107,8 +107,15 @@ tr > th {
 }
 
 .skill-icon {
-    @apply h-[1.25em] mt-[0.025em] mb-[-0.025em] bg-contain bg-no-repeat inline-block overflow-hidden align-top text-center indent-[1000vw] cursor-text;
+    @apply h-[1.25em] bg-contain bg-no-repeat inline-block overflow-hidden align-top text-center text-transparent cursor-text select-all relative;
 }
+
+.skill-icon:before {
+    @apply absolute -left-4 top-0 select-none underline pointer-events-none;
+    content: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+}
+
+.skill-icon::selection { color: transparent; }
 
 ul {
     @apply ml-4 list-disc list-inside;

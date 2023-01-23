@@ -23,7 +23,8 @@
 
 <style lang="postcss">
     .skill-icon {
-        @apply w-[1em] h-[1em] mt-[.166em];
+        @apply w-[1em];
+        background-position-y: .166em;
 
         &.all {
             background-image: url("/images/card/piece_all.png");
