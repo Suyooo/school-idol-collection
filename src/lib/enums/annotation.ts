@@ -57,7 +57,7 @@ export default class AnnotationEnum {
         } else if (cards.length === 1) {
             return "/card/" + cards[0].cardNo;
         } else {
-            return "/search/" + this.getSearchFilters(parameter).map(f => f.getFilterString()).join("/") + "/";
+            return "/search/" + this.getSearchFilters(parameter).map(f => f.getFilterString()).join("/");
         }
     }
 

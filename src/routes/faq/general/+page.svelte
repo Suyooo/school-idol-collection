@@ -10,7 +10,7 @@
     export let data: PageData;
 </script>
 
-<svelte:head><title>FAQ → General &bull; SIC</title></svelte:head>
+<svelte:head><title>How To Play → General FAQ &bull; SIC</title></svelte:head>
 <div class="content">
     <h3>Frequently Asked Questions</h3>
     <div class="panel">
@@ -28,8 +28,8 @@
             <Question {...data.sections[0].qa[5]}/>
             <h5>What happens if my Deck runs out during a match?</h5>
             <Question {...data.sections[0].qa[6]}/>
-            <h5>What does "Collection" mean?</h5>
-            <SeeAlso link="/faq/rules#official_collection" label={[{text: "Rules → Events → Collection"}]}/>
+            <h5 id="collection">What does "Collection" mean?</h5>
+            <SeeAlso link="/faq/rules#official_collection" label={[{text: "Rules → Official Event Rules → Collection"}]}/>
             <Question {...data.sections[0].qa[7]}/>
             <Question {...data.sections[0].qa[8]}/>
             <h5>What does "Pair" (or "Trio") mean?</h5>
@@ -39,7 +39,7 @@
             <Question {...data.sections[0].qa[11]}/>
             <Question {...data.sections[0].qa[12]}/>
             <Question {...data.sections[0].qa[13]}/>
-            <h5>What does "Special Practice" mean?</h5>
+            <h5 id="sp_practice">What does "Special Practice" mean?</h5>
             <Question {...data.sections[0].qa[14]}/>
             <Question {...data.sections[0].qa[15]}/>
             <Question {...data.sections[0].qa[16]}/>

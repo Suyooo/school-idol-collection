@@ -1,2 +1,2 @@
-<svelte:head><title>FAQ → LL03 &bull; SIC</title></svelte:head>
+<svelte:head><title>How To Play → LL03 FAQ &bull; SIC</title></svelte:head>
 LL03 Frequently Asked Questions

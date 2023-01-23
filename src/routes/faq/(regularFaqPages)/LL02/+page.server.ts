@@ -162,7 +162,7 @@ export const json: Faq = [
             {
                 "key": "064_increase_first",
                 "question": "I performed a ⟪LIVE⟫ with this Song when the Live Points goal was 9, and hit 9 Live Points. Do I win?",
-                "answer": "No. The Live Points goal increased by one, so you need another point."
+                "answer": "No. The Live Points goal was increased by one, so you need another point."
             },
             {
                 "key": "064_win",

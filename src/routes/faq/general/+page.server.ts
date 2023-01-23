@@ -123,7 +123,7 @@ export const json: Faq = [
             {
                 "key": "entry_at_start",
                 "question": "When the Starting Members are turned face-up at the start of the match, can I use that card's [RUSH] or [Entry] Skill?",
-                "answer": "No, the card's [RUSH] and [Entry] Skill will not be activated.<br>If all players agree, you can play with Starting Members' [Entry] Skills being activated as a house rule. If all of these Skills are activated at the beginning, picking a good Starting Member can give you a head start!"
+                "answer": "No, the card's [RUSH] and [Entry] Skill will not be activated.<br>As long as all players agree, you can play with Starting Members' [Entry] Skills being activated as a house rule. If you play this way, picking a good Starting Member is sure to give you a head start!"
             },
             {
                 "key": "more_less",

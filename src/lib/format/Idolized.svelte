@@ -3,7 +3,6 @@
     import Language from "$lib/enums/language.js";
 
     export let repl: string;
-
     export let lang: Language = Language.ENG; // TODO: JP Language
     export let cardType: CardType | undefined = undefined; cardType;
 </script>

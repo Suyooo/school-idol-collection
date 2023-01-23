@@ -67,7 +67,7 @@ body {
 }
 
 .panel-inner {
-    @apply rounded-lg overflow-hidden;
+    @apply rounded-lg px-4 pb-1 overflow-hidden;
 }
 
 span.card-id {
@@ -87,7 +87,7 @@ h3 {
 }
 
 h4 {
-    @apply m-0 py-1 w-full text-2xl text-accent-400 font-bold tracking-widest text-center bg-primary-500 mb-4;
+    @apply m-0 -mx-4 py-1 text-2xl text-accent-400 font-bold tracking-widest text-center bg-primary-500 mb-4;
 }
 
 h5 {
@@ -107,7 +107,7 @@ tr > th {
 }
 
 .skill-icon {
-    @apply h-[1.25em] bg-contain bg-no-repeat inline-block overflow-hidden align-top text-center text-transparent cursor-text select-all relative;
+    @apply h-[1.25em] bg-contain bg-no-repeat inline-block overflow-hidden align-top text-transparent cursor-text select-all relative;
 }
 
 .skill-icon:before {
@@ -118,5 +118,5 @@ tr > th {
 .skill-icon::selection { color: transparent; }
 
 ul {
-    @apply ml-4 list-disc list-inside;
+    @apply list-disc list-inside;
 }
