@@ -11,7 +11,7 @@
 
 <style lang="postcss">
     .seealso {
-        @apply mt-2 pl-12 relative;
+        @apply mb-4 pl-12 relative;
 
         &:before {
             @apply absolute left-4 top-0 w-4 text-center text-accent-500 font-bold;
@@ -19,7 +19,11 @@
         }
 
         & + :global(.seealso) {
-            @apply mt-0;
+            @apply -mt-4;
+        }
+
+        &:last-child {
+            @apply mb-0;
         }
     }
 </style>

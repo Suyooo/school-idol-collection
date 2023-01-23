@@ -225,7 +225,7 @@ function trigger(match: RegExpExecArray): ParseNode[] {
 function bold(pre: string, post: string, match: RegExpExecArray): ParseNode[] {
     const secret = Symbol();
     return [
-        {secret, element: "span", class: "font-bold inline-block"},
+        {secret, element: "span", class: "font-bold"},
         ...(pre ? [{text: pre}] : []),
         {text: match[1]},
         ...(post ? [{text: post}] : []),

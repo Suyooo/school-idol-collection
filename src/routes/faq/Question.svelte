@@ -33,7 +33,7 @@
     }
 
     .question {
-        @apply mt-2 font-bold;
+        @apply font-bold;
 
         &:after {
             @apply bg-accent-200;
@@ -47,6 +47,10 @@
         &:after {
             @apply bg-primary-200;
             content: "A";
+        }
+
+        &:last-child {
+            @apply mb-0;
         }
     }
 </style>
