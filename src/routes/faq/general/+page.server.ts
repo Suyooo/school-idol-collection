@@ -163,12 +163,12 @@ export const json: Faq = [
             {
                 "key": "do_either",
                 "question": "How should I handle a Skill that says \"Do either: ① ~ ② ~\"?",
-                "answer": "Between the two effects, ① and ②, choose the one you'd like to perform. (If it says \"Do either\", you must pick one of the two.)<br>For example, in the [Entry] Skill of {{link:LL15-051}}, you can choose whichever effect you want between the two listed effects. (If the Member is Idolized, it's recommended to pick ②.)"
+                "answer": "Between the two options, ① and ②, choose the one you'd like to perform. (If it says \"Do either\", you must pick one of the two.)<br>For example, in the [Entry] Skill of {{link:LL15-051}}, you can choose whichever option you want between the two listed ones. (If the Member is Idolized, it's recommended to pick ②.)"
             },
             {
                 "key": "do_either_conditions",
-                "question": "For Skills like the [Entry] Skill of {{link:LL15-051}}, where it says \"② If this Member is Idolized\" - can I pick effects with conditions even if they are not met?",
-                "answer": "Yes. You can choose that effect, but if the conditions are not met, nothing will happen."
+                "question": "For Skills like the [Entry] Skill of {{link:LL15-051}}, where it says \"② If this Member is Idolized\" - can I pick options with conditions even if they are not met?",
+                "answer": "Yes. You can choose that option, but if the conditions are not met, it will have no effect."
             },
             {
                 "key": "live_non_exact",
