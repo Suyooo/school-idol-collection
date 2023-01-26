@@ -100,8 +100,8 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
             nodes.push({secret});
         }
         apply(nodes, /⟪([^⟪⟫]*?)⟫/, bold.bind(undefined, "⟪", "⟫"));
-        apply(nodes, new RegExp("\\+(\\[(?:"
-                + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+"),
+        apply(nodes, new RegExp("\\+((?:\\[(?:"
+                + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+)"),
             bold.bind(undefined, "+", ""));
         apply(nodes, /\[Idolized] Pieces/, idolized);
         apply(nodes, /(\[)(\d)(\d)(\d)(])/, attrRequirement);
@@ -131,8 +131,8 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
             nodes.push({secret});
         }
         apply(nodes, /《([^《》]*?)》/, bold.bind(undefined, "《", "》"));
-        apply(nodes, new RegExp("\\+(【(?:"
-                + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.JPN)).join("|") + ")】)+"),
+        apply(nodes, new RegExp("\\+((?:【(?:"
+                + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.JPN)).join("|") + ")】)+)"),
             bold.bind(undefined, "+", ""));
         apply(nodes, /【覚醒\(仮\)】/, idolized);
         apply(nodes, /(【)([０-９])([０-９])([０-９])(】)/, attrRequirement);

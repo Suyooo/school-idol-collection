@@ -334,7 +334,7 @@
     }
 
     .row > h4 {
-        @apply m-0 tracking-normal;
+        @apply my-0 tracking-normal;
     }
 
     .inforow {

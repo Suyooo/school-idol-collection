@@ -233,7 +233,7 @@ export const json: Faq = [
         "qa": [
             {
                 "question": "If multiple players have starting Members with [Starter] Skills, in what order should the Skills be used?",
-                "answer": "Skills are used in the turn order decided at the start of the match. Once everyone's [Starter] Skills have been resolved, the first player in the turn order begins with their action."
+                "answer": "Skills are used in the turn order decided at the start of the match. Once everyone's [Starter] Skills have been resolved, the first player in the turn order can begin."
             }
         ]
     }

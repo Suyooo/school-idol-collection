@@ -6,24 +6,39 @@
     export let key: string;
     export let question: ParseNodePrepared[] | string;
     export let answer: ParseNodePrepared[] | string;
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.origin + window.location.pathname + "#" + key);
+    }
 </script>
 
-<div class="question" id="{key}">
-    {#if typeof question === "string"}
-        {@html question}
-    {:else}
-        <SkillNodeRenderer nodes={makeNodesRenderable(question)}/>
-    {/if}
-</div>
-<div class="answer">
-    {#if typeof answer === "string"}
-        {@html answer}
-    {:else}
-        <SkillNodeRenderer nodes={makeNodesRenderable(answer)}/>
-    {/if}
+<div class="w-full group relative">
+    <button class="absolute left-0 top-0 text-xs leading-5 opacity-50 hidden group-hover:block z-50" on:click={copyLink}>🔗</button>
+    <div class="question" id="{key}">
+        {#if typeof question === "string"}
+            {@html question}
+        {:else}
+            <SkillNodeRenderer nodes={makeNodesRenderable(question)}/>
+        {/if}
+    </div>
+    <div class="answer">
+        {#if typeof answer === "string"}
+            {@html answer}
+        {:else}
+            <SkillNodeRenderer nodes={makeNodesRenderable(answer)}/>
+        {/if}
+    </div>
 </div>
 
 <style lang="postcss">
+    .group {
+        @apply mb-4;
+
+        &:last-child {
+            @apply mb-0;
+        }
+    }
+
     .question, .answer {
         @apply relative pl-12;
 
@@ -42,15 +57,9 @@
     }
 
     .answer {
-        @apply mb-4;
-
         &:after {
             @apply bg-primary-200;
             content: "A";
-        }
-
-        &:last-child {
-            @apply mb-0;
         }
     }
 </style>
