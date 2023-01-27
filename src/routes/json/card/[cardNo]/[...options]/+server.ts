@@ -96,18 +96,24 @@ export const GET: RequestHandler = (async ({params, locals}) => {
         // Filter cards already listed as group partners
         return !(cardData.member?.group && cardData.member.group.memberExtraInfos.some(m => m.cardNo === l.skill.cardNo));
     });
-    cardData.sameId = await locals.DB.Card.withScope(["viewForLink", "viewRarity", "orderCardNo"]).findAll({
-        where: {
-            id: cardData.id,
-            cardNo: {[Op.not]: cardData.cardNo}
-        }
-    });
-    cardData.prevCardNo = (await locals.DB.Card
-        .withScope(["viewCardNoOnly", {method: ["filterBefore", cardData.cardNo]}]).findOne())?.cardNo ?? null;
-    if (cardData.prevCardNo && cardData.prevCardNo.split("-")[0] !== cardData.cardSet) cardData.prevCardNo = null;
-    cardData.nextCardNo = (await locals.DB.Card
-        .withScope(["viewCardNoOnly", {method: ["filterAfter", cardData.cardNo]}]).findOne())?.cardNo ?? null;
-    if (cardData.nextCardNo && cardData.nextCardNo.split("-")[0] !== cardData.cardSet) cardData.nextCardNo = null;
+
+    if (options.some(o => o === "sameid")) {
+        cardData.sameId = await locals.DB.Card.withScope(["viewForLink", "viewRarity", "orderCardNo"]).findAll({
+            where: {
+                id: cardData.id,
+                cardNo: {[Op.not]: cardData.cardNo}
+            }
+        });
+    }
+
+    if (options.some(o => o === "neighbors")) {
+        cardData.prevCardNo = (await locals.DB.Card
+            .withScope(["viewCardNoOnly", {method: ["filterBefore", cardData.cardNo]}]).findOne())?.cardNo ?? null;
+        if (cardData.prevCardNo && cardData.prevCardNo.split("-")[0] !== cardData.cardSet) cardData.prevCardNo = null;
+        cardData.nextCardNo = (await locals.DB.Card
+            .withScope(["viewCardNoOnly", {method: ["filterAfter", cardData.cardNo]}]).findOne())?.cardNo ?? null;
+        if (cardData.nextCardNo && cardData.nextCardNo.split("-")[0] !== cardData.cardSet) cardData.nextCardNo = null;
+    }
 
     if (options.some(o => o === "preparse")) {
         cardData.skills.forEach(skill => {
