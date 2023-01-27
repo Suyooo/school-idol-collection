@@ -8,7 +8,7 @@ import type {DBObject} from "$models/db.js";
 export type Faq = FaqSection[];
 
 export interface FaqSection {
-    subjects: (string | {from: string, to: string})[];
+    subjects: (string | { from: string, to: string })[];
     notes?: string[];
     seeAlso?: string[];
     qa?: FaqQA[];
@@ -26,7 +26,7 @@ export type FaqPrepared = {
 }
 
 export interface FaqSectionPrepared {
-    subjects: (string | {from: string, to: string})[];
+    subjects: (string | { from: string, to: string })[];
     notes?: ParseNodePrepared[][];
     seeAlso?: FaqSeeAlsoPrepared[];
     qa?: FaqQAPrepared[];
@@ -66,6 +66,10 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
                 }
             }
             keyPrefix = keyPrefix.split("-").at(-1)!;
+
+            if (section.qa && section.qa.length > 1 && section.qa.some(q => q.key === undefined)) {
+                throw new Error("A FAQ section with multiple QAs must specify a key for each. " + JSON.stringify(section.subjects));
+            }
 
             return <FaqSectionPrepared>{
                 subjects: section.subjects,
