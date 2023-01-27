@@ -45,6 +45,7 @@
                 <li><a href="/faq/LL15">LL15 Frequently Asked Questions</a></li>
                 <li><a href="/faq/LL16">LL16 Frequently Asked Questions</a></li>
                 <li><a href="/faq/LL17">LL17 Frequently Asked Questions</a></li>
+                <li class="mt-4"><a href="/faq/EX10">EX10 (Acrylic Keyholder Set) Frequently Asked Questions</a></li>
             </ul>
         </div>
     </div>
