@@ -2,7 +2,7 @@
     import Star from "$lib/format/Star.svelte";
     import CardImage from "$lib/format/CardImage.svelte";
     import TriggerComponent from "$lib/format/TriggerComponent.svelte";
-    import TriggerEnum from "$lib/enums/trigger.ts";
+    import TriggerEnum from "$lib/enums/trigger.js";
     import Idolized from "$lib/format/Idolized.svelte";
 </script>
 

@@ -30,7 +30,7 @@
     import CardPageButtons from "./CardPageButtons.svelte";
 
     export let data: PageData;
-    let card: Card & CardPageExtraInfo;
+    let card: Card & Required<CardPageExtraInfo>;
     $: card = data.card;
 </script>
 

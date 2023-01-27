@@ -4,7 +4,7 @@
     import Section from "../Section.svelte";
     import {page} from "$app/stores";
     import type Card from "$models/card/card.js";
-    import type {FaqSectionPrepared} from "./prepareFaq.js";
+    import type {FaqSectionPrepared} from "../prepareFaq.js";
     import SeeAlso from "../SeeAlso.svelte";
 
     let cards: { [key: string]: Card }, sections: FaqSectionPrepared[];
