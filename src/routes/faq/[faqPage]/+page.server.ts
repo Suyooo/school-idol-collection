@@ -377,7 +377,7 @@ export const data: { [key: string]: Faq } = {
             qa: [
                 {
                     key: "member",
-                    question: "Is the draw limit increased by one even if I ⟪SCOUT⟫ using a Skill like the one of {{link:LL04-046}} ?",
+                    question: "Is the draw limit increased by one even if I ⟪SCOUT⟫ using a Skill like the one of {{link:LL04-046}}?",
                     answer: "Yes. Even if you use a Skill to do so, ⟪SCOUT⟫ing will always get +1 extra card. Note that Skills such as \"Draw X cards\" are not ⟪SCOUT⟫s, so you cannot draw extra cards."
                 },
                 {
@@ -594,7 +594,7 @@ export const data: { [key: string]: Faq } = {
             subjects: ["LL06-049"],
             qa: [
                 {
-                    question: "Does the \"⟪ENTER⟫ed from your Hand\" requirement also count ⟪ENTER⟫ing using [RUSH] and ⟪ENTER⟫ ing using Skills such as {{link:LL04-048}} ?",
+                    question: "Does the \"⟪ENTER⟫ed from your Hand\" requirement also count ⟪ENTER⟫ing using [RUSH] and ⟪ENTER⟫ ing using Skills such as {{link:LL04-048}}?",
                     answer: "Yes. The requirement is not only met if you pick ⟪ENTER⟫ as your turn action, but also if you use a [RUSH] or a Skill to ⟪ENTER⟫ this card."
                 }
             ]
@@ -659,7 +659,7 @@ export const data: { [key: string]: Faq } = {
             qa: [
                 {
                     key: "skills",
-                    question: "Does the \"⟪ENTER⟫ed from your Deck\" requirement also count ⟪ENTER⟫ing using Skills such as {{link:LL04-054}} ?",
+                    question: "Does the \"⟪ENTER⟫ed from your Deck\" requirement also count ⟪ENTER⟫ing using Skills such as {{link:LL04-054}}?",
                     answer: "Yes. The requirement is not only met if you pick ⟪ENTER⟫ as your turn action, but also if you use a Skill to ⟪ENTER⟫ this card."
                 },
                 {

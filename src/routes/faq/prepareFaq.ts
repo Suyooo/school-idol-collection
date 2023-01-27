@@ -43,29 +43,58 @@ export interface FaqQAPrepared {
     answer: ParseNodePrepared[];
 }
 
+export function getKeyPrefix(subjects: (string | { from: string, to: string })[]) {
+    if (subjects.length === 0) {
+        return null;
+    } else if (typeof subjects[0] === "string") {
+        return subjects[0].split("-").at(-1)!;
+    } else {
+        return subjects[0].from.split("-").at(-1)!;
+    }
+}
+
+export function getKey(prefix: string | null, key?: string) {
+    if (key) {
+        if (prefix) {
+            return `${prefix}_${key}`;
+        } else {
+            return key;
+        }
+    } else {
+        return prefix;
+    }
+}
+
+export async function getFaqLinkLabel(DB: DBObject, link: string) {
+    return (await DB.CardFAQLink.findOne({where: {link}}))?.label ?? "Unlabeled Link";
+}
+
+export function getLinkedCards(s: string) {
+    const cards: string[] = [];
+    function f(match: string, cardNo: string) {
+        cards.push(cardNo);
+        return match;
+    }
+
+    s.replace(/{{link:([^}]*?)}}/g, f);
+    return cards;
+}
+
 export default async function prepareFaq(DB: DBObject, faq: Faq) {
     const cardsToLoad: string[] = [];
     const faqPromises: Promise<void>[] = [];
 
-    function replFind(match: string, cardNo: string) {
-        cardsToLoad.push(cardNo);
-        return match;
-    }
-
     const retFaq: FaqPrepared = {
         sections: faq.map(section => {
-            let keyPrefix: string = "";
+            const keyPrefix = getKeyPrefix(section.subjects);
             for (const subject of section.subjects) {
                 if (typeof subject === "string") {
                     cardsToLoad.push(subject);
-                    if (keyPrefix === "") keyPrefix = subject;
                 } else {
                     cardsToLoad.push(subject.from);
                     cardsToLoad.push(subject.to);
-                    if (keyPrefix === "") keyPrefix = subject.from;
                 }
             }
-            keyPrefix = keyPrefix.split("-").at(-1)!;
 
             if (section.qa && section.qa.length > 1 && section.qa.some(q => q.key === undefined)) {
                 throw new Error("A FAQ section with multiple QAs must specify a key for each. " + JSON.stringify(section.subjects));
@@ -78,18 +107,16 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
                     const faqObj = <Partial<FaqSeeAlsoPrepared>>{
                         link: seeAlso
                     };
-                    faqPromises.push(DB.CardFAQLink.findOne({where: {link: seeAlso}})
-                        .then(faqFromDb => {
-                            faqObj.label = parseSkillToNodes(faqFromDb?.label ?? "Unlabeled Link", Language.ENG, true);
+                    faqPromises.push(getFaqLinkLabel(DB, seeAlso)
+                        .then(label => {
+                            faqObj.label = parseSkillToNodes(label, Language.ENG, true);
                         }));
                     return <FaqSeeAlsoPrepared>faqObj;
                 }),
                 qa: section.qa?.map(qa => {
-                    qa.question.replace(/{{link:([^}]*?)}}/g, replFind);
-                    qa.answer.replace(/{{link:([^}]*?)}}/g, replFind);
-
+                    cardsToLoad.push(...getLinkedCards(qa.question), ...getLinkedCards(qa.answer));
                     return <FaqQAPrepared>{
-                        key: keyPrefix + (qa.key ? (keyPrefix ? "_" : "") + qa.key : ""),
+                        key: getKey(keyPrefix, qa.key),
                         question: parseSkillToNodes(
                             qa.question.replace(/{{red:([^}]*?)}}/g, "<span class='text-highlight-red'>$1</span>"),
                             Language.ENG, true),
