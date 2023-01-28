@@ -56,14 +56,14 @@ export const json: Faq = [
                 "answer": "Yes. When using a Skill to bring cards into play from your Collection, the Deck construction restrictions (maximum number of a card, total Cost, etc.) do not apply."
             },
             {
-                "key": "group",
+                "key": "group_skill",
                 "question": "What does \"Pair up\" (\"Form a Trio\") mean?",
                 "answer": "If you have unpaired Members on Stand-By whose ID and name match with those written in the Skill, place the two cards side by side. This state is called \"Paired\". Paired Members will be able to use their Pair Skill (the lower field that goes across both cards). Also, the two Members of a Pair must perform in ⟪LIVE⟫s together."
             },
             {
                 "key": "group_counting",
                 "question": "When counting Members, how are Paired Members counted?",
-                "answer": "Count each Member separately, just as usual. (The Pair will not count as a single card, and their name will also not become, for example, \"<a href=\"/card/LL11-057\">Mari</a> & <a href=\"/card/LL11-052\">Kanan</a>\".)"
+                "answer": "Count each Member separately, just as usual. (The Pair will not count as a single card, and their name will also not become, for example, {{red:\"<a href=\"/card/LL11-057\">Mari</a> & <a href=\"/card/LL11-052\">Kanan</a>\"}}.)"
             },
             {
                 "key": "group_return",

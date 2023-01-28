@@ -28,10 +28,12 @@
             <Question {...data.sections[0].qa[5]}/>
             <h5>What happens if my Deck runs out during a match?</h5>
             <Question {...data.sections[0].qa[6]}/>
-            <h5 id="collection">What does "Collection" mean?</h5>
+            <div class="anchor" id="collection"></div>
+            <h5>What does "Collection" mean?</h5>
             <SeeAlso link="/faq/rules#official_collection" label={[{text: "Rules → Official Event Rules → Collection"}]}/>
             <Question {...data.sections[0].qa[7]}/>
             <Question {...data.sections[0].qa[8]}/>
+            <div class="anchor" id="group"></div>
             <h5>What does "Pair" (or "Trio") mean?</h5>
             <Note note={data.sections[0].notes[0]}/>
             <Question {...data.sections[0].qa[9]}/>
@@ -39,7 +41,8 @@
             <Question {...data.sections[0].qa[11]}/>
             <Question {...data.sections[0].qa[12]}/>
             <Question {...data.sections[0].qa[13]}/>
-            <h5 id="sp_practice">What does "Special Practice" mean?</h5>
+            <div class="anchor" id="sp_practice"></div>
+            <h5>What does "Special Practice" mean?</h5>
             <Question {...data.sections[0].qa[14]}/>
             <Question {...data.sections[0].qa[15]}/>
             <Question {...data.sections[0].qa[16]}/>
@@ -97,3 +100,13 @@
         </div>
     </div>
 </div>
+
+<style lang="postcss">
+    div.anchor {
+        @apply -mb-4;
+    }
+
+    div.anchor:target + h5 {
+        animation: highlight-faq .25s ease-in-out 2;
+    }
+</style>

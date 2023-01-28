@@ -120,3 +120,16 @@ tr > th {
 ul {
     @apply list-disc list-inside;
 }
+
+div.anchor {
+    @apply block h-0 pt-[15vh] mt-[-15vh] pointer-events-none;
+}
+
+@keyframes highlight-faq {
+    0%, 100% {
+        @apply bg-transparent;
+    }
+    50% {
+        @apply bg-primary-500;
+    }
+}

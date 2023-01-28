@@ -14,7 +14,8 @@
 
 <div class="w-full group relative">
     <button class="absolute left-0 top-0 text-xs leading-5 opacity-50 hidden group-hover:block z-50" on:click={copyLink}>🔗</button>
-    <div class="question" id="{key}">
+    <div class="anchor absolute left-0 top-[-15vh]" id="{key}"></div>
+    <div class="question">
         {#if typeof question === "string"}
             {@html question}
         {:else}
@@ -61,5 +62,9 @@
             @apply bg-primary-200;
             content: "A";
         }
+    }
+
+    div.anchor:target + .question, div.anchor:target + .question + .answer {
+        animation: highlight-faq .25s ease-in-out 2;
     }
 </style>
