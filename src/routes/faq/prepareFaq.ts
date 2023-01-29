@@ -141,7 +141,8 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
         retFaq.cards[card.cardNo] = card.get({plain: true});
     }
 
-    function replReplace(_match: string, cardNo: string) {
+    function replReplace(_match: string, cardNo: string, possessive: string) {
+        if (possessive) return `<span class="whitespace-nowrap">${cardLink(retFaq.cards[cardNo])}${possessive}</span>`;
         return cardLink(retFaq.cards[cardNo]);
     }
 
@@ -150,12 +151,12 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
             for (const qa of section.qa) {
                 for (const node of qa.question) {
                     if (isTextNode(node)) {
-                        node.text = node.text.replace(/{{link:([^}]*?)}}/g, replReplace);
+                        node.text = node.text.replace(/{{link:([^}]*?)}}('s)?/g, replReplace);
                     }
                 }
                 for (const node of qa.answer) {
                     if (isTextNode(node)) {
-                        node.text = node.text.replace(/{{link:([^}]*?)}}/g, replReplace);
+                        node.text = node.text.replace(/{{link:([^}]*?)}}('s)?/g, replReplace);
                     }
                 }
             }

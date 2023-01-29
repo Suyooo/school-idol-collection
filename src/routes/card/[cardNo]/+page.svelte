@@ -305,6 +305,9 @@
                                 {#each card.faqs as faq (faq.cardId + "_" + faq.displayOrder)}
                                     <a href={faq.link}>
                                         <Skill skill={faq.labelPreparsed ?? faq.label} parseAsHelpText/>
+                                        {#if faq.shortAnswer}
+                                            <span class="text-primary-100">({faq.shortAnswer})</span>
+                                        {/if}
                                     </a>
                                 {/each}
                             </div>

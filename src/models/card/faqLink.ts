@@ -37,4 +37,10 @@ export default class CardFAQLink extends Model {
         allowNull: false
     })
     declare link: string;
+
+    @Attribute({
+        type: DataTypes.STRING,
+        allowNull: true
+    })
+    declare shortAnswer?: string;
 }

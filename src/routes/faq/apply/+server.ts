@@ -64,11 +64,22 @@ export const POST: RequestHandler = (async ({locals, request}) => {
                     }
                     const label = qa.question
                         .replace(/{{red:([^}]*?)}}/g, (_, text) => text)
-                        .replace(/{{link:([^}]*?)}}/g, (_, cardNo) => cardTitle(cards[cardNo], true));
+                        .replace(/{{link:([^}]*?)}}('s)?/g, (_, cardNo, possessive) => {
+                            if (possessive) return `<span class="whitespace-nowrap">${cardTitle(cards[cardNo], true)}${possessive}</span>`
+                            return cardTitle(cards[cardNo], true);
+                        });
+
+                    let shortAnswer = null;
+                    if (qa.answer.startsWith("Yes.")) shortAnswer = "Yes.";
+                    if (qa.answer.startsWith("No.")) shortAnswer = "No.";
 
                     for (const cardId of subjectIds) {
                         await locals.DB.CardFAQLink.upsert({
-                            cardId, displayOrder, label, link: `/faq/${faqName}#${getKey(keyPrefix, qa.key)}`
+                            cardId,
+                            displayOrder,
+                            label,
+                            link: `/faq/${faqName}#${getKey(keyPrefix, qa.key)}`,
+                            shortAnswer
                         }, {transaction});
                     }
                     displayOrder++;
