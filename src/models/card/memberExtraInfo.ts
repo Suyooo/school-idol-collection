@@ -52,6 +52,12 @@ export default class CardMemberExtraInfo extends Model {
     declare rarity: CardMemberRarity;
 
     @Attribute({
+        type: DataTypes.STRING,
+        allowNull: true
+    })
+    declare baseIfSecret: string | null;
+
+    @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     })

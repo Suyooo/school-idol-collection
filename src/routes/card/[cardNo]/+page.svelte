@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {CardMemberRarity} from "$lib/enums/cardRarity.js";
     import Ability from "$lib/format/Ability.svelte";
     import CardImage from "$lib/format/CardImage.svelte";
     import PieceCount from "$lib/format/PieceCount.svelte";
@@ -30,8 +31,9 @@
     import CardPageButtons from "./CardPageButtons.svelte";
 
     export let data: PageData;
-    let card: Card & Required<CardPageExtraInfo>;
+    let card: Card & Required<CardPageExtraInfo>, secret: boolean;
     $: card = data.card;
+    $: secret = cardIsMember(card) && card.member.rarity === CardMemberRarity.Secret;
 </script>
 
 <svelte:head>
@@ -42,10 +44,10 @@
     <div class="row lg:flex">
         <div class="col-quarter imgcont">
             <div>
-                <CardImage cardNo={card.cardNo} cardSet={card.cardSet} front/>
+                <CardImage cardNo={card.cardNo} cardSet={card.cardSet} front {secret} />
             </div>
             <div>
-                <CardImage cardNo={card.cardNo} cardSet={card.cardSet}/>
+                <CardImage cardNo={card.cardNo} cardSet={card.cardSet} {secret} />
             </div>
         </div>
         <div class="col-threequarters">

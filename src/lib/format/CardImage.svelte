@@ -1,12 +1,14 @@
 <script lang="ts">
     export let cardNo: string;
     export let cardSet: string;
+    export let secret: boolean = false;
     export let front: boolean = false;
 
-    let img: HTMLImageElement, isHorizontal: boolean = false, isVertical: boolean = false;
+    let img: HTMLImageElement, url: string, isHorizontal: boolean = false, isVertical: boolean = false;
 
     $: {
-        cardNo;
+        if (secret) url = `/images/secret.jpg`;
+        else url = `/images/${cardSet}/${cardNo}-${front ? 'front' : 'back'}.jpg`;
         isHorizontal = isVertical = false;
     }
 
@@ -17,8 +19,7 @@
 </script>
 
 {#key cardNo}
-    <img bind:this={img} src="/images/{cardSet}/{cardNo}-{front ? 'front' : 'back'}.jpg"
-         alt="{cardNo} {front ? 'Front' : 'Back'} Illustration" on:load={checkOrientation}
+    <img bind:this={img} src={url} alt="{cardNo} {front ? 'Front' : 'Back'} Illustration" on:load={checkOrientation}
          class:card-h={isHorizontal} class:card-v={isVertical}>
 {/key}
 
