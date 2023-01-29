@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import Star from "$lib/format/Star.svelte";
     import CardImage from "$lib/format/CardImage.svelte";
     import TriggerComponent from "$lib/format/TriggerComponent.svelte";
@@ -67,7 +67,7 @@
                 You can not only play the game one on one, but also with three or more players.<br>
                 It is recommended to play in clockwise order, and deciding the starting player with a game of
                 Rock-Paper-Scissors.<br>
-                If a player reaches the Live Points Goal, they be out of the game as a winner. The players in first
+                If a player reaches the Live Points Goal, they will go out of the game as a winner. The players in first
                 place, second place, third place and so on are decided by the order in which they win and go out.
             </p>
 

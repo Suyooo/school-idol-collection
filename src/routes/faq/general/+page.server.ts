@@ -83,7 +83,7 @@ export const json: Faq = [
             {
                 "key": "special_practice",
                 "question": "What do [Special Practice] Skills do?",
-                "answer": "If you Enter a Member with a [Special Practice] Skill, you can use that Skill by stacking on top of another Member card that matches the requirements. When ⟪ENTER⟫ing a Member with [Special Practice], you can flip an Unidolized Member on Stand-By who matches the name or other requirements listed next to the [Special Practice] icon facedown and place the ⟪ENTER⟫ing Member on top of them. Members that are stacked on top of another \"Member\" card are Idolized Members."
+                "answer": "If you Enter a Member with a [Special Practice] Skill, you can use that Skill by stacking on top of another Member card that matches the requirements. When ⟪ENTER⟫ing a Member with [Special Practice], you can flip an Unidolized Member on Stand-By who matches the name or other requirements listed next to the [Special Practice] icon face-down and place the ⟪ENTER⟫ing Member on top of them. Members that are stacked on top of another \"Member\" card are Idolized Members."
             },
             {
                 "key": "special_practice_optional",

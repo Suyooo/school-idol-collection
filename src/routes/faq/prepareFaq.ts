@@ -66,7 +66,12 @@ export function getKey(prefix: string | null, key?: string) {
 }
 
 export async function getFaqLinkLabel(DB: DBObject, link: string) {
-    return (await DB.CardFAQLink.findOne({where: {link}}))?.label ?? "Unlabeled Link";
+    if (link === "/faq/general#collection") return `What does "Collection" mean?`;
+    const faqEntry = await DB.CardFAQLink.findOne({where: {link}});
+    if (faqEntry === null) {
+        throw new Error("No link label in database for " + link + ", add exception in prepareFaq.ts:getFaqLinkLabel until FAQ is applied");
+    }
+    return faqEntry.label;
 }
 
 export function getLinkedCards(s: string) {

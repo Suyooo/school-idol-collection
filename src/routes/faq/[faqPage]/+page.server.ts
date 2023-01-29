@@ -15,7 +15,7 @@ export const data: { [key: string]: Faq } = {
                 }, {
                     key: "other",
                     question: `Does the condition for {{link:LL01-046}}'s Skill include cards other than this "Honoka" card?`,
-                    answer: `No, it means all {{red:"Honoka"}} cards are excluded. She only gains +[ALL] if a {{red:"Kotori"}} or {{red:"Umi"}} card joins the same ⟪LIVE⟫. No other joining Members have an effect.`
+                    answer: `No. It means all {{red:"Honoka"}} cards are excluded. She only gains +[ALL] if a {{red:"Kotori"}} or {{red:"Umi"}} card joins the same ⟪LIVE⟫. No other joining Members have an effect.`
                 }
             ]
         }, {
@@ -972,11 +972,181 @@ export const data: { [key: string]: Faq } = {
             ]
         }, {
             subjects: ["EX10-007"],
-            seeAlso: ["/faq/general#members_on_stage",  "/faq/general#join_success_order"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"],
             qa: [
                 {
                     question: `If there are Members without Live Costumes on Stage, can they count for the "all Members on your Stage have the {{red:"MIRAI TICKET"}} Live Costume" requirement?`,
                     answer: `No. All Members on Stage must have a Live Costume and it must be the {{red:"MIRAI TICKET"}} Live Costume.`
+                }
+            ]
+        }
+    ],
+    "LL09": [
+        {
+            subjects: [{from: "LL09-037", to: "LL09-045"}],
+            qa: [
+                {
+                    question: `I'm the first player in turn order, and at the start of the match, I used {{link:LL07-064}}'s [Starter] Skill to ⟪ENTER⟫ a card. If I ⟪ENTER⟫ {{link:LL09-037}} on my first turn, can I draw two cards using the [Entry] Skill?`,
+                    answer: `No. [Starter] Skills are counted as part of match preparation before any turns are played, so once your first turn starts, there have been no Members who ⟪ENTER⟫ed that turn.`
+                }
+            ]
+        }, {
+            subjects: ["LL09-046"],
+            seeAlso: ["/faq/general#stand_by"]
+        }, {
+            subjects: ["LL09-047"],
+            qa: [
+                {
+                    question: `When this Member joined the ⟪LIVE⟫, there were four face-down Song cards in the Set List. Does this Member still get +[COOL] from the [Live Join] Skill?`,
+                    answer: `Yes. After the ⟪LIVE⟫, one face-down card will be turned face-up, but at the time [Live Join] Skills are resolved, there are four face-down cards, so the card gets +[COOL].`
+                }
+            ]
+        }, {
+            subjects: ["LL09-048"],
+            seeAlso: ["/faq/general#collection"],
+            qa: [
+                {
+                    key: "stars",
+                    question: `Does "Member with one Star" include Members with two or more Stars?`,
+                    answer: `No. The Member must have exactly one Star.`
+                }, {
+                    key: "entry",
+                    question: `Can I use the [RUSH], [LIVE] or [Entry] Skill of the Member I ⟪ENTER⟫ from my Collection?`,
+                    answer: `Yes. You can use it.`
+                }
+            ]
+        }, {
+            subjects: ["LL09-049"],
+            qa: [
+                {
+                    question: `Does "Member with one Star" include Members with two or more Stars?`,
+                    answer: `No. The Member must have exactly one Star.`
+                }
+            ]
+        }, {
+            subjects: ["LL09-050"],
+            qa: [
+                {
+                    key: "samename",
+                    question: `There is a face-up {{link:LL04-055}} and {{link:EX03-028}} in my Set List. If I ⟪ENTER⟫ a Member with the {{red:"Kimi no Kokoro wa Kagayaiteru kai?"}} Live Costume using this card's Skill, what happens with the ⟪LIVE⟫ I could perform?`,
+                    answer: `If there are multiple Song cards with the same name, you can pick any of them to use for the ⟪LIVE⟫.`
+                }, {
+                    key: "multiple",
+                    question: `If there is a face-up Song card with multiple names in my Set List, for example {{link:LL01-067}}, can I ⟪ENTER⟫ a Member with the {{red:"Sore wa Bokutachi no Kiseki"}} Live Costume? If so, can I perform a ⟪LIVE⟫ using that Song card?`,
+                    answer: `Yes. If a face-up Song card has multiple names, the requirement is met if the Live Costume has the same name as either song name. In the given example, both ⟪ENTER⟫ing and performing the ⟪LIVE⟫ are possible.`
+                }
+            ]
+        }, {
+            subjects: ["LL09-051"],
+            seeAlso: ["/faq/general#skill_impossible", "/faq/general#top_deck_card_faceup"],
+            qa: [
+                {
+                    key: "types",
+                    question: `How do I count types of Attributes?`,
+                    answer: `There are four types of Attributes: [SMILE], [PURE], [COOL] and [ALL]. For example, {{link:LL09-064}} has [SMILE][ALL][ALL] in the upper left corner, so this Member has two types of Attributes. (You cannot use [ALL] as a wildcard for another type.)`
+                }, {
+                    key: "livejoin",
+                    question: `If the flipped Member card has a [Live Join] Skill that allows it to gain Pieces, can those Pieces be counted?`,
+                    answer: `No. Pieces gained through [Live Join] Skills cannot be counted.`
+                }, {
+                    key: "bonus",
+                    question: `Can I count Birthday Bonus Pieces?`,
+                    answer: `If the requirement for the Birthday Bonus is met, the Pieces can be counted. For example, {{link:LL09-001}} has two types of Attribute if the Birthday Bonus is active, and one type of Attribute otherwise.`
+                }, {
+                    key: "order",
+                    question: `How exactly should I resolve the Skill if the flipped Member card has three or more types of Attributes?`,
+                    answer: `Do what the Skill says to do in the case of one types and the case of two types, in that order. So, add the Member card to your Hand, draw two cards, and after that you may ⟪ENTER⟫ one Member from your Hand.`
+                }
+            ]
+        }, {
+            subjects: ["LL09-052"],
+            qa: [
+                {
+                    key: "self",
+                    question: `I used a {{red:"take another turn"}} Skill. Is it possible to perform a ⟪LIVE⟫ using this Skill on my second turn?`,
+                    answer: `No. Taking another turn means the previous turn was yours. That means that even if you performed a ⟪LIVE⟫ in the previous turn, it's not possible to meet the "another player" requirement.`
+                }, {
+                    key: "skip",
+                    question: `If a {{red:"skip a turn"}} Skill was activated, what counts as the "previous turn"?`,
+                    answer: `In that case, the "previous turn" is the turn taken by the player before the one who had to skip theirs.<br><ul><li>If the match is a one-on-one, that means the "previous turn" is your turn. (Meeting the requirement is impossible, as mentioned above.)</li><li>If you are playing with three or more players, that means the "previous turn" is the turn of the last player who wasn't skipped. (The requirement can be met.)</li></ul>`
+                }, {
+                    key: "won",
+                    question: `In the previous turn, another player performed a ⟪LIVE⟫ and hit the Live Points Goal. Can I still perform a ⟪LIVE⟫ using this Skill?`,
+                    answer: `Yes. The requirement is met even if the player who performed a ⟪LIVE⟫ in the previous turn won and went out.`
+                }
+            ]
+        }, {
+            subjects: ["LL09-053"],
+            qa: [
+                {
+                    key: "donotuse",
+                    question: `What exactly does "Do not use their [RUSH], [LIVE] or [Entry] Skill" mean?`,
+                    answer: `Even if the Member card you ⟪ENTER⟫ed using this card's Skill has [RUSH], you cannot ⟪ENTER⟫ a card from your Hand. Similarly, even if the card has ⟪LIVE⟫ you cannot perform a ⟪LIVE⟫, and the card's [Entry] Skills have no effect.`
+                }, {
+                    key: "return",
+                    question: `A Member card I ⟪ENTER⟫ed using this card's Skill returned to my Hand with another Skill. If that Member card is ⟪ENTER⟫ed again, can I use their [RUSH], [LIVE] or [Entry] Skill now?`,
+                    answer: `Yes. Even if a Member card was ⟪ENTER⟫ed using this Skill before, they can use their Abilities or [Entry] Skills if the get ⟪ENTER⟫ed through other means later after returning to your Hand or Deck.`
+                }, {
+                    key: "sp",
+                    question: `The Member card I ⟪ENTER⟫ed using this card's Skill has a [Special Practice] Skill. Since they are used when ⟪ENTER⟫ing, is that Skill also blocked by the "Do not use their [Entry] Skill" effect?`,
+                    answer: `No. Only Skills with the [Entry] icon are blocked. [Special Practice] Skills have a different icon, so you can use it and perform [Special Practice] with that Member.`
+                }, {
+                    key: "instantsp",
+                    question: `Using this card's Skill, I'm ⟪ENTER⟫ing {{link:LL15-035}} and a {{red:"Mari"}} with Stars. Can I immediately use {{red:"Mari"}}'s [Special Practice] by stacking onto the other {{red:"Mari"}}?`,
+                    answer: `No. [Special Practice] Skills don't allow placing the Member card on a card that is ⟪ENTER⟫ing at the same time. You can only stack onto Members who are already on Stand-By on your Stage at the time the card ⟪ENTER⟫s.`
+                }
+            ]
+        }, {
+            subjects: ["LL09-054"],
+            qa: [
+                {
+                    question: `If the next player does not have five or more cards in their Hand, can I still pick the "If the next player in turn order has five or more cards in their Hand, draw four cards" option?`,
+                    answer: `Yes. You can choose it, and the Skill will resolve without any effect.<br>Similarly, even if you have no Members without Stars on your Hand, you can still pick the "⟪ENTER⟫ one Member without Stars from your Hand" option.`
+                }
+            ]
+        }, {
+            subjects: ["LL09-056"],
+            qa: [
+                {
+                    question: `If all the Members with Live Costumes have the same Live Costume, will the Skill's requirement be met even if Members without Live Costumes participate?`,
+                    answer: `No. All Members joining the ⟪LIVE⟫ must have a Live Costume and they must have the same Live Costume.`
+                }
+            ]
+        }, {
+            subjects: ["LL09-057"],
+            seeAlso: ["/faq/general#members_on_stage"]
+        }, {
+            subjects: ["LL09-058"],
+            qa: [
+                {
+                    key: "ongoing",
+                    question: `I already performed a ⟪LIVE⟫ with {{red:"Kimi no Hitomi o Meguru Bouken"}}, and am now performing another ⟪LIVE⟫ a Song card without a Skill. Will this increase the Live Points gained through this Skill by one?`,
+                    answer: `Yes. As long as the requirement is met, you can earn additional Live Points even after the ⟪LIVE⟫ with {{red:"Kimi no Hitomi o Meguru Bouken"}} was successfully performed.`
+                }, {
+                    key: "lose_first",
+                    question: `I'm playing a match with the Live Points Goal at 9. I performed ⟪LIVE⟫s with this card and {{link:EX03-031}}, which does not have any Skills, so my Live Points are currently at 6. I'm now performing a ⟪LIVE⟫ with {{link:LL08-055}}. Will I win the match?`,
+                    answer: `No. The moment you successfully perform a ⟪LIVE⟫ with {{link:LL08-055}}, the requirement for the Skill of {{red:"Kimi no Hitomi o Meguru Bouken"}} is no longer met. That means your Live Points are at 8 after performing the ⟪LIVE⟫, and you have not won yet.`
+                }
+            ]
+        }, {
+            subjects: ["LL09-061"],
+            qa: [
+                {
+                    key: "gained",
+                    question: `A Member card who did not originally have [ALL] joined this ⟪LIVE⟫, but gained [ALL] from a [Live Join] Skill. Can I still take another turn?`,
+                    answer: `No. Even if the [ALL] was gained from a Skill or another Piece turning into [ALL], it will block the Skill.`
+                }, {
+                    key: "not_optional",
+                    question: `I want to activate this card's Skill, can I choose to not activate a Member's [Live Join] Skill if a card would gain [ALL] from it?`,
+                    answer: `No. If the requirements for a Skill are met, it will be activated and [ALL] will be gained. (You can only choose to skip and effect if the Skill says "you may".)`
+                }
+            ]
+        }, {
+            subjects: ["LL09-063"],
+            qa: [
+                {
+                    question: `What does "for each different Live Costume the "Aqours" Members joining this ⟪LIVE⟫ have" mean?`,
+                    answer: `The types of Live Costumes in the lower left of your {{red:"Aqours"}} Member cards are counted.<br>For example, if you have Member cards with the Live Costumes {{red:"Aozora Jumping Heart"}}, {{red:"Aozora Jumping Heart"}}, {{red:"Kimi no Kokoro wa Kagayaiteru kai?"}}, {{red:"Kimi no Kokoro wa Kagayaiteru kai?"}} and {{red:"Koi ni Naritai AQUARIUM"}}, you have three different Live Costumes, so the Any Piece requirement will be reduced by 3.`
                 }
             ]
         }
