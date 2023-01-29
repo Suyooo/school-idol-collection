@@ -32,16 +32,16 @@
         @apply w-[2.88em];
 
         &.rush {
-            background-image: url("/images/card/ability_rush.png");
+            background-image: url("/images/icons/ability_rush.png");
         }
 
         &.live {
-            background-image: url("/images/card/ability_live.png");
+            background-image: url("/images/icons/ability_live.png");
         }
 
         &.or {
             @apply absolute ml-[-.63em];
-            background-image: url("/images/card/ability_or.png");
+            background-image: url("/images/icons/ability_or.png");
 
             & + .live {
                 @apply ml-[-.25em];

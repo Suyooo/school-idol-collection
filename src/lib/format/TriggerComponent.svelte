@@ -30,40 +30,40 @@
         @apply w-[3.65em];
 
         &.entry {
-            background-image: url("/images/card/skill_entry.png");
+            background-image: url("/images/icons/skill_entry.png");
         }
 
         &.join {
-            background-image: url("/images/card/skill_join.png");
+            background-image: url("/images/icons/skill_join.png");
         }
 
         &.success {
-            background-image: url("/images/card/skill_success.png");
+            background-image: url("/images/icons/skill_success.png");
         }
 
         &.live {
-            background-image: url("/images/card/skill_live.png");
+            background-image: url("/images/icons/skill_live.png");
         }
 
         &.start {
-            background-image: url("/images/card/skill_start.png");
+            background-image: url("/images/icons/skill_start.png");
         }
 
         &.auto {
-            background-image: url("/images/card/skill_auto.png");
+            background-image: url("/images/icons/skill_auto.png");
         }
 
         &.standby {
-            background-image: url("/images/card/skill_standby.png");
+            background-image: url("/images/icons/skill_standby.png");
         }
 
         &.sp {
             @apply w-[4.45em];
-            background-image: url("/images/card/skill_sp.png");
+            background-image: url("/images/icons/skill_sp.png");
 
             &.closing {
                 @apply w-[.8em] ml-[.2em];
-                background-image: url("/images/card/skill_sp_end.png");
+                background-image: url("/images/icons/skill_sp_end.png");
             }
         }
     }

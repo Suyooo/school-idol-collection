@@ -12,6 +12,6 @@
 <style lang="postcss">
     .skill-icon {
         @apply w-[3.285em] mt-[0.03em];
-        background-image: url("/images/card/idolized.png");
+        background-image: url("/images/icons/idolized.png");
     }
 </style>

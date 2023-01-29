@@ -27,19 +27,19 @@
         background-position-y: .166em;
 
         &.all {
-            background-image: url("/images/card/piece_all.png");
+            background-image: url("/images/icons/piece_all.png");
         }
 
         &.smile {
-            background-image: url("/images/card/piece_smile.png");
+            background-image: url("/images/icons/piece_smile.png");
         }
 
         &.pure {
-            background-image: url("/images/card/piece_pure.png");
+            background-image: url("/images/icons/piece_pure.png");
         }
 
         &.cool {
-            background-image: url("/images/card/piece_cool.png");
+            background-image: url("/images/icons/piece_cool.png");
         }
     }
 </style>
