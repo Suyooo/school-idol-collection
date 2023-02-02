@@ -967,7 +967,7 @@ export const data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `What does "pick up to two differently named Members" mean?`,
-                    answer: `From the three cards shown, pick up to two Members to add to your Hand, so they don't share the same name. You can also pick up only one or no cards.`
+                    answer: `From the three cards shown, pick up to two Members to add to your Hand that don't share the same name with each other. You can also pick up only one or no cards.`
                 }
             ]
         }, {
@@ -1150,6 +1150,167 @@ export const data: { [key: string]: Faq } = {
                 }
             ]
         }
+    ],
+    "EX05": [
+        {
+            subjects: ["EX05-028"],
+            qa: [
+                {
+                    key: "explain",
+                    question: `What exactly does this Skill do?`,
+                    answer: `If the Song card involves counting Members who have the {{red:"Mogyutto “love” de Sekkin chuu!"}} Live Costume, you can count every card participating in the ⟪LIVE⟫, including this card. For example, if this card joins a ⟪LIVE⟫ with {{link:LL01-065}}, every Member will count for the Song card's Skill, and you can reduce the Any Piece requirement accordingly.`
+                }, {
+                    key: "original",
+                    question: `If Members who already have Live Costumes join the same ⟪LIVE⟫, what happens to their original Live Costumes?`,
+                    answer: `Treat their Live Costumes as {{red:"Mogyutto “love” de Sekkin chuu!"}}. Their original Live Costume does not count for any Skills anymore.`
+                }, {
+                    key: "after",
+                    question: `After I successfully perform the ⟪LIVE⟫, will the Members who joined still be treated as having the {{red:"Mogyutto “love” de Sekkin chuu!"}} Live Costume?`,
+                    answer: `Yes. For the rest of the match, treat all the Members as having the {{red:"Mogyutto “love” de Sekkin chuu!"}} instead of having no/another Live Costume.`
+                }
+            ]
+        }, {
+            subjects: ["EX05-029"],
+            qa: [
+                {
+                    question: `If two or more of this card join a ⟪LIVE⟫ with {{link:LL02-068}}, does the Skill become "If you used five or more Song cards for Lives, gain ♪Live Points +4♪" instead?`,
+                    answer: `No. This card's Skill does not increase the Live Points gained from the Song card's Skill, but replaces the Skill. Hence, even if two or more of this card join the ⟪LIVE⟫, the resulting Skill does not change.`
+                }
+            ]
+        }, {
+            subjects: ["EX05-030"],
+            seeAlso: ["/faq/general#join_success_order"]
+        }, {
+            subjects: ["EX05-031", "EX05-032", "EX05-034"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills"],
+            qa: [
+                {
+                    question: `When this card joins a ⟪LIVE⟫ with a Song card other than the one listed in the [Live Join] Skill, does the [Live Success] Skill still activate?`,
+                    answer: `Yes. The [Live Join] and [Live Success] Skills are not related to each other, so you can draw a card using the [Live Success] Skill even if joining a ⟪LIVE⟫ with a different Song card.`
+                }
+            ]
+        }, {
+            subjects: ["EX05-035"],
+            qa: [
+                {
+                    question: `If two or more of this card join a ⟪LIVE⟫ with {{link:LL02-066}}, can I draw three cards for each?`,
+                    answer: `Yes. For example, if two {{red:"Hanayo"}}s are joining the ⟪LIVE⟫, you can draw eight cards in total (including the Skill of the Song card).`
+                }
+            ]
+        }, {
+            subjects: ["EX05-036"],
+            qa: [
+                {
+                    key: "each",
+                    question: `If two or more of this card join a ⟪LIVE⟫ with {{link:LL01-064}}, do I gain ♪Live Points +1♪ for each?`,
+                    answer: `Yes. For each {{red:"Nico"}}, you will gain ♪Live Points +1♪.`
+                }, {
+                    key: "zero",
+                    question: `If the Song card used for the ⟪LIVE⟫ would give me zero Live Points by itself (less than three Members with the {{red:"Natsuiro Egao de 1,2,Jump!"}} Live Costume), do I still gain ♪Live Points +1♪ if this card joined the ⟪LIVE⟫?`,
+                    answer: `Yes. Regardless of the Bonus Live Points of {{link:LL01-064}}, you will gain ♪Live Points +1♪.`
+                }
+            ]
+        }, {
+            subjects: ["EX05-037"],
+            qa: [
+                {
+                    key: "explain",
+                    question: `What does "For each differently named {{red:"µ's"}} Member in them, pick one of their cards to add to your Hand" mean?`,
+                    answer: `From the three cards shown, pick Members to add to your Hand that don't share the same name. If there are multiple cards with the same name, you can only pick one of them.`
+                }, {
+                    key: "same",
+                    question: `If all of the flipped cards are the same {{red:"µ's"}} Member, can I still add a card to my Hand?`,
+                    answer: `Yes. For example, even if all three flipped cards are {{red:"Honoka"}} cards, you can still pick one of them to add to your Hand.`
+                }
+            ]
+        }, {
+            subjects: ["EX05-038"],
+            qa: [
+                {
+                    key: "livejoin",
+                    question: `If one of the flipped Member cards has a [Live Join] Skill that allows it to gain Pieces, can those Pieces be counted?`,
+                    answer: `No. Pieces gained through [Live Join] Skills cannot be counted.`
+                }, {
+                    key: "bonus",
+                    question: `If I ⟪ENTER⟫ed {{link:LL04-067}} with the Birthday Bonus active using this card's Skill, can I take another turn?`,
+                    answer: `Yes. If the requirement for the Birthday Bonus is met, the Pieces can be counted, so in this example, you are allowed to take another turn.`
+                }
+            ]
+        }, {
+            subjects: ["EX05-039"],
+            qa: [
+                {
+                    key: "original",
+                    question: `If Members who already have Live Costumes join the same ⟪LIVE⟫, what happens to their original Live Costumes?`,
+                    answer: `Treat their Live Costumes as the one matching the Song card used for the ⟪LIVE⟫. Their original Live Costume does not count for any Skills anymore.`
+                }, {
+                    key: "multiple",
+                    question: `If this Member joins a ⟪LIVE⟫ with a Song card with multiple names, for example {{link:LL02-069}}, what happens to the Live Costumes of the joining Members?`,
+                    answer: `You can choose one of the names on the Song card, and every Member joining the ⟪LIVE⟫ will have that Live Costume. Pick which song name you'd like to use when resolving the Skill.`
+                }, {
+                    key: "nonsong",
+                    question: `If this Member joins a ⟪LIVE⟫ with a Song card like {{link:LL01-075}} or {{link:PR-012}}, will my cards have a Live Costume with that name?`,
+                    answer: `Yes. These two Song cards are not actually songs, but the Members joining these ⟪LIVE⟫s will still be treated as having a Live Costume with the same name as the Song card used. (They will not keep their original Live Costume.)`
+                }, {
+                    key: "after",
+                    question: `After I successfully perform the ⟪LIVE⟫, will the Members who joined still be treated as having a Live Costume with the same name as the Song card?`,
+                    answer: `Yes. For the rest of the match, treat all the Members as having the Live Costume with the same name as the Song card instead of having no/another Live Costume.`
+                }
+            ]
+        }, {
+            subjects: ["EX05-040"],
+            seeAlso: ["/faq/general#no_shuffle_facedown_song"]
+        }, {
+            subjects: ["EX05-041"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills"],
+            qa: [
+                {
+                    key: "all",
+                    question: `I have three Members with [RUSH] on my Stage who can join a ⟪LIVE⟫ with this card's [Entry] Skill. If they have enough Pieces between them, am I allowed to only use two of them to perform the ⟪LIVE⟫?`,
+                    answer: `No. All Members with [RUSH] must join the ⟪LIVE⟫.`
+                }, {
+                    key: "blocked",
+                    question: `There are two Members with [RUSH] on my Stage, with one of them being {{link:LL05-047}} who was ⟪ENTER⟫ed last turn (which means she cannot join ⟪LIVE⟫s this turn). If I use this card's [Entry] Skill now, can I perform a ⟪LIVE⟫ with just this card and the [RUSH] card that is not {{red:"Riko"}}?`,
+                    answer: `No. All Members with [RUSH] must join the ⟪LIVE⟫. In this example, it is impossible to perform a ⟪LIVE⟫.`
+                }
+            ]
+        }, {
+            subjects: ["EX05-042"],
+            seeAlso: ["/faq/general#muse_and_aqours_song_cards"],
+            qa: [
+                {
+                    key: "all",
+                    question: `I have three Members with [RUSH] on my Stage who can join a ⟪LIVE⟫ with this card's [Entry] Skill. If they have enough Pieces between them, am I allowed to only use two of them to perform the ⟪LIVE⟫?`,
+                    answer: `No. All Members with [RUSH] must join the ⟪LIVE⟫.`
+                }, {
+                    key: "blocked",
+                    question: `There are two Members with [RUSH] on my Stage, with one of them being {{link:LL05-047}} who was ⟪ENTER⟫ed last turn (which means she cannot join ⟪LIVE⟫s this turn). If I use this card's [Entry] Skill now, can I perform a ⟪LIVE⟫ with just this card and the [RUSH] card that is not {{red:"Riko"}}?`,
+                    answer: `No. All Members with [RUSH] must join the ⟪LIVE⟫. In this example, it is impossible to perform a ⟪LIVE⟫.`
+                }
+            ]
+        }, {
+            subjects: ["EX05-043"],
+            qa: [
+                {
+                    question: `Is it allowed to only reveal some of the cards in my Hand when using this Skill?`,
+                    answer: `No. You must either show your entire Hand or not show it at all.`
+                }
+            ]
+        }, {
+            subjects: ["EX05-045"],
+            seeAlso: ["/faq/general#skill_order_same_skill"],
+            qa: [
+                {
+                    key: "neutral",
+                    question: `If there's a face-up Song card with the Neutral Attribute, does that mean I can use all the effects for all three Attributes?`,
+                    answer: `No. Unlike [ALL], Neutral is not a wildcard. It is it's own unique Attribute.`
+                }, {
+                    key: "may",
+                    question: `Even if I have face-up Song cards with the Smile, Pure and Cool Attributes, can I choose to not ⟪ENTER⟫ a card or perform a ⟪LIVE⟫?`,
+                    answer: `Yes. These effects say "you may", so you can choose to not use these effects.`
+                }
+            ]
+        },
     ]
 };
 

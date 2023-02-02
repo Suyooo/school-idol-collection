@@ -58,9 +58,7 @@
 
             <div class="panel">
                 <div class="panel-inner">
-                    <div class="row">
-                        <h4>{@html cardTitle(card, true)}</h4>
-                    </div>
+                    <h4>{@html cardTitle(card, true)}</h4>
                     <div class="row gap">
                         <div class="col-half inforow">
                             <div>
@@ -338,8 +336,8 @@
         }
     }
 
-    .row > h4 {
-        @apply my-0 tracking-normal;
+    h4 {
+        @apply mb-0 tracking-normal;
     }
 
     .inforow {
