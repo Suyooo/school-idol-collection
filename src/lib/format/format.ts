@@ -91,14 +91,14 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
                 + TriggerEnum.all.map(t => t.toName(Language.ENG)).join("|")
                 + ")]/?([^(]*?)(?= \\(|$)"), triggerWithClose);
             apply(nodes, /"([^"]*?)"/, highlightRed.bind(undefined, "\"", "\""));
-            apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
-            apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
         } else if (!parseAsHelpText && (skillString.charAt(0) !== "(" || cardType === CardType.SONG)) {
             // Help text has brackets - if there are none, this is flavour text. Song cards also don't have help text
             const secret = Symbol();
             nodes.unshift({secret, element: "i"});
             nodes.push({secret});
         }
+        apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
+        apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
         apply(nodes, /⟪([^⟪⟫]*?)⟫/, bold.bind(undefined, "⟪", "⟫"));
         apply(nodes, new RegExp("\\+((?:\\[(?:"
                 + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+)"),
@@ -122,14 +122,14 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
                     .concat(TriggerEnum.allWithMemoryAlts.map(t => t.toName(Language.JPN, true))).join("|")
                 + ")】/?([^（]*?)(?=（|$)"), triggerWithClose);
             apply(nodes, /「([^"]*?)」/, highlightRed.bind(undefined, "「", "」"));
-            apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
-            apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
         } else if (!parseAsHelpText && (skillString.charAt(0) !== "（" || cardType === CardType.SONG)) {
             // Help text has brackets - if there are none, this is flavour text. Song cards also don't have help text
             const secret = Symbol();
             nodes.unshift({secret, element: "i"});
             nodes.push({secret});
         }
+        apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
+        apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
         apply(nodes, /《([^《》]*?)》/, bold.bind(undefined, "《", "》"));
         apply(nodes, new RegExp("\\+((?:【(?:"
                 + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.JPN)).join("|") + ")】)+)"),
@@ -192,10 +192,31 @@ function apply(nodes: ParseNode[], regex: RegExp, replaceFunc: (match: RegExpExe
             continue;
         }
 
+        const replArr = replaceFunc(match);
+        let start = match.index;
+        let end = match.index + match[0].length;
+        let needsInlineBlock = false;
+
+        if (start > 0 && node.text.substring(start - 1, start).match(/[^ <>{}\b]/)) {
+            replArr.unshift({text: node.text.substring(start - 1, start)});
+            start--;
+            needsInlineBlock = true;
+        }
+        if (end < node.text.length && node.text.substring(end, end + 1).match(/[^ <>{}\b]/)) {
+            replArr.push({text: node.text.substring(end, end + 1)});
+            end++;
+            needsInlineBlock = true;
+        }
+        if (needsInlineBlock) {
+            const secret = Symbol();
+            replArr.unshift({secret, element: "span", class: "inline-block"});
+            replArr.push({secret});
+        }
+
         nodes.splice(i, 1,
-            {...node, text: node.text.substring(0, match.index)},
-            ...replaceFunc(match),
-            {...node, text: node.text.substring(match.index + match[0].length)}
+            {...node, text: node.text.substring(0, start)},
+            ...replArr,
+            {...node, text: node.text.substring(end)}
         );
         i += 2;
     }
