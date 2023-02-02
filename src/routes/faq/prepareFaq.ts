@@ -76,6 +76,7 @@ export async function getFaqLinkLabel(DB: DBObject, link: string) {
 
 export function getLinkedCards(s: string) {
     const cards: string[] = [];
+
     function f(match: string, cardNo: string) {
         cards.push(cardNo);
         return match;
@@ -94,15 +95,29 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
             const keyPrefix = getKeyPrefix(section.subjects);
             for (const subject of section.subjects) {
                 if (typeof subject === "string") {
+                    if (cardsToLoad.some(c => c === subject)) {
+                        throw new Error("Duplicate subject for different FAQ sections. " + subject);
+                    }
                     cardsToLoad.push(subject);
                 } else {
+                    if (cardsToLoad.some(c => c === subject.from)) {
+                        throw new Error("Duplicate subject for different FAQ sections. " + subject.from);
+                    }
+                    if (cardsToLoad.some(c => c === subject.to)) {
+                        throw new Error("Duplicate subject for different FAQ sections. " + subject.to);
+                    }
                     cardsToLoad.push(subject.from);
                     cardsToLoad.push(subject.to);
                 }
             }
 
-            if (section.qa && section.qa.length > 1 && section.qa.some(q => q.key === undefined)) {
-                throw new Error("A FAQ section with multiple QAs must specify a key for each. " + JSON.stringify(section.subjects));
+            if (section.qa && section.qa.length > 1) {
+                if (section.qa.some(q => q.key === undefined)) {
+                    throw new Error("A FAQ section with multiple QAs must specify a key for each. " + JSON.stringify(section.subjects));
+                }
+                if (section.qa.some((q, i) => section.qa?.findIndex(qq => qq.key === q.key) !== i)) {
+                    throw new Error("Duplicate key in FAQ section. " + JSON.stringify(section.subjects));
+                }
             }
 
             return <FaqSectionPrepared>{
@@ -115,6 +130,8 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
                     faqPromises.push(getFaqLinkLabel(DB, seeAlso)
                         .then(label => {
                             faqObj.label = parseSkillToNodes(label, Language.ENG, true);
+                        }).catch(e => {
+                            faqObj.label = parseSkillToNodes("UNLABELED LINK UNLABELED LINK UNLABELED LINK UNLABELED LINK", Language.ENG, true);
                         }));
                     return <FaqSeeAlsoPrepared>faqObj;
                 }),
