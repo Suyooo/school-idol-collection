@@ -1,5 +1,5 @@
 export default class ImportError extends Error {
-    constructor(message: string, path: string) {
-        super("Importing \"" + path + "\": " + message);
+    constructor(message: string, cardNo: string) {
+        super("Importing \"" + cardNo + "\": " + message);
     }
 }

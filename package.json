@@ -13,6 +13,7 @@
 		"@sveltejs/adapter-node": "^1.1.0",
 		"@sveltejs/adapter-static": "^1.0.1",
 		"@sveltejs/kit": "^1.0.0",
+		"@types/crawler": "^1.2.2",
 		"autoprefixer": "^10.4.13",
 		"postcss": "^8.4.20",
 		"postcss-nesting": "^10.2.0",
@@ -26,6 +27,7 @@
 	"type": "module",
 	"dependencies": {
 		"@sequelize/core": "github:sequelize/sequelize",
+		"crawler": "^1.4.0",
 		"sqlite3": "^5.1.4"
 	}
 }
