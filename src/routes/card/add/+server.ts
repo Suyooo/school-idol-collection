@@ -23,7 +23,7 @@ import type {DBObject} from "$models/db.js";
 import type Skill from "$models/skill/skill.js";
 import {Op} from "@sequelize/core";
 import {error, json} from "@sveltejs/kit";
-import Crawler from "crawler";
+import Crawler from "./promiseCrawler.js";
 import * as fs from "fs";
 import type {RequestHandler} from "./$types.js";
 
@@ -40,13 +40,13 @@ export const POST: RequestHandler = (async ({locals, request}) => {
         rateLimit: 1000,
         callback: async (error, res, done) => {
             if (error) {
-                res.options.reject(error);
+                done();
+                throw error;
             } else {
                 const info: { [k: string]: string | null } = {};
                 if (res.$(".status").length === 0) {
-                    res.options.reject(new ImportError("Card page does not exist.", res.request.uri.pathname!));
                     done();
-                    return;
+                    throw new ImportError("Card page does not exist.", res.request.uri.pathname!);
                 }
                 fillInfoObject(info, res.$);
 
@@ -56,9 +56,8 @@ export const POST: RequestHandler = (async ({locals, request}) => {
 
                 // As far as I am aware, EX15-055 to EX15-072 do not actually exist (dupes of EX15-E01 to EX15-E18)
                 if (set == "EX15" && cardNo.charAt(5) != "E" && inSetNo >= 55) {
-                    res.options.reject(new ImportError("This card does not exist in reality, only on the site.", cardNo));
                     done();
-                    return;
+                    throw new ImportError("This card does not exist in reality, only on the site.", cardNo);
                 }
 
                 // Guess Card type
@@ -77,18 +76,13 @@ export const POST: RequestHandler = (async ({locals, request}) => {
                 applyFixes(info, cardNo, set, inSetNo, type);
                 await downloadImages(res.$, cardNo, set);
                 await importCard(info, locals.DB, cardNo, set, inSetNo, type);
-                res.options.resolve();
+                done();
             }
-            done();
         }
     });
 
     try {
-        const res = await new Promise((resolve, reject) => {
-            cardCrawler.queue({
-                uri: `https://lovelive-sic.com/cardlist/list/?cardno=${cardNo}`, resolve, reject
-            });
-        });
+        await cardCrawler.queue(`https://lovelive-sic.com/cardlist/list/?cardno=${cardNo}`);
     } catch (e: any) {
         throw error(500, e.message);
     }
@@ -208,26 +202,22 @@ async function downloadImages($: cheerio.CheerioAPI, cardNo: string, set: string
     const backUrl = $(".illust-2 img").attr("src");
 
     const imageCrawler = new Crawler({
-        encoding: null, jQuery: false,
+        encoding: null, jQuery: false, rateLimit: 1000,
         callback: (err, res, done) => {
             if (err) {
-                res.options.reject(new ImportError("Failed to download image", res.request.uri.href));
+                done();
+                throw err;
             } else {
                 if (!fs.existsSync(`static/images/${set}`)) fs.mkdirSync(`static/images/${set}`);
                 fs.createWriteStream(`static/images/${set}/${cardNo}-${res.options.filename}.jpg`).write(res.body);
-                res.options.resolve();
+                done();
             }
-            done();
         }
     });
 
     await Promise.all([
-        new Promise((resolve, reject) => {
-            imageCrawler.queue({uri: frontUrl, filename: "front", resolve, reject});
-        }),
-        new Promise((resolve, reject) => {
-            imageCrawler.queue({uri: backUrl, filename: "back", resolve, reject});
-        })
+        imageCrawler.queue({uri: frontUrl, filename: "front"}),
+        imageCrawler.queue({uri: backUrl, filename: "back"})
     ]);
 }
 
