@@ -45,6 +45,10 @@
         color: red;
     }
 
+    :global(.text-highlight-blue) {
+        color: blue;
+    }
+
     :global(a) {
         color: red !important;
         text-decoration-line: none;

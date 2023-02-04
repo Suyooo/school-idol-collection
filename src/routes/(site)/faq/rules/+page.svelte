@@ -98,8 +98,8 @@
             <h5>Pairs and Trios</h5>
             <div>
                 <div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
-                    <a href="/card/LL11-057"><CardImage cardSet="LL11" cardNo="LL11-057" front /></a>
-                    <a href="/card/LL11-052"><CardImage cardSet="LL11" cardNo="LL11-052" front /></a>
+                    <a href="/card/LL14-059"><CardImage cardSet="LL14" cardNo="LL14-059" front /></a>
+                    <a href="/card/LL14-060"><CardImage cardSet="LL14" cardNo="LL14-060" front /></a>
                 </div>
                 Certain cards can be linked into Pairs or Trios. Their illustrations will combine into one larger image
                 if you do so.<br>
@@ -107,8 +107,9 @@
                 The <span class="text-highlight-red">"Pair Up"</span> or
                 <span class="text-highlight-red">"Form A Trio"</span> Skill that allows you to form such a group is
                 available as an <TriggerComponent trigger={TriggerEnum.ENTRY}/> Skill on one or more cards of the
-                Pair/Trio, and lists the IDs of the cards it can link up with. Once all the cards are on your Stage,
-                you can combine them into the Pair or Trio by <b>⟪ENTER⟫</b>ing a card with the Skill last.<br>
+                Pair/Trio, and lists the IDs of the cards it can link up with. Once all the other cards of the Pair/Trio
+                are on your Stage, you can combine them into the Pair or Trio by <b>⟪ENTER⟫</b>ing a card with that
+                Skill last.<br>
                 <br>
                 As a Pair or Trio, the cards will join <b>⟪LIVE⟫</b>s together and activate additional Pair/Trio Skills.
                 For more information, check out <a href="/faq/general#group">the FAQ about Pairs and Trios</a>.
