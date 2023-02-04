@@ -197,12 +197,12 @@ function apply(nodes: ParseNode[], regex: RegExp, replaceFunc: (match: RegExpExe
         let end = match.index + match[0].length;
         let needsInlineBlock = false;
 
-        if (start > 0 && node.text.substring(start - 1, start).match(/[^ <>{}\b]/)) {
+        if (start > 0 && node.text.substring(start - 1, start).match(/["().!?,;]/)) {
             replArr.unshift({text: node.text.substring(start - 1, start)});
             start--;
             needsInlineBlock = true;
         }
-        if (end < node.text.length && node.text.substring(end, end + 1).match(/[^ <>{}\b]/)) {
+        if (end < node.text.length && node.text.substring(end, end + 1).match(/["().!?,;]/)) {
             replArr.push({text: node.text.substring(end, end + 1)});
             end++;
             needsInlineBlock = true;

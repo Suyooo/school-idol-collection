@@ -13,8 +13,8 @@
     }
 
     function checkOrientation() {
-        if (img.width > img.height) isHorizontal = true;
-        if (img.width < img.height) isVertical = true;
+        if (img.naturalWidth > img.naturalHeight) isHorizontal = true;
+        if (img.naturalWidth < img.naturalHeight) isVertical = true;
     }
 </script>
 

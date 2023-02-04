@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    @apply bg-background text-white font-sans leading-5;
+}
+
 a {
     @apply text-accent-400 underline;
 }
@@ -16,10 +20,6 @@ a:not(.button) *, a:not(.button) *:before {
 
 a:focus *, a:hover *, a:focus *:before, a:hover *:before {
     @apply decoration-accent-200;
-}
-
-body {
-    @apply bg-background text-white font-sans leading-5;
 }
 
 .cont {
