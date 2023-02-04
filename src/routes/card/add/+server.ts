@@ -208,8 +208,8 @@ async function downloadImages($: cheerio.CheerioAPI, cardNo: string, set: string
                 done();
                 throw err;
             } else {
-                if (!fs.existsSync(`static/images/${set}`)) fs.mkdirSync(`static/images/${set}`);
-                fs.createWriteStream(`static/images/${set}/${cardNo}-${res.options.filename}.jpg`).write(res.body);
+                if (!fs.existsSync(`static/images/cards/${set}`)) fs.mkdirSync(`static/images/${set}`);
+                fs.createWriteStream(`static/images/cards/${set}/${cardNo}-${res.options.filename}.jpg`).write(res.body);
                 done();
             }
         }

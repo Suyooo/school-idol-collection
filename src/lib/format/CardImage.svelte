@@ -7,8 +7,8 @@
     let img: HTMLImageElement, url: string, isHorizontal: boolean = false, isVertical: boolean = false;
 
     $: {
-        if (secret) url = `/images/secret.jpg`;
-        else url = `/images/${cardSet}/${cardNo}-${front ? 'front' : 'back'}.jpg`;
+        if (secret) url = `/images/cards/secret.jpg`;
+        else url = `/images/cards/${cardSet}/${cardNo}-${front ? 'front' : 'back'}.jpg`;
         isHorizontal = isVertical = false;
     }
 
