@@ -60,6 +60,9 @@
 
 <style lang="postcss">
     .label {
+        --group-skill-margin: 1mm;
+        --group-skill-overlap: 0.5mm;
+
         @apply flex-none w-0 flex flex-col text-justify box-border overflow-hidden;
         font-family: "Open Sans", Arial, sans-serif;
         font-size: 3mm;
@@ -100,18 +103,18 @@
 
             &.skillsgroup {
                 --group-pos: 0;
-                padding: 1mm;
+                padding: 1mm .5mm;
                 font-stretch: semi-condensed;
                 border: 0.25mm solid black;
-                margin-left: calc(-100% * var(--group-pos) + 1mm);
+                margin-left: calc((-100% + var(--group-skill-overlap) * 2) * var(--group-pos) + var(--group-skill-margin));
                 margin-bottom: 1mm;
 
                 &.pair {
-                    width: calc(200% - 2mm);
+                    width: calc(200% - var(--group-skill-margin) * 2 - var(--group-skill-overlap) * 2);
                 }
 
                 &.trio {
-                    width: calc(300% - 2mm);
+                    width: calc(300% - var(--group-skill-margin) * 2 - var(--group-skill-overlap) * 4);
                 }
             }
 

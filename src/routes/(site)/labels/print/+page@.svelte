@@ -37,7 +37,7 @@
         }
         shelfCardNos = shelfVert.get().flat();
         pageStyle.innerHTML = `@page { margin: ${padding}mm 0; size: ${width}mm ${height}mm`
-        requestAnimationFrame(print);
+        //requestAnimationFrame(print);
     });
 </script>
 
