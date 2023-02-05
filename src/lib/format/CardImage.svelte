@@ -1,26 +1,26 @@
 <script lang="ts">
-    export let cardNo: string;
-    export let cardSet: string;
-    export let secret: boolean = false;
-    export let front: boolean = false;
+    import {cardIsMember} from "$lib/card/types.js";
+    import {CardOrientation} from "$lib/enums/cardOrientation.js";
+    import {CardMemberRarity} from "$lib/enums/cardRarity.js";
+    import type Card from "$models/card/card.js";
 
-    let img: HTMLImageElement, url: string, isHorizontal: boolean = false, isVertical: boolean = false;
+    export let card: Card;
+    export let back: boolean = false;
+
+    let set: string, secret: boolean, isLandscape: boolean, url: string;
 
     $: {
+        set = card.cardNo.split("-")[0];
+        secret = cardIsMember(card) && card.member.rarity === CardMemberRarity.Secret;
+        isLandscape = (back ? card.backOrientation : card.frontOrientation) === CardOrientation.LANDSCAPE;
         if (secret) url = `/images/cards/secret.jpg`;
-        else url = `/images/cards/${cardSet}/${cardNo}-${front ? 'front' : 'back'}.jpg`;
-        isHorizontal = isVertical = false;
-    }
-
-    function checkOrientation() {
-        if (img.naturalWidth > img.naturalHeight) isHorizontal = true;
-        if (img.naturalWidth < img.naturalHeight) isVertical = true;
+        else url = `/images/cards/${set}/${card.cardNo}-${back ? 'back' : 'front'}.jpg`;
     }
 </script>
 
-{#key cardNo}
-    <img bind:this={img} src={url} alt="{cardNo} {front ? 'Front' : 'Back'} Illustration" on:load={checkOrientation}
-         class:card-h={isHorizontal} class:card-v={isVertical}>
+{#key card}
+    <img src={url} alt="{card.cardNo} {back ? 'Back' : 'Front'} Illustration"
+         class:card-v={!isLandscape} class:card-h={isLandscape}>
 {/key}
 
 <style lang="postcss">

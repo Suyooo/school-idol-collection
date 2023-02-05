@@ -1,3 +1,4 @@
+import type {CardOrientation} from "$lib/enums/cardOrientation.js";
 import {DataTypes, literal, Model} from "@sequelize/core";
 import type {OrderItem} from "@sequelize/core";
 import {Attribute, HasMany, HasOne, Table} from "@sequelize/core/decorators-legacy";
@@ -93,6 +94,18 @@ export class CardBase extends Model {
         as: "skills", foreignKey: "cardNo", inverse: {as: "card"}
     })
     declare skills: Skill[];
+
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
+    declare frontOrientation: CardOrientation;
+
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
+    declare backOrientation: CardOrientation;
 
     @Attribute({
         type: DataTypes.STRING,

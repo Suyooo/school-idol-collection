@@ -31,9 +31,8 @@
     import CardPageButtons from "./CardPageButtons.svelte";
 
     export let data: PageData;
-    let card: Card & Required<CardPageExtraInfo>, secret: boolean;
+    let card: Card & Required<CardPageExtraInfo>;
     $: card = data.card;
-    $: secret = cardIsMember(card) && card.member.rarity === CardMemberRarity.Secret;
 </script>
 
 <svelte:head>
@@ -44,10 +43,10 @@
     <div class="row lg:flex">
         <div class="col-quarter imgcont">
             <div>
-                <CardImage cardNo={card.cardNo} cardSet={card.cardSet} front {secret} />
+                <CardImage {card}/>
             </div>
             <div>
-                <CardImage cardNo={card.cardNo} cardSet={card.cardSet} {secret} />
+                <CardImage {card} back/>
             </div>
         </div>
         <div class="col-threequarters">

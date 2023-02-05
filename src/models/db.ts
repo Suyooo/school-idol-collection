@@ -51,7 +51,7 @@ async function scopes() {
         attributes: ["id"]
     }));
     CardBase.addScope("viewForLink", () => ({
-        attributes: ["cardNo", "id", "type", "nameJpn", "nameEng"]
+        attributes: ["cardNo", "id", "type", "nameJpn", "nameEng", "frontOrientation", "backOrientation"]
     }));
     CardBase.addScope("viewRarity", () => ({
         include: [

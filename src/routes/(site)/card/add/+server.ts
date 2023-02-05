@@ -4,6 +4,7 @@ import AnnotationEnum from "$lib/enums/annotation.js";
 import AttributeEnum from "$lib/enums/attribute.js";
 import CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
 import CardMemberIdolizeType from "$lib/enums/cardMemberIdolizeType.js";
+import {CardOrientation} from "$lib/enums/cardOrientation.js";
 import {CardMemberRarity, CardSongRarity} from "$lib/enums/cardRarity.js";
 import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import CardType from "$lib/enums/cardType.js";
@@ -25,6 +26,7 @@ import {Op} from "@sequelize/core";
 import {error, json} from "@sveltejs/kit";
 import Crawler from "./promiseCrawler.js";
 import * as fs from "fs";
+import probeImageSize from "probe-image-size";
 import type {RequestHandler} from "./$types.js";
 
 const nameNormalizations: { [k: string]: string } = {};
@@ -221,6 +223,13 @@ async function downloadImages($: cheerio.CheerioAPI, cardNo: string, set: string
     ]);
 }
 
+async function checkImageOrientation(cardNo: string, side: string) {
+    const set = cardNo.split("-")[0];
+    const res = await probeImageSize(fs.createReadStream(`static/images/${set}/${cardNo}-${side}.jpg`));
+    if (res.width < res.height) return CardOrientation.PORTRAIT;
+    else return CardOrientation.LANDSCAPE;
+}
+
 const birthdayPattern = /^(\d*)月(\d*)日$/;
 const lpPattern = /^(\d*)([+-][\dX∞]*)?$/;
 const idolizedPiecesPattern = /<覚醒>(【(?:オール|赤|緑|青)】(?:\/【(?:オール|赤|緑|青)】?)*)/;
@@ -239,6 +248,7 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
             type
         };
         let skillText = info["スキル"]?.replace(/\n\n/g, "\n");
+        let orientationCheckCardNo = info["カードNo."]!;
 
         if (type === CardType.MEMBER) {
             const checkNameTable = await DB.TranslationName.findByPk(card.nameJpn, {transaction});
@@ -271,7 +281,7 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
                 // Estimate card no. of the base SP card for SEC cards
                 let paddedInSetNo = (inSetNo - 9).toString();
                 while (paddedInSetNo.length < 3) paddedInSetNo = "0" + paddedInSetNo;
-                card.member!.baseIfSecret = set + "-" + paddedInSetNo;
+                card.member!.baseIfSecret = orientationCheckCardNo = set + "-" + paddedInSetNo;
             }
 
             let pieces = new PieceInfo(0, 0, 0, 0);
@@ -451,6 +461,9 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
             }
             card.skills = skills as Skill[];
         }
+
+        card.frontOrientation = await checkImageOrientation(orientationCheckCardNo, "front");
+        card.backOrientation = await checkImageOrientation(orientationCheckCardNo, "back");
 
         // Add the card to the database
         await DB.Card.create(card, {

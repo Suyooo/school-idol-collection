@@ -2,40 +2,24 @@
     import {cardHasGroup} from "$lib/card/types";
     import {cardIsMember, cardIsSong} from "$lib/card/types.js";
     import CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
+    import {CardOrientation} from "$lib/enums/cardOrientation.js";
     import {CardMemberRarity, CardSongRarity} from "$lib/enums/cardRarity.js";
     import Skill from "$lib/format/Skill.svelte";
     import type Card from "$models/card/card.js";
-    import {onMount} from "svelte";
 
     export let cardNo: string;
     export let byCardNo: { [cardNo: string]: Card };
     export let byCardId: { [cardId: string]: Card };
-    let card: Card, showGroupSkills: boolean, img: HTMLImageElement, url: string, isLandscape: boolean | undefined = undefined;
+    let card: Card, showGroupSkills: boolean, isLandscape: boolean | undefined = undefined;
+
     $: {
         card = byCardNo[cardNo];
         showGroupSkills = cardIsMember(card) && cardHasGroup(card) && card.member.group.skills.length > 0;
-    }
-
-    onMount(() => {
-        img.onload = checkOrientation;
-        if (cardIsMember(card) && card.member.baseIfSecret) {
-            img.src = `/images/cards/${card.member.baseIfSecret.split("-")[0]}/${card.member.baseIfSecret}-front.jpg`;
-        } else {
-            img.src = `/images/cards/${card.cardNo.split("-")[0]}/${card.cardNo}-front.jpg`;
-        }
-        isLandscape = undefined;
-    });
-
-    function checkOrientation() {
-        if (img.naturalWidth > img.naturalHeight) isLandscape = true;
-        if (img.naturalWidth < img.naturalHeight) isLandscape = false;
+        isLandscape = card.frontOrientation === CardOrientation.LANDSCAPE;
     }
 </script>
 
-{#if isLandscape === undefined}
-    <img class="absolute left-[1000vw]" bind:this={img} src="" alt="Checking Orientation..." aria-hidden="true">
-{/if}
-<div class="label" class:narrow={isLandscape === false} class:wide={isLandscape === true}>
+<div class="label" class:narrow={!isLandscape} class:wide={isLandscape}>
     <div class="skillsallcards">
         {#each (showGroupSkills ? card.member.group.expectedMemberIds.split("|").filter(c => c !== "").map(c => byCardId[c]) : [card]) as c}
             <div class="skillscard" class:othergroupmember={c.cardNo !== cardNo}>

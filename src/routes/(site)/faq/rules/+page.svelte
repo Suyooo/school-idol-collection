@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {CardOrientation} from "$lib/enums/cardOrientation.js";
     import Star from "$lib/format/Star.svelte";
     import CardImage from "$lib/format/CardImage.svelte";
     import TriggerComponent from "$lib/format/TriggerComponent.svelte";
@@ -98,8 +99,8 @@
             <h5>Pairs and Trios</h5>
             <div>
                 <div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
-                    <a href="/card/LL14-059"><CardImage cardSet="LL14" cardNo="LL14-059" front /></a>
-                    <a href="/card/LL14-060"><CardImage cardSet="LL14" cardNo="LL14-060" front /></a>
+                    <a href="/card/LL14-059"><CardImage card={{cardNo: "LL14-059", frontOrientation: CardOrientation.PORTRAIT}}/></a>
+                    <a href="/card/LL14-060"><CardImage card={{cardNo: "LL14-060", frontOrientation: CardOrientation.PORTRAIT}}/></a>
                 </div>
                 Certain cards can be linked into Pairs or Trios. Their illustrations will combine into one larger image
                 if you do so.<br>
@@ -118,7 +119,7 @@
             <h5 class="clear-both">Memories</h5>
             <div>
                 <div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
-                    <a href="/card/LL11-073"><CardImage cardSet="LL11" cardNo="LL11-073" front /></a>
+                    <a href="/card/LL11-073"><CardImage card={{cardNo: "LL11-073", frontOrientation: CardOrientation.LANDSCAPE}}/></a>
                 </div>
                 Memory cards are a third type of cards, in addition to the Member and Song cards you already know. They
                 are not part of either your Deck or Set List. Instead, you bring them onto your Stage from your
@@ -135,7 +136,7 @@
             <h5 class="clear-both">Idolization</h5>
             <div>
                 <div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
-                    <a href="/card/LL15-031"><CardImage cardSet="LL15" cardNo="LL15-031" front /></a>
+                    <a href="/card/LL15-028"><CardImage card={{cardNo: "LL15-028", frontOrientation: CardOrientation.PORTRAIT}}/></a>
                 </div>
                 Certain cards are able to be Idolized. This works similar to LLSIF: by combining multiple cards, you can
                 get a powered-up version of the Idolizable card.<br>

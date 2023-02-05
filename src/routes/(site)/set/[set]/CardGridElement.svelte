@@ -8,13 +8,12 @@
     export let card: Card;
     let cardSet: string;
     $: cardSet = card.cardNo.split("-")[0];
-    $: secret = cardIsMember(card) && card.member.rarity === CardMemberRarity.Secret;
 </script>
 
 <a href="/card/{card.cardNo}" class="grid-item">
     <div class="imgcont">
-        <CardImage cardNo={card.cardNo} {cardSet} front {secret}/>
-        <CardImage cardNo={card.cardNo} {cardSet} {secret}/>
+        <CardImage {card}/>
+        <CardImage {card} back/>
     </div>
     <div class="namecont">
         <span>⏵</span>
