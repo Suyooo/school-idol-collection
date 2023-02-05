@@ -1,14 +1,12 @@
 <script lang="ts">
     import {CardOrientation} from "$lib/enums/cardOrientation.js";
-    import {onMount} from "svelte";
     import type {PageData} from "./$types.js";
     import Label from "./Label.svelte";
     import "../../../../app.css";
     import Shelving from "./shelf.js";
 
     export let data: PageData;
-    let shelfCardNos: string[][], shelfElements: HTMLDivElement[] = [], sheets: HTMLDivElement,
-        sizeTester: HTMLDivElement, done: boolean;
+    let shelfCardNos: string[][];
 
     $: {
         data.cardNos;
@@ -18,49 +16,23 @@
         }
         shelfCardNos = shelfHorz.get();
     }
-
-    onMount(() => {
-        document.getElementsByTagName("body")[0].classList.add("A4"); // TODO: probably ditch paper-css
-        const shelfVert = new Shelving<HTMLDivElement>(297 - 9 * 2);
-        const pxPerMeter = sizeTester.clientHeight;
-        for (const shelf of shelfElements) {
-            shelfVert.add(shelf, Math.ceil(shelf.clientHeight * 1000 / pxPerMeter));
-        }
-
-        for (const sheet of shelfVert.get()) {
-            const sheetDiv = document.createElement("div");
-            sheetDiv.classList.add("sheet");
-            sheetDiv.style.padding = "9mm";
-            sheets.appendChild(sheetDiv);
-
-            for (const shelf of sheet) {
-                sheetDiv.appendChild(shelf);
-            }
-        }
-        setTimeout(() => done = true, 1);
-    });
 </script>
 
 <svelte:head>
-    <link rel="stylesheet" href="/vendor/paper-css/paper.min.css">
     <title>Sleeve Labels</title>
 </svelte:head>
 
-<div class="opacity-0 print:hidden">
+<table class="sheets">
     {#each shelfCardNos as shelf, i}
-        <div class="shelf" bind:this={shelfElements[i]}>
-            {#each shelf as cardNo}
-                <Label {cardNo} byCardNo={data.byCardNo} byCardId={data.byCardId}/>
-            {/each}
-        </div>
+        <tr>
+            <td class="shelf">
+                {#each shelf as cardNo}
+                    <Label {cardNo} byCardNo={data.byCardNo} byCardId={data.byCardId}/>
+                {/each}
+            </td>
+        </tr>
     {/each}
-</div>
-
-{#if !done}
-    <div class="absolute l-[1000vw] w-[100cm] h-[100cm]" bind:this={sizeTester}></div>
-{/if}
-
-<div class="sheets" bind:this={sheets}></div>
+</table>
 
 <style lang="postcss">
     @font-face {
@@ -69,11 +41,12 @@
     }
 
     @page {
-        size: A4;
+        margin: 9mm 0;
+        size: 210mm 297mm;
     }
 
     :global(body) {
-        @apply text-black;
+        @apply m-0 text-black bg-white;
     }
 
     :global(.skill-icon) {
@@ -94,7 +67,12 @@
         text-decoration-line: none;
     }
 
+    .sheets {
+        margin: 0 9mm;
+    }
+
     .shelf {
-        @apply w-full flex items-end;
+        @apply flex items-end;
+        width: calc(210mm - 9mm - 9mm);
     }
 </style>
