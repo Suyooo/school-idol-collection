@@ -19,12 +19,17 @@
     }
 
     onMount(() => {
+        // reorder shelves to fill pages better
+        const shelfVert = new Shelving<string[]>(297 - 9 * 2);
         for (const i in shelfCardNos) {
-            // reorder card numbers in height order (to reduce extra cuts needed on the left side due to holes)
-            shelfCardNos[i] = shelfCardNos[i]
+            // reorder labels in a shelf in height order (to reduce extra cuts needed on the left side due to holes)
+            const sortedCardNos = shelfCardNos[i]
                 .map((cardNo, ii) => ({cardNo, height: shelfElements[i].children[ii].clientHeight}))
                 .sort((a,b) => b.height - a.height).map(({cardNo}) => cardNo);
+            shelfVert.add(sortedCardNos, shelfElements[i].clientHeight);
         }
+        shelfCardNos = shelfVert.get().flat();
+        requestAnimationFrame(print);
     });
 </script>
 
@@ -34,8 +39,8 @@
 
 <table class="sheets">
     {#each shelfCardNos as shelf, i}
-        <tr>
-            <td class="shelf" bind:this={shelfElements[i]}>
+        <tr class="shelf">
+            <td bind:this={shelfElements[i]}>
                 {#each shelf as cardNo}
                     <Label {cardNo} byCardNo={data.byCardNo} byCardId={data.byCardId}/>
                 {/each}
@@ -82,7 +87,18 @@
     }
 
     .shelf {
-        @apply flex items-end;
-        width: calc(210mm - 9mm - 9mm);
+        & > td {
+            @apply flex;
+            width: calc(210mm - 9mm - 9mm);
+            margin-bottom: -0.5mm;
+        }
+
+        &:nth-child(odd) > td {
+            @apply items-end;
+        }
+
+        &:nth-child(even) > td {
+            @apply items-start;
+        }
     }
 </style>
