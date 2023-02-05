@@ -9,5 +9,6 @@ export const load: PageLoad = (async ({params, fetch}) => {
         byCardNo[c.cardNo] = c;
         byCardId[c.id] = c;
     })));
+    // TODO: load group member skills
     return {cardNos, byCardNo, byCardId};
 }) satisfies PageLoad;

@@ -11,33 +11,33 @@
     let height: number = 297;
     let padding: number = 9;
     let contentWidth: number, contentHeight: number, shelfCardNos: string[][],
-        shelfElements: HTMLTableCellElement[] = [], pageStyle: HTMLStyleElement;
+        shelfElements: HTMLTableCellElement[] = [], pageSize: HTMLDivElement, pageStyle: HTMLStyleElement;
 
     $: contentWidth = width - padding * 2;
     $: contentHeight = height - padding * 2;
 
-    $: {
-        data.cardNos;
-        const shelfHorz = new Shelving<string>(contentWidth);
-        for (const cardNo of data.cardNos) {
-            shelfHorz.add(cardNo, data.byCardNo[cardNo].frontOrientation === CardOrientation.PORTRAIT ? 63.5 : 88);
+    onMount(() => {
+        // Sort all the labels into horizontal shelves
+        const shelfHorz = new Shelving<string>(pageSize.clientWidth);
+        for (const i in data.cardNos) {
+            shelfHorz.add(data.cardNos[i], shelfElements[i].children[0].clientWidth, shelfElements[i].children[0].clientHeight);
         }
         shelfCardNos = shelfHorz.get();
-    }
 
-    onMount(() => {
-        // reorder shelves to fill pages better
-        const shelfVert = new Shelving<string[]>(contentHeight);
-        for (const i in shelfCardNos) {
-            // reorder labels in a shelf in height order (to reduce extra cuts needed on the left side due to holes)
-            const sortedCardNos = shelfCardNos[i]
-                .map((cardNo, ii) => ({cardNo, height: shelfElements[i].children[ii].clientHeight}))
-                .sort((a, b) => b.height - a.height).map(({cardNo}) => cardNo);
-            shelfVert.add(sortedCardNos, shelfElements[i].clientHeight);
-        }
-        shelfCardNos = shelfVert.get().flat();
-        pageStyle.innerHTML = `@page { margin: ${padding}mm 0; size: ${width}mm ${height}mm`
-        //requestAnimationFrame(print);
+        requestAnimationFrame(() => {
+            // Sort those shelves into vertical shelves
+            const shelfVert = new Shelving<string[]>(pageSize.clientHeight);
+            for (const i in shelfCardNos) {
+                // Reorder labels within shelf in height order (to reduce extra cuts needed on the left side due to holes)
+                const sortedCardNos = shelfCardNos[i]
+                    .map((cardNo, ii) => ({cardNo, height: shelfElements[i].children[ii].clientHeight}))
+                    .sort((a, b) => b.height - a.height).map(({cardNo}) => cardNo);
+                shelfVert.add(sortedCardNos, 1, shelfElements[i].clientHeight);
+            }
+            shelfCardNos = shelfVert.get().flat();
+            pageStyle.innerHTML = `@page { margin: ${padding}mm 0; size: ${width}mm ${height}mm`
+            //requestAnimationFrame(print);
+        });
     });
 </script>
 
@@ -46,11 +46,12 @@
     <title>Sleeve Labels</title>
 </svelte:head>
 
+<div bind:this={pageSize} class="absolute l-[1000vw]" style:width={contentWidth+"mm"} style:height={contentHeight+"mm"}></div>
 <table class="sheets" style:margin={"0 "+padding+"mm"}>
-    {#each shelfCardNos as shelf, i}
+    {#each (shelfCardNos ?? data.cardNos.map(c => [c])) as shelf, i}
         <tr class="shelf">
-            <td bind:this={shelfElements[i]} style:width={contentWidth+"mm"}>
-                {#each shelf as cardNo}
+            <td style:width={contentWidth+"mm"} bind:this={shelfElements[i]}>
+                {#each shelf as cardNo, i}
                     <Label {cardNo} byCardNo={data.byCardNo} byCardId={data.byCardId}/>
                 {/each}
             </td>
