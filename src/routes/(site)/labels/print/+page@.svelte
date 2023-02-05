@@ -1,12 +1,44 @@
 <script lang="ts">
+    import {CardOrientation} from "$lib/enums/cardOrientation.js";
     import {onMount} from "svelte";
     import type {PageData} from "./$types.js";
     import Label from "./Label.svelte";
     import "../../../../app.css";
+    import Shelving from "./shelf.js";
 
     export let data: PageData;
+    let shelfCardNos: string[][], shelfElements: HTMLDivElement[] = [], sheets: HTMLDivElement,
+        sizeTester: HTMLDivElement, done: boolean;
 
-    onMount(() => document.getElementsByTagName("body")[0].classList.add("A4"));
+    $: {
+        data.cardNos;
+        const shelfHorz = new Shelving<string>(210 - 9 * 2);
+        for (const cardNo of data.cardNos) {
+            shelfHorz.add(cardNo, data.byCardNo[cardNo].frontOrientation === CardOrientation.PORTRAIT ? 63.5 : 88);
+        }
+        shelfCardNos = shelfHorz.get();
+    }
+
+    onMount(() => {
+        document.getElementsByTagName("body")[0].classList.add("A4"); // TODO: probably ditch paper-css
+        const shelfVert = new Shelving<HTMLDivElement>(297 - 9 * 2);
+        const pxPerMeter = sizeTester.clientHeight;
+        for (const shelf of shelfElements) {
+            shelfVert.add(shelf, Math.ceil(shelf.clientHeight * 1000 / pxPerMeter));
+        }
+
+        for (const sheet of shelfVert.get()) {
+            const sheetDiv = document.createElement("div");
+            sheetDiv.classList.add("sheet");
+            sheetDiv.style.padding = "9mm";
+            sheets.appendChild(sheetDiv);
+
+            for (const shelf of sheet) {
+                sheetDiv.appendChild(shelf);
+            }
+        }
+        setTimeout(() => done = true, 1);
+    });
 </script>
 
 <svelte:head>
@@ -14,13 +46,21 @@
     <title>Sleeve Labels</title>
 </svelte:head>
 
-<section class="sheet p-[9mm]">
-    {#key data}
-        {#each data.cardNos as cardNo}
-            <Label {cardNo} byCardNo={data.byCardNo} byCardId={data.byCardId}/>
-        {/each}
-    {/key}
-</section>
+<div class="opacity-0 print:hidden">
+    {#each shelfCardNos as shelf, i}
+        <div class="shelf" bind:this={shelfElements[i]}>
+            {#each shelf as cardNo}
+                <Label {cardNo} byCardNo={data.byCardNo} byCardId={data.byCardId}/>
+            {/each}
+        </div>
+    {/each}
+</div>
+
+{#if !done}
+    <div class="absolute l-[1000vw] w-[100cm] h-[100cm]" bind:this={sizeTester}></div>
+{/if}
+
+<div class="sheets" bind:this={sheets}></div>
 
 <style lang="postcss">
     @font-face {
@@ -54,7 +94,7 @@
         text-decoration-line: none;
     }
 
-    .sheet {
-        @apply flex flex-wrap items-start content-start;
+    .shelf {
+        @apply w-full flex items-end;
     }
 </style>
