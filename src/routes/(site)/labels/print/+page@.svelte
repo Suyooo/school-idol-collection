@@ -1,12 +1,13 @@
 <script lang="ts">
     import {CardOrientation} from "$lib/enums/cardOrientation.js";
+    import {onMount} from "svelte";
     import type {PageData} from "./$types.js";
     import Label from "./Label.svelte";
     import "../../../../app.css";
     import Shelving from "./shelf.js";
 
     export let data: PageData;
-    let shelfCardNos: string[][];
+    let shelfCardNos: string[][], shelfElements: HTMLTableCellElement[] = [];
 
     $: {
         data.cardNos;
@@ -16,6 +17,15 @@
         }
         shelfCardNos = shelfHorz.get();
     }
+
+    onMount(() => {
+        for (const i in shelfCardNos) {
+            // reorder card numbers in height order (to reduce extra cuts needed on the left side due to holes)
+            shelfCardNos[i] = shelfCardNos[i]
+                .map((cardNo, ii) => ({cardNo, height: shelfElements[i].children[ii].clientHeight}))
+                .sort((a,b) => b.height - a.height).map(({cardNo}) => cardNo);
+        }
+    });
 </script>
 
 <svelte:head>
@@ -25,7 +35,7 @@
 <table class="sheets">
     {#each shelfCardNos as shelf, i}
         <tr>
-            <td class="shelf">
+            <td class="shelf" bind:this={shelfElements[i]}>
                 {#each shelf as cardNo}
                     <Label {cardNo} byCardNo={data.byCardNo} byCardId={data.byCardId}/>
                 {/each}
