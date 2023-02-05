@@ -7,11 +7,18 @@
     import Shelving from "./shelf.js";
 
     export let data: PageData;
-    let shelfCardNos: string[][], shelfElements: HTMLTableCellElement[] = [];
+    let width: number = 210;
+    let height: number = 297;
+    let padding: number = 9;
+    let contentWidth: number, contentHeight: number, shelfCardNos: string[][],
+        shelfElements: HTMLTableCellElement[] = [], pageStyle: HTMLStyleElement;
+
+    $: contentWidth = width - padding * 2;
+    $: contentHeight = height - padding * 2;
 
     $: {
         data.cardNos;
-        const shelfHorz = new Shelving<string>(210 - 9 * 2);
+        const shelfHorz = new Shelving<string>(contentWidth);
         for (const cardNo of data.cardNos) {
             shelfHorz.add(cardNo, data.byCardNo[cardNo].frontOrientation === CardOrientation.PORTRAIT ? 63.5 : 88);
         }
@@ -20,27 +27,29 @@
 
     onMount(() => {
         // reorder shelves to fill pages better
-        const shelfVert = new Shelving<string[]>(297 - 9 * 2);
+        const shelfVert = new Shelving<string[]>(contentHeight);
         for (const i in shelfCardNos) {
             // reorder labels in a shelf in height order (to reduce extra cuts needed on the left side due to holes)
             const sortedCardNos = shelfCardNos[i]
                 .map((cardNo, ii) => ({cardNo, height: shelfElements[i].children[ii].clientHeight}))
-                .sort((a,b) => b.height - a.height).map(({cardNo}) => cardNo);
+                .sort((a, b) => b.height - a.height).map(({cardNo}) => cardNo);
             shelfVert.add(sortedCardNos, shelfElements[i].clientHeight);
         }
         shelfCardNos = shelfVert.get().flat();
+        pageStyle.innerHTML = `@page { margin: ${padding}mm 0; size: ${width}mm ${height}mm`
         requestAnimationFrame(print);
     });
 </script>
 
 <svelte:head>
+    <style bind:this={pageStyle}></style>
     <title>Sleeve Labels</title>
 </svelte:head>
 
-<table class="sheets">
+<table class="sheets" style:margin={"0 "+padding+"mm"}>
     {#each shelfCardNos as shelf, i}
         <tr class="shelf">
-            <td bind:this={shelfElements[i]}>
+            <td bind:this={shelfElements[i]} style:width={contentWidth+"mm"}>
                 {#each shelf as cardNo}
                     <Label {cardNo} byCardNo={data.byCardNo} byCardId={data.byCardId}/>
                 {/each}
@@ -53,11 +62,6 @@
     @font-face {
         font-family: "Open Sans";
         src: url("/vendor/OpenSans-VariableFont_wdth,wght.ttf") format("truetype");
-    }
-
-    @page {
-        margin: 9mm 0;
-        size: 210mm 297mm;
     }
 
     :global(body) {
@@ -82,14 +86,9 @@
         text-decoration-line: none;
     }
 
-    .sheets {
-        margin: 0 9mm;
-    }
-
     .shelf {
         & > td {
             @apply flex;
-            width: calc(210mm - 9mm - 9mm);
             margin-bottom: -0.5mm;
         }
 
