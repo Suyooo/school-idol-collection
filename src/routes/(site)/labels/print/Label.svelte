@@ -22,17 +22,15 @@
 <div class="label" class:narrow={!isLandscape} class:wide={isLandscape}>
     <div class="skillsallcards">
         {#each (showGroupSkills ? card.member.group.expectedMemberIds.split("|").filter(c => c !== "").map(c => byCardId[c]) : [card]) as c}
-            <div class="skillscard" class:othergroupmember={c.cardNo !== cardNo}>
-                {#if c.skills.length > 0}
-                    <div class="skills">
-                        {#each c.skills as skill (skill.id)}
-                            <div>
-                                <Skill skill={skill} cardType={c.type}/>
-                            </div>
-                        {/each}
-                    </div>
-                {/if}
-            </div>
+            {#if c.skills.length > 0}
+                <div class="skillscard" class:othergroupmember={c.cardNo !== cardNo}>
+                    {#each c.skills as skill (skill.id)}
+                        <div>
+                            <Skill skill={skill} cardType={c.type}/>
+                        </div>
+                    {/each}
+                </div>
+            {/if}
         {/each}
     </div>
     {#if showGroupSkills}
@@ -87,16 +85,22 @@
         & > div {
             @apply w-full;
             z-index: 1;
+            margin-top: 1mm;
+
+            &:not(.ids) + hr {
+                margin-top: 1mm;
+            }
 
             &.skillsallcards {
-                padding: 1mm 2mm;
+                @apply flex items-start;
+                padding: 0 1mm;
                 font-stretch: semi-condensed;
-                display: flex;
 
                 & > .skillscard {
-                    width: 100%;
-                    flex-grow: 0;
-                    flex-shrink: 0;
+                    border: 0.25mm solid black;
+                    padding: .5mm .75mm .5mm .5mm;
+                    text-indent: -.25mm;
+                    flex: 0 0 100%;
                     flex-wrap: nowrap;
 
                     &.othergroupmember {
@@ -104,15 +108,19 @@
                         margin-right: -100%;
                     }
                 }
+
+                &:empty {
+                    display: none;
+                }
             }
 
             &.skillsgroup {
                 --group-pos: 0;
-                padding: 1mm .5mm;
+                padding: .5mm .75mm .5mm .5mm;
+                text-indent: -.25mm;
                 font-stretch: semi-condensed;
                 border: 0.25mm solid black;
                 margin-left: calc((-100% + var(--group-skill-overlap) * 2) * var(--group-pos) + var(--group-skill-margin));
-                margin-bottom: 1mm;
 
                 &.pair {
                     width: calc(200% - var(--group-skill-margin) * 2 - var(--group-skill-overlap) * 2);
@@ -124,7 +132,8 @@
             }
 
             &.costume {
-                margin: 0 .5mm .5mm;
+                margin-left: .5mm;
+                margin-right: .5mm;
 
                 & > span {
                     @apply rounded-full inline-flex items-center;
@@ -156,6 +165,7 @@
 
             &.ids {
                 @apply flex justify-between;
+                margin: 0;
                 padding: 0 1mm;
                 height: 3mm;
                 font-size: 2mm;
@@ -163,6 +173,7 @@
             }
 
             &.fold {
+                margin: 0;
                 height: 10mm;
             }
         }
