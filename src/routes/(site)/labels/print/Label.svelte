@@ -48,7 +48,7 @@
     {/if}
     {#if cardIsMember(card) && card.member.costumeEng}
         <div class="costume">
-            <span><span>⏵</span><span>{card.member.costumeEng}</span></span>
+            <span><span><span>⏵</span></span><span>{card.member.costumeEng}</span></span>
         </div>
     {/if}
     <hr>
@@ -128,18 +128,22 @@
 
                 & > span {
                     @apply rounded-full inline-flex items-center;
-                    padding: .5mm 2.5mm .5mm 2mm;
-                    border: 2px solid hotpink;
+                    padding: 0 2.5mm 0 2mm;
+                    border: .5mm solid hotpink;
                     color: hotpink;
+                    font-size: 2mm;
 
                     & > span:first-child {
-                        display: inline-block;
-                        border: 2px solid hotpink;
-                        @apply rounded-full text-center;
-                        width: 3mm;
-                        height: 3mm;
-                        line-height: 1.5mm;
+                        @apply rounded-full box-content flex items-center justify-center;
+                        border: .5mm solid hotpink;
+                        width: 1.5mm;
+                        height: 1.5mm;
                         margin-right: 2mm;
+
+                        & > span {
+                            margin-top: -.3mm;
+                            margin-left: .15mm;
+                        }
                     }
 
                     & > span:last-child {
