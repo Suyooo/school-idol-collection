@@ -9,7 +9,7 @@
 
     export let cardNo: string;
     export let byCardNo: { [cardNo: string]: Card };
-    export let byCardId: { [cardId: string]: Card };
+    export let byCardId: { [cardId: number]: Card };
     let card: Card, showGroupSkills: boolean, isLandscape: boolean | undefined = undefined;
 
     $: {

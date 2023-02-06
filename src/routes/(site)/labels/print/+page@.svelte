@@ -1,5 +1,4 @@
 <script lang="ts">
-    import {CardOrientation} from "$lib/enums/cardOrientation.js";
     import {onMount} from "svelte";
     import type {PageData} from "./$types.js";
     import Label from "./Label.svelte";
