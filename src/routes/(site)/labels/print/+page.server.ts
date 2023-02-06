@@ -3,7 +3,7 @@ import type Card from "$models/card/card.js";
 import type {PageServerLoad} from "./$types.js";
 
 export const load: PageServerLoad = (async ({params, locals, fetch}) => {
-    const cardNos = ["LL14-052", "LL14-057", "LL14-053", "LL15-051", "LL15-052", "LL15-053", "LL15-046", "LL15-047", "LL15-057", "LL15-089", "LL14-074", "LL10-063", "LL11-051", "LL11-055", "LL11-052", "LL11-057", "LL14-052", "LL14-057", "LL14-053", "LL15-051", "LL15-052", "LL15-053", "LL15-046", "LL15-047", "LL15-057", "LL15-089", "LL14-074", "LL10-063", "LL11-051", "LL11-055", "LL11-052", "LL11-057"];
+    const cardNos = ["LL14-052", "LL14-057", "LL14-053", "LL15-051", "LL15-052", "LL15-053", "LL15-046", "LL15-047", "LL15-057", "LL15-089", "LL14-074", "LL10-063", "LL11-051", "LL11-055", "LL11-052", "LL11-057", "LL14-052", "LL14-057", "LL14-053", "LL15-051", "LL15-052", "LL15-053", "LL15-046", "LL15-047", "LL15-057", "LL15-089", "LL14-074", "LL10-063", "LL11-051", "LL11-055", "LL11-052", "LL11-057", "LL04-005", "LL14-075"];
     const byCardNo: { [cardNo: string]: Card } = {};
     const byCardId: { [cardId: number]: Card } = {};
     const allRequiredGroupMembers: number[] = [];

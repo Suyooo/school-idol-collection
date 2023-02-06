@@ -46,6 +46,11 @@
             {/each}
         </div>
     {/if}
+    {#if cardIsMember(card) && card.member.costumeEng}
+        <div class="costume">
+            <span><span>⏵</span><span>{card.member.costumeEng}</span></span>
+        </div>
+    {/if}
     <hr>
     <div class="ids">
         <div>
@@ -68,7 +73,7 @@
         font-size: 3mm;
         line-height: 3mm;
         letter-spacing: -0.1mm;
-        outline: 1mm solid rgb(230,230,230);
+        outline: 1mm solid rgb(230, 230, 230);
         outline-offset: -0.5mm;
 
         &.narrow {
@@ -115,6 +120,33 @@
 
                 &.trio {
                     width: calc(300% - var(--group-skill-margin) * 2 - var(--group-skill-overlap) * 4);
+                }
+            }
+
+            &.costume {
+                margin: 0 .5mm .5mm;
+
+                & > span {
+                    @apply rounded-full inline-flex items-center;
+                    padding: .5mm 2.5mm .5mm 2mm;
+                    border: 2px solid hotpink;
+                    color: hotpink;
+
+                    & > span:first-child {
+                        display: inline-block;
+                        border: 2px solid hotpink;
+                        @apply rounded-full text-center;
+                        width: 3mm;
+                        height: 3mm;
+                        line-height: 1.5mm;
+                        margin-right: 2mm;
+                    }
+
+                    & > span:last-child {
+                        font-weight: bold;
+                        font-stretch: semi-condensed;
+                        margin-top: -.25mm;
+                    }
                 }
             }
 
