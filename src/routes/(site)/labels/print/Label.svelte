@@ -44,9 +44,9 @@
             {/each}
         </div>
     {/if}
-    {#if cardIsMember(card) && card.member.costumeEng}
+    {#if cardIsMember(card) && card.member.costumeJpn}
         <div class="costume">
-            <span><span><span>⏵</span></span><span>{card.member.costumeEng}</span></span>
+            <span><span><span>⏵</span></span><span>{card.member.costumeEng ?? card.member.costumeJpn}</span></span>
         </div>
     {/if}
     <hr>

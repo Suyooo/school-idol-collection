@@ -29,5 +29,17 @@ export const load: PageServerLoad = (async ({params, locals, fetch}) => {
             });
         }));
 
-    return {cardNos, byCardNo, byCardId};
+    const filteredCardNos = cardNos.filter(cardNo => {
+        const card = byCardNo[cardNo];
+        if (card.skills.length > 0) return true;
+        if (cardIsMember(card)) {
+            if (card.member.costumeJpn) return true;
+            if (cardHasGroup(card)) {
+                if (card.member.group.skills.length > 0) return true;
+            }
+        }
+        return false;
+    });
+
+    return {cardNos: filteredCardNos, byCardNo, byCardId};
 }) satisfies PageServerLoad;

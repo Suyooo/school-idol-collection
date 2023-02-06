@@ -35,7 +35,7 @@
             }
             shelfCardNos = shelfVert.get().flat();
             pageStyle.innerHTML = `@page { margin: ${padding}mm 0; size: ${width}mm ${height}mm`
-            //requestAnimationFrame(print);
+            requestAnimationFrame(print);
         });
     });
 </script>
@@ -45,18 +45,23 @@
     <title>Sleeve Labels</title>
 </svelte:head>
 
-<div bind:this={pageSize} class="absolute l-[1000vw]" style:width={contentWidth+"mm"} style:height={contentHeight+"mm"}></div>
-<table class="sheets" style:margin={"0 "+padding+"mm"}>
-    {#each (shelfCardNos ?? data.cardNos.map(c => [c])) as shelf, i}
-        <tr class="shelf">
-            <td style:width={contentWidth+"mm"} bind:this={shelfElements[i]}>
-                {#each shelf as cardNo, i}
-                    <Label {cardNo} byCardNo={data.byCardNo} byCardId={data.byCardId}/>
-                {/each}
-            </td>
-        </tr>
-    {/each}
-</table>
+{#if data.cardNos.length === 0}
+    You have added no cards to print labels for (or, none of them have any Skills/Live Costumes to put on the labels).
+{:else}
+    <div bind:this={pageSize} class="absolute l-[1000vw]"
+         style:width={contentWidth+"mm"} style:height={contentHeight+"mm"}></div>
+    <table class="sheets" style:margin={"0 "+padding+"mm"}>
+        {#each (shelfCardNos ?? data.cardNos.map(c => [c])) as shelf, i}
+            <tr class="shelf">
+                <td style:width={contentWidth+"mm"} bind:this={shelfElements[i]}>
+                    {#each shelf as cardNo, i}
+                        <Label {cardNo} byCardNo={data.byCardNo} byCardId={data.byCardId}/>
+                    {/each}
+                </td>
+            </tr>
+        {/each}
+    </table>
+{/if}
 
 <style lang="postcss">
     @font-face {
