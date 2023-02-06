@@ -39,9 +39,3 @@
         </div>
     </div>
 </div>
-
-<style lang="postcss">
-    input {
-        @apply text-black;
-    }
-</style>

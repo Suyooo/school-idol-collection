@@ -213,14 +213,6 @@
         }
     }
 
-    input, textarea {
-        @apply bg-primary-900 border-primary-100 p-2;
-    }
-
-    textarea {
-        @apply w-full h-32 mb-2 rounded;
-    }
-
     .error {
         @apply bg-red-700 rounded mb-2 p-2;
     }

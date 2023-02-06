@@ -133,3 +133,11 @@ div.anchor {
         @apply bg-primary-500;
     }
 }
+
+input, textarea {
+    @apply bg-primary-900 border-primary-100 p-2;
+}
+
+textarea {
+    @apply w-full h-32 mb-2 rounded;
+}
