@@ -134,7 +134,7 @@ div.anchor {
     }
 }
 
-input, textarea {
+input, textarea, select {
     @apply bg-primary-900 border-primary-100 p-2;
 }
 

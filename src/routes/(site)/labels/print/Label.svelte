@@ -21,7 +21,7 @@
 
 <div class="label" class:narrow={!isLandscape} class:wide={isLandscape}>
     <div class="skillsallcards">
-        {#each (showGroupSkills ? card.member.group.expectedMemberIds.split("|").filter(c => c !== "").map(c => byCardId[c]) : [card]) as c}
+        {#each (showGroupSkills ? card.member.group.expectedMemberIds.split("|").filter(c => c !== "").map(c => byCardNo[byCardId[c]]) : [card]) as c}
             {#if c.skills.length > 0}
                 <div class="skillscard" class:othergroupmember={c.cardNo !== cardNo}>
                     {#each c.skills as skill (skill.id)}

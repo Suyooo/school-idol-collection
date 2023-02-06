@@ -1,14 +1,15 @@
 <script lang="ts">
+    import Button from "$lib/style/Button.svelte";
     import {onMount} from "svelte";
-    import type {PageData} from "./$types.js";
+    import type {ActionData} from "./$types.js";
     import Label from "./Label.svelte";
     import "../../../../app.css";
     import Shelving from "./shelf.js";
 
-    export let data: PageData;
-    let width: number = 210;
-    let height: number = 297;
-    let padding: number = 9;
+    export let form: ActionData;
+    let width: number = form?.width ?? 0;
+    let height: number = form?.height ?? 0;
+    let padding: number = form?.padding ?? 0;
     let contentWidth: number, contentHeight: number, shelfCardNos: string[][],
         shelfElements: HTMLTableCellElement[] = [], pageSize: HTMLDivElement, pageStyle: HTMLStyleElement;
 
@@ -16,12 +17,12 @@
     $: contentHeight = height - padding * 2;
 
     onMount(() => {
-        if (data.cardNos.length === 0) return;
+        if ((form?.cardNos.length ?? 0) === 0) return;
 
         // Sort all the labels into horizontal shelves
         const shelfHorz = new Shelving<string>(pageSize.clientWidth);
-        for (const i in data.cardNos) {
-            shelfHorz.add(data.cardNos[i], shelfElements[i].children[0].clientWidth, shelfElements[i].children[0].clientHeight);
+        for (const i in form.cardNos) {
+            shelfHorz.add(form.cardNos[i], shelfElements[i].children[0].clientWidth, shelfElements[i].children[0].clientHeight);
         }
         shelfCardNos = shelfHorz.get();
 
@@ -36,8 +37,7 @@
                 shelfVert.add(sortedCardNos, 1, shelfElements[i].clientHeight);
             }
             shelfCardNos = shelfVert.get().flat();
-            pageStyle.innerHTML = `@page { margin: ${padding}mm 0; size: ${width}mm ${height}mm`
-            requestAnimationFrame(print);
+            pageStyle.innerHTML = `@page { margin: ${padding}mm 0; size: ${width}mm ${height}mm`;
         });
     });
 </script>
@@ -47,38 +47,47 @@
     <title>Labels → Print &bull; SIC</title>
 </svelte:head>
 
-{#if data.cardNos.length + data.invalidCardNos.length + data.filteredCardNos.length === 0}
+{#if !form || form.cardNos.length + form.invalidCardNos.length + form.filteredCardNos.length === 0}
     You have added no cards to print labels for. <a href="/labels" class="underline">Go back</a>
 {:else}
     <div class="info">
-        {#if data.invalidCardNos.length > 0}
+        {#if form.invalidCardNos.length > 0}
             <div class="error">
                 <b>The following card numbers are invalid and were removed:</b>
-                {data.invalidCardNos.join(", ")}
+                {form.invalidCardNos.join(", ")}
             </div>
         {/if}
-        {#if data.filteredCardNos.length > 0}
+        {#if form.filteredCardNos.length > 0}
             <div class="error">
                 <b>The following cards had no Skills or Live Costumes and were removed:</b>
-                {data.filteredCardNos.join(", ")}
+                {form.filteredCardNos.join(", ")}
+            </div>
+        {/if}
+        {#if form.duplicateCardNos.length > 0}
+            <div class="error">
+                <b>The following cards appear multiple times - they were NOT removed, please make sure you actually want multiple labels for these:</b>
+                {form.duplicateCardNos.join(", ")}
             </div>
         {/if}
         <div>
-            {#if data.cardNos.length === 0}
+            {#if form.cardNos.length === 0}
                 No cards were left to be labeled. Close the tab and change the card number list!
             {:else}
-                {data.cardNos.length} label{data.cardNos.length === 1 ? "" : "s"} ready to print!
+                {form.cardNos.length} label{form.cardNos.length === 1 ? "" : "s"} ready to print!
             {/if}
         </div>
+        <div class="flex items-center justify-end w-full mt-1">
+            <Button accent on:click={() => print()}>Print</Button>
+        </div>
     </div>
-    <div bind:this={pageSize} class="absolute l-[1000vw]"
+    <div bind:this={pageSize} class="absolute left-[1000vw] print:hidden"
          style:width={contentWidth+"mm"} style:height={contentHeight+"mm"}></div>
-    <table class="sheets" style:margin={"0 "+padding+"mm"}>
-        {#each (shelfCardNos ?? data.cardNos.map(c => [c])) as shelf, i}
+    <table class="sheets" style:margin={"0 "+padding+"mm"} style:--page-padding={padding+"mm"}>
+        {#each (shelfCardNos ?? form.cardNos.map(c => [c])) as shelf, i}
             <tr class="shelf">
                 <td style:width={contentWidth+"mm"} bind:this={shelfElements[i]}>
                     {#each shelf as cardNo, i}
-                        <Label {cardNo} byCardNo={data.byCardNo} byCardId={data.byCardId}/>
+                        <Label {cardNo} byCardNo={form.byCardNo} byCardId={form.byCardId}/>
                     {/each}
                 </td>
             </tr>
@@ -97,11 +106,16 @@
     }
 
     .info {
-        @apply m-4;
+        @apply m-4 max-w-2xl;
 
         & .error b {
             @apply text-highlight-red;
         }
+    }
+
+    .sheets {
+        @apply m-0 text-black bg-white;
+        border: var(--page-padding) solid white;
     }
 
     @media print {
@@ -112,10 +126,12 @@
         .info {
             @apply hidden;
         }
-    }
 
-    .sheets {
-        @apply m-0 text-black bg-white;
+        .sheets {
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
     }
 
     :global(.skill-icon) {
