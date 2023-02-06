@@ -35,7 +35,9 @@
     <div class="panel">
         <div class="panel-inner">
             Enter name of the FAQ page: <input bind:value={faqName}>
-            <Button accent style="margin-top:1rem;float:right" on:click={submit} {disabled}>Apply</Button>
+            <div class="flex items-center justify-end w-full">
+                <Button accent on:click={submit} {disabled}>Apply</Button>
+            </div>
         </div>
     </div>
 </div>
