@@ -16,6 +16,8 @@
     $: contentHeight = height - padding * 2;
 
     onMount(() => {
+        if (data.cardNos.length === 0) return;
+
         // Sort all the labels into horizontal shelves
         const shelfHorz = new Shelving<string>(pageSize.clientWidth);
         for (const i in data.cardNos) {
@@ -42,12 +44,33 @@
 
 <svelte:head>
     <style bind:this={pageStyle}></style>
-    <title>Sleeve Labels</title>
+    <title>Labels → Print &bull; SIC</title>
 </svelte:head>
 
-{#if data.cardNos.length === 0}
-    You have added no cards to print labels for (or, none of them have any Skills/Live Costumes to put on the labels).
+{#if data.cardNos.length + data.invalidCardNos.length + data.filteredCardNos.length === 0}
+    You have added no cards to print labels for. <a href="/labels" class="underline">Go back</a>
 {:else}
+    <div class="info">
+        {#if data.invalidCardNos.length > 0}
+            <div class="error">
+                <b>The following card numbers are invalid and were removed:</b>
+                {data.invalidCardNos.join(", ")}
+            </div>
+        {/if}
+        {#if data.filteredCardNos.length > 0}
+            <div class="error">
+                <b>The following cards had no Skills or Live Costumes and were removed:</b>
+                {data.filteredCardNos.join(", ")}
+            </div>
+        {/if}
+        <div>
+            {#if data.cardNos.length === 0}
+                No cards were left to be labeled. Close the tab and change the card number list!
+            {:else}
+                {data.cardNos.length} label{data.cardNos.length === 1 ? "" : "s"} ready to print!
+            {/if}
+        </div>
+    </div>
     <div bind:this={pageSize} class="absolute l-[1000vw]"
          style:width={contentWidth+"mm"} style:height={contentHeight+"mm"}></div>
     <table class="sheets" style:margin={"0 "+padding+"mm"}>
@@ -70,6 +93,28 @@
     }
 
     :global(body) {
+        @apply flex flex-col items-center;
+    }
+
+    .info {
+        @apply m-4;
+
+        & .error b {
+            @apply text-highlight-red;
+        }
+    }
+
+    @media print {
+        :global(body) {
+            @apply block m-0 text-black bg-white;
+        }
+
+        .info {
+            @apply hidden;
+        }
+    }
+
+    .sheets {
         @apply m-0 text-black bg-white;
     }
 
