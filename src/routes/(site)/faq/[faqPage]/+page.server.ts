@@ -33,9 +33,6 @@ export const data: { [key: string]: Faq } = {
             subjects: ["LL01-057"],
             seeAlso: ["/faq/general#top_deck_card_faceup"]
         }, {
-            subjects: ["LL01-058"],
-            seeAlso: ["/faq/general#top_deck_card_faceup"]
-        }, {
             subjects: ["LL01-060"],
             seeAlso: ["/faq/general#more_faceup_songs"]
         }, {
@@ -715,7 +712,7 @@ export const data: { [key: string]: Faq } = {
                     answer: "No. When they reach the Live Points target, the winner is removed from the rest of the match, so they cannot perform a ⟪LIVE⟫."
                 }, {
                     key: "other",
-                    question: "What happens if non- {{red:\"CYaRon!\"}} Members are participating in this ⟪LIVE⟫?",
+                    question: "What happens if non-{{red:\"CYaRon!\"}} Members are participating in this ⟪LIVE⟫?",
                     answer: "As long as {{red:\"Chika\"}}, {{red:\"You\"}} and {{red:\"Ruby\"}} have joined this ⟪LIVE⟫, the Skill can be used no matter what other Members are participating."
                 }
             ]
@@ -732,7 +729,7 @@ export const data: { [key: string]: Faq } = {
                     answer: "Yes. Pieces gained through Skills become [ALL], too."
                 }, {
                     key: "other",
-                    question: "What happens if non- {{red:\"AZALEA\"}} Members are participating in this ⟪LIVE⟫?",
+                    question: "What happens if non-{{red:\"AZALEA\"}} Members are participating in this ⟪LIVE⟫?",
                     answer: "As long as {{red:\"Kanan\"}}, {{red:\"Dia\"}} and {{red:\"Hanamaru\"}} have joined this ⟪LIVE⟫, the Skill can be used no matter what other Members are participating."
                 }
             ]
@@ -746,7 +743,7 @@ export const data: { [key: string]: Faq } = {
                     answer: "It means that you may ⟪ENTER⟫ up to one {{red:\"Riko\"}}, one {{red:\"Yoshiko\"}}, and one {{red:\"Mari\"}}. That means you can for example ⟪ENTER⟫ three Members, one of each, or ⟪ENTER⟫ only a {{red:\"Riko\"}} and a {{red:\"Yoshiko\"}} card."
                 }, {
                     key: "other",
-                    question: "What happens if non- {{red:\"Guilty Kiss\"}} Members are participating in this ⟪LIVE⟫?",
+                    question: "What happens if non-{{red:\"Guilty Kiss\"}} Members are participating in this ⟪LIVE⟫?",
                     answer: "As long as {{red:\"Riko\"}}, {{red:\"Yoshiko\"}} and {{red:\"Mari\"}} have joined this ⟪LIVE⟫, the Skill can be used no matter what other Members are participating."
                 }
             ]
@@ -884,7 +881,7 @@ export const data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `What if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
-                    answer: `As long as there is a {{red:"Dia"}} card with [SMILE] and a {{red:"Ruby"}} card with [SMILE] joining, the Any Piece requirement is reduced by three, regardless of what other members join.`
+                    answer: `As long as there is a {{red:"Dia"}} card with [SMILE] and a {{red:"Ruby"}} card with [SMILE] joining, the Any Piece requirement is reduced by three, regardless of what other Members join.`
                 }
             ]
         }, {
@@ -919,7 +916,7 @@ export const data: { [key: string]: Faq } = {
             seeAlso: ["/faq/general#members_on_stage"],
             qa: [
                 {
-                    question: `If there are Members without Live Costumes on Stage, can they count for the "all Members on your Stage have the {{red:"MIRAI TICKET"}} Live Costume" requirement?`,
+                    question: `If there are Members without Live Costumes on Stage, can I meet the "all Members on your Stage have the {{red:"MIRAI TICKET"}} Live Costume" requirement?`,
                     answer: `No. All Members on Stage must have a Live Costume and it must be the {{red:"MIRAI TICKET"}} Live Costume.`
                 }
             ]
@@ -958,7 +955,7 @@ export const data: { [key: string]: Faq } = {
             seeAlso: ["/faq/general#join_success_order"],
             qa: [
                 {
-                    question: `If there are Members without Live Costumes joining the ⟪LIVE⟫, can they count for the "all Members joining this ⟪LIVE⟫ have the "MIRAI TICKET" Live Costume" requirement?`,
+                    question: `If there are Members without Live Costumes joining the ⟪LIVE⟫, can I meet the "all Members joining this ⟪LIVE⟫ have the "MIRAI TICKET" Live Costume" requirement?`,
                     answer: `No. All Members joining the ⟪LIVE⟫ must have a Live Costume and it must be the {{red:"MIRAI TICKET"}} Live Costume.`
                 }
             ]
@@ -975,7 +972,7 @@ export const data: { [key: string]: Faq } = {
             seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"],
             qa: [
                 {
-                    question: `If there are Members without Live Costumes on Stage, can they count for the "all Members on your Stage have the {{red:"MIRAI TICKET"}} Live Costume" requirement?`,
+                    question: `If there are Members without Live Costumes on Stage, can I meet the "all Members on your Stage have the {{red:"MIRAI TICKET"}} Live Costume" requirement?`,
                     answer: `No. All Members on Stage must have a Live Costume and it must be the {{red:"MIRAI TICKET"}} Live Costume.`
                 }
             ]
@@ -987,7 +984,7 @@ export const data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `I'm the first player in turn order, and at the start of the match, I used {{link:LL07-064}}'s [Starter] Skill to ⟪ENTER⟫ a card. If I ⟪ENTER⟫ {{link:LL09-037}} on my first turn, can I draw two cards using the [Entry] Skill?`,
-                    answer: `No. [Starter] Skills are counted as part of match preparation before any turns are played, so once your first turn starts, there have been no Members who ⟪ENTER⟫ed that turn.`
+                    answer: `No. [Starter] Skills are counted as part of match preparation, before any turns are played, so once your first turn starts, there have been no Members who ⟪ENTER⟫ed that turn.`
                 }
             ]
         }, {
@@ -1028,11 +1025,11 @@ export const data: { [key: string]: Faq } = {
             qa: [
                 {
                     key: "samename",
-                    question: `There is a face-up {{link:LL04-055}} and {{link:EX03-028}} in my Set List. If I ⟪ENTER⟫ a Member with the {{red:"Kimi no Kokoro wa Kagayaiteru kai?"}} Live Costume using this card's Skill, what happens with the ⟪LIVE⟫ I could perform?`,
+                    question: `There is a face-up {{link:LL04-055}} and {{link:EX03-028}} in my Set List. If I ⟪ENTER⟫ a Member who has the {{red:"Kimi no Kokoro wa Kagayaiteru kai?"}} Live Costume using this card's Skill, what happens with the ⟪LIVE⟫ I could perform?`,
                     answer: `If there are multiple Song cards with the same name, you can pick any of them to use for the ⟪LIVE⟫.`
                 }, {
                     key: "multiple",
-                    question: `If there is a face-up Song card with multiple names in my Set List, for example {{link:LL01-067}}, can I ⟪ENTER⟫ a Member with the {{red:"Sore wa Bokutachi no Kiseki"}} Live Costume? If so, can I perform a ⟪LIVE⟫ using that Song card?`,
+                    question: `If there is a face-up Song card with multiple names in my Set List, for example {{link:LL01-067}}, can I ⟪ENTER⟫ a Member who has the {{red:"Sore wa Bokutachi no Kiseki"}} Live Costume? If so, can I perform a ⟪LIVE⟫ using that Song card?`,
                     answer: `Yes. If a face-up Song card has multiple names, the requirement is met if the Live Costume has the same name as either song name. In the given example, both ⟪ENTER⟫ing and performing the ⟪LIVE⟫ are possible.`
                 }
             ]
@@ -1043,7 +1040,7 @@ export const data: { [key: string]: Faq } = {
                 {
                     key: "types",
                     question: `How do I count types of Attributes?`,
-                    answer: `There are four types of Attributes: [SMILE], [PURE], [COOL] and [ALL]. For example, {{link:LL09-064}} has [SMILE][ALL][ALL] in the upper left corner, so this Member has two types of Attributes. (You cannot use [ALL] as a wildcard for another type.)`
+                    answer: `There are four types of Attributes: [SMILE], [PURE], [COOL] and [ALL]. For example, {{link:LL09-064}} has [SMILE][ALL][ALL] in the upper left corner, so this Member has two types of Attributes. (You cannot use [ALL] as a wildcard for another Attribute.)`
                 }, {
                     key: "livejoin",
                     question: `If the flipped Member card has a [Live Join] Skill that allows it to gain Pieces, can those Pieces be counted?`,
@@ -1206,7 +1203,7 @@ export const data: { [key: string]: Faq } = {
                     answer: `Yes. For each {{red:"Nico"}}, you will gain ♪Live Points +1♪.`
                 }, {
                     key: "zero",
-                    question: `If the Song card used for the ⟪LIVE⟫ would give me zero Live Points by itself (less than three Members with the {{red:"Natsuiro Egao de 1,2,Jump!"}} Live Costume), do I still gain ♪Live Points +1♪ if this card joined the ⟪LIVE⟫?`,
+                    question: `If the Song card used for the ⟪LIVE⟫ would give me zero Live Points by itself (less than three Members who have the {{red:"Natsuiro Egao de 1,2,Jump!"}} Live Costume), do I still gain ♪Live Points +1♪ if this card joined the ⟪LIVE⟫?`,
                     answer: `Yes. Regardless of the Bonus Live Points of {{link:LL01-064}}, you will gain ♪Live Points +1♪.`
                 }
             ]
@@ -1311,6 +1308,319 @@ export const data: { [key: string]: Faq } = {
                 }
             ]
         },
+    ],
+    "EX11": [
+        {
+            subjects: ["EX11-001"],
+            seeAlso: ["/faq/general#flip_before_skills"]
+        }, {
+            subjects: ["EX11-002"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    key: "base",
+                    question: `What are "Base Live Points"?`,
+                    answer: "It refers to the large number in the top right of the Song card. If there are Bonus Live Points on a card, like {{link:LL03-075}}, it only refers to the number on the left. (That means that {{link:LL03-075}} does not meet the requirement.)"
+                }, {
+                    key: "none",
+                    question: `When I ⟪ENTER⟫ed this card, there weren't any Song cards in my Set List with 4 or more Base Live Points. Can I still draw the additional card?`,
+                    answer: `Yes. In that case, you can still draw a card.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-003"],
+            seeAlso: ["/faq/general#flip_before_skills", "/faq/general#muse_and_aqours_song_cards"],
+            qa: [
+                {
+                    key: "twice",
+                    question: `If I used this card's Skill when I ⟪ENTER⟫ed it, can I also use it after performing a ⟪LIVE⟫ with this card?`,
+                    answer: "Yes. You can use it both times, after ⟪ENTER⟫ing and after performing a ⟪LIVE⟫."
+                }, {
+                    key: "multiple",
+                    question: `If there is a face-up Song card with multiple names in my Set List, for example {{link:LL01-067}}, can I ⟪ENTER⟫ a Member who has the {{red:"Sore wa Bokutachi no Kiseki"}} Live Costume?`,
+                    answer: `Yes. If a face-up Song card has multiple names, the requirement is met if the Live Costume has the same name as either song name.`
+                }, {
+                    key: "same",
+                    question: `After performing a ⟪LIVE⟫, can I ⟪ENTER⟫ a Member who has a Live Costume with the same name as the Song card used for that ⟪LIVE⟫?`,
+                    answer: `No. When a ⟪LIVE⟫ is performed, the Song card is placed on the Stage and is not part of the Set List anymore, but the Skill requires the Song card to be in your Set List.<br>(If you have a second Song card with the same name as the one used for the ⟪LIVE⟫, and it's face-up in your Set List, you can still ⟪ENTER⟫ a Member who has a Live Costume with that name.)`
+                }
+            ]
+        }, {
+            subjects: ["EX11-004"],
+            qa: [
+                {
+                    key: "other",
+                    question: `If I used {{link:LL01-058}}'s Skill to ⟪ENTER⟫ this card after it was revealed to everyone, can I use this card's [Entry] Skill?`,
+                    answer: "Yes. The requirement is met. Even if the card is revealed, it is still in your Hand."
+                }, {
+                    key: "rush",
+                    question: `Does [RUSH] count as an [Entry] Skill?`,
+                    answer: `No. It is not a Skill. Only lines with the [Entry] icon are [Entry] Skills.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-005"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `What does "If there are exactly three differently named Members on your Stage" mean?`,
+                    answer: `Count how many different names the Member cards on your Stage have.<br>For example, if you have Member cards named {{red:"Rin Hoshizora"}}, {{red:"Rin Hoshizora"}}, {{red:"Hanayo Koizumi"}}, {{red:"Hanayo Koizumi"}} and {{red:"Nico Yazawa"}} on your Stage, you have three differently named Members on your Stage - {{red:"Rin Hoshizora"}}, {{red:"Hanayo Koizumi"}} and {{red:"Nico Yazawa"}}. Since that's three different names, the Skill's requirement is met.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-006"],
+            seeAlso: ["/faq/general#more_faceup_songs"]
+        }, {
+            subjects: ["EX11-007"],
+            qa: [
+                {
+                    question: `Is this Skill's requirement met if this card joins a ⟪LIVE⟫ with a Song card with {{red:"µ's"}} in its name, such as {{link:LL01-075}}?`,
+                    answer: `No. {{red:"µ's"}} must be included in the card's Skill text (the text at the bottom of the card), so the requirement is not met.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-008"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `What does "If there are exactly three differently named Members joining this ⟪LIVE⟫" mean?`,
+                    answer: `Count how many different names the Member cards joining this ⟪LIVE⟫ have.<br>For example, if you have Member cards joining this ⟪LIVE⟫ named {{red:"Rin Hoshizora"}}, {{red:"Rin Hoshizora"}}, {{red:"Hanayo Koizumi"}}, {{red:"Hanayo Koizumi"}} and {{red:"Nico Yazawa"}}, you have three differently named Members joining this ⟪LIVE⟫ - {{red:"Rin Hoshizora"}}, {{red:"Hanayo Koizumi"}} and {{red:"Nico Yazawa"}}. Since that's three different names, the Skill's requirement is met.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-009"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `What does "If there are exactly three differently named Members on your Stage" mean?`,
+                    answer: `Count how many different names the Member cards on your Stage have.<br>For example, if you have Member cards named {{red:"Rin Hoshizora"}}, {{red:"Rin Hoshizora"}}, {{red:"Hanayo Koizumi"}}, {{red:"Hanayo Koizumi"}} and {{red:"Nico Yazawa"}} on your Stage, you have three differently named Members on your Stage - {{red:"Rin Hoshizora"}}, {{red:"Hanayo Koizumi"}} and {{red:"Nico Yazawa"}}. Since that's three different names, the Skill's requirement is met.`
+                }
+            ]
+        }, {
+            subjects: [{from: "EX11-010", to: "EX11-018"}],
+            qa: [
+                {
+                    question: `I'm the first player in turn order, and at the start of the match, I used {{link:LL07-064}}'s [Starter] Skill to ⟪ENTER⟫ a card. If I ⟪ENTER⟫ {{link:EX11-010}} on my first turn, can I draw two cards using the [Entry] Skill?`,
+                    answer: `No. [Starter] Skills are counted as part of match preparation, before any turns are played, so once your first turn starts, there have been no Members who ⟪ENTER⟫ed that turn.`
+                }
+            ]
+        }, {
+            subjects: [{from: "EX11-019", to: "EX11-027"}],
+            seeAlso: ["/faq/general#members_on_stage"]
+        }, {
+            subjects: ["EX11-028"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    key: "livejoin",
+                    question: `If the flipped Member card has a [Live Join] Skill that allows it to gain [SMILE], can that Piece be counted?`,
+                    answer: `No. Pieces gained through [Live Join] Skills cannot be counted. If the card has a normal [SMILE] shown in the top left, the card will be ⟪ENTER⟫ed, otherwise, it will be added to your Hand.`
+                }, {
+                    key: "bonus",
+                    question: `If the flipped Member card has an active Birthday Bonus and it's [SMILE], can that Piece be counted?`,
+                    answer: `Yes. If the requirement for the Birthday Bonus is met, the Pieces can be counted and if the Bonus Piece is [SMILE], the card will be ⟪ENTER⟫ed.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-029"],
+            qa: [
+                {
+                    question: `This Member has [COOL][COOL], and I have used three Song cards for Lives. What Pieces will the Member have in this case?`,
+                    answer: `The Member will have [ALL][ALL]. (Even if you have more Song cards than [COOL], only [COOL] can become [ALL].)`
+                }
+            ]
+        }, {
+            subjects: ["EX11-030"],
+            qa: [
+                {
+                    question: `A player used this Member's Skill. If they have no cards in their Hand, can I still grant the "⟪ENTER⟫ one Member from your Hand" request?`,
+                    answer: `Yes. No matter how many cards the player has on their Hand, you can choose either request. (For the same reason, you can also grant the "draw three cards" request if they have less than three cards in their Deck.)`
+                }
+            ]
+        }, {
+            subjects: ["EX11-031"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    key: "attribute",
+                    question: `How are Song cards with Attribute requirements counted for "highest requirement"?`,
+                    answer: `Sum up the number of all Pieces required to perform a ⟪LIVE⟫. For example, {{link:EX11-047}} (4x [SMILE], 3x [PURE], 3x [COOL]) will be counted as <span class="whitespace-nowrap">4 + 3 + 3 = 10</span>.`
+                }, {
+                    key: "tied",
+                    question: `If there are multiple cards with the same highest amount of Pieces needed, does performing a ⟪LIVE⟫ with any of them meet this Skill's requirement?`,
+                    answer: `Yes. If no other Song card has a higher amount of Pieces needed to perform a ⟪LIVE⟫, the Skill's requirement is met.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-032"],
+            seeAlso: ["/faq/general#stand_by"],
+            qa: [
+                {
+                    question: `If I return a Member with Stars to my Hand, can I ⟪ENTER⟫ a Member without Stars?`,
+                    answer: `Yes. Members with Stars and Members without Stars count as having a different amount of Stars. Similarly, you can ⟪ENTER⟫ a Member with Stars after returning a Member without Stars to your Hand.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-033"],
+            qa: [
+                {
+                    question: `If the face-up Song cards in my Set List have four different Attributes, do I draw two cards?`,
+                    answer: `Yes. If there are four Attributes, you both draw two cards and take another turn.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-035"],
+            seeAlso: ["/faq/general#stand_by"]
+        }, {
+            subjects: ["EX11-036"],
+            seeAlso: ["/faq/general#skill_impossible"]
+        }, {
+            subjects: ["EX11-037"],
+            seeAlso: ["/faq/general#more_faceup_songs"]
+        }, {
+            subjects: ["EX11-038"],
+            qa: [
+                {
+                    key: "others",
+                    question: `What if Members other than {{red:"Honoka"}} and {{red:"Rin"}} join the ⟪LIVE⟫?`,
+                    answer: `As long as there is a {{red:"Honoka"}} card and a {{red:"Rin"}} card joining, the Skill's requirement is met, regardless of what other Members join.`
+                }, {
+                    key: "skip",
+                    question: `If the Skill's requirement is met and I perform a ⟪LIVE⟫, can I choose not to ⟪SCOUT⟫?`,
+                    answer: `No. If the requirement of the Skill is met, you must always ⟪SCOUT⟫.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-039"],
+            qa: [
+                {
+                    key: "others",
+                    question: `What if Members other than {{red:"Nozomi"}} and {{red:"Nico"}} join the ⟪LIVE⟫?`,
+                    answer: `As long as there is a {{red:"Nozomi"}} card and a {{red:"Nico"}} card joining, the Skill's requirement is met, regardless of what other Members join.`
+                }, {
+                    key: "skip",
+                    question: `If the Skill's requirement is met and I perform a ⟪LIVE⟫, can I choose not to add the bottom card of my Deck to my Hand?`,
+                    answer: `No. If the requirement of the Skill is met, you must always add the bottom card of your Deck to your Hand.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-040"],
+            qa: [
+                {
+                    question: `What if Members other than {{red:"Kotori"}} and {{red:"Hanayo"}} join the ⟪LIVE⟫?`,
+                    answer: `As long as there is a {{red:"Kotori"}} card and a {{red:"Hanayo"}} card joining, the Skill's requirement is met, regardless of what other Members join.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-041"],
+            qa: [
+                {
+                    key: "others",
+                    question: `What if Members other than {{red:"Eli"}}, {{red:"Umi"}} and {{red:"Maki"}} join the ⟪LIVE⟫?`,
+                    answer: `As long as there is a {{red:"Eli"}} card, a {{red:"Umi"}} card and a {{red:"Maki"}} card joining, the Skill's requirement is met, regardless of what other Members join.`
+                }, {
+                    key: "flipping",
+                    question: `What exactly does the [While Live] Skill of this card do?`,
+                    answer: `After this ⟪LIVE⟫ is performed, for every Song card in your Set List that is flipped face-up because of performing a ⟪LIVE⟫ or as the result of a Skill, flip an additional Song card face-up.<br>(This includes the Song card you flip face-up after performing the ⟪LIVE⟫ with this card.)`
+                }, {
+                    key: "multiple",
+                    question: `What happens if I use a Skill that allows me to flip multiple Song cards face-up at once, such as the [Live Success] Skill of {{link:LL03-066}}, while {{red:"soldier game"}} is live its the Skill's requirement is met?`,
+                    answer: `If you flip multiple Song cards face-up at the same time, you still flip one additional Song card face-up for each flipped card. (For example, if you flip three Song cards face-up at once, you flip three more Song cards face-up.)`
+                }
+            ]
+        }, {
+            subjects: ["EX11-042"],
+            qa: [
+                {
+                    key: "others",
+                    question: `What if Members other than {{red:"Nico"}}, {{red:"Rin"}} and {{red:"Hanayo"}} join the ⟪LIVE⟫?`,
+                    answer: `As long as there is a {{red:"Nico"}} card, a {{red:"Rin"}} card and a {{red:"Hanayo"}} card joining, the Skill's requirement is met, regardless of what other Members join.`
+                }, {
+                    key: "all",
+                    question: `If the {{red:"Nico"}} cards, {{red:"Rin"}} cards and {{red:"Hanayo"}} cards joining this ⟪LIVE⟫ don't have Live Costumes, is the Skill's requirement met even if there are other Members with Live Costumes joining this ⟪LIVE⟫?`,
+                    answer: `No. No Members joining the ⟪LIVE⟫ may have Live Costumes. If any Member joining has a Live Costume, the Skill's requirement is not met.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-043"],
+            qa: [
+                {
+                    key: "later",
+                    question: `After performing a ⟪LIVE⟫ with {{red:"Binetsu kara Mystery"}} with the Skill's requirement met, I performed another ⟪LIVE⟫ with all three Members of {{red:"lily white"}}. Do I gain another Live Point?`,
+                    answer: `Yes. If the Skill's requirement is met, you will gain Live Points even from ⟪LIVE⟫s performed after {{red:"Binetsu kara Mystery"}} was.`
+                }, {
+                    key: "others",
+                    question: `What if Members other than those of {{red:"lily white"}} join the ⟪LIVE⟫? And if another Member joins a ⟪LIVE⟫ along with {{red:"Umi"}}, {{red:"Rin"}} and {{red:"Nozomi"}} cards, will I gain Live Points?`,
+                    answer: `As long as there is a {{red:"Umi"}} card, a {{red:"Rin"}} card and a {{red:"Nozomi"}} card joining, the Skill's requirement is met, regardless of what other Members join. Similarly, as longs as there is at least a {{red:"Umi"}} card, a {{red:"Rin"}} card and a {{red:"Nozomi"}} card joining a ⟪LIVE⟫ with another Song card, you will gain a Live Point.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-044"],
+            seeAlso: ["/faq/general#collection", "/faq/general#flip_before_skills"],
+            qa: [
+                {
+                    question: `What if Members other than those of {{red:"BiBi"}} join the ⟪LIVE⟫?`,
+                    answer: `As long as there is a {{red:"Eli"}} card, a {{red:"Maki"}} card and a {{red:"Nico"}} card joining, the Skill's requirement is met, regardless of what other Members join.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-045"],
+            qa: [
+                {
+                    key: "others",
+                    question: `What if Members other than those of {{red:"Printemps"}} join the ⟪LIVE⟫?`,
+                    answer: `As long as there is a {{red:"Hanayo"}} card, a {{red:"Kotori"}} card and a {{red:"Hanayo"}} card joining, the Skill's requirement is met, regardless of what other Members join.`
+                }, {
+                    key: "skills",
+                    question: `While this Song card is live and its Skill's requirement is met, {{link:LL08-050}} joined a ⟪LIVE⟫ with a Member of {{red:"Printemps"}} who did not originally have [PURE]. In this situation, can the {{red:"Printemps"}} Member gain +[PURE] through the Skill of the {{red:"You"}} card?`,
+                    answer: `Yes. The Member will gain +[PURE] from this card's Skill before the [Live Join] Skill is resolved. Thus, you can gain +[PURE] again by using the Skill of the {{red:"You"}} card.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-046"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `I used a "Take another turn" Skill. If I perform a ⟪LIVE⟫ with this Song card on my second turn, will {{red:"µ's"}} Members I ⟪ENTER⟫ed on my first turn count for the "have been on your Stage before this turn" requirement?`,
+                    answer: `Yes. Since you have taken another turn, any Members who ⟪ENTER⟫ed before the extra turn meet this Skill's requirement.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-047"],
+            qa: [
+                {
+                    question: `Do [ALL] gained through [Live Join] Skills count for this card's [Live Success] Skill?`,
+                    answer: `Yes. [ALL] gained through Skills or by treating other Pieces as [ALL] count.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-048"],
+            seeAlso: ["/faq/general#member_counting"]
+        }, {
+            subjects: ["EX11-049"],
+            seeAlso: ["/faq/general#members_on_stage"]
+        }, {
+            subjects: ["EX11-050"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `The Members joining this ⟪LIVE⟫ have 3x [SMILE] and 1x [ALL] in total. Will the Any Piece requirement be reduced?`,
+                    answer: `No. The Skill of this Song card requires one Attribute, [SMILE] [PURE] [COOL] or [ALL], to have four or more Pieces. You cannot use [ALL] as a wildcard for another Attribute.`
+                }
+            ]
+        }, {
+            subjects: ["EX11-051"],
+            seeAlso: ["/faq/general#member_counting"]
+        }, {
+            subjects: [{from: "EX11-052", to: "EX11-069"}],
+            seeAlso: ["/faq/general#skill_impossible"],
+            qa: [
+                {
+                    question: `I'm using this Member's Skill while having no cards in my Hand. Can I still draw four cards?`,
+                    answer: `Yes. You can draw four cards even if you have no cards in your Hand.`
+                }
+            ]
+        }
     ]
 };
 

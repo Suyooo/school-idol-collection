@@ -113,7 +113,7 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
         apply(nodes, new RegExp("(?:\\[(?:"
                 + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+"),
             pieces.bind(undefined, "]["));
-        apply(nodes, /(1|2|3|one|two|three|has|each|more|no|with|without) (Stars?)(?:\b)/, cost);
+        apply(nodes, /(1|2|3|one|two|three|has|each|more|no|with|without|) (Stars?)(?:\b)/, cost);
     } else if (lang === Language.JPN) {
         if (!parseAsHelpText && skillString.charAt(0) === "【") {
             // Only call these applys if this string starts with a trigger (so, it's not flavour or help text)
@@ -337,7 +337,7 @@ function cost(match: RegExpExecArray): ParseNode[] {
         // count/word match
         return [
             {secret, element: "span", class: "inline-block"},
-            {text: match[1] + " "},
+            {text: match[1] + "&nbsp;"},
             {componentName: "Star", props: {repl: match[2]}},
             {secret}
         ];

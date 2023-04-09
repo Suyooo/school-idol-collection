@@ -87,6 +87,7 @@ export function getLinkedCards(s: string) {
 
 export default async function prepareFaq(DB: DBObject, faq: Faq) {
     const cardsToLoad: string[] = [];
+    const seenSubjects: string[] = [];
     const faqPromises: Promise<void>[] = [];
 
     const retFaq: FaqPrepared = {
@@ -94,9 +95,10 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
             const keyPrefix = getKeyPrefix(section.subjects);
             for (const subject of section.subjects) {
                 if (typeof subject === "string") {
-                    if (cardsToLoad.some(c => c === subject)) {
+                    if (seenSubjects.some(c => c === subject)) {
                         throw new Error("Duplicate subject for different FAQ sections. " + subject);
                     }
+                    seenSubjects.push(subject);
                     cardsToLoad.push(subject);
                 } else {
                     if (cardsToLoad.some(c => c === subject.from)) {

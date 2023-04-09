@@ -180,7 +180,7 @@
             {/each}
         </div>
     </div>
-    <div class="flex items-center justify-between mt-2 w-full">
+    <div class="flex items-center justify-end mt-2 w-full">
         <Button accent on:click={submit} disabled={!lastSuccessful}>Submit</Button>
     </div>
     <h5>Test</h5>
