@@ -1621,6 +1621,123 @@ export const data: { [key: string]: Faq } = {
                 }
             ]
         }
+    ],
+    "EX12": [
+        {
+            subjects: ["EX12-019"],
+            seeAlso: ["/faq/LL05#LL05-046"]
+        }, {
+            subjects: ["EX12-020"],
+            seeAlso: ["/faq/LL05#LL05-047"]
+        }, {
+            subjects: ["EX12-021"],
+            seeAlso: ["/faq/LL05#LL05-048"]
+        }, {
+            subjects: ["EX12-022"],
+            seeAlso: ["/faq/LL05#LL05-049"]
+        }, {
+            subjects: ["EX12-023"],
+            seeAlso: ["/faq/LL05#LL05-050"]
+        }, {
+            subjects: ["EX12-024"],
+            seeAlso: ["/faq/LL05#LL05-051"]
+        }, {
+            subjects: ["EX12-025"],
+            seeAlso: ["/faq/LL05#LL05-052"]
+        }, {
+            subjects: ["EX12-026"],
+            seeAlso: ["/faq/LL05#LL05-053"]
+        }, {
+            subjects: ["EX12-027"],
+            seeAlso: ["/faq/LL05#LL05-054"]
+        }, {
+            subjects: ["EX12-028"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    key: `emptyscout`,
+                    question: `I ⟪SCOUT⟫ed in my previous turn, but already had four or more cards on my Hand, so I didn't draw any cards. Will the "if you ⟪SCOUT⟫ed in your previous turn" requirement still be met?`,
+                    answer: `Yes. Whether you draw cards or not, the Skill's requirement is met if you ⟪SCOUT⟫ed in the previous turn.`
+                }, {
+                    key: `idolization`,
+                    question: `Using the [Entry] Skill, I ⟪ENTER⟫ed a {{red:"Chika"}} without Stars, and because I ⟪SCOUT⟫ed in the previous turn, I'm also ⟪ENTER⟫ing {{link:LL15-048}}. Can I flip the {{red:"Chika"}} without Stars face-down and place the second card on top of it?`,
+                    answer: `Yes. By the time {{link:LL15-048}} is ⟪ENTER⟫ed, the {{red:"Chika"}} without Stars is already on Stand-By, so you can flip it face-down and place the card on top of it.`
+                }
+            ]
+        }, {
+            subjects: ["EX12-029"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `My opponent had to pass due to a "skip a turn" Skill, so it's my turn again. If I ⟪ENTER⟫ this Member in this turn, is the "if the previous turn was yours" requirement met?`,
+                    answer: `Yes. If the opponent skipping a turn causes you to take two turns in a row, you can have the previous turn be yours, and the Skill's requirement can be met.`
+                }
+            ]
+        }, {
+            subjects: ["EX12-030"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#member_counting", "/faq/general#skill_order_multiple_skills"]
+        }, {
+            subjects: ["EX12-031"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["EX12-032"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#skill_order_multiple_skills"],
+            qa: [
+                {
+                    question: `My opponent had to pass due to a "skip a turn" Skill, so it's my turn again. If I ⟪ENTER⟫ this Member in this turn, is the "if the previous turn was yours" requirement met?`,
+                    answer: `Count how many different Live Costumes the {{red:"You"}} cards on your Stage have (in the lower left).<br>For example, if you have {{red:"You"}} cards with the Live Costumes {{red:\"Aozora Jumping Heart\"}}, {{red:\"Aozora Jumping Heart\"}}, {{red:\"Kimi no Kokoro wa Kagayaiteru kai?\"}}, {{red:\"Kimi no Kokoro wa Kagayaiteru kai?\"}} and {{red:\"Koi ni Naritai AQUARIUM\"}}, you have three different Live Costumes, and you draw cards until you have three cards in your Hand. (If you already have three or more cards in your Hand, you don't draw any cards.)`
+                }
+            ]
+        }, {
+            subjects: ["EX12-033"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#skill_order_same_skill"],
+            qa: [
+                {
+                    key: `explain`,
+                    question: `What exactly does the Skill of this card do?`,
+                    answer: `If all Members on your Stage are {{red:"Yoshiko"}} cards, resolve the three following effects. If you meet the requirement for all of them, you can get all three effects.`
+                }, {
+                    key: `others`,
+                    question: `I was not allowed to draw cards because I did not have six or more Members on my Stage, but I still have six or more cards in my Hand. Am I allowed to ⟪ENTER⟫ a Member without Stars?`,
+                    answer: `Yes. You can ⟪ENTER⟫ a Member without Stars from your Hand. When resolving an effect, it does not matter whether the requirements of the other two effects are met.<br>Similarly, even if you are unable to draw cards because your Deck is empty, or if you choose not to ⟪ENTER⟫ a Member, the requirements of the other effects are unaffected.`
+                }, {
+                    key: `combo`,
+                    question: `I used this card's Skill when I had six Members on my Stage and four cards in my Hand. I draw two cards from the first effect and now have six cards in my Hand - can I ⟪ENTER⟫ a Member without Stars now?`,
+                    answer: `Yes. You can ⟪ENTER⟫ a Member without Stars from your Hand. The requirements for the effects are checked in order when you resolve that effect, not all at once when the Skill starts to be resolved.`
+                }
+            ]
+        }, {
+            subjects: ["EX12-034"],
+            seeAlso: ["/faq/general#stand_by", "/faq/general#members_on_stage"]
+        }, {
+            subjects: ["EX12-035"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#collection"],
+            qa: [
+                {
+                    key: `skill`,
+                    question: `Can I pick a Member like {{link:LL06-053}}, who has only [ALL] in the upper left, but might gain Pieces other than [ALL] from a [Live Join] Skill, from my Collection?`,
+                    answer: `Yes. Pieces that can be gained from [Live Join] Skills are not considered for this Skill.`
+                }, {
+                    key: `bonus`,
+                    question: `Can I pick a {{red:"Mari"}} card that has only [ALL] in the upper left, but has a Pieces that is not [ALL] as its Birthday Bonus, from my Collection?`,
+                    answer: `If the Birthday Bonus is active, you must consider the Piece for this Skill. If a {{red:"Mari"}} card has a Birthday Bonus Piece that is not [ALL] and its Birthday Bonus is active, you cannot pick it from your Collection.`
+                }
+            ]
+        }, {
+            subjects: ["EX12-036"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    key: `one`,
+                    question: `When I ⟪ENTER⟫ed this Member, I only had one card on my Hand. Can I return that one card to my Deck and then ⟪ENTER⟫ the top card of my Deck?`,
+                    answer: `No. You must return two cards to your Deck, one to the top and one to the bottom, or you cannot ⟪ENTER⟫ the top card of your Deck.`
+                }, {
+                    key: `empty`,
+                    question: `If my Deck is empty when this Member is ⟪ENTER⟫ed, can I still ⟪ENTER⟫ a card from the Deck?`,
+                    answer: `Yes. As usual, the card you have placed on the top of the Deck will be ⟪ENTER⟫ed.`
+                }
+            ]
+        }
     ]
 };
 

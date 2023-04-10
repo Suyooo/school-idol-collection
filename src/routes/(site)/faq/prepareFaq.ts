@@ -1,4 +1,4 @@
-import {cardLink} from "$lib/card/strings.js";
+import {cardLink, cardTitle} from "$lib/card/strings.js";
 import Language from "$lib/enums/language.js";
 import {isTextNode, parseSkillToNodes} from "$lib/format/format.js";
 import type {ParseNodePrepared} from "$lib/format/format.js";
@@ -66,11 +66,17 @@ export function getKey(prefix: string | null, key?: string) {
 }
 
 export async function getFaqLinkLabel(DB: DBObject, link: string) {
-    const faqEntry = await DB.CardFAQLink.findOne({where: {link}});
-    if (faqEntry === null) {
-        throw new Error("No link label in database for " + link + ", add exception in prepareFaq.ts:getFaqLinkLabel until FAQ is applied");
+    const anchorName = link.split("#").at(-1)!;
+    if (anchorName.match(/(LL\d\d|EX\d\d|PR)-\d\d\d/)) {
+        const card = (await DB.Card.withScope(["viewForLink"]).findByPk(anchorName))!;
+        return cardTitle(card, true);
+    } else {
+        const faqEntry = await DB.CardFAQLink.findOne({where: {link}});
+        if (faqEntry === null) {
+            throw new Error("No link label in database for " + link + ", add exception in prepareFaq.ts:getFaqLinkLabel until FAQ is applied");
+        }
+        return faqEntry.label;
     }
-    return faqEntry.label;
 }
 
 export function getLinkedCards(s: string) {

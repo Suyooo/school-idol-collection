@@ -10,13 +10,15 @@
 </script>
 
 {#each subjects as subject}
-    <h5>
-        {#if isMultipleSubjects(subject)}
+    {#if isMultipleSubjects(subject)}
+        <h5 id={subject.from.cardNo}>
             {@html cardLink(subject.from)} to {@html cardLink(subject.to)}
-        {:else}
+        </h5>
+    {:else}
+        <h5 id={subject.cardNo}>
             {@html cardLink(subject)}
-        {/if}
-    </h5>
+        </h5>
+    {/if}
 {/each}
 <slot></slot>
 

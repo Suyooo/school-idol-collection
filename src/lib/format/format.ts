@@ -122,6 +122,7 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
                     .concat(TriggerEnum.allWithMemoryAlts.map(t => t.toName(Language.JPN, true))).join("|")
                 + ")】/?([^（]*?)(?=（|$)"), triggerWithClose);
             apply(nodes, /「([^"]*?)」/, highlightRed.bind(undefined, "「", "」"));
+            apply(nodes, /『([^"]*?)』/, highlightRed.bind(undefined, "『", "』"));
         } else if (!parseAsHelpText && (skillString.charAt(0) !== "（" || cardType === CardType.SONG)) {
             // Help text has brackets - if there are none, this is flavour text. Song cards also don't have help text
             const secret = Symbol();

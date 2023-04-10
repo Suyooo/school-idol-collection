@@ -58,7 +58,7 @@ export default class PatternGroupType {
         map.push(new PatternGroupType(3, "Memory Name",
             async function (DB: DBObject | null, match: string, options?: QueryOptions) {
                 if (DB === null) return "EXAMPLE MEMORY";
-                const n = (await DB.Card.withScope(["memories", "forLink"]).findOne({
+                const n = (await DB.Card.withScope(["filterMemories", "viewForLink"]).findOne({
                     ...options,
                     where: {
                         nameJpn: match
