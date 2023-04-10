@@ -9,11 +9,19 @@ export default class Crawler extends C {
             const originalCallback = options.callback;
             options.callback = async (error, res, done) => {
                 try {
-                    await originalCallback(error, res, done);
+                    const callbackPromise = new Promise<void>(resolve => originalCallback(error, res, resolve));
+                    await callbackPromise;
                     res.options.promise.resolve();
                 } catch (e) {
                     res.options.promise.reject(e);
+                } finally {
+                    done();
                 }
+            };
+        } else {
+            options.callback = async (error, res, done) => {
+                res.options.promise.resolve();
+                done();
             };
         }
         super(options);
@@ -27,20 +35,20 @@ export default class Crawler extends C {
                     if (typeof v === "string") {
                         v = {uri: v, promise: {resolve, reject}};
                     } else {
-                        v.options.promise = {resolve, reject};
+                        v.promise = {resolve, reject};
                     }
                 });
                 promiseArray.push(p);
                 return v;
             });
             super.queue(urisOrOptions);
-            return Promise.all(promiseArray).then(() => {});
+            return Promise.all(promiseArray).then(() => { });
         } else {
             const p = new Promise<void>((resolve, reject) => {
                 if (typeof urisOrOptions === "string") {
                     urisOrOptions = {uri: urisOrOptions, promise: {resolve, reject}};
                 } else {
-                    (<CrawlerRequestOptions>urisOrOptions).options.promise = {resolve, reject};
+                    (<CrawlerRequestOptions>urisOrOptions).promise = {resolve, reject};
                 }
             });
             super.queue(urisOrOptions);

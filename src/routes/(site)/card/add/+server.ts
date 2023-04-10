@@ -210,7 +210,7 @@ async function downloadImages($: cheerio.CheerioAPI, cardNo: string, set: string
                 done();
                 throw err;
             } else {
-                if (!fs.existsSync(`static/images/cards/${set}`)) fs.mkdirSync(`static/images/${set}`);
+                if (!fs.existsSync(`static/images/cards/${set}`)) fs.mkdirSync(`static/images/cards/${set}`);
                 fs.createWriteStream(`static/images/cards/${set}/${cardNo}-${res.options.filename}.jpg`).write(res.body);
                 done();
             }
@@ -225,7 +225,7 @@ async function downloadImages($: cheerio.CheerioAPI, cardNo: string, set: string
 
 async function checkImageOrientation(cardNo: string, side: string) {
     const set = cardNo.split("-")[0];
-    const res = await probeImageSize(fs.createReadStream(`static/images/${set}/${cardNo}-${side}.jpg`));
+    const res = await probeImageSize(fs.createReadStream(`static/images/cards/${set}/${cardNo}-${side}.jpg`));
     if (res.width < res.height) return CardOrientation.PORTRAIT;
     else return CardOrientation.LANDSCAPE;
 }
