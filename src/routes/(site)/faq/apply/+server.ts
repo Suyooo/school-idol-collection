@@ -14,6 +14,13 @@ export const POST: RequestHandler = (async ({locals, request}) => {
 
     locals.DB.sequelize.transaction(async transaction => {
         for (const section of data[faqName]) {
+            if (section.qa === undefined && section.seeAlso?.length === 1
+                && section.seeAlso[0].split("#").at(-1)!.match(/(LL\d\d|EX\d\d|PR)-\d\d\d/)) {
+                // This FAQ entry only links to another card's FAQ section, which means this card should already have
+                // the FAQ links on its card page due to shared ID. Do not process this section
+                continue;
+            }
+
             const allSubjects: string[] = [];
             for (const subject of section.subjects) {
                 if (typeof subject === "string") {
