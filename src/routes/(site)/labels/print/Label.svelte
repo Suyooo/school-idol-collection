@@ -55,7 +55,7 @@
             {card.cardNo}
             {cardIsMember(card) ? CardMemberRarity[card.member.rarity] : cardIsSong(card) ? CardSongRarity[card.song.rarity] : "ME"}
         </div>
-        <div>ID: {card.id}</div>
+        <div>ID: {card.id.toString().padStart(4,"0")}</div>
     </div>
     <hr>
     <div class="fold"></div>
@@ -71,8 +71,8 @@
         font-size: 3mm;
         line-height: 3mm;
         letter-spacing: -0.1mm;
-        outline: 1mm solid rgb(230, 230, 230);
-        outline-offset: -0.5mm;
+        outline: 0.25mm solid rgb(230, 230, 230);
+        outline-offset: -0.125mm;
 
         &.narrow {
             width: 63.5mm;

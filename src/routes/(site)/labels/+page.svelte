@@ -67,7 +67,8 @@
                         <h6>Card Numbers</h6>
                         <div class="mb-2">
                             Enter the card numbers (starting with "LL", "EX" or "PR") of the cards that you want to
-                            print labels for. Seperate them with commas, spaces or line breaks.
+                            print labels for. Seperate them with commas, spaces or line breaks.<br>
+                            For faster entry, you can leave out the "-", and case does not matter.
                         </div>
                         <textarea name="cardNos" bind:value={cardNos}
                                   placeholder={"LL01-001\nLL01-002\nLL01-003\n..."}></textarea>

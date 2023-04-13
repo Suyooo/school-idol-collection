@@ -5,7 +5,9 @@ import type {Actions, PageServerLoad} from "./$types.js";
 export const actions = {
     default: async ({request, locals, fetch}) => {
         const data = await request.formData();
-        const cardNos = (data.get("cardNos") as string).split(/[ 　\n\r,、]/).filter(s => s.length > 0);
+        const cardNos = (data.get("cardNos") as string).toUpperCase()
+            .split(/[ 　\n\r,、]/).filter(s => s.length > 0)
+            .map(s => s.indexOf("-") === -1 ? s.substring(0, s.length - 3) + "-" + s.substring(s.length - 3) : s);
         const byCardNo: { [cardNo: string]: Card } = {};
         const byCardId: { [cardId: number]: Card } = {};
         const allRequiredGroupMembers: number[] = [];
