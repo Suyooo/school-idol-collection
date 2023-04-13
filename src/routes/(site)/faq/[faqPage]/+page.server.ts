@@ -1738,6 +1738,166 @@ export const data: { [key: string]: Faq } = {
                 }
             ]
         }
+    ],
+    "LL10": [
+        {
+            subjects: ["LL10-046"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#more_faceup_songs"],
+            qa: [
+                {
+                    question: `If I have no face-down cards in my Set List, can I still choose the "flip one face-down Song card in your Set List face-up" effect?`,
+                    answer: `Yes. In that case, the Skill would be resolved without anything happening.<br>Similarly, you can choose to draw two cards even if you have no cards or only one card in your Deck, or choose to ⟪ENTER⟫ a Member without Stars and with a Live Costume from your Hand even if you have no matching Member on your Hand.`
+                }
+            ]
+        }, {
+            subjects: ["LL10-047"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#collection", "/faq/general#muse_and_aqours_song_cards", "/faq/general#more_faceup_songs"],
+            qa: [
+                {
+                    question: `Can I pick a Song card with the same name as a Song card in my Set List or a Song card used for a ⟪LIVE⟫ from my Collection?`,
+                    answer: `Yes. You can pick Song cards with the same name, no matter whether their ID matches with one of the Song cards in play or not.`
+                }
+            ]
+        }, {
+            subjects: ["LL10-048"],
+            seeAlso: ["/faq/general#member_counting"],
+            qa: [
+                {
+                    key: `cards`,
+                    question: `Which cards have Skills that require "counting {{red:"Members currently in your Lives"}}"?`,
+                    answer: `You can use <a href="http://localhost:5173/search/skill:Members%20currently%20in%20your%20Lives">the search function on this site</a> to find all cards affected by this Skill.`
+                },
+                {
+                    key: `samelive`,
+                    question: `I'm performing a ⟪LIVE⟫ with this card and {{link:LL08-048}}. When counting {{red:"Members currently in your Lives"}} while resolving {{link:LL08-048}}'s [Live Success] Skill, does this card's Skill double the amount?`,
+                    answer: `Yes. The [While Live] Skill is already active when resolving the [Live Success] Skill, so the amount is doubled.`
+                },
+                {
+                    key: `stack`,
+                    question: `If there are two or more of this card in Lives, do you double the counted amounts of {{red:"Members currently in your Lives"}} for each card?`,
+                    answer: `Yes. If there are two {{link:LL10-048}} currently in Lives, the amount will be quadrupled, and if there are three {{link:LL10-048}} currently in Lives, it will be multiplied by eight.`
+                }
+            ]
+        }, {
+            subjects: ["LL10-049"],
+            seeAlso: ["/faq/general#member_counting"],
+            qa: [
+                {
+                    question: `Does this card's Skill count the card itself as a "3rd Year" card with Stars?`,
+                    answer: `Yes. If three or more "3rd Year" cards with Stars, including {{link:LL10-049}} itself, join this ⟪LIVE⟫, it will gain +[ALL].`
+                }
+            ]
+        }, {
+            subjects: ["LL10-050"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `What exactly does the [Entry] Skill do?`,
+                    answer: `You may ⟪ENTER⟫ a Member with a Live Costume and without Stars from your Hand if there is at least one card with the same Live Costume on your Stage.<br>For example, if you have cards with the Live Costumes {{red:"Aozora Jumping Heart"}}, {{red:"Aozora Jumping Heart"}}, {{red:"Kimi no Kokoro wa Kagayaiteru kai?"}}, {{red:"Kimi no Kokoro wa Kagayaiteru kai?"}} and {{red:"Koi ni Naritai AQUARIUM"}} on your Stage, you may ⟪ENTER⟫ up to one Member with the {{red:"Aozora Jumping Heart"}} Live Costume and without Stars, one Member with the {{red:"Kimi no Kokoro wa Kagayaiteru kai?"}} Live Costume and without Stars, and one Member with the {{red:"Koi ni Naritai AQUARIUM"}} Live Costume and without Stars from your Hand.`
+                }
+            ]
+        }, {
+            subjects: ["LL10-051"],
+            seeAlso: ["/faq/general#member_counting", "/faq/general#stand_by"]
+        }, {
+            subjects: ["LL10-052"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#flip_before_skills", "/faq/general#live_non_exact"],
+            qa: [
+                {
+                    question: `If the requirement of the Song card used in this ⟪LIVE⟫ was reduced by a Skill, does this Skill count the original or the reduced requirement? Additionally, if Members joining this ⟪LIVE⟫ gained Pieces from Skills, does this Skill count or ignore these additional Pieces?`,
+                    answer: `If the ⟪LIVE⟫ is performed with a Song card with a reduced requirement, that changed requirement is counted. Similarly, any Pieces the joining Members gained from Skills are also counted in the total number of Pieces.`
+                }
+            ]
+        }, {
+            subjects: ["LL10-053"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#flip_before_skills"],
+            qa: [
+                {
+                    question: `This Member performs a ⟪LIVE⟫ with a Member without [ALL]. If the other Member gains +[ALL] from a Skill, does that additional Piece fulfil the "If there is another Member with [ALL] who joined this ⟪LIVE⟫" requirement?`,
+                    answer: `Yes. If another Member gains +[ALL] from a Skill, or a Skill allows you to treat another Piece as [ALL], the Skill's requirement is met.`
+                }
+            ]
+        }, {
+            subjects: ["LL10-054"],
+            qa: [
+                {
+                    key: `same`,
+                    question: `Can I pick two {{red:"1st Year"}} Members with the same name to add to my Hand?`,
+                    answer: `Yes. As long as both cards are {{red:"1st Year"}} Members, you can add any card, no matter what their names are.`
+                },
+                {
+                    key: `optional`,
+                    question: `If the cards shown from the Deck contain two or more {{red:"1st Year"}} Members, do I have to pick two cards to add to my Hand?`,
+                    answer: `No. You can pick up to two cards, so you can add two Members, just one Member or no Members at all to your Hand.`
+                }
+            ]
+        }, {
+            subjects: ["LL10-059", "LL10-060"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `When exactly is the "If everyone of "Saint Aqours Snow" is on your Stage" requirement met?`,
+                    answer: `You must have at least one card of each of these Members on your Stage: {{red:"Chika"}}, {{red:"Riko"}}, {{red:"Kanan"}}, {{red:"Dia"}}, {{red:"You"}}, {{red:"Yoshiko"}}, {{red:"Hanamaru"}}, {{red:"Mari"}}, {{red:"Ruby"}}, {{red:"Sarah"}} and {{red:"Leah"}}.`
+                }
+            ]
+        }, {
+            subjects: ["LL10-061"],
+            seeAlso: ["/faq/general#member_counting"]
+        }, {
+            subjects: ["LL10-062"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `What if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
+                    answer: `As long as there is a {{red:"Sarah"}} card with [COOL] and a {{red:"Leah"}} card with [COOL] joining, the Any Piece requirement is reduced by two, regardless of what other Members join.`
+                }
+            ]
+        }, {
+            subjects: ["LL10-063"],
+            seeAlso: ["/faq/general#member_counting"],
+            qa: [
+                {
+                    question: `I performed a ⟪LIVE⟫ with this Song card with two Members joining, who originally had three Pieces in total, but gained a fourth Piece from a [Live Join] Skill. Does this meet the "they must have four or more Pieces in total" requirement?`,
+                    answer: `Yes. The Pieces gained from [Live Join] Skills remain for the rest of the match, so the Pieces will still be counted in the [While Live] Skill of this card and you will not lose a Live Point.`
+                }
+            ]
+        }, {
+            subjects: ["LL10-064"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL10-065"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL10-066"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL10-067"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `When performing a ⟪LIVE⟫ with this Song card, is it included when counting face-up Song cards in your Set List?`,
+                    answer: `Yes. This card is counted, too.`
+                }
+            ]
+        }, {
+            subjects: ["LL10-068"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order", "/faq/general#member_counting"]
+        }, {
+            subjects: ["LL10-069"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL10-070"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order", "/faq/general#member_counting"]
+        }, {
+            subjects: ["LL10-071"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL10-072"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"]
+        }, {
+            subjects: [{"from": "LL10-073", "to": "LL10-090"}],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#flip_before_skills"]
+        }
     ]
 };
 
