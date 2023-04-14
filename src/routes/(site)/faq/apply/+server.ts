@@ -12,6 +12,7 @@ export const POST: RequestHandler = (async ({locals, request}) => {
         throw error(404, {message: "This FAQ page does not exist."});
     }
 
+    const nextDisplayOrderCounters: { [cardId: number]: number } = {}
     locals.DB.sequelize.transaction(async transaction => {
         for (const section of data[faqName]) {
             if (section.qa === undefined && section.seeAlso?.length === 1
@@ -46,16 +47,16 @@ export const POST: RequestHandler = (async ({locals, request}) => {
                     subjectIds.push(id);
                 }
             }
-            let displayOrder = 1;
             const keyPrefix = getKeyPrefix(section.subjects);
 
             if (section.seeAlso) {
                 for (const seeAlso of section.seeAlso) {
                     const label = await getFaqLinkLabel(locals.DB, seeAlso);
                     for (const cardId of subjectIds) {
+                        const displayOrder = nextDisplayOrderCounters[cardId] ?? 1;
                         await locals.DB.CardFAQLink.upsert({cardId, displayOrder, label, link: seeAlso}, {transaction});
+                        nextDisplayOrderCounters[cardId] = displayOrder + 1;
                     }
-                    displayOrder++;
                 }
             }
 
@@ -81,6 +82,7 @@ export const POST: RequestHandler = (async ({locals, request}) => {
                     if (qa.answer.startsWith("No.")) shortAnswer = "No.";
 
                     for (const cardId of subjectIds) {
+                        const displayOrder = nextDisplayOrderCounters[cardId] ?? 1;
                         await locals.DB.CardFAQLink.upsert({
                             cardId,
                             displayOrder,
@@ -88,13 +90,15 @@ export const POST: RequestHandler = (async ({locals, request}) => {
                             link: `/faq/${faqName}#${getKey(keyPrefix, qa.key)}`,
                             shortAnswer
                         }, {transaction});
+                        nextDisplayOrderCounters[cardId] = displayOrder + 1;
                     }
-                    displayOrder++;
                 }
             }
+        }
 
+        for (const cardId in Object.keys(nextDisplayOrderCounters)) {
             await locals.DB.CardFAQLink.destroy({
-                where: {cardId: subjectIds, displayOrder: {[Op.gte]: displayOrder}}, transaction
+                where: {cardId, displayOrder: {[Op.gte]: nextDisplayOrderCounters[cardId]}}, transaction
             });
         }
     });

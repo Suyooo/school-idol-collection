@@ -1765,7 +1765,7 @@ export const data: { [key: string]: Faq } = {
                 {
                     key: `cards`,
                     question: `Which cards have Skills that require "counting {{red:"Members currently in your Lives"}}"?`,
-                    answer: `You can use <a href="http://localhost:5173/search/skill:Members%20currently%20in%20your%20Lives">the search function on this site</a> to find all cards affected by this Skill.`
+                    answer: `You can use <a href="/search/skill:Members%20currently%20in%20your%20Lives">the search function on this site</a> to find all cards affected by this Skill.`
                 },
                 {
                     key: `samelive`,
@@ -1898,7 +1898,242 @@ export const data: { [key: string]: Faq } = {
             subjects: [{"from": "LL10-073", "to": "LL10-090"}],
             seeAlso: ["/faq/general#join_success_order", "/faq/general#flip_before_skills"]
         }
+    ],
+    "LL11": [
+        {
+            subjects: [{"from": "LL11-039", "to": "LL11-047"}],
+            seeAlso: ["/faq/general#collection"]
+        }, {
+            subjects: ["LL11-043", "LL11-044", "LL11-046"],
+            qa: [
+                {
+                    question: `Does "Member with one Star" also include Members with two or more Stars?`,
+                    answer: `No. "Member with one Star" refers to a Member card with exactly one Star.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-050"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills", "/faq/general#join_success_order", "/faq/general#collection"],
+            qa: [
+                {
+                    question: `Between [LIVE] and the [Entry] Skill, which one should be used first?`,
+                    answer: `Use all [Entry] Skills first, only then you may use [LIVE] to perform a ⟪LIVE⟫. You cannot use [LIVE] before that.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-051"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills", "/faq/general#more_faceup_songs", "/faq/general#members_on_stage", "/faq/general#group", "/faq/general#group_skill_field"],
+            qa: [
+                {
+                    key: `paired`,
+                    question: `When resolving the [Auto] Pair Skill, can I use the [Entry] Skill of the {{link:LL11-055}} card that is part of this pair to draw two cards?`,
+                    answer: `Yes. It counts as a {{red:"Yoshiko"}} card on your Stage, so you can use its [Entry] Skill.`
+                },
+                {
+                    key: `target`,
+                    question: `When using the [Entry] Skill of {{link:LL05-051}} when resolving the [Auto] Pair Skill, which cards can be counted as "Members on Stand-By"?`,
+                    answer: `Any Members other than this card. (This includes both the {{link:LL05-051}} card whose Skill is being used, and the paired {{link:LL11-055}} card.)`
+                }
+            ]
+        }, {
+            subjects: ["LL11-052"],
+            seeAlso: ["/faq/general#member_counting", "/faq/general#skill_order_multiple_skills", "/faq/general#group", "/faq/general#group_skill_field"],
+            qa: [
+                {
+                    key: `ability`,
+                    question: `Between [LIVE] and the [Entry] Skill, which one should be used first?`,
+                    answer: `Use all [Entry] Skills first, only then you may use [LIVE] to perform a ⟪LIVE⟫. You cannot use [LIVE] before that.`
+                },
+                {
+                    key: `extraturns`,
+                    question: `When performing a ⟪LIVE⟫ with {{link:LL05-063}} while paired with {{link:LL11-057}}, two [Live Success] Skills will activate that say "take another turn". In that case, can I take two extra turns?`,
+                    answer: `Yes. Take as many extra turns as "take another turn" Skills you have activated.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-053"],
+            seeAlso: ["/faq/general#collection", "/faq/general#skill_order_multiple_skills"]
+        }, {
+            subjects: ["LL11-054"],
+            seeAlso: ["/faq/general#stand_by"],
+            qa: [
+                {
+                    question: `If the Member I told {{red:"I love you"}} has no Stars, can I still draw two cards?`,
+                    answer: `Yes. Members without Stars count as Members with two or less Stars.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-055"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills", "/faq/general#members_on_stage", "/faq/general#group", "/faq/general#group_skill_field"],
+            qa: [
+                {
+                    key: `paired`,
+                    question: `When resolving the [Auto] Pair Skill, can I use the [Entry] Skill of this card to draw two cards?`,
+                    answer: `Yes. It counts as a {{red:"Yoshiko"}} card on your Stage, so you can use its [Entry] Skill.`
+                },
+                {
+                    key: `target`,
+                    question: `When using the [Entry] Skill of {{link:LL05-051}} when resolving the [Auto] Pair Skill, which cards can be counted as "Members on Stand-By"?`,
+                    answer: `Any Members other than the {{link:LL11-051}} card that is part of this pair. (This includes both the {{link:LL05-051}} card whose Skill is being used, and this card.)`
+                }
+            ]
+        }, {
+            subjects: ["LL11-056"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills", "/faq/general#join_success_order", "/faq/general#members_on_stage", "/faq/general#member_counting"],
+            qa: [
+                {
+                    key: `inactive`,
+                    question: `Does "Member with a {{red:"Birthday Bonus"}}" include only Members whose Birthday Bonus is active?`,
+                    answer: `No. All Members with a Birthday Bonus are included, no matter whether it is active or not.`
+                },
+                {
+                    key: `nodouble`,
+                    question: `If a Member with an already active Birthday Bonus joins this ⟪LIVE⟫, do they gain another Birthday Bonus Piece?`,
+                    answer: `No. Skills that activate the Birthday Bonus on cards where it is already active will not add more Pieces.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-057"],
+            seeAlso: ["/faq/general#member_counting", "/faq/general#skill_order_multiple_skills", "/faq/general#group", "/faq/general#group_skill_field"],
+            qa: [
+                {
+                    key: `ability`,
+                    question: `Between [RUSH] and the [Entry] Skill, which one should be used first?`,
+                    answer: `Use all [Entry] Skills first, only then you may use [RUSH] to perform a ⟪LIVE⟫. You cannot use [RUSH] before that.`
+                },
+                {
+                    key: `extraturns`,
+                    question: `When performing a ⟪LIVE⟫ with {{link:LL05-063}} while paired with {{link:LL11-052}}, two [Live Success] Skills will activate that say "take another turn". In that case, can I take two extra turns?`,
+                    answer: `Yes. Take as many extra turns as "take another turn" Skills you have activated.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-058"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#skill_order_multiple_skills", "/faq/general#more_faceup_songs", "/faq/general#collection", "/faq/general#group", "/faq/general#group_skill_field"]
+        }, {
+            subjects: ["LL11-059"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#skill_order_multiple_skills", "/faq/general#flip_before_skills", "/faq/general#top_deck_card_faceup"]
+        }, {
+            subjects: ["LL11-060"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#skill_order_multiple_skills", "/faq/general#more_faceup_songs", "/faq/general#collection", "/faq/general#group", "/faq/general#group_skill_field"],
+            qa: [
+                {
+                    question: `When ⟪ENTER⟫ing "up to two differently named Members without Stars" with the [Entry] Skill, can I also ⟪ENTER⟫ just one Member?`,
+                    answer: `Yes. You can ⟪ENTER⟫ just one or even no Members.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-061"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#flip_before_skills"]
+        }, {
+            subjects: ["LL11-062"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#member_counting"]
+        }, {
+            subjects: ["LL11-063"],
+            seeAlso: ["/faq/general#flip_before_skills", "/faq/general#muse_and_aqours_song_cards"],
+            qa: [
+                {
+                    question: `A pair with {{link:LL11-052}} and {{link:LL11-057}} are joining a ⟪LIVE⟫ with this card. Between the "take another turn" from their [Live Success] Pair Skill and the "you may perform a ⟪LIVE⟫" from this card's [Live Success] Skill, which comes first?`,
+                    answer: `Perform a ⟪LIVE⟫ in this turn first, then you can take the extra turn after this turn is over. (This applies regardless of the order in which you resolved the [Live Success] Skills.)`
+                }
+            ]
+        }, {
+            subjects: ["LL11-065"],
+            qa: [
+                {
+                    question: `The Skill text for this card says {{red:"Saint Aqours Snow"}}, but if {{link:LL05-049}} joins this ⟪LIVE⟫, does she still gain +[ALL] from her [Live Join] Skill?`,
+                    answer: `Yes. {{red:"Saint Aqours Snow"}} includes the word {{red:"Aqours"}}, so the Skill's requirement is met.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-066"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#flip_before_skills", "/faq/general#collection"]
+        }, {
+            subjects: ["LL11-067"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#collection"],
+            qa: [
+                {
+                    question: `If a Song card has two or more Skills, can I use both?`,
+                    answer: `Yes. You can use both Skills.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-068"],
+            qa: [
+                {
+                    question: `What does this Memory do if it has no Skills?`,
+                    answer: `The Skills of cards such as {{link:LL11-039}} or {{link:LL11-067}} refer to this card being on your Stage.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-069"],
+            qa: [
+                {
+                    question: `What exactly does the [Auto] Skill do?`,
+                    answer: `When using the Skills of <a href="/search/skill:Dia-chan">these cards</a>, the other players get a chance to call Dia {{red:"Dia-chan"}}. If all other players do so, the requirement is met.<br>For example, if {{link:LL08-049}}'s Skill is resolved and all other players call Dia {{red:"Dia-chan"}}, you may ⟪ENTER⟫ one Member without Stars from your Hand, and then draw two cards. If even one of the other players does not call Dia {{red:"Dia-chan"}}, the top card of your Deck is ⟪ENTER⟫ed and no cards are drawn.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-070"],
+            qa: [
+                {
+                    question: `In which order should this card's [Auto] Skill and the [Live Success] Skills of the Song card and Member cards joining this ⟪LIVE⟫ be resolved?`,
+                    answer: `You can resolve them in any order of your choice. If there is more than one [Live Success] Skill, you can even resolve the [Auto] Skill in-between them, like [Live Success][Auto][Live Success].`
+                }
+            ]
+        }, {
+            subjects: ["LL11-071"],
+            qa: [
+                {
+                    key: `order`,
+                    question: `In which order should this card's [Auto] Skill and the [Live Success] Skills of the Song card and Member cards joining this ⟪LIVE⟫ be resolved?`,
+                    answer: `You can resolve them in any order of your choice.`
+                },
+                {
+                    key: `later`,
+                    question: `I used this card's Skill to ⟪ENTER⟫ enough Members to meet the requirement of {{link:LL11-065}}. Will I gain ♪Live Points +9♪?`,
+                    answer: `Yes. If the Skill's requirement is met, you will gain the extra Live Points.`
+                },
+                {
+                    key: `requirement`,
+                    question: `With this Memory card on Stage, I want to perform a ⟪LIVE⟫ with {{red:"Awaken the Power"}}, and both {{red:"Ruby"}} and {{red:"Leah"}} joining it. Can I use this card's [Auto] Skill to ⟪ENTER⟫ Members and add their Pieces to the Pieces the joining Members have?`,
+                    answer: `No. The [Auto] Skill only allows you to ⟪ENTER⟫ Members and have them join the performed ⟪LIVE⟫. Since the [Auto] Skill will only trigger after a ⟪LIVE⟫ was successfully performed, you must have Members on Stand-By join the ⟪LIVE⟫ so the requirement of {{red:"Awaken the Power"}} can be reached.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-072"],
+            qa: [
+                {
+                    key: `noattribute`,
+                    question: `With this Memory card on Stage, I performed a ⟪LIVE⟫ with {{link:LL05-053}} joining it, together with a Member with [SMILE], a Member with [PURE] and a Member with [COOL] joining. Will {{red:"Mari"}} gain +[ALL] from her Skill?`,
+                    answer: `No. The [Auto] Skill of this card applies before resolving [Live Join] Skills, so the [SMILE][PURE][COOL] Pieces of the joining Members must already be treated as [ALL]. In this case, the requirement of {{red:"Mari"}}'s Skill is not met and she will not gain +[ALL].`
+                },
+                {
+                    key: `additional`,
+                    question: `With this Memory card on Stage, I performed a ⟪LIVE⟫ with a Member who gained +[SMILE] from a [Live Join] Skill. Is that Piece treated as [ALL], too?`,
+                    answer: `Yes. The Piece will be treated as [ALL] after it is gained.`
+                }
+            ]
+        }, {
+            subjects: ["LL11-073"],
+            qa: [
+                {
+                    question: `With this Memory card on Stage, I performed another ⟪LIVE⟫. Do I gain another Live Point?`,
+                    answer: `Yes. Even after this Memory has been brought on Stage, you will gain a Live Point every time you perform another ⟪LIVE⟫.`
+                }
+            ]
+        }, {
+            subjects: [{"from": "LL11-074", "to": "LL11-091"}],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#skill_order_multiple_skills", "/faq/general#flip_before_skills"],
+            qa: [
+                {
+                    question: "If multiple players have starting Members with [Starter] Skills, in what order should the Skills be used?",
+                    answer: "Skills are used in the turn order decided at the start of the match. Once everyone's [Starter] Skills have been resolved, the first player in the turn order can begin."
+                }
+            ]
+        }
     ]
+
 };
 
 export const load: PageServerLoad = (async ({params, locals}) => {
