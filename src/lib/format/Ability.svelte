@@ -40,7 +40,7 @@
         }
 
         &.or {
-            @apply absolute ml-[-.63em];
+            @apply absolute ml-[-.63em] z-10;
             background-image: url("/images/icons/ability_or.png");
 
             & + .live {

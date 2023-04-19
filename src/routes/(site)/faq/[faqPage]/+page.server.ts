@@ -2077,7 +2077,7 @@ export const data: { [key: string]: Faq } = {
             subjects: ["LL11-070"],
             qa: [
                 {
-                    question: `In which order should this card's [Auto] Skill and the [Live Success] Skills of the Song card and Member cards joining this ⟪LIVE⟫ be resolved?`,
+                    question: `In what order should this card's [Auto] Skill and the [Live Success] Skills of the Song card and Member cards joining this ⟪LIVE⟫ be resolved?`,
                     answer: `You can resolve them in any order of your choice. If there is more than one [Live Success] Skill, you can even resolve the [Auto] Skill in-between them, like [Live Success][Auto][Live Success].`
                 }
             ]
@@ -2086,7 +2086,7 @@ export const data: { [key: string]: Faq } = {
             qa: [
                 {
                     key: `order`,
-                    question: `In which order should this card's [Auto] Skill and the [Live Success] Skills of the Song card and Member cards joining this ⟪LIVE⟫ be resolved?`,
+                    question: `In what order should this card's [Auto] Skill and the [Live Success] Skills of the Song card and Member cards joining this ⟪LIVE⟫ be resolved?`,
                     answer: `You can resolve them in any order of your choice.`
                 },
                 {
@@ -2132,14 +2132,239 @@ export const data: { [key: string]: Faq } = {
                 }
             ]
         }
+    ],
+    "LL12": [
+        {
+            subjects: [{"from": "LL12-037", "to": "LL12-045"}],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#collection", "/faq/general#more_faceup_songs"]
+        },
+        {
+            subjects: ["LL12-039", "LL12-040", "LL12-043"],
+            qa: [
+                {
+                    key: `songs`,
+                    question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
+                    answer: `As of June 2020, {{red:"AZALEA"}} Song cards include:<ul><li>{{link:EX03-031}} / {{link:EX14-048}}</li><li>{{link:LL04-062}} / {{link:EX09-031}}</li><li>{{link:LL06-056}}</li><li>{{link:LL07-056}}</li><li>{{link:LL08-062}}</li><li>{{link:LL12-058}}</li><li>{{link:LL16-063}}</li></ul>`
+                },
+                {
+                    key: `dupes`,
+                    question: `Can I bring a Song card with the same name as a Song card in my Set List or a Song card used for a ⟪LIVE⟫ from my Collection to my Set List? And can I perform ⟪LIVE⟫s with both of them?`,
+                    answer: `Yes. You can being Song cards with the same name to your Set List, no matter whether their ID matches with one of the Song cards in play or not, and perform ⟪LIVE⟫s with them.`
+                }
+            ]
+        }, {
+            subjects: ["LL12-046"],
+            seeAlso: ["/faq/general#member_counting", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL12-047"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    key: `explain`,
+                    question: `How exactly should I resolve the [Live Success] Skill?`,
+                    answer: `In this example, let's assume you have performed a ⟪LIVE⟫ and the Members who joined it have [SMILE] x2, [PURE] x2, [COOL] x2 and [ALL] x1 in total.<br>If the Song card used for the ⟪LIVE⟫ is {{link:LL07-057}}, there will be one [PURE] remaining when checking the Piece total against the requirement, so you can draw two cards.<br>If the Song card used for the ⟪LIVE⟫ is {{link:LL12-055}}, there will be two Pieces remaining when checking the Piece total against the requirement. Since this Song card has an Any Piece requirement, you can decide which Pieces should be considered used and which ones remain unused, so you can draw up to four cards.`
+                },
+                {
+                    key: `count`,
+                    question: `How do I count how many Attributes have remaining Pieces?`,
+                    answer: `For each Attribute, [SMILE][PURE][COOL] and [ALL], count the leftover Pieces after subtracting the Song card's requirement from the total Pieces of the Members joining the ⟪LIVE⟫. [ALL] counts as a seperate Attribute, so if, for example, you have [COOL][ALL][ALL] remaining, there are two Attribute with remaining Pieces.`
+                },
+                {
+                    key: `skills`,
+                    question: `If the requirement of the Song card used in this ⟪LIVE⟫ was reduced by a Skill, does this Skill count the original or the reduced requirement? Additionally, if Members joining this ⟪LIVE⟫ gained Pieces from Skills, does this Skill count or ignore these additional Pieces?`,
+                    answer: `If the ⟪LIVE⟫ is performed with a Song card with a reduced requirement, that changed requirement is counted. Similarly, any Pieces the joining Members gained from Skills are also counted in the total number of Pieces.`
+                }
+            ]
+        }, {
+            subjects: ["LL12-048"],
+            seeAlso: ["/faq/general#more_faceup_songs", "/faq/general#no_shuffle_facedown_song", "/faq/general#skill_order_multiple_skills"],
+            qa: [
+                {
+                    question: `If I turn a face-up Song card face-down, I will have zero face-up Song cards in my Set List. Can I still perform ⟪LIVE⟫s like that?`,
+                    answer: `No. If there are no face-up Song cards in your Set List, you cannot perform ⟪LIVE⟫s. As such, unless you have a Skill that allows you to turn a face-down Song card face-up again, you should avoid flipping your last Song card face-down.`
+                }
+            ]
+        }, {
+            subjects: ["LL12-049"],
+            qa: [
+                {
+                    question: `When resolving this card's [Entry] Skill, I chose to not draw two cards. What happens next?`,
+                    answer: `If you don't draw two cards, the [Entry] Skill finishes resolving, after which you can use [RUSH] or [LIVE].`
+                }
+            ]
+        }, {
+            subjects: ["LL12-050"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `What happens if I apply the effect of this card's [Live Join] Skill to a Member with an active Birthday Bonus?`,
+                    answer: `Members with active Birthday Bonuses will also only have three Pieces, [SMILE][PURE][COOL], after the effect is applied to them.<br>For example, {{link:PR-134}} has two Pieces, [SMILE][ALL], if her Birthday Bonus is active, but after this Skill's effect is applied, she will have three Pieces, [SMILE][PURE][COOL].`
+                }
+            ]
+        }, {
+            subjects: ["LL12-051"],
+            qa: [
+                {
+                    key: `off`,
+                    question: `This card was taken off the Stage during the turn in which this Member's [Entry] Skill was used. Do I still have to return all of the cards in my Hand to my Deck?`,
+                    answer: `Yes. When performing the [Entry] Skill, you must return all of the cards in your Hand to your Deck at the end of the turn, no matter whether the Member is still on the Stage at that point or not.`
+                },
+                {
+                    key: `facedown`,
+                    question: `This card was flipped face-down due to another card's [Special Practice] during the turn in which this Member's [Entry] Skill was used. Do I still have to return all of the cards in my Hand to my Deck?`,
+                    answer: `Yes. When performing the [Entry] Skill, you must return all of the cards in your Hand to your Deck at the end of the turn, no matter whether the Member is face-up at that point or not.`
+                }
+            ]
+        }, {
+            subjects: ["LL12-052"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills"],
+            qa: [
+                {
+                    key: `nowildcard`,
+                    question: `The Members joining this ⟪LIVE⟫ have [SMILE] x3 and [ALL] x1 in total. In this case, will this Member gain +[SMILE] from the first [Live Join] Skill?`,
+                    answer: `No. The first [Live Join] Skill requires four or more Pieces of one Attribute, [SMILE], [PURE], [COOL] or [ALL]. [ALL] cannot be used as a wildcard for other Attributes.`
+                },
+                {
+                    key: `order`,
+                    question: `The other Members joining this ⟪LIVE⟫ have [SMILE] x3 in total. Can I first use the second [Live Join] Skill to have this Member gain +[SMILE], so I can then meet the requirement for the first [Live Join] Skill?`,
+                    answer: `No. If a Member has two or more Skills with the same icon, you must use them in the given order. In this case, the requirement of the first [Live Join] Skill cannot be met.`
+                }
+            ]
+        }, {
+            subjects: ["LL12-053"],
+            qa: [
+                {
+                    key: `notchosen`,
+                    question: `What happens to the card that was not chosen?`,
+                    answer: `If the top card of the Deck was not chosen, it is left face-up on top of the Deck until it is drawn. If the card from the Hand was not chosen, it is returned to the Hand and you can hide it from the other players again.`
+                },
+                {
+                    key: `empty`,
+                    question: `If my Hand or my Deck is empty, can I use this Skill?`,
+                    answer: `No. If there is no card in the Deck to flip, or no card from your Hand to show, you cannot use the Skill.`
+                },
+                {
+                    key: `alreadyopen`,
+                    question: `The top card of my Deck is already face-up because of another Skill. Can I still use this Skill?`,
+                    answer: `Yes. In that case, leave the top card of your Deck face-up, and show one Member from your Hand to everyone.`
+                }
+            ]
+        }, {
+            subjects: ["LL12-054"],
+            qa: [
+                {
+                    key: `explain`,
+                    question: `How exactly should I resolve the [Auto] Skill?`,
+                    answer: `Take the [Entry] Skill of {{link:LL11-050}}, for example. You must choose a Member to return to the bottom your Deck. If you choose this Member, you can ⟪ENTER⟫ it instead of returning it to the Deck. (You don't have to choose another Member to return to your deck after ⟪ENTER⟫ing this Member.)`
+                },
+                {
+                    key: `ifyoudo`,
+                    question: `For Skills like {{link:LL08-064}}'s Skill, where returning a card to the Deck is optional and you can activate an additional effect if doing so, does it still activate if I choose to return this Member and then ⟪ENTER⟫ it instead by using the [Auto] Skill?`,
+                    answer: `Yes. No cards are returned to the Deck, but the requirement is still met.<br>Similarly, when a Skill like {{link:LL07-051}}'s Skill requires multiple cards to be returned to the Deck, the requirement is met even if some or all of the returned cards are this Member.`
+                },
+                {
+                    key: `order`,
+                    question: `When resolving a Skill that requires returning multiple cards to the Deck, and either arranging them in a chosen order (like {{link:EX10-009}}) or shuffling them (like {{link:LL12-051}}), how should this Member be handled?`,
+                    answer: `After picking the Members to return to the Deck, ⟪ENTER⟫ the {{link:LL12-054}}s among them first, then put the rest of the cards into the Deck as described. (You don't have to pick a position in the order for this card, and you don't have to shuffle it with the other returning cards before ⟪ENTER⟫ing it.)`
+                },
+                {
+                    key: `live`,
+                    question: `For Skills like {{link:EX10-009}}'s [Entry] Skill, which allow you to perform a ⟪LIVE⟫ after returning cards to the Deck, if I use this Member and ⟪ENTER⟫ it instead of returning it to the Deck, can it join the ⟪LIVE⟫ that will be performed as a result of the Skill?`,
+                    answer: `Yes. The Member was ⟪ENTER⟫ed by the time the ⟪LIVE⟫ is being performed, so it can perform in that ⟪LIVE⟫.`
+                },
+                {
+                    key: `livejoin`,
+                    question: `For Skills like {{link:PR-125}} [Live Join] Skill, which require returning cards to the Deck when performing a ⟪LIVE⟫, if I use this Member and ⟪ENTER⟫ it instead of returning it to the Deck, can it join the ⟪LIVE⟫ that is being performed?`,
+                    answer: `No. [Live Join] Skills are resolved after the Members who join the ⟪LIVE⟫ are picked. As such, Members who are ⟪ENTER⟫ed from [Live Join] Skills cannot join that ⟪LIVE⟫.`
+                }
+            ]
+        }, {
+            subjects: ["LL12-055"],
+            qa: [
+                {
+                    question: `How exactly should I resolve the [While Live] Skill?`,
+                    answer: `Using {{link:LL05-063}} as an example, if this card's [While Live] Skill is active, the [Live Success] Skill of {{red:"MIRAI TICKET"}} will turn from "If all Members who joined this ⟪LIVE⟫ are {{red:"Aqours"}} cards, take another turn" into "If all Members who joined this ⟪LIVE⟫ are {{red:"Aqours"}} cards, ⟪SCOUT⟫". So, if any player performs a ⟪LIVE⟫ with {{red:"MIRAI TICKET"}} and only {{red:"Aqours"}} Members join, instead of taking another turn, they will ⟪SCOUT⟫.`
+                }
+            ]
+        }, {
+            subjects: ["LL12-056"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#member_counting"],
+            qa: [
+                {
+                    key: `order`,
+                    question: `In what order should this card's [Auto] Skill and the [Live Success] Skills of the Song card and Member cards joining this ⟪LIVE⟫ be resolved?`,
+                    answer: `You can resolve them in any order of your choice. If there is more than one [Live Success] Skill, you can even resolve the [Auto] Skill in-between them, like [Live Success][Auto][Live Success].`
+                },
+                {
+                    key: `between`,
+                    question: `While resolving the Skills of a Member with two or more Skills with the same icon, such as {{link:EX10-002}}, this Song card was flipped face-up by their first Skill. Can I use this card's [Auto] Skill before moving on to the other card's next Skill?`,
+                    answer: `No. If a card has two or more Skills with the same icon, they must be resolved from in order, top to bottom, and you cannot use the Skills of other cards until all Skills are resolved.`
+                },
+                {
+                    key: `interrupt`,
+                    question: `This Song card was flipped up in the middle of resolving a Skill, such as {{link:LL03-058}}'s [Entry] Skill. Can I immediately use this card's [Auto] Skill?`,
+                    answer: `No. You can't use another Skill until the current Skill is fully resolved.`
+                }
+            ]
+        }, {
+            subjects: ["LL12-057"],
+            qa: [
+                {
+                    question: `Which Song cards are {{red:"CYaRon!"}} Song cards?`,
+                    answer: `As of June 2020, {{red:"CYaRon!"}} Song cards include:<ul><li>{{link:EX03-030}}</li><li>{{link:LL04-061}} / {{link:EX09-030}} / {{link:EX14-047}}</li><li>{{link:LL06-055}}</li><li>{{link:LL07-055}}</li><li>{{link:LL08-061}}</li><li>{{link:LL12-057}}</li><li>{{link:LL16-062}}</li></ul>`
+                }
+            ]
+        }, {
+            subjects: ["LL12-058"],
+            qa: [
+                {
+                    question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
+                    answer: `As of June 2020, {{red:"AZALEA"}} Song cards include:<ul><li>{{link:EX03-031}} / {{link:EX14-048}}</li><li>{{link:LL04-062}} / {{link:EX09-031}}</li><li>{{link:LL06-056}}</li><li>{{link:LL07-056}}</li><li>{{link:LL08-062}}</li><li>{{link:LL12-058}}</li><li>{{link:LL16-063}}</li></ul>`
+                }
+            ]
+        }, {
+            subjects: ["LL12-059"],
+            qa: [
+                {
+                    question: `Which Song cards are {{red:"Guilty Kiss"}} Song cards?`,
+                    answer: `As of June 2020, {{red:"Guilty Kiss"}} Song cards include:<ul><li>{{link:EX03-032}} / {{link:EX14-049}}</li><li>{{link:LL04-063}}</li><li>{{link:LL06-057}}</li><li>{{link:LL07-057}}</li><li>{{link:LL08-063}}</li><li>{{link:LL12-059}}</li><li>{{link:LL16-061}}</li></ul>`
+                }
+            ]
+        }, {
+            subjects: ["LL12-061"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `How exactly should I resolve the [Live Success] Skill?`,
+                    answer: `As an example, assume you have {{red:"Chika"}}, {{red:"Riko"}}, {{red:"Kanan"}}, {{red:"You"}}, {{red:"Dia"}} and {{red:"Ruby"}} on your Stage. Since all three Members of {{red:"CYaRon!"}}, {{red:"Chika"}}, {{red:"You"}} and {{red:"Ruby"}}, are there, it counts as one complete subunit. On the other hand, {{red:"Guilty Kiss"}} ({{red:"Riko"}}, {{red:"Yoshiko"}} and {{red:"Mari"}}) and {{red:"AZALEA"}} ({{red:"Kanan"}}, {{red:"Dia"}} and {{red:"Hanamaru"}}) cannot be counted, since you don't have all three Members of the subunits on Stage.<br>As a result, in this example, you would be allowed to ⟪ENTER⟫ one Member without Stars from your Hand.`
+                }
+            ]
+        }, {
+            subjects: ["LL12-063"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#member_counting"],
+            qa: [
+                {
+                    question: `How exactly should I resolve the [Live Success] Skill?`,
+                    answer: `Take the number of Members on your Stage, while counting yourself, the player, as another Member. If there are nine Member cards on your Stage, the total number, including yourself, will be ten, which is the exact amount you need.`
+                }
+            ]
+        }, {
+            subjects: [{"from": "LL12-064", "to": "LL12-081"}],
+            seeAlso: ["/faq/general#stand_by", "/faq/general#skill_order_multiple_skills", "/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `How exactly should I resolve the [On Stand-By] Skill?`,
+                    answer: `Each time you take a turn, you may look at the top card of your Deck before choosing between ⟪ENTER⟫ing a Member, performing a ⟪LIVE⟫, or ⟪SCOUT⟫ing. (You don't have to show the card to the other players, you can just put it back after looking at it.) After you have returned the card to the Deck, you can perform your chosen action.`
+                }
+            ]
+        }
     ]
-
 };
 
 export const load: PageServerLoad = (async ({params, locals}) => {
     if (data.hasOwnProperty(params.faqPage)) {
         return await prepareFaq(locals.DB, data[params.faqPage]);
     } else {
-        error(404, "This FAQ page does not exist.");
+        throw error(404, "This FAQ page does not exist.");
     }
 }) satisfies PageServerLoad;

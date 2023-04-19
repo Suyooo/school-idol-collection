@@ -11,13 +11,16 @@ export interface FaqSection {
     subjects: (string | { from: string, to: string })[];
     notes?: string[];
     seeAlso?: string[];
-    qa?: FaqQA[];
+    qa?: [FaqQA] | [FaqQAWithKey, FaqQAWithKey, ...FaqQAWithKey[]];
 }
 
 export interface FaqQA {
-    key?: string;
     question: string;
     answer: string;
+}
+
+export interface FaqQAWithKey extends FaqQA {
+    key: string;
 }
 
 export type FaqPrepared = {
@@ -41,6 +44,14 @@ export interface FaqQAPrepared {
     key: string;
     question: ParseNodePrepared[];
     answer: ParseNodePrepared[];
+}
+
+function isMultipleQA(qa?: [FaqQA] | [FaqQAWithKey, FaqQAWithKey, ...FaqQAWithKey[]]): qa is [FaqQAWithKey, FaqQAWithKey, ...FaqQAWithKey[]] {
+    return qa !== undefined && qa.length > 1;
+}
+
+function isKeyedQA(thisQa: FaqQA | FaqQAWithKey, qa?: [FaqQA] | [FaqQAWithKey, FaqQAWithKey, ...FaqQAWithKey[]]): thisQa is FaqQAWithKey {
+    return isMultipleQA(qa);
 }
 
 export function getKeyPrefix(subjects: (string | { from: string, to: string })[]) {
@@ -118,11 +129,9 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
                 }
             }
 
-            if (section.qa && section.qa.length > 1) {
-                if (section.qa.some(q => q.key === undefined)) {
-                    throw new Error("A FAQ section with multiple QAs must specify a key for each. " + JSON.stringify(section.subjects));
-                }
-                if (section.qa.some((q, i) => section.qa?.findIndex(qq => qq.key === q.key) !== i)) {
+            const qaConst = section.qa;
+            if (isMultipleQA(qaConst)) {
+                if (qaConst.some((q, i) => qaConst.findIndex(qq => qq.key === q.key) !== i)) {
                     throw new Error("Duplicate key in FAQ section. " + JSON.stringify(section.subjects));
                 }
             }
@@ -145,7 +154,7 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
                 qa: section.qa?.map(qa => {
                     cardsToLoad.push(...getLinkedCards(qa.question), ...getLinkedCards(qa.answer));
                     return <FaqQAPrepared>{
-                        key: getKey(keyPrefix, qa.key),
+                        key: getKey(keyPrefix, isKeyedQA(qa, section.qa) ? qa.key : undefined),
                         question: parseSkillToNodes(
                             qa.question.replace(/{{red:([^}]*?)}}/g, "<span class='text-highlight-red'>$1</span>"),
                             Language.ENG, true),

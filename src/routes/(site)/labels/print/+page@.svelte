@@ -74,24 +74,24 @@
                 No cards were left to be labeled. Close the tab and change the card number list!
             {:else}
                 {form.cardNos.length} label{form.cardNos.length === 1 ? "" : "s"} ready to print!
+                <div class="flex items-center justify-center w-full mt-1">
+                    <Button accent on:click={() => print()}>Print</Button>
+                </div>
+                <div class="mt-2">
+                    <div class="-indent-5">
+                        <b>①</b> Make sure to print the labels one-sided, at the highest quality and at original (or 100%) scale. Most operating systems also allow you to save a PDF instead of printing the page - that way, you can bring the labels to a print shop if you don't have a printer.
+                    </div>
+                    <div class="-indent-5">
+                        <b>②</b> Double-check the size with a ruler after the print - the distance between the grey lines should be 63.5mm (2.5in) for cards in portrait orientation and 88mm (3.47in) for cards in landscape orientation.
+                    </div>
+                    <div class="-indent-5">
+                        <b>③</b> Cut out each label along the grey lines. The labels have (hopefully) been aligned in a way that matches up as many labels as possible on one cut line. Then, fold the labels on the black line below the card number and ID.
+                    </div>
+                    <div class="-indent-5">
+                        <b>④</b> Wrap the labels around the cards, then put them into their sleeve or a folder to hold them in place.
+                    </div>
+                </div>
             {/if}
-        </div>
-        <div class="flex items-center justify-center w-full mt-1">
-            <Button accent on:click={() => print()}>Print</Button>
-        </div>
-        <div class="mt-2">
-            <div class="-indent-5">
-                <b>①</b> Make sure to print the labels one-sided, at the highest quality and at original (or 100%) scale. Most operating systems also allow you to save a PDF instead of printing the page - that way, you can bring the labels to a print shop if you don't have a printer.
-            </div>
-            <div class="-indent-5">
-                <b>②</b> Double-check the size with a ruler after the print - the distance between the grey lines should be 63.5mm (2.5in) for cards in portrait orientation and 88mm (3.47in) for cards in landscape orientation.
-            </div>
-            <div class="-indent-5">
-                <b>③</b> Cut out each label along the grey lines. The labels have (hopefully) been aligned in a way that matches up as many labels as possible on one cut line. Then, fold the labels on the black line below the card number and ID.
-            </div>
-            <div class="-indent-5">
-                <b>④</b> Wrap the labels around the cards, then put them into their sleeve or a folder to hold them in place.
-            </div>
         </div>
     </div>
     <div bind:this={pageSize} class="absolute left-[1000vw] print:hidden"
