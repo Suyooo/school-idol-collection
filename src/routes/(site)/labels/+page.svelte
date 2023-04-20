@@ -49,27 +49,27 @@
         <div class="panel-inner">
             <form action="/labels/print" method="POST" target="_blank" bind:this={form}>
                 <div class="row">
-                    <div class="col-half">
+                    <div class="col-half lg:pr-4">
                         <h6>Page Settings</h6>
                         <div>
                             <b>Presets:</b>
-                            <select on:change={setPreset}>
+                            <select on:change={setPreset} class="flex-grow">
                                 <option disabled selected>Select Size</option>
                                 <option value="210x297x9">DIN A4</option>
                                 <option value="216x279x10">US Letter</option>
                             </select>
                         </div>
                         <div class="mt-4">
-                            <b>Size:</b>
+                            <b>Custom Size:</b>
                             <input type="number" name="width" bind:value={width}> x
                             <input type="number" name="height" bind:value={height}> mm
                         </div>
                         <div class="mt-1">
-                            <b>Margins:</b>
+                            <b>Custom Page Margins:</b>
                             <input type="number" name="padding" bind:value={padding}> mm
                         </div>
                     </div>
-                    <div class="col-half">
+                    <div class="col-half lg:pl-4">
                         <h6>Card Numbers</h6>
                         <div class="mb-2">
                             Enter the card numbers (starting with "LL", "EX" or "PR") of the cards that you want to
@@ -94,5 +94,15 @@
 <style lang="postcss">
     input[type="number"] {
         @apply w-20;
+    }
+
+    .col-half {
+        & > * {
+            @apply flex items-center gap-x-2;
+
+            & + * {
+                @apply mt-1;
+            }
+        }
     }
 </style>
