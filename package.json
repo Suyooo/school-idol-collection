@@ -28,7 +28,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@sequelize/core": "github:sequelize/sequelize",
+		"@sequelize/core": "^7.0.0-alpha.23",
 		"crawler": "^1.4.0",
 		"sqlite3": "^5.1.4"
 	}
