@@ -1,8 +1,14 @@
 <script lang="ts">
     import Button from "$lib/style/Button.svelte";
+    import type { Snapshot } from './$types';
 
     let width: number, height: number, padding: number, cardNos: string, error: string | undefined,
         form: HTMLFormElement;
+
+    export const snapshot: Snapshot = {
+        capture: () => ({width, height, padding, cardNos}),
+        restore: value => ({width, height, padding, cardNos} = value)
+    };
 
     function setPreset(e) {
         if (e.target.value) {
@@ -35,7 +41,7 @@
 </script>
 
 <svelte:head>
-    <title>Labels &bull; SIC</title>
+    <title>Label Printer &bull; SIC</title>
 </svelte:head>
 
 <div class="content">
