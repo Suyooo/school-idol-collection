@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-    @apply bg-background text-white font-sans leading-5;
+    @apply bg-background text-white font-sans leading-5 overflow-y-scroll;
 }
 
 a {
