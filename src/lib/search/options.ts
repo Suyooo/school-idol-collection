@@ -296,15 +296,13 @@ export class SearchFilterSkill extends SearchFilterTranslatableLike {
 }
 
 export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
-    abstract readonly columnName: string;
+    abstract readonly column: string;
+    readonly columnLiteral: boolean = false;
     abstract readonly explainName: string;
     readonly explainAfter: boolean = false;
     readonly include: Includeable | undefined = undefined;
 
-    public getScopeElements(): (string | ScopeOptions)[] {
-        return [{method: ["searchGenericNumberWithMod", this.param, this.columnName, this.include]}];
-    }
-
+    getScopeElements = () => [<ScopeOptions>{method: ["searchGenericNumberWithMod", this.param, this.column, this.columnLiteral, this.include]}];
     getExplainString = () => {
         const mod = this.param.endsWith("+") ? " or more" : (this.param.endsWith("-") ? " or less" : "");
         if (this.explainAfter) {
@@ -317,7 +315,7 @@ export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
 
 export class SearchFilterMemberCost extends SearchFilterNumberWithMod {
     readonly key = "cost";
-    readonly columnName = "$member.cost$";
+    readonly column = "$member.cost$";
     readonly explainName = "Cost";
     readonly include: Includeable = {
         association: "member",
@@ -328,18 +326,15 @@ export class SearchFilterMemberCost extends SearchFilterNumberWithMod {
 
 export class SearchFilterMemberPieces extends SearchFilterNumberWithMod {
     readonly key = "pieces";
-    readonly columnName = "$piecesTotal$";
+    readonly column = "member.piecesSmile + member.piecesPure + member.piecesCool + member.piecesAll";
+    readonly columnLiteral = true;
     readonly explainName = "Pieces";
     readonly explainAfter = true;
-
-    getScopeElements = () => {
-        return ["columnPiecesTotal", ...super.getScopeElements()];
-    };
 }
 
 export class SearchFilterMemberPiecesAll extends SearchFilterNumberWithMod {
     readonly key = "allpieces";
-    readonly columnName = "$member.piecesAll$";
+    readonly column = "$member.piecesAll$";
     readonly explainName = "[ALL] Pieces";
     readonly explainAfter = true;
     readonly include: Includeable = {
@@ -351,7 +346,7 @@ export class SearchFilterMemberPiecesAll extends SearchFilterNumberWithMod {
 
 export class SearchFilterMemberPiecesSmile extends SearchFilterNumberWithMod {
     readonly key = "smilepieces";
-    readonly columnName = "$member.piecesSmile$";
+    readonly column = "$member.piecesSmile$";
     readonly explainName = "[SMILE] Pieces";
     readonly explainAfter = true;
     readonly include: Includeable = {
@@ -363,7 +358,7 @@ export class SearchFilterMemberPiecesSmile extends SearchFilterNumberWithMod {
 
 export class SearchFilterMemberPiecesPure extends SearchFilterNumberWithMod {
     readonly key = "purepieces";
-    readonly columnName = "$member.piecesPure$";
+    readonly column = "$member.piecesPure$";
     readonly explainName = "[PURE] Pieces";
     readonly explainAfter = true;
     readonly include: Includeable = {
@@ -375,7 +370,7 @@ export class SearchFilterMemberPiecesPure extends SearchFilterNumberWithMod {
 
 export class SearchFilterMemberPiecesCool extends SearchFilterNumberWithMod {
     readonly key = "coolpieces";
-    readonly columnName = "$member.piecesCool$";
+    readonly column = "$member.piecesCool$";
     readonly explainName = "[COOL] Pieces";
     readonly explainAfter = true;
     readonly include: Includeable = {
@@ -447,7 +442,7 @@ export class SearchFilterSongReqTypeAttr extends SearchFilterSongReqType {
 
 export class SearchFilterSongLivePoints extends SearchFilterNumberWithMod {
     readonly key = "livepoints";
-    readonly columnName = "$song.lpBase$";
+    readonly column = "$song.lpBase$";
     readonly explainName = "Base Live Points";
     readonly explainAfter = true;
     readonly include: Includeable = {
@@ -459,7 +454,7 @@ export class SearchFilterSongLivePoints extends SearchFilterNumberWithMod {
 
 export class SearchFilterSongReqSmile extends SearchFilterNumberWithMod {
     readonly key = "smilerequired";
-    readonly columnName = "$song.attrRequirement.piecesSmile$";
+    readonly column = "$song.attrRequirement.piecesSmile$";
     readonly explainName = "Required [SMILE] Pieces";
     readonly explainAfter = true;
     readonly include: Includeable = {
@@ -475,7 +470,7 @@ export class SearchFilterSongReqSmile extends SearchFilterNumberWithMod {
 
 export class SearchFilterSongReqPure extends SearchFilterNumberWithMod {
     readonly key = "purerequired";
-    readonly columnName = "$song.attrRequirement.piecesPure$";
+    readonly column = "$song.attrRequirement.piecesPure$";
     readonly explainName = "Required [PURE] Pieces";
     readonly explainAfter = true;
     readonly include: Includeable = {
@@ -491,7 +486,7 @@ export class SearchFilterSongReqPure extends SearchFilterNumberWithMod {
 
 export class SearchFilterSongReqCool extends SearchFilterNumberWithMod {
     readonly key = "coolrequired";
-    readonly columnName = "$song.attrRequirement.piecesCool$";
+    readonly column = "$song.attrRequirement.piecesCool$";
     readonly explainName = "Required [COOL] Pieces";
     readonly explainAfter = true;
     readonly include: Includeable = {
@@ -507,7 +502,7 @@ export class SearchFilterSongReqCool extends SearchFilterNumberWithMod {
 
 export class SearchFilterSongReqAny extends SearchFilterNumberWithMod {
     readonly key = "required";
-    readonly columnName = "$song.anyRequirement.piecesAll$";
+    readonly column = "$song.anyRequirement.piecesAll$";
     readonly explainName = "Required Pieces";
     readonly explainAfter = true;
     readonly include: Includeable = {

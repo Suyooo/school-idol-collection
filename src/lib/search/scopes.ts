@@ -1,4 +1,4 @@
-import {literal, Op} from "@sequelize/core";
+import {literal, Op, where} from "@sequelize/core";
 import type {Includeable, Sequelize} from "@sequelize/core";
 import {CardBase} from "$models/card/card.js";
 import type CardSongRequirementType from "../enums/cardSongRequirementType.js";
@@ -58,19 +58,12 @@ export function addScopes(sequelize: Sequelize) {
             [Op.or]: columns.map(col => ({[col]: {[Op.like]: "%" + term + "%"}}))
         }
     }));
-    CardBase.addScope("searchGenericNumberWithMod", (term: string, columnName: string, include?: Includeable) => {
+    CardBase.addScope("searchGenericNumberWithMod", (term: string, column: string, columnLiteral: boolean, include?: Includeable) => {
         const op = term.endsWith("+") ? Op.gte : (term.endsWith("-") ? Op.lte : Op.eq);
         const num = parseInt(term);
-        return {include, where: {[columnName]: {[op]: num}}};
+        if (columnLiteral) return {include, where: where(literal(column), {[op]: num})};
+        else return {include, where: {[column]: {[op]: num}}};
     });
-    CardBase.addScope("columnPiecesTotal", () => ({
-        attributes: [[literal("member.piecesSmile + member.piecesPure + member.piecesCool + member.piecesAll"), "piecesTotal"]],
-        include: {
-            model: sequelize.models.CardMemberExtraInfo,
-            required: true,
-            attributes: ["piecesAll", "piecesSmile", "piecesPure", "piecesCool"]
-        }
-    }));
     CardBase.addScope("searchBonus", () => ({
         include: {
             model: sequelize.models.CardMemberExtraInfo,
