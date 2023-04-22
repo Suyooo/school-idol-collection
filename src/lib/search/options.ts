@@ -61,7 +61,7 @@ export class SearchFilterMemory extends SearchFilter0 {
 export class SearchFilterSet extends SearchFilter1 {
     readonly key = "set";
     getExplainString = () => `In Set ${this.param}`;
-    getScopeElements = () => [<ScopeOptions>{method: ["filterMembers", this.param]}];
+    getScopeElements = () => [<ScopeOptions>{method: ["filterSet", this.param]}];
 }
 
 export abstract class SearchFilterMemberRarity extends SearchFilter0 {
