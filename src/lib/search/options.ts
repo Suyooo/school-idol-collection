@@ -94,9 +94,9 @@ export class SearchFilterMemberRaritySpecial extends SearchFilterMemberRarity {
 }
 
 export class SearchFilterMemberRaritySecret extends SearchFilterMemberRarity {
-    readonly key = "special";
+    readonly key = "secret";
     readonly rarity = CardMemberRarity.Secret;
-    getExplainString = () => "Special Rarity";
+    getExplainString = () => "Secret Rarity";
 }
 
 export class SearchFilterMemberRarityPR extends SearchFilterMemberRarity {
@@ -119,7 +119,7 @@ export class SearchFilterMemberRaritySSR extends SearchFilterMemberRarity {
 
 export abstract class SearchFilterMemberNames extends SearchFilter0 {
     abstract readonly members: string[];
-    getScopeElements = () => [<ScopeOptions>{method: ["filterGroup", this.members]}];
+    getScopeElements = () => [<ScopeOptions>{method: ["searchGroup", this.members]}];
 }
 
 export class SearchFilterMemberGroupMuse extends SearchFilterMemberNames {
