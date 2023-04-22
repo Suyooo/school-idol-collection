@@ -21,7 +21,7 @@
 
 <style lang="postcss">
     a, button {
-        @apply font-bold text-primary-100 bg-primary-700 rounded uppercase px-4 py-2 cursor-pointer text-sm tracking-wide no-underline select-none;
+        @apply font-bold text-primary-100 bg-primary-700 rounded uppercase px-4 py-2 cursor-pointer text-sm text-center tracking-wide no-underline select-none;
 
         &:hover, &:focus {
             @apply bg-primary-500 text-white;

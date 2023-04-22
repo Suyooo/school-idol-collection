@@ -72,9 +72,9 @@
                     </tr>
                 {/each}
                 <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td class="whitespace-nowrap">
                         <input id="all" type="checkbox" on:change={toggleAll}>
                         <label for="all">All</label>

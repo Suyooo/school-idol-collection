@@ -100,6 +100,10 @@
         } = value)
     };
 
+    function isSet(value: any) {
+        return value !== undefined && value !== null && value !== "";
+    }
+
     function query() {
         const filters = [];
 
@@ -233,7 +237,7 @@
                                 <option value="2">2★</option>
                                 <option value="3">3★</option>
                             </select>
-                            {#if memberCost !== undefined && memberCost !== null && memberCost !== ""}
+                            {#if isSet(memberCost)}
                                 <select bind:value={memberCostMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -265,7 +269,7 @@
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select>
-                            {#if memberPieces !== undefined && memberPieces !== null && memberPieces !== ""}
+                            {#if isSet(memberPieces)}
                                 <select bind:value={memberPiecesMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -285,7 +289,7 @@
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select>
-                            {#if memberPiecesSmile !== undefined && memberPiecesSmile !== null && memberPiecesSmile !== ""}
+                            {#if isSet(memberPiecesSmile)}
                                 <select bind:value={memberPiecesSmileMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -305,7 +309,7 @@
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select>
-                            {#if memberPiecesPure !== undefined && memberPiecesPure !== null && memberPiecesPure !== ""}
+                            {#if isSet(memberPiecesPure)}
                                 <select bind:value={memberPiecesPureMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -325,7 +329,7 @@
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select>
-                            {#if memberPiecesCool !== undefined && memberPiecesCool !== null && memberPiecesCool !== ""}
+                            {#if isSet(memberPiecesCool)}
                                 <select bind:value={memberPiecesCoolMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -345,7 +349,7 @@
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select>
-                            {#if memberPiecesAll !== undefined && memberPiecesAll !== null && memberPiecesAll !== ""}
+                            {#if isSet(memberPiecesAll)}
                                 <select bind:value={memberPiecesAllMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -392,7 +396,7 @@
                         <div>
                             <b>Base Live Points:</b>
                             <input type="number" min="0" bind:value={songLivePoints} placeholder="—">
-                            {#if songLivePoints !== undefined && songLivePoints !== null && songLivePoints !== ""}
+                            {#if isSet(songLivePoints)}
                                 <select bind:value={songLivePointsMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -419,7 +423,7 @@
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                 </select>
-                                {#if songPiecesAll !== undefined && songPiecesAll !== null && songPiecesAll !== ""}
+                                {#if isSet(songPiecesAll)}
                                     <select bind:value={songPiecesAllMod}>
                                         <option value="" selected>exactly</option>
                                         <option value="-">or less</option>
@@ -441,7 +445,7 @@
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                 </select>
-                                {#if songPiecesSmile !== undefined && songPiecesSmile !== null && songPiecesSmile !== ""}
+                                {#if isSet(songPiecesSmile)}
                                     <select bind:value={songPiecesSmileMod}>
                                         <option value="" selected>exactly</option>
                                         <option value="-">or less</option>
@@ -461,7 +465,7 @@
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                 </select>
-                                {#if songPiecesPure !== undefined && songPiecesPure !== null && songPiecesPure !== ""}
+                                {#if isSet(songPiecesPure)}
                                     <select bind:value={songPiecesPureMod}>
                                         <option value="" selected>exactly</option>
                                         <option value="-">or less</option>
@@ -482,7 +486,7 @@
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                 </select>
-                                {#if songPiecesCool !== undefined && songPiecesCool !== null && songPiecesCool !== ""}
+                                {#if isSet(songPiecesCool)}
                                     <select bind:value={songPiecesCoolMod}>
                                         <option value="" selected>exactly</option>
                                         <option value="-">or less</option>

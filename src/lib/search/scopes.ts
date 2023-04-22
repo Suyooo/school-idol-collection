@@ -1,5 +1,5 @@
-import {col, literal, Op, where} from "@sequelize/core";
-import type {Literal, Includeable, Sequelize} from "@sequelize/core";
+import {literal, Op} from "@sequelize/core";
+import type {Includeable, Sequelize} from "@sequelize/core";
 import {CardBase} from "$models/card/card.js";
 import type CardSongRequirementType from "../enums/cardSongRequirementType.js";
 

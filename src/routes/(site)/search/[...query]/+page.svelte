@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {goto} from "$app/navigation";
     import Skill from "$lib/format/Skill.svelte";
     import Button from "$lib/style/Button.svelte";
     import GridPanel from "$lib/style/GridPanel.svelte";
@@ -7,9 +8,10 @@
     import CardGridElement from "../../set/[set]/CardGridElement.svelte";
 
     export let data: PageData;
-    let cards: Card[];
     $: cards = data.cards;
-    $: queries = data.queries;
+    $: queryUrl = data.queryUrl;
+    $: queryExplain = data.queryExplain;
+    $: pagination = data.pagination;
 </script>
 
 <svelte:head>
@@ -18,7 +20,7 @@
 
 <h5>
     Search Results:
-    {#each queries as q, i}
+    {#each queryExplain as q, i}
         {#if i > 0},{/if}
         <Skill skill={q}/>
     {/each}
@@ -33,6 +35,21 @@
     {/if}
 </div>
 
-<div class="my-4 mr-4 float-right">
-    <Button accent href="/list">View Full Card List</Button>
+<div class="mt-2 flex flex-col gap-y-2 items-center">
+    <div>
+        Cards {(pagination.page - 1) * pagination.pageSize + 1}
+        - {Math.min(pagination.page * pagination.pageSize, pagination.totalResults)} of {pagination.totalResults}
+    </div>
+    <div class="px-4 w-full flex">
+        <div class="flex-1"></div>
+        <div class="max-w-[50%] flex flex-wrap gap-2 justify-center">
+            {#each {length: Math.ceil(pagination.totalResults / pagination.pageSize)} as _, i}
+                <Button style="width: 3em; padding-left: 0; padding-right: 0;" accent={i+1 === pagination.page}
+                        on:click={goto(`/search/${queryUrl}/page:${i+1}`, {replaceState: true})}>{i + 1}</Button>
+            {/each}
+        </div>
+        <div class="flex-1 text-right">
+            <Button accent on:click={() => history.back()}>Back To Search</Button>
+        </div>
+    </div>
 </div>
