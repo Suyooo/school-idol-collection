@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Skill from "$lib/format/Skill.svelte";
     import Button from "$lib/style/Button.svelte";
     import GridPanel from "$lib/style/GridPanel.svelte";
     import type {PageData} from './$types.js';
@@ -15,7 +16,13 @@
     <title>Search Results &bull; SIC</title>
 </svelte:head>
 
-<h5>{queries.join(", ")}</h5>
+<h5>
+    Search Results for
+    {#each queries as q, i}
+        {#if i > 0},{/if}
+        <Skill skill={q}/>
+    {/each}
+</h5>
 <div class="content">
     {#if cards.length === 0}
         There are no results for this query.

@@ -195,7 +195,7 @@
                                 <option value="noability">None</option>
                                 <option value="rush">[RUSH]</option>
                                 <option value="live">[LIVE]</option>
-                                <option value="rushorlive">[RUSH] or [LIVE]</option>
+                                <option value="rushorlive">[RUSH/LIVE]</option>
                             </select>
                         </div>
                         <div>

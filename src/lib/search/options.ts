@@ -278,7 +278,7 @@ export class SearchFilterMemberAbilityRushOrLive extends SearchFilter0 {
         required: true,
         attributes: ["abilityRush", "abilityLive"]
     }];
-    getExplainString = () => "[RUSH] or [LIVE] Ability";
+    getExplainString = () => "[RUSH/LIVE] Ability";
 }
 
 export class SearchFilterCardID extends SearchFilter1 {
@@ -319,7 +319,7 @@ export abstract class SearchFilterTranslatableLike extends SearchFilter1 {
     });
 
     getIncludeOptions = (_db: DBObject) => <IncludeOptions[]>[];
-    getExplainString = () => this.explainName + " contains " + this.param;
+    getExplainString = () => `${this.explainName} contains "${this.param}"`;
 }
 
 export class SearchFilterName extends SearchFilterTranslatableLike {
