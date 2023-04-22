@@ -1,9 +1,8 @@
-import CardType from "$lib/enums/cardType.js";
-import {Op, Sequelize} from "@sequelize/core";
+import {Sequelize} from "@sequelize/core";
 import type {ModelStatic} from "@sequelize/core";
 
 import type Card from "$models/card/card.js";
-import {CardBase, cardOrder} from "$models/card/card.js";
+import {CardBase} from "$models/card/card.js";
 import CardFAQLink from "$models/card/faqLink.js";
 import CardMemberGroup from "$models/card/memberGroup.js";
 import TranslationPattern from "$models/translation/pattern.js";
@@ -20,6 +19,8 @@ import Annotation from "$models/skill/annotation.js";
 import Link from "$models/skill/link.js";
 import Set from "$models/set/set.js";
 import SetCategory from "$models/set/category.js";
+import {addScopes as addScopesCardBase} from "$models/card/card.js";
+import {addScopes as addScopesCardMemberGroup} from "$models/card/memberGroup.js";
 
 const modelList: ModelStatic<any>[] = [
     CardBase, CardMemberGroup, CardFAQLink,
@@ -34,61 +35,13 @@ const sequelize = new Sequelize({
     dialect: "sqlite",
     storage: "cardlist.db",
     models: modelList,
-    logging: true,
+    logging: false,
     logQueryParameters: true
 });
 
-async function scopes() {
-    // TODO: Add as decorators once those are implemented? Or move to model files?
-
-    CardBase.addScope("orderCardNo", () => ({
-        order: cardOrder("`Card`.`cardNo`")
-    }));
-    CardBase.addScope("viewCardNoOnly", () => ({
-        attributes: ["cardNo"]
-    }));
-    CardBase.addScope("viewIdOnly", () => ({
-        attributes: ["id"]
-    }));
-    CardBase.addScope("viewForLink", () => ({
-        attributes: ["cardNo", "id", "type", "nameJpn", "nameEng", "frontOrientation", "backOrientation"]
-    }));
-    CardBase.addScope("viewRarity", () => ({
-        include: [
-            {model: sequelize.models.CardMemberExtraInfo, attributes: ["rarity"]},
-            {model: sequelize.models.CardSongExtraInfo, attributes: ["rarity"]}
-        ]
-    }));
-    CardBase.addScope("filterId", (id) => ({
-        where: {id: id}
-    }));
-    CardBase.addScope("filterBefore", (cardNo) => ({
-        where: {cardNo: {[Op.lt]: cardNo}},
-        order: [["cardNo", "DESC"]]
-    }));
-    CardBase.addScope("filterAfter", (cardNo) => ({
-        where: {cardNo: {[Op.gt]: cardNo}},
-        order: [["cardNo", "ASC"]]
-    }));
-    CardBase.addScope("filterSet", (set) => ({
-        where: {cardNo: {[Op.like]: set + "-%"}}
-    }));
-    CardBase.addScope("filterMembers", () => ({
-        where: {type: CardType.MEMBER}
-    }));
-    CardBase.addScope("filterSongs", () => ({
-        where: {type: CardType.SONG}
-    }));
-    CardBase.addScope("filterMemories", () => ({
-        where: {type: CardType.MEMORY}
-    }));
-    CardBase.addScope("filterHasSkill", () => ({
-        include: [{model: DB.Skill, required: true}]
-    }));
-
-    CardMemberGroup.addScope("filterHasSkill", () => ({
-        include: [{model: DB.Skill, required: true}]
-    }));
+async function addScopes() {
+    addScopesCardBase(sequelize);
+    addScopesCardMemberGroup(sequelize);
 }
 
 export interface DBObject {
@@ -119,7 +72,7 @@ export interface DBObject {
 }
 
 const DB: DBObject = {
-    syncPromise: Promise.all(modelList.map(m => m.sync())).then(scopes),
+    syncPromise: Promise.all(modelList.map(m => m.sync())).then(addScopes),
     sequelize: sequelize,
 
     Card: <ModelStatic<Card>>sequelize.models.Card,

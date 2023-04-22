@@ -1,5 +1,5 @@
 import type {CardOrientation} from "$lib/enums/cardOrientation.js";
-import {DataTypes, literal, Model} from "@sequelize/core";
+import {DataTypes, literal, Model, Op, Sequelize} from "@sequelize/core";
 import type {OrderItem} from "@sequelize/core";
 import {Attribute, HasMany, HasOne, Table} from "@sequelize/core/decorators-legacy";
 
@@ -17,6 +17,7 @@ import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePiec
 import type CardMemberGroup from "$models/card/memberGroup.js";
 import type CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";
 import type CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo.js";
+import DB from "../db.js";
 
 export const cardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + " LIKE 'LL%' DESC, " + col)]];
 
@@ -176,3 +177,51 @@ export class CardMemory extends CardBase {
 
 type Card = CardMember | CardSong | CardMemory;
 export default Card;
+
+export function addScopes(sequelize: Sequelize) {
+    // TODO: move to decorators once @Scope is implemented
+    CardBase.addScope("orderCardNo", () => ({
+        order: cardOrder("`Card`.`cardNo`")
+    }));
+    CardBase.addScope("viewCardNoOnly", () => ({
+        attributes: ["cardNo"]
+    }));
+    CardBase.addScope("viewIdOnly", () => ({
+        attributes: ["id"]
+    }));
+    CardBase.addScope("viewForLink", () => ({
+        attributes: ["cardNo", "id", "type", "nameJpn", "nameEng", "frontOrientation", "backOrientation"]
+    }));
+    CardBase.addScope("viewRarity", () => ({
+        include: [
+            {model: sequelize.models.CardMemberExtraInfo, attributes: ["rarity"]},
+            {model: sequelize.models.CardSongExtraInfo, attributes: ["rarity"]}
+        ]
+    }));
+    CardBase.addScope("filterId", (id) => ({
+        where: {id: id}
+    }));
+    CardBase.addScope("filterBefore", (cardNo) => ({
+        where: {cardNo: {[Op.lt]: cardNo}},
+        order: [["cardNo", "DESC"]]
+    }));
+    CardBase.addScope("filterAfter", (cardNo) => ({
+        where: {cardNo: {[Op.gt]: cardNo}},
+        order: [["cardNo", "ASC"]]
+    }));
+    CardBase.addScope("filterSet", (set) => ({
+        where: {cardNo: {[Op.like]: set + "-%"}}
+    }));
+    CardBase.addScope("filterMembers", () => ({
+        where: {type: CardType.MEMBER}
+    }));
+    CardBase.addScope("filterSongs", () => ({
+        where: {type: CardType.SONG}
+    }));
+    CardBase.addScope("filterMemories", () => ({
+        where: {type: CardType.MEMORY}
+    }));
+    CardBase.addScope("filterHasSkill", () => ({
+        include: [{model: DB.Skill, required: true}]
+    }));
+}

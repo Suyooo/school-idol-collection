@@ -1,11 +1,12 @@
 import {Attribute, HasMany, Table} from "@sequelize/core/decorators-legacy";
-import {DataTypes, Model} from "@sequelize/core";
+import {DataTypes, Model, Op, Sequelize} from "@sequelize/core";
 
 import type {CardMember} from "$models/card/card.js";
 import type CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
 
 import type CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
 import type Skill from "$models/skill/skill.js";
+import DB from "../db.js";
 
 @Table({
     modelName: "CardMemberGroup",
@@ -47,4 +48,11 @@ export default class CardMemberGroup extends Model {
         as: "skills", foreignKey: "groupId", inverse: {as: "group"}
     })
     declare skills: Skill[];
+}
+
+export function addScopes(sequelize: Sequelize) {
+    // TODO: move to decorators once @Scope is implemented
+    CardMemberGroup.addScope("filterHasSkill", () => ({
+        include: [{model: DB.Skill, required: true}]
+    }));
 }
