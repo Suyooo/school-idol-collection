@@ -2,16 +2,25 @@ import type SearchFilter from "$lib/search/options.js";
 import type Card from "$models/card/card.js";
 import {cardOrder} from "$models/card/card.js";
 import DB from "$models/db.js";
-import {Op} from "@sequelize/core";
-import type {Attributes, FindOptions, IncludeOptions, ProjectionAlias, WhereOptions} from "@sequelize/core";
+import {literal, Op} from "@sequelize/core";
+import type {
+    Attributes,
+    FindAttributeOptions,
+    FindOptions,
+    IncludeOptions,
+    ProjectionAlias,
+    WhereOptions
+} from "@sequelize/core";
 
 export function makeFindOptionsFromFilters(filters: SearchFilter[]): FindOptions<Attributes<Card>> {
     let where: WhereOptions = {};
+    let attributes: Array<string | ProjectionAlias> = [];
     const include: Map<any, IncludeOptions> = new Map();
 
     for (const filter of filters) {
         where = {...where, ...filter.getWhereOptions(Op)};
-        for (let inclusion of filter.getIncludeOptions(DB)) {
+        attributes = [...attributes, ...filter.getAttributeOptions(literal)];
+        for (let inclusion of filter.getIncludeOptions(DB, Op)) {
             if (include.has(inclusion.model)) {
                 const inclInMap = include.get(inclusion.model)!;
                 inclInMap.required = inclusion.required || inclInMap.required;
@@ -32,7 +41,7 @@ export function makeFindOptionsFromFilters(filters: SearchFilter[]): FindOptions
         }
     }
 
-    return {where, include: [...include.values()]}
+    return {where, attributes: {include: attributes}, include: [...include.values()]}
 }
 
 export default async function searchQuery(filters: SearchFilter[], scope: string | string[], options?: FindOptions<Attributes<Card>>): Promise<Card[]> {

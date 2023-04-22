@@ -17,7 +17,7 @@
 
 <style lang="postcss">
     .header {
-        @apply w-full bg-primary-800;
+        @apply w-full bg-primary-700;
 
         & .cont {
             @apply flex items-center gap-x-4 text-accent-400 font-bold tracking-widest uppercase;
@@ -27,7 +27,7 @@
             }
 
             & a {
-                @apply px-6 py-2 bg-primary-700 rounded-full no-underline;
+                @apply px-6 py-2 bg-primary-500 rounded-full no-underline;
             }
         }
     }

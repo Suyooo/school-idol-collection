@@ -17,9 +17,13 @@
 
 <h5>{queries.join(", ")}</h5>
 <div class="content">
-    <GridPanel items={cards} key="cardNo" let:item={card}>
-        <CardGridElement {card}/>
-    </GridPanel>
+    {#if cards.length === 0}
+        There are no results for this query.
+    {:else}
+        <GridPanel items={cards} key="cardNo" let:item={card}>
+            <CardGridElement {card}/>
+        </GridPanel>
+    {/if}
 </div>
 
 <div class="my-4 mr-4 float-right">

@@ -5,15 +5,15 @@
     type NumberQueryMod = "exact" | "less" | "more";
 
     let cardName: string, cardSet: string, skillText: string, cardType: "member" | "song" | "memory",
-        memberRarity: number, memberGroup: string, memberYear: number,
+        memberRarity: string, memberGroup: string, memberYear: number,
         memberCost: number, memberCostMod: NumberQueryMod,
-        memberIdolizable: boolean, memberAbility: "none" | "live" | "rush" | "both", memberCostume: string,
+        memberIdolizable: boolean, memberAbility: "noability" | "live" | "rush" | "rushorlive", memberCostume: string,
         memberPieces: number, memberPiecesMod: NumberQueryMod,
         memberPiecesSmile: number, memberPiecesSmileMod: NumberQueryMod,
         memberPiecesPure: number, memberPiecesPureMod: NumberQueryMod,
         memberPiecesCool: number, memberPiecesCoolMod: NumberQueryMod,
         memberPiecesAll: number, memberPiecesAllMod: NumberQueryMod, memberPieceBonus: boolean,
-        songRarity: number, songAttribute: number, songRequirementType: "any" | "attr",
+        songRarity: string, songAttribute: string, songRequirementType: "anypiece" | "attributepiece",
         songLivePoints: number, songLivePointsMod: NumberQueryMod,
         songPiecesSmile: number, songPiecesSmileMod: NumberQueryMod,
         songPiecesPure: number, songPiecesPureMod: NumberQueryMod,
@@ -137,14 +137,14 @@
                             <b>Rarity:</b>
                             <select bind:value={memberRarity}>
                                 <option value="" selected>—</option>
-                                <option value="0">R</option>
-                                <option value="1">SR</option>
-                                <option value="2">HR</option>
-                                <option value="3">Special</option>
-                                <option value="4">Secret</option>
-                                <option value="5">PR</option>
-                                <option value="6">N</option>
-                                <option value="7">SSR</option>
+                                <option value="r">R</option>
+                                <option value="sr">SR</option>
+                                <option value="hr">HR</option>
+                                <option value="special">Special</option>
+                                <option value="secret">Secret</option>
+                                <option value="pr">PR</option>
+                                <option value="n">N</option>
+                                <option value="ssr">SSR</option>
                             </select>
                         </div>
                         <div>
@@ -158,7 +158,8 @@
                                 <option value="bibi">BiBi</option>
                                 <option value="cyaron">CYaRon!</option>
                                 <option value="azalea">AZALEA</option>
-                                <option value="guiltykis">Guilty Kiss</option>
+                                <option value="guiltykiss">Guilty Kiss</option>
+                                <option value="saintsnow">Saint Snow</option>
                             </select>
                         </div>
                         <div>
@@ -191,10 +192,10 @@
                             <b>Ability:</b>
                             <select bind:value={memberAbility}>
                                 <option value="" selected>—</option>
-                                <option value="none">None</option>
+                                <option value="noability">None</option>
                                 <option value="rush">[RUSH]</option>
                                 <option value="live">[LIVE]</option>
-                                <option value="both">[RUSH] or [LIVE]</option>
+                                <option value="rushorlive">[RUSH] or [LIVE]</option>
                             </select>
                         </div>
                         <div>
@@ -320,27 +321,45 @@
                             <b>Rarity:</b>
                             <select bind:value={songRarity}>
                                 <option value="" selected>—</option>
-                                <option value="0">M</option>
-                                <option value="1">GR</option>
+                                <option value="m">M</option>
+                                <option value="gr">GR</option>
                             </select>
                         </div>
                         <div>
                             <b>Attribute:</b>
                             <select bind:value={songAttribute}>
                                 <option value="" selected>—</option>
-                                <option value="0">Neutral</option>
-                                <option value="1">Smile</option>
-                                <option value="2">Pure</option>
-                                <option value="3">Cool</option>
-                                <option value="4">Orange</option>
+                                <option value="neutral">Neutral</option>
+                                <option value="smile">Smile</option>
+                                <option value="pure">Pure</option>
+                                <option value="cool">Cool</option>
+                                <option value="orange">Orange</option>
                             </select>
+                        </div>
+                        <div>
+                            <b>Base Live Points:</b>
+                            <select bind:value={songLivePoints}>
+                                <option value="" selected>—</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                            {#if songLivePoints}
+                                <select bind:value={songLivePointsMod}>
+                                    <option value="exactly" selected>exactly</option>
+                                    <option value="less">or less</option>
+                                    <option value="more">or more</option>
+                                </select>
+                            {/if}
                         </div>
                         <div>
                             <b>Requirement Type:</b>
                             <select bind:value={songRequirementType}>
                                 <option value="" selected>—</option>
-                                <option value="any">Any Piece Requirement</option>
-                                <option value="attr">Attribute Piece Requirement</option>
+                                <option value="anypiece">Any Piece Requirement</option>
+                                <option value="attributepiece">Attribute Piece Requirement</option>
                             </select>
                         </div>
                         {#if songRequirementType === "any"}
