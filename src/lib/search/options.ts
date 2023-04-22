@@ -301,11 +301,14 @@ export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
     readonly explainAfter: boolean = false;
     readonly include: Includeable | undefined = undefined;
 
-    getScopeElements = () => [<ScopeOptions>{method: ["searchGenericNumberWithMod", this.param, this.columnName, this.include]}];
+    public getScopeElements(): (string | ScopeOptions)[] {
+        return [{method: ["searchGenericNumberWithMod", this.param, this.columnName, this.include]}];
+    }
+
     getExplainString = () => {
         const mod = this.param.endsWith("+") ? " or more" : (this.param.endsWith("-") ? " or less" : "");
         if (this.explainAfter) {
-            return `${parseInt(this.param)}${mod} ${this.explainName}`;
+            return `${parseInt(this.param)}${mod} ${this.param === "1" ? this.explainName.substring(0, this.explainName.length - 1) : this.explainName}`;
         } else {
             return `${this.explainName} is ${parseInt(this.param)}${mod}`;
         }
@@ -325,13 +328,12 @@ export class SearchFilterMemberCost extends SearchFilterNumberWithMod {
 
 export class SearchFilterMemberPieces extends SearchFilterNumberWithMod {
     readonly key = "pieces";
-    readonly columnName = "$member.piecesAll + member.piecesSmile + member.piecesPure + member.piecesCool$";
+    readonly columnName = "$piecesTotal$";
     readonly explainName = "Pieces";
     readonly explainAfter = true;
-    readonly include: Includeable = {
-        association: "member",
-        required: true,
-        attributes: ["piecesAll", "piecesSmile", "piecesPure", "piecesCool"]
+
+    getScopeElements = () => {
+        return ["columnPiecesTotal", ...super.getScopeElements()];
     };
 }
 
