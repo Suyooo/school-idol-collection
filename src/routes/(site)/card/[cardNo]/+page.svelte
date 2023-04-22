@@ -1,5 +1,4 @@
 <script lang="ts">
-    import {CardMemberRarity} from "$lib/enums/cardRarity.js";
     import Ability from "$lib/format/Ability.svelte";
     import CardImage from "$lib/format/CardImage.svelte";
     import PieceCount from "$lib/format/PieceCount.svelte";

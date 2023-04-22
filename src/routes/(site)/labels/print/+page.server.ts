@@ -1,6 +1,6 @@
 import {cardHasGroup, cardIsMember} from "$lib/card/types.js";
 import type Card from "$models/card/card.js";
-import type {Actions, PageServerLoad} from "./$types.js";
+import type {Actions} from "./$types.js";
 
 export const actions = {
     default: async ({request, locals, fetch}) => {

@@ -1,13 +1,10 @@
 <script lang="ts">
-    import {CardMemberRarity} from "$lib/enums/cardRarity.js";
     import CardImage from "$lib/format/CardImage.svelte";
     import type Card from "$models/card/card.js";
     import {cardRarityShort, cardType} from "$lib/card/strings.js";
     import {cardIsMember} from "$lib/card/types.js";
 
     export let card: Card;
-    let cardSet: string;
-    $: cardSet = card.cardNo.split("-")[0];
 </script>
 
 <a href="/card/{card.cardNo}" class="grid-item">

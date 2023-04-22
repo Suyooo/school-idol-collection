@@ -1,6 +1,6 @@
 <script lang="ts">
     import Button from "$lib/style/Button.svelte";
-    import type {Snapshot} from './$types';
+    import type {Snapshot} from "./$types.js";
 
     type NumberQueryMod = "" | "-" | "+";
 
@@ -232,7 +232,7 @@
                                 <option value="2">2★</option>
                                 <option value="3">3★</option>
                             </select>
-                            {#if memberCost}
+                            {#if memberCost !== undefined && memberCost !== null}
                                 <select bind:value={memberCostMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -264,7 +264,7 @@
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select>
-                            {#if memberPieces}
+                            {#if memberPieces !== undefined && memberPieces !== null}
                                 <select bind:value={memberPiecesMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -284,7 +284,7 @@
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select>
-                            {#if memberPiecesSmile}
+                            {#if memberPiecesSmile !== undefined && memberPiecesSmile !== null}
                                 <select bind:value={memberPiecesSmileMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -304,7 +304,7 @@
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select>
-                            {#if memberPiecesPure}
+                            {#if memberPiecesPure !== undefined && memberPiecesPure !== null}
                                 <select bind:value={memberPiecesPureMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -324,7 +324,7 @@
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select>
-                            {#if memberPiecesCool}
+                            {#if memberPiecesCool !== undefined && memberPiecesCool !== null}
                                 <select bind:value={memberPiecesCoolMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -344,7 +344,7 @@
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select>
-                            {#if memberPiecesAll}
+                            {#if memberPiecesAll !== undefined && memberPiecesAll !== null}
                                 <select bind:value={memberPiecesAllMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -390,15 +390,8 @@
                         </div>
                         <div>
                             <b>Base Live Points:</b>
-                            <select bind:value={songLivePoints}>
-                                <option value="" selected>—</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                            </select>
-                            {#if songLivePoints}
+                            <input type="number" min="0" bind:value={songLivePoints} placeholder="—">
+                            {#if songLivePoints !== undefined && songLivePoints !== null}
                                 <select bind:value={songLivePointsMod}>
                                     <option value="" selected>exactly</option>
                                     <option value="-">or less</option>
@@ -425,7 +418,7 @@
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                 </select>
-                                {#if songPiecesAll}
+                                {#if songPiecesAll !== undefined && songPiecesAll !== null}
                                     <select bind:value={songPiecesAllMod}>
                                         <option value="" selected>exactly</option>
                                         <option value="-">or less</option>
@@ -447,7 +440,7 @@
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                 </select>
-                                {#if songPiecesSmile}
+                                {#if songPiecesSmile !== undefined && songPiecesSmile !== null}
                                     <select bind:value={songPiecesSmileMod}>
                                         <option value="" selected>exactly</option>
                                         <option value="-">or less</option>
@@ -467,7 +460,7 @@
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                 </select>
-                                {#if songPiecesPure}
+                                {#if songPiecesPure !== undefined && songPiecesPure !== null}
                                     <select bind:value={songPiecesPureMod}>
                                         <option value="" selected>exactly</option>
                                         <option value="-">or less</option>
@@ -488,7 +481,7 @@
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                 </select>
-                                {#if songPiecesCool}
+                                {#if songPiecesCool !== undefined && songPiecesCool !== null}
                                     <select bind:value={songPiecesCoolMod}>
                                         <option value="" selected>exactly</option>
                                         <option value="-">or less</option>

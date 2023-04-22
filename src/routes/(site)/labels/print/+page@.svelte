@@ -7,9 +7,9 @@
     import Shelving from "./shelf.js";
 
     export let form: ActionData;
-    let width: number = form?.width ?? 0;
-    let height: number = form?.height ?? 0;
-    let padding: number = form?.padding ?? 0;
+    let width: number = form?.width ? parseInt(form?.width.toString()) : 0;
+    let height: number = form?.height ? parseInt(form?.height.toString()) : 0;
+    let padding: number = form?.padding ? parseInt(form?.padding.toString()) : 0;
     let contentWidth: number, contentHeight: number, shelfCardNos: string[][],
         shelfElements: HTMLTableCellElement[] = [], pageSize: HTMLDivElement, pageStyle: HTMLStyleElement;
 
@@ -17,7 +17,7 @@
     $: contentHeight = height - padding * 2;
 
     onMount(() => {
-        if ((form?.cardNos.length ?? 0) === 0) return;
+        if (form === null || form.cardNos.length === 0) return;
 
         // Sort all the labels into horizontal shelves
         const shelfHorz = new Shelving<string>(pageSize.clientWidth);
@@ -100,7 +100,7 @@
         {#each (shelfCardNos ?? form.cardNos.map(c => [c])) as shelf, i}
             <tr class="shelf">
                 <td style:width={contentWidth+"mm"} bind:this={shelfElements[i]}>
-                    {#each shelf as cardNo, i}
+                    {#each shelf as cardNo}
                         <Label {cardNo} byCardNo={form.byCardNo} byCardId={form.byCardId}/>
                     {/each}
                 </td>

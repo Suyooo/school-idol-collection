@@ -50,8 +50,8 @@ function isMultipleQA(qa?: [FaqQA] | [FaqQAWithKey, FaqQAWithKey, ...FaqQAWithKe
     return qa !== undefined && qa.length > 1;
 }
 
-function isKeyedQA(thisQa: FaqQA | FaqQAWithKey, qa?: [FaqQA] | [FaqQAWithKey, FaqQAWithKey, ...FaqQAWithKey[]]): thisQa is FaqQAWithKey {
-    return isMultipleQA(qa);
+function isKeyedQA(qa: FaqQA | FaqQAWithKey): qa is FaqQAWithKey {
+    return (<{key: string | undefined}>qa).key !== undefined;
 }
 
 export function getKeyPrefix(subjects: (string | { from: string, to: string })[]) {
@@ -64,12 +64,12 @@ export function getKeyPrefix(subjects: (string | { from: string, to: string })[]
     }
 }
 
-export function getKey(prefix: string | null, key?: string) {
-    if (key) {
+export function getKey(prefix: string | null, qa?: FaqQA | FaqQAWithKey) {
+    if (qa && isKeyedQA(qa)) {
         if (prefix) {
-            return `${prefix}_${key}`;
+            return `${prefix}_${qa.key}`;
         } else {
-            return key;
+            return qa.key;
         }
     } else {
         return prefix;
@@ -146,7 +146,7 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
                     faqPromises.push(getFaqLinkLabel(DB, seeAlso)
                         .then(label => {
                             faqObj.label = parseSkillToNodes(label, Language.ENG, true);
-                        }).catch(e => {
+                        }).catch(() => {
                             faqObj.label = parseSkillToNodes("UNLABELED LINK UNLABELED LINK UNLABELED LINK UNLABELED LINK", Language.ENG, true);
                         }));
                     return <FaqSeeAlsoPrepared>faqObj;
@@ -154,7 +154,7 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
                 qa: section.qa?.map(qa => {
                     cardsToLoad.push(...getLinkedCards(qa.question), ...getLinkedCards(qa.answer));
                     return <FaqQAPrepared>{
-                        key: getKey(keyPrefix, isKeyedQA(qa, section.qa) ? qa.key : undefined),
+                        key: getKey(keyPrefix, qa),
                         question: parseSkillToNodes(
                             qa.question.replace(/{{red:([^}]*?)}}/g, "<span class='text-highlight-red'>$1</span>"),
                             Language.ENG, true),

@@ -87,7 +87,7 @@ export const POST: RequestHandler = (async ({locals, request}) => {
                             cardId,
                             displayOrder,
                             label,
-                            link: `/faq/${faqName}#${getKey(keyPrefix, qa.key)}`,
+                            link: `/faq/${faqName}#${getKey(keyPrefix, qa)}`,
                             shortAnswer
                         }, {transaction});
                         nextDisplayOrderCounters[cardId] = displayOrder + 1;

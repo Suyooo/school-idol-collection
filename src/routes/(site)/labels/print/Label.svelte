@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {cardHasGroup} from "$lib/card/types";
+    import {cardHasGroup} from "$lib/card/types.js";
     import {cardIsMember, cardIsSong} from "$lib/card/types.js";
     import CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
     import {CardOrientation} from "$lib/enums/cardOrientation.js";
@@ -14,14 +14,16 @@
 
     $: {
         card = byCardNo[cardNo];
-        showGroupSkills = cardIsMember(card) && cardHasGroup(card) && card.member.group.skills.length > 0;
+        showGroupSkills = cardIsMember(card) && cardHasGroup(card) && (card.member?.group?.skills.length ?? 0) > 0;
         isLandscape = card.frontOrientation === CardOrientation.LANDSCAPE;
     }
 </script>
 
 <div class="label" class:narrow={!isLandscape} class:wide={isLandscape}>
     <div class="skillsallcards">
-        {#each (showGroupSkills ? card.member.group.expectedMemberIds.split("|").filter(c => c !== "").map(c => byCardNo[byCardId[c]]) : [card]) as c}
+        {#each (card.member && card.member.group && showGroupSkills
+            ? card.member.group.expectedMemberIds.split("|").filter(c => c !== "").map(c => byCardNo[byCardId[parseInt(c)].cardNo])
+            : [card]) as c}
             {#if c.skills.length > 0}
                 <div class="skillscard" class:othergroupmember={c.cardNo !== cardNo}>
                     {#each c.skills as skill (skill.id)}
@@ -33,7 +35,7 @@
             {/if}
         {/each}
     </div>
-    {#if showGroupSkills}
+    {#if card.member && card.member.group && showGroupSkills}
         <div class="skillsgroup" class:pair={card.member.group.type === CardMemberGroupType.PAIR}
              class:trio={card.member.group.type === CardMemberGroupType.TRIO}
              style:--group-pos={card.member.group.expectedMemberIds.split("|").indexOf(card.id.toString()) - 1}>

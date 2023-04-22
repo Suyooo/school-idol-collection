@@ -1,6 +1,7 @@
 <script lang="ts">
     import Button from "$lib/style/Button.svelte";
-    import type { Snapshot } from './$types';
+    import type {FormEventHandler} from "svelte/elements";
+    import type {Snapshot} from "./$types.js";
 
     let width: number, height: number, padding: number, cardNos: string, error: string | undefined,
         form: HTMLFormElement;
@@ -10,10 +11,10 @@
         restore: value => ({width, height, padding, cardNos} = value)
     };
 
-    function setPreset(e) {
-        if (e.target.value) {
-            [width, height, padding] = e.target.value.split("x").map(x => parseInt(x));
-            e.target.children[0].selected = true;
+    const setPreset: FormEventHandler<HTMLSelectElement> = (e) => {
+        if (e.currentTarget.value) {
+            [width, height, padding] = e.currentTarget.value.split("x").map(x => parseInt(x));
+            (<HTMLOptionElement>e.currentTarget.children[0]).selected = true;
         }
     }
 

@@ -19,7 +19,7 @@ export default class Crawler extends C {
                 }
             };
         } else {
-            options.callback = async (error, res, done) => {
+            options.callback = async (_error, res, done) => {
                 res.options.promise.resolve();
                 done();
             };
@@ -27,7 +27,7 @@ export default class Crawler extends C {
         super(options);
     }
 
-    public queue(urisOrOptions: string | ReadonlyArray<string> | CrawlerRequestOptions | ReadonlyArray<CrawlerRequestOptions>): Promise<void> {
+    public async queue(urisOrOptions: string | ReadonlyArray<string> | CrawlerRequestOptions | ReadonlyArray<CrawlerRequestOptions>): Promise<void> {
         if (Array.isArray(urisOrOptions)) {
             const promiseArray: Promise<void>[] = [];
             urisOrOptions = urisOrOptions.map(v => {
@@ -42,7 +42,7 @@ export default class Crawler extends C {
                 return v;
             });
             super.queue(urisOrOptions);
-            return Promise.all(promiseArray).then(() => { });
+            await Promise.all(promiseArray);
         } else {
             const p = new Promise<void>((resolve, reject) => {
                 if (typeof urisOrOptions === "string") {
@@ -52,7 +52,7 @@ export default class Crawler extends C {
                 }
             });
             super.queue(urisOrOptions);
-            return p;
+            await p;
         }
     }
 }

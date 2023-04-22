@@ -9,7 +9,7 @@ import {CardMemberRarity, CardSongRarity} from "$lib/enums/cardRarity.js";
 import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import CardType from "$lib/enums/cardType.js";
 import ImportError from "$lib/errors/importError.js";
-import {makeFindOptionsFromFilters} from "$lib/search/query.js";
+import {getScopesFromFilters} from "$lib/search/query.js";
 import {tryAllPatterns} from "$lib/translation/skills.js";
 import PieceInfo from "$lib/types/pieceInfo.js";
 import type Card from "$models/card/card.js";
@@ -92,7 +92,7 @@ export const POST: RequestHandler = (async ({locals, request}) => {
 }) satisfies RequestHandler;
 
 function fillInfoObject(info: { [k: string]: string | null }, $: cheerio.CheerioAPI) {
-    $(".status tr").each((i, e) => {
+    $(".status tr").each((_i, e) => {
         if ($("td", e).length > 0) {
             const k = $("th", e).text();
             let x: string | null = $("td", e).text();
@@ -390,7 +390,7 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
                         include: [DB.Skill],
                         transaction
                     })).id;
-                    const existingMembers = await DB.Card.scope(["cardNoOnly"]).findAll({
+                    const existingMembers = await DB.Card.withScope(["cardNoOnly"]).findAll({
                         where: {
                             id: {
                                 [Op.in]: memberIds
@@ -489,11 +489,10 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
         // Find any already existing annotations that now link to this new card
         for (const annotation of await DB.Annotation.findAll({transaction})) {
             const type = AnnotationEnum.fromId(annotation.type);
-            const options = makeFindOptionsFromFilters(type.getSearchFilters(annotation.parameter));
-            options.where = {...options.where};
-            options.transaction = transaction;
-            options.attributes = ["cardNo"];
-            if ((await DB.Card.findAll(options)).some(r => r.cardNo === cardNo)) {
+            const scopes = getScopesFromFilters(type.getSearchFilters(annotation.parameter));
+            if ((await DB.Card.withScope(scopes).findAll({
+                attributes: ["cardNo"], transaction
+            })).some(r => r.cardNo === cardNo)) {
                 await DB.Link.upsert({
                     from: annotation.id,
                     to: cardNo
