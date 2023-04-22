@@ -17,7 +17,7 @@
 </svelte:head>
 
 <h5>
-    Search Results for
+    Search Results:
     {#each queries as q, i}
         {#if i > 0},{/if}
         <Skill skill={q}/>

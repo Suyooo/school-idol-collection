@@ -21,6 +21,7 @@ import Set from "$models/set/set.js";
 import SetCategory from "$models/set/category.js";
 import {addScopes as addScopesCardBase} from "$models/card/card.js";
 import {addScopes as addScopesCardMemberGroup} from "$models/card/memberGroup.js";
+import {addScopes as addScopesSearch} from "$lib/search/scopes.js";
 
 const modelList: ModelStatic<any>[] = [
     CardBase, CardMemberGroup, CardFAQLink,
@@ -42,6 +43,7 @@ const sequelize = new Sequelize({
 async function addScopes() {
     addScopesCardBase(sequelize);
     addScopesCardMemberGroup(sequelize);
+    addScopesSearch(sequelize);
 }
 
 export interface DBObject {

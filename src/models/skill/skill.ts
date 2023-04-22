@@ -130,7 +130,7 @@ export class SkillBase extends Model {
                     type: type.id,
                     parameter
                 }, {transaction: options.transaction});
-                const cards = (await searchQuery(type.getSearchFilters(parameter), "viewCardNoOnly", options))
+                const cards = (await searchQuery(type.getSearchFilters(parameter), ["viewCardNoOnly"], options))
                     .map(c => c.cardNo);
                 await(<BelongsToMany<Annotation,Card,Link>>SkillBase.associations.annotations.target.associations.links)
                     .add(annotation, cards, {transaction: options.transaction});
@@ -145,7 +145,7 @@ export class SkillBase extends Model {
                     type: type.id,
                     parameter
                 }, {transaction: options.transaction});
-                const cards = (await searchQuery(type.getSearchFilters(parameter), "viewCardNoOnly", options))
+                const cards = (await searchQuery(type.getSearchFilters(parameter), ["viewCardNoOnly"], options))
                     .map(c => c.cardNo);
                 await(<BelongsToMany<Annotation,Card,Link>>SkillBase.associations.annotations.target.associations.links)
                     .add(annotation, cards, {transaction: options.transaction});
