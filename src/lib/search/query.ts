@@ -14,16 +14,24 @@ import type {
 
 export function makeFindOptionsFromFilters(filters: SearchFilter[]): FindOptions<Attributes<Card>> {
     let where: WhereOptions = {};
-    let attributes: Array<string | ProjectionAlias> = [];
+    const attributes: Array<string | ProjectionAlias> = [];
     const include: Map<any, IncludeOptions> = new Map();
 
     for (const filter of filters) {
         where = {...where, ...filter.getWhereOptions(Op)};
-        attributes = [...attributes, ...filter.getAttributeOptions(literal)];
+        attributes.push(...filter.getAttributeOptions(literal));
         for (let inclusion of filter.getIncludeOptions(DB, Op)) {
+            console.log(inclusion);
             if (include.has(inclusion.model)) {
                 const inclInMap = include.get(inclusion.model)!;
                 inclInMap.required = inclusion.required || inclInMap.required;
+                if (inclusion.hasOwnProperty("include")) {
+                    if (inclInMap.include === undefined) inclInMap.include = <IncludeOptions[]>[];
+                    for (const recInclusion of <IncludeOptions[]>inclusion.include) {
+                        if ((<IncludeOptions[]>inclInMap.include).some(e => e.model == recInclusion.model)) continue;
+                        (<IncludeOptions[]>inclInMap.include).push(recInclusion);
+                    }
+                }
                 if (inclInMap.hasOwnProperty("attributes")) {
                     if (inclusion.hasOwnProperty("attributes")) {
                         inclInMap.attributes = [
@@ -41,6 +49,7 @@ export function makeFindOptionsFromFilters(filters: SearchFilter[]): FindOptions
         }
     }
 
+    console.log([...include.values()]);
     return {where, attributes: {include: attributes}, include: [...include.values()]}
 }
 

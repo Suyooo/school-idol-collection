@@ -70,6 +70,13 @@ export class SearchFilterMemory extends SearchFilterCardType {
     getExplainString = () => "Memories";
 }
 
+export class SearchFilterSet extends SearchFilter1 {
+    readonly key = "set";
+    getWhereOptions = (ops: typeof Op) => ({set: {[ops.like]: `${this.param}-%`}});
+    getIncludeOptions = () => <IncludeOptions[]>[];
+    getExplainString = () => `In Set ${this.param}`;
+}
+
 export abstract class SearchFilterMemberRarity extends SearchFilter0 {
     abstract readonly rarity: CardMemberRarity;
 
@@ -451,7 +458,7 @@ export class SearchFilterMemberPiecesCool extends SearchFilterNumberWithMod {
 export class SearchFilterMemberBonusYes extends SearchFilter0 {
     readonly key = "bonus";
 
-    getWhereOptions = (ops: typeof Op) => ({ "$member.pieceBdayAttribute$": { [ops.not]: null } });
+    getWhereOptions = (ops: typeof Op) => ({"$member.pieceBdayAttribute$": {[ops.not]: null}});
     getIncludeOptions = (db: DBObject) => [{
         model: db.CardMemberExtraInfo,
         required: true,
@@ -463,7 +470,7 @@ export class SearchFilterMemberBonusYes extends SearchFilter0 {
 export class SearchFilterMemberBonusNo extends SearchFilter0 {
     readonly key = "nobonus";
 
-    getWhereOptions = () => ({ "$member.pieceBdayAttribute$": null });
+    getWhereOptions = () => ({"$member.pieceBdayAttribute$": null});
     getIncludeOptions = (db: DBObject) => [{
         model: db.CardMemberExtraInfo,
         required: true,
@@ -475,7 +482,7 @@ export class SearchFilterMemberBonusNo extends SearchFilter0 {
 export class SearchFilterSongAttributeNeutral extends SearchFilter0 {
     readonly key = "neutral";
 
-    getWhereOptions = () => ({ "$song.attribute$": 0 });
+    getWhereOptions = () => ({"$song.attribute$": 0});
     getIncludeOptions = (db: DBObject) => [{
         model: db.CardSongExtraInfo,
         required: true,
@@ -487,7 +494,7 @@ export class SearchFilterSongAttributeNeutral extends SearchFilter0 {
 export class SearchFilterSongAttributeSmile extends SearchFilter0 {
     readonly key = "smile";
 
-    getWhereOptions = () => ({ "$song.attribute$": 1 });
+    getWhereOptions = () => ({"$song.attribute$": 1});
     getIncludeOptions = (db: DBObject) => [{
         model: db.CardSongExtraInfo,
         required: true,
@@ -499,7 +506,7 @@ export class SearchFilterSongAttributeSmile extends SearchFilter0 {
 export class SearchFilterSongAttributePure extends SearchFilter0 {
     readonly key = "pure";
 
-    getWhereOptions = () => ({ "$song.attribute$": 2 });
+    getWhereOptions = () => ({"$song.attribute$": 2});
     getIncludeOptions = (db: DBObject) => [{
         model: db.CardSongExtraInfo,
         required: true,
@@ -511,7 +518,7 @@ export class SearchFilterSongAttributePure extends SearchFilter0 {
 export class SearchFilterSongAttributeCool extends SearchFilter0 {
     readonly key = "cool";
 
-    getWhereOptions = () => ({ "$song.attribute$": 3 });
+    getWhereOptions = () => ({"$song.attribute$": 3});
     getIncludeOptions = (db: DBObject) => [{
         model: db.CardSongExtraInfo,
         required: true,
@@ -523,7 +530,7 @@ export class SearchFilterSongAttributeCool extends SearchFilter0 {
 export class SearchFilterSongAttributeOrange extends SearchFilter0 {
     readonly key = "orange";
 
-    getWhereOptions = () => ({ "$song.attribute$": 4 });
+    getWhereOptions = () => ({"$song.attribute$": 4});
     getIncludeOptions = (db: DBObject) => [{
         model: db.CardSongExtraInfo,
         required: true,
@@ -557,7 +564,7 @@ export class SearchFilterSongReqTypeAttr extends SearchFilter0 {
 }
 
 export class SearchFilterSongLivePoints extends SearchFilterNumberWithMod {
-    readonly key = "lp";
+    readonly key = "livepoints";
     readonly columnName = "$song.lpBase$";
     readonly explainName = "Base Live Points";
     readonly explainAfter = true;
@@ -578,11 +585,11 @@ export class SearchFilterSongReqSmile extends SearchFilterNumberWithMod {
     getIncludeOptions = (db: DBObject) => [{
         model: db.CardSongExtraInfo,
         required: true,
-        include: {
+        include: [{
             model: db.CardSongAttrReqExtraInfo,
             required: true,
             attributes: ["piecesSmile"]
-        }
+        }]
     }];
 }
 
@@ -595,11 +602,11 @@ export class SearchFilterSongReqPure extends SearchFilterNumberWithMod {
     getIncludeOptions = (db: DBObject) => [{
         model: db.CardSongExtraInfo,
         required: true,
-        include: {
+        include: [{
             model: db.CardSongAttrReqExtraInfo,
             required: true,
             attributes: ["piecesPure"]
-        }
+        }]
     }];
 }
 
@@ -612,11 +619,11 @@ export class SearchFilterSongReqCool extends SearchFilterNumberWithMod {
     getIncludeOptions = (db: DBObject) => [{
         model: db.CardSongExtraInfo,
         required: true,
-        include: {
+        include: [{
             model: db.CardSongAttrReqExtraInfo,
             required: true,
             attributes: ["piecesCool"]
-        }
+        }]
     }];
 }
 
@@ -629,11 +636,11 @@ export class SearchFilterSongReqAny extends SearchFilterNumberWithMod {
     getIncludeOptions = (db: DBObject) => [{
         model: db.CardSongExtraInfo,
         required: true,
-        include: {
+        include: [{
             model: db.CardSongAnyReqExtraInfo,
             required: true,
             attributes: ["piecesAll"]
-        }
+        }]
     }];
 }
 
@@ -663,6 +670,7 @@ const map = new Map<string, new (split?: string[]) => SearchFilter>([
     ["id", SearchFilterCardID],
     ["year", SearchFilterMemberYear],
     ["name", SearchFilterName],
+    ["set", SearchFilterSet],
     ["costume", SearchFilterCostume],
     ["skill", SearchFilterSkill],
     ["cost", SearchFilterMemberCost],
@@ -684,6 +692,7 @@ const map = new Map<string, new (split?: string[]) => SearchFilter>([
     ["pure", SearchFilterSongAttributePure],
     ["cool", SearchFilterSongAttributeCool],
     ["orange", SearchFilterSongAttributeOrange],
+    ["livepoints", SearchFilterSongLivePoints],
     ["anypiece", SearchFilterSongReqTypeAny],
     ["attributepiece", SearchFilterSongReqTypeAttr],
     ["required", SearchFilterSongReqAny],
@@ -694,6 +703,7 @@ const map = new Map<string, new (split?: string[]) => SearchFilter>([
 
 export function getSearchFilter(key: string): { new(split: string[]): SearchFilter } {
     if (map.has(key)) {
+        console.log(key);
         return map.get(key)!;
     } else {
         throw new SearchFilterError("Unknown filter key", key);

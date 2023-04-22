@@ -2,7 +2,7 @@
     import Button from "$lib/style/Button.svelte";
     import type {Snapshot} from './$types';
 
-    type NumberQueryMod = "exact" | "less" | "more";
+    type NumberQueryMod = "" | "-" | "+";
 
     let cardName: string, cardSet: string, skillText: string, cardType: "member" | "song" | "memory",
         memberRarity: string, memberGroup: string, memberYear: number,
@@ -98,6 +98,58 @@
             songPiecesAllMod
         } = value)
     };
+
+    function query() {
+        const filters = [];
+
+        // Dropdowns => 0-parameter filter
+        for (const option of [
+            [cardType, true],
+            [memberRarity, cardType === "member"],
+            [memberGroup, cardType === "member"],
+            [memberYear, cardType === "member"],
+            [memberAbility, cardType === "member"],
+            [memberPieceBonus, cardType === "member"],
+            [memberIdolizable, cardType === "member"],
+            [songRarity, cardType === "song"],
+            [songAttribute, cardType === "song"],
+            [songRequirementType, cardType === "song"]
+        ]) {
+            if (!option[1] || option[0] === undefined || option[0] === "") continue;
+            filters.push(option[0]);
+        }
+
+        // Inputs => 1-parameter filter
+        for (const option of [
+            [cardName, true, "name"],
+            [cardSet, true, "set"],
+            [skillText, true, "skill"],
+            [memberCostume, cardType === "member", "costume"]
+        ]) {
+            if (!option[1] || option[0] === undefined || option[0] === "") continue;
+            filters.push(`${option[2]}:${option[0]}`);
+        }
+
+        // Number with Mod => 1-parameter filter
+        for (const option of [
+            [memberCost, memberCostMod, cardType === "member", "cost"],
+            [memberPieces, memberPiecesMod, cardType === "member", "pieces"],
+            [memberPiecesSmile, memberPiecesSmileMod, cardType === "member", "smilepieces"],
+            [memberPiecesPure, memberPiecesPureMod, cardType === "member", "purepieces"],
+            [memberPiecesCool, memberPiecesCoolMod, cardType === "member", "coolpieces"],
+            [memberPiecesAll, memberPiecesAllMod, cardType === "member", "allpieces"],
+            [songLivePoints, songLivePointsMod, cardType === "song", "livepoints"],
+            [songPiecesAll, songPiecesAllMod, cardType === "song" && songRequirementType === "anypiece", "required"],
+            [songPiecesSmile, songPiecesSmileMod, cardType === "song" && songRequirementType === "attributepiece", "smilerequired"],
+            [songPiecesPure, songPiecesPureMod, cardType === "song" && songRequirementType === "attributepiece", "purerequired"],
+            [songPiecesCool, songPiecesCoolMod, cardType === "song" && songRequirementType === "attributepiece", "coolrequired"]
+        ]) {
+            if (!option[2] || option[0] === undefined || option[0] === "") continue;
+            filters.push(`${option[3]}:${option[0]}${option[1]}`);
+        }
+
+        console.log(filters);
+    }
 </script>
 
 <svelte:head>
@@ -166,9 +218,9 @@
                             <b>School Year:</b>
                             <select bind:value={memberYear}>
                                 <option value="" selected>—</option>
-                                <option value="1">1st Year</option>
-                                <option value="2">2nd Year</option>
-                                <option value="3">3nd Year</option>
+                                <option value="year:1">1st Year</option>
+                                <option value="year:2">2nd Year</option>
+                                <option value="year:3">3nd Year</option>
                             </select>
                         </div>
                         <div>
@@ -182,9 +234,9 @@
                             </select>
                             {#if memberCost}
                                 <select bind:value={memberCostMod}>
-                                    <option value="exactly" selected>exactly</option>
-                                    <option value="less">or less</option>
-                                    <option value="more">or more</option>
+                                    <option value="" selected>exactly</option>
+                                    <option value="-">or less</option>
+                                    <option value="+">or more</option>
                                 </select>
                             {/if}
                         </div>
@@ -214,9 +266,9 @@
                             </select>
                             {#if memberPieces}
                                 <select bind:value={memberPiecesMod}>
-                                    <option value="exactly" selected>exactly</option>
-                                    <option value="less">or less</option>
-                                    <option value="more">or more</option>
+                                    <option value="" selected>exactly</option>
+                                    <option value="-">or less</option>
+                                    <option value="+">or more</option>
                                 </select>
                             {/if}
                         </div>
@@ -234,9 +286,9 @@
                             </select>
                             {#if memberPiecesSmile}
                                 <select bind:value={memberPiecesSmileMod}>
-                                    <option value="exactly" selected>exactly</option>
-                                    <option value="less">or less</option>
-                                    <option value="more">or more</option>
+                                    <option value="" selected>exactly</option>
+                                    <option value="-">or less</option>
+                                    <option value="+">or more</option>
                                 </select>
                             {/if}
                         </div>
@@ -254,9 +306,9 @@
                             </select>
                             {#if memberPiecesPure}
                                 <select bind:value={memberPiecesPureMod}>
-                                    <option value="exactly" selected>exactly</option>
-                                    <option value="less">or less</option>
-                                    <option value="more">or more</option>
+                                    <option value="" selected>exactly</option>
+                                    <option value="-">or less</option>
+                                    <option value="+">or more</option>
                                 </select>
                             {/if}
                         </div>
@@ -274,9 +326,9 @@
                             </select>
                             {#if memberPiecesCool}
                                 <select bind:value={memberPiecesCoolMod}>
-                                    <option value="exactly" selected>exactly</option>
-                                    <option value="less">or less</option>
-                                    <option value="more">or more</option>
+                                    <option value="" selected>exactly</option>
+                                    <option value="-">or less</option>
+                                    <option value="+">or more</option>
                                 </select>
                             {/if}
                         </div>
@@ -294,9 +346,9 @@
                             </select>
                             {#if memberPiecesAll}
                                 <select bind:value={memberPiecesAllMod}>
-                                    <option value="exactly" selected>exactly</option>
-                                    <option value="less">or less</option>
-                                    <option value="more">or more</option>
+                                    <option value="" selected>exactly</option>
+                                    <option value="-">or less</option>
+                                    <option value="+">or more</option>
                                 </select>
                             {/if}
                         </div>
@@ -304,16 +356,16 @@
                             <b>Birthday Bonus:</b>
                             <select bind:value={memberPieceBonus}>
                                 <option value="" selected>—</option>
-                                <option value="false">No</option>
-                                <option value="true">Yes</option>
+                                <option value="nobonus">No</option>
+                                <option value="bonus">Yes</option>
                             </select>
                         </div>
                         <div>
                             <b>Idolizable:</b>
                             <select bind:value={memberIdolizable}>
                                 <option value="" selected>—</option>
-                                <option value="false">No</option>
-                                <option value="true">Yes</option>
+                                <option value="notidolizable">No</option>
+                                <option value="idolizable">Yes</option>
                             </select>
                         </div>
                     {:else if cardType === "song"}
@@ -348,9 +400,9 @@
                             </select>
                             {#if songLivePoints}
                                 <select bind:value={songLivePointsMod}>
-                                    <option value="exactly" selected>exactly</option>
-                                    <option value="less">or less</option>
-                                    <option value="more">or more</option>
+                                    <option value="" selected>exactly</option>
+                                    <option value="-">or less</option>
+                                    <option value="+">or more</option>
                                 </select>
                             {/if}
                         </div>
@@ -362,7 +414,7 @@
                                 <option value="attributepiece">Attribute Piece Requirement</option>
                             </select>
                         </div>
-                        {#if songRequirementType === "any"}
+                        {#if songRequirementType === "anypiece"}
                             <div>
                                 <b>Required Pieces</b>
                                 <select bind:value={songPiecesAll}>
@@ -375,13 +427,13 @@
                                 </select>
                                 {#if songPiecesAll}
                                     <select bind:value={songPiecesAllMod}>
-                                        <option value="exactly" selected>exactly</option>
-                                        <option value="less">or less</option>
-                                        <option value="more">or more</option>
+                                        <option value="" selected>exactly</option>
+                                        <option value="-">or less</option>
+                                        <option value="+">or more</option>
                                     </select>
                                 {/if}
                             </div>
-                        {:else if songRequirementType === "attr"}
+                        {:else if songRequirementType === "attributepiece"}
                             <div>
                                 <b class="whitespace-nowrap">
                                     <img class="skill-icon" src="/images/icons/piece_smile.png" alt="Smile">
@@ -397,9 +449,9 @@
                                 </select>
                                 {#if songPiecesSmile}
                                     <select bind:value={songPiecesSmileMod}>
-                                        <option value="exactly" selected>exactly</option>
-                                        <option value="less">or less</option>
-                                        <option value="more">or more</option>
+                                        <option value="" selected>exactly</option>
+                                        <option value="-">or less</option>
+                                        <option value="+">or more</option>
                                     </select>
                                 {/if}
                             </div>
@@ -417,9 +469,9 @@
                                 </select>
                                 {#if songPiecesPure}
                                     <select bind:value={songPiecesPureMod}>
-                                        <option value="exactly" selected>exactly</option>
-                                        <option value="less">or less</option>
-                                        <option value="more">or more</option>
+                                        <option value="" selected>exactly</option>
+                                        <option value="-">or less</option>
+                                        <option value="+">or more</option>
                                     </select>
                                 {/if}
                             </div>
@@ -438,9 +490,9 @@
                                 </select>
                                 {#if songPiecesCool}
                                     <select bind:value={songPiecesCoolMod}>
-                                        <option value="exactly" selected>exactly</option>
-                                        <option value="less">or less</option>
-                                        <option value="more">or more</option>
+                                        <option value="" selected>exactly</option>
+                                        <option value="-">or less</option>
+                                        <option value="+">or more</option>
                                     </select>
                                 {/if}
                             </div>
@@ -455,7 +507,7 @@
                 </div>
             </div>
             <div class="mt-2 flex items-center justify-end w-full">
-                <Button accent on:click={() => {}}>Search</Button>
+                <Button accent on:click={query}>Search</Button>
             </div>
         </div>
     </div>
