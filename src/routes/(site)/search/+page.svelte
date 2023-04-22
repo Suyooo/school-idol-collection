@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {goto} from "$app/navigation";
     import Button from "$lib/style/Button.svelte";
     import type {Snapshot} from "./$types.js";
 
@@ -148,7 +149,7 @@
             filters.push(`${option[3]}:${option[0]}${option[1]}`);
         }
 
-        console.log(filters);
+        if (filters.length > 0) goto("/search/" + filters.join("/"));
     }
 </script>
 
