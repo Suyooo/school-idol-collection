@@ -1,17 +1,18 @@
 import {cardHasGroup, cardIsMember} from "$lib/card/types.js";
 import type Card from "$models/card/card.js";
+import {couldBeEntryCardNo, entryCardNoToCanonical} from "$lib/utils/entry.js";
 import type {Actions} from "./$types.js";
 
 export const actions = {
     default: async ({request, locals, fetch}) => {
         const data = await request.formData();
-        const cardNos = (data.get("cardNos") as string).toUpperCase()
-            .split(/[ 　\n\r,、]/).filter(s => s.length > 0)
-            .map(s => s.indexOf("-") === -1 ? s.substring(0, s.length - 3) + "-" + s.substring(s.length - 3) : s);
+        const enteredCardNos = (data.get("cardNos") as string).toUpperCase()
+            .split(/[ 　\n\r,、]/).filter(s => s.length > 0);
+        const cardNos = enteredCardNos.filter(s => couldBeEntryCardNo(s)).map(s => entryCardNoToCanonical(s));
         const byCardNo: { [cardNo: string]: Card } = {};
         const byCardId: { [cardId: number]: Card } = {};
         const allRequiredGroupMembers: number[] = [];
-        const invalidCardNos: string[] = [];
+        const invalidCardNos: string[] = enteredCardNos.filter(s => !couldBeEntryCardNo(s));
         const filteredCardNos: string[] = [];
 
         await Promise.all(cardNos.map(cardNo => fetch(`/json/card/${cardNo}/preparse`).then(r => {

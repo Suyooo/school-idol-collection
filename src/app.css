@@ -138,6 +138,10 @@ input, textarea, select {
     @apply bg-primary-900 border-primary-100 p-2;
 }
 
+input::placeholder {
+    @apply text-primary-400;
+}
+
 textarea {
     @apply w-full h-32 mb-2 rounded;
 }
