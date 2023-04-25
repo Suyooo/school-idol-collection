@@ -3,18 +3,19 @@
     export let disabled: boolean = false;
     export let href: string | undefined = undefined;
     export let style: string = "";
+    export let classes: string = "";
 </script>
 
 {#if disabled}
-    <button disabled class="!bg-primary-900 !text-primary-400" {style}>
+    <button disabled class={`!bg-primary-900 !text-primary-400 ${classes}`} {style}>
         <slot></slot>
     </button>
 {:else if href}
-    <a {href} class:accent {style}>
+    <a {href} class:accent class={classes} {style}>
         <slot></slot>
     </a>
 {:else}
-    <button class:accent {style} on:click>
+    <button class:accent class={classes} {style} on:click>
         <slot></slot>
     </button>
 {/if}

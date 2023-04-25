@@ -1,12 +1,15 @@
 <script lang="ts">
     import "../../app.css";
     import {goto} from "$app/navigation";
+    import Button from "$lib/style/Button.svelte";
+    import Collapse from "$lib/style/icons/Collapse.svelte";
+    import Menu from "$lib/style/icons/Menu.svelte";
     import Search from "$lib/style/icons/Search.svelte";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import {couldBeEntryCardNo, entryCardNoToCanonical} from "$lib/utils/entry.js";
     import {stringIsInteger} from "$lib/utils/string.js";
 
-    let quicksearch: string = "", searching: boolean = false;
+    let menuExpanded: boolean = false, quicksearch: string = "", searching: boolean = false;
 
     function doQuicksearch() {
         if (quicksearch === "" || searching) return;
@@ -34,11 +37,29 @@
 
 <div class="header">
     <div class="cont">
-        <div class="buttons">
-            <div class="logo">SIC</div>
-            <a href="/list">Card List</a>
-            <a href="/search">Search</a>
-            <a href="/labels">Label Printer</a>
+        <div class="menu">
+            <div class="list">
+                <div class="logo">SIC</div>
+                <div class="buttons" class:!h-max={menuExpanded}>
+                    <a href="/list">Card List</a>
+                    <a href="/search">Search</a>
+                    <a href="/faq">Rules and FAQ</a>
+                    <a href="/labels">Label Printer</a>
+                </div>
+            </div>
+            <div class="expand">
+                <div>
+                    <Button accent classes="w-9 h-9 !px-0 !rounded-full flex items-center justify-center"
+                            on:click={() => menuExpanded = !menuExpanded}
+                            label={menuExpanded ? "Collapse Menu" : "Expand Menu"}>
+                        {#if menuExpanded}
+                            <Collapse/>
+                        {:else}
+                            <Menu/>
+                        {/if}
+                    </Button>
+                </div>
+            </div>
         </div>
         <form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
             <input placeholder="Quick Search (Card No., ID or Name)" bind:value={quicksearch}
@@ -64,25 +85,37 @@
         @apply w-full bg-primary-700 ;
 
         & .cont {
-            @apply flex items-center justify-between;
+            @apply flex flex-col sm:flex-row gap-y-2 items-start justify-between;
 
-            & .buttons {
-                @apply flex items-center gap-x-4 text-accent-400 font-bold tracking-widest uppercase;
+            & .menu {
+                @apply w-full flex flex-row items-stretch text-accent-400 font-bold tracking-widest uppercase;
 
-                & .logo {
-                    @apply text-3xl;
+                & .list {
+                    @apply w-full flex-shrink flex flex-col sm:flex-row ml-16 sm:ml-0 items-center sm:items-start gap-x-4 gap-y-2;
+
+                    & .logo {
+                        @apply text-3xl;
+                    }
+
+                    & .buttons {
+                        @apply h-0 sm:h-9 overflow-hidden flex flex-wrap flex-col sm:flex-row items-center gap-x-4 gap-y-2;
+
+                        & a {
+                            @apply px-6 py-2 bg-primary-500 text-white rounded-full no-underline whitespace-nowrap;
+                        }
+                    }
                 }
 
-                & a {
-                    @apply px-6 py-2 bg-primary-500 rounded-full no-underline;
+                & .expand {
+                    @apply flex flex-shrink-0 items-start justify-start basis-16 pl-4;
                 }
             }
 
             & .quicksearch {
-                @apply flex-grow max-w-sm ml-16 relative flex items-center;
+                @apply flex-grow w-full relative flex items-center sm:justify-end;
 
                 & input {
-                    @apply w-full pr-9;
+                    @apply w-full sm:max-w-sm pr-9;
                 }
 
                 & button {

@@ -44,7 +44,7 @@
         <div class="flex-1"></div>
         <div class="max-w-[50%] flex flex-wrap gap-2 justify-center">
             {#each {length: Math.ceil(pagination.totalResults / pagination.pageSize)} as _, i}
-                <Button style="width: 3em; padding-left: 0; padding-right: 0;" accent={i+1 === pagination.page}
+                <Button classes="w-12 px-0" accent={i+1 === pagination.page}
                         on:click={goto(`/search/${queryUrl}/page:${i+1}`, {replaceState: true})}>{i + 1}</Button>
             {/each}
         </div>
