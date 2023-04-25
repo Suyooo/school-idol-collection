@@ -3,10 +3,13 @@
     import Skill from "$lib/format/Skill.svelte";
     import Button from "$lib/style/Button.svelte";
     import GridPanel from "$lib/style/GridPanel.svelte";
+    import type Card from "$models/card/card.js";
     import type {PageData} from './$types.js';
     import CardGridElement from "../../set/[set]/CardGridElement.svelte";
 
     export let data: PageData;
+    let cards: Card[], queryUrl: string, queryExplain: string[],
+        pagination: { page: number, totalResults: number, pageSize: number };
     $: cards = data.cards;
     $: queryUrl = data.queryUrl;
     $: queryExplain = data.queryExplain;
@@ -36,7 +39,8 @@
             <div class="mt-2 flex flex-col gap-y-2 items-center">
                 <div>
                     Cards {(pagination.page - 1) * pagination.pageSize + 1}
-                    - {Math.min(pagination.page * pagination.pageSize, pagination.totalResults)} of {pagination.totalResults}
+                    - {Math.min(pagination.page * pagination.pageSize, pagination.totalResults)}
+                    of {pagination.totalResults}
                 </div>
                 <div class="max-w-md flex flex-wrap gap-2 justify-center">
                     {#each {length: Math.ceil(pagination.totalResults / pagination.pageSize)} as _, i}

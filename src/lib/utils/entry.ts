@@ -1,6 +1,6 @@
 const entryCardNoRegex = /(l?l?\d\d|ex?\d\d|pr?)-?\d{1,3}/i;
 const entryCardNoRegexNoDefaultSetName = /(ll?\d\d|ex?\d\d|pr?)-?\d{1,3}/i;
-const canonicalCardNoRegex = /(LL\d\d|EX\d\d|PR)-\d\d\d/;
+//const canonicalCardNoRegex = /(LL\d\d|EX\d\d|PR)-\d\d\d/;
 
 export function couldBeEntryCardNo(test: string, allowDefaultSetName: boolean = true): boolean {
     return (allowDefaultSetName ? entryCardNoRegex : entryCardNoRegexNoDefaultSetName).test(test);
