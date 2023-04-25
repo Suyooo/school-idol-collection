@@ -311,6 +311,7 @@ export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
             return `${this.explainName} is ${parseInt(this.param)}${mod}`;
         }
     };
+    getFilterString = () => this.key + ":" + this.param;
 }
 
 export class SearchFilterMemberCost extends SearchFilterNumberWithMod {

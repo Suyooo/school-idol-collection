@@ -3,15 +3,24 @@
     import Skill from "$lib/format/Skill.svelte";
     import Button from "$lib/style/Button.svelte";
     import GridPanel from "$lib/style/GridPanel.svelte";
+    import Collapse from "$lib/style/icons/Collapse.svelte";
+    import Expand from "$lib/style/icons/Expand.svelte";
     import type Card from "$models/card/card.js";
+    import type {SearchUiOptions} from "$lib/search/ui.js";
+    import {urlToUiOptions} from "$lib/search/ui.js";
+    import SearchOptions from "../SearchOptions.svelte";
     import type {PageData} from './$types.js';
     import CardGridElement from "../../set/[set]/CardGridElement.svelte";
 
     export let data: PageData;
-    let cards: Card[], queryUrl: string, queryExplain: string[],
+    let cards: Card[], queryUrl: string, options: SearchUiOptions, showOptions: boolean = false, queryExplain: string[],
         pagination: { page: number, totalResults: number, pageSize: number };
-    $: cards = data.cards;
+    $: {
+        cards = data.cards;
+        showOptions = false;
+    }
     $: queryUrl = data.queryUrl;
+    $: options = urlToUiOptions(queryUrl);
     $: queryExplain = data.queryExplain;
     $: pagination = data.pagination;
 </script>
@@ -27,7 +36,30 @@
         <Skill skill={q}/>
     {/each}
 </h5>
+
 <div class="content">
+    <div class="flex items-center">
+        <Button accent classes="w-6 h-6 !px-0 !rounded-full flex items-center justify-center"
+                on:click={() => showOptions = !showOptions}
+                label={showOptions ? "Collapse Search Options" : "Expand Search Options"}>
+            {#if showOptions}
+                <Collapse/>
+            {:else}
+                <Expand/>
+            {/if}
+        </Button>
+        <span class="ml-4">Change Search Query</span>
+    </div>
+    <div class="panel mt-4" class:hidden={!showOptions}>
+        <div class="panel-inner">
+            {#key queryUrl}
+                <SearchOptions {options}/>
+            {/key}
+        </div>
+    </div>
+</div>
+
+<div class="content mt-4">
     {#if cards.length === 0}
         There are no results for this query.
     {:else}

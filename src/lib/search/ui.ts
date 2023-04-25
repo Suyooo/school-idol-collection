@@ -1,17 +1,23 @@
+import {escapeForUrl} from "$lib/utils/string.js";
+
 type NumberQueryMod = "" | "-" | "+";
 
 export type SearchUiOptions = {
-    cardName?: string, cardSet?: string, skillText?: string, cardType?: "member" | "song" | "memory",
-    memberRarity?: string, memberGroup?: string, memberYear?: "year:1" | "year:2" | "year:3",
-    memberCost?: string, memberCostMod?: NumberQueryMod, memberIdolizable?: string,
-    memberAbility?: "noability" | "live" | "rush" | "rushorlive", memberCostume?: string,
+    cardName?: string, cardSet?: string, skillText?: string, cardType?: "" | "member" | "song" | "memory",
+    memberRarity?: "" | "r" | "sr" | "hr" | "special" | "secret" | "pr" | "n" | "ssr",
+    memberGroup?: "" | "muse" | "aqours" | "printemps" | "lilywhite" | "bibi" | "cyaron" | "azalea" | "guiltykiss" | "saintsnow",
+    memberYear?: "" | "year?:1" | "year?:2" | "year?:3",
+    memberCost?: "" | "0" | "1" | "2" | "3", memberCostMod?: NumberQueryMod,
+    memberIdolizable?: "" | "idolizable" | "notidolizable",
+    memberAbility?: "" | "noability" | "live" | "rush" | "rushorlive", memberCostume?: string,
     memberPieces?: string, memberPiecesMod?: NumberQueryMod,
     memberPiecesSmile?: string, memberPiecesSmileMod?: NumberQueryMod,
     memberPiecesPure?: string, memberPiecesPureMod?: NumberQueryMod,
     memberPiecesCool?: string, memberPiecesCoolMod?: NumberQueryMod,
     memberPiecesAll?: string, memberPiecesAllMod?: NumberQueryMod,
-    memberPieceBonus?: string,
-    songRarity?: string, songAttribute?: string, songRequirementType?: "anypiece" | "attributepiece",
+    memberPieceBonus?: "" | "bonus" | "nobonus",
+    songRarity?: "" | "m" | "gr", songAttribute?: "" | "neutral" | "smile" | "pure" | "cool" | "orange",
+    songRequirementType?: "" | "anypiece" | "attributepiece",
     songLivePoints?: string, songLivePointsMod?: NumberQueryMod,
     songPiecesSmile?: string, songPiecesSmileMod?: NumberQueryMod,
     songPiecesPure?: string, songPiecesPureMod?: NumberQueryMod,
@@ -112,7 +118,7 @@ export function urlToUiOptions(url: string): SearchUiOptions {
     const filterQueries = url.split(/(?<!\/)\/(?!\/)/g).map(f => f.replace(/\/\//g, "/"));
 
     for (const filterQuery of filterQueries) {
-        const split = filterQuery.split(":");
+        const split = filterQuery.split(":").map(s => decodeURIComponent(s));
 
         if (mapSelectInputReverse.has(filterQuery)) {
             options[mapSelectInputReverse.get(filterQuery)!] = filterQuery;
@@ -121,9 +127,9 @@ export function urlToUiOptions(url: string): SearchUiOptions {
         } else if (mapNumberInputReverse.has(split[0])) {
             options[mapNumberInputReverse.get(split[0])!] = parseInt(split[1]).toString();
             if (split[1].endsWith("+") || split[1].endsWith("-")) {
-                options[mapNumberInputReverse.get(split[0] + "Mod")!] = split[1].at(-1)!;
+                options[mapNumberInputReverse.get(split[0])! + "Mod"] = split[1].at(-1)!;
             } else {
-                options[mapNumberInputReverse.get(split[0] + "Mod")!] = "";
+                options[mapNumberInputReverse.get(split[0])! + "Mod"] = "";
             }
         }
     }
@@ -145,7 +151,7 @@ export function uiOptionsToUrl(options: SearchUiOptions): string {
     for (const [name, inputInfo] of [...mapTextInput.entries()]) {
         if (inputInfo.condition && !inputInfo.condition(options)) continue;
         if (!uiOptionIsSet(options[name])) continue;
-        filters.push(`${inputInfo.urlParam}:${encodeURIComponent((<string>options[name]).replace(/\//g, "//"))}`);
+        filters.push(`${inputInfo.urlParam}:${escapeForUrl((<string>options[name]).replace(/\//g, "//"))}`);
     }
 
     // Number with Mod => 1-parameter filter
