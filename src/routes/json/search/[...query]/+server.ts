@@ -11,23 +11,23 @@ const PAGE_SIZE = 60;
 
 export const GET: RequestHandler = (async ({params}) => {
     const filters = [];
-    let preparseQuery = false;
+    let includeUiParameters = false;
     let page = 1;
 
     try {
-        const explainString = params.query.split("/");
+        const filterQueries = params.query.split(/(?<!\/)\/(?!\/)/g).map(f => f.replace(/\/\//g, "/"));
 
-        for (const filterString of explainString) {
-            if (filterString === "preparse") {
-                preparseQuery = true;
+        for (const filterQuery of filterQueries) {
+            if (filterQuery === "ui") {
+                includeUiParameters = true;
                 continue;
             }
-            if (filterString.startsWith("page:")) {
-                page = parseInt(filterString.substring(5));
+            if (filterQuery.startsWith("page:")) {
+                page = parseInt(filterQuery.substring(5));
                 continue;
             }
-            if (filterString.length === 0) continue;
-            const split = filterString.split(":");
+            if (filterQuery.length === 0) continue;
+            const split = filterQuery.split(":");
             filters.push(new (getSearchFilter(split[0]))(split));
         }
     } catch (e) {
@@ -42,18 +42,22 @@ export const GET: RequestHandler = (async ({params}) => {
         throw error(404, {message: "No search filters specified"});
     }
 
+    let queryExplain = undefined;
+    if (includeUiParameters) {
+        queryExplain = filters.map(f => parseSkillToNodes(f.getExplainString(), Language.ENG, true));
+    }
+
     const {count, rows} = await searchQuery(filters, ["viewForLink", "viewRarity", "orderCardNo"]).findAndCountAll({
         offset: (page - 1) * PAGE_SIZE, limit: PAGE_SIZE
     });
 
     return json({
-        "queryUrl": filters.map(f => f.getFilterString()).join("/"),
-        "queryExplain": filters.map(f => preparseQuery ? parseSkillToNodes(f.getExplainString(), Language.ENG, true) : f.getExplainString()),
         "cards": rows.map((c: Card) => c.get({plain: true})),
         "pagination": {
             "page": page,
             "totalResults": count,
             "pageSize": PAGE_SIZE
-        }
+        },
+        "queryUrl": filters.map(f => f.getFilterString()).join("/"), queryExplain
     });
 }) satisfies RequestHandler;

@@ -1,6 +1,7 @@
 <script lang="ts">
     import {goto} from "$app/navigation";
     import Button from "$lib/style/Button.svelte";
+    import {onMount} from "svelte";
     import type {Snapshot} from "./$types.js";
 
     type NumberQueryMod = "" | "-" | "+";
@@ -104,57 +105,130 @@
         return value !== undefined && value !== null && value !== "";
     }
 
+    const mapSelectInput: { [name: string]: { urlParamOptions: string[], condition?: () => boolean } } = {
+        "cardType": {urlParamOptions: ["member", "song", "memory"]},
+        "memberRarity": {
+            urlParamOptions: ["r", "sr", "hr", "special", "secret", "pr", "n", "ssr"],
+            condition: () => cardType === "member"
+        },
+        "memberGroup": {
+            urlParamOptions: ["muse", "aqours", "printemps", "lilywhite", "bibi", "cyaron", "azalea", "guiltykiss", "saintsnow"],
+            condition: () => cardType === "member"
+        },
+        "memberYear": {urlParamOptions: ["year:1", "year:2", "year:3"], condition: () => cardType === "member"},
+        "memberAbility": {
+            urlParamOptions: ["noability", "rush", "live", "rushorlive"],
+            condition: () => cardType === "member"
+        },
+        "memberPieceBonus": {urlParamOptions: ["nobonus", "bonus"], condition: () => cardType === "member"},
+        "memberIdolizable": {urlParamOptions: ["notidolizable", "idolizable"], condition: () => cardType === "member"},
+        "songRarity": {urlParamOptions: ["m", "gr"], condition: () => cardType === "song"},
+        "songAttribute": {
+            urlParamOptions: ["neutral", "smile", "pure", "cool", "orange"],
+            condition: () => cardType === "song"
+        },
+        "songRequirementType": {urlParamOptions: ["anypiece", "attributepiece"], condition: () => cardType === "song"}
+    }
+    const mapSelectInputReverse = Object.keys(mapSelectInput)
+        .map(name => mapSelectInput[name].urlParamOptions.map(param => ({[param]: name}))).flat()
+        .reduce((obj, param) => ({...obj, ...param}), {});
+
+    const mapTextInput: { [name: string]: { urlParam: string, condition?: () => boolean } } = {
+        "cardName": {urlParam: "name"},
+        "cardSet": {urlParam: "set"},
+        "skillText": {urlParam: "skill"},
+        "memberCostume": {urlParam: "costume", condition: () => cardType === "member"}
+    }
+    const mapTextInputReverse = Object.keys(mapTextInput)
+        .map(name => ({[mapTextInput[name].urlParam]: name})).reduce((obj, param) => ({...obj, ...param}), {});
+
+    const mapNumberInput: { [name: string]: { urlParam: string, condition?: () => boolean } } = {
+        "memberCost": {urlParam: "cost", condition: () => cardType === "member"},
+        "memberPieces": {urlParam: "pieces", condition: () => cardType === "member"},
+        "memberPiecesSmile": {urlParam: "smilepieces", condition: () => cardType === "member"},
+        "memberPiecesPure": {urlParam: "purepieces", condition: () => cardType === "member"},
+        "memberPiecesCool": {urlParam: "coolpieces", condition: () => cardType === "member"},
+        "memberPiecesAll": {urlParam: "allpieces", condition: () => cardType === "member"},
+        "songLivePoints": {urlParam: "livepoints", condition: () => cardType === "song"},
+        "songPiecesAll": {
+            urlParam: "required",
+            condition: () => cardType === "song" && songRequirementType === "anypiece"
+        },
+        "songPiecesSmile": {
+            urlParam: "smilerequired",
+            condition: () => cardType === "song" && songRequirementType === "attributepiece"
+        },
+        "songPiecesPure": {
+            urlParam: "purerequired",
+            condition: () => cardType === "song" && songRequirementType === "attributepiece"
+        },
+        "songPiecesCool": {
+            urlParam: "coolrequired",
+            condition: () => cardType === "song" && songRequirementType === "attributepiece"
+        }
+    }
+    const mapNumberInputReverse = Object.keys(mapNumberInput)
+        .map(name => ({[mapNumberInput[name].urlParam]: name})).reduce((obj, param) => ({...obj, ...param}), {});
+
     function query() {
         const filters = [];
+        const form = snapshot.capture();
 
         // Dropdowns => 0-parameter filter
-        for (const option of [
-            [cardType, true],
-            [memberRarity, cardType === "member"],
-            [memberGroup, cardType === "member"],
-            [memberYear, cardType === "member"],
-            [memberAbility, cardType === "member"],
-            [memberPieceBonus, cardType === "member"],
-            [memberIdolizable, cardType === "member"],
-            [songRarity, cardType === "song"],
-            [songAttribute, cardType === "song"],
-            [songRequirementType, cardType === "song"]
-        ]) {
-            if (!option[1] || option[0] === undefined || option[0] === "") continue;
-            filters.push(option[0]);
+        for (const name of Object.keys(mapSelectInput)) {
+            if (mapSelectInput[name].condition && mapSelectInput[name].condition() === false) continue;
+            if (!isSet(form[name])) continue;
+            filters.push(form[name]);
         }
 
         // Inputs => 1-parameter filter
-        for (const option of [
-            [cardName, true, "name"],
-            [cardSet, true, "set"],
-            [skillText, true, "skill"],
-            [memberCostume, cardType === "member", "costume"]
-        ]) {
-            if (!option[1] || option[0] === undefined || option[0] === "") continue;
-            filters.push(`${option[2]}:${option[0]}`);
+        for (const name of Object.keys(mapTextInput)) {
+            if (mapTextInput[name].condition && mapTextInput[name].condition() === false) continue;
+            if (!isSet(form[name])) continue;
+            filters.push(`${mapTextInput[name].urlParam}:${encodeURIComponent(form[name].replace(/\//g, "//"))}`);
         }
 
         // Number with Mod => 1-parameter filter
-        for (const option of [
-            [memberCost, memberCostMod, cardType === "member", "cost"],
-            [memberPieces, memberPiecesMod, cardType === "member", "pieces"],
-            [memberPiecesSmile, memberPiecesSmileMod, cardType === "member", "smilepieces"],
-            [memberPiecesPure, memberPiecesPureMod, cardType === "member", "purepieces"],
-            [memberPiecesCool, memberPiecesCoolMod, cardType === "member", "coolpieces"],
-            [memberPiecesAll, memberPiecesAllMod, cardType === "member", "allpieces"],
-            [songLivePoints, songLivePointsMod, cardType === "song", "livepoints"],
-            [songPiecesAll, songPiecesAllMod, cardType === "song" && songRequirementType === "anypiece", "required"],
-            [songPiecesSmile, songPiecesSmileMod, cardType === "song" && songRequirementType === "attributepiece", "smilerequired"],
-            [songPiecesPure, songPiecesPureMod, cardType === "song" && songRequirementType === "attributepiece", "purerequired"],
-            [songPiecesCool, songPiecesCoolMod, cardType === "song" && songRequirementType === "attributepiece", "coolrequired"]
-        ]) {
-            if (!option[2] || option[0] === undefined || option[0] === "") continue;
-            filters.push(`${option[3]}:${option[0]}${option[1]}`);
+        for (const name of Object.keys(mapNumberInput)) {
+            if (mapNumberInput[name].condition && mapNumberInput[name].condition() === false) continue;
+            if (!isSet(form[name])) continue;
+            filters.push(`${mapNumberInput[name].urlParam}:${form[name]}${form[name + "Mod"]}`);
         }
 
-        if (filters.length > 0) goto("/search/" + filters.join("/"));
+        if (filters.length > 0) {
+            goto("/search/" + filters.join("/"));
+        }
     }
+
+    onMount(() => {
+        if (history.state.prefillQueryUrl) {
+            const formValues = snapshot.capture();
+            const filterQueries = history.state.prefillQueryUrl.split(/(?<!\/)\/(?!\/)/g).map(f => f.replace(/\/\//g, "/"));
+
+            for (const filterQuery of filterQueries) {
+                const split = filterQuery.split(":");
+                console.log(split);
+                if (mapSelectInputReverse.hasOwnProperty(filterQuery)) {
+                    console.log("select", filterQuery);
+                    formValues[mapSelectInputReverse[filterQuery]] = filterQuery;
+                } else if (mapTextInputReverse.hasOwnProperty(split[0])) {
+                    console.log("text", split);
+                    formValues[mapTextInputReverse[split[0]]] = split[1];
+                } else if (mapNumberInputReverse.hasOwnProperty(split[0])) {
+                    console.log("number", split);
+                    formValues[mapNumberInputReverse[split[0]]] = parseInt(split[1]).toString();
+                    if (split[1].endsWith("+") || split[1].endsWith("-")) {
+                        formValues[mapNumberInputReverse[split[0]] + "Mod"] = split[1].at(-1);
+                    } else {
+                        formValues[mapNumberInputReverse[split[0]] + "Mod"] = "";
+                    }
+                }
+            }
+
+            console.log(formValues);
+            snapshot.restore(formValues);
+        }
+    });
 </script>
 
 <svelte:head>
