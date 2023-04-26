@@ -1,20 +1,20 @@
 import {cardTitle} from "$lib/card/strings.js";
 import type Card from "$models/card/card.js";
 import {Op} from "@sequelize/core";
-import {data} from "../[faqPage]/+page.server.js";
+import {_data} from "../[faqPage]/+page.server.js";
 import {error, json} from "@sveltejs/kit";
 import {getFaqLinkLabel, getKey, getKeyPrefix, getLinkedCards} from "../prepareFaq.js";
 import type {RequestHandler} from "./$types.js";
 
 export const POST: RequestHandler = (async ({locals, request}) => {
     const faqName = (await request.json()).faqName;
-    if (!data.hasOwnProperty(faqName)) {
+    if (!_data.hasOwnProperty(faqName)) {
         throw error(404, {message: "This FAQ page does not exist."});
     }
 
     const nextDisplayOrderCounters: { [cardId: number]: number } = {}
     locals.DB.sequelize.transaction(async transaction => {
-        for (const section of data[faqName]) {
+        for (const section of _data[faqName]) {
             if (section.qa === undefined && section.seeAlso?.length === 1
                 && section.seeAlso[0].split("#").at(-1)!.match(/(LL\d\d|EX\d\d|PR)-\d\d\d/)) {
                 // This FAQ entry only links to another card's FAQ section, which means this card should already have

@@ -3,7 +3,7 @@ import prepareFaq from "../prepareFaq.js";
 import type {Faq} from "../prepareFaq.js";
 import type {PageServerLoad} from "./$types.js";
 
-export const data: { [key: string]: Faq } = {
+export const _data: { [key: string]: Faq } = {
     "LL01": [
         {
             subjects: [{from: "LL01-046", to: "LL01-054"}],
@@ -25,7 +25,7 @@ export const data: { [key: string]: Faq } = {
             subjects: ["LL01-056"],
             qa: [
                 {
-                    question: `Does this Skill activate if performing a ⟪LIVE⟫ using a Song card which awards {{red:"3+1"}} Live Points?`,
+                    question: `Does this Skill activate if performing a ⟪LIVE⟫ using a Song card which awards something like {{red:"3+1"}} Live Points?`,
                     answer: `Yes. It will activate if the total of both base and bonus Live Points gained is 4 or more. However, you must meet the conditions to gain the bonus Live Points.`
                 }
             ]
@@ -2070,7 +2070,7 @@ export const data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `What exactly does the [Auto] Skill do?`,
-                    answer: `When using the Skills of <a href="/search/skill:Dia-chan">these cards</a>, the other players get a chance to call Dia {{red:"Dia-chan"}}. If all other players do so, the requirement is met.<br>For example, if {{link:LL08-049}}'s Skill is resolved and all other players call Dia {{red:"Dia-chan"}}, you may ⟪ENTER⟫ one Member without Stars from your Hand, and then draw two cards. If even one of the other players does not call Dia {{red:"Dia-chan"}}, the top card of your Deck is ⟪ENTER⟫ed and no cards are drawn.`
+                    answer: `When using the Skills of <a href="/search/skill:Dia-chan">certain cards</a>, the other players get a chance to call Dia {{red:"Dia-chan"}}. If all other players do so, the requirement is met.<br>For example, if {{link:LL08-049}}'s Skill is resolved and all other players call Dia {{red:"Dia-chan"}}, you may ⟪ENTER⟫ one Member without Stars from your Hand, and then draw two cards. If even one of the other players does not call Dia {{red:"Dia-chan"}}, the top card of your Deck is ⟪ENTER⟫ed and no cards are drawn.`
                 }
             ]
         }, {
@@ -2227,7 +2227,7 @@ export const data: { [key: string]: Faq } = {
                 {
                     key: `order`,
                     question: `The other Members joining this ⟪LIVE⟫ have [SMILE] x3 in total. Can I first use the second [Live Join] Skill to have this Member gain +[SMILE], so I can then meet the requirement for the first [Live Join] Skill?`,
-                    answer: `No. If a Member has two or more Skills with the same icon, you must use them in the given order. In this case, the requirement of the first [Live Join] Skill cannot be met.`
+                    answer: `No. If a Member has two or more Skills with the same icon, you must use them in the given order. In this case, the requirement of the first [Live Join] Skill fails.`
                 }
             ]
         }, {
@@ -2358,12 +2358,167 @@ export const data: { [key: string]: Faq } = {
                 }
             ]
         }
+    ],
+    "LL13": [
+        {
+            subjects: [{"from": "LL13-037", "to": "LL13-045"}],
+            seeAlso: ["/faq/general#stand_by"]
+        }, {
+            subjects: ["LL13-046"],
+            qa: [
+                {
+                    question: `When I ⟪ENTER⟫ed this Member, I had no cards in my Hand. Even if can't ⟪ENTER⟫ a {{red:"µ's"}} Member from my Hand, can I still ⟪SCOUT⟫?`,
+                    answer: `Yes. Regardless of whether you ⟪ENTER⟫ a Member or not, as long as you have no cards in your Hand, do a ⟪SCOUT⟫.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-047"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#flip_before_skills"],
+            qa: [
+                {
+                    question: `Does this Skill activate if performing a ⟪LIVE⟫ using a Song card which awards something like {{red:"3+1"}} Live Points, like {{link:LL02-075}}?`,
+                    answer: `Yes. It will activate if the total of both base and bonus Live Points gained is 4 or more. However, you must meet the conditions to gain the bonus Live Points.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-048"],
+            qa: [
+                {
+                    question: `What exactly does "pick up to one {{red:"µ's"}} Member with [RUSH], [LIVE], or a Live Costume each from them" mean?`,
+                    answer: `Pick up to one {{red:"µ's"}} Member with [RUSH], up to one {{red:"µ's"}} Member with [LIVE], and up to one {{red:"µ's"}} Member with a Live Costume. You cannot pick more than one Member having one of these traits.<br>For example, if the cards your show from your Deck are {{link:EX01-001}}, {{link:LL13-053}}, {{link:LL13-049}} and {{link:LL02-012}}, you can add either {{red:"Honoka"}} or {{red:"Hanayo"}} as the Member with [RUSH], {{red:"Umi"}} as the Member with [LIVE], and {{red:"Kotori"}} as the Member with a Live Costume to your Hand.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-049"],
+            seeAlso: ["/faq/general#more_faceup_songs"],
+            qa: [
+                {
+                    question: `When performing a ⟪LIVE⟫ using this Member's [LIVE], can I use the Song card that was flipped face-up by this Member's [Entry] Skill?`,
+                    answer: `Yes. You can use that Song card for the ⟪LIVE⟫.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-050"],
+            qa: [
+                {
+                    question: `How exactly should I resolve the [Entry] Skill?`,
+                    answer: `[RUSH] allows you to ⟪ENTER⟫ a Member from your Hand, but usually, only one [RUSH] can be used per turn. However, if you use this Skill, you can use more than one [RUSH] in the same turn to ⟪ENTER⟫ more Members.<br>For example, if you use this Member's [RUSH] to ⟪ENTER⟫ {{link:LL13-032}} from your Hand, you can use that Member's [RUSH] to ⟪ENTER⟫ another Member from your Hand. Similarly, if you ⟪ENTER⟫ this Member using another Member's [RUSH], you are allowed to use this Member's [RUSH] to ⟪ENTER⟫ another Member from your Hand.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-052"],
+            seeAlso: ["/faq/general#top_deck_card_faceup"]
+        }, {
+            subjects: ["LL13-053"],
+            seeAlso: ["/faq/general#flip_before_skills"],
+            qa: [
+                {
+                    question: `There are no Members with three Stars used for Lives on any player's Stage. If I perform a ⟪LIVE⟫ with this Member and a Member with three Stars, can I draw two cards using this Member's [Live Success] Skill?`,
+                    answer: `Yes. At the time this Member's [Live Success] Skill is resolved, the ⟪LIVE⟫ has been performed, and there is a Member with three Stars used for a Live, so the requirement is met.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-054"],
+            seeAlso: ["/faq/general#live_join_pieces", "/faq/general#join_success_order", "/faq/general#flip_before_skills"],
+            qa: [
+                {
+                    question: `Can I count [ALL] as another Piece to meet the requirement of this Member's [Live Success] Skill?`,
+                    answer: `No. You must have two or more [SMILE], two or more [PURE], and two or more [COOL]. [ALL] are not counted.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-055"],
+            qa: [
+                {
+                    question: `What is the Attribute of this Song card?`,
+                    answer: `The Attribute of this Song card is Orange.<br>This Attribute is different from the Smil, Pure, Cool and Neutral Attributes. For example, when resolving {{link:LL03-060}}'s Skill and counting the amount of different Attributes, this Song card's Attribute is counted as a separate Attribute from the other four. (If you have Smile, Pure, Cool, Neutral, and Orange Song cards face-up, the amount of different Attributes is five.)`
+                }
+            ]
+        }, {
+            subjects: ["LL13-056"],
+            seeAlso: ["/faq/general#live_join_pieces", "/faq/general#join_success_order", "/faq/general#flip_before_skills"],
+            qa: [
+                {
+                    key: `added`,
+                    question: `If a Member who is joining this ⟪LIVE⟫ did not have [ALL] originally, but gained +[ALL] from a [Live Join] Skill, am I allowed to ⟪ENTER⟫?`,
+                    answer: `No. Even if [ALL] is gained later through Skills, or another Piece must be treated as [ALL] as the result of a Skill, the requirement is failed.`
+                },
+                {
+                    key: `notoptional`,
+                    question: `If a Skill would cause this card's [Live Success] Skill to fail, because it adds an [ALL] Piece or makes you treat another Piece as [ALL], can I choose not to use that Skill?`,
+                    answer: `No. Unless the Skill says "you may", you must resolve the Skill's effects.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-057"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills", "/faq/general#join_success_order", "/faq/general#flip_before_skills"],
+            qa: [
+                {
+                    question: `If a Song card has two or more Skills, can I use both if both of their requirements are met?`,
+                    answer: `Yes. In that case, you can use both Skills.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-058"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL13-059", "LL13-062", "LL13-063"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `The Skill says "all three are on your Stage", does that mean there must be exactly three Member cards on my Stage?`,
+                    answer: `No. As long as there are only cards of the three mentioned Members and at least one card of each of them, the Skill is active no matter how many cards there are on your Stage.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-060"],
+            seeAlso: ["/faq/general#members_on_stage"]
+        }, {
+            subjects: ["LL13-061"],
+            qa: [
+                {
+                    question: `What Attribute is {{link:LL13-055}} counted as?`,
+                    answer: `It is counted as "Orange". See <a href="#055">the FAQ section for {{red:"Snow halation"}}</a> for details.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-064", "LL13-069", "LL13-070"],
+            qa: [
+                {
+                    key: `order`,
+                    question: `In what order should this card's [Auto] Skill and the [Live Success] Skills of the Song card and Member cards joining this ⟪LIVE⟫ be resolved?`,
+                    answer: `You can resolve them in any order of your choice. If there is more than one [Live Success] Skill, you can even resolve the [Auto] Skill in-between them, like [Live Success][Auto][Live Success].`
+                },
+                {
+                    key: `changed`,
+                    question: `If the requirement of the Song card used in this ⟪LIVE⟫ was reduced by a Skill, does this Skill count the original or the reduced requirement? Additionally, if Members joining this ⟪LIVE⟫ gained Pieces from Skills, does this Skill count or ignore these additional Pieces?`,
+                    answer: `If the ⟪LIVE⟫ is performed with a Song card with a reduced requirement, that changed requirement is counted. Similarly, any Pieces the joining Members gained from Skills are also counted in the total number of Pieces.`
+                }
+            ]
+        }, {
+            subjects: ["LL13-065", "LL13-066", "LL13-068"],
+            qa: [
+                {
+                    question: `In what order should this card's [Auto] Skill and the [Live Join] Skills of the Song card and Member cards joining this ⟪LIVE⟫ be resolved?`,
+                    answer: `You can resolve them in any order of your choice. If there is more than one [Live Join] Skill, you can even resolve the [Auto] Skill in-between them, like [Live Join][Auto][Live Join].`
+                }
+            ]
+        }, {
+            subjects: ["LL13-067", "LL13-071", "LL13-072"],
+            seeAlso: ["/faq/general#member_counting"],
+            qa: [
+                {
+                    question: `In what order should this card's [Auto] Skill and the [Live Success] Skills of the Song card and Member cards joining this ⟪LIVE⟫ be resolved?`,
+                    answer: `You can resolve them in any order of your choice. If there is more than one [Live Success] Skill, you can even resolve the [Auto] Skill in-between them, like [Live Success][Auto][Live Success].`
+                }
+            ]
+        }
     ]
 };
 
 export const load: PageServerLoad = (async ({params, locals}) => {
-    if (data.hasOwnProperty(params.faqPage)) {
-        return await prepareFaq(locals.DB, data[params.faqPage]);
+    if (_data.hasOwnProperty(params.faqPage)) {
+        return await prepareFaq(locals.DB, _data[params.faqPage]);
     } else {
         throw error(404, "This FAQ page does not exist.");
     }

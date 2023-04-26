@@ -70,7 +70,7 @@
             <Question {...data.sections[0].qa[26]}/>
             <h5>Does the order of actions in a Skill matter?</h5>
             <Question {...data.sections[0].qa[27]}/>
-            <h5>What if a Member card has two or more Skills?</h5>
+            <h5>What if a card has two or more Skills?</h5>
             <Question {...data.sections[0].qa[28]}/>
             <h5>What does it mean if a Member card has two Skill fields?</h5>
             <SeeAlso link="#group" label={[{text: "What does \"Pair\" (or \"Trio\") mean?"}]}/>

@@ -2,6 +2,7 @@
     import SkillNodeRenderer from "$lib/format/SkillNodeRenderer.svelte";
     import {makeNodesRenderable} from "$lib/format/format.js";
     import type {ParseNodePrepared} from "$lib/format/format.js";
+    import Link from "$lib/style/icons/Link.svelte";
 
     export let key: string;
     export let question: ParseNodePrepared[] | string;
@@ -13,7 +14,10 @@
 </script>
 
 <div class="w-full group relative">
-    <button class="absolute left-0 top-0 text-xs leading-5 opacity-50 hidden group-hover:block z-50" on:click={copyLink}>🔗</button>
+    <button class="absolute -left-2 top-0 flex justify-center hidden group-hover:block z-50"
+            label="Copy Link to This Question" on:click={copyLink}>
+        <Link/>
+    </button>
     <div class="anchor absolute left-0 top-[-15vh]" id="{key}"></div>
     <div class="question">
         {#if typeof question === "string"}
