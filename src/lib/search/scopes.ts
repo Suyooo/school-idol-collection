@@ -1,6 +1,7 @@
 import {literal, Op, where} from "@sequelize/core";
 import type {Includeable, Sequelize} from "@sequelize/core";
 import {CardBase} from "$models/card/card.js";
+import type {IncludeOptions} from "@sequelize/core/_non-semver-use-at-your-own-risk_/model.js";
 import type CardSongRequirementType from "../enums/cardSongRequirementType.js";
 
 export function addScopes(sequelize: Sequelize) {
@@ -52,10 +53,17 @@ export function addScopes(sequelize: Sequelize) {
             where: {year}
         }
     }));
-    CardBase.addScope("searchGenericMultiColumnLike", (term: string, columns: string[], include?: Includeable) => ({
-        include,
+    CardBase.addScope("searchGenericMultiColumnLike", (term: string, columns: string[]) => ({
         where: {
             [Op.or]: columns.map(col => ({[col]: {[Op.like]: "%" + term + "%"}}))
+        }
+    }));
+    CardBase.addScope("searchGenericMultiColumnLikeWithInclude", (term: string, columns: string[], include: IncludeOptions) => ({
+        include: {
+            ...include,
+            where: {
+                [Op.or]: columns.map(col => ({[col]: {[Op.like]: "%" + term + "%"}}))
+            }
         }
     }));
     CardBase.addScope("searchGenericNumberWithMod", (term: string, column: string, columnLiteral: boolean, include?: Includeable) => {

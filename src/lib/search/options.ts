@@ -1,6 +1,7 @@
 import type {Includeable, ScopeOptions} from "@sequelize/core";
 import SearchFilterError from "$lib/errors/searchFilterError.js";
 import {escapeForUrl} from "$lib/utils/string.js";
+import type {IncludeOptions} from "@sequelize/core/_non-semver-use-at-your-own-risk_/model.js";
 import AttributeEnum from "../enums/attribute.js";
 import {CardMemberRarity, CardSongRarity} from "../enums/cardRarity.js";
 import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
@@ -261,9 +262,14 @@ export class SearchFilterMemberYear extends SearchFilter1 {
 export abstract class SearchFilterTranslatableLike extends SearchFilter1 {
     abstract readonly columnNames: string[];
     abstract readonly explainName: string;
-    readonly include: Includeable | undefined = undefined;
+    readonly include: IncludeOptions | undefined = undefined;
 
-    getScopeElements = () => [<ScopeOptions>{method: ["searchGenericMultiColumnLike", this.param, this.columnNames, this.include]}];
+    getScopeElements = () => {
+        if (this.include) {
+            return [<ScopeOptions>{method: ["searchGenericMultiColumnLikeWithInclude", this.param, this.columnNames, this.include]}]
+        }
+        return [<ScopeOptions>{method: ["searchGenericMultiColumnLike", this.param, this.columnNames]}]
+    };
     getExplainString = () => `${this.explainName} contains "${this.param}"`;
 }
 
@@ -277,7 +283,7 @@ export class SearchFilterCostume extends SearchFilterTranslatableLike {
     readonly key = "costume";
     readonly columnNames = ["$member.costumeJpn$", "$member.costumeEng$"];
     readonly explainName = "Costume";
-    readonly include: Includeable = {
+    readonly include = {
         association: "member",
         required: true,
         attributes: ["costumeJpn", "costumeEng"]
@@ -288,8 +294,9 @@ export class SearchFilterSkill extends SearchFilterTranslatableLike {
     readonly key = "skill";
     readonly columnNames = ["$skills.jpn$", "$skills.eng$"];
     readonly explainName = "Skill";
-    readonly include: Includeable = {
+    readonly include = {
         association: "skills",
+        separate: false,
         required: true,
         attributes: ["jpn", "eng"]
     };
