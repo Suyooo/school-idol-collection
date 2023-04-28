@@ -113,7 +113,7 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
         apply(nodes, new RegExp("(?:\\[(?:"
                 + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")])+"),
             pieces.bind(undefined, "]["));
-        apply(nodes, /(1|2|3|one|two|three|has|each|more|no|with|without|) (Stars?)(?:\b)/, cost);
+        apply(nodes, /(?:((?:\d+|one|two|three|has|each|more|no|with|without)(?: or (?:more|less))?) )?(Stars?)\b/, cost);
     } else if (lang === Language.JPN) {
         if (!parseAsHelpText && skillString.charAt(0) === "【") {
             // Only call these applys if this string starts with a trigger (so, it's not flavour or help text)
@@ -129,8 +129,8 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
             nodes.unshift({secret, element: "i"});
             nodes.push({secret});
         }
-        apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
-        apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
+        apply(nodes, /♪(ライブP＋[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
+        apply(nodes, /♪(ライブP－[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
         apply(nodes, /《([^《》]*?)》/, bold.bind(undefined, "《", "》"));
         apply(nodes, new RegExp("\\+((?:【(?:"
                 + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.JPN)).join("|") + ")】)+)"),
@@ -334,7 +334,7 @@ function pieces(splitter: string, match: RegExpExecArray): ParseNode[] {
 
 function cost(match: RegExpExecArray): ParseNode[] {
     const secret = Symbol();
-    if (match.length > 1) {
+    if (match[1] !== undefined) {
         // count/word match
         return [
             {secret, element: "span", class: "inline-block"},
@@ -344,7 +344,7 @@ function cost(match: RegExpExecArray): ParseNode[] {
         ];
     } else {
         // symbol only
-        return [{componentName: "Star", props: {repl: match[0]}}];
+        return [{componentName: "Star", props: {repl: match[2]}}];
     }
 }
 

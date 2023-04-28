@@ -2513,6 +2513,207 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }
+    ],
+    "LL14": [
+        {
+            subjects: ["LL14-041", "LL14-042", "LL14-045", "LL14-046", "LL14-047", "LL14-049"],
+            seeAlso: ["/faq/general#collection"]
+        }, {
+            subjects: ["LL14-043", "LL14-044", "LL14-048"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills"]
+        }, {
+            subjects: ["LL14-050", "LL14-051"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills", "/faq/general#group", "/faq/general#flip_before_skills", "/faq/general#join_success_order", "/faq/general#group_skill_field", "/faq/general#more_faceup_songs", "/faq/general#muse_and_aqours_song_cards"],
+            qa: [
+                {
+                    question: `With exactly two face-up Song cards in my Set List, I form a Pair with {{link:LL14-050}} and {{link:LL14-051}}, and use their [Auto] Skill to flip one face-down Song card face-up, which means there are now three face-up Song cards. Can I perform a ⟪LIVE⟫ with this Pair?`,
+                    answer: `No. Only one of the two effects of the [Auto] Skill is used, depending on the amount of face-up Song cards at the time this Pair was formed.`
+                }
+            ]
+        }, {
+            subjects: ["LL14-052", "LL14-053", "LL14-057"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills", "/faq/general#group", "/faq/general#group_skill_field", "/faq/general#member_counting", "/faq/general#collection"],
+            qa: [
+                {
+                    key: `double`,
+                    question: `Two trios of {{link:LL14-052}}, {{link:LL14-053}} and {{link:LL14-057}} each join the same ⟪LIVE⟫. Will both of the trios give the Song card ♪Live Points +1♪?`,
+                    answer: `Yes. There are two [Auto] Skills granting ♪Live Points +1♪ each, so in total, the Song card will gain ♪Live Points +2♪.`
+                },
+                {
+                    key: `pair`,
+                    question: `With {{link:LL14-052}} on Stand-By, but {{link:LL14-053}} not on Stand-By, I'm ⟪ENTER⟫ing {{link:LL14-057}} and use her "Form a Trio" [Entry] Skill. In this situation, can I still form a Group with just {{red:"Kanan"}} and {{red:"Mari"}}?`,
+                    answer: `No. You can only form the Trio when both {{link:LL14-052}} and {{link:LL14-053}} are on Stand-By and they are not part of a Trio already.`
+                }
+            ]
+        }, {
+            subjects: ["LL14-054"],
+            seeAlso: ["/faq/general#collection"]
+        }, {
+            subjects: ["LL14-055"],
+            seeAlso: ["/faq/general#collection"],
+            qa: [
+                {
+                    question: `With {{link:LL14-069}} not on my Stage yet, I ⟪ENTER⟫ed this Member, and brought {{link:LL14-069}} to my Stage. Which Ability will this Member be able to use, [RUSH] or [LIVE]?`,
+                    answer: `The Member can use [RUSH]. The Memory's [Auto] Skill is applied before the Member's Ability can be used.`
+                }
+            ]
+        }, {
+            subjects: ["LL14-058"],
+            seeAlso: ["/faq/general#collection"],
+            qa: [
+                {
+                    question: `How can I activate this Member's [Live Join] Skill?`,
+                    answer: `Using Skills like the [Auto] Skill of {{link:LL14-071}}, or the [Live Success] Skill of {{link:LL07-055}}, you can perform a second ⟪LIVE⟫ in the same turn. You can have this Member participate in that second ⟪LIVE⟫.<br>Note that Skills that allow you to take another turn, such as {{link:LL05-063}}, will not activate the Skill, as the extra turn counts as a new turn. In that case, you are performing two ⟪LIVE⟫s in two separate turns, and the requirement is not met.`
+                }
+            ]
+        }, {
+            subjects: ["LL14-059", "LL14-060"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills", "/faq/general#group", "/faq/general#more_faceup_songs", "/faq/general#group_skill_field", "/faq/general#collection"]
+        }, {
+            subjects: ["LL14-061"],
+            seeAlso: ["/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL14-062"],
+            seeAlso: ["/faq/general#member_counting"]
+        }, {
+            subjects: ["LL14-063"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `If I have Memories on my Stage, can I perform a ⟪LIVE⟫ with this Song card and resolve the [Live Join] Skill without returning the Memories to my Collection?`,
+                    answer: `No. If you have any Memories on your Stage, you must return them all to your Collection.`
+                }
+            ]
+        }, {
+            subjects: ["LL14-065"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#live_join_pieces"],
+            qa: [
+                {
+                    question: `I used the [Live Join] Skill to treat the Pieces of Members with the {{red:"Brightest Melody"}} Live Costume as [ALL]. After successfully performing the ⟪LIVE⟫, I used the [Auto] Skill of {{link:LL14-074}} to have additional Members with the {{red:"Brightest Melody"}} Live Costume join that ⟪LIVE⟫. Can I also treat their Pieces as [ALL]?`,
+                    answer: `No. [Live Join] Skills only affect Members who have joined the ⟪LIVE⟫ at the time the Skill is resolved, so only those Members will have their Pieces treated as [ALL].`
+                }
+            ]
+        }, {
+            subjects: ["LL14-066"],
+            qa: [
+                {
+                    question: `The Members joining this ⟪LIVE⟫ have 10 or more Stars in total. What happens to the Any Piece requirement?`,
+                    answer: `It becomes 0. (Any Piece requirements cannot drop below 0.) You can perform a ⟪LIVE⟫ with this Song card with as many Members joining as you want, even if they have 10 or more Stars in total.`
+                }
+            ]
+        }, {
+            subjects: ["LL14-067"],
+            seeAlso: ["/faq/general#member_counting"],
+            qa: [
+                {
+                    question: `I performed a ⟪LIVE⟫ with this Song card with six differently named Members joining. After successfully performing the ⟪LIVE⟫, I used the [Auto] Skill of {{link:LL14-074}} to have additional Members join that ⟪LIVE⟫, so there are nine differently named Members in the Live and the requirement of the [While Live] Skill is met. Will I gain ♪Live Points +1♪?`,
+                    answer: `Yes. Even if the requirement of a [While Live] is only met after successfully performing a ⟪LIVE⟫ with that card, it can activate.`
+                }
+            ]
+        }, {
+            subjects: ["LL14-068"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    key: `nodeckenter`,
+                    question: `What exactly does "You may not ⟪ENTER⟫ Members from your Deck" mean?`,
+                    answer: `You cannot ⟪ENTER⟫ any Member cards directly from your Deck, both through your turn action and Skills. (You can still ⟪ENTER⟫ Members from your Hand.)<br>For Skills that involve ⟪ENTER⟫ing cards from your Deck, ignore only that part. For example, when ⟪ENTER⟫ing {{link:LL05-046}} and resolving her [Entry] Skill with no cards in your Hand and no Members on Stand-By, you are not allowed to ⟪ENTER⟫ the top card of your Deck, but you can still draw three cards.`
+                },
+                {
+                    key: `order`,
+                    question: `I successfully performed a ⟪LIVE⟫, and can now resolve this card's [Auto] Skills and other card's [Live Success] Skills. In that case, can I use this card's [Auto] Skills to return this Memory and draw cards before resolving the [Live Success] Skills?`,
+                    answer: `Yes. If multiple Skills become resolvable at the same time, you can resolve them in any order you want.<br>For example, if you successfully performed a ⟪LIVE⟫ with {{link:LL10-080}} joining, and her [Live Success] Skill becomes resolvable at the same time as this Memory's [Auto] Skills, you can resolve the [Auto] Skills first to draw cards that you can then ⟪ENTER⟫ using {{red:"Mari"}}'s Skill.`
+                }
+            ]
+        }, {
+            subjects: ["LL14-069"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    key: `explain`,
+                    question: `What exactly does "treat [RUSH] as [LIVE], and treat [LIVE] as [RUSH]" mean?`,
+                    answer: `Members that originally had [RUSH] will be able to use [LIVE] instead, and Members that originally had [LIVE] will be able to use [RUSH] instead.`
+                },
+                {
+                    key: `return`,
+                    question: `If I perform a ⟪LIVE⟫ without any {{red:"Yoshiko"}} cards joining it, do I still have to return this Memory to my Collection?`,
+                    answer: `Yes. No matter whether there are {{red:"Yoshiko"}} cards joining the ⟪LIVE⟫ or not, this Memory must be returned to your Collection. (If there are no {{red:"Yoshiko"}} cards joining, no cards will gain +[COOL][COOL].)`
+                },
+                {
+                    key: `offstage`,
+                    question: `{{link:LL14-055}} was on the Stage, and had her [LIVE] treated as [RUSH] due to this card's [Auto] Skill, but was returned to my Hand or my Deck. After returning, does should the Ability of the {{red:"Yoshiko"}} card be treated as [RUSH] or [LIVE]?`,
+                    answer: `Treat it as [LIVE]. This Memory's Skill only affects Members on your Stage, so cards that leave the Stage are not affected anymore.`
+                }
+            ]
+        }, {
+            subjects: ["LL14-070"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    key: `explain`,
+                    question: `What exactly does "replace this Memory with {{red:"Student Council President, Tsuki Watanabe"}} from your Collection" mean?`,
+                    answer: `Return this Memory to your Collection, and bring {{link:LL14-073}} from your Collection to your Stage. (You cannot return this Memory without bringing {{red:"Student Council President, Tsuki Watanabe"}} to your Stage, or bring {{red:"Student Council President, Tsuki Watanabe"}} to your Stage without returning this Memory.)`
+                },
+                {
+                    key: `bonus`,
+                    question: `Does this Skill activate if performing a ⟪LIVE⟫ using a Song card which awards something like {{red:"3+1"}} Live Points, like {{link:LL05-056}}?`,
+                    answer: `Yes. It will activate if the total of both base and bonus Live Points gained is 4 or more. However, you must meet the conditions to gain the bonus Live Points.`
+                },
+                {
+                    key: `later`,
+                    question: `I successfully performed a ⟪LIVE⟫ using a Song card which awards something like {{red:"3+1"}} Live Points, like {{link:LL05-056}}, but didn't meet the requirement. I then used the [Auto] Skill of {{link:LL14-074}} to meet the requirement of the [While Live] Skill of {{red:"Kimeta yo Hand in Hand"}}. Can I replace this Memory with {{link:LL14-073}} now?`,
+                    answer: `Yes. As long as the requirement is met when this card's [Auto] Skill is resolved, you can replace it.`
+                }
+            ]
+        }, {
+            subjects: ["LL14-071"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `With this Memory on my Stage, I performed a ⟪LIVE⟫ with a card that has a [Live Success] Skill that allows me to perform another ⟪LIVE⟫, like {{link:LL11-063}}. Can I perform ⟪LIVE⟫s with both this card's [Auto] Skill and the [Live Success] Skill of the other card?`,
+                    answer: `Yes. You can use both the [Auto] Skill and the [Live Success] Skill to perform a ⟪LIVE⟫ each, in any order you want.`
+                }
+            ]
+        }, {
+            subjects: ["LL14-072"],
+            qa: [
+                {
+                    question: `With this Memory on my Stage, I performed a ⟪LIVE⟫ with a Song card with an Attribute Piece requirement, and {{link:LL10-060}} joining it, who gained +[COOL] from her [Live Join] Skill. Will this [COOL] also be affected by the [Auto] Skill of this Memory, and be treated as [ALL]?`,
+                    answer: `Yes. Any [COOL] that {{red:"Leah"}} cards joining this ⟪LIVE⟫ gain will be treated as [ALL].`
+                }
+            ]
+        }, {
+            subjects: ["LL14-073"],
+            seeAlso: ["/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL14-074"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    key: "later",
+                    question: `I performed a ⟪LIVE⟫ with {{link:LL14-067}} with six differently named Members joining. After successfully performing the ⟪LIVE⟫, I used the [Auto] Skill of this card to have additional Members join that ⟪LIVE⟫, so there are nine differently named Members in the Live and the requirement of the [While Live] Skill is met. Will I gain ♪Live Points +1♪?`,
+                    answer: `Yes. Even if the requirement of a [While Live] is only met after successfully performing a ⟪LIVE⟫ with that card, it can activate.`
+                },
+                {
+                    key: `order`,
+                    question: `If the [Live Success] Skills of other cards in a ⟪LIVE⟫ use the amount of Members who joined that ⟪LIVE⟫, can I use this Memory's [Auto] Skill first to increase the amount of Members that is counted?`,
+                    answer: `Yes. The Members you add to a ⟪LIVE⟫ using this [Auto] Skill count towards Skills that count Members who joined the ⟪LIVE⟫.<br>For example, if you perform a ⟪LIVE⟫ with {{link:LL07-063}}, and you add three more Members with the {{red:"HAPPY PARTY TRAIN"}} Live Costume to the ⟪LIVE⟫ using this card's [Auto] Skill before resolving the Song card's [Live Success] Skill, you can take one more additional turn.`
+                },
+                {
+                    key: `exactly`,
+                    question: `When resolving the [Auto] Skill, can I ⟪ENTER⟫ only one or two Members?`,
+                    answer: `No. If you choose to ⟪ENTER⟫ Members, you must always ⟪ENTER⟫ three Members. If you don't have three Members in your Collection that meet the requirement, you cannot ⟪ENTER⟫ Members.`
+                }
+            ]
+        }, {
+            subjects: [{"from": "LL14-075", "to": "LL14-092"}],
+            qa: [
+                {
+                    question: `What does "[Starter]/[Entry]" mean?`,
+                    answer: `You can use this Skill both at the start of the match if you chose this Member as your starting Member, or when ⟪ENTER⟫ing this Member.`
+                }
+            ]
+        }
     ]
 };
 

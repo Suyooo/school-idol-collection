@@ -92,7 +92,11 @@ export const GET: RequestHandler = (async ({params, locals}) => {
         // Filter this card itself
         if (l.skill.cardNo === cardData.cardNo) return false;
         // Filter duplicates
-        if (i !== cardData.linkedBy.findIndex(ll => l.skill.card!.id === ll.skill.card!.id)) return false;
+        if (l.skill.card) {
+            if (i !== cardData.linkedBy.findIndex(ll => l.skill.card!.id === ll.skill.card?.id)) return false;
+        } else {
+            if (i !== cardData.linkedBy.findIndex(ll => l.skill.group!.id === ll.skill.group?.id)) return false;
+        }
         // Filter cards already listed as group partners
         return !(cardData.member?.group && cardData.member.group.memberExtraInfos.some(m => m.cardNo === l.skill.cardNo));
     });
