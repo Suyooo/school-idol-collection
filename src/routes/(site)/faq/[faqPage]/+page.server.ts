@@ -2714,6 +2714,103 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }
+    ],
+    "LL15": [
+        {
+            subjects: [{"from": "LL15-028", "to": "LL15-036"}],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"]
+        }, {
+            subjects: [{"from": "LL15-037", "to": "LL15-045"}],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL15-046", "LL15-047"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#group", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL15-048", "LL15-077"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"]
+        }, {
+            subjects: ["LL15-049", "LL15-078"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown", "/faq/general#more_faceup_songs"]
+        }, {
+            subjects: ["LL15-050", "LL15-079"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"]
+        }, {
+            subjects: ["LL15-051", "LL15-080"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown", "/faq/general#do_either"]
+        }, {
+            subjects: ["LL15-052", "LL15-081"],
+            seeAlso: ["/faq/general#collection", "/faq/general#idolization", "/faq/general#member_facedown", "/faq/general#do_either"]
+        }, {
+            subjects: ["LL15-053", "LL15-082"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL15-054", "LL15-083"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"]
+        }, {
+            subjects: ["LL15-055", "LL15-084"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown", "/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL15-056", "LL15-085"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"]
+        }, {
+            subjects: ["LL15-057"],
+            seeAlso: ["/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL15-059"],
+            seeAlso: ["/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL15-060"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `What exactly does "only one type of Pieces" mean?`,
+                    answer: `Members that have only one type of Pieces would be, for example, a Member with [SMILE] x2 or a Member with [ALL] x1. They have either only [SMILE] or only [ALL] respectively, so they have "only one type of Pieces".<br>On the other hand, a Member with [SMILE] x1 and [ALL] x1, for example, would not could as a Member who has "only one type of Pieces", as there are two different attributes in their Pieces. ([ALL] cannot be used as a wildcard.)`
+                }
+            ]
+        }, {
+            subjects: ["LL15-061"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#member_counting"]
+        }, {
+            subjects: ["LL15-062"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#member_counting"],
+            qa: [
+                {
+                    question: `I performed a ⟪LIVE⟫ with this Song card, and all three members of both {{red:"CYaRon!"}} and {{red:"AZALEA"}} joining it. Does this mean I can draw six cards using the [Live Success] Skill?`,
+                    answer: `No. Even if all three members of more than one subunit join the ⟪LIVE⟫, you can only draw three cards.`
+                }
+            ]
+        }, {
+            subjects: ["LL15-063"],
+            seeAlso: ["/faq/general#skill_order_multiple_skills", "/faq/general#join_success_order", "/faq/general#live_join_pieces"]
+        }, {
+            subjects: ["LL15-064"],
+            seeAlso: ["/faq/general#idolization"]
+        }, {
+            subjects: ["LL15-065"],
+            seeAlso: ["/faq/general#join_success_order"]
+        }, {
+            subjects: [{"from": "LL15-066", "to": "LL15-076"}],
+            qa: [
+                {
+                    key: `trigger`,
+                    question: `What does "[Starter]/[Entry]" mean?`,
+                    answer: `You can use this Skill both at the start of the match if you chose this Member as your starting Member, or when ⟪ENTER⟫ing this Member.`
+                },
+                {
+                    key: `order`,
+                    question: "If multiple players have starting Members with [Starter] Skills, in what order should the Skills be used?",
+                    answer: "Skills are used in the turn order decided at the start of the match. Once everyone's [Starter] Skills have been resolved, the first player in the turn order can begin."
+                }
+            ]
+        }, {
+            subjects: ["LL15-088", "LL15-089", "LL15-090", "LL15-091"],
+            qa: [
+                {
+                    question: `What Attribute does this Song card count as?`,
+                    answer: `Treat these cards' Attributes as the same as the corresponding M rarity card with the same ID.`
+                }
+            ]
+        }
     ]
 };
 

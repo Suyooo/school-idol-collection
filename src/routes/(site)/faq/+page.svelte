@@ -12,7 +12,7 @@
             exactly follow what it says in casual play. The content of these pages describe how the game's designers
             interpret the rules, but as long as you talk it out with the other players and everyone agrees, they
             encourage you to experiment with slight changes, and see whether you can make some new discoveries that'll
-            allow you to enjoy SIC even more ♪
+            help you enjoy SIC even more ♪
         </div>
     </div>
     <div class="panel">
