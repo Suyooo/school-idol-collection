@@ -36,7 +36,7 @@
         <div class="panel-inner">
             Download Single Card: <input bind:value={cardNo}>
             <div class="flex items-center justify-end w-full">
-                <Button accent on:click={submitCard} {disabled}>Download</Button>
+                <Button label="Download" accent on:click={submitCard} {disabled}>Download</Button>
             </div>
         </div>
     </div>

@@ -355,7 +355,7 @@
     </div>
 </div>
 <div class="mt-2 flex items-center justify-end w-full">
-    <Button accent on:click={query}>Search</Button>
+    <Button label="Search" accent on:click={query}>Search</Button>
 </div>
 
 <style lang="postcss">

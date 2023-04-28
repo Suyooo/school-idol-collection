@@ -156,7 +156,6 @@ export function uiOptionsToUrl(options: SearchUiOptions): string {
 
     // Number with Mod => 1-parameter filter
     for (const [name, inputInfo] of [...mapNumberInput.entries()]) {
-        const inputInfo = mapNumberInput.get(name)!;
         if (inputInfo.condition && !inputInfo.condition(options)) continue;
         if (!uiOptionIsSet(options[name])) continue;
         filters.push(`${inputInfo.urlParam}:${options[name]}${options[<keyof SearchUiOptions>(name + "Mod")]}`);

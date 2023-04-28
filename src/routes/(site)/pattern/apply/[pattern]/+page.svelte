@@ -84,8 +84,8 @@
             </table>
 
             <div class="flex items-center justify-between mt-2 w-full">
-                <Button accent href="/pattern/edit/{id}/{applicable[0].skillId}/">Edit</Button>
-                <Button accent on:click={submit} {disabled}>Apply</Button>
+                <Button label="Edit" accent href="/pattern/edit/{id}/{applicable[0].skillId}/">Edit</Button>
+                <Button label="Apply" accent on:click={submit} {disabled}>Apply</Button>
             </div>
         </div>
     </div>

@@ -76,17 +76,11 @@
                 </div>
                 <div class="max-w-md flex flex-wrap gap-2 justify-center">
                     {#each {length: Math.ceil(pagination.totalResults / pagination.pageSize)} as _, i}
-                        <Button classes="w-12 px-0" accent={i+1 === pagination.page}
-                                on:click={() => goto(`/search/${queryUrl}/page:${i+1}`)}>{i + 1}</Button>
+                        <Button classes="w-12 px-0" accent={i + 1 === pagination.page} label={`Page ${i + 1}`}
+                                on:click={() => goto(`/search/${queryUrl}/page:${i + 1}`)}>{i + 1}</Button>
                     {/each}
                 </div>
             </div>
         {/if}
     {/if}
-</div>
-
-<div class="mt-4 w-full flex justify-end">
-    <Button accent on:click={() => goto(`/search`, {state: {prefillQueryUrl: queryUrl}})}>
-        Back To Search
-    </Button>
 </div>

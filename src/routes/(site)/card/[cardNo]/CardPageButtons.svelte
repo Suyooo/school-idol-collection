@@ -9,14 +9,14 @@
 
 <div class="buttons row">
     <div class="col-min flex">
-        <Button href="/card/{prevCardNo}" accent disabled={prevCardNo === null}>🢀</Button>
-        <Button href="/card/{nextCardNo}" accent disabled={nextCardNo === null}>🢂</Button>
+        <Button href="/card/{prevCardNo}" label="Previous Card" accent disabled={prevCardNo === null}>🢀</Button>
+        <Button href="/card/{nextCardNo}" label="Next Card" accent disabled={nextCardNo === null}>🢂</Button>
     </div>
     <div class="col-min lg:flex" class:hidden={listLinksOnLargeOnly} class:flex={!listLinksOnLargeOnly}>
-        <Button href="/set/{cardSet}">View Set</Button>
+        <Button label="View Set" href="/set/{cardSet}">View Set</Button>
     </div>
     <div class="col-min lg:flex" class:hidden={listLinksOnLargeOnly} class:flex={!listLinksOnLargeOnly}>
-        <Button href="/list">View Full Card List</Button>
+        <Button label="View Full Card List" href="/list">View Full Card List</Button>
     </div>
 </div>
 

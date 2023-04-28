@@ -4,18 +4,19 @@
     export let href: string | undefined = undefined;
     export let style: string = "";
     export let classes: string = "";
+    export let label: string;
 </script>
 
 {#if disabled}
-    <button disabled class={`!bg-primary-900 !text-primary-400 ${classes}`} {style}>
+    <button disabled class={`!bg-primary-900 !text-primary-400 ${classes}`} {style} title={label} aria-label={label}>
         <slot></slot>
     </button>
 {:else if href}
-    <a {href} class:accent class={classes} {style}>
+    <a {href} class:accent class={classes} {style} title={label} aria-label={label}>
         <slot></slot>
     </a>
 {:else}
-    <button class:accent class={classes} {style} on:click>
+    <button class:accent class={classes} {style} title={label} aria-label={label} on:click>
         <slot></slot>
     </button>
 {/if}

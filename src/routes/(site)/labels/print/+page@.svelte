@@ -75,7 +75,7 @@
             {:else}
                 {form.cardNos.length} label{form.cardNos.length === 1 ? "" : "s"} ready to print!
                 <div class="flex items-center justify-center w-full mt-1">
-                    <Button accent on:click={() => print()}>Print</Button>
+                    <Button label="Print" accent on:click={() => print()}>Print</Button>
                 </div>
                 <div class="mt-2">
                     <div class="-indent-5">

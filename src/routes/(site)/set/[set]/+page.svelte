@@ -23,5 +23,5 @@
 </div>
 
 <div class="mt-4 px-4 w-full flex justify-end">
-    <Button accent href="/list">View Full Card List</Button>
+    <Button label="View Full Card List" accent href="/list">View Full Card List</Button>
 </div>

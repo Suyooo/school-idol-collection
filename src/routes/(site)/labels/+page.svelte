@@ -86,7 +86,7 @@
                 {#if error}
                     <b class="text-highlight-red mr-4">Error: {error}</b>
                 {/if}
-                <Button accent on:click={submit}>Print</Button>
+                <Button label="Print" accent on:click={submit}>Print</Button>
             </div>
         </div>
     </div>
