@@ -38,27 +38,27 @@
 <div class="header">
     <div class="cont">
         <div class="menu">
-            <div class="list">
+            <div class="top">
                 <div class="logo">SIC</div>
-                <div class="buttons" class:!h-max={menuExpanded}>
-                    <a href="/list">Card List</a>
-                    <a href="/search">Search</a>
-                    <a href="/faq">Rules and FAQ</a>
-                    <a href="/labels">Label Printer</a>
+                <div class="expand">
+                    <div>
+                        <Button accent classes="w-9 h-9 !px-0 !rounded-full flex items-center justify-center"
+                                on:click={() => menuExpanded = !menuExpanded}
+                                label={menuExpanded ? "Collapse Menu" : "Expand Menu"}>
+                            {#if menuExpanded}
+                                <Collapse/>
+                            {:else}
+                                <Menu/>
+                            {/if}
+                        </Button>
+                    </div>
                 </div>
             </div>
-            <div class="expand">
-                <div>
-                    <Button accent classes="w-9 h-9 !px-0 !rounded-full flex items-center justify-center"
-                            on:click={() => menuExpanded = !menuExpanded}
-                            label={menuExpanded ? "Collapse Menu" : "Expand Menu"}>
-                        {#if menuExpanded}
-                            <Collapse/>
-                        {:else}
-                            <Menu/>
-                        {/if}
-                    </Button>
-                </div>
+            <div class="buttons" class:open={menuExpanded}>
+                <a href="/list">Card List</a>
+                <a href="/faq">Rules and FAQ</a>
+                <a href="/search">Search</a>
+                <a href="/labels">Label Printer</a>
             </div>
         </div>
         <form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
@@ -88,26 +88,44 @@
             @apply flex flex-col sm:flex-row gap-y-2 items-start justify-between;
 
             & .menu {
-                @apply w-full flex flex-row items-stretch text-accent-400 font-bold tracking-widest uppercase;
+                @apply w-full flex flex-col sm:flex-row items-center sm:items-start text-accent-400 font-bold tracking-widest uppercase;
 
-                & .list {
-                    @apply w-full flex-shrink flex flex-col sm:flex-row ml-16 sm:ml-0 items-center sm:items-start gap-x-4 gap-y-2;
+                & .top {
+                    @apply w-full sm:w-max flex-shrink flex sm:ml-0 items-center justify-between sm:justify-start;
 
                     & .logo {
                         @apply text-3xl;
                     }
 
-                    & .buttons {
-                        @apply h-0 sm:h-9 overflow-hidden flex flex-wrap flex-col sm:flex-row items-center gap-x-4 gap-y-2;
-
-                        & a {
-                            @apply px-6 py-2 bg-primary-500 text-white rounded-full no-underline whitespace-nowrap;
-                        }
+                    & .expand {
+                        @apply flex flex-none sm:px-4;
                     }
                 }
 
-                & .expand {
-                    @apply flex flex-shrink-0 items-start justify-start basis-16 pl-4;
+                & .buttons {
+                    @apply flex flex-wrap flex-col sm:flex-row items-center gap-x-4 gap-y-2;
+
+                    & a {
+                        @apply hidden px-6 py-2 bg-primary-500 text-white rounded-full no-underline whitespace-nowrap;
+
+                        &:nth-child(-n+1) {
+                            @apply md:block;
+                        }
+
+                        &:nth-child(-n+2) {
+                            @apply lg:block;
+                        }
+
+                        &:nth-child(-n+3) {
+                            @apply 2xl:block;
+                        }
+                    }
+
+                    &.open {
+                        & a {
+                            @apply block;
+                        }
+                    }
                 }
             }
 
