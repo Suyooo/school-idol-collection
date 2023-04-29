@@ -1,6 +1,6 @@
 <script lang="ts">
     import "../../app.css";
-    import {goto} from "$app/navigation";
+    import {goto as gotoInThisTab} from "$app/navigation";
     import Button from "$lib/style/Button.svelte";
     import Collapse from "$lib/style/icons/Collapse.svelte";
     import Menu from "$lib/style/icons/Menu.svelte";
@@ -9,31 +9,49 @@
     import {couldBeEntryCardNo, entryCardNoToCanonical} from "$lib/utils/entry.js";
     import {stringIsInteger} from "$lib/utils/string.js";
 
-    let menuExpanded: boolean = false, quicksearch: string = "", searching: boolean = false;
+    let menuExpanded: boolean = false, quicksearch: string = "", searching: boolean = false, isAltDown: boolean = false;
+
+    async function goto(url: string) {
+        if (isAltDown) {
+            window.open(url, "_blank");
+        } else {
+            await gotoInThisTab(url);
+        }
+        searching = false;
+        quicksearch = "";
+    }
 
     function doQuicksearch() {
         if (quicksearch === "" || searching) return;
         searching = true;
         if (couldBeEntryCardNo(quicksearch, false)) {
             // Card number - go directly to page
-            goto(`/card/${entryCardNoToCanonical(quicksearch)}`).finally(() => searching = false);
+            goto(`/card/${entryCardNoToCanonical(quicksearch)}`);
         } else if (quicksearch.length <= 4 && stringIsInteger(quicksearch)) {
             // Only digits - probably a card ID, search for that
             fetch(`/json/search/id:${quicksearch}`).then(async (res) => {
                 const cards = (await res.json()).cards;
-                if (cards.length > 0) {
-                    goto(`/card/${cards[0].cardNo}`).finally(() => searching = false);
+                if (cards && cards.length > 0) {
+                    goto(`/card/${cards[0].cardNo}`);
                 } else {
                     // No cards with that ID, go to search page to show "no results" text
-                    goto(`/search/id:${quicksearch}`).finally(() => searching = false);
+                    goto(`/search/id:${quicksearch}`);
                 }
             });
         } else {
             // Name search
-            goto(`/search/name:${quicksearch}`).finally(() => searching = false);
+            goto(`/search/name:${quicksearch}`);
+        }
+    }
+
+    function updateAltStatus(e: KeyboardEvent) {
+        if (e.key === "Alt") {
+            isAltDown = e.type === "keydown";
         }
     }
 </script>
+
+<svelte:window on:keydown={updateAltStatus} on:keyup={updateAltStatus} />
 
 <div class="header">
     <div class="cont">

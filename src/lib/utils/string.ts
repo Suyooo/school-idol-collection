@@ -1,5 +1,5 @@
 export const specialCharactersRegex = /[-[\]{}()*+?.,\\^$|#]/g;
-export const isIntegerRegex = /\d+/;
+export const isIntegerRegex = /^\d+$/;
 
 export function toNumWithFullwidth(fw: string): number {
     return parseInt(fw.normalize('NFKC'));
