@@ -405,7 +405,7 @@ export const _data: { [key: string]: Faq } = {
                 }, {
                     key: "name",
                     question: "If this card joins a ⟪LIVE⟫ with {{link:LL04-057}}, does it get +[ALL] from the second Skill?",
-                    answer: "No. The Song title is not part of the Skill text, so the requirement for the second Skill is not met."
+                    answer: "No. The Song name is not part of the Skill text, so the requirement for the second Skill is not met."
                 }
             ]
         }, {
@@ -2807,7 +2807,188 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `What Attribute does this Song card count as?`,
-                    answer: `Treat these cards' Attributes as the same as the corresponding M rarity card with the same ID.`
+                    answer: `Treat these cards' Attributes as the same as the corresponding M Rarity card with the same ID.`
+                }
+            ]
+        }
+    ],
+    "LL16": [
+        {
+            subjects: ["LL16-046"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown", "/faq/general#do_either"],
+            qa: [
+                {
+                    key: `youmay`,
+                    question: `If I use this [Entry] Skill while the card is Idolized, can I draw cards without performing a ⟪LIVE⟫?`,
+                    answer: `Yes. If you are doing both effects, you draw two cards with ①, and then ② allows you to choose whether you want to perform a ⟪LIVE⟫ or not.`
+                },
+                {
+                    key: `firstturn`,
+                    question: `I'm the first player in turn order, and at the start of the match, I used {{link:LL07-064}}'s [Starter] Skill to ⟪ENTER⟫ a {{red:"Chika"}} card. If I ⟪ENTER⟫ this card on my first turn, does the other card meet the "a {{red:"Chika"}} that was ⟪ENTER⟫ed this turn" requirement?`,
+                    answer: `No. [Starter] Skills are counted as part of match preparation, before any turns are played, so once your first turn starts, there have been no Members who ⟪ENTER⟫ed that turn.`
+                }
+            ]
+        }, {
+            subjects: ["LL16-047"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"],
+            qa: [
+                {
+                    question: `Do {{red:"Riko"}} cards that have one Piece and Birthday Bonus Piece, like {{link:LL15-011}}, meet the "a {{red:"Riko"}} with exactly one Piece" requirement?`,
+                    answer: `The requirement is met if the Birthday Bonus is not active. If the Birthday Bonus is active, the card will have two Pieces, and the requirement is not met.`
+                }
+            ]
+        }, {
+            subjects: ["LL16-048"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown", "/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `I ⟪ENTER⟫ed {{link:LL16-066}}, who has [RUSH/LIVE], and used [RUSH]. Does that card still meet the "a {{red:"Kanan"}} with [LIVE]" requirement?`,
+                    answer: `Yes. Even if you used [RUSH] to ⟪ENTER⟫ another Member, the card still has a [LIVE], so the requirement is met.`
+                }
+            ]
+        }, {
+            subjects: ["LL16-049"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"],
+            qa: [
+                {
+                    key: "name",
+                    question: "If this card joins a ⟪LIVE⟫ with {{link:LL04-057}}, can I draw two cards?",
+                    answer: "No. The Song name is not part of the Skill text, so the requirement is not met."
+                },
+                {
+                    key: `then`,
+                    question: `I don't have any Song cards in my Set List that contains "Aqours" in it's Skill text, but this Member is Idolized. Can I ⟪ENTER⟫ a card from my Hand?`,
+                    answer: `No. Since this part of the Skill begins with "Then", the previous requirement must also be met. Even if this Member is Idolized, if there are no Song cards in yout Set List that contain "Aqours" in their Skill text, you cannot ⟪ENTER⟫ a Member.`
+                }
+            ]
+        }, {
+            subjects: ["LL16-050"],
+            seeAlso: ["/faq/general#stand_by", "/faq/general#idolization", "/faq/general#member_facedown"],
+            qa: [
+                {
+                    key: `any`,
+                    question: `If there are multiple Song cards in my Set List whose name matches the name of a Live Costume of one of the Members on my Stage, which one can I perform a ⟪LIVE⟫ with?`,
+                    answer: `If there are multiple Song cards that meet the requirement, you can pick whichever one you'd like to use, and perform a ⟪LIVE⟫ with it.`
+                },
+                {
+                    key: `multiple`,
+                    question: `If there is a face-up Song card with multiple names in my Set List, for example {{link:LL02-071}}, can I perform a ⟪LIVE⟫ with it even if the Members on my Stage only have a Live Costume matching with one of those names?`,
+                    answer: `Yes. If a face-up Song card has multiple names, the requirement is met if the Live Costume has the same name as either song name.`
+                }
+            ]
+        }, {
+            subjects: ["LL16-051"],
+            seeAlso: ["/faq/general#stand_by", "/faq/general#member_counting", "/faq/general#idolization", "/faq/general#member_facedown"],
+            qa: [
+                {
+                    question: `I'm ⟪ENTER⟫ing this Member while the number of Members on Stand-By on my Stage is even. If I'm using it's [Special Practice] Skill while ⟪ENTER⟫ing this Member, how does the amount of Members change?`,
+                    answer: `If you ⟪ENTER⟫ this Member and use it's [Special Practice] Skill, the number of Members on Stand-By does not change. If the amount was even before, it is still even afterwards. (Similarly, an odd amount of Members will remain odd after a [Special Practice] Skill.)`
+                }
+            ]
+        }, {
+            subjects: ["LL16-052"],
+            seeAlso: ["/faq/general#collection", "/faq/general#idolization", "/faq/general#member_facedown"],
+            qa: [
+                {
+                    question: `Using this Member's [Entry] Skill, can I add a card with [RUSH/LIVE], like {{link:LL16-070}}, to my Hand?`,
+                    answer: `Yes. As long as the Member has [RUSH], it doesn't matter whether they also have [LIVE] or not.`
+                }
+            ]
+        }, {
+            subjects: ["LL16-053"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown", "/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `In addition to two Members with only [ALL], one of them being this Member while Idolized, there are other Members who have Pieces other than [ALL] who are joining the same ⟪LIVE⟫. In this case, will this Member still gain +[ALL][ALL]?`,
+                    answer: `Yes. As long as there are at least two Members with only [ALL], the requirement is met, no matter what Pieces the other Members who are joining the ⟪LIVE⟫ have.`
+                }
+            ]
+        }, {
+            subjects: ["LL16-054"],
+            seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"],
+            qa: [
+                {
+                    key: `order`,
+                    question: `After ⟪ENTER⟫ing this Member without Idolizing, I used the [Entry] Skill to ⟪ENTER⟫ the top card of my Deck, which was {{link:LL15-036}}. Can I use that card's [Special Practice] to stack it on top of the this card before returning it to my Hand?`,
+                    answer: `No. The order of actions within a Skill must be followed, so you must return this Member to your Hand before you can ⟪ENTER⟫ the top card of my Deck. So, when {{link:LL15-036}} is ⟪ENTER⟫ed, it cannot be stacked on top of this Member, as it has already left the Stage.`
+                },
+                {
+                    key: `extra`,
+                    question: `Do {{red:"Ruby"}} cards that have one Piece and Birthday Bonus Piece, like {{link:LL15-018}}, or {{red:"Ruby"}} cards that have one Piece and have Idolized Pieces, like {{link:LL15-056}}, meet the "a {{red:"Ruby"}} with exactly one Piece" requirement?`,
+                    answer: `In both cases, the requirement is met if the extra Pieces are not active. If the Birthday Bonus is active or the Member is Idolized, the card will have two Pieces, and the requirement is not met.`
+                },
+                {
+                    key: `firstturn`,
+                    question: `I'm the first player in turn order, and at the start of the match, I used {{link:LL07-072}}'s [Starter] Skill to ⟪ENTER⟫ a {{red:"Ruby"}} card with exactly one Piece. If I ⟪ENTER⟫ this card on my first turn, does the other card meet the "a {{red:"Ruby"}} that was ⟪ENTER⟫ed this turn and with exactly one Piece" requirement?`,
+                    answer: `No. [Starter] Skills are counted as part of match preparation, before any turns are played, so once your first turn starts, there have been no Members who ⟪ENTER⟫ed that turn.`
+                }
+            ]
+        }, {
+            subjects: ["LL16-055"],
+            seeAlso: ["/faq/general#member_counting"]
+        }, {
+            subjects: ["LL16-056"],
+            seeAlso: ["/faq/general#member_counting", "/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `If I return a Member without Stars to my Hand while resolving the [Live Success] Skill, can I ⟪ENTER⟫ that Member again?`,
+                    answer: `Yes. The actions are resolved in order as written in the Skill text, so the card you are returning to your Hand is available when you can choose which Members from your Hand to ⟪ENTER⟫.`
+                }
+            ]
+        }, {
+            subjects: ["LL16-057"],
+            seeAlso: ["/faq/general#member_counting", "/faq/general#join_success_order", "/faq/general#no_shuffle_facedown_song"],
+            qa: [
+                {
+                    question: `While resolving the [Live Success] Skill, the Song card I flipped face-up was {{link:LL12-056}}. Can I draw cards using that Song card's [Auto] Skill before I continue with ⟪ENTER⟫ing a Member from my Hand?`,
+                    answer: `No. You can't use another Skill until the current Skill is fully resolved.`
+                }
+            ]
+        }, {
+            subjects: ["LL16-058"],
+            seeAlso: ["/faq/general#member_counting"]
+        }, {
+            subjects: ["LL16-059"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `When Skills that cause you to treat other Pieces as [ALL], like {{link:LL07-056}} or {{link:LL11-072}}, are active, can I still gain +[ALL][ALL][ALL][ALL] from this card's [Live Join] Skill?`,
+                    answer: `No. The [While Live] and [Auto] Skills of the other cards are already in effect when counting Pieces for the [Live Join] Skill.`
+                }
+            ]
+        }, {
+            subjects: ["LL16-060"],
+            seeAlso: ["/faq/general#member_counting"]
+        }, {
+            subjects: ["LL16-061"],
+            qa: [
+                {
+                    question: `Which Song cards are {{red:"Guilty Kiss"}} Song cards?`,
+                    answer: `As of June 2020, {{red:"Guilty Kiss"}} Song cards include:<ul><li>{{link:EX03-032}} / {{link:EX14-049}}</li><li>{{link:LL04-063}}</li><li>{{link:LL06-057}}</li><li>{{link:LL07-057}}</li><li>{{link:LL08-063}}</li><li>{{link:LL12-059}}</li><li>{{link:LL16-061}}</li></ul>`
+                }
+            ]
+        }, {
+            subjects: ["LL16-062"],
+            qa: [
+                {
+                    question: `Which Song cards are {{red:"CYaRon!"}} Song cards?`,
+                    answer: `As of June 2020, {{red:"CYaRon!"}} Song cards include:<ul><li>{{link:EX03-030}}</li><li>{{link:LL04-061}} / {{link:EX09-030}} / {{link:EX14-047}}</li><li>{{link:LL06-055}}</li><li>{{link:LL07-055}}</li><li>{{link:LL08-061}}</li><li>{{link:LL12-057}}</li><li>{{link:LL16-062}}</li></ul>`
+                }
+            ]
+        }, {
+            subjects: ["LL16-063"],
+            qa: [
+                {
+                    question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
+                    answer: `As of June 2020, {{red:"AZALEA"}} Song cards include:<ul><li>{{link:EX03-031}} / {{link:EX14-048}}</li><li>{{link:LL04-062}} / {{link:EX09-031}}</li><li>{{link:LL06-056}}</li><li>{{link:LL07-056}}</li><li>{{link:LL08-062}}</li><li>{{link:LL12-058}}</li><li>{{link:LL16-063}}</li></ul>`
+                }
+            ]
+        }, {
+            subjects: ["LL16-082", "LL16-083", "LL16-084", "LL16-085"],
+            qa: [
+                {
+                    question: `What Attribute does this Song card count as?`,
+                    answer: `Treat these cards' Attributes as the same as the corresponding M Rarity card with the same ID.`
                 }
             ]
         }
