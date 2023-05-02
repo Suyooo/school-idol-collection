@@ -21,6 +21,21 @@
             <input bind:value={options.cardName} placeholder="—">
         </div>
         <div>
+            <b>Group:</b>
+            <select bind:value={options.group}>
+                <option value="" selected>—</option>
+                <option value="muse">µ's</option>
+                <option value="aqours">Aqours</option>
+                <option value="printemps">Printemps</option>
+                <option value="lilywhite">lily white</option>
+                <option value="bibi">BiBi</option>
+                <option value="cyaron">CYaRon!</option>
+                <option value="azalea">AZALEA</option>
+                <option value="guiltykiss">Guilty Kiss</option>
+                <option value="saintsnow">Saint Snow</option>
+            </select>
+        </div>
+        <div>
             <b>Card Type:</b>
             <select bind:value={options.cardType}>
                 <option value="" selected>—</option>
@@ -52,21 +67,6 @@
                     <option value="pr">PR</option>
                     <option value="n">N</option>
                     <option value="ssr">SSR</option>
-                </select>
-            </div>
-            <div>
-                <b>Group:</b>
-                <select bind:value={options.memberGroup}>
-                    <option value="" selected>—</option>
-                    <option value="muse">µ's</option>
-                    <option value="aqours">Aqours</option>
-                    <option value="printemps">Printemps</option>
-                    <option value="lilywhite">lily white</option>
-                    <option value="bibi">BiBi</option>
-                    <option value="cyaron">CYaRon!</option>
-                    <option value="azalea">AZALEA</option>
-                    <option value="guiltykiss">Guilty Kiss</option>
-                    <option value="saintsnow">Saint Snow</option>
                 </select>
             </div>
             <div>

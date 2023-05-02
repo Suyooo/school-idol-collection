@@ -55,15 +55,15 @@ export default class GroupEnum {
     static SAINT_SNOW = new GroupEnum(10, "Saint Snow");
     static SAINT_AQOURS_SNOW = new GroupEnum(11, "Saint Aqours Snow", GroupEnum.AQOURS);
 
+    static getSubIdsFromId(n: number): GroupID[] {
+        const a = GroupEnum.idMapWithSubs.get(<GroupID>n);
+        if (a === undefined) throw new EnumError("Trigger", "ID (subgroups included)", n);
+        else return a.map(g => g.id);
+    }
+
     static fromId(n: number): GroupEnum {
         const a = GroupEnum.idMap.get(<GroupID>n);
         if (a === undefined) throw new EnumError("Trigger", "ID", n);
-        else return a;
-    }
-
-    fromIdIncludeSubs(n: number): GroupEnum[] {
-        const a = GroupEnum.idMapWithSubs.get(<GroupID>n);
-        if (a === undefined) throw new EnumError("Trigger", "ID (subgroups included)", n);
         else return a;
     }
 

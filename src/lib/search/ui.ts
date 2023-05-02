@@ -1,11 +1,13 @@
 import {escapeForUrl} from "$lib/utils/string.js";
+import type {GroupID} from "../enums/group.js";
 
 type NumberQueryMod = "" | "-" | "+";
 
 export type SearchUiOptions = {
-    cardName?: string, cardSet?: string, skillText?: string, cardType?: "" | "member" | "song" | "memory",
+    cardName?: string,
+    group?: "muse" | "aqours" | "printemps" | "lilywhite" | "bibi" | "cyaron" | "azalea" | "guiltykiss" | "saintsnow",
+    cardSet?: string, skillText?: string, cardType?: "" | "member" | "song" | "memory",
     memberRarity?: "" | "r" | "sr" | "hr" | "special" | "secret" | "pr" | "n" | "ssr",
-    memberGroup?: "" | "muse" | "aqours" | "printemps" | "lilywhite" | "bibi" | "cyaron" | "azalea" | "guiltykiss" | "saintsnow",
     memberYear?: "" | "year?:1" | "year?:2" | "year?:3",
     memberCost?: "" | "0" | "1" | "2" | "3", memberCostMod?: NumberQueryMod,
     memberIdolizable?: "" | "idolizable" | "notidolizable",
@@ -31,14 +33,13 @@ export function uiOptionIsSet(value: any) {
 
 const mapSelectInput: Map<keyof SearchUiOptions, { urlParamOptions: string[], condition?: (options: SearchUiOptions) => boolean }>
     = new Map([
+    ["group", {
+        urlParamOptions: ["muse", "aqours", "printemps", "lilywhite", "bibi", "cyaron", "azalea", "guiltykiss", "saintsnow"]
+    }],
     ["cardType", {urlParamOptions: ["member", "song", "memory"]}],
     ["memberRarity", {
         urlParamOptions: ["r", "sr", "hr", "special", "secret", "pr", "n", "ssr"],
         condition: (options: SearchUiOptions) => options.cardType === "member"
-    }],
-    ["memberGroup", {
-        urlParamOptions: ["muse", "aqours", "printemps", "lilywhite", "bibi", "cyaron", "azalea", "guiltykiss", "saintsnow"],
-        condition: (options) => options.cardType === "member"
     }],
     ["memberYear", {
         urlParamOptions: ["year:1", "year:2", "year:3"],

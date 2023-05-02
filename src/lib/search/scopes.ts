@@ -2,7 +2,8 @@ import {literal, Op, where} from "@sequelize/core";
 import type {Includeable, Sequelize} from "@sequelize/core";
 import {CardBase} from "$models/card/card.js";
 import type {IncludeOptions} from "@sequelize/core/_non-semver-use-at-your-own-risk_/model.js";
-import type CardSongRequirementType from "../enums/cardSongRequirementType.js";
+import type CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
+import type {GroupID} from "$lib/enums/group.js";
 
 export function addScopes(sequelize: Sequelize) {
     CardBase.addScope("searchMemberRarity", (rarity: number) => ({
@@ -12,8 +13,8 @@ export function addScopes(sequelize: Sequelize) {
             where: {"$member.rarity$": rarity}
         }
     }));
-    CardBase.addScope("searchGroup", (names: string[]) => ({
-        where: {"nameJpn": {[Op.in]: names}}
+    CardBase.addScope("searchGroup", (ids: GroupID[]) => ({
+        where: {"group": {[Op.in]: ids}}
     }));
     CardBase.addScope("searchSongRarity", (rarity: number) => ({
         include: {

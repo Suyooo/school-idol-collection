@@ -5,6 +5,8 @@ import type {IncludeOptions} from "@sequelize/core/_non-semver-use-at-your-own-r
 import AttributeEnum from "../enums/attribute.js";
 import {CardMemberRarity, CardSongRarity} from "../enums/cardRarity.js";
 import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
+import GroupEnum from "$lib/enums/group.js";
+import type {GroupID} from "$lib/enums/group.js";
 
 export default abstract class SearchFilter {
     abstract readonly key: string;
@@ -119,61 +121,61 @@ export class SearchFilterMemberRaritySSR extends SearchFilterMemberRarity {
 }
 
 export abstract class SearchFilterMemberNames extends SearchFilter0 {
-    abstract readonly members: string[];
-    getScopeElements = () => [<ScopeOptions>{method: ["searchGroup", this.members]}];
+    abstract readonly group: GroupID;
+    getScopeElements = () => [<ScopeOptions>{method: ["searchGroup", GroupEnum.getSubIdsFromId(this.group)]}];
 }
 
 export class SearchFilterMemberGroupMuse extends SearchFilterMemberNames {
     readonly key = "muse";
-    readonly members = ["高坂 穂乃果", "絢瀬 絵里", "南 ことり", "園田 海未", "星空 凛", "西木野 真姫", "東條 希", "小泉 花陽", "矢澤 にこ"];
+    readonly group = 2;
     getExplainString = () => "µ's";
 }
 
 export class SearchFilterMemberGroupAqours extends SearchFilterMemberNames {
     readonly key = "aqours";
-    readonly members = ["高海 千歌", "桜内 梨子", "松浦 果南", "黒澤 ダイヤ", "渡辺 曜", "津島 善子", "国木田 花丸", "小原 鞠莉", "黒澤 ルビィ"];
+    readonly group = 3;
     getExplainString = () => "Aqours";
 }
 
 export class SearchFilterMemberGroupPrintemps extends SearchFilterMemberNames {
     readonly key = "printemps";
-    readonly members = ["高坂 穂乃果", "南 ことり", "小泉 花陽"];
+    readonly group = 4;
     getExplainString = () => "Printemps";
 }
 
 export class SearchFilterMemberGroupLilyWhite extends SearchFilterMemberNames {
     readonly key = "lilywhite";
-    readonly members = ["園田 海未", "星空 凛", "東條 希"];
+    readonly group = 5;
     getExplainString = () => "lily white";
 }
 
 export class SearchFilterMemberGroupBiBi extends SearchFilterMemberNames {
     readonly key = "bibi";
-    readonly members = ["絢瀬 絵里", "西木野 真姫", "矢澤 にこ"];
+    readonly group = 6;
     getExplainString = () => "BiBi";
 }
 
 export class SearchFilterMemberGroupCYaRon extends SearchFilterMemberNames {
     readonly key = "cyaron";
-    readonly members = ["高海 千歌", "渡辺 曜", "黒澤 ルビィ"];
+    readonly group = 7;
     getExplainString = () => "CYaRon!";
 }
 
 export class SearchFilterMemberGroupAzalea extends SearchFilterMemberNames {
     readonly key = "azalea";
-    readonly members = ["松浦 果南", "黒澤 ダイヤ", "国木田 花丸"];
+    readonly group = 8;
     getExplainString = () => "AZALEA";
 }
 
 export class SearchFilterMemberGroupGuiltyKiss extends SearchFilterMemberNames {
     readonly key = "guiltykiss";
-    readonly members = ["桜内 梨子", "津島 善子", "小原 鞠莉"];
+    readonly group = 9;
     getExplainString = () => "Guilty Kiss";
 }
 
 export class SearchFilterMemberGroupSaintSnow extends SearchFilterMemberNames {
     readonly key = "saintsnow";
-    readonly members = ["鹿角 聖良", "鹿角 理亞"];
+    readonly group = 10;
     getExplainString = () => "Saint Snow";
 }
 
