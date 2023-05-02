@@ -17,6 +17,7 @@ import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePiec
 import type CardMemberGroup from "$models/card/memberGroup.js";
 import type CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";
 import type CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo.js";
+import type {GroupID} from "$lib/enums/group.js";
 import DB from "../db.js";
 
 export const cardOrder = (col: string) => <OrderItem[]><unknown>[[literal(col + " LIKE 'LL%' DESC, " + col)]];
@@ -90,6 +91,12 @@ export class CardBase extends Model {
         allowNull: true
     })
     declare nameEng: string | null;
+
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
+    declare group: GroupID;
 
     @HasMany((s) => s.models.Skill, {
         as: "skills", foreignKey: "cardNo", inverse: {as: "card"}

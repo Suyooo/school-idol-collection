@@ -1,5 +1,6 @@
 import {Attribute, Table} from "@sequelize/core/decorators-legacy";
 import {DataTypes, Model} from "@sequelize/core";
+import type {GroupID} from "$lib/enums/group.js";
 
 @Table({
     modelName: "TranslationName",
@@ -18,4 +19,10 @@ export default class TranslationName extends Model {
         allowNull: false
     })
     declare eng: string;
+
+    @Attribute({
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+    })
+    declare group: GroupID;
 }

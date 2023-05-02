@@ -245,6 +245,7 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
             id: parseInt(info["ID"]!),
             nameJpn: info["name"]!,
             copyright: info["コピーライト"]!,
+            group: 0,
             type
         };
         let skillText = info["スキル"]?.replace(/\n\n/g, "\n");
@@ -254,6 +255,7 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
             const checkNameTable = await DB.TranslationName.findByPk(card.nameJpn, {transaction});
             if (checkNameTable !== null) {
                 card.nameEng = checkNameTable.eng;
+                card.group = checkNameTable.group;
             }
 
             const memberInfo: Partial<CardMemberExtraInfo> = {};
@@ -415,9 +417,10 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
 
             (card as CardMember).member = memberInfo as CardMemberExtraInfo;
         } else if (type === CardType.SONG) {
-            const checkSongTable = await Promise.all(card.nameJpn!.split("／").map((s: string) => DB.TranslationName.findByPk(s, {transaction})));
+            const checkSongTable = await Promise.all(card.nameJpn!.split("／").map((s: string) => DB.TranslationSong.findByPk(s, {transaction})));
             if (checkSongTable.every(s => s !== null)) {
                 card.nameEng = checkSongTable.map(s => s!.eng).join("/");
+                card.group = checkSongTable[0]!.group;
             }
 
             const songInfo: Partial<CardSongExtraInfo> = {};
