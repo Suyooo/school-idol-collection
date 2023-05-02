@@ -176,6 +176,10 @@ while i < len(faq):
                     "from": subjs[0][:subjlen],
                     "to": subjs[1][:subjlen]
                 })
+        elif "/" in faq[i]:
+            subjs = [x.strip() for x in faq[i].split("/")]
+            for partsubj in subjs:
+                curSec["subjects"].append(partsubj[1:1+subjlen])
         else:
             curSec["subjects"].append(faq[i][1:1+subjlen])
         i += 1

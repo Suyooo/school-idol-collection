@@ -65,7 +65,13 @@ export const GET: RequestHandler = (async ({params, locals}) => {
                 include: [{
                     model: locals.DB.Skill,
                     include: [
-                        locals.DB.Card,
+                        {
+                            model: locals.DB.Card,
+                            include: [
+                                {model: locals.DB.CardMemberExtraInfo, attributes: ["rarity"]},
+                                {model: locals.DB.CardSongExtraInfo, attributes: ["rarity"]}
+                            ]
+                        },
                         {
                             model: locals.DB.CardMemberGroup,
                             include: [{

@@ -197,7 +197,11 @@ export function addScopes(sequelize: Sequelize) {
         attributes: ["id"]
     }));
     CardBase.addScope("viewForLink", () => ({
-        attributes: ["cardNo", "id", "type", "nameJpn", "nameEng", "frontOrientation", "backOrientation"]
+        attributes: ["cardNo", "id", "type", "nameJpn", "nameEng", "frontOrientation", "backOrientation"],
+        include: [
+            {model: sequelize.models.CardMemberExtraInfo, attributes: ["rarity"]},
+            {model: sequelize.models.CardSongExtraInfo, attributes: ["rarity"]}
+        ]
     }));
     CardBase.addScope("viewRarity", () => ({
         include: [

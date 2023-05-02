@@ -5,7 +5,7 @@
     export let subjects: (Card | { from: Card, to: Card })[];
 
     function isMultipleSubjects(s: Card | { from: Card, to: Card }): s is { from: Card, to: Card } {
-        return s.hasOwnProperty("from");
+        return s["from"] !== undefined;
     }
 </script>
 

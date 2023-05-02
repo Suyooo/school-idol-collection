@@ -2814,7 +2814,7 @@ export const _data: { [key: string]: Faq } = {
     ],
     "LL16": [
         {
-            subjects: ["LL16-046"],
+            subjects: ["LL16-046", "LL16-073"],
             seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown", "/faq/general#do_either"],
             qa: [
                 {
@@ -2829,7 +2829,7 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }, {
-            subjects: ["LL16-047"],
+            subjects: ["LL16-047", "LL16-074"],
             seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"],
             qa: [
                 {
@@ -2838,7 +2838,7 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }, {
-            subjects: ["LL16-048"],
+            subjects: ["LL16-048", "LL16-075"],
             seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown", "/faq/general#join_success_order"],
             qa: [
                 {
@@ -2847,7 +2847,7 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }, {
-            subjects: ["LL16-049"],
+            subjects: ["LL16-049", "LL16-076"],
             seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"],
             qa: [
                 {
@@ -2862,7 +2862,7 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }, {
-            subjects: ["LL16-050"],
+            subjects: ["LL16-050", "LL16-077"],
             seeAlso: ["/faq/general#stand_by", "/faq/general#idolization", "/faq/general#member_facedown"],
             qa: [
                 {
@@ -2877,7 +2877,7 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }, {
-            subjects: ["LL16-051"],
+            subjects: ["LL16-051", "LL16-078"],
             seeAlso: ["/faq/general#stand_by", "/faq/general#member_counting", "/faq/general#idolization", "/faq/general#member_facedown"],
             qa: [
                 {
@@ -2886,7 +2886,7 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }, {
-            subjects: ["LL16-052"],
+            subjects: ["LL16-052", "LL16-079"],
             seeAlso: ["/faq/general#collection", "/faq/general#idolization", "/faq/general#member_facedown"],
             qa: [
                 {
@@ -2895,7 +2895,7 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }, {
-            subjects: ["LL16-053"],
+            subjects: ["LL16-053", "LL16-080"],
             seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown", "/faq/general#join_success_order"],
             qa: [
                 {
@@ -2904,7 +2904,7 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }, {
-            subjects: ["LL16-054"],
+            subjects: ["LL16-054", "LL16-081"],
             seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"],
             qa: [
                 {

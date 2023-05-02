@@ -12,8 +12,8 @@
         cardBirthday,
         cardCost,
         cardGroupType,
-        cardId,
-        cardRarity,
+        cardId, cardLink,
+        cardRarityShort,
         cardTitle,
         cardType,
         cardYear
@@ -71,7 +71,7 @@
                                 {#each card.sameId as sameIdCard (sameIdCard.cardNo)}
                                     <br>
                                     <a href="/card/{sameIdCard.cardNo}">{sameIdCard.cardNo}
-                                        <span class="rarity">{cardRarity(sameIdCard)}</span></a>
+                                        <span class="rarity">{cardRarityShort(sameIdCard)}</span></a>
                                 {/each}
                             </div>
                         </div>
@@ -283,16 +283,12 @@
                                 {#each card.linkedBy as link (link.id)}
                                     {#if link.skill.card !== null}
                                         <div>
-                                            <a href="/card/{link.skill.card.cardNo}">
-                                                {@html cardTitle(link.skill.card, true)}
-                                            </a>
+                                            {@html cardLink(link.skill.card)}
                                         </div>
                                     {:else}
                                         {#each link.skill.group.memberExtraInfos as member}
                                             <div>
-                                                <a href="/card/{member.card.cardNo}">
-                                                    {@html cardTitle(member.card, true)}
-                                                </a>
+                                                {@html cardLink(member.card)}
                                             </div>
                                         {/each}
                                     {/if}
