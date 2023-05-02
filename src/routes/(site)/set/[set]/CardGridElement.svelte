@@ -1,8 +1,9 @@
 <script lang="ts">
+    import {CardSongRarity} from "$lib/enums/cardRarity.js";
     import CardImage from "$lib/format/CardImage.svelte";
     import type Card from "$models/card/card.js";
     import {cardRarityShort, cardType} from "$lib/card/strings.js";
-    import {cardIsMember} from "$lib/card/types.js";
+    import {cardIsMember, cardIsSong} from "$lib/card/types.js";
 
     export let card: Card;
 </script>
@@ -15,7 +16,7 @@
     <div class="namecont">
         <span>⏵</span>
         <span>
-            {#if cardIsMember(card)}
+            {#if cardIsMember(card) || (cardIsSong(card) && card.song.rarity === CardSongRarity.GR)}
                 <span class="rarity">{cardRarityShort(card)}</span>
             {/if}
             {card.nameEng || card.nameJpn}
