@@ -10,7 +10,7 @@ import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import CardType from "$lib/enums/cardType.js";
 import ImportError from "$lib/errors/importError.js";
 import {getScopesFromFilters} from "$lib/search/query.js";
-import {tryAllPatterns} from "$lib/translation/skills.js";
+import {tryAllPatterns, appendTriggersToString} from "$lib/translation/skills.js";
 import PieceInfo from "$lib/types/pieceInfo.js";
 import type Card from "$models/card/card.js";
 import type {CardMember, CardSongWithAnyReq, CardSongWithAttrReq} from "$models/card/card.js";
@@ -378,9 +378,11 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
                             const skillLine = skillLines[i];
                             group.skills.push({
                                 line: i,
-                                patternId: checkSkillPattern[i]?.pattern.id || null,
+                                patternId: checkSkillPattern[i] ? checkSkillPattern[i]!.pattern.id : null,
                                 jpn: skillLine,
-                                eng: checkSkillPattern[i]?.skill || null,
+                                eng: checkSkillPattern[i]
+                                    ? appendTriggersToString(checkSkillPattern[i]!.triggers, checkSkillPattern[i]!.translatedSkill)
+                                    : null
                             });
                         }
                     }
@@ -454,9 +456,11 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
                 skills.push({
                     cardNo,
                     line: i,
-                    patternId: checkSkillPattern[i]?.pattern.id || null,
+                    patternId: checkSkillPattern[i] ? checkSkillPattern[i]!.pattern.id : null,
                     jpn: skillLine,
-                    eng: checkSkillPattern[i]?.skill || null,
+                    eng: checkSkillPattern[i]
+                        ? appendTriggersToString(checkSkillPattern[i]!.triggers, checkSkillPattern[i]!.translatedSkill)
+                        : null
                 })
             }
             card.skills = skills as Skill[];
@@ -466,6 +470,7 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
         card.backOrientation = await checkImageOrientation(orientationCheckCardNo, "back");
 
         // Add the card to the database
+        await DB.Card.destroy({where: {cardNo}});
         await DB.Card.create(card, {
             include: [
                 {

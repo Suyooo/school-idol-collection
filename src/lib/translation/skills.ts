@@ -108,19 +108,20 @@ export async function applyPatternToSkills(DB: DBObject, pattern: TranslationPat
                 throw new PatternApplyError(Error("Pattern should be applied to Skill #" + application + ", but its regex does not match the Skill"), pattern, skillObj.jpn);
             }
 
-            skillObj.eng = triggers.map(t => "[" + t.toName(Language.ENG) + "]").join("/") + " " + translatedSkill;
+            skillObj.eng = appendTriggersToString(triggers, translatedSkill);
             skillObj.patternId = pattern.id;
             await skillObj.save({transaction});
         }
     });
 }
 
-export async function tryAllPatterns(DB: DBObject, skillLine: string, options?: QueryOptions): Promise<{ skill: string, pattern: TranslationPattern } | null> {
+export async function tryAllPatterns(DB: DBObject, skillLine: string, options?: QueryOptions):
+    Promise<{ translatedSkill: string, triggers: TriggerEnum[], pattern: TranslationPattern } | null> {
     const {skill, triggers} = splitTriggersFromSkill(skillLine);
     for (const pattern of (await DB.TranslationPattern.findAll(options))) {
         const res = await applyPatternOrNull(DB, skill, triggers, pattern, options);
         if (res !== null) {
-            return {skill, pattern};
+            return {translatedSkill: res, triggers, pattern};
         }
     }
     return null;
@@ -160,4 +161,8 @@ async function applyPatternOrNull(DB: DBObject, skill: string, triggers: Trigger
     }
 
     return res;
+}
+
+export function appendTriggersToString(triggers: TriggerEnum[], s: string, lang: Language = Language.ENG): string {
+    return triggers.map(t => "[" + t.toName(lang) + "]").join("/") + " " + s;
 }
