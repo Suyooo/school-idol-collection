@@ -14,21 +14,28 @@
 
     const attrs = AttributeEnum.allForPieces;
     let display: [number | null, number | null, number | null, number | null];
+    let totalPieces = 0;
     $: {
+        totalPieces = 0;
         display = <[number | null, number | null, number | null, number | null]>attrs.map(attr => {
             const piecesKey = <keyof typeof pieces>("pieces" + uppercaseFirst(attr.toCssClassName()));
             const pieceCount: number | undefined = pieces[piecesKey];
+            totalPieces += pieceCount ?? 0;
             return (pieceCount === undefined || (pieceCount === 0 && !showZero)) ? null : pieces[piecesKey];
         });
     }
 </script>
 
-<!-- I wish there was an easier way to avoid whitespace -->
-{#each attrs as attr, i}{#if display[i] !== null}<span
-            class="pieceno {attr.toCssClassName()}" class:reduced-gap={isSongReq}><Piece
-            {lang} {attr} noText={isSongReq}/>{#if !isSongReq}<span
-            class="text-none">{lang.times}&nbsp;</span>{/if}<span>{display[i]}</span>{#if !isSongReq}<span
-            class="text-none">&nbsp;</span>{/if}</span>{/if}{/each}
+{#if totalPieces > 0 || showZero}
+    <!-- I wish there was an easier way to avoid whitespace -->
+    {#each attrs as attr, i}{#if display[i] !== null}<span
+                class="pieceno {attr.toCssClassName()}" class:reduced-gap={isSongReq}><Piece
+                {lang} {attr} noText={isSongReq}/>{#if !isSongReq}<span
+                class="text-none">{lang.times}&nbsp;</span>{/if}<span>{display[i]}</span>{#if !isSongReq}<span
+                class="text-none">&nbsp;</span>{/if}</span>{/if}{/each}
+{:else}
+    —
+{/if}
 
 <style lang="postcss">
     span.pieceno {
