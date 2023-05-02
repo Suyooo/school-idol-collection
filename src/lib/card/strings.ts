@@ -7,7 +7,7 @@ import {CardMemberRarity, CardSongRarity} from "$lib/enums/cardRarity.js";
 import {ordinal} from "$lib/utils/grammar.js";
 
 export function cardLink(card: Card, lang: Language = Language.ENG): string {
-    return `<a href="/card/${card.cardNo}">${cardTitle(card, true, lang)}</a>`;
+    return `<a href="/card/${card.cardNo}">${cardTitle(card, true, lang, true)}</a>`;
 }
 
 export function cardName(card: Card, styled: boolean, lang: Language = Language.ENG): string {
@@ -19,9 +19,9 @@ export function cardName(card: Card, styled: boolean, lang: Language = Language.
         : card.nameEng.split(" / ").map(s => `${pre}${s}${post}`).join(styled ? "&nbsp;/</span> " : " / ");
 }
 
-export function cardTitle(card: Card, styled: boolean, lang: Language = Language.ENG): string {
-    if (styled) return `<span class='card-id'>${card.cardNo}</span> ${cardName(card, styled, lang)}</span>`;
-    else return card.cardNo + " " + cardName(card, styled, lang);
+export function cardTitle(card: Card, styled: boolean, lang: Language = Language.ENG, showRarity: boolean = false): string {
+    if (styled) return `<span class="card-id">${card.cardNo}</span>${showRarity ? ` <span class="rarity">${cardRarityShort(card)}</span>` : ""} ${cardName(card, styled, lang)}</span>`;
+    else return `${card.cardNo}${showRarity ? ` ${cardRarityShort(card)}` : ""} ${cardName(card, false, lang)}`;
 }
 
 export function cardId(card: Card): string {

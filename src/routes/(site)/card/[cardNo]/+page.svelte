@@ -1,4 +1,5 @@
 <script lang="ts">
+    import GroupEnum from "$lib/enums/group.js";
     import Ability from "$lib/format/Ability.svelte";
     import CardImage from "$lib/format/CardImage.svelte";
     import PieceCount from "$lib/format/PieceCount.svelte";
@@ -56,7 +57,7 @@
 
             <div class="panel">
                 <div class="panel-inner">
-                    <h4>{@html cardTitle(card, true)}</h4>
+                    <h4>{@html cardTitle(card, true, Language.ENG, true)}</h4>
                     <div class="row gap">
                         <div class="col-half inforow">
                             <div>
@@ -70,7 +71,7 @@
                                 {#each card.sameId as sameIdCard (sameIdCard.cardNo)}
                                     <br>
                                     <a href="/card/{sameIdCard.cardNo}">{sameIdCard.cardNo}
-                                        ({cardRarity(sameIdCard)})</a>
+                                        <span class="rarity">{cardRarity(sameIdCard)}</span></a>
                                 {/each}
                             </div>
                         </div>
@@ -82,8 +83,8 @@
                     {#if cardIsMember(card)}
                         <div class="row">
                             <div class="col-half inforow">
-                                <div>Rarity</div>
-                                <div>{cardRarity(card)}</div>
+                                <div>Group</div>
+                                <div>{GroupEnum.fromId(card.group).toNameWithSuper(", ")}</div>
                             </div>
                             <div class="col-half inforow">
                                 <div>Cost</div>
@@ -155,8 +156,8 @@
                         {@const songAttr = AttributeEnum.fromId(card.song.attribute)}
                         <div class="row">
                             <div class="col-half inforow">
-                                <div>Rarity</div>
-                                <div>{cardRarity(card)}</div>
+                                <div>Group</div>
+                                <div>{GroupEnum.fromId(card.group).toNameWithSuper(", ", false)}</div>
                             </div>
                             <div class="col-half inforow">
                                 <div>Attribute</div>
@@ -171,8 +172,7 @@
                                 <div>
                                     {card.song.lpBase}
                                     {#if card.song.lpBonus}
-                                        (
-                                        {#if card.song.lpBonus.toString().charAt(0) !== "-"}+{/if}{card.song.lpBonus})
+                                        ({#if card.song.lpBonus.toString().charAt(0) !== "-"}+{/if}{card.song.lpBonus})
                                     {/if}
                                 </div>
                             </div>
@@ -192,6 +192,11 @@
                                     {/if}
                                 </div>
                             </div>
+                        </div>
+                    {:else}
+                        <div class="row inforow">
+                            <div>Group</div>
+                            <div>{GroupEnum.fromId(card.group).toNameWithSuper(", ")}</div>
                         </div>
                     {/if}
                     {#if card.skills.length === 0}
