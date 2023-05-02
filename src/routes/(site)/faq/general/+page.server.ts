@@ -18,7 +18,7 @@ export const _data: Faq = [
             {
                 "key": "muse_and_aqours_song_cards",
                 "question": "Which Song cards are {{red:\"µ's\"}} Song cards / {{red:\"Aqours\"}} Song cards?",
-                "answer": "{{link:PR-012}}{{link:PR-032}}{{link:PR-203}}{{link:PR-215}}{{link:PR-226}}{{link:LL10-062}}{{link:LL10-063}}{{link:LL14-064}}{{link:LL15-057}}){{link:PR-069A}}{{link:PR-069B}}{{link:PR-124}}{{link:PR-173}}{{link:PR-193}}{{link:PR-204}}{{link:PR-225}}"
+                "answer": `You can find <a href="/search/song/muse">a list of all {{red:"µ's"}} Song cards here</a>, and <a href="/search/song/aqours">a list of all {{red:"Aqours"}} Song cards here</a>.<br>Generally, {{red:"µ's"}} card sets only contain {{red:"µ's"}} Song cards, and {{red:"Aqours"}} card sets only contain {{red:"Aqours"}} Song cards (with {{red:"Saint Snow"}} Song cards being the only exception). The Song cards distributed as Promo Cards also count as {{red:"µ's"}} or {{red:"Aqours"}} Song cards - you can always check the "Group" entry on a Song card's info page to find out which groups a card counts for.<br>Note that all subunit Song cards also belong to the full group. For example, {{red:"CYaRon!"}} Song cards will also count for Skills that require {{red:"Aqours"}} Song cards.`
             },
             {
                 "key": "stand_by",
@@ -211,7 +211,6 @@ export const _data: Faq = [
 
 export const load: PageServerLoad = (async ({locals}) => {
     const faq = <any>await prepareFaq(locals.DB, _data);
-    faq.sections[0].qa[1].answer = `As of November 2021, <span class="text-highlight-red">"µ's"</span> Song cards include:<ul><li>All Song cards from sets <a href="/set/LL01">LL01</a> to <a href="/set/LL03">LL03</a>, <a href="/set/LL13">LL13</a>, <a href="/set/EX01">EX01</a>, <a href="/set/EX11">EX11</a>, <a href="/set/EX15">EX15</a></li> <li>${cardLink(faq.cards["PR-012"])}</li> <li>${cardLink(faq.cards["PR-032"])}</li> <li>${cardLink(faq.cards["PR-203"])}</li> <li>${cardLink(faq.cards["PR-215"])}</li> <li>${cardLink(faq.cards["PR-226"])}</li></ul>As of November 2021, <span class="text-highlight-red">"Aqours"</span> Song cards include:<ul><li>All Song cards from sets <a href="/set/LL04">LL04</a> to <a href="/set/LL12">LL12</a>, <a href="/set/LL14">LL14</a> to <a href="/set/LL17">LL17</a>, <a href="/set/EX03">EX03</a>, <a href="/set/EX09">EX09</a>, <a href="/set/EX14">EX14</a> (except for: ${cardLink(faq.cards["LL10-062"])}, ${cardLink(faq.cards["LL10-063"])}, ${cardLink(faq.cards["LL14-064"])}, ${cardLink(faq.cards["LL15-057"])}, ${cardLink(faq.cards["LL17-057"])}) </li> <li>${cardLink(faq.cards["PR-069A"])} / ${cardLink(faq.cards["PR-069B"])}</li> <li>${cardLink(faq.cards["PR-124"])}</li> <li>${cardLink(faq.cards["PR-173"])}</li> <li>${cardLink(faq.cards["PR-193"])}</li> <li>${cardLink(faq.cards["PR-204"])}</li> <li>${cardLink(faq.cards["PR-225"])}</li></ul>`;
     faq.sections[0].qa[24].question = `What if I can't do something a Skill tells me to do? For example: <ul><li>"⟪SCOUT⟫" or "Draw three cards", but there's not enough cards in the Deck </li><li>"⟪ENTER⟫ one Member", but there's no Members able to ⟪ENTER⟫</li></ul>`;
     return faq;
 }) satisfies PageServerLoad;

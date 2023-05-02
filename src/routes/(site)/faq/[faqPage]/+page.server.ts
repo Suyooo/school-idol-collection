@@ -2144,7 +2144,7 @@ export const _data: { [key: string]: Faq } = {
                 {
                     key: `songs`,
                     question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
-                    answer: `As of June 2020, {{red:"AZALEA"}} Song cards include:<ul><li>{{link:EX03-031}} / {{link:EX14-048}}</li><li>{{link:LL04-062}} / {{link:EX09-031}}</li><li>{{link:LL06-056}}</li><li>{{link:LL07-056}}</li><li>{{link:LL08-062}}</li><li>{{link:LL12-058}}</li><li>{{link:LL16-063}}</li></ul>`
+                    answer: `You can find <a href="/search/song/azalea">a list of all {{red:"AZALEA"}} Song cards here</a>.`
                 },
                 {
                     key: `dupes`,
@@ -2311,7 +2311,7 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `Which Song cards are {{red:"CYaRon!"}} Song cards?`,
-                    answer: `As of June 2020, {{red:"CYaRon!"}} Song cards include:<ul><li>{{link:EX03-030}}</li><li>{{link:LL04-061}} / {{link:EX09-030}} / {{link:EX14-047}}</li><li>{{link:LL06-055}}</li><li>{{link:LL07-055}}</li><li>{{link:LL08-061}}</li><li>{{link:LL12-057}}</li><li>{{link:LL16-062}}</li></ul>`
+                    answer: `You can find <a href="/search/song/cyaron">a list of all {{red:"CYaRon!"}} Song cards here</a>.`
                 }
             ]
         }, {
@@ -2319,7 +2319,7 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
-                    answer: `As of June 2020, {{red:"AZALEA"}} Song cards include:<ul><li>{{link:EX03-031}} / {{link:EX14-048}}</li><li>{{link:LL04-062}} / {{link:EX09-031}}</li><li>{{link:LL06-056}}</li><li>{{link:LL07-056}}</li><li>{{link:LL08-062}}</li><li>{{link:LL12-058}}</li><li>{{link:LL16-063}}</li></ul>`
+                    answer: `You can find <a href="/search/song/azalea">a list of all {{red:"AZALEA"}} Song cards here</a>.`
                 }
             ]
         }, {
@@ -2327,7 +2327,7 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `Which Song cards are {{red:"Guilty Kiss"}} Song cards?`,
-                    answer: `As of June 2020, {{red:"Guilty Kiss"}} Song cards include:<ul><li>{{link:EX03-032}} / {{link:EX14-049}}</li><li>{{link:LL04-063}}</li><li>{{link:LL06-057}}</li><li>{{link:LL07-057}}</li><li>{{link:LL08-063}}</li><li>{{link:LL12-059}}</li><li>{{link:LL16-061}}</li></ul>`
+                    answer: `You can find <a href="/search/song/guiltykiss">a list of all {{red:"Guilty Kiss"}} Song cards here</a>.`
                 }
             ]
         }, {
@@ -2964,7 +2964,7 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `Which Song cards are {{red:"Guilty Kiss"}} Song cards?`,
-                    answer: `As of June 2020, {{red:"Guilty Kiss"}} Song cards include:<ul><li>{{link:EX03-032}} / {{link:EX14-049}}</li><li>{{link:LL04-063}}</li><li>{{link:LL06-057}}</li><li>{{link:LL07-057}}</li><li>{{link:LL08-063}}</li><li>{{link:LL12-059}}</li><li>{{link:LL16-061}}</li></ul>`
+                    answer: `You can find <a href="/search/song/guiltykiss">a list of all {{red:"Guilty Kiss"}} Song cards here</a>.`
                 }
             ]
         }, {
@@ -2972,7 +2972,7 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `Which Song cards are {{red:"CYaRon!"}} Song cards?`,
-                    answer: `As of June 2020, {{red:"CYaRon!"}} Song cards include:<ul><li>{{link:EX03-030}}</li><li>{{link:LL04-061}} / {{link:EX09-030}} / {{link:EX14-047}}</li><li>{{link:LL06-055}}</li><li>{{link:LL07-055}}</li><li>{{link:LL08-061}}</li><li>{{link:LL12-057}}</li><li>{{link:LL16-062}}</li></ul>`
+                    answer: `You can find <a href="/search/song/cyaron">a list of all {{red:"CYaRon!"}} Song cards here</a>.`
                 }
             ]
         }, {
@@ -2980,7 +2980,7 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
-                    answer: `As of June 2020, {{red:"AZALEA"}} Song cards include:<ul><li>{{link:EX03-031}} / {{link:EX14-048}}</li><li>{{link:LL04-062}} / {{link:EX09-031}}</li><li>{{link:LL06-056}}</li><li>{{link:LL07-056}}</li><li>{{link:LL08-062}}</li><li>{{link:LL12-058}}</li><li>{{link:LL16-063}}</li></ul>`
+                    answer: `You can find <a href="/search/song/azalea">a list of all {{red:"AZALEA"}} Song cards here</a>.`
                 }
             ]
         }, {
