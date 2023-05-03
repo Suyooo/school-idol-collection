@@ -129,7 +129,7 @@ function applyFixes(info: { [k: string]: string | null }, cardNo: string, set: s
 
     // Fix for some LL15 Member cards: They are Pair cards, but the Group Skill is not listed on either card
     else if (cardNo === "LL15-046" || cardNo === "LL15-047") {
-        info["スキル"] += "\n<ペアスキル>【ライブ成功時】あなたのステージに「Aqours」がいるなら、手札から【☆】を持たないメンバー２人を《登場》してよい。"
+        info["スキル"] += "\n<ペアスキル>【ライブ成功時】あなたのステージに「Aqours」のメンバーがいるなら、手札から【☆】を持たないメンバーを２人まで《登場》してよい。"
     }
 
     // Fix for LL16 non-GR song cards: The ID listed on the site is incorrect
