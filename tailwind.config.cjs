@@ -6,9 +6,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: colors.blue[900],
-        primary: colors.blue,
-        accent: colors.orange,
+        background: colors.slate[900],
+        primary: colors.slate,
+        accent: colors.pink,
         attribute: {
           all: "#ffd87f",
           smile: "#fa7dca",

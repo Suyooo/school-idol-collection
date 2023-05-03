@@ -1,5 +1,4 @@
 import {escapeForUrl} from "$lib/utils/string.js";
-import type {GroupID} from "../enums/group.js";
 
 type NumberQueryMod = "" | "-" | "+";
 

@@ -74,14 +74,14 @@
             </div>
             <div class="buttons" class:open={menuExpanded}>
                 <a href="/list">Card List</a>
-                <a href="/faq">Rules and FAQ</a>
+                <a href="/faq">How To Play</a>
                 <a href="/search">Search</a>
                 <a href="/labels">Label Printer</a>
             </div>
         </div>
         <form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
             <input placeholder="Quick Search (Card No., ID or Name)" bind:value={quicksearch}
-                aria-label="Quick Search. Enter a card number, ID or name">
+                aria-label="Quick Search. Enter a card number, ID or name" disabled={searching}>
             <button class:text-primary-400={quicksearch === ""} disabled={quicksearch === "" || searching}
                     aria-label="Submit Quick Search">
                 {#if searching}

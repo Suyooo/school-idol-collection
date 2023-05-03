@@ -7,6 +7,8 @@
     import Idolized from "$lib/format/Idolized.svelte";
 </script>
 
+<svelte:head><title>How To Play → Rules &bull; SIC</title></svelte:head>
+
 <div class="content">
     <h3>Rules</h3>
     <div class="panel">
@@ -20,11 +22,11 @@
 
     <div class="panel">
         <div class="panel-inner">
-            <h4>Optional Rules</h4>
-            Here are some additional rules that can be used to play SIC. While some recommendations are listed, you can
-            decide yourself whether you want to use these rules or not. When playing casually with others, you should
-            talk it out to make sure everyone is on the same page regarding these, while they're usually already
-            decided by the organizers at events or tournaments.
+            <h4>Rule Modifications</h4>
+            Here, some of the rules that you can easily change up when play SIC are highlighted. While the recommended
+            rule for each modification is listed, you can decide yourself whether you want to use these defaults or not.
+            When playing casually with others, you should talk about these to make sure everyone is on the same page,
+            while they're usually already decided by the organizers at events or tournaments.
 
             <h5 id="option_cost">Star Rule</h5>
             <p>
@@ -144,7 +146,7 @@
                 Cards that have a <TriggerComponent trigger={TriggerEnum.SP}/> Skill are Idolizable. You can Idolize
                 these cards by stacking them on top of another card already on your Stage, which must meet the
                 requirements mentioned by the <TriggerComponent trigger={TriggerEnum.SP}/> Skill, such as being a
-                certain Member or having a certain Cost.<br>
+                certain member or having a certain Cost.<br>
                 <br>
                 Once Idolized, cards can gain additional Pieces listed as <Idolized repl="[Idolized] Pieces"/>, or use
                 more powerful Skills. You can learn more from the <a href="/faq/general#sp_practice">FAQ about
