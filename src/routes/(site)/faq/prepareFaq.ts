@@ -118,13 +118,15 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
                     seenSubjects.push(subject);
                     cardsToLoad.push(subject);
                 } else {
-                    if (cardsToLoad.some(c => c === subject.from)) {
+                    if (seenSubjects.some(c => c === subject.from)) {
                         throw new Error("Duplicate subject for different FAQ sections. " + subject.from);
                     }
-                    if (cardsToLoad.some(c => c === subject.to)) {
+                    if (seenSubjects.some(c => c === subject.to)) {
                         throw new Error("Duplicate subject for different FAQ sections. " + subject.to);
                     }
+                    seenSubjects.push(subject.from);
                     cardsToLoad.push(subject.from);
+                    seenSubjects.push(subject.to);
                     cardsToLoad.push(subject.to);
                 }
             }

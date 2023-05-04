@@ -3168,6 +3168,140 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }
+    ],
+    "EX15": [
+        {
+            subjects: [{"from": "EX15-010", "to": "EX15-018"}],
+            seeAlso: ["/faq/general#members_on_stage"]
+        }, {
+            subjects: ["EX15-019"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `I'm the first player in turn order, and at the start of the match, I used {{link:EX15-037}}'s [Starter] Skill to ⟪ENTER⟫ a card. If I ⟪ENTER⟫ this Member on my first turn, can I perform a ⟪LIVE⟫ using the [Entry] Skill?`,
+                    answer: `No. [Starter] Skills are counted as part of match preparation, before any turns are played, so once your first turn starts, there have been no Members who ⟪ENTER⟫ed that turn.`
+                }
+            ]
+        }, {
+            subjects: ["EX15-020"],
+            seeAlso: ["/faq/general#members_on_stage"]
+        }, {
+            subjects: ["EX15-021"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#member_counting"]
+        }, {
+            subjects: ["EX15-022", "EX15-024", "EX15-026", "EX15-027"],
+            seeAlso: ["/faq/general#members_on_stage"]
+        }, {
+            subjects: ["EX15-023"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `I flipped the top card of my Deck, and it was a Member with an active Birthday Bonus Piece. Can I count that Piece?`,
+                    answer: `Yes. If the Birthday Bonus is active, you can count that Piece. If it is not active, the Piece does not count.<br>For example, if the card you flipped is {{link:LL13-005}}, it has two Pieces if the Birthday Bonus is active, and one Piece otherwise.`
+                }
+            ]
+        }, {
+            subjects: ["EX15-025"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `Can I use the [Entry] Skill if I have only one card left in my Deck?`,
+                    answer: `Yes. In case you have only one card in your Deck, you can show that card to everyone and add it to your Hand. The extra effect for having 3 or more Stars in total also still applies, so you can ⟪ENTER⟫ a Member if the one card from your Deck meets the requirement.`
+                }
+            ]
+        }, {
+            subjects: ["EX15-029"],
+            seeAlso: ["/faq/LL02#LL02-056"]
+        }, {
+            subjects: ["EX15-030"],
+            seeAlso: ["/faq/LL02#LL02-057"]
+        }, {
+            subjects: ["EX15-031"],
+            seeAlso: ["/faq/LL02#LL02-058"]
+        }, {
+            subjects: ["EX15-032"],
+            seeAlso: ["/faq/LL02#LL02-059"]
+        }, {
+            subjects: ["EX15-034"],
+            seeAlso: ["/faq/LL02#LL02-061"]
+        }, {
+            subjects: ["EX15-036"],
+            seeAlso: ["/faq/LL02#LL02-063"]
+        }, {
+            subjects: ["EX15-E02"],
+            seeAlso: ["/faq/LL03#LL03-065"]
+        }, {
+            subjects: ["EX15-E09"],
+            seeAlso: ["/faq/LL03#LL03-071"]
+        }, {
+            subjects: ["EX15-E10", "EX15-E16"],
+            seeAlso: ["/faq/general#members_on_stage"]
+        }, {
+            subjects: ["EX15-E11"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `What are "Base Live Points"?`,
+                    answer: `It refers to the large number in the top right of the Song card. If there are Bonus Live Points, as in "4 + 1", it only refers to the number on the left.`
+                }
+            ]
+        }, {
+            subjects: ["EX15-E12"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#member_counting"]
+        }, {
+            subjects: ["EX15-E13"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `If I perform a ⟪LIVE⟫ with this Song card, does this card count as a face-up Song card in my Set List?`,
+                    answer: `Yes. Until the ⟪LIVE⟫ has been successfully performed, the Song card remains in the Set List.`
+                }
+            ]
+        }, {
+            subjects: ["EX15-E14"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#member_counting"]
+        }, {
+            subjects: ["EX15-E15"],
+            seeAlso: ["/faq/general#members_on_stage"],
+            qa: [
+                {
+                    question: `If I perform a ⟪LIVE⟫ with this Song card, does this card count as a face-up Song card in my Set List?`,
+                    answer: `Yes. Until the ⟪LIVE⟫ has been successfully performed, the Song card remains in the Set List.`
+                }
+            ]
+        }, {
+            subjects: ["EX15-E17"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `When resolving the [Live Join] Skill, can I count [ALL] as [PURE]?`,
+                    answer: `No. You must have three or more [PURE], not counting [ALL].`
+                }
+            ]
+        }, {
+            subjects: ["EX15-E18"],
+            seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `When resolving the [Live Join] Skill, can I count [ALL] as [SMILE], [PURE] or [COOL]?`,
+                    answer: `No. You must have at least one [SMILE], at least one [PURE], and at least one [COOL], not counting [ALL].`
+                }
+            ]
+        }, {
+            subjects: [{"from": "EX15-037", "to": "EX15-054"}],
+            qa: [
+                {
+                    key: `explain`,
+                    question: `What does "[Starter][Entry]" mean?`,
+                    answer: `You can use this Skill both at the start of the match if you chose this Member as your starting Member, or when ⟪ENTER⟫ing this Member.`
+                },
+                {
+                    key: `order`,
+                    question: "If multiple players have starting Members with [Starter] Skills, in what order should the Skills be used?",
+                    answer: "Skills are used in the turn order decided at the start of the match. Once everyone's [Starter] Skills have been resolved, the first player in the turn order can begin."
+                }
+            ]
+        }
     ]
 };
 
