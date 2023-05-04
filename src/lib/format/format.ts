@@ -97,6 +97,9 @@ export function parseSkillToNodes(skill: string | Skill | null, lang: Language =
             nodes.unshift({secret, element: "i"});
             nodes.push({secret});
         }
+        apply(nodes, new RegExp("\\[("
+                + AttributeEnum.allForPieces.map(t => t.toPieceAttributeName(Language.ENG)).join("|") + ")] x (\\d+)"),
+            piecesMultiple);
         apply(nodes, /♪(Live Points \+[^♪]*?)♪/, highlightRedNoWrap.bind(undefined, "♪", "♪"));
         apply(nodes, /♪(Live Points -[^♪]*?)♪/, highlightBlueNoWrap.bind(undefined, "♪", "♪"));
         apply(nodes, /⟪([^⟪⟫]*?)⟫/, bold.bind(undefined, "⟪", "⟫"));
@@ -317,6 +320,34 @@ function abilityBoth(_match: RegExpExecArray): ParseNode[] {
 function abilityOne(match: RegExpExecArray): ParseNode[] {
     const rush = match[1] === "RUSH";
     return [{componentName: "Ability", props: {rush, live: !rush}}];
+}
+
+function piecesMultiple(match: RegExpExecArray): ParseNode[] {
+    const secret = Symbol();
+    return [
+        {secret, element: "span", class: `inline-block text-attribute-${match[1].toLowerCase()}`},
+        {
+            componentName: "Piece", props: {
+                attrId: AttributeEnum.fromPieceAttributeName(match[1]).id
+            }
+        },
+        {text: ` x ${match[2]}`},
+        {secret}
+    ];
+    return [
+        {
+            componentName: "PieceCount", props: {
+                pieces: {
+                    piecesSmile: match[1] === "SMILE" ? toNumWithFullwidth(match[2]) : 0,
+                    piecesPure: match[1] === "PURE" ? toNumWithFullwidth(match[2]) : 0,
+                    piecesCool: match[1] === "COOL" ? toNumWithFullwidth(match[2]) : 0,
+                    piecesAll: match[1] === "ALL" ? toNumWithFullwidth(match[2]) : 0
+                },
+                showZero: false,
+                isSongReq: false
+            }
+        }
+    ];
 }
 
 function pieces(splitter: string, match: RegExpExecArray): ParseNode[] {
