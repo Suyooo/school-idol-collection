@@ -95,7 +95,7 @@ function fillInfoObject(info: { [k: string]: string | null }, $: cheerio.Cheerio
     $(".status tr").each((_i, e) => {
         if ($("td", e).length > 0) {
             const k = $("th", e).text();
-            let x: string | null = $("td", e).text();
+            let x: string | null = $("td", e).find("br").replaceWith("\n").end().text();
             // normalize "none" values
             if (x === "―" || x === "－" || x === "─" || x === "-") x = null;
             info[k] = x;
@@ -130,6 +130,18 @@ function applyFixes(info: { [k: string]: string | null }, cardNo: string, set: s
     // Fix for some LL15 Member cards: They are Pair cards, but the Group Skill is not listed on either card
     else if (cardNo === "LL15-046" || cardNo === "LL15-047") {
         info["スキル"] += "\n<ペアスキル>【ライブ成功時】あなたのステージに「Aqours」のメンバーがいるなら、手札から【☆】を持たないメンバーを２人まで《登場》してよい。"
+    }
+
+    // Fix for LL16 HR/SECs: Idolized Pieces missing from Skill field
+    else if (type === CardType.MEMBER && set === "LL16") {
+        if (info["ID"] === "1731") info["スキル"] += "<覚醒>【オール】/【オール】";
+        if (info["ID"] === "1733") info["スキル"] += "<覚醒>【オール】";
+        if (info["ID"] === "1734") info["スキル"] += "<覚醒>【オール】";
+        if (info["ID"] === "1735") info["スキル"] += "<覚醒>【オール】/【オール】";
+        if (info["ID"] === "1736") info["スキル"] += "<覚醒>【オール】/【オール】/【オール】";
+        if (info["ID"] === "1737") info["スキル"] += "<覚醒>【オール】";
+        if (info["ID"] === "1738") info["スキル"] += "<覚醒>【オール】/【オール】/【オール】";
+        if (info["ID"] === "1739") info["スキル"] += "<覚醒>【オール】/【オール】";
     }
 
     // Fix for LL16 non-GR song cards: The ID listed on the site is incorrect
