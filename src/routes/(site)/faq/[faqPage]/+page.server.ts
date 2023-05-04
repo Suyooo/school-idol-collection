@@ -880,24 +880,24 @@ export const _data: { [key: string]: Faq } = {
             seeAlso: ["/faq/general#join_success_order"],
             qa: [
                 {
-                    question: `What if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
-                    answer: `As long as there is a {{red:"Dia"}} card with [SMILE] and a {{red:"Ruby"}} card with [SMILE] joining, the Any Piece requirement is reduced by three, regardless of what other Members join.`
+                    question: `Can the requirement be met if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
+                    answer: `Yes. As long as there is a {{red:"Dia"}} card with [SMILE] and a {{red:"Ruby"}} card with [SMILE] joining, the Any Piece requirement is reduced by 3, regardless of what other Members join.`
                 }
             ]
         }, {
             subjects: ["LL08-059"],
             qa: [
                 {
-                    question: `What if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
-                    answer: `As long as there is a {{red:"You"}} card with a Live Costume and a {{red:"Yoshiko"}} with a Live Costume joining, the Any Piece requirement is reduced by three, regardless of what other Members join.`
+                    question: `Can the requirement be met if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
+                    answer: `Yes. As long as there is a {{red:"You"}} card with a Live Costume and a {{red:"Yoshiko"}} with a Live Costume joining, the Any Piece requirement is reduced by 3, regardless of what other Members join.`
                 }
             ]
         }, {
             subjects: ["LL08-060"],
             qa: [
                 {
-                    question: `What if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
-                    answer: `As long as there is a "Chika" card with [RUSH] or [LIVE] and a "Kanan" card with [RUSH] or [LIVE] joining, the Any Piece requirement is reduced by three, regardless of what other Members join.`
+                    question: `Can the requirement be met if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
+                    answer: `Yes. As long as there is a "Chika" card with [RUSH] or [LIVE] and a "Kanan" card with [RUSH] or [LIVE] joining, the Any Piece requirement is reduced by 3, regardless of what other Members join.`
                 }
             ]
         }, {
@@ -1848,8 +1848,8 @@ export const _data: { [key: string]: Faq } = {
             seeAlso: ["/faq/general#join_success_order"],
             qa: [
                 {
-                    question: `What if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
-                    answer: `As long as there is a {{red:"Sarah"}} card with [COOL] and a {{red:"Leah"}} card with [COOL] joining, the Any Piece requirement is reduced by two, regardless of what other Members join.`
+                    question: `Can the requirement be met if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
+                    answer: `Yes. As long as there is a {{red:"Sarah"}} card with [COOL] and a {{red:"Leah"}} card with [COOL] joining, the Any Piece requirement is reduced by 2, regardless of what other Members join.`
                 }
             ]
         }, {
@@ -1895,13 +1895,13 @@ export const _data: { [key: string]: Faq } = {
             subjects: ["LL10-072"],
             seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"]
         }, {
-            subjects: [{"from": "LL10-073", "to": "LL10-090"}],
+            subjects: [{from: "LL10-073", to: "LL10-090"}],
             seeAlso: ["/faq/general#join_success_order", "/faq/general#flip_before_skills"]
         }
     ],
     "LL11": [
         {
-            subjects: [{"from": "LL11-039", "to": "LL11-047"}],
+            subjects: [{from: "LL11-039", to: "LL11-047"}],
             seeAlso: ["/faq/general#collection"]
         }, {
             subjects: ["LL11-043", "LL11-044", "LL11-046"],
@@ -2123,7 +2123,7 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }, {
-            subjects: [{"from": "LL11-074", "to": "LL11-091"}],
+            subjects: [{from: "LL11-074", to: "LL11-091"}],
             seeAlso: ["/faq/general#join_success_order", "/faq/general#skill_order_multiple_skills", "/faq/general#flip_before_skills"],
             qa: [
                 {
@@ -2135,7 +2135,7 @@ export const _data: { [key: string]: Faq } = {
     ],
     "LL12": [
         {
-            subjects: [{"from": "LL12-037", "to": "LL12-045"}],
+            subjects: [{from: "LL12-037", to: "LL12-045"}],
             seeAlso: ["/faq/general#members_on_stage", "/faq/general#collection", "/faq/general#more_faceup_songs"]
         },
         {
@@ -2162,7 +2162,7 @@ export const _data: { [key: string]: Faq } = {
                 {
                     key: `explain`,
                     question: `How exactly should I resolve the [Live Success] Skill?`,
-                    answer: `In this example, let's assume you have performed a ⟪LIVE⟫ and the Members who joined it have [SMILE] x2, [PURE] x2, [COOL] x2 and [ALL] x1 in total.<br>If the Song card used for the ⟪LIVE⟫ is {{link:LL07-057}}, there will be one [PURE] remaining when checking the Piece total against the requirement, so you can draw two cards.<br>If the Song card used for the ⟪LIVE⟫ is {{link:LL12-055}}, there will be two Pieces remaining when checking the Piece total against the requirement. Since this Song card has an Any Piece requirement, you can decide which Pieces should be considered used and which ones remain unused, so you can draw up to four cards.`
+                    answer: `In this example, let's assume you have performed a ⟪LIVE⟫ and the Members who joined it have [SMILE] x 2, [PURE] x 2, [COOL] x 2 and [ALL] x 1 in total.<br>If the Song card used for the ⟪LIVE⟫ is {{link:LL07-057}}, there will be one [PURE] remaining when checking the Piece total against the requirement, so you can draw two cards.<br>If the Song card used for the ⟪LIVE⟫ is {{link:LL12-055}}, there will be two Pieces remaining when checking the Piece total against the requirement. Since this Song card has an Any Piece requirement, you can decide which Pieces should be considered used and which ones remain unused, so you can draw up to four cards.`
                 },
                 {
                     key: `count`,
@@ -2221,12 +2221,12 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     key: `nowildcard`,
-                    question: `The Members joining this ⟪LIVE⟫ have [SMILE] x3 and [ALL] x1 in total. In this case, will this Member gain +[SMILE] from the first [Live Join] Skill?`,
+                    question: `The Members joining this ⟪LIVE⟫ have [SMILE] x 3 and [ALL] x 1 in total. In this case, will this Member gain +[SMILE] from the first [Live Join] Skill?`,
                     answer: `No. The first [Live Join] Skill requires four or more Pieces of one Attribute, [SMILE], [PURE], [COOL] or [ALL]. [ALL] cannot be used as a wildcard for other Attributes.`
                 },
                 {
                     key: `order`,
-                    question: `The other Members joining this ⟪LIVE⟫ have [SMILE] x3 in total. Can I first use the second [Live Join] Skill to have this Member gain +[SMILE], so I can then meet the requirement for the first [Live Join] Skill?`,
+                    question: `The other Members joining this ⟪LIVE⟫ have [SMILE] x 3 in total. Can I first use the second [Live Join] Skill to have this Member gain +[SMILE], so I can then meet the requirement for the first [Live Join] Skill?`,
                     answer: `No. If a Member has two or more Skills with the same icon, you must use them in the given order. In this case, the requirement of the first [Live Join] Skill fails.`
                 }
             ]
@@ -2349,7 +2349,7 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }, {
-            subjects: [{"from": "LL12-064", "to": "LL12-081"}],
+            subjects: [{from: "LL12-064", to: "LL12-081"}],
             seeAlso: ["/faq/general#stand_by", "/faq/general#skill_order_multiple_skills", "/faq/general#join_success_order"],
             qa: [
                 {
@@ -2361,7 +2361,7 @@ export const _data: { [key: string]: Faq } = {
     ],
     "LL13": [
         {
-            subjects: [{"from": "LL13-037", "to": "LL13-045"}],
+            subjects: [{from: "LL13-037", to: "LL13-045"}],
             seeAlso: ["/faq/general#stand_by"]
         }, {
             subjects: ["LL13-046"],
@@ -2706,10 +2706,10 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }, {
-            subjects: [{"from": "LL14-075", "to": "LL14-092"}],
+            subjects: [{from: "LL14-075", to: "LL14-092"}],
             qa: [
                 {
-                    question: `What does "[Starter]/[Entry]" mean?`,
+                    question: `What does "[Starter][Entry]" mean?`,
                     answer: `You can use this Skill both at the start of the match if you chose this Member as your starting Member, or when ⟪ENTER⟫ing this Member.`
                 }
             ]
@@ -2717,10 +2717,10 @@ export const _data: { [key: string]: Faq } = {
     ],
     "LL15": [
         {
-            subjects: [{"from": "LL15-028", "to": "LL15-036"}],
+            subjects: [{from: "LL15-028", to: "LL15-036"}],
             seeAlso: ["/faq/general#idolization", "/faq/general#member_facedown"]
         }, {
-            subjects: [{"from": "LL15-037", "to": "LL15-045"}],
+            subjects: [{from: "LL15-037", to: "LL15-045"}],
             seeAlso: ["/faq/general#members_on_stage", "/faq/general#join_success_order"]
         }, {
             subjects: ["LL15-046", "LL15-047"],
@@ -2764,7 +2764,7 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `What exactly does "only one type of Pieces" mean?`,
-                    answer: `Members that have only one type of Pieces would be, for example, a Member with [SMILE] x2 or a Member with [ALL] x1. They have either only [SMILE] or only [ALL] respectively, so they have "only one type of Pieces".<br>On the other hand, a Member with [SMILE] x1 and [ALL] x1, for example, would not could as a Member who has "only one type of Pieces", as there are two different attributes in their Pieces. ([ALL] cannot be used as a wildcard.)`
+                    answer: `Members that have only one type of Pieces would be, for example, a Member with [SMILE] x 2 or a Member with [ALL] x 1. They have either only [SMILE] or only [ALL] respectively, so they have "only one type of Pieces".<br>On the other hand, a Member with [SMILE] x 1 and [ALL] x 1, for example, would not could as a Member who has "only one type of Pieces", as there are two different attributes in their Pieces. ([ALL] cannot be used as a wildcard.)`
                 }
             ]
         }, {
@@ -2789,11 +2789,11 @@ export const _data: { [key: string]: Faq } = {
             subjects: ["LL15-065"],
             seeAlso: ["/faq/general#join_success_order"]
         }, {
-            subjects: [{"from": "LL15-066", "to": "LL15-076"}],
+            subjects: [{from: "LL15-066", to: "LL15-076"}],
             qa: [
                 {
                     key: `trigger`,
-                    question: `What does "[Starter]/[Entry]" mean?`,
+                    question: `What does "[Starter][Entry]" mean?`,
                     answer: `You can use this Skill both at the start of the match if you chose this Member as your starting Member, or when ⟪ENTER⟫ing this Member.`
                 },
                 {
@@ -2914,7 +2914,7 @@ export const _data: { [key: string]: Faq } = {
                 },
                 {
                     key: `extra`,
-                    question: `Do {{red:"Ruby"}} cards that have one Piece and Birthday Bonus Piece, like {{link:LL15-018}}, or {{red:"Ruby"}} cards that have one Piece and have Idolized Pieces, like {{link:LL15-056}}, meet the "a {{red:"Ruby"}} with exactly one Piece" requirement?`,
+                    question: `Do {{red:"Ruby"}} cards that have one Piece and a Birthday Bonus Piece, like {{link:LL15-018}}, or {{red:"Ruby"}} cards that have one Piece and have Idolized Pieces, like {{link:LL15-056}}, meet the "a {{red:"Ruby"}} with exactly one Piece" requirement?`,
                     answer: `In both cases, the requirement is met if the extra Pieces are not active. If the Birthday Bonus is active or the Member is Idolized, the card will have two Pieces, and the requirement is not met.`
                 },
                 {
@@ -2989,6 +2989,182 @@ export const _data: { [key: string]: Faq } = {
                 {
                     question: `What Attribute does this Song card count as?`,
                     answer: `Treat these cards' Attributes as the same as the corresponding M Rarity card with the same ID.`
+                }
+            ]
+        }
+    ],
+    "LL17": [
+        {
+            subjects: ["LL17-046", "LL17-076"],
+            qa: [
+                {
+                    question: `When I ⟪ENTER⟫ed this Member and ⟪SCOUT⟫ed, I already had four or more cards in my Hand. Even if I don't draw any cards, can I ⟪ENTER⟫ the top card of my Deck?`,
+                    answer: `Yes. Since the number of cards you drew from the ⟪ENTER⟫ was two or less, you can ⟪ENTER⟫ the top card of your Deck.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-047", "LL17-077"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#collection"],
+            qa: [
+                {
+                    key: `look`,
+                    question: `After bringing a face-down Song card to my Collection, am I allowed to look at it to check which Song card it is?`,
+                    answer: `Yes. You are allowed to check the cards in your Collection at any time, and you don't have to show it to the other players.`
+                },
+                {
+                    key: `nofaceup`,
+                    question: `If I bring a face-up Song card to my Collection, I will have zero face-up Song cards in my Set List. Can I still perform ⟪LIVE⟫s like that?`,
+                    answer: `No. If there are no face-up Song cards in your Set List, you cannot perform ⟪LIVE⟫s. You are not allowed to flip a face-down Song card face-up if you choose a face-up Song card to bring to your Collection. As such, unless you have a Skill that allows you to turn a face-down Song card face-up again, you should avoid removing your last Song card from your Set List.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-048", "LL17-078"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `How can I use this Member's [Live Join] Skill?`,
+                    answer: `You can use this Member's [RUSH] to ⟪ENTER⟫ a Member with [LIVE], or a Member with a Skill that allows you perform a ⟪LIVE⟫, like {{link:EX14-030}}. If you have this Member join that ⟪LIVE⟫, you can activate the [Live Join] Skill.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-049", "LL17-079"],
+            seeAlso: ["/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL17-050", "LL17-080"],
+            seeAlso: ["/faq/general#stand_by"],
+            qa: [
+                {
+                    question: `How exactly should I resolve the [Entry] Skill?`,
+                    answer: `If you return one other Member on Stand-By on your Stage to the bottom of your Deck, you may ⟪ENTER⟫ a Member, either from your Hand or from the top of your Deck. If that Member you ⟪ENTER⟫ed this way has a Live Costume, draw two cards.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-051", "LL17-081"],
+            qa: [
+                {
+                    key: `bonus`,
+                    question: `Does a card with one Piece and a Birthday Bonus Piece, like {{link:LL15-015}}, meet the "exactly one Piece" requirement?`,
+                    answer: `The requirement is met if the Birthday Bonus is not active. If the Birthday Bonus is active, the card will have two Pieces, and the requirement is not met.`
+                },
+                {
+                    key: `idolizable`,
+                    question: `Does a card with one Piece and Idolized Pieces, like {{link:LL16-051}}, meet the "exactly one Piece" requirement?`,
+                    answer: `Yes. Members cannot be Idolized while they are in your Hand, so the Idolized Pieces are not active and the requirement is met.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-052", "LL17-082"],
+            seeAlso: ["/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL17-053", "LL17-083"],
+            seeAlso: ["/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL17-054", "LL17-084"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `What does "[Entry][Live Success]" mean?`,
+                    answer: `You can use this Skill both when ⟪ENTER⟫ing this Member, and when this Member has joined a successful ⟪LIVE⟫.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-055", {from: "LL17-085", to: "LL17-087"}],
+            qa: [
+                {
+                    question: `A Member with [RUSH/LIVE], like {{link:LL16-064}}, is joining a ⟪LIVE⟫ with this Song card. I chose to use [RUSH] when ⟪ENTER⟫ing that Member, but can it still meet both the "Member with [RUSH]" and the "Member with [LIVE]" requirements?`,
+                    answer: `Yes. If a Member has both [RUSH] and [LIVE], the requirements of both Skills are met, and the Any Piece requirement will be reduced by 4 in total. It doesn't matter whether you chose to use [RUSH] or [LIVE] when ⟪ENTER⟫ing that Member.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-057"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `What does "you may ⟪ENTER⟫ one Member without Stars for each member of {{red:"Saint Snow"}}" mean?`,
+                    answer: `You may ⟪ENTER⟫ up to one {{red:"Sarah"}} and up to one {{red:"Leah"}}. That means you can ⟪ENTER⟫ both, or just one, either {{red:"Sarah"}} or {{red:"Leah"}}.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-058"],
+            seeAlso: ["/faq/general#join_success_order"]
+        }, {
+            subjects: ["LL17-059"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#flip_before_skills", "/faq/general#muse_and_aqours_song_cards"],
+            qa: [
+                {
+                    question: `Before using this card's Skill, I flipped a Song card face-down using a Skill like {{link:LL12-048}}'s [Entry] Skill, and separated it from the other face-down Song cards to remember that I know what that card is. Do I have to shuffle that card with the other face-down Song cards when resolving this card's Skill?`,
+                    answer: `Yes. You must shuffle all face-down Song cards, including those that were flipped face-down by other Skills.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-060"],
+            qa: [
+                {
+                    question: `Can the requirement met if Members other than {{red:"Hanamaru"}} and {{red:"Ruby"}} join the ⟪LIVE⟫? Similarly, if other {{red:"Hanamaru"}} or {{red:"Ruby"}} cards that don't have the same amount of Stars join the ⟪LIVE⟫ together with the ones that do, is the requirement met?`,
+                    answer: `Yes. In both cases, the requirement can be met. As long as there is a {{red:"Hanamaru"}} card and a {{red:"Ruby"}} card who have the same amount of Stars joining, the Any Piece requirement is reduced by 3, regardless of what other Members join.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-061"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `Can the requirement be met if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
+                    answer: `Yes. As long as there is a {{red:"Kanan"}} card with [COOL] and a {{red:"Mari"}} card with [COOL] joining, the Any Piece requirement is reduced by 3, regardless of what other Members join.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-062"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    key: `explain`,
+                    question: `How exactly should this Skill be resolved?`,
+                    answer: `If the {{red:"Riko"}} card and the {{red:"You"}} card joining this ⟪LIVE⟫ do not share any Pieces, the requirement is met.<br>For example, if the {{red:"Riko"}} card has [SMILE][COOL] and the {{red:"You"}} card has [PURE][ALL], the requirement is met.<br>However, if the {{red:"Riko"}} card has [COOL][ALL] and the {{red:"You"}} card has [PURE][ALL], the requirement is not met, as they share [ALL]. You cannot use [ALL] as a wildcard for another Attribute.`
+                },
+                {
+                    key: `extra`,
+                    question: `What if the {{red:"Riko"}} card or the {{red:"You"}} card joining this ⟪LIVE⟫ have Birthday Bonus Pieces or [Idolized] Pieces?`,
+                    answer: `In both cases, you must include the extra Pieces in the requirement check if they are active. Otherwise, you can ignore them.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-063"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#flip_before_skills"],
+            qa: [
+                {
+                    question: `While resolving the [Live Success] Skill, the Song card I flipped face-up was {{link:LL12-056}}. Can I draw cards using that Song card's [Auto] Skill before I continue with ⟪ENTER⟫ing a Member from my Hand?`,
+                    answer: `No. You can't use another Skill until the current Skill is fully resolved.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-064"],
+            seeAlso: ["/faq/general#join_success_order", "/faq/general#live_join_pieces"]
+        }, {
+            subjects: ["LL17-065"],
+            seeAlso: ["/faq/general#member_counting"],
+            qa: [
+                {
+                    question: `Can the requirement be met if Members other than the ones mentioned in the Skill join the ⟪LIVE⟫?`,
+                    answer: `Yes. As long as there are at least two {{red:"Aqours"}} cards joining, the Any Piece requirement is reduced by 2, even if other Members are part {{red:"µ's"}} or {{red:"Saint Snow"}}.`
+                }
+            ]
+        }, {
+            subjects: ["LL17-066"],
+            seeAlso: ["/faq/general#join_success_order"],
+            qa: [
+                {
+                    question: `I am performing a ⟪LIVE⟫ with this Song card, and the Members joining it have [SMILE] x 6 and [ALL] x 1 in total. Does the Any Piece requirement get reduced by 5?`,
+                    answer: `No. The Skill of this Song card requires the Members joining the ⟪LIVE⟫ to only have Pieces of one Attribute, [SMILE] [PURE] [COOL] or [ALL]. You cannot use [ALL] as a wildcard for another Attribute.`
+                }
+            ]
+        }, {
+            subjects: [{from: "LL17-067", to: "LL17-075"}],
+            seeAlso: ["/faq/general#collection"],
+            qa: [
+                {
+                    question: `What does "[Starter][Entry]" mean?`,
+                    answer: `You can use this Skill both at the start of the match if you chose this Member as your starting Member, or when ⟪ENTER⟫ing this Member.`
                 }
             ]
         }
