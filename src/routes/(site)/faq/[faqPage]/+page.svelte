@@ -11,10 +11,14 @@
     $: ({cards, sections} = $page.data);
 </script>
 
-<svelte:head><title>How To Play → {$page.params.faqPage} FAQ &bull; SIC</title></svelte:head>
+<svelte:head>
+    <title>
+        How To Play → {$page.params.faqPage === "other" ? "Other Sets" : $page.params.faqPage} FAQ &bull; SIC
+    </title>
+</svelte:head>
 
 <div class="content">
-    <h3>{$page.params.faqPage} Frequently Asked Questions</h3>
+    <h3>{$page.params.faqPage === "other" ? "Other Sets" : $page.params.faqPage} Frequently Asked Questions</h3>
     <div class="panel">
         <div class="panel-inner">
             {#each sections as section}

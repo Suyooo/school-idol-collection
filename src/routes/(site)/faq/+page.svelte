@@ -45,13 +45,11 @@
                 <li><a href="/faq/LL15">LL15 Frequently Asked Questions</a></li>
                 <li><a href="/faq/LL16">LL16 Frequently Asked Questions</a></li>
                 <li><a href="/faq/LL17">LL17 Frequently Asked Questions</a></li>
-                <li class="mt-4"><a href="/faq/EX01">EX01 (µ's Trial Set) Frequently Asked Questions</a></li>
-                <li><a href="/faq/EX04">EX04 (Sparkly Cards & Clear Holder Set 1) Frequently Asked Questions</a></li>
-                <li><a href="/faq/EX05">EX05 (SIF Fes 2017 µ's Special Pack) Frequently Asked Questions</a></li>
+                <li class="mt-4"><a href="/faq/EX05">EX05 (SIF Fes 2017 µ's Special Pack) Frequently Asked Questions</a></li>
                 <li><a href="/faq/EX10">EX10 (Acrylic Keyholder Set) Frequently Asked Questions</a></li>
                 <li><a href="/faq/EX11">EX11 (SIF Fes 2018 µ's Special Pack) Frequently Asked Questions</a></li>
                 <li><a href="/faq/EX12">EX12 (SIF Honor Student Scouting Box) Frequently Asked Questions</a></li>
-                <li class="mt-4"><a href="/faq/PR">Promo Cards Frequently Asked Questions</a></li>
+                <li class="mt-4"><a href="/faq/other">Other Sets Frequently Asked Questions (EX01, EX04, Promo Cards)</a></li>
             </ul>
         </div>
     </div>

@@ -3302,7 +3302,36 @@ export const _data: { [key: string]: Faq } = {
                 }
             ]
         }
+    ],
+    "other": [
+        {
+            subjects: ["EX01-033"],
+            seeAlso: ["/faq/general#member_counting"]
+        },
+        {
+            subjects: [{"from": "EX04-001", "to": "EX04-009"}],
+            seeAlso: ["/faq/general#members_on_stage"]
+        }, {
+            subjects: ["PR-011"],
+            seeAlso: ["/faq/general#member_counting"]
+        }, {
+            subjects: ["PR-016", "PR-020", "PR-021"],
+            seeAlso: ["/faq/general#more_less"]
+        }, {
+            subjects: ["PR-022"],
+            seeAlso: ["/faq/general#more_less"]
+        }, {
+            subjects: ["PR-032"],
+            seeAlso: ["/faq/general#member_counting"]
+        }, {
+            subjects: [{"from": "PR-070", "to": "PR-078"}],
+            seeAlso: ["/faq/general#members_on_stage"]
+        }, {
+            subjects: ["PR-106", "PR-111", "PR-114"],
+            seeAlso: ["/faq/general#member_counting"]
+        }
     ]
+
 };
 
 export const load: PageServerLoad = (async ({params, locals}) => {

@@ -13,7 +13,7 @@ export const POST: RequestHandler = (async ({locals, request}) => {
     }
 
     const nextDisplayOrderCounters: { [cardId: number]: number } = {}
-    locals.DB.sequelize.transaction(async transaction => {
+    await locals.DB.sequelize.transaction(async transaction => {
         for (const section of _data[faqName]) {
             if (section.qa === undefined && section.seeAlso?.length === 1
                 && section.seeAlso[0].split("#").at(-1)!.match(/(LL\d\d|EX\d\d|PR)-\d\d\d/)) {
@@ -28,11 +28,12 @@ export const POST: RequestHandler = (async ({locals, request}) => {
                     allSubjects.push(subject);
                 } else {
                     let cur: string | null = subject.from;
+                    const startSet = cur.split("-")[0];
                     allSubjects.push(cur);
                     while (cur !== subject.to) {
                         cur = (await locals.DB.Card
                             .withScope(["viewCardNoOnly", {method: ["filterAfter", cur]}]).findOne())?.cardNo ?? null;
-                        if (cur === null || cur.split("-")[0] !== faqName) {
+                        if (cur === null || cur.split("-")[0] !== startSet) {
                             throw error(500, {message: `Range ${subject.from} to ${subject.to} failed.`});
                         }
                         allSubjects.push(cur);
