@@ -8,7 +8,9 @@
 
     export let data: PageData;
     // Not reactive to stop inputs getting reset on every change. There should be no links from this route to itself
-    let {isNew, patternId, triggers, groupTypeIds, example, regex, template} = data;
+    let {isNew, patternId, triggers, groupTypeIds, example, regex, template} = <{
+        isNew: boolean, patternId: number, triggers: number, groupTypeIds: number[], example: string, regex: string, template: string
+    }>data;
 
     let lastMatch: RegExpExecArray = <RegExpExecArray>[""], lastSuccessful: boolean = false, result: string = "",
         regexTextarea: HTMLTextAreaElement, templateTextarea: HTMLTextAreaElement, disabled: boolean,
@@ -57,7 +59,7 @@
         if (!lastSuccessful || disabled) return;
         disabled = true;
         const sendData = {
-            triggers, regex, template, groupTypeIds
+            triggers, regex, template, groupTypeIds: groupTypeIds.slice(0, lastMatch.length - 1)
         };
 
         fetch(`/admin/pattern/edit/${isNew ? "new" : patternId}`, {

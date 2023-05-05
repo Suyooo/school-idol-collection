@@ -33,7 +33,7 @@ export const _data: Faq = [
             {
                 "key": "members_on_stage",
                 "question": "If a Skill says \"Members on Stage\", which Members are counted?",
-                "answer": "This includes both waiting Members and Members who are used for Lives. You can also just remember that it means \"all Members outside your Deck and Hand\"."
+                "answer": "This includes both waiting Members and Members who are Live on your Stage. You can also just remember that it means \"all Members outside your Deck and Hand\"."
             },
             {
                 "key": "member_counting",
@@ -148,7 +148,7 @@ export const _data: Faq = [
             {
                 "key": "skill_order_same_skill",
                 "question": "If there are multiple things to do for one Skill, can I do them in any order?",
-                "answer": "No. Make sure to perform everything in the order written. For example, if you activate the [Entry] Skill of {{link:LL05-046}} with no cards in your Hand and no Members used for Lives, you must draw cards before you perform a ⟪LIVE⟫."
+                "answer": "No. Make sure to perform everything in the order written. For example, if you activate the [Entry] Skill of {{link:LL05-046}} with no cards in your Hand and no Members that are Live on your Stage, you must draw cards before you perform a ⟪LIVE⟫."
             },
             {
                 "key": "skill_order_multiple_skills",

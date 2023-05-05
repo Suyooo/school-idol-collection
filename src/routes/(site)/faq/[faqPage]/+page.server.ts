@@ -368,7 +368,7 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: "There are three conditions and effects each, can I use multiple effects of the [Entry] Skill if the respective conditions are met?",
-                    answer: "Yes. For example, if you have no cards in your Hand and no Song cards used for Lives when this card is ⟪ENTER⟫ed, you may both draw three cards and perform a ⟪LIVE⟫ with this card."
+                    answer: "Yes. For example, if you have no cards in your Hand and no Song cards that are Live on your Stage when this card is ⟪ENTER⟫ed, you may both draw three cards and perform a ⟪LIVE⟫ with this card."
                 }
             ]
         }, {
@@ -592,7 +592,7 @@ export const _data: { [key: string]: Faq } = {
                 {
                     key: "lowest",
                     question: "What does \"Member with the lowest number of cards in this ⟪LIVE⟫\" mean?",
-                    answer: "Count how many cards of each differently named Member you have used for this ⟪LIVE⟫.<br>For example, if there are three {{red:\"Chika\"}} cards, two {{red:\"You\"}} cards, and one {{red:\"Riko\"}} card joining a ⟪LIVE⟫, {{red:\"Riko\"}} is the Member with the lowest number of cards in this ⟪LIVE⟫."
+                    answer: "Count how many cards of each differently named Member have joined this ⟪LIVE⟫.<br>For example, if there are three {{red:\"Chika\"}} cards, two {{red:\"You\"}} cards, and one {{red:\"Riko\"}} card joining a ⟪LIVE⟫, {{red:\"Riko\"}} is the Member with the lowest number of cards in this ⟪LIVE⟫."
                 }, {
                     key: "none",
                     question: "When choosing a \"Member with the lowest number of cards in this ⟪LIVE⟫\", can I pick a Member with no cards in this ⟪LIVE⟫?",
@@ -2413,8 +2413,8 @@ export const _data: { [key: string]: Faq } = {
             seeAlso: ["/faq/general#flip_before_skills"],
             qa: [
                 {
-                    question: `There are no Members with three Stars used for Lives on any player's Stage. If I perform a ⟪LIVE⟫ with this Member and a Member with three Stars, can I draw two cards using this Member's [Live Success] Skill?`,
-                    answer: `Yes. At the time this Member's [Live Success] Skill is resolved, the ⟪LIVE⟫ has been performed, and there is a Member with three Stars used for a Live, so the requirement is met.`
+                    question: `There are no Members with three Stars that are Live on any player's Stage. If I perform a ⟪LIVE⟫ with this Member and a Member with three Stars, can I draw two cards using this Member's [Live Success] Skill?`,
+                    answer: `Yes. At the time this Member's [Live Success] Skill is resolved, the ⟪LIVE⟫ has been performed, and now there is a Member with three Stars that is Live, so the requirement is met.`
                 }
             ]
         }, {

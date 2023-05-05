@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-    <title>Admin → Cards → Create FAQ Links &bull; SIC</title>
+    <title>Admin → Cards → FAQ Links &bull; SIC</title>
 </svelte:head>
 
 <div class="content">

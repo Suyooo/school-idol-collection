@@ -19,6 +19,7 @@
             <table>
                 <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Triggers</th>
                     <th>Regex</th>
                     <th>Template</th>
@@ -33,6 +34,7 @@
                 {/if}
                 {#each list as pattern}
                     <tr>
+                        <td>{pattern.id}</td>
                         <td>
                             {#each TriggerEnum.bitmaskToTriggers(pattern.triggers) as trigger}
                                 <TriggerComponent {trigger}/>

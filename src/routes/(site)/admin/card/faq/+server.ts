@@ -1,9 +1,9 @@
 import {cardTitle} from "$lib/card/strings.js";
 import type Card from "$models/card/card.js";
 import {Op} from "@sequelize/core";
-import {_data} from "../[faqPage]/+page.server.js";
+import {_data} from "../../../faq/[faqPage]/+page.server.js";
 import {error, json} from "@sveltejs/kit";
-import {getFaqLinkLabel, getKey, getKeyPrefix, getLinkedCards} from "../prepareFaq.js";
+import {getFaqLinkLabel, getKey, getKeyPrefix, getLinkedCards} from "../../../faq/prepareFaq.js";
 import type {RequestHandler} from "./$types.js";
 
 export const POST: RequestHandler = (async ({locals, request}) => {
