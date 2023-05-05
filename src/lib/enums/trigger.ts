@@ -69,4 +69,19 @@ export default class TriggerEnum {
         if (a === undefined) throw new EnumError("Trigger", "name", s);
         else return a;
     }
+
+    static triggersToBitmask(triggers: TriggerEnum[]): number {
+        return triggers.map(t => 1 << t.id).reduce((acc, i) => acc + i, 0);
+    }
+
+    static bitmaskToTriggers(triggerBitmask: number): TriggerEnum[] {
+        const triggers: TriggerEnum[] = [];
+        let i: number = 0;
+        while (triggerBitmask > 0 && i < 8) {
+            if ((triggerBitmask & 1) == 1) triggers.push(TriggerEnum.fromId(i));
+            i++;
+            triggerBitmask = triggerBitmask >> 1;
+        }
+        return triggers;
+    }
 }

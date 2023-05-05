@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-    <title>Pattern → Untranslated List &bull; SIC</title>
+    <title>Admin → Pattern → Untranslated List &bull; SIC</title>
 </svelte:head>
 
 <div class="content">
@@ -37,7 +37,7 @@
                             <th><a href="/card/{a.firstCardNo}/">Group #{a.groupId}</a></th>
                         {/if}
                         <td>{a.skillJpn}</td>
-                        <td><a href="/pattern/edit/new/{a.skillId}">Create</a></td>
+                        <td><a href="/admin/pattern/edit/new/{a.skillId}">Create</a></td>
                     </tr>
                 {/each}
                 </tbody>

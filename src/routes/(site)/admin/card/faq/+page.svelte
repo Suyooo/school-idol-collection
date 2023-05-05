@@ -7,7 +7,7 @@
         if (disabled) return;
         disabled = true;
 
-        fetch(`/faq/apply`, {
+        fetch(`/admin/card/faq`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({faqName})
@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-    <title>FAQ → Apply &bull; SIC</title>
+    <title>Admin → Cards → Create FAQ Links &bull; SIC</title>
 </svelte:head>
 
 <div class="content">

@@ -26,19 +26,11 @@ export default class TranslationPattern extends Model {
     declare triggers: number;
 
     get triggerArray(): TriggerEnum[] {
-        const triggers: TriggerEnum[] = [];
-        let triggerBitmask: number = this.triggers;
-        let i: number = 0;
-        while (triggerBitmask > 0 && i < 8) {
-            if ((triggerBitmask & 1) == 1) triggers.push(TriggerEnum.fromId(i));
-            i++;
-            triggerBitmask = triggerBitmask >> 1;
-        }
-        return triggers;
+        return TriggerEnum.bitmaskToTriggers(this.triggers);
     }
 
     set triggerArray(triggers: TriggerEnum[]) {
-        this.triggers = triggers.map(t => 1 << t.id).reduce((acc, i) => acc + i, 0);
+        this.triggers = TriggerEnum.triggersToBitmask(triggers);
     }
 
     @Attribute({

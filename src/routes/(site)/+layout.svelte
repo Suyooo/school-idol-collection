@@ -80,6 +80,9 @@
             </div>
         </div>
         <form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
+            {#if import.meta.env.DEV}
+                <Button accent classes="!rounded-full mr-4" href="/admin" label="Admin">Admin</Button>
+            {/if}
             <input placeholder="Quick Search (Card No., ID or Name)" bind:value={quicksearch}
                 aria-label="Quick Search. Enter a card number, ID or name" disabled={searching}>
             <button class:text-primary-400={quicksearch === ""} disabled={quicksearch === "" || searching}
@@ -124,7 +127,7 @@
                     @apply flex flex-wrap flex-col sm:flex-row items-center gap-x-4 gap-y-2;
 
                     & a {
-                        @apply hidden px-6 py-2 bg-primary-500 text-white rounded-full no-underline whitespace-nowrap;
+                        @apply hidden px-6 py-2 bg-primary-500 hover:bg-primary-400 text-white rounded-full no-underline whitespace-nowrap;
 
                         &:nth-child(-n+1) {
                             @apply md:block;

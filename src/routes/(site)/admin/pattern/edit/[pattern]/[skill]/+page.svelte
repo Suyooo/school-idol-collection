@@ -60,7 +60,7 @@
             triggers, regex, template, groupTypeIds
         };
 
-        fetch(`/pattern/edit/${isNew ? "new" : patternId}`, {
+        fetch(`/admin/pattern/edit/${isNew ? "new" : patternId}`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(sendData)
@@ -69,7 +69,7 @@
                 if (res.status !== 200) {
                     throw new Error(res.status + " " + res.statusText);
                 }
-                res.json().then(j => goto(`/pattern/apply/${j.patternId}`));
+                res.json().then(j => goto(`/admin/pattern/apply/${j.patternId}`));
             })
             .catch((e) => {
                 alert("Failed to edit: " + e.message);
@@ -81,7 +81,7 @@
 </script>
 
 <svelte:head>
-    <title>Pattern → Edit &bull; SIC</title>
+    <title>Admin → Pattern → Edit &bull; SIC</title>
 </svelte:head>
 
 <div class="content">

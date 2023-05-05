@@ -7,7 +7,7 @@
         if (disabled) return;
         disabled = true;
 
-        fetch(`/card/add`, {
+        fetch(`/admin/card/add`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({cardNo})
@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-    <title>Card → Add &bull; SIC</title>
+    <title>Admin → Cards → Download &bull; SIC</title>
 </svelte:head>
 
 <div class="content">

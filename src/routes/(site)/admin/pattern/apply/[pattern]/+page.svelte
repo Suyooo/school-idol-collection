@@ -22,7 +22,7 @@
             return;
         }
 
-        fetch(`/pattern/apply/${id}`, {
+        fetch(`/admin/pattern/apply/${id}`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(applyTo)
@@ -43,7 +43,7 @@
 </script>
 
 <svelte:head>
-    <title>Pattern → Apply &bull; SIC</title>
+    <title>Admin → Pattern → Apply &bull; SIC</title>
 </svelte:head>
 
 <div class="content">
@@ -84,7 +84,7 @@
             </table>
 
             <div class="flex items-center justify-between mt-2 w-full">
-                <Button label="Edit" accent href="/pattern/edit/{id}/{applicable[0].skillId}/">Edit</Button>
+                <Button label="Edit" accent href="/admin/pattern/edit/{id}/{applicable[0].skillId}/">Edit</Button>
                 <Button label="Apply" accent on:click={submit} {disabled}>Apply</Button>
             </div>
         </div>
