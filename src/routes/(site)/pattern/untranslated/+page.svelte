@@ -26,7 +26,7 @@
                 <tbody>
                 {#if untranslated.length === 0}
                     <tr>
-                        <td colspan="3">all translated :)</td>
+                        <td colspan="3">No untranslated Skills left :)</td>
                     </tr>
                 {/if}
                 {#each untranslated as a}

@@ -99,7 +99,7 @@ export class CardBase extends Model {
     declare group: GroupID;
 
     @HasMany((s) => s.models.Skill, {
-        as: "skills", foreignKey: "cardNo", inverse: {as: "card"}
+        as: "skills", foreignKey: {name: "cardNo", onDelete: "CASCADE"}, inverse: {as: "card"}
     })
     declare skills: Skill[];
 

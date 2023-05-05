@@ -1746,7 +1746,7 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `If I have no face-down cards in my Set List, can I still choose the "flip one face-down Song card in your Set List face-up" effect?`,
-                    answer: `Yes. In that case, the Skill would be resolved without anything happening.<br>Similarly, you can choose to draw two cards even if you have no cards or only one card in your Deck, or choose to ⟪ENTER⟫ a Member without Stars and with a Live Costume from your Hand even if you have no matching Member on your Hand.`
+                    answer: `Yes. In that case, the Skill would be resolved without anything happening.<br>Similarly, you can choose to draw two cards even if you have no cards or only one card in your Deck, or choose to ⟪ENTER⟫ a Member without Stars and with a Live Costume from your Hand, even if you have no matching Member on your Hand.`
                 }
             ]
         }, {

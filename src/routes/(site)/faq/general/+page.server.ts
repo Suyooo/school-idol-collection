@@ -43,7 +43,7 @@ export const _data: Faq = [
             {
                 "key": "deck_runs_out",
                 "question": "During a match, I drew a card and my Deck ran out. What happens now?",
-                "answer": "If your Deck runs out, keep playing! Do your best to reach the Live Points goal with the Members on your Stage and in your Hand! If you're unable to ⟪ENTER⟫ a card, ⟪SCOUT⟫ or perform a ⟪LIVE⟫, you must pass your turn. If every player had to pass in a round, the match ends in a draw for the remaining players."
+                "answer": "If your Deck runs out, keep playing! Do your best to reach the Live Points goal with the Members on your Stage and in your Hand! If you're unable to ⟪ENTER⟫ a card, ⟪SCOUT⟫ or perform a ⟪LIVE⟫, you must pass your turn. If every player had to pass in the same round, the match ends in a draw for the remaining players."
             },
             {
                 "key": "collection",

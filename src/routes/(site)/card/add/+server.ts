@@ -485,7 +485,7 @@ async function importCard(info: { [k: string]: string | null }, DB: DBObject, ca
         card.backOrientation = await checkImageOrientation(orientationCheckCardNo, "back");
 
         // Add the card to the database
-        await DB.Card.destroy({where: {cardNo}});
+        await DB.Card.destroy({where: {cardNo}, transaction});
         await DB.Card.create(card, {
             include: [
                 {

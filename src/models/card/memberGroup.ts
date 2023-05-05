@@ -45,7 +45,7 @@ export default class CardMemberGroup extends Model {
     declare expectedMemberIds: string;
 
     @HasMany((s) => s.models.Skill, {
-        as: "skills", foreignKey: "groupId", inverse: {as: "group"}
+        as: "skills", foreignKey: {name: "groupId", onDelete: "CASCADE"}, inverse: {as: "group"}
     })
     declare skills: Skill[];
 }
