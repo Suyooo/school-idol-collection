@@ -36,9 +36,13 @@
                     <tr>
                         <td>{pattern.id}</td>
                         <td>
-                            {#each TriggerEnum.bitmaskToTriggers(pattern.triggers) as trigger}
-                                <TriggerComponent {trigger}/>
-                            {/each}
+                            {#if pattern.triggers === 0}
+                                <i>Flavour</i>
+                            {:else}
+                                {#each TriggerEnum.bitmaskToTriggers(pattern.triggers) as trigger}
+                                    <TriggerComponent {trigger}/>
+                                {/each}
+                            {/if}
                         </td>
                         <td>{pattern.regex}</td>
                         <td>{pattern.template}</td>

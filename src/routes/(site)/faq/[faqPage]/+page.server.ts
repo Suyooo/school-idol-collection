@@ -725,8 +725,8 @@ export const _data: { [key: string]: Faq } = {
                     answer: "No. The Skill of this Song card changes all [SMILE][PURE][COOL] of the Members joining this ⟪LIVE⟫ into [ALL] before [Live Join] Skills are resolved. That means that in this case, {{red:\"Mari\"}} does not gain +[ALL]."
                 }, {
                     key: "later",
-                    question: "A member who joined a ⟪LIVE⟫ with this Song card gained +[SMILE] through a [Live Join] Skill. If the requirement for this card's Skill is met, does that Piece also become [ALL] ?",
-                    answer: "Yes. Pieces gained through Skills become [ALL], too."
+                    question: "A member who joined a ⟪LIVE⟫ with this Song card gained +[SMILE] through a [Live Join] Skill. If the requirement for this card's Skill is met, will that Piece also be treated as [ALL] ?",
+                    answer: "Yes. Pieces gained through Skills are treated as [ALL], too."
                 }, {
                     key: "other",
                     question: "What happens if non-{{red:\"AZALEA\"}} Members are participating in this ⟪LIVE⟫?",
@@ -1426,7 +1426,7 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `This Member has [COOL][COOL], and I have used three Song cards for Lives. What Pieces will the Member have in this case?`,
-                    answer: `The Member will have [ALL][ALL]. (Even if you have more Song cards than [COOL], only [COOL] can become [ALL].)`
+                    answer: `The Member will have [ALL][ALL]. (Even if you have more Song cards than [COOL], you can't treat [COOL] Pieces that don't exist as [ALL].)`
                 }
             ]
         }, {
