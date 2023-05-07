@@ -20,6 +20,7 @@
 		"postcss-nesting": "^10.2.0",
 		"probe-image-size": "^7.2.3",
 		"svelte": "^3.54.0",
+		"svelte-agnostic-draggable": "^0.1.13",
 		"svelte-check": "^2.9.2",
 		"tailwindcss": "^3.2.4",
 		"tslib": "^2.4.1",
@@ -29,6 +30,7 @@
 	"type": "module",
 	"dependencies": {
 		"@sequelize/core": "^7.0.0-alpha.23",
+		"cheerio": "^1.0.0-rc.12",
 		"crawler": "^1.4.0",
 		"sqlite3": "^5.1.4"
 	}
