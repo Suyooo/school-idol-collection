@@ -7,7 +7,7 @@
     export let cards: Map<number, CardSchema>;
     export let memberDeck: string[];
     export let songDeck: string[];
-    let nextId = 5;
+    let nextId = 5, memberDeckComponent: Deck, songDeckComponent: Deck;
 
     function addToDeck(
         useMemberDeck: boolean,
@@ -81,13 +81,30 @@
         const card = removeFromField(id);
         addToDeck(card.cardType === CardType.MEMBER, useTop, card.cardNo);
     }
+
+    function shuffle(useMemberDeck: boolean) {
+        if (useMemberDeck) {
+            memberDeck = shuffleArray(memberDeck);
+            memberDeckComponent.shake();
+        } else {
+            songDeck = shuffleArray(songDeck);
+            songDeckComponent.shake();
+        }
+    }
+
+    function shuffleArray(deck: string[]) {
+        return deck
+            .map((v) => ({ v, r: Math.random() }))
+            .sort((a, b) => a.r - b.r)
+            .map((e) => e.v);
+    }
 </script>
 
 <div class="field">
     {#each [...cards.entries()] as [id, card] (id)}
         <CardObject {id} {...card} />
     {/each}
-    <Deck
+    <Deck bind:this={memberDeckComponent}
         cardNos={memberDeck}
         cardType={CardType.MEMBER}
         x={450}
@@ -95,8 +112,9 @@
         on:reveal={(e) =>
             deckToField(true, e.detail.useTop, e.detail.x, e.detail.y)}
         on:return={(e) => fieldToDeck(e.detail.id, e.detail.useTop)}
+        on:shuffle={() => shuffle(true)}
     />
-    <Deck
+    <Deck bind:this={songDeckComponent}
         cardNos={songDeck}
         cardType={CardType.SONG}
         x={350}
@@ -104,6 +122,7 @@
         on:reveal={(e) =>
             deckToField(false, e.detail.useTop, e.detail.x, e.detail.y)}
         on:return={(e) => fieldToDeck(e.detail.id, e.detail.useTop)}
+        on:shuffle={() => shuffle(false)}
     />
 </div>
 

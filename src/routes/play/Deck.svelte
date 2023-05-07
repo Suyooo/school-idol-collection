@@ -122,6 +122,23 @@
             true
         );
     }
+
+    let shakeX = 0;
+    export function shake() {
+        let t = 16;
+        const anim = () => {
+            t--;
+            if (t % 4 === 3) {
+                shakeX = -1 * (t/4);
+            } else if (t % 4 === 1) {
+                shakeX = 1 * (t/4);
+            } else {
+                shakeX = 0;
+            }
+            if (t > 0) requestAnimationFrame(anim);
+        }
+        requestAnimationFrame(anim);
+    }
 </script>
 
 <!-- Accessibility considerations maybe later... -->
@@ -130,6 +147,7 @@
     class="deckcontainer"
     style:left={`${x}px`}
     style:top={`${y - 40}px`}
+    style:transform={`translateX(${shakeX}px)`}
     class:deck-v={cardType === CardType.MEMBER}
     class:deck-h={cardType !== CardType.MEMBER}
     class:!cursor-not-allowed={cardNos.length === 0}
