@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
     import { droppable } from "svelte-agnostic-draggable";
     import CardType from "$lib/enums/cardType.js";
-    import { getContext } from "svelte";
+    import { createEventDispatcher, getContext } from "svelte";
 </script>
 
 <script lang="ts">
@@ -14,43 +14,133 @@
     $: deckLength = Math.min(cardNos.length, 40);
     $: h = cardType === CardType.MEMBER ? 91 : 65;
 
-    const openMenu =
-        getContext<
-            (
-                x: number,
-                y: number,
-                header: string,
-                entries: { label: string; handler: () => void }[],
-                cancelable: boolean
-            ) => void
-        >("openMenu");
-    function menuCardToDeck(e: Event & DroppableEvent) {
+    const openMenu = getContext<
+        (
+            x: number,
+            y: number,
+            header: string,
+            entries: {
+                label: string;
+                handler: () => void;
+                close?: boolean;
+            }[],
+            cancelable: boolean
+        ) => void
+    >("openMenu");
+    const dispatch = createEventDispatcher();
+
+    function menuFromDeck(e: MouseEvent) {
+        if (cardNos.length === 0) return;
+        if (cardType === CardType.MEMBER) {
+            openMenu(
+                e.pageX,
+                e.pageY,
+                `Deck`,
+                [
+                    {
+                        label: "Draw Top Card to Hand",
+                        handler: () => dispatch("draw", { useTop: true }),
+                        close: false,
+                    },
+                    {
+                        label: "Draw Bottom Card to Hand",
+                        handler: () => dispatch("draw", { useTop: false }),
+                        close: false,
+                    },
+                    {
+                        label: "Reveal Top Card on Stage",
+                        handler: () =>
+                            dispatch("reveal", {
+                                useTop: true,
+                                x,
+                                y: y - deckLength,
+                            }),
+                    },
+                    {
+                        label: "Reveal Bottom Card on Stage",
+                        handler: () =>
+                            dispatch("reveal", { useTop: false, x, y: y }),
+                    },
+                    {
+                        label: "Shuffle",
+                        handler: () => dispatch("shuffle"),
+                    },
+                ],
+                true
+            );
+        } else {
+            openMenu(
+                e.pageX,
+                e.pageY,
+                `Set List`,
+                [
+                    {
+                        label: "Reveal Top Card on Stage",
+                        handler: () =>
+                            dispatch("reveal", {
+                                useTop: true,
+                                x,
+                                y: y - deckLength,
+                            }),
+                    },
+                    {
+                        label: "Shuffle",
+                        handler: () => dispatch("shuffle"),
+                    },
+                ],
+                true
+            );
+        }
+    }
+    function menuToDeck(e: Event & DroppableEvent) {
         openMenu(
             e.detail.sensorEvent.data.pageX,
             e.detail.sensorEvent.data.pageY,
             `${e.detail.draggable.element.dataset.cardNo} &rarr; Deck`,
             [
-                { label: "Put on Top", handler: () => {} },
-                { label: "Put on Bottom", handler: () => {} },
+                {
+                    label: "Return to Top",
+                    handler: () =>
+                        dispatch("return", {
+                            id: parseInt(
+                                e.detail.draggable.element.dataset.id!
+                            ),
+                            useTop: true,
+                        }),
+                },
+                {
+                    label: "Return to Bottom",
+                    handler: () =>
+                        dispatch("return", {
+                            id: parseInt(
+                                e.detail.draggable.element.dataset.id!
+                            ),
+                            useTop: false,
+                        }),
+                },
             ],
             true
         );
     }
 </script>
 
+<!-- Accessibility considerations maybe later... -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
     class="deckcontainer"
     style:left={`${x}px`}
     style:top={`${y - 40}px`}
     class:deck-v={cardType === CardType.MEMBER}
     class:deck-h={cardType !== CardType.MEMBER}
+    class:!cursor-not-allowed={cardNos.length === 0}
     use:droppable={{ scope: cardType.toString() }}
-    on:droppable:drop={menuCardToDeck}
+    on:droppable:drop={menuToDeck}
+    on:click={menuFromDeck}
 >
     <div class="deck bottom" class:opacity-0={cardNos.length === 0} />
     <div
         class="deck top"
-        class:opacity-50={cardNos.length === 0}
+        class:!bg-primary-600={cardNos.length === 0}
         style:margin-top={`-${deckLength + h}px`}
     >
         {cardNos.length}
@@ -59,7 +149,7 @@
 
 <style lang="postcss">
     .deckcontainer {
-        @apply absolute w-min -z-10 cursor-pointer select-none;
+        @apply absolute w-min -z-10 select-none cursor-pointer;
 
         & .deck {
             &.bottom {
@@ -73,7 +163,7 @@
             }
 
             &.top {
-                @apply flex items-center justify-center bg-primary-400 text-xl font-bold;
+                @apply flex items-center justify-center text-xl font-bold bg-primary-400;
             }
         }
 

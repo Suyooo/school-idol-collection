@@ -9,13 +9,13 @@
     let menuX: number,
         menuY: number,
         menuHeader: string,
-        menuEntries: { label: string; handler: () => void }[] | undefined =
+        menuEntries: { label: string, handler: () => void, close?: boolean }[] | undefined =
             undefined;
     function openMenu(
         x: number,
         y: number,
         header: string,
-        entries: { label: string; handler: () => void }[],
+        entries: { label: string, handler: () => void, close?: boolean }[],
         cancelable: boolean
     ): void {
         menuX = x;
@@ -24,7 +24,7 @@
         menuEntries = entries.map((e) => ({
             label: e.label,
             handler: () => {
-                menuEntries = undefined;
+                if (e.close ?? true) menuEntries = undefined;
                 e.handler();
             },
         }));
