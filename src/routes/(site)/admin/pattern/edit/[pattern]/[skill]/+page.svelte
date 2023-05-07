@@ -3,14 +3,13 @@
     import TriggerEnum from "$lib/enums/trigger.js";
     import Button from "$lib/style/Button.svelte";
     import PatternGroupType from "$lib/translation/patternGroupType.js";
+    import type {PatternGroupTypeID} from "../../../../../../../lib/translation/patternGroupType.js";
     import type {PageData} from './$types.js';
     import Pill from "./Pill.svelte";
 
     export let data: PageData;
     // Not reactive to stop inputs getting reset on every change. There should be no links from this route to itself
-    let {isNew, patternId, triggers, groupTypeIds, example, regex, template} = <{
-        isNew: boolean, patternId: number, triggers: number, groupTypeIds: number[], example: string, regex: string, template: string
-    }>data;
+    let {isNew, patternId, triggers, groupTypeIds, example, regex, template} = data;
 
     let lastMatch: RegExpExecArray = <RegExpExecArray>[""], lastSuccessful: boolean = false, result: string = "",
         regexTextarea: HTMLTextAreaElement, templateTextarea: HTMLTextAreaElement, disabled: boolean,
@@ -38,7 +37,7 @@
             result = template;
             for (let i = 1; i < match.length; i++) {
                 const previous = result;
-                const groupType = PatternGroupType.get(groupTypeIds[i - 1]);
+                const groupType = PatternGroupType.get(<PatternGroupTypeID>groupTypeIds[i - 1]);
                 const repl = await groupType.getReplacement(null, match[i]);
                 result = result.replace(new RegExp(`<${i}>`, "g"), repl);
                 const extraRepl = groupType.getExtraReplacements(match[i], i);

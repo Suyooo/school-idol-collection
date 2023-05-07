@@ -1,5 +1,5 @@
 <script lang="ts">
-    import TriggerEnum from "$lib/enums/trigger";
+    import TriggerEnum from "$lib/enums/trigger.js";
     import TriggerComponent from "$lib/format/TriggerComponent.svelte";
     import type TranslationPattern from "$models/translation/pattern.js";
     import type {PageData} from './$types.js';

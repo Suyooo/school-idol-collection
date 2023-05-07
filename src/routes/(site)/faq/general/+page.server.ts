@@ -1,4 +1,3 @@
-import {cardLink} from "$lib/card/strings.js";
 import prepareFaq from "../prepareFaq.js";
 import type {Faq} from "../prepareFaq.js";
 import type {PageServerLoad} from "./$types.js";

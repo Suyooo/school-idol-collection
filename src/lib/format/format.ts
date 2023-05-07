@@ -334,20 +334,6 @@ function piecesMultiple(match: RegExpExecArray): ParseNode[] {
         {text: ` x ${match[2]}`},
         {secret}
     ];
-    return [
-        {
-            componentName: "PieceCount", props: {
-                pieces: {
-                    piecesSmile: match[1] === "SMILE" ? toNumWithFullwidth(match[2]) : 0,
-                    piecesPure: match[1] === "PURE" ? toNumWithFullwidth(match[2]) : 0,
-                    piecesCool: match[1] === "COOL" ? toNumWithFullwidth(match[2]) : 0,
-                    piecesAll: match[1] === "ALL" ? toNumWithFullwidth(match[2]) : 0
-                },
-                showZero: false,
-                isSongReq: false
-            }
-        }
-    ];
 }
 
 function pieces(splitter: string, match: RegExpExecArray): ParseNode[] {

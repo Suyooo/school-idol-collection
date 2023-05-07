@@ -76,7 +76,9 @@ export const POST: RequestHandler = (async ({locals, request}) => {
                 }
 
                 applyFixes(info, cardNo, set, inSetNo, type);
-                await downloadImages(res.$, cardNo, set);
+                if (type !== CardType.MEMBER || info["レアリティ"] !== "Secret") {
+                    await downloadImages(res.$, cardNo, set);
+                }
                 await importCard(info, locals.DB, cardNo, set, inSetNo, type);
                 done();
             }
