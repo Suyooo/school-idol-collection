@@ -2,6 +2,8 @@
     import { droppable } from "svelte-agnostic-draggable";
     import CardType from "$lib/enums/cardType.js";
     import { createEventDispatcher, getContext } from "svelte";
+    import { StackSide } from "$lib/play/schema.js";
+    import type { OpenMenuFunction } from "./+page.svelte";
 </script>
 
 <script lang="ts">
@@ -10,26 +12,14 @@
     export let x: number = 0;
     export let y: number = 0;
 
-    let deckLength: number, h: number;
-    $: deckLength = Math.min(cardNos.length, 40);
+    let stackLength: number, h: number;
+    $: stackLength = Math.min(cardNos.length, 40);
     $: h = cardType === CardType.MEMBER ? 91 : 65;
 
-    const openMenu = getContext<
-        (
-            x: number,
-            y: number,
-            header: string,
-            entries: {
-                label: string;
-                handler: () => void;
-                close?: boolean;
-            }[],
-            cancelable: boolean
-        ) => void
-    >("openMenu");
+    const openMenu = getContext<OpenMenuFunction>("openMenu");
     const dispatch = createEventDispatcher();
 
-    function menuFromDeck(e: MouseEvent) {
+    function menuFromStack(e: MouseEvent) {
         if (cardNos.length === 0) return;
         if (cardType === CardType.MEMBER) {
             openMenu(
@@ -39,27 +29,33 @@
                 [
                     {
                         label: "Draw Top Card to Hand",
-                        handler: () => dispatch("draw", { useTop: true }),
+                        handler: () =>
+                            dispatch("draw", { side: StackSide.TOP }),
                         close: false,
                     },
                     {
                         label: "Draw Bottom Card to Hand",
-                        handler: () => dispatch("draw", { useTop: false }),
+                        handler: () =>
+                            dispatch("draw", { side: StackSide.BOTTOM }),
                         close: false,
                     },
                     {
                         label: "Reveal Top Card on Stage",
                         handler: () =>
                             dispatch("reveal", {
-                                useTop: true,
+                                side: StackSide.TOP,
                                 x,
-                                y: y - deckLength,
+                                y: y - stackLength,
                             }),
                     },
                     {
                         label: "Reveal Bottom Card on Stage",
                         handler: () =>
-                            dispatch("reveal", { useTop: false, x, y: y }),
+                            dispatch("reveal", {
+                                side: StackSide.BOTTOM,
+                                x,
+                                y: y,
+                            }),
                     },
                     {
                         label: "Shuffle",
@@ -72,15 +68,15 @@
             openMenu(
                 e.pageX,
                 e.pageY,
-                `Set List`,
+                `Song Card Stack`,
                 [
                     {
                         label: "Reveal Top Card on Stage",
                         handler: () =>
                             dispatch("reveal", {
-                                useTop: true,
+                                side: StackSide.TOP,
                                 x,
-                                y: y - deckLength,
+                                y: y - stackLength,
                             }),
                     },
                     {
@@ -92,11 +88,14 @@
             );
         }
     }
-    function menuToDeck(e: Event & DroppableEvent) {
+
+    function menuToStack(e: Event & DroppableEvent) {
         openMenu(
             e.detail.sensorEvent.data.pageX,
             e.detail.sensorEvent.data.pageY,
-            `${e.detail.draggable.element.dataset.cardNo} &rarr; Deck`,
+            `${e.detail.draggable.element.dataset.cardNo} &rarr; ${
+                cardType === CardType.MEMBER ? "Deck" : "Song Card Stack"
+            }`,
             [
                 {
                     label: "Return to Top",
@@ -105,7 +104,7 @@
                             id: parseInt(
                                 e.detail.draggable.element.dataset.id!
                             ),
-                            useTop: true,
+                            side: StackSide.TOP,
                         }),
                 },
                 {
@@ -115,7 +114,7 @@
                             id: parseInt(
                                 e.detail.draggable.element.dataset.id!
                             ),
-                            useTop: false,
+                            side: StackSide.BOTTOM,
                         }),
                 },
             ],
@@ -129,14 +128,14 @@
         const anim = () => {
             t--;
             if (t % 4 === 3) {
-                shakeX = -1 * (t/4);
+                shakeX = -1 * (t / 4);
             } else if (t % 4 === 1) {
-                shakeX = 1 * (t/4);
+                shakeX = 1 * (t / 4);
             } else {
                 shakeX = 0;
             }
             if (t > 0) requestAnimationFrame(anim);
-        }
+        };
         requestAnimationFrame(anim);
     }
 </script>
@@ -144,32 +143,32 @@
 <!-- Accessibility considerations maybe later... -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-    class="deckcontainer"
+    class="stackcontainer"
     style:left={`${x}px`}
     style:top={`${y - 40}px`}
     style:transform={`translateX(${shakeX}px)`}
-    class:deck-v={cardType === CardType.MEMBER}
-    class:deck-h={cardType !== CardType.MEMBER}
+    class:stack-v={cardType === CardType.MEMBER}
+    class:stack-h={cardType !== CardType.MEMBER}
     class:!cursor-not-allowed={cardNos.length === 0}
     use:droppable={{ scope: cardType.toString() }}
-    on:droppable:drop={menuToDeck}
-    on:click={menuFromDeck}
+    on:droppable:drop={menuToStack}
+    on:click={menuFromStack}
 >
-    <div class="deck bottom" class:opacity-0={cardNos.length === 0} />
+    <div class="stack bottom" class:opacity-0={cardNos.length === 0} />
     <div
-        class="deck top"
+        class="stack top"
         class:!bg-primary-600={cardNos.length === 0}
-        style:margin-top={`-${deckLength + h}px`}
+        style:margin-top={`-${stackLength + h}px`}
     >
         {cardNos.length}
     </div>
 </div>
 
 <style lang="postcss">
-    .deckcontainer {
+    .stackcontainer {
         @apply absolute w-min -z-10 select-none cursor-pointer;
 
-        & .deck {
+        & .stack {
             &.bottom {
                 background: repeating-linear-gradient(
                     theme(colors.primary.600),
@@ -185,20 +184,20 @@
             }
         }
 
-        &.deck-v .deck {
+        &.stack-v .stack {
             @apply rounded-card-v;
             width: 65px;
             height: 91px;
         }
 
-        &.deck-h .deck {
+        &.stack-h .stack {
             @apply rounded-card-h;
             width: 91px;
             height: 65px;
         }
 
-        &:global(.ui-droppable-hover) .deck.top {
-            @apply border-4 border-solid border-accent-400;
+        &:global(.ui-droppable-hover) .stack.top {
+            @apply border-4 border-solid border-primary-100;
         }
     }
 </style>

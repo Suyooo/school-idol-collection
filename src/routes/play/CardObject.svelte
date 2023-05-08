@@ -15,9 +15,7 @@
     export let id: number;
     export let cardNo: string;
     export let cardType: CardType;
-    export let x: number = 0;
-    export let y: number = 0;
-    export let z: number = 0;
+    export let position: { x: number; y: number; z: number };
 
     let element: HTMLDivElement,
         loadPromise: Promise<Card & { imageDataUrl: string }> = new Promise(
@@ -68,9 +66,9 @@
 
 <div
     class="cardcontainer"
-    style:left={`${x}px`}
-    style:top={`${y}px`}
-    style:z-index={z}
+    style:left={`${position.x}px`}
+    style:top={`${position.y}px`}
+    style:z-index={position.z}
     bind:this={element}
     use:draggable={{
         cursor: "grabbing",
