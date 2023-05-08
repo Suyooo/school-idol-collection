@@ -17,18 +17,27 @@
     export let playerId: number;
     export let deckComponent: StackObject;
     export let setListComponent: StackObject;
-    
-    let game: Readable<ClientGameSchema>, players: Readable<ClientPlayerSchema[]>, player: ClientPlayerSchema,
-        field: Readable<Map<number, ClientCardSchema>>, deck: Readable<string[]>, setList: Readable<string[]>;
+
+    let game: Readable<ClientGameSchema>,
+        players: Readable<ClientPlayerSchema[]>,
+        player: ClientPlayerSchema,
+        field: Readable<Map<number, ClientCardSchema>>,
+        deck: Readable<string[]>,
+        setList: Readable<string[]>;
     $: game = logic.game;
     $: players = $game.players;
     $: player = $players[playerId];
-    $: ({field, deck, setList} = player);
+    $: ({ field, deck, setList } = player);
 </script>
 
 <div class="field">
     {#each [...$field.entries()] as [id, card] (id)}
-        <CardObject {id} {...card} />
+        <CardObject
+            {id}
+            {...card}
+            on:cardmove={(e) =>
+                logic.requestMove(e.detail.id, e.detail.x, e.detail.y)}
+        />
     {/each}
     <StackObject
         bind:this={deckComponent}

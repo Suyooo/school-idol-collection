@@ -40,8 +40,9 @@ export abstract class ClientGameLogic {
     };
 
     abstract requestStackToField(target: StackTarget, side: StackSide, x: number, y: number): void;
-    abstract requestFieldToStack (id: number, side: StackSide): void;
-    abstract requestShuffle (target: StackTarget): void;
+    abstract requestFieldToStack(id: number, side: StackSide): void;
+    abstract requestShuffle(target: StackTarget): void;
+    abstract requestMove(id: number, x: number, y: number): void;
 }
 
 export interface ClientGameLogicHandlers {

@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-    import { onMount } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
     import { draggable } from "svelte-agnostic-draggable";
     import { CardOrientation } from "$lib/enums/cardOrientation.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
@@ -18,6 +18,7 @@
     export let cardType: CardType;
     export let position: Readable<{ x: number; y: number; z: number }>;
 
+    const dispatch = createEventDispatcher();
     let element: HTMLDivElement,
         loadPromise: Promise<Card & { imageDataUrl: string }> = new Promise(
             () => null
@@ -63,6 +64,14 @@
                 }
             );
     });
+
+    function moveCard(e: Event & DraggableEvent) {
+        dispatch("cardmove", {
+            id: parseInt(e.detail.helper.dataset.id!),
+            x: parseInt(e.detail.helper.style.left),
+            y: parseInt(e.detail.helper.style.top),
+        });
+    }
 </script>
 
 <div
@@ -77,6 +86,7 @@
         scope: cardType.toString(),
         containment: "parent",
     }}
+    on:drag:stop={moveCard}
 >
     {#await loadPromise}
         <div

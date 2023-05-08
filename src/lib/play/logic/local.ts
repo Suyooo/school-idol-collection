@@ -1,6 +1,6 @@
 import CardType from "$lib/enums/cardType.js";
 import { writable, type Readable, type Writable, derived, readonly, get } from "svelte/store";
-import { StackTarget, ClientGameLogic, type GameSchema, type ClientGameLogicHandlers, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientCardSchema, type CardSchema } from "../schema.js";
+import { StackTarget, ClientGameLogic, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientCardSchema, type CardSchema } from "../schema.js";
 
 export class LocalClientGameLogic extends ClientGameLogic {
     private storeCardPositions = new Map<number, Writable<{ x: number, y: number, z: number; }>>();
@@ -36,6 +36,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     }));
 
     private nextId: number = 0;
+    private nextZ: number = 10;
 
     constructor(name: string) {
         super();
@@ -70,7 +71,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     private addToField(cardNo: string, cardType: CardType, x: number, y: number) {
         const thisId = this.nextId++;
-        const thisPos = writable({ x, y, z: 0 });
+        const thisPos = writable({ x, y, z: this.nextZ++ });
         const thisCard = {
             cardNo,
             cardType,
@@ -123,5 +124,14 @@ export class LocalClientGameLogic extends ClientGameLogic {
             .map((v) => ({ v, r: Math.random() }))
             .sort((a, b) => a.r - b.r)
             .map((e) => e.v);
+    }
+
+    requestMove(id: number, x: number, y: number) {
+        this.storeCardPositions.get(id)!.update(pos => {
+            pos.x = x;
+            pos.y = y;
+            pos.z = this.nextZ++;
+            return pos;
+        });
     }
 }
