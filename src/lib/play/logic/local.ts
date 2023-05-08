@@ -1,75 +1,100 @@
 import CardType from "$lib/enums/cardType.js";
-import { readable, type Readable, type Subscriber } from "svelte/store";
-import { StackTarget, type ClientGameLogic, type GameSchema, type GameLogicHandlers, StackSide, type CardSchema, type PlayerSchema } from "../schema.js";
+import { writable, type Readable, type Writable, derived, readonly, get } from "svelte/store";
+import { StackTarget, ClientGameLogic, type GameSchema, type ClientGameLogicHandlers, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientCardSchema, type CardSchema } from "../schema.js";
 
-export class LocalClientGameLogic implements ClientGameLogic {
-    private gameStoreSetFunc: Subscriber<GameSchema> | undefined;
-    private gameObj: GameSchema = {
-        players: [
-            {
-                name: "Local Player",
-                livePoints: 0,
-                field: new Map(),
-                hand: [],
-                deck: ["LL01-001", "LL01-002", "LL01-003"],
-                setList: ["LL01-064", "LL01-065", "LL01-066"]
-            }
-        ],
-        turn: 0,
-    };
-
-    game: Readable<GameSchema> = readable(this.gameObj, (setFunc) => {
-        this.gameStoreSetFunc = setFunc;
-        return () => this.gameStoreSetFunc = undefined;
+export class LocalClientGameLogic extends ClientGameLogic {
+    private storeCardPositions = new Map<number, Writable<{ x: number, y: number, z: number; }>>();
+    private storePlayers = [
+        {
+            name: writable("Local Player"),
+            livePoints: writable(0),
+            field: writable(new Map<number, ClientCardSchema>),
+            hand: writable<string[]>([]),
+            deck: writable<string[]>([]),
+            setList: writable<string[]>([]),
+        }
+    ];
+    private storeGame = writable({
+        players: writable<ClientPlayerSchema[]>(this.storePlayers),
+        turn: writable(0)
     });
-    handlers: GameLogicHandlers = {
-        onShuffle: undefined
-    };
+
+    // yes I hate this thank you
+    game: Readable<ClientGameSchema> = derived(this.storeGame, gameObj => ({
+        players: derived(gameObj.players, playersObj => playersObj.map(playerObj => ({
+            name: readonly(playerObj.name),
+            livePoints: readonly(playerObj.livePoints),
+            field: derived(playerObj.field, fieldObj => new Map([...fieldObj.entries()].map(([cardId, cardObj]) => [cardId, {
+                ...cardObj,
+                position: readonly(cardObj.position)
+            }]))),
+            hand: readonly(playerObj.hand),
+            deck: readonly(playerObj.deck),
+            setList: readonly(playerObj.setList),
+        }))),
+        turn: readonly(gameObj.turn)
+    }));
 
     private nextId: number = 0;
 
     constructor(name: string) {
-        this.gameObj.players[0].name = name;
+        super();
+        this.storePlayers[0].name.set(name);
+        this.storePlayers[0].deck.set(["LL01-001", "LL01-002", "LL01-003"]);
+        this.storePlayers[0].setList.set(["LL01-064", "LL01-065", "LL01-066"]);
     }
 
     private targetToProperty(target: StackTarget) {
         return target == StackTarget.DECK ? "deck" : "setList";
     }
 
-    private notifyChanged() {
-        if (this.gameStoreSetFunc) this.gameStoreSetFunc(this.gameObj);
-    }
-
     private addToStack(target: StackTarget, side: StackSide, cardNo: string) {
         const prop = this.targetToProperty(target);
-        if (side === StackSide.TOP) this.gameObj.players[0][prop].push(cardNo);
-        else this.gameObj.players[0][prop].unshift(cardNo);
+        this.storePlayers[0][prop].update(arr => {
+            if (side === StackSide.TOP) arr.push(cardNo);
+            else arr.unshift(cardNo);
+            return arr;
+        });
     }
 
     private removeFromStack(target: StackTarget, side: StackSide): string {
         let val: string;
         const prop = this.targetToProperty(target);
-        if (side === StackSide.TOP) val = this.gameObj.players[0][prop].pop()!;
-        else val = this.gameObj.players[0][prop].shift()!;
-        return val;
+        this.storePlayers[0][prop].update(arr => {
+            if (side === StackSide.TOP) val = arr.pop()!;
+            else val = arr.shift()!;
+            return arr;
+        });
+        return val!;
     }
 
     private addToField(cardNo: string, cardType: CardType, x: number, y: number) {
-        this.gameObj.players[0].field.set(this.nextId++, {
+        const thisId = this.nextId++;
+        const thisPos = writable({ x, y, z: 0 });
+        const thisCard = {
             cardNo,
             cardType,
-            position: {
-                x,
-                y,
-                z: 0,
-            }
+            position: thisPos
+        };
+
+        this.storeCardPositions.set(thisId, thisPos);
+        this.storePlayers[0].field.update(map => {
+            map.set(thisId, thisCard);
+            return map;
         });
     }
 
     private removeFromField(id: number): CardSchema {
-        let ret = this.gameObj.players[0].field.get(id)!;
-        this.gameObj.players[0].field.delete(id);
-        return ret;
+        let ret: CardSchema;
+        this.storePlayers[0].field.update(map => {
+            const card = map.get(id)!;
+            const position = get(this.storeCardPositions.get(id)!);
+            ret = { ...card, position };
+            map.delete(id);
+            return map;
+        });
+        this.storeCardPositions.delete(id);
+        return ret!;
     }
 
     requestStackToField(target: StackTarget, side: StackSide, x: number, y: number) {
@@ -80,20 +105,17 @@ export class LocalClientGameLogic implements ClientGameLogic {
             x,
             y
         );
-        this.notifyChanged();
     }
 
     requestFieldToStack(id: number, side: StackSide) {
         const card = this.removeFromField(id);
         this.addToStack(card.cardType === CardType.MEMBER ? StackTarget.DECK : StackTarget.SET_LIST, side, card.cardNo);
-        this.notifyChanged();
     }
 
     requestShuffle(target: StackTarget) {
         const prop = this.targetToProperty(target);
-        this.gameObj.players[0][prop] = this.shuffleArray(this.gameObj.players[0][prop]);
+        this.storePlayers[0][prop].update(arr => this.shuffleArray(arr));
         if (this.handlers.onShuffle) this.handlers.onShuffle(0, target);
-        this.notifyChanged();
     }
 
     private shuffleArray(deck: string[]) {

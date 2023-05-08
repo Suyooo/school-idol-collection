@@ -1,18 +1,6 @@
 import type CardType from "$lib/enums/cardType.js";
 import type { Readable } from "svelte/store";
 
-export interface ClientGameLogic {
-    game: Readable<GameSchema>;
-    handlers: GameLogicHandlers;
-    requestStackToField: (target: StackTarget, side: StackSide, x: number, y: number) => void,
-    requestFieldToStack: (id: number, side: StackSide) => void,
-    requestShuffle: (target: StackTarget) => void;
-}
-
-export interface GameLogicHandlers {
-    onShuffle: ((playerId: number, target: StackTarget) => void) | undefined;
-}
-
 export const enum StackTarget {
     DECK, SET_LIST
 }
@@ -29,7 +17,7 @@ export interface GameSchema {
 export interface PlayerSchema {
     name: string;
     livePoints: number;
-    field: Map<number,CardSchema>;
+    field: Map<number, CardSchema>;
     hand: string[];
     deck: string[];
     setList: string[];
@@ -43,4 +31,43 @@ export interface CardSchema {
         y: number;
         z: number;
     };
+}
+
+export abstract class ClientGameLogic {
+    abstract game: Readable<ClientGameSchema>;
+    handlers: ClientGameLogicHandlers = {
+        onShuffle: undefined
+    };
+
+    abstract requestStackToField(target: StackTarget, side: StackSide, x: number, y: number): void;
+    abstract requestFieldToStack (id: number, side: StackSide): void;
+    abstract requestShuffle (target: StackTarget): void;
+}
+
+export interface ClientGameLogicHandlers {
+    onShuffle: ((playerId: number, target: StackTarget) => void) | undefined;
+}
+
+export interface ClientGameSchema {
+    players: Readable<ClientPlayerSchema[]>;
+    turn: Readable<number>;
+}
+
+export interface ClientPlayerSchema {
+    name: Readable<string>;
+    livePoints: Readable<number>;
+    field: Readable<Map<number, ClientCardSchema>>;
+    hand: Readable<string[]>;
+    deck: Readable<string[]>;
+    setList: Readable<string[]>;
+}
+
+export interface ClientCardSchema {
+    cardNo: string;
+    cardType: CardType;
+    position: Readable<{
+        x: number;
+        y: number;
+        z: number;
+    }>;
 }

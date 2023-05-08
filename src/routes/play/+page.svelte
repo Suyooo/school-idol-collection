@@ -1,4 +1,12 @@
 <script context="module" lang="ts">
+    import "../../app.css";
+    import FieldObject from "./FieldObject.svelte";
+    import { setContext } from "svelte";
+    import PopupMenu from "./PopupMenu.svelte";
+    import { LocalClientGameLogic } from "$lib/play/logic/local.js";
+    import type StackObject from "./StackObject.svelte";
+    import { StackTarget } from "$lib/play/schema.js";
+
     export type OpenMenuFunction = (
         x: number,
         y: number,
@@ -9,12 +17,6 @@
 </script>
 
 <script lang="ts">
-    import "../../app.css";
-    import FieldObject from "./FieldObject.svelte";
-    import { setContext } from "svelte";
-    import PopupMenu from "./PopupMenu.svelte";
-    import { LocalClientGameLogic } from "$lib/play/logic/local.js";
-
     let menuX: number,
         menuY: number,
         menuHeader: string,
@@ -45,11 +47,23 @@
     setContext("openMenu", openMenu);
 
     const logic = new LocalClientGameLogic("me :)");
+    let deckComponents: StackObject[] = [],
+        setListComponents: StackObject[] = [];
+    logic.handlers.onShuffle = (playerId: number, target: StackTarget) => {
+        (target === StackTarget.DECK ? deckComponents : setListComponents)[
+            playerId
+        ].shake();
+    };
 </script>
 
 <svelte:body on:mousedown={() => (menuEntries = undefined)} />
 
-<FieldObject {logic} playerId={0} />
+<FieldObject
+    {logic}
+    playerId={0}
+    bind:deckComponent={deckComponents[0]}
+    bind:setListComponent={setListComponents[0]}
+/>
 
 {#if menuEntries}
     <PopupMenu x={menuX} y={menuY} header={menuHeader} entries={menuEntries} />

@@ -9,13 +9,14 @@
     import { CardMemberRarity } from "$lib/enums/cardRarity.js";
     import CardType from "$lib/enums/cardType.js";
     import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
+    import type { Readable } from "svelte/store";
 </script>
 
 <script lang="ts">
     export let id: number;
     export let cardNo: string;
     export let cardType: CardType;
-    export let position: { x: number; y: number; z: number };
+    export let position: Readable<{ x: number; y: number; z: number }>;
 
     let element: HTMLDivElement,
         loadPromise: Promise<Card & { imageDataUrl: string }> = new Promise(
@@ -66,9 +67,9 @@
 
 <div
     class="cardcontainer"
-    style:left={`${position.x}px`}
-    style:top={`${position.y}px`}
-    style:z-index={position.z}
+    style:left={`${$position.x}px`}
+    style:top={`${$position.y}px`}
+    style:z-index={$position.z}
     bind:this={element}
     use:draggable={{
         cursor: "grabbing",

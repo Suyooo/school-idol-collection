@@ -1,31 +1,38 @@
-<script lang="ts">
+<script context="module" lang="ts">
     import CardType from "$lib/enums/cardType.js";
     import {
         StackTarget,
         type ClientGameLogic,
-        type PlayerSchema,
-        type GameSchema,
+        type ClientGameSchema,
+        type ClientPlayerSchema,
+        type ClientCardSchema,
     } from "$lib/play/schema.js";
     import type { Readable } from "svelte/store";
     import CardObject from "./CardObject.svelte";
     import StackObject from "./StackObject.svelte";
+</script>
 
+<script lang="ts">
     export let logic: ClientGameLogic;
     export let playerId: number;
-    let game: Readable<GameSchema>, player: PlayerSchema;
+    export let deckComponent: StackObject;
+    export let setListComponent: StackObject;
+    
+    let game: Readable<ClientGameSchema>, players: Readable<ClientPlayerSchema[]>, player: ClientPlayerSchema,
+        field: Readable<Map<number, ClientCardSchema>>, deck: Readable<string[]>, setList: Readable<string[]>;
     $: game = logic.game;
-    $: player = $game.players[playerId];
-
-    let deckComponent: StackObject, setListComponent: StackObject;
+    $: players = $game.players;
+    $: player = $players[playerId];
+    $: ({field, deck, setList} = player);
 </script>
 
 <div class="field">
-    {#each [...player.field.entries()] as [id, card] (id)}
+    {#each [...$field.entries()] as [id, card] (id)}
         <CardObject {id} {...card} />
     {/each}
     <StackObject
         bind:this={deckComponent}
-        cardNos={player.deck}
+        cardNos={$deck}
         cardType={CardType.MEMBER}
         x={450}
         y={50}
@@ -41,7 +48,7 @@
     />
     <StackObject
         bind:this={setListComponent}
-        cardNos={player.setList}
+        cardNos={$setList}
         cardType={CardType.SONG}
         x={350}
         y={50}
