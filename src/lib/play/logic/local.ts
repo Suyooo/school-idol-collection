@@ -1,17 +1,18 @@
 import CardType from "$lib/enums/cardType.js";
 import { writable, type Readable, type Writable, derived, readonly, get } from "svelte/store";
-import { StackTarget, ClientGameLogic, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientCardSchema, type CardSchema, type Profile } from "../schema.js";
+import { StackTarget, ClientGameLogic, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientCardSchema, type CardSchema, type ClientProfile } from "../schema.js";
 
 export class LocalClientGameLogic extends ClientGameLogic {
     private storeCardPositions = new Map<number, Writable<{ x: number, y: number, z: number; }>>();
     private storePlayers = [
         {
-            profile: writable<Profile>({
+            profile: writable<ClientProfile>({
                 name: "Local Player",
                 fieldColor: "skyblue",
                 deckColor: "lightblue",
                 setListColor: "lightpink"
             }),
+            matchUuid: "local",
             livePoints: writable(0),
             field: writable(new Map<number, ClientCardSchema>),
             hand: writable<string[]>([]),
@@ -21,13 +22,15 @@ export class LocalClientGameLogic extends ClientGameLogic {
     ];
     private storeGame = writable({
         players: writable<ClientPlayerSchema[]>(this.storePlayers),
-        turn: writable(0)
+        turnOrder: writable([0]),
+        round: writable(1),
+        turnPlayerIdx: writable(0)
     });
 
-    // yes I hate this thank you
     game: Readable<ClientGameSchema> = derived(this.storeGame, gameObj => ({
         players: derived(gameObj.players, playersObj => playersObj.map(playerObj => ({
             profile: readonly(playerObj.profile),
+            matchUuid: playerObj.matchUuid,
             livePoints: readonly(playerObj.livePoints),
             field: derived(playerObj.field, fieldObj => new Map([...fieldObj.entries()].map(([cardId, cardObj]) => [cardId, {
                 ...cardObj,
@@ -37,13 +40,15 @@ export class LocalClientGameLogic extends ClientGameLogic {
             deck: readonly(playerObj.deck),
             setList: readonly(playerObj.setList),
         }))),
-        turn: readonly(gameObj.turn)
+        turnOrder: readonly(gameObj.turnOrder),
+        round: readonly(gameObj.round),
+        turnPlayerIdx: readonly(gameObj.turnPlayerIdx)
     }));
 
     private nextId: number = 0;
     private nextZ: number = 10;
 
-    constructor(profile: Profile) {
+    constructor(profile: ClientProfile) {
         super();
         this.storePlayers[0].profile.set(profile);
         this.storePlayers[0].deck.set(["LL01-001", "LL01-002", "LL01-003"]);

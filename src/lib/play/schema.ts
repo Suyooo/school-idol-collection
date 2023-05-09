@@ -11,6 +11,7 @@ export const enum StackSide {
 
 export interface Profile {
     name: string;
+    uuid: string;
     fieldColor: string;
     deckColor: string;
     setListColor: string;
@@ -18,11 +19,13 @@ export interface Profile {
 
 export interface GameSchema {
     players: PlayerSchema[];
-    turn: number;
+    round: number;
+    turnPlayerIdx: number;
 }
 
 export interface PlayerSchema {
     profile: Profile;
+    matchUuid: string;
     livePoints: number;
     field: Map<number, CardSchema>;
     hand: string[];
@@ -38,6 +41,13 @@ export interface CardSchema {
         y: number;
         z: number;
     };
+}
+
+export interface ClientProfile {
+    name: string;
+    fieldColor: string;
+    deckColor: string;
+    setListColor: string;
 }
 
 export abstract class ClientGameLogic {
@@ -58,11 +68,14 @@ export interface ClientGameLogicHandlers {
 
 export interface ClientGameSchema {
     players: Readable<ClientPlayerSchema[]>;
-    turn: Readable<number>;
+    turnOrder: Readable<number[]>;
+    round: Readable<number>;
+    turnPlayerIdx: Readable<number>;
 }
 
 export interface ClientPlayerSchema {
-    profile: Readable<Profile>;
+    profile: Readable<ClientProfile>;
+    matchUuid: string;
     livePoints: Readable<number>;
     field: Readable<Map<number, ClientCardSchema>>;
     hand: Readable<string[]>;

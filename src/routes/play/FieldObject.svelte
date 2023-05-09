@@ -6,7 +6,7 @@
         type ClientGameSchema,
         type ClientPlayerSchema,
         type ClientCardSchema,
-        type Profile,
+        type ClientProfile,
     } from "$lib/play/schema.js";
     import type { Readable } from "svelte/store";
     import CardObject from "./CardObject.svelte";
@@ -26,7 +26,7 @@ import Plus from "$lib/style/icons/Plus.svelte";
     let game: Readable<ClientGameSchema>,
         players: Readable<ClientPlayerSchema[]>,
         player: ClientPlayerSchema,
-        profile: Readable<Profile>,
+        profile: Readable<ClientProfile>,
         livePoints: Readable<number>,
         field: Readable<Map<number, ClientCardSchema>>,
         deck: Readable<string[]>,
