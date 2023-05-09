@@ -13,7 +13,7 @@
     export let y: number = 0;
 
     let stackLength: number, h: number;
-    $: stackLength = Math.min(cardNos.length, 40);
+    $: stackLength = Math.min(cardNos.length, 60);
     $: h = cardType === CardType.MEMBER ? 91 : 65;
 
     const openMenu = getContext<OpenMenuFunction>("openMenu");
@@ -180,7 +180,7 @@
             }
 
             &.top {
-                @apply flex items-center justify-center text-xl font-bold bg-primary-400;
+                @apply flex items-center justify-center text-xl font-bold;
             }
         }
 
@@ -188,16 +188,47 @@
             @apply rounded-card-v;
             width: 65px;
             height: 91px;
+
+            &.bottom {
+                background: repeating-linear-gradient(
+                    theme(colors.primary.600),
+                    theme(colors.primary.600) 1px,
+                    theme(colors.primary.500) 1px,
+                    theme(colors.primary.500) 2px
+                );
+            }
+
+            &.top {
+                @apply border border-solid border-primary-600 bg-primary-700;
+            }
         }
 
         &.stack-h .stack {
             @apply rounded-card-h;
             width: 91px;
             height: 65px;
+
+            &.bottom {
+                background: repeating-linear-gradient(
+                    theme(colors.accent.500),
+                    theme(colors.accent.500) 1px,
+                    theme(colors.accent.400) 1px,
+                    theme(colors.accent.400) 2px
+                );
+            }
+
+            &.top {
+                @apply border border-solid border-accent-600 bg-accent-700;
+            }
         }
 
-        &:global(.ui-droppable-hover) .stack.top {
-            @apply border-4 border-solid border-primary-100;
+        &:global(.ui-droppable-hover) {
+            &.stack-v .stack.top {
+                @apply border-4 border-primary-100;
+            }
+            &.stack-h .stack.top {
+                @apply border-4 border-accent-100;
+            }
         }
     }
 </style>

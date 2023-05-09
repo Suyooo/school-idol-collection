@@ -7,7 +7,8 @@ export class LocalClientGameLogic extends ClientGameLogic {
     private storePlayers = [
         {
             name: writable("Local Player"),
-            livePoints: writable(0),
+            color: writable("skyblue"),
+            livePoints: writable(20),
             field: writable(new Map<number, ClientCardSchema>),
             hand: writable<string[]>([]),
             deck: writable<string[]>([]),
@@ -23,6 +24,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     game: Readable<ClientGameSchema> = derived(this.storeGame, gameObj => ({
         players: derived(gameObj.players, playersObj => playersObj.map(playerObj => ({
             name: readonly(playerObj.name),
+            color: readonly(playerObj.color),
             livePoints: readonly(playerObj.livePoints),
             field: derived(playerObj.field, fieldObj => new Map([...fieldObj.entries()].map(([cardId, cardObj]) => [cardId, {
                 ...cardObj,

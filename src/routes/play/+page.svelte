@@ -61,6 +61,7 @@
 <FieldObject
     {logic}
     playerId={0}
+    isThisPlayer={true}
     bind:deckComponent={deckComponents[0]}
     bind:setListComponent={setListComponents[0]}
 />

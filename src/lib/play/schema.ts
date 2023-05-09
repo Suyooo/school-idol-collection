@@ -16,6 +16,7 @@ export interface GameSchema {
 
 export interface PlayerSchema {
     name: string;
+    color: string;
     livePoints: number;
     field: Map<number, CardSchema>;
     hand: string[];
@@ -56,6 +57,7 @@ export interface ClientGameSchema {
 
 export interface ClientPlayerSchema {
     name: Readable<string>;
+    color: Readable<string>;
     livePoints: Readable<number>;
     field: Readable<Map<number, ClientCardSchema>>;
     hand: Readable<string[]>;

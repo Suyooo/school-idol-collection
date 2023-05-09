@@ -13,24 +13,46 @@
 </script>
 
 <script lang="ts">
+    import Minus from "$lib/style/icons/Minus.svelte";
+import Plus from "$lib/style/icons/Plus.svelte";
+
     export let logic: ClientGameLogic;
     export let playerId: number;
+    export let isThisPlayer: boolean;
     export let deckComponent: StackObject;
     export let setListComponent: StackObject;
 
     let game: Readable<ClientGameSchema>,
         players: Readable<ClientPlayerSchema[]>,
         player: ClientPlayerSchema,
+        name: Readable<string>,
+        livePoints: Readable<number>,
         field: Readable<Map<number, ClientCardSchema>>,
         deck: Readable<string[]>,
         setList: Readable<string[]>;
     $: game = logic.game;
     $: players = $game.players;
     $: player = $players[playerId];
-    $: ({ field, deck, setList } = player);
+    $: ({ name, color, livePoints, field, deck, setList } = player);
 </script>
 
-<div class="field">
+<div class="field" style:--player-color={$color}>
+    <div class="background">
+        <div class="area deck"></div>
+        <div class="area setlist"></div>
+        <div class="line live"></div>
+        <div class="line info"></div>
+        <div class="name">{$name}</div>
+        <div class="livepoints">{$livePoints}</div>
+        <div class="livepointsbelow">
+            {#if isThisPlayer}
+                <button><Plus/></button>
+                <button><Minus/></button>
+            {:else}
+                Live Points
+            {/if}
+        </div>
+    </div>
     {#each [...$field.entries()] as [id, card] (id)}
         <CardObject
             {id}
@@ -43,8 +65,8 @@
         bind:this={deckComponent}
         cardNos={$deck}
         cardType={CardType.MEMBER}
-        x={450}
-        y={50}
+        x={619}
+        y={254}
         on:reveal={(e) =>
             logic.requestStackToField(
                 StackTarget.DECK,
@@ -59,8 +81,8 @@
         bind:this={setListComponent}
         cardNos={$setList}
         cardType={CardType.SONG}
-        x={350}
-        y={50}
+        x={35}
+        y={279}
         on:reveal={(e) =>
             logic.requestStackToField(
                 StackTarget.SET_LIST,
@@ -75,8 +97,98 @@
 
 <style lang="postcss">
     .field {
-        @apply absolute left-0 top-0 box-content border border-solid border-accent-500 -z-50;
+        @apply absolute left-0 top-0 box-content border border-solid -z-50;
         width: 720px;
         height: 360px;
+        border-color: var(--player-color);
+
+        & .background {
+            @apply select-none -z-50;
+
+            & .area {
+                @apply absolute border border-solid -z-50 box-content rounded-md;
+                border-color: var(--player-color);
+
+                &.setlist {
+                    left: 30px;
+                    right: 113px;
+                    height: 74px;
+                    bottom: 10px;
+
+                    &:before {
+                        content: "Set List";
+                        left: -1.5rem;
+                        top: 0px;
+                        bottom: 0px;
+                        writing-mode: vertical-rl;
+                        transform: rotate(180deg);
+                    }
+                }
+
+                &.deck {
+                    right: 30px;
+                    width: 74px;
+                    bottom: 10px;
+                    height: 99px;
+
+                    &:before {
+                        content: "Deck";
+                        right: -1.5rem;
+                        top: 0px;
+                        bottom: 0px;
+                        writing-mode: vertical-rl;
+                    }
+                }
+
+                &:before {
+                    @apply absolute text-sm font-bold text-center uppercase tracking-widest;
+                    color: var(--player-color);
+                }
+            }
+
+            & .line {
+                @apply absolute border-l border-solid -z-50;
+                width: 1px;
+                top: 10px;
+                bottom: 96px;
+                border-color: var(--player-color);
+
+                &.live {
+                    left: 280px;
+                }
+                &.info {
+                    left: 60px;
+                }
+            }
+
+            & .name {
+                @apply absolute flex items-center justify-center text-white text-2xl font-bold align-middle;
+                left: 0px;
+                width: 60px;
+                top: 60px;
+                bottom: 96px;
+                writing-mode: vertical-rl;
+                transform: rotate(180deg);
+            }
+
+            & .livepoints {
+                @apply absolute text-white text-3xl font-bold text-center;
+                left: 0px;
+                width: 60px;
+                top: 5px;
+            }
+
+            & .livepointsbelow {
+                @apply absolute flex items-center justify-around text-xs text-center uppercase font-normal tracking-tighter leading-none;
+                left: 0px;
+                width: 60px;
+                top: 35px;
+                height: 25px;
+
+                & button {
+                    @apply flex items-center justify-center bg-accent-500 text-white rounded-full;
+                }
+            }
+        }
     }
 </style>
