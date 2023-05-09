@@ -144,4 +144,8 @@ export class LocalClientGameLogic extends ClientGameLogic {
             return pos;
         });
     }
+
+    requestLPUpdate(delta: number) {
+        this.storePlayers[0].livePoints.update(lp => Math.max(lp + delta, 0));
+    }
 }

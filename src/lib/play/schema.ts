@@ -60,6 +60,7 @@ export abstract class ClientGameLogic {
     abstract requestFieldToStack(id: number, side: StackSide): void;
     abstract requestShuffle(target: StackTarget): void;
     abstract requestMove(id: number, x: number, y: number): void;
+    abstract requestLPUpdate(delta: number): void;
 }
 
 export interface ClientGameLogicHandlers {

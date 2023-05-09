@@ -47,8 +47,8 @@ import Plus from "$lib/style/icons/Plus.svelte";
         <div class="livepoints">{$livePoints}</div>
         <div class="livepointsbelow">
             {#if isThisPlayer}
-                <button><Plus/></button>
-                <button><Minus/></button>
+                <button on:click={() => logic.requestLPUpdate(1)}><Plus/></button>
+                <button on:click={() => logic.requestLPUpdate(-1)}><Minus/></button>
             {:else}
                 Live Points
             {/if}
@@ -190,7 +190,7 @@ import Plus from "$lib/style/icons/Plus.svelte";
                 height: 25px;
 
                 & button {
-                    @apply flex items-center justify-center bg-accent-500 text-white rounded-full;
+                    @apply flex items-center justify-center bg-accent-600 hover:bg-accent-400 text-white rounded-full;
                 }
             }
         }
