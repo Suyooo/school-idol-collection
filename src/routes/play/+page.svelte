@@ -46,7 +46,12 @@
     };
     setContext("openMenu", openMenu);
 
-    const logic = new LocalClientGameLogic("me :)");
+    const logic = new LocalClientGameLogic({
+        name: "Suyooo",
+        fieldColor: "skyblue",
+        deckColor: "#FF8246",
+        setListColor: "#27C1B7",
+    });
     let deckComponents: StackObject[] = [],
         setListComponents: StackObject[] = [];
     logic.handlers.onShuffle = (playerId: number, target: StackTarget) => {

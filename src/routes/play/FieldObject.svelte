@@ -6,6 +6,7 @@
         type ClientGameSchema,
         type ClientPlayerSchema,
         type ClientCardSchema,
+        type Profile,
     } from "$lib/play/schema.js";
     import type { Readable } from "svelte/store";
     import CardObject from "./CardObject.svelte";
@@ -25,7 +26,7 @@ import Plus from "$lib/style/icons/Plus.svelte";
     let game: Readable<ClientGameSchema>,
         players: Readable<ClientPlayerSchema[]>,
         player: ClientPlayerSchema,
-        name: Readable<string>,
+        profile: Readable<Profile>,
         livePoints: Readable<number>,
         field: Readable<Map<number, ClientCardSchema>>,
         deck: Readable<string[]>,
@@ -33,16 +34,16 @@ import Plus from "$lib/style/icons/Plus.svelte";
     $: game = logic.game;
     $: players = $game.players;
     $: player = $players[playerId];
-    $: ({ name, color, livePoints, field, deck, setList } = player);
+    $: ({ profile, livePoints, field, deck, setList } = player);
 </script>
 
-<div class="field" style:--player-color={$color}>
+<div class="field" style:--player-color={$profile.fieldColor}>
     <div class="background">
         <div class="area deck"></div>
         <div class="area setlist"></div>
         <div class="line live"></div>
         <div class="line info"></div>
-        <div class="name">{$name}</div>
+        <div class="name">{$profile.name}</div>
         <div class="livepoints">{$livePoints}</div>
         <div class="livepointsbelow">
             {#if isThisPlayer}
@@ -67,6 +68,7 @@ import Plus from "$lib/style/icons/Plus.svelte";
         cardType={CardType.MEMBER}
         x={619}
         y={254}
+        color={$profile.deckColor}
         on:reveal={(e) =>
             logic.requestStackToField(
                 StackTarget.DECK,
@@ -83,6 +85,7 @@ import Plus from "$lib/style/icons/Plus.svelte";
         cardType={CardType.SONG}
         x={35}
         y={279}
+        color={$profile.setListColor}
         on:reveal={(e) =>
             logic.requestStackToField(
                 StackTarget.SET_LIST,
@@ -162,7 +165,7 @@ import Plus from "$lib/style/icons/Plus.svelte";
             }
 
             & .name {
-                @apply absolute flex items-center justify-center text-white text-2xl font-bold align-middle;
+                @apply absolute flex items-center justify-center text-white text-2xl font-bold;
                 left: 0px;
                 width: 60px;
                 top: 60px;

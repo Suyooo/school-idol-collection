@@ -9,14 +9,20 @@ export const enum StackSide {
     TOP, BOTTOM
 }
 
+export interface Profile {
+    name: string;
+    fieldColor: string;
+    deckColor: string;
+    setListColor: string;
+}
+
 export interface GameSchema {
     players: PlayerSchema[];
     turn: number;
 }
 
 export interface PlayerSchema {
-    name: string;
-    color: string;
+    profile: Profile;
     livePoints: number;
     field: Map<number, CardSchema>;
     hand: string[];
@@ -56,8 +62,7 @@ export interface ClientGameSchema {
 }
 
 export interface ClientPlayerSchema {
-    name: Readable<string>;
-    color: Readable<string>;
+    profile: Readable<Profile>;
     livePoints: Readable<number>;
     field: Readable<Map<number, ClientCardSchema>>;
     hand: Readable<string[]>;

@@ -1,14 +1,18 @@
 import CardType from "$lib/enums/cardType.js";
 import { writable, type Readable, type Writable, derived, readonly, get } from "svelte/store";
-import { StackTarget, ClientGameLogic, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientCardSchema, type CardSchema } from "../schema.js";
+import { StackTarget, ClientGameLogic, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientCardSchema, type CardSchema, type Profile } from "../schema.js";
 
 export class LocalClientGameLogic extends ClientGameLogic {
     private storeCardPositions = new Map<number, Writable<{ x: number, y: number, z: number; }>>();
     private storePlayers = [
         {
-            name: writable("Local Player"),
-            color: writable("skyblue"),
-            livePoints: writable(20),
+            profile: writable<Profile>({
+                name: "Local Player",
+                fieldColor: "skyblue",
+                deckColor: "lightblue",
+                setListColor: "lightpink"
+            }),
+            livePoints: writable(0),
             field: writable(new Map<number, ClientCardSchema>),
             hand: writable<string[]>([]),
             deck: writable<string[]>([]),
@@ -23,8 +27,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     // yes I hate this thank you
     game: Readable<ClientGameSchema> = derived(this.storeGame, gameObj => ({
         players: derived(gameObj.players, playersObj => playersObj.map(playerObj => ({
-            name: readonly(playerObj.name),
-            color: readonly(playerObj.color),
+            profile: readonly(playerObj.profile),
             livePoints: readonly(playerObj.livePoints),
             field: derived(playerObj.field, fieldObj => new Map([...fieldObj.entries()].map(([cardId, cardObj]) => [cardId, {
                 ...cardObj,
@@ -40,9 +43,9 @@ export class LocalClientGameLogic extends ClientGameLogic {
     private nextId: number = 0;
     private nextZ: number = 10;
 
-    constructor(name: string) {
+    constructor(profile: Profile) {
         super();
-        this.storePlayers[0].name.set(name);
+        this.storePlayers[0].profile.set(profile);
         this.storePlayers[0].deck.set(["LL01-001", "LL01-002", "LL01-003"]);
         this.storePlayers[0].setList.set(["LL01-064", "LL01-065", "LL01-066"]);
     }

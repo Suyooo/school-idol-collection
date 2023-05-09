@@ -11,9 +11,10 @@
     export let cardType: CardType;
     export let x: number = 0;
     export let y: number = 0;
+    export let color: string;
 
     let stackLength: number, h: number;
-    $: stackLength = Math.min(cardNos.length, 60);
+    $: stackLength = Math.min(cardNos.length - 1, 60);
     $: h = cardType === CardType.MEMBER ? 91 : 65;
 
     const openMenu = getContext<OpenMenuFunction>("openMenu");
@@ -144,22 +145,20 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
     class="stackcontainer"
+    style:--stack-color={color}
     style:left={`${x}px`}
-    style:top={`${y - 40}px`}
+    style:top={`${y - 60}px`}
     style:transform={`translateX(${shakeX}px)`}
     class:stack-v={cardType === CardType.MEMBER}
     class:stack-h={cardType !== CardType.MEMBER}
-    class:!cursor-not-allowed={cardNos.length === 0}
+    class:almostempty={cardNos.length <= 1}
+    class:empty={cardNos.length === 0}
     use:droppable={{ scope: cardType.toString() }}
     on:droppable:drop={menuToStack}
     on:click={menuFromStack}
 >
-    <div class="stack bottom" class:opacity-0={cardNos.length === 0} />
-    <div
-        class="stack top"
-        class:!bg-primary-600={cardNos.length === 0}
-        style:margin-top={`-${stackLength + h}px`}
-    >
+    <div class="stack bottom" />
+    <div class="stack top" style:margin-top={`-${stackLength + h}px`}>
         {cardNos.length}
     </div>
 </div>
@@ -169,18 +168,27 @@
         @apply absolute w-min -z-10 select-none cursor-pointer;
 
         & .stack {
+            background-color: var(--stack-color);
+
             &.bottom {
-                background: repeating-linear-gradient(
-                    theme(colors.primary.600),
-                    theme(colors.primary.600) 1px,
-                    theme(colors.primary.500) 1px,
-                    theme(colors.primary.500) 2px
-                );
-                margin-top: 40px;
+                @apply relative;
+                margin-top: 60px;
+
+                &:after {
+                    @apply absolute left-0 right-0 top-0 bottom-0;
+                    content: " ";
+                    background: repeating-linear-gradient(
+                        rgba(0, 0, 0, 0.25),
+                        rgba(0, 0, 0, 0.25) 1px,
+                        rgba(0, 0, 0, 0.5) 1px,
+                        rgba(0, 0, 0, 0.5) 2px
+                    );
+                }
             }
 
             &.top {
-                @apply flex items-center justify-center text-xl font-bold;
+                @apply relative z-10 flex items-center justify-center text-xl font-bold;
+                border: 1px solid rgba(0, 0, 0, 0.5);
             }
         }
 
@@ -189,17 +197,8 @@
             width: 65px;
             height: 91px;
 
-            &.bottom {
-                background: repeating-linear-gradient(
-                    theme(colors.primary.600),
-                    theme(colors.primary.600) 1px,
-                    theme(colors.primary.500) 1px,
-                    theme(colors.primary.500) 2px
-                );
-            }
-
-            &.top {
-                @apply border border-solid border-primary-600 bg-primary-700;
+            &.bottom:after {
+                @apply rounded-card-v;
             }
         }
 
@@ -208,27 +207,31 @@
             width: 91px;
             height: 65px;
 
-            &.bottom {
-                background: repeating-linear-gradient(
-                    theme(colors.accent.500),
-                    theme(colors.accent.500) 1px,
-                    theme(colors.accent.400) 1px,
-                    theme(colors.accent.400) 2px
-                );
-            }
-
-            &.top {
-                @apply border border-solid border-accent-600 bg-accent-700;
+            &.bottom:after {
+                @apply rounded-card-h;
             }
         }
 
-        &:global(.ui-droppable-hover) {
-            &.stack-v .stack.top {
-                @apply border-4 border-primary-100;
+        &.almostempty {
+            & .stack {
+                &.bottom {
+                    @apply opacity-0;
+                }
             }
-            &.stack-h .stack.top {
-                @apply border-4 border-accent-100;
+        }
+
+        &.empty {
+            @apply cursor-not-allowed;
+            & .stack {
+                &.top {
+                    @apply bg-transparent;
+                    border: 1px solid var(--stack-color);
+                }
             }
+        }
+
+        &:global(.ui-droppable-hover) .stack.top {
+            border: 4px solid rgba(255, 255, 255, 0.5);
         }
     }
 </style>
