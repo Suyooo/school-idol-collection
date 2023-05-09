@@ -82,7 +82,7 @@
     bind:this={element}
     use:draggable={{
         cursor: "grabbing",
-        zIndex: 1000000000,
+        zIndex: 2099999999,
         scope: cardType.toString(),
         containment: "parent",
     }}
@@ -109,7 +109,7 @@
 
 <style lang="postcss">
     .cardcontainer {
-        @apply absolute w-min cursor-grab select-none;
+        @apply absolute w-min cursor-grab select-none z-play-card;
 
         & .card {
             @apply flex items-center justify-center bg-primary-200 overflow-hidden;

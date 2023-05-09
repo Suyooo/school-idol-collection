@@ -125,7 +125,7 @@
 
     let shakeX = 0;
     export function shake() {
-        let t = 16;
+        let t = 30;
         const anim = () => {
             t--;
             if (t % 4 === 3) {
@@ -165,7 +165,7 @@
 
 <style lang="postcss">
     .stackcontainer {
-        @apply absolute w-min -z-10 select-none cursor-pointer;
+        @apply absolute w-min z-play-stack select-none cursor-pointer;
 
         & .stack {
             background-color: var(--stack-color);
@@ -187,7 +187,7 @@
             }
 
             &.top {
-                @apply relative z-10 flex items-center justify-center text-xl font-bold;
+                @apply relative flex items-center justify-center text-xl font-bold;
                 border: 1px solid rgba(0, 0, 0, 0.5);
             }
         }

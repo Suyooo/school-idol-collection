@@ -66,8 +66,8 @@ import Plus from "$lib/style/icons/Plus.svelte";
         bind:this={deckComponent}
         cardNos={$deck}
         cardType={CardType.MEMBER}
-        x={619}
-        y={254}
+        x={620}
+        y={253}
         color={$profile.deckColor}
         on:reveal={(e) =>
             logic.requestStackToField(
@@ -100,22 +100,22 @@ import Plus from "$lib/style/icons/Plus.svelte";
 
 <style lang="postcss">
     .field {
-        @apply absolute left-0 top-0 box-content border border-solid -z-50;
+        @apply absolute left-0 top-0 box-content border border-solid z-play-field;
         width: 720px;
         height: 360px;
         border-color: var(--player-color);
 
         & .background {
-            @apply select-none -z-50;
+            @apply select-none pointer-events-none;
 
             & .area {
-                @apply absolute border border-solid -z-50 box-content rounded-md;
+                @apply absolute border border-solid z-play-field box-content rounded-md;
                 border-color: var(--player-color);
 
                 &.setlist {
                     left: 30px;
-                    right: 113px;
-                    height: 74px;
+                    right: 112px;
+                    height: 73.5px;
                     bottom: 10px;
 
                     &:before {
@@ -130,9 +130,9 @@ import Plus from "$lib/style/icons/Plus.svelte";
 
                 &.deck {
                     right: 30px;
-                    width: 74px;
+                    width: 73.5px;
                     bottom: 10px;
-                    height: 99px;
+                    height: 100px;
 
                     &:before {
                         content: "Deck";
@@ -150,7 +150,7 @@ import Plus from "$lib/style/icons/Plus.svelte";
             }
 
             & .line {
-                @apply absolute border-l border-solid -z-50;
+                @apply absolute border-l border-solid z-play-field;
                 width: 1px;
                 top: 10px;
                 bottom: 96px;
@@ -165,24 +165,25 @@ import Plus from "$lib/style/icons/Plus.svelte";
             }
 
             & .name {
-                @apply absolute flex items-center justify-center text-white text-2xl font-bold;
+                @apply absolute text-white text-2xl font-bold overflow-hidden text-ellipsis text-center z-play-ui;
                 left: 0px;
                 width: 60px;
                 top: 60px;
                 bottom: 96px;
+                line-height: 60px;
                 writing-mode: vertical-rl;
                 transform: rotate(180deg);
             }
 
             & .livepoints {
-                @apply absolute text-white text-3xl font-bold text-center;
+                @apply absolute text-white text-3xl font-bold text-center z-play-ui;
                 left: 0px;
                 width: 60px;
                 top: 5px;
             }
 
             & .livepointsbelow {
-                @apply absolute flex items-center justify-around text-xs text-center uppercase font-normal tracking-tighter leading-none;
+                @apply absolute flex items-center justify-around text-xs text-center uppercase font-normal tracking-tighter leading-none z-play-ui pointer-events-auto;
                 left: 0px;
                 width: 60px;
                 top: 35px;
