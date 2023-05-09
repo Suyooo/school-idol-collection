@@ -21,8 +21,7 @@
 
 <style lang="postcss">
     .panel {
-        @apply absolute rounded-tl-none select-none;
-        z-index: 2000000000;
+        @apply absolute rounded-tl-none select-none z-play-menu;
 
         & .panel-inner {
             @apply p-0 flex flex-col gap-y-1;

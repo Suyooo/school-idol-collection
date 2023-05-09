@@ -4,12 +4,9 @@
     import { CardOrientation } from "$lib/enums/cardOrientation.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import type Card from "$models/card/card.js";
-    import { retryPromise } from "$lib/utils/promise.js";
-    import { cardIsMember } from "$lib/card/types.js";
-    import { CardMemberRarity } from "$lib/enums/cardRarity.js";
     import CardType from "$lib/enums/cardType.js";
-    import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
     import type { Readable } from "svelte/store";
+    import { loadCardInfo } from "$lib/play/cardInfo.js";
 </script>
 
 <script lang="ts">
@@ -27,42 +24,7 @@
     $: if (element) element.dataset.cardNo = cardNo;
 
     onMount(() => {
-        loadPromise = retryPromise(
-            fetch(`/json/card/${cardNo}/sameid/preparse`)
-        )
-            .then((res) => res.json())
-            .then(
-                async (
-                    card: Card & CardPageExtraInfo & { imageDataUrl: string }
-                ) => {
-                    let usedCardNo = cardNo;
-                    if (
-                        cardIsMember(card) &&
-                        card.member.rarity === CardMemberRarity.Secret
-                    ) {
-                        usedCardNo = card.sameId![0].cardNo;
-                    }
-
-                    card.imageDataUrl = await fetch(
-                        `/images/cards/${
-                            usedCardNo.split("-")[0]
-                        }/${usedCardNo}-front.jpg`
-                    )
-                        .then((response) => response.blob())
-                        .then(
-                            (blob) =>
-                                new Promise<string>((resolve, reject) => {
-                                    const reader = new FileReader();
-                                    reader.onloadend = () => {
-                                        resolve(<string>reader.result);
-                                    };
-                                    reader.onerror = reject;
-                                    reader.readAsDataURL(blob);
-                                })
-                        );
-                    return card;
-                }
-            );
+        loadPromise = loadCardInfo(cardNo);
     });
 
     function moveCard(e: Event & DraggableEvent) {
@@ -84,6 +46,7 @@
         cursor: "grabbing",
         zIndex: 2099999999,
         scope: cardType.toString(),
+        scroll: false,
         containment: "parent",
     }}
     on:drag:stop={moveCard}
@@ -112,7 +75,7 @@
         @apply absolute w-min cursor-grab select-none z-play-card;
 
         & .card {
-            @apply flex items-center justify-center bg-primary-200 overflow-hidden;
+            @apply flex items-center justify-center bg-primary-200 overflow-hidden shadow-sm shadow-black;
 
             &.card-v {
                 @apply rounded-card-v;

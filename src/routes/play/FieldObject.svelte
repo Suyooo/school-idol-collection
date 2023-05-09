@@ -19,7 +19,7 @@ import Plus from "$lib/style/icons/Plus.svelte";
 
     export let logic: ClientGameLogic;
     export let playerId: number;
-    export let isThisPlayer: boolean;
+    export let isClient: boolean;
     export let deckComponent: StackObject;
     export let setListComponent: StackObject;
 
@@ -46,7 +46,7 @@ import Plus from "$lib/style/icons/Plus.svelte";
         <div class="name">{$profile.name}</div>
         <div class="livepoints">{$livePoints}</div>
         <div class="livepointsbelow">
-            {#if isThisPlayer}
+            {#if isClient}
                 <button on:click={() => logic.requestLPUpdate(1)}><Plus/></button>
                 <button on:click={() => logic.requestLPUpdate(-1)}><Minus/></button>
             {:else}

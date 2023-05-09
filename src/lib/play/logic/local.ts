@@ -53,6 +53,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.storePlayers[0].profile.set(profile);
         this.storePlayers[0].deck.set(["LL01-001", "LL01-002", "LL01-003"]);
         this.storePlayers[0].setList.set(["LL01-064", "LL01-065", "LL01-066"]);
+        this.storePlayers[0].hand.set(["LL01-004", "LL01-005", "LL01-006"]);
     }
 
     private targetToProperty(target: StackTarget) {

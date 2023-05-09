@@ -6,6 +6,13 @@
     import { LocalClientGameLogic } from "$lib/play/logic/local.js";
     import type StackObject from "./StackObject.svelte";
     import { StackTarget } from "$lib/play/schema.js";
+    import type {
+        ClientGameLogic,
+        ClientGameSchema,
+        ClientPlayerSchema,
+    } from "$lib/play/schema.js";
+    import HandObject from "./HandObject.svelte";
+    import type { Readable } from "svelte/store";
 
     export type OpenMenuFunction = (
         x: number,
@@ -46,7 +53,7 @@
     };
     setContext("openMenu", openMenu);
 
-    const logic = new LocalClientGameLogic({
+    const logic: ClientGameLogic = new LocalClientGameLogic({
         name: "Suyooo",
         fieldColor: "skyblue",
         deckColor: "#FF8246",
@@ -59,18 +66,52 @@
             playerId
         ].shake();
     };
+
+    let game: Readable<ClientGameSchema>,
+        players: Readable<ClientPlayerSchema[]>,
+        handCards: Readable<string[]>;
+    $: game = logic.game;
+    $: players = $game.players;
+    $: handCards = $players[0].hand;
 </script>
 
 <svelte:body on:mousedown={() => (menuEntries = undefined)} />
 
-<FieldObject
-    {logic}
-    playerId={0}
-    isThisPlayer={true}
-    bind:deckComponent={deckComponents[0]}
-    bind:setListComponent={setListComponents[0]}
-/>
+<div class="play">
+    <div class="leftside">
+        <FieldObject
+            {logic}
+            playerId={0}
+            isClient={true}
+            bind:deckComponent={deckComponents[0]}
+            bind:setListComponent={setListComponents[0]}
+        />
+
+        <HandObject cardNos={$handCards} />
+    </div>
+    <div class="rightside">
+        Sidebar!
+    </div>
+</div>
 
 {#if menuEntries}
     <PopupMenu x={menuX} y={menuY} header={menuHeader} entries={menuEntries} />
 {/if}
+
+<style lang="postcss">
+    :global(body) {
+        @apply overflow-hidden;
+    }
+
+    .play {
+        @apply flex;
+    }
+
+    .leftside {
+        @apply relative w-3/4 h-screen overflow-hidden;
+    }
+
+    .rightside {
+        @apply bg-primary-700 relative w-1/4 h-screen overflow-hidden;
+    }
+</style>
