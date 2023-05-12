@@ -100,7 +100,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
         let ret: CardSchema;
         this.storePlayers[0].field.update(map => {
             const card = map.get(id)!;
-            const position = get(this.storeCardPositions.get(id)!);
+            const position = get(card.position);
             ret = { ...card, position };
             map.delete(id);
             return map;
@@ -109,19 +109,50 @@ export class LocalClientGameLogic extends ClientGameLogic {
         return ret!;
     }
 
+    private addToHand(cardNo: string) {
+        this.storePlayers[0].hand.update(arr => {
+            arr.push(cardNo);
+            return arr;
+        });
+    }
+
+    private removeFromHand(idx: number): string {
+        let cardNo: string;
+        this.storePlayers[0].hand.update(arr => {
+            cardNo = arr.splice(idx, 1)[0];
+            return arr;
+        });
+        return cardNo!;
+    }
+
     requestStackToField(target: StackTarget, side: StackSide, x: number, y: number) {
         const cardNo = this.removeFromStack(target, side);
-        this.addToField(
-            cardNo,
-            target === StackTarget.DECK ? CardType.MEMBER : CardType.SONG,
-            x,
-            y
-        );
+        this.addToField(cardNo, target === StackTarget.DECK ? CardType.MEMBER : CardType.SONG, x, y);
+    }
+
+    requestHandToField(idx: number, x: number, y: number) {
+        const cardNo = this.removeFromHand(idx);
+        this.addToField(cardNo, CardType.MEMBER, x, y);
     }
 
     requestFieldToStack(id: number, side: StackSide) {
         const card = this.removeFromField(id);
         this.addToStack(card.cardType === CardType.MEMBER ? StackTarget.DECK : StackTarget.SET_LIST, side, card.cardNo);
+    }
+
+    requestHandToStack(idx: number, side: StackSide) {
+        const cardNo = this.removeFromHand(idx);
+        this.addToStack(StackTarget.DECK, side, cardNo);
+    }
+
+    requestFieldToHand(id: number) {
+        const card = this.removeFromField(id);
+        this.addToHand(card.cardNo);
+    }
+
+    requestStackToHand(side: StackSide) {
+        const cardNo = this.removeFromStack(StackTarget.DECK, side);
+        this.addToHand(cardNo);
     }
 
     requestShuffle(target: StackTarget) {

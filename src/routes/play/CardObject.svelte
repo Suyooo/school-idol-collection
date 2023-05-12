@@ -28,6 +28,8 @@
     });
 
     function moveCard(e: Event & DraggableEvent) {
+        if(e.detail.droppable?.element.classList.contains("hand")) return;
+        
         dispatch("cardmove", {
             id: parseInt(e.detail.helper.dataset.id!),
             x: parseInt(e.detail.helper.style.left),
@@ -47,7 +49,6 @@
         zIndex: 2099999999,
         scope: cardType.toString(),
         scroll: false,
-        containment: "parent",
     }}
     on:drag:stop={moveCard}
 >

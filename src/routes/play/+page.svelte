@@ -67,12 +67,13 @@
         ].shake();
     };
 
-    let game: Readable<ClientGameSchema>,
+    let clientPlayerId: number = 0,
+        game: Readable<ClientGameSchema>,
         players: Readable<ClientPlayerSchema[]>,
         handCards: Readable<string[]>;
     $: game = logic.game;
     $: players = $game.players;
-    $: handCards = $players[0].hand;
+    $: handCards = $players[clientPlayerId].hand;
 </script>
 
 <svelte:body on:mousedown={() => (menuEntries = undefined)} />
@@ -82,12 +83,12 @@
         <FieldObject
             {logic}
             playerId={0}
-            isClient={true}
+            isClient={0 === clientPlayerId}
             bind:deckComponent={deckComponents[0]}
             bind:setListComponent={setListComponents[0]}
         />
 
-        <HandObject cardNos={$handCards} />
+        <HandObject {logic} cardNos={$handCards} />
     </div>
     <div class="rightside">
         Sidebar!

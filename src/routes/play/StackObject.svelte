@@ -97,11 +97,34 @@
             `${e.detail.draggable.element.dataset.cardNo} &rarr; ${
                 cardType === CardType.MEMBER ? "Deck" : "Song Card Stack"
             }`,
-            [
+            e.detail.draggable.element.classList.contains("handcardcontainer")
+            ? [
                 {
                     label: "Return to Top",
                     handler: () =>
-                        dispatch("return", {
+                        dispatch("returnHand", {
+                            idx: parseInt(
+                                e.detail.draggable.element.dataset.idx!
+                            ),
+                            side: StackSide.TOP,
+                        }),
+                },
+                {
+                    label: "Return to Bottom",
+                    handler: () =>
+                        dispatch("returnHand", {
+                            idx: parseInt(
+                                e.detail.draggable.element.dataset.idx!
+                            ),
+                            side: StackSide.BOTTOM,
+                        }),
+                },
+            ]
+            : [
+                {
+                    label: "Return to Top",
+                    handler: () =>
+                        dispatch("returnField", {
                             id: parseInt(
                                 e.detail.draggable.element.dataset.id!
                             ),
@@ -111,7 +134,7 @@
                 {
                     label: "Return to Bottom",
                     handler: () =>
-                        dispatch("return", {
+                        dispatch("returnField", {
                             id: parseInt(
                                 e.detail.draggable.element.dataset.id!
                             ),
@@ -153,7 +176,7 @@
     class:stack-h={cardType !== CardType.MEMBER}
     class:almostempty={cardNos.length <= 1}
     class:empty={cardNos.length === 0}
-    use:droppable={{ scope: cardType.toString() }}
+    use:droppable={{ scope: cardType.toString(), greedy: true }}
     on:droppable:drop={menuToStack}
     on:click={menuFromStack}
 >
@@ -187,8 +210,7 @@
             }
 
             &.top {
-                @apply relative flex items-center justify-center text-xl font-bold;
-                border: 1px solid rgba(0, 0, 0, 0.5);
+                @apply relative flex items-center justify-center text-xl font-bold border border-solid border-black/50;
             }
         }
 
@@ -225,13 +247,13 @@
             & .stack {
                 &.top {
                     @apply bg-transparent;
-                    border: 1px solid var(--stack-color);
+                    border-color: var(--stack-color);
                 }
             }
         }
 
         &:global(.ui-droppable-hover) .stack.top {
-            border: 4px solid rgba(255, 255, 255, 0.5);
+            @apply border-4 border-white/50;
         }
     }
 </style>

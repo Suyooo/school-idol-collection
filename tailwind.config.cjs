@@ -30,9 +30,10 @@ module.exports = {
                 "none": ["0px", "0"]
             },
             zIndex: {
-                "play-field": -20,
-                "play-stack": -10,
-                "play-card": 0,
+                "play-field": 1,
+                "play-stack": 5,
+                "play-card": 10,
+                "play-hand": 2099999998,
                 "play-card-dragging": 2099999999,
                 "play-ui": 2100000000,
                 "play-menu": 2100000001

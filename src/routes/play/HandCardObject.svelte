@@ -29,7 +29,7 @@
         use:draggable={{
             cursor: "grabbing",
             zIndex: 2100000000,
-            scope: "hand",
+            scope: "0",
             scroll: false,
             revert: "invalid",
         }}
@@ -50,7 +50,6 @@
     .handspace {
         @apply relative;
         width: 65px;
-        height: 182px;
 
         &:last-child {
             width: 130px;
@@ -58,14 +57,14 @@
 
         & .handcardcontainer {
             @apply absolute w-min cursor-grab select-none;
-            width: 130px;
-            height: 182px;
-
+            width: 65px;
+            height: 91px;
+            
             & .card {
                 @apply flex pt-4 items-start justify-center text-black bg-primary-200 overflow-hidden rounded-card-h shadow-md shadow-black;
                 width: 130px;
                 height: 182px;
-                transition: margin-top 0.3s, transform 0.3s, shadow-blur 0.3s;
+                transition: margin-top 0.3s, width 0.3s, height 0.3s, shadow-blur 0.3s;
                 transform-origin: 0 0;
 
                 & img {
@@ -75,7 +74,8 @@
 
             &.ui-draggable-helper .card {
                 @apply shadow-sm;
-                transform: scale(0.5);
+                width: 65px;
+                height: 91px;
             }
 
             &:not(.ui-draggable-helper):hover .card {

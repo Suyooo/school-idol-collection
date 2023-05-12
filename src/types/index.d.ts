@@ -1,9 +1,9 @@
 interface DroppableEvent {
-    detail: {draggable: {element: HTMLElement}, droppable: HTMLElement, sensorEvent: {data: {pageX: number, pageY: number}}}
+    detail: { draggable: { element: HTMLElement, position: { absolute: { left: number, top: number; }; }; }, droppable: HTMLElement, sensorEvent: { data: { pageX: number, pageY: number; }; }; };
 }
 
 interface DraggableEvent {
-    detail: {helper: HTMLElement}
+    detail: { helper: HTMLElement, droppable?: { element: HTMLElement; }; };
 }
 
 declare namespace svelte.JSX {

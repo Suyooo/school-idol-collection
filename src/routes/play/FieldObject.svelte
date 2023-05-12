@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
     import CardType from "$lib/enums/cardType.js";
+    import { droppable } from "svelte-agnostic-draggable";
     import {
         StackTarget,
         type ClientGameLogic,
@@ -15,7 +16,7 @@
 
 <script lang="ts">
     import Minus from "$lib/style/icons/Minus.svelte";
-import Plus from "$lib/style/icons/Plus.svelte";
+    import Plus from "$lib/style/icons/Plus.svelte";
 
     export let logic: ClientGameLogic;
     export let playerId: number;
@@ -35,20 +36,41 @@ import Plus from "$lib/style/icons/Plus.svelte";
     $: players = $game.players;
     $: player = $players[playerId];
     $: ({ profile, livePoints, field, deck, setList } = player);
+
+    function enterCard(e: Event & DroppableEvent) {
+        logic.requestHandToField(
+            parseInt(e.detail.draggable.element.dataset.idx!),
+            e.detail.draggable.position.absolute.left,
+            e.detail.draggable.position.absolute.top
+        );
+    }
+
+    function onlyHandCards(e: HTMLElement) {
+        return e.classList.contains("handcardcontainer");
+    }
 </script>
 
-<div class="field" style:--player-color={$profile.fieldColor}>
+<div
+    class="field"
+    style:--player-color={$profile.fieldColor}
+    use:droppable={{ scope: "0", accept: onlyHandCards, disabled: !isClient }}
+    on:droppable:drop={enterCard}
+>
     <div class="background">
-        <div class="area deck"></div>
-        <div class="area setlist"></div>
-        <div class="line live"></div>
-        <div class="line info"></div>
+        <div class="area deck" />
+        <div class="area setlist" />
+        <div class="line live" />
+        <div class="line info" />
         <div class="name">{$profile.name}</div>
         <div class="livepoints">{$livePoints}</div>
         <div class="livepointsbelow">
             {#if isClient}
-                <button on:click={() => logic.requestLPUpdate(1)}><Plus/></button>
-                <button on:click={() => logic.requestLPUpdate(-1)}><Minus/></button>
+                <button on:click={() => logic.requestLPUpdate(1)}
+                    ><Plus /></button
+                >
+                <button on:click={() => logic.requestLPUpdate(-1)}
+                    ><Minus /></button
+                >
             {:else}
                 Live Points
             {/if}
@@ -76,8 +98,10 @@ import Plus from "$lib/style/icons/Plus.svelte";
                 e.detail.x,
                 e.detail.y
             )}
-        on:return={(e) => logic.requestFieldToStack(e.detail.id, e.detail.side)}
+        on:returnField={(e) => logic.requestFieldToStack(e.detail.id, e.detail.side)}
+        on:returnHand={(e) => logic.requestHandToStack(e.detail.idx, e.detail.side)}
         on:shuffle={() => logic.requestShuffle(StackTarget.DECK)}
+        on:draw={(e) => logic.requestStackToHand(e.detail.side)}
     />
     <StackObject
         bind:this={setListComponent}
@@ -93,17 +117,21 @@ import Plus from "$lib/style/icons/Plus.svelte";
                 e.detail.x,
                 e.detail.y
             )}
-        on:return={(e) => logic.requestFieldToStack(e.detail.id, e.detail.side)}
+        on:returnField={(e) => logic.requestFieldToStack(e.detail.id, e.detail.side)}
         on:shuffle={() => logic.requestShuffle(StackTarget.SET_LIST)}
     />
 </div>
 
 <style lang="postcss">
     .field {
-        @apply absolute left-0 top-0 box-content border border-solid z-play-field;
+        @apply absolute left-0 top-0 box-content border border-solid;
         width: 720px;
         height: 360px;
         border-color: var(--player-color);
+    
+        &:global(.ui-droppable-hover) {
+            @apply outline outline-4 -outline-offset-4 outline-white/50;
+        }
 
         & .background {
             @apply select-none pointer-events-none;
