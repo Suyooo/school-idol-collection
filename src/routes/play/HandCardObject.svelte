@@ -38,7 +38,7 @@
             zIndex: 2100000000,
             scope: "0",
             scroll: false,
-            revert: "invalid",
+            revert: true,
         }}
         on:contextmenu|preventDefault={updateSidebar}
     >

@@ -28,7 +28,12 @@
     });
 
     function moveCard(e: Event & DraggableEvent) {
-        if (e.detail.droppable?.element.classList.contains("hand")) return;
+        console.log("handler");
+        if (
+            e.detail.droppable?.element.classList.contains("hand") ||
+            outOfBounds(e.detail.helper)
+        )
+            return;
 
         dispatch("cardmove", {
             id: parseInt(e.detail.helper.dataset.id!),
@@ -42,42 +47,58 @@
     function updateSidebar() {
         $sidebarCardNo = cardNo;
     }
+
+    function outOfBounds(draggable: HTMLElement) {
+        const fieldPos = draggable.parentElement!.getBoundingClientRect();
+        const dragPos = draggable.getBoundingClientRect();
+        return (
+            fieldPos.top > dragPos.top ||
+            fieldPos.left > dragPos.left ||
+            fieldPos.bottom < dragPos.bottom ||
+            fieldPos.right < dragPos.right
+        );
+    }
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
-    class="cardcontainer"
-    style:left={`${$position.x}px`}
-    style:top={`${$position.y}px`}
-    style:z-index={$position.z}
-    bind:this={element}
-    use:draggable={{
-        cursor: "grabbing",
-        zIndex: 2099999999,
-        scope: cardType.toString(),
-        scroll: false,
-    }}
-    on:drag:stop={moveCard}
-    on:contextmenu|preventDefault={updateSidebar}
->
-    {#await loadPromise}
-        <div
-            class="card"
-            class:card-v={cardType === CardType.MEMBER}
-            class:card-h={cardType !== CardType.MEMBER}
-        >
-            <Spinner />
-        </div>
-    {:then card}
-        <div
-            class="card"
-            class:card-v={card.frontOrientation === CardOrientation.PORTRAIT}
-            class:card-h={card.frontOrientation === CardOrientation.LANDSCAPE}
-        >
-            <img src={card.imageDataUrl} alt={cardNo} />
-        </div>
-    {/await}
-</div>
+{#key $position}
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div
+        class="cardcontainer"
+        style:left={`${$position.x}px`}
+        style:top={`${$position.y}px`}
+        style:z-index={$position.z}
+        bind:this={element}
+        use:draggable={{
+            cursor: "grabbing",
+            zIndex: 2099999999,
+            scope: cardType.toString(),
+            scroll: false,
+            revert: outOfBounds,
+        }}
+        on:drag:stop={moveCard}
+        on:contextmenu|preventDefault={updateSidebar}
+    >
+        {#await loadPromise}
+            <div
+                class="card"
+                class:card-v={cardType === CardType.MEMBER}
+                class:card-h={cardType !== CardType.MEMBER}
+            >
+                <Spinner />
+            </div>
+        {:then card}
+            <div
+                class="card"
+                class:card-v={card.frontOrientation ===
+                    CardOrientation.PORTRAIT}
+                class:card-h={card.frontOrientation ===
+                    CardOrientation.LANDSCAPE}
+            >
+                <img src={card.imageDataUrl} alt={cardNo} />
+            </div>
+        {/await}
+    </div>
+{/key}
 
 <style lang="postcss">
     .cardcontainer {
