@@ -12,7 +12,13 @@
         ClientPlayerSchema,
     } from "$lib/play/schema.js";
     import HandObject from "./HandObject.svelte";
-    import type { Readable } from "svelte/store";
+    import { writable, type Readable, type Writable } from "svelte/store";
+    import {
+        loadCardInfo,
+        type CardWithImageData,
+    } from "$lib/play/cardInfo.js";
+    import Spinner from "$lib/style/icons/Spinner.svelte";
+    import { cardTitle } from "$lib/card/strings.js";
 
     export type OpenMenuFunction = (
         x: number,
@@ -74,24 +80,47 @@
     $: game = logic.game;
     $: players = $game.players;
     $: handCards = $players[clientPlayerId].hand;
+
+    let sidebarCardNo: Writable<string | undefined> = writable(undefined),
+        sidebarCardPromise: Promise<CardWithImageData> = new Promise(
+            () => null
+        );
+    $: {
+        if ($sidebarCardNo !== undefined) {
+            sidebarCardPromise = loadCardInfo($sidebarCardNo);
+        }
+    }
+    setContext("sidebarCardNo", sidebarCardNo);
 </script>
 
 <svelte:body on:mousedown={() => (menuEntries = undefined)} />
 
 <div class="play">
     <div class="leftside">
-        <FieldObject
-            {logic}
-            playerId={0}
-            isClient={0 === clientPlayerId}
-            bind:deckComponent={deckComponents[0]}
-            bind:setListComponent={setListComponents[0]}
-        />
+        {#key $players}
+            {#each $players as _, i}
+                <FieldObject
+                    {logic}
+                    playerIdx={i}
+                    isClient={i === clientPlayerId}
+                    bind:deckComponent={deckComponents[i]}
+                    bind:setListComponent={setListComponents[i]}
+                />
+            {/each}
+        {/key}
 
         <HandObject {logic} cardNos={$handCards} />
     </div>
     <div class="rightside">
-        Sidebar!
+        {#if $sidebarCardNo !== undefined}
+            {#await sidebarCardPromise}
+                <Spinner />
+            {:then card}
+                {@html cardTitle(card, true)}
+            {/await}
+        {:else}
+            Right-click on a card to show details!
+        {/if}
     </div>
 </div>
 
@@ -113,6 +142,6 @@
     }
 
     .rightside {
-        @apply bg-primary-700 relative w-1/4 h-screen overflow-hidden;
+        @apply p-4 bg-primary-700 relative w-1/4 h-screen overflow-hidden;
     }
 </style>

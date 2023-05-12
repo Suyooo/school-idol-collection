@@ -1,12 +1,14 @@
 <script context="module" lang="ts">
-    import { createEventDispatcher, onMount } from "svelte";
+    import { createEventDispatcher, getContext, onMount } from "svelte";
     import { draggable } from "svelte-agnostic-draggable";
     import { CardOrientation } from "$lib/enums/cardOrientation.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
-    import type Card from "$models/card/card.js";
     import CardType from "$lib/enums/cardType.js";
-    import type { Readable } from "svelte/store";
-    import { loadCardInfo } from "$lib/play/cardInfo.js";
+    import type { Readable, Writable } from "svelte/store";
+    import {
+        loadCardInfo,
+        type CardWithImageData,
+    } from "$lib/play/cardInfo.js";
 </script>
 
 <script lang="ts">
@@ -17,9 +19,7 @@
 
     const dispatch = createEventDispatcher();
     let element: HTMLDivElement,
-        loadPromise: Promise<Card & { imageDataUrl: string }> = new Promise(
-            () => null
-        );
+        loadPromise: Promise<CardWithImageData> = new Promise(() => null);
     $: if (element) element.dataset.id = id.toString();
     $: if (element) element.dataset.cardNo = cardNo;
 
@@ -28,16 +28,23 @@
     });
 
     function moveCard(e: Event & DraggableEvent) {
-        if(e.detail.droppable?.element.classList.contains("hand")) return;
-        
+        if (e.detail.droppable?.element.classList.contains("hand")) return;
+
         dispatch("cardmove", {
             id: parseInt(e.detail.helper.dataset.id!),
             x: parseInt(e.detail.helper.style.left),
             y: parseInt(e.detail.helper.style.top),
         });
     }
+
+    let sidebarCardNo: Writable<string | undefined> =
+        getContext("sidebarCardNo");
+    function updateSidebar() {
+        $sidebarCardNo = cardNo;
+    }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
     class="cardcontainer"
     style:left={`${$position.x}px`}
@@ -51,6 +58,7 @@
         scroll: false,
     }}
     on:drag:stop={moveCard}
+    on:contextmenu|preventDefault={updateSidebar}
 >
     {#await loadPromise}
         <div

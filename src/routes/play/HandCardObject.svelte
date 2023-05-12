@@ -1,9 +1,12 @@
 <script context="module" lang="ts">
-    import { onMount } from "svelte";
+    import { getContext, onMount } from "svelte";
     import { draggable } from "svelte-agnostic-draggable";
     import Spinner from "$lib/style/icons/Spinner.svelte";
-    import type Card from "$models/card/card.js";
-    import { loadCardInfo } from "$lib/play/cardInfo.js";
+    import {
+        loadCardInfo,
+        type CardWithImageData,
+    } from "$lib/play/cardInfo.js";
+    import type { Writable } from "svelte/store";
 </script>
 
 <script lang="ts">
@@ -11,15 +14,19 @@
     export let cardNo: string;
 
     let element: HTMLDivElement,
-        loadPromise: Promise<Card & { imageDataUrl: string }> = new Promise(
-            () => null
-        );
+        loadPromise: Promise<CardWithImageData> = new Promise(() => null);
     $: if (element) element.dataset.idx = idx.toString();
     $: if (element) element.dataset.cardNo = cardNo;
 
     onMount(() => {
         loadPromise = loadCardInfo(cardNo);
     });
+
+    let sidebarCardNo: Writable<string | undefined> =
+        getContext("sidebarCardNo");
+    function updateSidebar() {
+        $sidebarCardNo = cardNo;
+    }
 </script>
 
 <div class="handspace">
@@ -33,6 +40,7 @@
             scroll: false,
             revert: "invalid",
         }}
+        on:contextmenu|preventDefault={updateSidebar}
     >
         {#await loadPromise}
             <div class="card">
@@ -59,12 +67,13 @@
             @apply absolute w-min cursor-grab select-none;
             width: 65px;
             height: 91px;
-            
+
             & .card {
                 @apply flex pt-4 items-start justify-center text-black bg-primary-200 overflow-hidden rounded-card-h shadow-md shadow-black;
                 width: 130px;
                 height: 182px;
-                transition: margin-top 0.3s, width 0.3s, height 0.3s, shadow-blur 0.3s;
+                transition: margin-top 0.3s, width 0.3s, height 0.3s,
+                    shadow-blur 0.3s;
                 transform-origin: 0 0;
 
                 & img {

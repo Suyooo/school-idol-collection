@@ -19,7 +19,7 @@
     import Plus from "$lib/style/icons/Plus.svelte";
 
     export let logic: ClientGameLogic;
-    export let playerId: number;
+    export let playerIdx: number;
     export let isClient: boolean;
     export let deckComponent: StackObject;
     export let setListComponent: StackObject;
@@ -34,7 +34,7 @@
         setList: Readable<string[]>;
     $: game = logic.game;
     $: players = $game.players;
-    $: player = $players[playerId];
+    $: player = $players[playerIdx];
     $: ({ profile, livePoints, field, deck, setList } = player);
 
     function enterCard(e: Event & DroppableEvent) {
