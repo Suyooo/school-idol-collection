@@ -80,6 +80,7 @@
     $: game = logic.game;
     $: players = $game.players;
     $: handCards = $players[clientPlayerId].hand;
+    setContext("logic", logic);
 
     let sidebarCardNo: Writable<string | undefined> = writable(undefined),
         sidebarCardPromise: Promise<CardWithImageData> = new Promise(
@@ -100,7 +101,6 @@
         {#key $players}
             {#each $players as _, i}
                 <FieldObject
-                    {logic}
                     playerIdx={i}
                     isClient={i === clientPlayerId}
                     bind:deckComponent={deckComponents[i]}
@@ -109,7 +109,7 @@
             {/each}
         {/key}
 
-        <HandObject {logic} cardNos={$handCards} />
+        <HandObject cardNos={$handCards} />
     </div>
     <div class="rightside">
         {#if $sidebarCardNo !== undefined}

@@ -16,6 +16,7 @@
     import "@interactjs/auto-start";
     import "@interactjs/actions/drag";
     import "@interactjs/modifiers";
+    import type { ClientGameLogic } from "$lib/play/schema.js";
 </script>
 
 <script lang="ts">
@@ -23,6 +24,7 @@
     export let cardNo: string;
     export let cardType: CardType;
     export let position: Readable<{ x: number; y: number; z: number }>;
+    let logic: ClientGameLogic = getContext("logic");
 
     const dispatch = createEventDispatcher();
     let element: HTMLDivElement,
@@ -48,13 +50,10 @@
                         displayPosition.x += event.dx;
                         displayPosition.y += event.dy;
                     },
-                    end() {
+                    end(event) {
+                        console.log(event.relatedTarget);
                         node.classList.remove("dragging");
-                        dispatch("cardmove", {
-                            id: id,
-                            x: displayPosition.x,
-                            y: displayPosition.y,
-                        });
+                        logic.requestMove(id, displayPosition.x, displayPosition.y);
                     },
                 },
                 modifiers: [

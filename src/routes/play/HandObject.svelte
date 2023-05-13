@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+    import { getContext } from "svelte";
     import HandCardObject from "./HandCardObject.svelte";
     import type { ClientGameLogic } from "$lib/play/schema.js";
     import interact from "@interactjs/interact/index";
@@ -7,7 +8,7 @@
 
 <script lang="ts">
     export let cardNos: string[];
-    export let logic: ClientGameLogic;
+    let logic: ClientGameLogic = getContext("logic");
 
     function action(node: HTMLElement) {
         const interactable = interact(node).dropzone({
@@ -16,7 +17,7 @@
             listeners: {
                 drop(event) {
                     node.classList.remove("hovering");
-                    console.log("HANDDROP", event);
+                    logic.requestFieldToHand(parseInt(event.relatedTarget.dataset.id!));
                 },
                 enter() {
                     node.classList.add("hovering");
@@ -31,14 +32,6 @@
             destroy: () => interactable.unset(),
         };
     }
-
-    /*function returnCard(e: Event & DroppableEvent) {
-        logic.requestFieldToHand(parseInt(e.detail.draggable.element.dataset.id!));
-    }
-
-    function noHandCards(e: HTMLElement) {
-        return !e.classList.contains("handcardcontainer");
-    }*/
 </script>
 
 <div class="hand" use:action>

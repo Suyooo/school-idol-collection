@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+    import { getContext } from "svelte";
     import CardType from "$lib/enums/cardType.js";
     import {
         StackTarget,
@@ -11,17 +12,17 @@
     import type { Readable } from "svelte/store";
     import CardObject from "./CardObject.svelte";
     import StackObject from "./StackObject.svelte";
+    import Minus from "$lib/style/icons/Minus.svelte";
+    import Plus from "$lib/style/icons/Plus.svelte";
 </script>
 
 <script lang="ts">
-    import Minus from "$lib/style/icons/Minus.svelte";
-    import Plus from "$lib/style/icons/Plus.svelte";
 
-    export let logic: ClientGameLogic;
     export let playerIdx: number;
     export let isClient: boolean;
     export let deckComponent: StackObject;
     export let setListComponent: StackObject;
+    let logic: ClientGameLogic = getContext("logic");
 
     let game: Readable<ClientGameSchema>,
         players: Readable<ClientPlayerSchema[]>,
@@ -77,8 +78,6 @@
         <CardObject
             {id}
             {...card}
-            on:cardmove={(e) =>
-                logic.requestMove(e.detail.id, e.detail.x, e.detail.y)}
         />
     {/each}
     <StackObject
