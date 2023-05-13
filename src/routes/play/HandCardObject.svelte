@@ -7,13 +7,15 @@
     import "@interactjs/auto-start";
     import "@interactjs/actions/drag";
     import "@interactjs/modifiers";
-    import type { ClientGameLogic } from "$lib/play/schema.js";
+    import { StackSide, type ClientGameLogic } from "$lib/play/schema.js";
+    import type { OpenMenuFunction } from "./+page.svelte";
 </script>
 
 <script lang="ts">
     export let idx: number;
     export let cardNo: string | null;
     const logic: ClientGameLogic = getContext("logic");
+    const openMenu: OpenMenuFunction = getContext("openMenu");
 
     let loadPromise: Promise<CardWithImageData> = new Promise(() => null);
     onMount(() => {
@@ -41,6 +43,25 @@
                             logic.requestHandToField(idx, box.left - 1, box.top - 1);
                         } else {
                             displayPosition.x = displayPosition.y = 0;
+                            if (event.relatedTarget?.classList.contains("objstackdeck")) {
+                                openMenu(
+                                    event.page.x,
+                                    event.page.y,
+                                    `${cardNo} &rarr; Deck`,
+                                    [
+                                        {
+                                            label: "Put on Top",
+                                            handler: () => logic.requestHandToStack(idx, StackSide.TOP),
+                                        },
+                                        {
+                                            label: "Put on Bottom",
+                                            handler: () => logic.requestHandToStack(idx, StackSide.BOTTOM),
+                                            condition: !event.relatedTarget.classList.contains("empty"),
+                                        },
+                                    ],
+                                    true
+                                );
+                            }
                         }
                     },
                 },
@@ -140,7 +161,7 @@
             &:before {
                 @apply absolute text-center text-accent-500 leading-none;
                 left: 0;
-                bottom: -.75rem;
+                bottom: -0.75rem;
                 width: 100px;
                 height: 1em;
                 font-size: 500%;

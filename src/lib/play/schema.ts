@@ -59,7 +59,7 @@ export abstract class ClientGameLogic {
     abstract requestStackToField(target: StackType, side: StackSide, x: number, y: number): void;
     abstract requestHandToField(idx: number, x: number, y: number): void;
     abstract requestFieldToStack(id: number, side: StackSide): void;
-    abstract requestHandToStack(id: number, side: StackSide): void;
+    abstract requestHandToStack(idx: number, side: StackSide): void;
     abstract requestFieldToHand(id: number, idx?: number): void;
     abstract requestStackToHand(side: StackSide): void;
     abstract requestShuffle(target: StackType): void;
