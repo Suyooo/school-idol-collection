@@ -1,6 +1,5 @@
 <script context="module" lang="ts">
     import { getContext } from "svelte";
-    import CardType from "$lib/enums/cardType.js";
     import {
         StackType,
         type ClientGameLogic,
@@ -14,10 +13,11 @@
     import StackObject from "./StackObject.svelte";
     import Minus from "$lib/style/icons/Minus.svelte";
     import Plus from "$lib/style/icons/Plus.svelte";
+    import interact from "@interactjs/interact/index";
+    import "@interactjs/actions/drop";
 </script>
 
 <script lang="ts">
-
     export let playerIdx: number;
     export let isClient: boolean;
     export let deckComponent: StackObject;
@@ -37,22 +37,33 @@
     $: player = $players[playerIdx];
     $: ({ profile, livePoints, field, deck, setList } = player);
 
-    /*function enterCard(e: Event & DroppableEvent) {
-        logic.requestHandToField(
-            parseInt(e.detail.draggable.element.dataset.idx!),
-            e.detail.draggable.position.absolute.left,
-            e.detail.draggable.position.absolute.top
-        );
-    }
+    function action(node: HTMLElement) {
+        const interactable = interact(node).dropzone({
+            accept: ".objcardhand",
+            overlap: "center",
+            listeners: {
+                enter() {
+                    node.classList.add("hovering");
+                },
+                leave() {
+                    node.classList.remove("hovering");
+                },
+                drop() {
+                    node.classList.remove("hovering");
+                },
+            },
+        });
 
-    function onlyHandCards(e: HTMLElement) {
-        return e.classList.contains("handcardcontainer");
-    }*/
+        return {
+            destroy: () => interactable.unset(),
+        };
+    }
 </script>
 
 <div
-    class="field"
+    class="objfield"
     style:--player-color={$profile.fieldColor}
+    use:action
 >
     <div class="background">
         <div class="area deck" />
@@ -99,7 +110,7 @@
 </div>
 
 <style lang="postcss">
-    .field {
+    .objfield {
         @apply absolute left-0 top-0 box-content border border-solid;
         width: 720px;
         height: 360px;

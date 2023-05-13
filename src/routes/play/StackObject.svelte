@@ -41,7 +41,7 @@
         };
     }
 
-    function menuFromStack(e: MouseEvent) {
+    function menu(e: MouseEvent) {
         if (cardNos.length === 0) return;
         openMenu(
             e.pageX,
@@ -107,7 +107,7 @@
     style:transform={`translateX(${shakeX}px)`}
     class:almostempty={cardNos.length <= 1}
     class:empty={cardNos.length === 0}
-    on:click={menuFromStack}
+    on:click={menu}
     use:action
 >
     <div class="stack bottom" />
