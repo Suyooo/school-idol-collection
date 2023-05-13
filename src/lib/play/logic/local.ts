@@ -15,7 +15,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
             matchUuid: "local",
             livePoints: writable(0),
             field: writable(new Map<number, ClientCardSchema>),
-            hand: writable<string[]>([]),
+            hand: writable<(string)[]>([]),
             deck: writable<string[]>([]),
             setList: writable<string[]>([]),
         }
@@ -118,9 +118,13 @@ export class LocalClientGameLogic extends ClientGameLogic {
         return ret!;
     }
 
-    private addToHand(cardNo: string) {
+    private addToHand(cardNo: string, idx?: number) {
         this.storePlayers[0].hand.update(arr => {
-            arr.push(cardNo);
+            if (idx === undefined) {
+                arr.push(cardNo);
+            } else {
+                arr.splice(idx, 0, cardNo);
+            }
             return arr;
         });
     }
@@ -154,9 +158,9 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.addToStack(StackType.DECK, side, cardNo);
     }
 
-    requestFieldToHand(id: number) {
+    requestFieldToHand(id: number, idx?: number) {
         const card = this.removeFromField(id);
-        this.addToHand(card.cardNo);
+        this.addToHand(card.cardNo, idx);
     }
 
     requestStackToHand(side: StackSide) {

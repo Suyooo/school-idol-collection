@@ -21,8 +21,10 @@
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
 
-    let loadPromise: Promise<CardWithImageData> = new Promise(() => null);
+    let element: HTMLElement;
+    $: if (element) element.dataset.id = id.toString();
 
+    let loadPromise: Promise<CardWithImageData> = new Promise(() => null);
     onMount(() => {
         loadPromise = loadCardInfo(cardNo);
     });
@@ -44,7 +46,7 @@
                     end(event) {
                         node.classList.remove("dragging");
                         if (event.relatedTarget?.classList.contains("objhand")) {
-                            logic.requestFieldToHand(id);
+                            // handled in HandObject
                         } else {
                             logic.requestMove(id, displayPosition.x, displayPosition.y);
                             if (
@@ -64,7 +66,7 @@
                                         {
                                             label: "Put on Bottom",
                                             handler: () => logic.requestFieldToStack(id, StackSide.BOTTOM),
-                                            condition: !event.relatedTarget.classList.contains("empty")
+                                            condition: !event.relatedTarget.classList.contains("empty"),
                                         },
                                     ],
                                     true
@@ -105,6 +107,7 @@
 {#key $position}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div
+        bind:this={element}
         class="objcardfield"
         class:objcardfieldmember={cardType === CardType.MEMBER}
         class:objcardfieldsong={cardType === CardType.SONG}

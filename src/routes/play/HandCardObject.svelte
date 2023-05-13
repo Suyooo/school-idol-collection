@@ -12,12 +12,12 @@
 
 <script lang="ts">
     export let idx: number;
-    export let cardNo: string;
+    export let cardNo: string | null;
     const logic: ClientGameLogic = getContext("logic");
 
     let loadPromise: Promise<CardWithImageData> = new Promise(() => null);
     onMount(() => {
-        loadPromise = loadCardInfo(cardNo);
+        if (cardNo !== null) loadPromise = loadCardInfo(cardNo);
     });
 
     let displayPosition: { x: number; y: number } = { x: 0, y: 0 };
@@ -37,6 +37,7 @@
                         node.classList.remove("dragging");
                         if (event.relatedTarget?.classList.contains("objfield")) {
                             const box = node.getBoundingClientRect();
+                            // TODO: scroll position of field view
                             logic.requestHandToField(idx, box.left - 1, box.top - 1);
                         } else {
                             displayPosition.x = displayPosition.y = 0;
@@ -64,28 +65,32 @@
 
     let sidebarCardNo: Writable<string | undefined> = getContext("sidebarCardNo");
     function updateSidebar() {
-        $sidebarCardNo = cardNo;
+        $sidebarCardNo = cardNo!;
     }
 </script>
 
 <div class="handspace">
-    <div
-        class="objcardhand"
-        style:left={`${displayPosition.x}px`}
-        style:top={`${displayPosition.y}px`}
-        on:contextmenu|preventDefault={updateSidebar}
-        use:action
-    >
-        {#await loadPromise}
-            <div class="card">
-                <Spinner />
-            </div>
-        {:then card}
-            <div class="card">
-                <img src={card.imageDataUrl} alt={cardNo} />
-            </div>
-        {/await}
-    </div>
+    {#if cardNo !== null}
+        <div
+            class="objcardhand"
+            style:left={`${displayPosition.x}px`}
+            style:top={`${displayPosition.y}px`}
+            on:contextmenu|preventDefault={updateSidebar}
+            use:action
+        >
+            {#await loadPromise}
+                <div class="card">
+                    <Spinner />
+                </div>
+            {:then card}
+                <div class="card">
+                    <img src={card.imageDataUrl} alt={cardNo} />
+                </div>
+            {/await}
+        </div>
+    {:else}
+        <div class="indicator" />
+    {/if}
 </div>
 
 <style lang="postcss">
@@ -120,12 +125,26 @@
                 height: 91px;
             }
 
-            &:hover, &:global(.dragging) {
+            &:hover,
+            &:global(.dragging) {
                 @apply brightness-110;
             }
 
             &:not(.dragging):hover .card {
                 margin-top: -50%;
+            }
+        }
+
+        & .indicator {
+            @apply relative pt-4 pointer-events-none;
+            &:before {
+                @apply absolute text-center text-accent-500 leading-none;
+                left: 0;
+                bottom: -.75rem;
+                width: 100px;
+                height: 1em;
+                font-size: 500%;
+                content: "🠛";
             }
         }
     }
