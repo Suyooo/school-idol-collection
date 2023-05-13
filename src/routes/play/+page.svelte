@@ -5,18 +5,11 @@
     import PopupMenu from "./PopupMenu.svelte";
     import { LocalClientGameLogic } from "$lib/play/logic/local.js";
     import type StackObject from "./StackObject.svelte";
-    import { StackTarget } from "$lib/play/schema.js";
-    import type {
-        ClientGameLogic,
-        ClientGameSchema,
-        ClientPlayerSchema,
-    } from "$lib/play/schema.js";
+    import { StackType } from "$lib/play/schema.js";
+    import type { ClientGameLogic, ClientGameSchema, ClientPlayerSchema } from "$lib/play/schema.js";
     import HandObject from "./HandObject.svelte";
     import { writable, type Readable, type Writable } from "svelte/store";
-    import {
-        loadCardInfo,
-        type CardWithImageData,
-    } from "$lib/play/cardInfo.js";
+    import { loadCardInfo, type CardWithImageData } from "$lib/play/cardInfo.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import { cardTitle } from "$lib/card/strings.js";
 
@@ -24,7 +17,7 @@
         x: number,
         y: number,
         header: string,
-        entries: { label: string; handler: () => void; close?: boolean }[],
+        entries: { label: string; handler: () => void; condition?: boolean; close?: boolean }[],
         cancelable: boolean
     ) => void;
 </script>
@@ -33,21 +26,21 @@
     let menuX: number,
         menuY: number,
         menuHeader: string,
-        menuEntries:
-            | { label: string; handler: () => void; close?: boolean }[]
-            | undefined = undefined;
+        menuEntries: { label: string; handler: () => void; close?: boolean }[] | undefined = undefined;
 
     const openMenu: OpenMenuFunction = (x, y, header, entries, cancelable) => {
         menuX = x;
         menuY = y;
         menuHeader = header;
-        menuEntries = entries.map((e) => ({
-            label: e.label,
-            handler: () => {
-                if (e.close ?? true) menuEntries = undefined;
-                e.handler();
-            },
-        }));
+        menuEntries = entries
+            .filter((e) => e.condition ?? true)
+            .map((e) => ({
+                label: e.label,
+                handler: () => {
+                    if (e.close ?? true) menuEntries = undefined;
+                    e.handler();
+                },
+            }));
         if (cancelable) {
             menuEntries.push({
                 label: "Cancel",
@@ -67,10 +60,8 @@
     });
     let deckComponents: StackObject[] = [],
         setListComponents: StackObject[] = [];
-    logic.handlers.onShuffle = (playerId: number, target: StackTarget) => {
-        (target === StackTarget.DECK ? deckComponents : setListComponents)[
-            playerId
-        ].shake();
+    logic.handlers.onShuffle = (playerId: number, target: StackType) => {
+        (target === StackType.DECK ? deckComponents : setListComponents)[playerId].shake();
     };
 
     let clientPlayerId: number = 0,
@@ -83,9 +74,7 @@
     setContext("logic", logic);
 
     let sidebarCardNo: Writable<string | undefined> = writable(undefined),
-        sidebarCardPromise: Promise<CardWithImageData> = new Promise(
-            () => null
-        );
+        sidebarCardPromise: Promise<CardWithImageData> = new Promise(() => null);
     $: {
         if ($sidebarCardNo !== undefined) {
             sidebarCardPromise = loadCardInfo($sidebarCardNo);

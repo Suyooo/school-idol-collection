@@ -1,7 +1,7 @@
 import type CardType from "$lib/enums/cardType.js";
 import type { Readable } from "svelte/store";
 
-export const enum StackTarget {
+export const enum StackType {
     DECK, SET_LIST
 }
 
@@ -56,19 +56,19 @@ export abstract class ClientGameLogic {
         onShuffle: undefined
     };
 
-    abstract requestStackToField(target: StackTarget, side: StackSide, x: number, y: number): void;
+    abstract requestStackToField(target: StackType, side: StackSide, x: number, y: number): void;
     abstract requestHandToField(idx: number, x: number, y: number): void;
     abstract requestFieldToStack(id: number, side: StackSide): void;
     abstract requestHandToStack(id: number, side: StackSide): void;
     abstract requestFieldToHand(id: number): void;
     abstract requestStackToHand(side: StackSide): void;
-    abstract requestShuffle(target: StackTarget): void;
+    abstract requestShuffle(target: StackType): void;
     abstract requestMove(id: number, x: number, y: number): void;
     abstract requestLPUpdate(delta: number): void;
 }
 
 export interface ClientGameLogicHandlers {
-    onShuffle: ((playerId: number, target: StackTarget) => void) | undefined;
+    onShuffle: ((playerId: number, target: StackType) => void) | undefined;
 }
 
 export interface ClientGameSchema {

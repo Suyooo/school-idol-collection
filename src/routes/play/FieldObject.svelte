@@ -2,7 +2,7 @@
     import { getContext } from "svelte";
     import CardType from "$lib/enums/cardType.js";
     import {
-        StackTarget,
+        StackType,
         type ClientGameLogic,
         type ClientGameSchema,
         type ClientPlayerSchema,
@@ -22,7 +22,7 @@
     export let isClient: boolean;
     export let deckComponent: StackObject;
     export let setListComponent: StackObject;
-    let logic: ClientGameLogic = getContext("logic");
+    const logic: ClientGameLogic = getContext("logic");
 
     let game: Readable<ClientGameSchema>,
         players: Readable<ClientPlayerSchema[]>,
@@ -83,38 +83,18 @@
     <StackObject
         bind:this={deckComponent}
         cardNos={$deck}
-        cardType={CardType.MEMBER}
+        stackType={StackType.DECK}
         x={620}
         y={253}
         color={$profile.deckColor}
-        on:reveal={(e) =>
-            logic.requestStackToField(
-                StackTarget.DECK,
-                e.detail.side,
-                e.detail.x,
-                e.detail.y
-            )}
-        on:returnField={(e) => logic.requestFieldToStack(e.detail.id, e.detail.side)}
-        on:returnHand={(e) => logic.requestHandToStack(e.detail.idx, e.detail.side)}
-        on:shuffle={() => logic.requestShuffle(StackTarget.DECK)}
-        on:draw={(e) => logic.requestStackToHand(e.detail.side)}
     />
     <StackObject
         bind:this={setListComponent}
         cardNos={$setList}
-        cardType={CardType.SONG}
+        stackType={StackType.SET_LIST}
         x={35}
         y={279}
         color={$profile.setListColor}
-        on:reveal={(e) =>
-            logic.requestStackToField(
-                StackTarget.SET_LIST,
-                e.detail.side,
-                e.detail.x,
-                e.detail.y
-            )}
-        on:returnField={(e) => logic.requestFieldToStack(e.detail.id, e.detail.side)}
-        on:shuffle={() => logic.requestShuffle(StackTarget.SET_LIST)}
     />
 </div>
 

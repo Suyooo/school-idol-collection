@@ -1,6 +1,6 @@
 import CardType from "$lib/enums/cardType.js";
 import { writable, type Readable, type Writable, derived, readonly, get } from "svelte/store";
-import { StackTarget, ClientGameLogic, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientCardSchema, type CardSchema, type ClientProfile } from "../schema.js";
+import { StackType, ClientGameLogic, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientCardSchema, type CardSchema, type ClientProfile } from "../schema.js";
 
 export class LocalClientGameLogic extends ClientGameLogic {
     private storeCardPositions = new Map<number, Writable<{ x: number, y: number, z: number; }>>();
@@ -65,11 +65,11 @@ export class LocalClientGameLogic extends ClientGameLogic {
         });
     }
 
-    private targetToProperty(target: StackTarget) {
-        return target == StackTarget.DECK ? "deck" : "setList";
+    private targetToProperty(target: StackType) {
+        return target == StackType.DECK ? "deck" : "setList";
     }
 
-    private addToStack(target: StackTarget, side: StackSide, cardNo: string) {
+    private addToStack(target: StackType, side: StackSide, cardNo: string) {
         const prop = this.targetToProperty(target);
         this.storePlayers[0][prop].update(arr => {
             if (side === StackSide.TOP) arr.push(cardNo);
@@ -78,7 +78,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
         });
     }
 
-    private removeFromStack(target: StackTarget, side: StackSide): string {
+    private removeFromStack(target: StackType, side: StackSide): string {
         let val: string;
         const prop = this.targetToProperty(target);
         this.storePlayers[0][prop].update(arr => {
@@ -134,9 +134,9 @@ export class LocalClientGameLogic extends ClientGameLogic {
         return cardNo!;
     }
 
-    requestStackToField(target: StackTarget, side: StackSide, x: number, y: number) {
+    requestStackToField(target: StackType, side: StackSide, x: number, y: number) {
         const cardNo = this.removeFromStack(target, side);
-        this.addToField(cardNo, target === StackTarget.DECK ? CardType.MEMBER : CardType.SONG, x, y);
+        this.addToField(cardNo, target === StackType.DECK ? CardType.MEMBER : CardType.SONG, x, y);
     }
 
     requestHandToField(idx: number, x: number, y: number) {
@@ -146,12 +146,12 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     requestFieldToStack(id: number, side: StackSide) {
         const card = this.removeFromField(id);
-        this.addToStack(card.cardType === CardType.MEMBER ? StackTarget.DECK : StackTarget.SET_LIST, side, card.cardNo);
+        this.addToStack(card.cardType === CardType.MEMBER ? StackType.DECK : StackType.SET_LIST, side, card.cardNo);
     }
 
     requestHandToStack(idx: number, side: StackSide) {
         const cardNo = this.removeFromHand(idx);
-        this.addToStack(StackTarget.DECK, side, cardNo);
+        this.addToStack(StackType.DECK, side, cardNo);
     }
 
     requestFieldToHand(id: number) {
@@ -160,11 +160,11 @@ export class LocalClientGameLogic extends ClientGameLogic {
     }
 
     requestStackToHand(side: StackSide) {
-        const cardNo = this.removeFromStack(StackTarget.DECK, side);
+        const cardNo = this.removeFromStack(StackType.DECK, side);
         this.addToHand(cardNo);
     }
 
-    requestShuffle(target: StackTarget) {
+    requestShuffle(target: StackType) {
         const prop = this.targetToProperty(target);
         this.storePlayers[0][prop].update(arr => this.shuffleArray(arr));
         if (this.handlers.onShuffle) this.handlers.onShuffle(0, target);

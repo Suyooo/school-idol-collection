@@ -1,40 +1,36 @@
 <script context="module" lang="ts">
-    import CardType from "$lib/enums/cardType.js";
-    import { createEventDispatcher, getContext } from "svelte";
-    import { StackSide } from "$lib/play/schema.js";
+    import { getContext } from "svelte";
+    import { ClientGameLogic, StackSide, StackType } from "$lib/play/schema.js";
     import type { OpenMenuFunction } from "./+page.svelte";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
-    import type { DropEvent } from "@interactjs/types/index";
 </script>
 
 <script lang="ts">
     export let cardNos: string[];
-    export let cardType: CardType;
+    export let stackType: StackType;
     export let x: number = 0;
     export let y: number = 0;
     export let color: string;
+    const logic: ClientGameLogic = getContext("logic");
+    const openMenu = getContext<OpenMenuFunction>("openMenu");
 
     let stackLength: number, h: number;
     $: stackLength = Math.min(cardNos.length - 1, 60);
-    $: h = cardType === CardType.MEMBER ? 91 : 65;
+    $: h = stackType === StackType.DECK ? 91 : 65;
 
     function action(node: HTMLElement) {
         const interactable = interact(node).dropzone({
-            accept:
-                cardType === CardType.MEMBER
-                    ? ".objcardfieldmember, .objcardhand"
-                    : ".objcardfieldsong",
+            accept: stackType === StackType.DECK ? ".objcardfieldmember, .objcardhand" : ".objcardfieldsong",
             overlap: "center",
             listeners: {
-                drop(event) {
-                    node.classList.remove("hovering");
-                    menuToStack(event);
-                },
                 enter() {
                     node.classList.add("hovering");
                 },
                 leave() {
+                    node.classList.remove("hovering");
+                },
+                drop() {
                     node.classList.remove("hovering");
                 },
             },
@@ -45,129 +41,37 @@
         };
     }
 
-    const openMenu = getContext<OpenMenuFunction>("openMenu");
-    const dispatch = createEventDispatcher();
-
     function menuFromStack(e: MouseEvent) {
         if (cardNos.length === 0) return;
-        if (cardType === CardType.MEMBER) {
-            openMenu(
-                e.pageX,
-                e.pageY,
-                `Deck`,
-                [
-                    {
-                        label: "Draw Top Card to Hand",
-                        handler: () =>
-                            dispatch("draw", { side: StackSide.TOP }),
-                        close: false,
-                    },
-                    {
-                        label: "Draw Bottom Card to Hand",
-                        handler: () =>
-                            dispatch("draw", { side: StackSide.BOTTOM }),
-                        close: false,
-                    },
-                    {
-                        label: "Reveal Top Card on Stage",
-                        handler: () =>
-                            dispatch("reveal", {
-                                side: StackSide.TOP,
-                                x,
-                                y: y - stackLength,
-                            }),
-                    },
-                    {
-                        label: "Reveal Bottom Card on Stage",
-                        handler: () =>
-                            dispatch("reveal", {
-                                side: StackSide.BOTTOM,
-                                x,
-                                y: y,
-                            }),
-                    },
-                    {
-                        label: "Shuffle",
-                        handler: () => dispatch("shuffle"),
-                    },
-                ],
-                true
-            );
-        } else {
-            openMenu(
-                e.pageX,
-                e.pageY,
-                `Song Card Stack`,
-                [
-                    {
-                        label: "Reveal Top Card on Stage",
-                        handler: () =>
-                            dispatch("reveal", {
-                                side: StackSide.TOP,
-                                x,
-                                y: y - stackLength,
-                            }),
-                    },
-                    {
-                        label: "Shuffle",
-                        handler: () => dispatch("shuffle"),
-                    },
-                ],
-                true
-            );
-        }
-    }
-
-    function menuToStack(e: DropEvent) {
         openMenu(
-            e.dragEvent.page.x,
-            e.dragEvent.page.y,
-            `${e.relatedTarget.dataset.cardNo} &rarr; ${
-                cardType === CardType.MEMBER ? "Deck" : "Song Card Stack"
-            }`,
-            e.relatedTarget.classList.contains("objcardHand")
-            ? [
+            e.pageX,
+            e.pageY,
+            stackType === StackType.DECK ? "Deck" : "Set List",
+            [
                 {
-                    label: "Return to Top",
-                    handler: () =>
-                        dispatch("returnHand", {
-                            idx: parseInt(
-                                e.relatedTarget.dataset.idx!
-                            ),
-                            side: StackSide.TOP,
-                        }),
+                    label: "Draw Top Card to Hand",
+                    handler: () => logic.requestStackToHand(StackSide.TOP),
+                    condition: stackType === StackType.DECK,
+                    close: false,
                 },
                 {
-                    label: "Return to Bottom",
-                    handler: () =>
-                        dispatch("returnHand", {
-                            idx: parseInt(
-                                e.relatedTarget.dataset.idx!
-                            ),
-                            side: StackSide.BOTTOM,
-                        }),
-                },
-            ]
-            : [
-                {
-                    label: "Return to Top",
-                    handler: () =>
-                        dispatch("returnField", {
-                            id: parseInt(
-                                e.relatedTarget.dataset.id!
-                            ),
-                            side: StackSide.TOP,
-                        }),
+                    label: "Draw Bottom Card to Hand",
+                    handler: () => logic.requestStackToHand(StackSide.BOTTOM),
+                    condition: stackType === StackType.DECK && cardNos.length > 1,
+                    close: false,
                 },
                 {
-                    label: "Return to Bottom",
-                    handler: () =>
-                        dispatch("returnField", {
-                            id: parseInt(
-                                e.relatedTarget.dataset.id!
-                            ),
-                            side: StackSide.BOTTOM,
-                        }),
+                    label: "Reveal Top Card on Stage",
+                    handler: () => logic.requestStackToField(stackType, StackSide.TOP, x, y - stackLength),
+                },
+                {
+                    label: "Reveal Bottom Card on Stage",
+                    handler: () => logic.requestStackToField(stackType, StackSide.BOTTOM, x, y),
+                    condition: cardNos.length > 1,
+                },
+                {
+                    label: "Shuffle",
+                    handler: () => logic.requestShuffle(StackType.DECK),
                 },
             ],
             true
@@ -195,12 +99,12 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
     class="objstack"
+    class:objstackdeck={stackType === StackType.DECK}
+    class:objstacksetlist={stackType === StackType.SET_LIST}
     style:--stack-color={color}
     style:left={`${x}px`}
     style:top={`${y - 60}px`}
     style:transform={`translateX(${shakeX}px)`}
-    class:stack-v={cardType === CardType.MEMBER}
-    class:stack-h={cardType !== CardType.MEMBER}
     class:almostempty={cardNos.length <= 1}
     class:empty={cardNos.length === 0}
     on:click={menuFromStack}
@@ -244,7 +148,7 @@
             }
         }
 
-        &.stack-v .stack {
+        &.objstackdeck .stack {
             @apply rounded-card-v;
             width: 65px;
             height: 91px;
@@ -254,7 +158,7 @@
             }
         }
 
-        &.stack-h .stack {
+        &.objstacksetlist .stack {
             @apply rounded-card-h;
             width: 91px;
             height: 65px;
