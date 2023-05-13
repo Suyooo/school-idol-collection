@@ -1,6 +1,5 @@
 <script context="module" lang="ts">
     import CardType from "$lib/enums/cardType.js";
-    import { droppable } from "svelte-agnostic-draggable";
     import {
         StackTarget,
         type ClientGameLogic,
@@ -37,7 +36,7 @@
     $: player = $players[playerIdx];
     $: ({ profile, livePoints, field, deck, setList } = player);
 
-    function enterCard(e: Event & DroppableEvent) {
+    /*function enterCard(e: Event & DroppableEvent) {
         logic.requestHandToField(
             parseInt(e.detail.draggable.element.dataset.idx!),
             e.detail.draggable.position.absolute.left,
@@ -47,14 +46,12 @@
 
     function onlyHandCards(e: HTMLElement) {
         return e.classList.contains("handcardcontainer");
-    }
+    }*/
 </script>
 
 <div
     class="field"
     style:--player-color={$profile.fieldColor}
-    use:droppable={{ scope: "0", accept: onlyHandCards, disabled: !isClient }}
-    on:droppable:drop={enterCard}
 >
     <div class="background">
         <div class="area deck" />

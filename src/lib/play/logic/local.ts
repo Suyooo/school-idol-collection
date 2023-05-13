@@ -54,6 +54,15 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.storePlayers[0].deck.set(["LL01-001", "LL01-002", "LL01-003"]);
         this.storePlayers[0].setList.set(["LL01-064", "LL01-065", "LL01-066"]);
         this.storePlayers[0].hand.set(["LL01-004", "LL01-005", "LL01-006"]);
+        this.storeCardPositions.set(-1, writable({ x: 10, y: 10, z: 10 }));
+        this.storePlayers[0].field.update(m => {
+            m.set(-1, {
+                cardNo: "LL01-007",
+                cardType: CardType.MEMBER,
+                position: this.storeCardPositions.get(-1)!
+            });
+            return m;
+        });
     }
 
     private targetToProperty(target: StackTarget) {

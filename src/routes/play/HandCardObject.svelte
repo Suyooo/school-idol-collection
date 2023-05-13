@@ -1,6 +1,5 @@
 <script context="module" lang="ts">
     import { getContext, onMount } from "svelte";
-    import { draggable } from "svelte-agnostic-draggable";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import {
         loadCardInfo,
@@ -33,13 +32,6 @@
     <div
         class="handcardcontainer"
         bind:this={element}
-        use:draggable={{
-            cursor: "grabbing",
-            zIndex: 2100000000,
-            scope: "0",
-            scroll: false,
-            revert: true,
-        }}
         on:contextmenu|preventDefault={updateSidebar}
     >
         {#await loadPromise}

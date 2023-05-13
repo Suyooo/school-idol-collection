@@ -1,9 +1,11 @@
 <script context="module" lang="ts">
-    import { droppable } from "svelte-agnostic-draggable";
     import CardType from "$lib/enums/cardType.js";
     import { createEventDispatcher, getContext } from "svelte";
     import { StackSide } from "$lib/play/schema.js";
     import type { OpenMenuFunction } from "./+page.svelte";
+    import interact from "@interactjs/interact/index";
+    import "@interactjs/actions/drop";
+    import type { DropEvent } from "@interactjs/types/index";
 </script>
 
 <script lang="ts">
@@ -16,6 +18,32 @@
     let stackLength: number, h: number;
     $: stackLength = Math.min(cardNos.length - 1, 60);
     $: h = cardType === CardType.MEMBER ? 91 : 65;
+
+    function action(node: HTMLElement) {
+        const interactable = interact(node).dropzone({
+            accept:
+                cardType === CardType.MEMBER
+                    ? ".objcardfieldmember, .objcardhand"
+                    : ".objcardfieldsong",
+            overlap: "center",
+            listeners: {
+                drop(event) {
+                    node.classList.remove("hovering");
+                    menuToStack(event);
+                },
+                enter() {
+                    node.classList.add("hovering");
+                },
+                leave() {
+                    node.classList.remove("hovering");
+                },
+            },
+        });
+
+        return {
+            destroy: () => interactable.unset(),
+        };
+    }
 
     const openMenu = getContext<OpenMenuFunction>("openMenu");
     const dispatch = createEventDispatcher();
@@ -90,21 +118,21 @@
         }
     }
 
-    function menuToStack(e: Event & DroppableEvent) {
+    function menuToStack(e: DropEvent) {
         openMenu(
-            e.detail.sensorEvent.data.pageX,
-            e.detail.sensorEvent.data.pageY,
-            `${e.detail.draggable.element.dataset.cardNo} &rarr; ${
+            e.dragEvent.page.x,
+            e.dragEvent.page.y,
+            `${e.relatedTarget.dataset.cardNo} &rarr; ${
                 cardType === CardType.MEMBER ? "Deck" : "Song Card Stack"
             }`,
-            e.detail.draggable.element.classList.contains("handcardcontainer")
+            e.relatedTarget.classList.contains("objcardHand")
             ? [
                 {
                     label: "Return to Top",
                     handler: () =>
                         dispatch("returnHand", {
                             idx: parseInt(
-                                e.detail.draggable.element.dataset.idx!
+                                e.relatedTarget.dataset.idx!
                             ),
                             side: StackSide.TOP,
                         }),
@@ -114,7 +142,7 @@
                     handler: () =>
                         dispatch("returnHand", {
                             idx: parseInt(
-                                e.detail.draggable.element.dataset.idx!
+                                e.relatedTarget.dataset.idx!
                             ),
                             side: StackSide.BOTTOM,
                         }),
@@ -126,7 +154,7 @@
                     handler: () =>
                         dispatch("returnField", {
                             id: parseInt(
-                                e.detail.draggable.element.dataset.id!
+                                e.relatedTarget.dataset.id!
                             ),
                             side: StackSide.TOP,
                         }),
@@ -136,7 +164,7 @@
                     handler: () =>
                         dispatch("returnField", {
                             id: parseInt(
-                                e.detail.draggable.element.dataset.id!
+                                e.relatedTarget.dataset.id!
                             ),
                             side: StackSide.BOTTOM,
                         }),
@@ -164,10 +192,9 @@
     }
 </script>
 
-<!-- Accessibility considerations maybe later... -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-    class="stackcontainer"
+    class="objstack"
     style:--stack-color={color}
     style:left={`${x}px`}
     style:top={`${y - 60}px`}
@@ -176,9 +203,8 @@
     class:stack-h={cardType !== CardType.MEMBER}
     class:almostempty={cardNos.length <= 1}
     class:empty={cardNos.length === 0}
-    use:droppable={{ scope: cardType.toString(), greedy: true }}
-    on:droppable:drop={menuToStack}
     on:click={menuFromStack}
+    use:action
 >
     <div class="stack bottom" />
     <div class="stack top" style:margin-top={`-${stackLength + h}px`}>
@@ -187,8 +213,12 @@
 </div>
 
 <style lang="postcss">
-    .stackcontainer {
+    .objstack {
         @apply absolute w-min z-play-stack select-none cursor-pointer;
+
+        &:hover {
+            @apply brightness-110;
+        }
 
         & .stack {
             background-color: var(--stack-color);
@@ -252,7 +282,7 @@
             }
         }
 
-        &:global(.ui-droppable-hover) .stack.top {
+        &:global(.hovering) .stack.top {
             @apply border-4 border-white/50;
         }
     }

@@ -1,6 +1,9 @@
 <script context="module" lang="ts">
-    import { createEventDispatcher, getContext, onMount } from "svelte";
-    import { draggable } from "svelte-agnostic-draggable";
+    import {
+        createEventDispatcher,
+        getContext,
+        onMount,
+    } from "svelte";
     import { CardOrientation } from "$lib/enums/cardOrientation.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import CardType from "$lib/enums/cardType.js";
@@ -9,6 +12,10 @@
         loadCardInfo,
         type CardWithImageData,
     } from "$lib/play/cardInfo.js";
+    import interact from "@interactjs/interact/index";
+    import "@interactjs/auto-start";
+    import "@interactjs/actions/drag";
+    import "@interactjs/modifiers";
 </script>
 
 <script lang="ts">
@@ -27,19 +34,50 @@
         loadPromise = loadCardInfo(cardNo);
     });
 
-    function moveCard(e: Event & DraggableEvent) {
-        console.log("handler");
-        if (
-            e.detail.droppable?.element.classList.contains("hand") ||
-            outOfBounds(e.detail.helper)
-        )
-            return;
+    let displayPosition: { x: number; y: number };
+    $: displayPosition = { x: $position.x, y: $position.y };
+    function action(node: HTMLElement) {
+        const interactable = interact(node)
+            .styleCursor(false)
+            .draggable({
+                listeners: {
+                    start() {
+                        node.classList.add("dragging");
+                    },
+                    move(event) {
+                        displayPosition.x += event.dx;
+                        displayPosition.y += event.dy;
+                    },
+                    end() {
+                        node.classList.remove("dragging");
+                        dispatch("cardmove", {
+                            id: id,
+                            x: displayPosition.x,
+                            y: displayPosition.y,
+                        });
+                    },
+                },
+                modifiers: [
+                    interact.modifiers.snap({
+                        targets: [
+                            interact.snappers.grid({
+                                x: 10,
+                                y: 10,
+                            }),
+                        ],
+                        relativePoints: [{ x: 0, y: 0 }],
+                        offset: "parent",
+                    }),
+                    interact.modifiers.restrictRect({
+                        restriction: "parent",
+                        endOnly: true,
+                    }),
+                ],
+            });
 
-        dispatch("cardmove", {
-            id: parseInt(e.detail.helper.dataset.id!),
-            x: parseInt(e.detail.helper.style.left),
-            y: parseInt(e.detail.helper.style.top),
-        });
+        return {
+            destroy: () => interactable.unset(),
+        };
     }
 
     let sidebarCardNo: Writable<string | undefined> =
@@ -47,36 +85,21 @@
     function updateSidebar() {
         $sidebarCardNo = cardNo;
     }
-
-    function outOfBounds(draggable: HTMLElement) {
-        const fieldPos = draggable.parentElement!.getBoundingClientRect();
-        const dragPos = draggable.getBoundingClientRect();
-        return (
-            fieldPos.top > dragPos.top ||
-            fieldPos.left > dragPos.left ||
-            fieldPos.bottom < dragPos.bottom ||
-            fieldPos.right < dragPos.right
-        );
-    }
 </script>
 
 {#key $position}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div
-        class="cardcontainer"
-        style:left={`${$position.x}px`}
-        style:top={`${$position.y}px`}
+        class="objcardfield"
+        class:objcardfieldmember={cardType === CardType.MEMBER}
+        class:objcardfieldsong={cardType === CardType.SONG}
+        class:objcardfieldmemory={cardType === CardType.MEMORY}
+        style:left={`${displayPosition.x}px`}
+        style:top={`${displayPosition.y}px`}
         style:z-index={$position.z}
         bind:this={element}
-        use:draggable={{
-            cursor: "grabbing",
-            zIndex: 2099999999,
-            scope: cardType.toString(),
-            scroll: false,
-            revert: outOfBounds,
-        }}
-        on:drag:stop={moveCard}
         on:contextmenu|preventDefault={updateSidebar}
+        use:action
     >
         {#await loadPromise}
             <div
@@ -101,8 +124,8 @@
 {/key}
 
 <style lang="postcss">
-    .cardcontainer {
-        @apply absolute w-min cursor-grab select-none z-play-card;
+    .objcardfield {
+        @apply absolute w-min select-none touch-none z-play-card cursor-grab;
 
         & .card {
             @apply flex items-center justify-center bg-primary-200 overflow-hidden shadow-sm shadow-black;
@@ -122,6 +145,14 @@
             & img {
                 @apply w-full;
             }
+        }
+
+        &:hover {
+            @apply brightness-110;
+        }
+
+        &:global(.dragging) {
+            @apply !z-play-card-dragging cursor-grabbing;
         }
     }
 </style>
