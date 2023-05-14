@@ -181,13 +181,17 @@ export class LocalClientGameLogic extends ClientGameLogic {
             .map((e) => e.v);
     }
 
-    requestMove(id: number, x: number, y: number) {
+    requestFieldMove(id: number, x: number, y: number) {
         this.storeCardPositions.get(id)!.update(pos => {
             pos.x = x;
             pos.y = y;
             pos.z = this.nextZ++;
             return pos;
         });
+    }
+
+    requestHandMove(idx: number, newIdx: number) {
+        this.addToHand(this.removeFromHand(idx), newIdx);
     }
 
     requestLPUpdate(delta: number) {

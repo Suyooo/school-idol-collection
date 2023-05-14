@@ -44,11 +44,11 @@
                         displayPosition.y += event.dy;
                     },
                     end(event) {
-                        node.classList.remove("dragging");
                         if (event.relatedTarget?.classList.contains("objhand")) {
                             // handled in HandObject
                         } else {
-                            logic.requestMove(id, displayPosition.x, displayPosition.y);
+                            node.classList.remove("dragging");
+                            logic.requestFieldMove(id, displayPosition.x, displayPosition.y);
                             if (
                                 event.relatedTarget?.classList.contains(
                                     cardType === CardType.MEMBER ? "objstackdeck" : "objstacksetlist"
@@ -140,6 +140,7 @@
 
         & .card {
             @apply flex items-center justify-center bg-primary-200 overflow-hidden shadow-sm shadow-black;
+            transition: width 0.3s, height 0.3s, shadow-blur 0.3s;
 
             &.card-v {
                 @apply rounded-card-v;
@@ -164,6 +165,21 @@
 
         &:global(.dragging) {
             @apply !z-play-card-dragging cursor-grabbing;
+
+            &:global(.inhand) {
+                & .card {
+                    @apply shadow-md shadow-black;
+                    &.card-v {
+                        width: 130px;
+                        height: 182px;
+                    }
+
+                    &.card-h {
+                        width: 182px;
+                        height: 130px;
+                    }
+                }
+            }
         }
     }
 </style>
