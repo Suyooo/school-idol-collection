@@ -11,8 +11,10 @@
     export let cardNos: string[];
     const logic: ClientGameLogic = getContext("logic");
 
+    let draggingHandCardIdx: number | null = null;
     let indicatorPos: number | null = null;
-    export function getHandIndex(event: DropEvent, sizeOffset: number = 0): number {
+    export function getHandIndex(event: DropEvent): number {
+        const sizeOffset = draggingHandCardIdx === null ? 0 : 1;
         if (cardNos.length - sizeOffset === 0) {
             return 0;
         }
@@ -24,22 +26,14 @@
             return cardCenterX < handCenterX ? 0 : 1;
         } else {
             // TODO: scroll position of hand row
-            const totalCardWidth = (displayCardNos.length - sizeOffset + 1) * 65;
-            let checkX = handCenterX - Math.floor(totalCardWidth / 2) + 65;
+            const totalCardWidth = (cardNos.length - sizeOffset + 1) * 65;
+            let checkX = handCenterX - Math.floor(totalCardWidth / 2) + 32;
             let ret = 0;
-            while (cardCenterX > checkX && ret < displayCardNos.length - sizeOffset) {
+            while (cardCenterX > checkX && ret < cardNos.length - sizeOffset) {
                 checkX += 65;
                 ret++;
             }
             return ret;
-        }
-    }
-
-    let displayCardNos: { idx: number; cardNo: string | null }[];
-    $: {
-        displayCardNos = cardNos.map((cardNo, idx) => ({ idx, cardNo }));
-        if (indicatorPos !== null) {
-            displayCardNos.splice(indicatorPos, 0, { idx: -1, cardNo: null });
         }
     }
 
@@ -50,19 +44,13 @@
             listeners: {
                 enter(event) {
                     event.relatedTarget.classList.add("inhand");
+                    if (event.relatedTarget.classList.contains("objcardhand")) {
+                        draggingHandCardIdx = parseInt(event.relatedTarget.dataset.idx!);
+                    }
                     indicatorPos = getHandIndex(event);
                 },
                 move(event) {
-                    if (event.relatedTarget.classList.contains("objcardfieldmember")) {
-                        indicatorPos = getHandIndex(event);
-                    } else {
-                        const newIndicatorPos = getHandIndex(event, -1);
-                        if (newIndicatorPos > indicatorPos!) {
-                            indicatorPos = newIndicatorPos - 1;
-                        } else {
-                            indicatorPos = newIndicatorPos;
-                        }
-                    }
+                    indicatorPos = getHandIndex(event);
                 },
                 leave(event) {
                     event.relatedTarget.classList.remove("inhand");
@@ -72,16 +60,15 @@
                     if (event.relatedTarget.classList.contains("objcardfieldmember")) {
                         logic.requestFieldToHand(parseInt(event.relatedTarget.dataset.id!), getHandIndex(event));
                     } else {
-                        indicatorPos = null;
                         const oldIdx = parseInt(event.relatedTarget.dataset.idx!);
-                        const newIdx = getHandIndex(event, -1);
-                        console.log(oldIdx, newIdx);
-                        if (oldIdx !== newIdx) logic.requestHandMove(oldIdx, newIdx);
-                        else {
+                        const newIdx = getHandIndex(event);
+                        if (oldIdx !== newIdx) {
+                            logic.requestHandMove(oldIdx, newIdx);
+                        } else {
                             event.relatedTarget.classList.remove("inhand");
                         }
                     }
-                    indicatorPos = null;
+                    draggingHandCardIdx = indicatorPos = null;
                 },
             },
         });
@@ -94,8 +81,20 @@
 
 <div class="objhand" use:action>
     {#key cardNos}
-        {#each displayCardNos as card (card.idx)}
-            <HandCardObject {...card} />
+        {#key draggingHandCardIdx === null}
+            <HandCardObject idx={-1} cardNo={null} indicatorAfter={indicatorPos === 0} />
+        {/key}
+        {#each cardNos as cardNo, idx}
+            <!-- this key forces recreation of the element when starting/ending a drag inside the hand - which means animations are skipped! -->
+            {#key draggingHandCardIdx === null || draggingHandCardIdx === idx}
+                <HandCardObject
+                    {idx}
+                    {cardNo}
+                    indicatorAfter={indicatorPos !== null && draggingHandCardIdx !== idx
+                        ? indicatorPos === idx + 1 - (draggingHandCardIdx !== null && idx > draggingHandCardIdx ? 1 : 0)
+                        : false}
+                />
+            {/key}
         {/each}
     {/key}
 </div>
@@ -108,5 +107,11 @@
         bottom: -15vh;
         height: 30vh;
         padding-top: 1vh;
+
+        &:after {
+            @apply pointer-events-none;
+            content: " ";
+            width: 65px;
+        }
     }
 </style>

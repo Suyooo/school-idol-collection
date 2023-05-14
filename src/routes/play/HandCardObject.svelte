@@ -14,6 +14,7 @@
 <script lang="ts">
     export let idx: number;
     export let cardNo: string | null;
+    export let indicatorAfter: boolean;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
 
@@ -104,6 +105,7 @@
     <div
         bind:this={element}
         class="objcardhand"
+        class:indicator-after={indicatorAfter}
         style:left={`${startOffset.x + displayPosition.x}px`}
         style:top={`${startOffset.y + displayPosition.y}px`}
         on:contextmenu|preventDefault={updateSidebar}
@@ -120,21 +122,68 @@
         {/await}
     </div>
 {:else}
-    <div class="indicator" />
+    <div class="emptycard" class:indicator-after={indicatorAfter} />
 {/if}
 
 <style lang="postcss">
+    .objcardhand,
+    .emptycard {
+        @apply relative mt-4 select-none;
+        transition: margin-left 0.3s, margin-right 0.3s;
+        margin-right: 0;
+
+        &:after {
+            @apply absolute text-center text-accent-500 leading-none pointer-events-none;
+            content: " ";
+            left: 10px;
+            top: -1em;
+            width: 130px;
+            height: 1em;
+            font-size: 500%;
+            transition: left 0.3s;
+        }
+
+        &:first-child:after {
+            left: -65px;
+        }
+
+        &:last-child:after {
+            left: 65px;
+        }
+
+        &.indicator-after {
+            margin-right: 65px;
+
+            &:after {
+                @apply absolute text-center text-accent-500 leading-none;
+                content: "🠛";
+                left: 45px;
+            }
+
+            &:first-child:after {
+                left: 0px;
+            }
+
+            &:last-child:after {
+                left: 65px;
+            }
+
+            &:first-child:last-child {
+                margin-right: 0;
+                &:after {
+                    left: -65px;
+                }
+            }
+        }
+    }
+
     .objcardhand {
-        @apply relative w-min cursor-grab select-none;
+        @apply cursor-grab;
         width: 65px;
         height: 91px;
 
-        &:last-child {
-            width: 130px;
-        }
-
         & .card {
-            @apply absolute flex pt-4 items-start justify-center text-black bg-primary-200 overflow-hidden rounded-card-h shadow-md shadow-black;
+            @apply absolute flex items-start justify-center text-black bg-primary-200 overflow-hidden rounded-card-h shadow-md shadow-black;
             left: 0;
             width: 130px;
             height: 182px;
@@ -142,7 +191,7 @@
             transform-origin: 0 0;
 
             & img {
-                @apply -mt-4 w-full;
+                @apply w-full;
             }
         }
 
@@ -162,26 +211,12 @@
         }
 
         &:not(.dragging):hover .card {
-            margin-top: -50%;
+            margin-top: -91px;
         }
     }
 
-    .indicator {
-        @apply relative pt-4 pointer-events-none;
-        width: 65px;
-
-        &:last-child {
-            width: 130px;
-        }
-
-        &:before {
-            @apply absolute text-center text-accent-500 leading-none;
-            left: 0;
-            bottom: -0.75rem;
-            width: 100px;
-            height: 1em;
-            font-size: 500%;
-            content: "🠛";
-        }
+    .emptycard {
+        @apply pointer-events-none;
+        width: 0px;
     }
 </style>
