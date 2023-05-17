@@ -127,6 +127,7 @@
                 class="card"
                 class:card-v={card.frontOrientation === CardOrientation.PORTRAIT}
                 class:card-h={card.frontOrientation === CardOrientation.LANDSCAPE}
+                class:highlight={card.cardNo === $sidebarCardNo}
             >
                 <img src={card.imageDataUrl} alt={cardNo} />
             </div>
@@ -156,6 +157,10 @@
 
             & img {
                 @apply w-full;
+            }
+
+            &.highlight {
+                @apply outline outline-4 outline-accent-500
             }
         }
 

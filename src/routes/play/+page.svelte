@@ -5,13 +5,16 @@
     import PopupMenu from "./PopupMenu.svelte";
     import { LocalClientGameLogic } from "$lib/play/logic/local.js";
     import type StackObject from "./StackObject.svelte";
-    import { StackType } from "$lib/play/schema.js";
+    import { StackType, type HandCardSchema } from "$lib/play/schema.js";
     import type { ClientGameLogic, ClientGameSchema, ClientPlayerSchema } from "$lib/play/schema.js";
     import HandObject from "./HandObject.svelte";
     import { writable, type Readable, type Writable } from "svelte/store";
     import { loadCardInfo, type CardWithImageData } from "$lib/play/cardInfo.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import { cardTitle } from "$lib/card/strings.js";
+    import CardInfoRows from "../(site)/card/[cardNo]/CardInfoRows.svelte";
+    import Button from "$lib/style/Button.svelte";
+    import Language from "$lib/enums/language.js";
 
     export type OpenMenuFunction = (
         x: number,
@@ -23,6 +26,8 @@
 </script>
 
 <script lang="ts">
+    import CardImage from "$lib/format/CardImage.svelte";
+
     let menuX: number,
         menuY: number,
         menuHeader: string,
@@ -67,7 +72,7 @@
     let clientPlayerId: number = 0,
         game: Readable<ClientGameSchema>,
         players: Readable<ClientPlayerSchema[]>,
-        handCards: Readable<string[]>;
+        handCards: Readable<HandCardSchema[]>;
     $: game = logic.game;
     $: players = $game.players;
     $: handCards = $players[clientPlayerId].hand;
@@ -98,17 +103,36 @@
             {/each}
         {/key}
 
-        <HandObject cardNos={$handCards} />
+        <HandObject hand={$handCards} />
     </div>
     <div class="rightside">
         {#if $sidebarCardNo !== undefined}
             {#await sidebarCardPromise}
                 <Spinner />
             {:then card}
-                {@html cardTitle(card, true)}
+                <div class="panel-inner">
+                    <h4>{@html cardTitle(card, true, Language.ENG, true)}</h4>
+                    <div class="relative">
+                        <CardInfoRows {card} hideSharedId hideBacklinks hideFaq forceSingleColumn />
+                        <div class="absolute -right-2 top-0 flex flex-col items-center gap-y-2">
+                            <CardImage {card} />
+                            <Button
+                                accent
+                                href={`/card/${card.cardNo}`}
+                                target="_blank"
+                                label="Open Card Page in New Tab"
+                            >
+                                Open Card Page
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+                <div class="cardcopyright">{card.copyright}</div>
             {/await}
         {:else}
-            Right-click on a card to show details!
+            <div class="panel">
+                <div class="panel-inner text">Right-click on a card to show details!</div>
+            </div>
         {/if}
     </div>
 </div>
@@ -127,10 +151,30 @@
     }
 
     .leftside {
-        @apply relative w-3/4 h-screen overflow-hidden;
+        @apply relative flex-1 h-screen overflow-hidden;
     }
 
     .rightside {
-        @apply p-4 bg-primary-700 relative w-1/4 h-screen overflow-hidden;
+        @apply p-2 bg-primary-700 relative basis-[30rem] flex-shrink-0 h-screen overflow-x-hidden;
+    }
+
+    h4 {
+        @apply mb-0 tracking-normal;
+    }
+
+    .panel-inner {
+        @apply pb-0;
+
+        &.text {
+            @apply py-2 select-none;
+        }
+    }
+
+    .panel-inner :global(.row) {
+        @apply -mx-4;
+    }
+
+    .cardcopyright {
+        @apply text-right text-2xs text-primary-500 mb-1;
     }
 </style>

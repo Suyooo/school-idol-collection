@@ -1,6 +1,6 @@
 import CardType from "$lib/enums/cardType.js";
 import { writable, type Readable, type Writable, derived, readonly, get } from "svelte/store";
-import { StackType, ClientGameLogic, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientCardSchema, type CardSchema, type ClientProfile } from "../schema.js";
+import { StackType, ClientGameLogic, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientFieldCardSchema, type FieldCardSchema, type ClientProfile, type HandCardSchema } from "../schema.js";
 
 export class LocalClientGameLogic extends ClientGameLogic {
     private storeCardPositions = new Map<number, Writable<{ x: number, y: number, z: number; }>>();
@@ -14,8 +14,8 @@ export class LocalClientGameLogic extends ClientGameLogic {
             }),
             matchUuid: "local",
             livePoints: writable(0),
-            field: writable(new Map<number, ClientCardSchema>),
-            hand: writable<(string)[]>([]),
+            field: writable(new Map<number, ClientFieldCardSchema>),
+            hand: writable<(HandCardSchema)[]>([]),
             deck: writable<string[]>([]),
             setList: writable<string[]>([]),
         }
@@ -53,11 +53,11 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.storePlayers[0].profile.set(profile);
         this.storePlayers[0].deck.set(["LL01-001", "LL01-002", "LL01-003"]);
         this.storePlayers[0].setList.set(["LL01-064", "LL01-065", "LL01-066"]);
-        this.storePlayers[0].hand.set(["LL01-004", "LL01-005", "LL01-006"]);
+        this.storePlayers[0].hand.set([{id: -2, cardNo: "LL01-004"}, {id: -3, cardNo: "LL01-005"}, {id: -4, cardNo: "LL01-006"}]);
         this.storeCardPositions.set(-1, writable({ x: 10, y: 10, z: 10 }));
         this.storePlayers[0].field.update(m => {
             m.set(-1, {
-                cardNo: "LL01-007",
+                cardNo: "LL01-063",
                 cardType: CardType.MEMBER,
                 position: this.storeCardPositions.get(-1)!
             });
@@ -105,8 +105,8 @@ export class LocalClientGameLogic extends ClientGameLogic {
         });
     }
 
-    private removeFromField(id: number): CardSchema {
-        let ret: CardSchema;
+    private removeFromField(id: number): FieldCardSchema {
+        let ret: FieldCardSchema;
         this.storePlayers[0].field.update(map => {
             const card = map.get(id)!;
             const position = get(card.position);
@@ -119,11 +119,12 @@ export class LocalClientGameLogic extends ClientGameLogic {
     }
 
     private addToHand(cardNo: string, idx?: number) {
+        const thisId = this.nextId++;
         this.storePlayers[0].hand.update(arr => {
             if (idx === undefined) {
-                arr.push(cardNo);
+                arr.push({id: thisId, cardNo});
             } else {
-                arr.splice(idx, 0, cardNo);
+                arr.splice(idx, 0, {id: thisId, cardNo});
             }
             return arr;
         });
@@ -132,7 +133,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     private removeFromHand(idx: number): string {
         let cardNo: string;
         this.storePlayers[0].hand.update(arr => {
-            cardNo = arr.splice(idx, 1)[0];
+            cardNo = arr.splice(idx, 1)[0].cardNo;
             return arr;
         });
         return cardNo!;

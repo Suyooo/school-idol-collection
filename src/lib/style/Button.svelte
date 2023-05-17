@@ -4,6 +4,7 @@
     export let href: string | undefined = undefined;
     export let style: string = "";
     export let classes: string = "";
+    export let target: string = "_self";
     export let label: string;
 </script>
 
@@ -12,7 +13,7 @@
         <slot></slot>
     </button>
 {:else if href}
-    <a {href} class:accent class={classes} {style} title={label} aria-label={label}>
+    <a {href} class:accent class={classes} {style} title={label} aria-label={label} {target}>
         <slot></slot>
     </a>
 {:else}

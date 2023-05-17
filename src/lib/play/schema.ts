@@ -27,13 +27,13 @@ export interface PlayerSchema {
     profile: Profile;
     matchUuid: string;
     livePoints: number;
-    field: Map<number, CardSchema>;
-    hand: string[];
+    field: Map<number, FieldCardSchema>;
+    hand: HandCardSchema[];
     deck: string[];
     setList: string[];
 }
 
-export interface CardSchema {
+export interface FieldCardSchema {
     cardNo: string;
     cardType: CardType;
     position: {
@@ -41,6 +41,11 @@ export interface CardSchema {
         y: number;
         z: number;
     };
+}
+
+export interface HandCardSchema {
+    id: number;
+    cardNo: string;
 }
 
 export interface ClientProfile {
@@ -83,13 +88,13 @@ export interface ClientPlayerSchema {
     profile: Readable<ClientProfile>;
     matchUuid: string;
     livePoints: Readable<number>;
-    field: Readable<Map<number, ClientCardSchema>>;
-    hand: Readable<string[]>;
+    field: Readable<Map<number, ClientFieldCardSchema>>;
+    hand: Readable<HandCardSchema[]>;
     deck: Readable<string[]>;
     setList: Readable<string[]>;
 }
 
-export interface ClientCardSchema {
+export interface ClientFieldCardSchema {
     cardNo: string;
     cardType: CardType;
     position: Readable<{

@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-    import { getContext, onMount } from "svelte";
+    import { createEventDispatcher, getContext, onMount } from "svelte";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import { loadCardInfo, type CardWithImageData } from "$lib/play/cardInfo.js";
     import type { Writable } from "svelte/store";
@@ -9,12 +9,14 @@
     import "@interactjs/modifiers";
     import { StackSide, type ClientGameLogic } from "$lib/play/schema.js";
     import type { OpenMenuFunction } from "./+page.svelte";
+    import { fly } from "svelte-reduced-motion/transition";
 </script>
 
 <script lang="ts">
     export let idx: number;
     export let cardNo: string | null;
     export let indicatorAfter: boolean;
+    export let disableSidewaysAnimations: boolean;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
 
@@ -28,6 +30,7 @@
 
     let startOffset: { x: number; y: number } = { x: 0, y: 0 };
     let displayPosition: { x: number; y: number } = { x: 0, y: 0 };
+    const dispatch = createEventDispatcher();
     function action(node: HTMLElement) {
         const interactable = interact(node)
             .styleCursor(false)
@@ -37,6 +40,7 @@
                         startOffset.x = node.offsetLeft;
                         startOffset.y = node.offsetTop;
                         node.classList.add("dragging");
+                        dispatch("handCardPickedUp");
                     },
                     move(event) {
                         displayPosition.x += event.dx;
@@ -106,8 +110,10 @@
         bind:this={element}
         class="objcardhand"
         class:indicator-after={indicatorAfter}
+        class:disable-sideways-animations={disableSidewaysAnimations}
         style:left={`${startOffset.x + displayPosition.x}px`}
         style:top={`${startOffset.y + displayPosition.y}px`}
+        in:fly={{ y: -200 }}
         on:contextmenu|preventDefault={updateSidebar}
         use:action
     >
@@ -116,13 +122,17 @@
                 <Spinner />
             </div>
         {:then card}
-            <div class="card">
+            <div class="card" class:highlight={cardNo === $sidebarCardNo}>
                 <img src={card.imageDataUrl} alt={cardNo} />
             </div>
         {/await}
     </div>
 {:else}
-    <div class="emptycard" class:indicator-after={indicatorAfter} />
+    <div
+        class="emptycard"
+        class:indicator-after={indicatorAfter}
+        class:disable-sideways-animations={disableSidewaysAnimations}
+    />
 {/if}
 
 <style lang="postcss">
@@ -175,6 +185,14 @@
                 }
             }
         }
+
+        &.disable-sideways-animations {
+            transition: none;
+
+            &:after {
+                transition: none;
+            }
+        }
     }
 
     .objcardhand {
@@ -183,15 +201,18 @@
         height: 91px;
 
         & .card {
-            @apply absolute flex items-start justify-center text-black bg-primary-200 overflow-hidden rounded-card-h shadow-md shadow-black;
+            @apply absolute flex items-start justify-center text-black bg-primary-200 overflow-hidden rounded-card-v shadow-md shadow-black;
             left: 0;
             width: 130px;
             height: 182px;
-            transition: margin-top 0.3s, width 0.3s, height 0.3s, shadow-blur 0.3s;
-            transform-origin: 0 0;
+            transition: margin-top 0.3s, width 0.3s, height 0.3s, shadow-blur 0.3s, opacity 0.3s;
 
             & img {
                 @apply w-full;
+            }
+
+            &.highlight {
+                @apply outline outline-4 outline-accent-500;
             }
         }
 

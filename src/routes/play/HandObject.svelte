@@ -3,38 +3,45 @@
     import HandCardObject from "./HandCardObject.svelte";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
-    import type { ClientGameLogic } from "$lib/play/schema.js";
+    import type { ClientGameLogic, HandCardSchema } from "$lib/play/schema.js";
     import type { DropEvent } from "@interactjs/types/index";
 </script>
 
 <script lang="ts">
-    export let cardNos: string[];
+    export let hand: HandCardSchema[];
     const logic: ClientGameLogic = getContext("logic");
 
     let draggingHandCardIdx: number | null = null;
     let indicatorPos: number | null = null;
     export function getHandIndex(event: DropEvent): number {
         const sizeOffset = draggingHandCardIdx === null ? 0 : 1;
-        if (cardNos.length - sizeOffset === 0) {
+        console.log(sizeOffset);
+        if (hand.length - sizeOffset === 0) {
             return 0;
         }
 
         const cardCenterX = event.dragEvent.rect.left + event.dragEvent.rect.width / 2;
         const handCenterX = event.target.clientWidth / 2;
 
-        if (cardNos.length - sizeOffset === 1) {
+        if (hand.length - sizeOffset === 1) {
             return cardCenterX < handCenterX ? 0 : 1;
         } else {
             // TODO: scroll position of hand row
-            const totalCardWidth = (cardNos.length - sizeOffset + 1) * 65;
+            const totalCardWidth = (hand.length - sizeOffset + 1) * 65;
             let checkX = handCenterX - Math.floor(totalCardWidth / 2) + 32;
             let ret = 0;
-            while (cardCenterX > checkX && ret < cardNos.length - sizeOffset) {
+            while (cardCenterX > checkX && ret < hand.length - sizeOffset) {
                 checkX += 65;
                 ret++;
             }
             return ret;
         }
+    }
+
+    let disableSidewaysAnimations: boolean = false;
+    function skipAnimations() {
+        disableSidewaysAnimations = true;
+        requestAnimationFrame(() => disableSidewaysAnimations = false);
     }
 
     function action(node: HTMLElement) {
@@ -54,19 +61,16 @@
                 },
                 leave(event) {
                     event.relatedTarget.classList.remove("inhand");
-                    indicatorPos = null;
+                    indicatorPos = draggingHandCardIdx = null;
                 },
                 drop(event) {
                     if (event.relatedTarget.classList.contains("objcardfieldmember")) {
                         logic.requestFieldToHand(parseInt(event.relatedTarget.dataset.id!), getHandIndex(event));
                     } else {
+                        skipAnimations();
                         const oldIdx = parseInt(event.relatedTarget.dataset.idx!);
                         const newIdx = getHandIndex(event);
-                        if (oldIdx !== newIdx) {
-                            logic.requestHandMove(oldIdx, newIdx);
-                        } else {
-                            event.relatedTarget.classList.remove("inhand");
-                        }
+                        logic.requestHandMove(oldIdx, newIdx);
                     }
                     draggingHandCardIdx = indicatorPos = null;
                 },
@@ -80,23 +84,18 @@
 </script>
 
 <div class="objhand" use:action>
-    {#key cardNos}
-        {#key draggingHandCardIdx === null}
-            <HandCardObject idx={-1} cardNo={null} indicatorAfter={indicatorPos === 0} />
-        {/key}
-        {#each cardNos as cardNo, idx}
-            <!-- this key forces recreation of the element when starting/ending a drag inside the hand - which means animations are skipped! -->
-            {#key draggingHandCardIdx === null || draggingHandCardIdx === idx}
-                <HandCardObject
-                    {idx}
-                    {cardNo}
-                    indicatorAfter={indicatorPos !== null && draggingHandCardIdx !== idx
-                        ? indicatorPos === idx + 1 - (draggingHandCardIdx !== null && idx > draggingHandCardIdx ? 1 : 0)
-                        : false}
-                />
-            {/key}
-        {/each}
-    {/key}
+    <HandCardObject idx={-1} cardNo={null} indicatorAfter={indicatorPos === 0} {disableSidewaysAnimations} />
+    {#each hand as handCard, idx (handCard.id)}
+        <HandCardObject
+            {idx}
+            cardNo={handCard.cardNo}
+            indicatorAfter={indicatorPos !== null && draggingHandCardIdx !== idx
+                ? indicatorPos === idx + 1 - (draggingHandCardIdx !== null && idx > draggingHandCardIdx ? 1 : 0)
+                : false}
+            {disableSidewaysAnimations}
+            on:handCardPickedUp={skipAnimations}
+        />
+    {/each}
 </div>
 
 <style lang="postcss">

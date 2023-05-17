@@ -27,7 +27,8 @@ module.exports = {
                 "4xl": "2rem"
             },
             fontSize: {
-                "none": ["0px", "0"]
+                "none": ["0px", "0"],
+                "2xs": "0.6rem"
             },
             zIndex: {
                 "play-field": 1,
@@ -42,4 +43,4 @@ module.exports = {
     },
     safelist: ["text-attribute-smile", "text-attribute-pure", "text-attribute-cool", "text-attribute-all"],
     plugins: [],
-}
+};
