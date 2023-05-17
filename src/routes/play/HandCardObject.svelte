@@ -101,7 +101,11 @@
 
     let sidebarCardNo: Writable<string | undefined> = getContext("sidebarCardNo");
     function updateSidebar() {
-        $sidebarCardNo = cardNo!;
+        if ($sidebarCardNo === cardNo) {
+            $sidebarCardNo = undefined;
+        } else {
+            $sidebarCardNo = cardNo!;
+        }
     }
 </script>
 
