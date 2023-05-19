@@ -10,7 +10,7 @@
     import "@interactjs/actions/drag";
     import "@interactjs/modifiers";
     import { StackSide, type ClientGameLogic } from "$lib/play/schema.js";
-    import type { OpenMenuFunction } from "./+page.svelte";
+    import type { OpenMenuFunction } from "./+page.svelte.js";
 </script>
 
 <script lang="ts">
@@ -108,36 +108,34 @@
     }
 </script>
 
-{#key $position}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div
-        bind:this={element}
-        class="objcardfield"
-        class:objcardfieldmember={cardType === CardType.MEMBER}
-        class:objcardfieldsong={cardType === CardType.SONG}
-        class:objcardfieldmemory={cardType === CardType.MEMORY}
-        style:left={`${displayPosition.x}px`}
-        style:top={`${displayPosition.y}px`}
-        style:z-index={$position.z}
-        on:contextmenu|preventDefault={updateSidebar}
-        use:action
-    >
-        {#await loadPromise}
-            <div class="card" class:card-v={cardType === CardType.MEMBER} class:card-h={cardType !== CardType.MEMBER}>
-                <Spinner />
-            </div>
-        {:then card}
-            <div
-                class="card"
-                class:card-v={card.frontOrientation === CardOrientation.PORTRAIT}
-                class:card-h={card.frontOrientation === CardOrientation.LANDSCAPE}
-                class:highlight={card.cardNo === $sidebarCardNo}
-            >
-                <img src={card.imageDataUrl} alt={cardNo} />
-            </div>
-        {/await}
-    </div>
-{/key}
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div
+    bind:this={element}
+    class="objcardfield"
+    class:objcardfieldmember={cardType === CardType.MEMBER}
+    class:objcardfieldsong={cardType === CardType.SONG}
+    class:objcardfieldmemory={cardType === CardType.MEMORY}
+    style:left={`${displayPosition.x}px`}
+    style:top={`${displayPosition.y}px`}
+    style:z-index={$position.z}
+    on:contextmenu|preventDefault={updateSidebar}
+    use:action
+>
+    {#await loadPromise}
+        <div class="card" class:card-v={cardType === CardType.MEMBER} class:card-h={cardType !== CardType.MEMBER}>
+            <Spinner />
+        </div>
+    {:then card}
+        <div
+            class="card"
+            class:card-v={card.frontOrientation === CardOrientation.PORTRAIT}
+            class:card-h={card.frontOrientation === CardOrientation.LANDSCAPE}
+            class:highlight={card.cardNo === $sidebarCardNo}
+        >
+            <img src={card.imageDataUrl} alt={cardNo} />
+        </div>
+    {/await}
+</div>
 
 <style lang="postcss">
     .objcardfield {

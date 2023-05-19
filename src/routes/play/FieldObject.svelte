@@ -9,7 +9,7 @@
         type ClientProfile,
     } from "$lib/play/schema.js";
     import type { Readable } from "svelte/store";
-    import CardObject from "./CardObject.svelte";
+    import FieldCardObject from "./FieldCardObject.svelte";
     import StackObject from "./StackObject.svelte";
     import Minus from "$lib/style/icons/Minus.svelte";
     import Plus from "$lib/style/icons/Plus.svelte";
@@ -86,7 +86,7 @@
         </div>
     </div>
     {#each [...$field.entries()] as [id, card] (id)}
-        <CardObject
+        <FieldCardObject
             {id}
             {...card}
         />
