@@ -15,7 +15,6 @@
     let indicatorPos: number | null = null;
     export function getHandIndex(event: DropEvent): number {
         const sizeOffset = draggingHandCardIdx === null ? 0 : 1;
-        console.log(sizeOffset);
         if (hand.length - sizeOffset === 0) {
             return 0;
         }

@@ -18,6 +18,9 @@
 </script>
 
 <script lang="ts">
+    import {cardIsMember} from "$lib/card/types";
+    import CardType from "$lib/enums/cardType.js";
+
     export let playerIdx: number;
     export let isClient: boolean;
     export let deckComponent: StackObject;
@@ -93,6 +96,7 @@
         <FieldCardObject
             {id}
             {...card}
+            flippedColor={card.cardType === CardType.MEMBER ? $profile.deckColor : $profile.setListColor}
         />
     {/each}
     <StackObject
@@ -176,10 +180,10 @@
                 border-color: var(--player-color);
 
                 &.live {
-                    left: 280px;
+                    left: 281px;
                 }
                 &.info {
-                    left: 60px;
+                    left: 61px;
                 }
             }
 

@@ -19,6 +19,7 @@
     export let cardType: CardType;
     export let flipped: boolean;
     export let position: Readable<{ x: number; y: number; z: number }>;
+    export let flippedColor: string;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
 
@@ -121,6 +122,7 @@
         style:left={`${displayPosition.x}px`}
         style:top={`${displayPosition.y}px`}
         style:z-index={$position.z}
+        style:--flipped-color={flippedColor}
         on:dblclick={() => logic.requestFieldFlip(id)}
         on:contextmenu|preventDefault={updateSidebar}
         use:action
@@ -132,6 +134,8 @@
         {:then card}
             {#if !$flipped}
                 <img src={card.imageDataUrl} alt={cardNo}/>
+            {:else}
+                <div class="flipped">?</div>
             {/if}
         {/await}
     </div>
@@ -142,7 +146,8 @@
         @apply absolute w-min select-none touch-none z-play-card cursor-grab;
 
         & .card {
-            @apply flex items-center justify-center bg-primary-200 overflow-hidden shadow-sm shadow-black;
+            @apply flex items-center justify-center overflow-hidden shadow-sm shadow-black;
+            background-color: var(--flipped-color);
             transition: width 0.3s, height 0.3s, shadow-blur 0.3s;
 
             &.card-v {
@@ -159,6 +164,10 @@
 
             & img {
                 @apply w-full;
+            }
+
+            & .flipped {
+                @apply text-3xl font-bold opacity-30;
             }
 
             &.highlight {
