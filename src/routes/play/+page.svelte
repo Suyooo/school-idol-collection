@@ -165,7 +165,7 @@
         @apply pb-0;
 
         &.text {
-            @apply py-2 select-none;
+            @apply py-2 select-none text-center;
         }
     }
 

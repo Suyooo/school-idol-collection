@@ -35,7 +35,11 @@
     $: game = logic.game;
     $: players = $game.players;
     $: player = $players[playerIdx];
-    $: ({ profile, livePoints, field, deck, setList } = player);
+    $: profile = player.profile;
+    $: livePoints = player.livePoints;
+    $: field = player.field;
+    $: deck = player.deck;
+    $: setList = player.setList;
 
     function action(node: HTMLElement) {
         const interactable = interact(node).dropzone({

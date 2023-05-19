@@ -3,6 +3,7 @@ import { writable, type Readable, type Writable, derived, readonly, get } from "
 import { StackType, ClientGameLogic, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientFieldCardSchema, type FieldCardSchema, type ClientProfile, type HandCardSchema } from "../schema.js";
 
 export class LocalClientGameLogic extends ClientGameLogic {
+    private storeCardFlips = new Map<number, Writable<boolean>>();
     private storeCardPositions = new Map<number, Writable<{ x: number, y: number, z: number; }>>();
     private storePlayers = [
         {
@@ -34,6 +35,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
             livePoints: readonly(playerObj.livePoints),
             field: derived(playerObj.field, fieldObj => new Map([...fieldObj.entries()].map(([cardId, cardObj]) => [cardId, {
                 ...cardObj,
+                flipped: readonly(cardObj.flipped),
                 position: readonly(cardObj.position)
             }]))),
             hand: readonly(playerObj.hand),
@@ -55,11 +57,13 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.storePlayers[0].deck.set(["LL01-001", "LL01-002", "LL01-003"]);
         this.storePlayers[0].setList.set(["LL01-064", "LL01-065", "LL01-066"]);
         this.storePlayers[0].hand.set([{id: -2, cardNo: "LL01-004"}, {id: -3, cardNo: "LL01-005"}, {id: -4, cardNo: "LL01-006"}]);
+        this.storeCardFlips.set(-1, writable(false));
         this.storeCardPositions.set(-1, writable({ x: 10, y: 10, z: 10 }));
         this.storePlayers[0].field.update(m => {
             m.set(-1, {
                 cardNo: "LL01-063",
                 cardType: CardType.MEMBER,
+                flipped: this.storeCardFlips.get(-1)!,
                 position: this.storeCardPositions.get(-1)!
             });
             return m;
@@ -92,14 +96,17 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     private addToField(cardNo: string, cardType: CardType, x: number, y: number) {
         const thisId = this.nextId++;
+        const thisFlip = writable(false);
         const thisPos = writable({ x, y, z: this.nextZ++ });
         const thisCard = {
             cardNo,
             cardType,
+            flipped: thisFlip,
             position: thisPos
         };
 
         this.storeCardPositions.set(thisId, thisPos);
+        this.storeCardFlips.set(thisId, thisFlip);
         this.storePlayers[0].field.update(map => {
             map.set(thisId, thisCard);
             return map;
@@ -110,11 +117,13 @@ export class LocalClientGameLogic extends ClientGameLogic {
         let ret: FieldCardSchema;
         this.storePlayers[0].field.update(map => {
             const card = map.get(id)!;
+            const flipped = get(card.flipped);
             const position = get(card.position);
-            ret = { ...card, position };
+            ret = { ...card, flipped, position };
             map.delete(id);
             return map;
         });
+        this.storeCardFlips.delete(id);
         this.storeCardPositions.delete(id);
         return ret!;
     }
@@ -190,6 +199,10 @@ export class LocalClientGameLogic extends ClientGameLogic {
             pos.z = this.nextZ++;
             return pos;
         });
+    }
+
+    requestFieldFlip(id: number) {
+        this.storeCardFlips.get(id)!.update(flip => !flip);
     }
 
     requestHandMove(idx: number, newIdx: number) {

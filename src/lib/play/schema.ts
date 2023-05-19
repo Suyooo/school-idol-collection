@@ -36,6 +36,7 @@ export interface PlayerSchema {
 export interface FieldCardSchema {
     cardNo: string;
     cardType: CardType;
+    flipped: boolean;
     position: {
         x: number;
         y: number;
@@ -70,6 +71,7 @@ export abstract class ClientGameLogic {
     abstract requestStackToHand(side: StackSide): void;
     abstract requestShuffle(target: StackType): void;
     abstract requestFieldMove(id: number, x: number, y: number): void;
+    abstract requestFieldFlip(id: number): void;
     abstract requestHandMove(idx: number, newIdx: number): void;
     abstract requestLPUpdate(delta: number): void;
 }
@@ -98,6 +100,7 @@ export interface ClientPlayerSchema {
 export interface ClientFieldCardSchema {
     cardNo: string;
     cardType: CardType;
+    flipped: Readable<boolean>;
     position: Readable<{
         x: number;
         y: number;

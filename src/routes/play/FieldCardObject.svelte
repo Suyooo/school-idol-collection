@@ -1,22 +1,23 @@
 <script context="module" lang="ts">
-    import { getContext, onMount } from "svelte";
-    import { CardOrientation } from "$lib/enums/cardOrientation.js";
+    import {getContext, onMount} from "svelte";
+    import {CardOrientation} from "$lib/enums/cardOrientation.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import CardType from "$lib/enums/cardType.js";
-    import type { Readable, Writable } from "svelte/store";
-    import { loadCardInfo, type CardWithImageData } from "$lib/play/cardInfo.js";
+    import type {Readable, Writable} from "svelte/store";
+    import {loadCardInfo, type CardWithImageData} from "$lib/play/cardInfo.js";
     import interact from "@interactjs/interact/index";
     import "@interactjs/auto-start";
     import "@interactjs/actions/drag";
     import "@interactjs/modifiers";
-    import { StackSide, type ClientGameLogic } from "$lib/play/schema.js";
-    import type { OpenMenuFunction } from "./+page.svelte.js";
+    import {StackSide, type ClientGameLogic} from "$lib/play/schema.js";
+    import type {OpenMenuFunction} from "./+page.svelte";
 </script>
 
 <script lang="ts">
     export let id: number;
     export let cardNo: string;
     export let cardType: CardType;
+    export let flipped: boolean;
     export let position: Readable<{ x: number; y: number; z: number }>;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
@@ -24,13 +25,14 @@
     let element: HTMLElement;
     $: if (element) element.dataset.id = id.toString();
 
-    let loadPromise: Promise<CardWithImageData> = new Promise(() => null);
+    let card: CardWithImageData | undefined, loadPromise: Promise<CardWithImageData> = new Promise(() => null);
     onMount(() => {
         loadPromise = loadCardInfo(cardNo);
     });
 
     let displayPosition: { x: number; y: number };
-    $: displayPosition = { x: $position.x, y: $position.y };
+    $: displayPosition = {x: $position.x, y: $position.y};
+
     function action(node: HTMLElement) {
         const interactable = interact(node)
             .styleCursor(false)
@@ -73,7 +75,7 @@
                                 );
                             }
                         }
-                    },
+                    }
                 },
                 modifiers: [
                     interact.modifiers.snap({
@@ -83,7 +85,7 @@
                                 y: 10,
                             }),
                         ],
-                        relativePoints: [{ x: 0, y: 0 }],
+                        relativePoints: [{x: 0, y: 0}],
                         offset: "parent",
                     }),
                     interact.modifiers.restrictRect({
@@ -99,6 +101,7 @@
     }
 
     let sidebarCardNo: Writable<string | undefined> = getContext("sidebarCardNo");
+
     function updateSidebar() {
         if ($sidebarCardNo === cardNo) {
             $sidebarCardNo = undefined;
@@ -110,31 +113,28 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-    bind:this={element}
-    class="objcardfield"
-    class:objcardfieldmember={cardType === CardType.MEMBER}
-    class:objcardfieldsong={cardType === CardType.SONG}
-    class:objcardfieldmemory={cardType === CardType.MEMORY}
-    style:left={`${displayPosition.x}px`}
-    style:top={`${displayPosition.y}px`}
-    style:z-index={$position.z}
-    on:contextmenu|preventDefault={updateSidebar}
-    use:action
+        bind:this={element}
+        class="objcardfield"
+        class:objcardfieldmember={cardType === CardType.MEMBER}
+        class:objcardfieldsong={cardType === CardType.SONG}
+        class:objcardfieldmemory={cardType === CardType.MEMORY}
+        style:left={`${displayPosition.x}px`}
+        style:top={`${displayPosition.y}px`}
+        style:z-index={$position.z}
+        on:dblclick={() => logic.requestFieldFlip(id)}
+        on:contextmenu|preventDefault={updateSidebar}
+        use:action
 >
-    {#await loadPromise}
-        <div class="card" class:card-v={cardType === CardType.MEMBER} class:card-h={cardType !== CardType.MEMBER}>
-            <Spinner />
-        </div>
-    {:then card}
-        <div
-            class="card"
-            class:card-v={card.frontOrientation === CardOrientation.PORTRAIT}
-            class:card-h={card.frontOrientation === CardOrientation.LANDSCAPE}
-            class:highlight={card.cardNo === $sidebarCardNo}
-        >
-            <img src={card.imageDataUrl} alt={cardNo} />
-        </div>
-    {/await}
+    <div class="card" class:card-v={cardType === CardType.MEMBER} class:card-h={cardType !== CardType.MEMBER}
+         class:highlight={cardNo === $sidebarCardNo}>
+        {#await loadPromise}
+            <Spinner/>
+        {:then card}
+            {#if !$flipped}
+                <img src={card.imageDataUrl} alt={cardNo}/>
+            {/if}
+        {/await}
+    </div>
 </div>
 
 <style lang="postcss">
@@ -162,7 +162,7 @@
             }
 
             &.highlight {
-                @apply outline outline-4 outline-accent-500
+                @apply outline outline-4 outline-accent-500;
             }
         }
 
@@ -176,6 +176,7 @@
             &:global(.inhand) {
                 & .card {
                     @apply shadow-md shadow-black;
+
                     &.card-v {
                         width: 130px;
                         height: 182px;
