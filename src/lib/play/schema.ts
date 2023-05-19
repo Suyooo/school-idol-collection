@@ -60,6 +60,7 @@ export abstract class ClientGameLogic {
     handlers: ClientGameLogicHandlers = {
         onShuffle: undefined
     };
+    abstract clientPlayerId: number;
 
     abstract requestStackToField(target: StackType, side: StackSide, x: number, y: number): void;
     abstract requestHandToField(idx: number, x: number, y: number): void;

@@ -44,6 +44,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
         round: readonly(gameObj.round),
         turnPlayerIdx: readonly(gameObj.turnPlayerIdx)
     }));
+    clientPlayerId: number = 0;
 
     private nextId: number = 0;
     private nextZ: number = 10;

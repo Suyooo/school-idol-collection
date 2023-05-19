@@ -20,7 +20,7 @@
         x: number,
         y: number,
         header: string,
-        entries: { label: string; handler: () => void; condition?: boolean; close?: boolean }[],
+        entries: { label: string; handler: () => void; condition?: boolean }[],
         cancelable: boolean
     ) => void;
 </script>
@@ -31,7 +31,7 @@
     let menuX: number,
         menuY: number,
         menuHeader: string,
-        menuEntries: { label: string; handler: () => void; close?: boolean }[] | undefined = undefined;
+        menuEntries: { label: string; handler: () => void }[] | undefined = undefined;
 
     const openMenu: OpenMenuFunction = (x, y, header, entries, cancelable) => {
         menuX = x;
@@ -42,7 +42,7 @@
             .map((e) => ({
                 label: e.label,
                 handler: () => {
-                    if (e.close ?? true) menuEntries = undefined;
+                    menuEntries = undefined;
                     e.handler();
                 },
             }));
@@ -69,13 +69,12 @@
         (target === StackType.DECK ? deckComponents : setListComponents)[playerId].shake();
     };
 
-    let clientPlayerId: number = 0,
-        game: Readable<ClientGameSchema>,
+    let game: Readable<ClientGameSchema>,
         players: Readable<ClientPlayerSchema[]>,
         handCards: Readable<HandCardSchema[]>;
     $: game = logic.game;
     $: players = $game.players;
-    $: handCards = $players[clientPlayerId].hand;
+    $: handCards = $players[logic.clientPlayerId].hand;
     setContext("logic", logic);
 
     let sidebarCardNo: Writable<string | undefined> = writable(undefined),
@@ -96,7 +95,7 @@
             {#each $players as _, i}
                 <FieldObject
                     playerIdx={i}
-                    isClient={i === clientPlayerId}
+                    isClient={i === logic.clientPlayerId}
                     bind:deckComponent={deckComponents[i]}
                     bind:setListComponent={setListComponents[i]}
                 />
