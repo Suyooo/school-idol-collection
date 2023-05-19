@@ -5,7 +5,7 @@
         type ClientGameLogic,
         type ClientGameSchema,
         type ClientPlayerSchema,
-        type ClientCardSchema,
+        type ClientFieldCardSchema,
         type ClientProfile,
     } from "$lib/play/schema.js";
     import type { Readable } from "svelte/store";
@@ -29,7 +29,7 @@
         player: ClientPlayerSchema,
         profile: Readable<ClientProfile>,
         livePoints: Readable<number>,
-        field: Readable<Map<number, ClientCardSchema>>,
+        field: Readable<Map<number, ClientFieldCardSchema>>,
         deck: Readable<string[]>,
         setList: Readable<string[]>;
     $: game = logic.game;
