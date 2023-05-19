@@ -95,16 +95,16 @@
         bind:this={deckComponent}
         cardNos={$deck}
         stackType={StackType.DECK}
-        x={620}
-        y={253}
+        x={616}
+        y={252}
         color={$profile.deckColor}
     />
     <StackObject
         bind:this={setListComponent}
         cardNos={$setList}
         stackType={StackType.SET_LIST}
-        x={35}
-        y={279}
+        x={39}
+        y={278}
         color={$profile.setListColor}
     />
 </div>
@@ -128,9 +128,9 @@
                 border-color: var(--player-color);
 
                 &.setlist {
-                    left: 30px;
-                    right: 112px;
-                    height: 73.5px;
+                    left: 32px;
+                    right: 120px;
+                    height: 75.5px;
                     bottom: 10px;
 
                     &:before {
@@ -144,10 +144,10 @@
                 }
 
                 &.deck {
-                    right: 30px;
-                    width: 73.5px;
+                    right: 32px;
+                    width: 77.5px;
                     bottom: 10px;
-                    height: 100px;
+                    height: 102px;
 
                     &:before {
                         content: "Deck";
@@ -168,7 +168,7 @@
                 @apply absolute border-l border-solid z-play-field;
                 width: 1px;
                 top: 10px;
-                bottom: 96px;
+                bottom: 98px;
                 border-color: var(--player-color);
 
                 &.live {
