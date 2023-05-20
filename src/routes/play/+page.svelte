@@ -113,21 +113,22 @@
                     <h4>{@html cardTitle(card, true, Language.ENG, true)}</h4>
                     <div class="relative">
                         <CardInfoRows {card} hideSharedId hideBacklinks hideFaq forceSingleColumn />
-                        <div class="absolute -right-2 top-0 flex flex-col items-center gap-y-2">
+                        <div class="absolute -right-2 top-0">
                             <CardImage {card} />
-                            <Button
-                                accent
-                                href={`/card/${card.cardNo}`}
-                                target="_blank"
-                                label="Open Card Page in New Tab"
-                            >
-                                Open Card Page
-                            </Button>
                         </div>
                     </div>
                 </div>
                 <div class="cardcopyright">{card.copyright}</div>
             {/await}
+            <Button
+                accent
+                href={`/card/${$sidebarCardNo}`}
+                classes="float-right mt-1"
+                target="_blank"
+                label="Open Card Page in New Tab"
+            >
+                Open Card Page
+            </Button>
         {:else}
             <div class="panel">
                 <div class="panel-inner text">Right-click on a card to show details!</div>

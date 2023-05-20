@@ -120,6 +120,9 @@
     let sidebarCardNo: Writable<string | undefined> = getContext("sidebarCardNo");
 
     function updateSidebar() {
+        if ($flipped) {
+            return;
+        }
         if ($sidebarCardNo === cardNo) {
             $sidebarCardNo = undefined;
         } else {
@@ -148,7 +151,7 @@
         class="card"
         class:card-v={cardType === CardType.MEMBER}
         class:card-h={cardType !== CardType.MEMBER}
-        class:highlight={cardNo === $sidebarCardNo}
+        class:highlight={$flipped === false && cardNo === $sidebarCardNo}
     >
         {#await loadPromise}
             <Spinner />
