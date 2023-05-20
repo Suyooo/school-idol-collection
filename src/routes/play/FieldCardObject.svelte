@@ -156,7 +156,7 @@
             {#if !$flipped}
                 <img src={card.imageDataUrl} alt={cardNo} />
             {:else}
-                <div class="flipped">?</div>
+                <div class="flipped">✖</div>
             {/if}
         {/await}
     </div>
@@ -188,7 +188,7 @@
             }
 
             & .flipped {
-                @apply text-3xl font-bold opacity-30;
+                @apply text-3xl font-bold opacity-50;
             }
 
             &.highlight {
