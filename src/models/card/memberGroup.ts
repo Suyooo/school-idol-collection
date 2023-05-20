@@ -1,36 +1,34 @@
-import {Attribute, HasMany, Table} from "@sequelize/core/decorators-legacy";
-import {DataTypes, Model, Sequelize} from "@sequelize/core";
-
-import type {CardMember} from "$models/card/card.js";
+import { DataTypes, Model, Sequelize } from "@sequelize/core";
+import { Attribute, HasMany, Table } from "@sequelize/core/decorators-legacy";
+import type { CardMember } from "$models/card/card.js";
 import type CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
-
-import type CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
 import type Skill from "$models/skill/skill.js";
+import type CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
 import DB from "../db.js";
 
 @Table({
     modelName: "CardMemberGroup",
-    timestamps: false
+    timestamps: false,
 })
 export default class CardMemberGroup extends Model {
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         allowNull: false,
-        autoIncrement: true
+        autoIncrement: true,
     })
     declare id: number;
 
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
+        allowNull: false,
     })
     declare type: CardMemberGroupType;
 
     @HasMany((s) => s.models.CardMemberExtraInfo, {
         as: "memberExtraInfos",
         foreignKey: "groupId",
-        inverse: { as: "group" }
+        inverse: { as: "group" },
     })
     declare memberExtraInfos: CardMemberExtraInfo[];
 
@@ -40,12 +38,14 @@ export default class CardMemberGroup extends Model {
 
     @Attribute({
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare expectedMemberIds: string;
 
     @HasMany((s) => s.models.Skill, {
-        as: "skills", foreignKey: {name: "groupId", onDelete: "CASCADE"}, inverse: {as: "group"}
+        as: "skills",
+        foreignKey: { name: "groupId", onDelete: "CASCADE" },
+        inverse: { as: "group" },
     })
     declare skills: Skill[];
 }
@@ -53,6 +53,6 @@ export default class CardMemberGroup extends Model {
 export function addScopes(_sequelize: Sequelize) {
     // TODO: move to decorators once @Scope is implemented
     CardMemberGroup.addScope("filterHasSkill", () => ({
-        include: [{model: DB.Skill, required: true}]
+        include: [{ model: DB.Skill, required: true }],
     }));
 }

@@ -1,28 +1,28 @@
-import {Attribute, Table} from "@sequelize/core/decorators-legacy";
-import {DataTypes, Model} from "@sequelize/core";
+import { DataTypes, Model } from "@sequelize/core";
+import { Attribute, Table } from "@sequelize/core/decorators-legacy";
 
 @Table({
     modelName: "Link",
-    timestamps: false
+    timestamps: false,
 })
 export default class Link extends Model {
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         allowNull: false,
-        autoIncrement: true
+        autoIncrement: true,
     })
     declare id: number;
 
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
+        allowNull: false,
     })
     declare from: number;
 
     @Attribute({
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare to: string;
 }

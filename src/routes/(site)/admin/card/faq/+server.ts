@@ -1,22 +1,28 @@
-import {cardTitle} from "$lib/card/strings.js";
+import { Op } from "@sequelize/core";
+import { error, json } from "@sveltejs/kit";
 import type Card from "$models/card/card.js";
-import {Op} from "@sequelize/core";
-import {_data} from "../../../faq/[faqPage]/+page.server.js";
-import {error, json} from "@sveltejs/kit";
-import {getFaqLinkLabel, getKey, getKeyPrefix, getLinkedCards} from "../../../faq/prepareFaq.js";
-import type {RequestHandler} from "./$types.js";
+import { cardTitle } from "$lib/card/strings.js";
+import { _data } from "../../../faq/[faqPage]/+page.server.js";
+import { getFaqLinkLabel, getKey, getKeyPrefix, getLinkedCards } from "../../../faq/prepareFaq.js";
+import type { RequestHandler } from "./$types.js";
 
-export const POST: RequestHandler = (async ({locals, request}) => {
+export const POST: RequestHandler = (async ({ locals, request }) => {
     const faqName = (await request.json()).faqName;
     if (!_data.hasOwnProperty(faqName)) {
-        throw error(404, {message: "This FAQ page does not exist."});
+        throw error(404, { message: "This FAQ page does not exist." });
     }
 
-    const nextDisplayOrderCounters: { [cardId: number]: number } = {}
-    await locals.DB.sequelize.transaction(async transaction => {
+    const nextDisplayOrderCounters: { [cardId: number]: number } = {};
+    await locals.DB.sequelize.transaction(async (transaction) => {
         for (const section of _data[faqName]) {
-            if (section.qa === undefined && section.seeAlso?.length === 1
-                && section.seeAlso[0].split("#").at(-1)!.match(/(LL\d\d|EX\d\d|PR)-\d\d\d/)) {
+            if (
+                section.qa === undefined &&
+                section.seeAlso?.length === 1 &&
+                section.seeAlso[0]
+                    .split("#")
+                    .at(-1)!
+                    .match(/(LL\d\d|EX\d\d|PR)-\d\d\d/)
+            ) {
                 // This FAQ entry only links to another card's FAQ section, which means this card should already have
                 // the FAQ links on its card page due to shared ID. Do not process this section
                 continue;
@@ -31,10 +37,15 @@ export const POST: RequestHandler = (async ({locals, request}) => {
                     const startSet = cur.split("-")[0];
                     allSubjects.push(cur);
                     while (cur !== subject.to) {
-                        cur = (await locals.DB.Card
-                            .withScope(["viewCardNoOnly", {method: ["filterAfter", cur]}]).findOne())?.cardNo ?? null;
+                        cur =
+                            (
+                                await locals.DB.Card.withScope([
+                                    "viewCardNoOnly",
+                                    { method: ["filterAfter", cur] },
+                                ]).findOne()
+                            )?.cardNo ?? null;
                         if (cur === null || cur.split("-")[0] !== startSet) {
-                            throw error(500, {message: `Range ${subject.from} to ${subject.to} failed.`});
+                            throw error(500, { message: `Range ${subject.from} to ${subject.to} failed.` });
                         }
                         allSubjects.push(cur);
                     }
@@ -43,7 +54,7 @@ export const POST: RequestHandler = (async ({locals, request}) => {
 
             const subjectIds: number[] = [];
             for (const cardNo of allSubjects) {
-                const id = (await locals.DB.Card.withScope(["viewIdOnly"]).findOne({where: {cardNo}}))?.id;
+                const id = (await locals.DB.Card.withScope(["viewIdOnly"]).findOne({ where: { cardNo } }))?.id;
                 if (id !== undefined && subjectIds.indexOf(id) === -1) {
                     subjectIds.push(id);
                 }
@@ -55,7 +66,10 @@ export const POST: RequestHandler = (async ({locals, request}) => {
                     const label = await getFaqLinkLabel(locals.DB, seeAlso);
                     for (const cardId of subjectIds) {
                         const displayOrder = nextDisplayOrderCounters[cardId] ?? 1;
-                        await locals.DB.CardFAQLink.upsert({cardId, displayOrder, label, link: seeAlso}, {transaction});
+                        await locals.DB.CardFAQLink.upsert(
+                            { cardId, displayOrder, label, link: seeAlso },
+                            { transaction }
+                        );
                         nextDisplayOrderCounters[cardId] = displayOrder + 1;
                     }
                 }
@@ -64,8 +78,9 @@ export const POST: RequestHandler = (async ({locals, request}) => {
             if (section.qa) {
                 for (const qa of section.qa) {
                     const cardsToLoad = getLinkedCards(qa.question);
-                    const loadedCards = await locals.DB.Card.withScope(["viewForLink"])
-                        .findAll({where: {cardNo: cardsToLoad.filter((c, i) => cardsToLoad.indexOf(c) === i)}});
+                    const loadedCards = await locals.DB.Card.withScope(["viewForLink"]).findAll({
+                        where: { cardNo: cardsToLoad.filter((c, i) => cardsToLoad.indexOf(c) === i) },
+                    });
 
                     const cards: { [cardNo: string]: Card } = {};
                     for (const card of loadedCards) {
@@ -74,7 +89,11 @@ export const POST: RequestHandler = (async ({locals, request}) => {
                     const label = qa.question
                         .replace(/{{red:([^}]*?)}}/g, (_, text) => text)
                         .replace(/{{link:([^}]*?)}}('s)?/g, (_, cardNo, possessive) => {
-                            if (possessive) return `<span class="whitespace-nowrap">${cardTitle(cards[cardNo], true)}${possessive}</span>`
+                            if (possessive)
+                                return `<span class="whitespace-nowrap">${cardTitle(
+                                    cards[cardNo],
+                                    true
+                                )}${possessive}</span>`;
                             return cardTitle(cards[cardNo], true);
                         });
 
@@ -84,13 +103,16 @@ export const POST: RequestHandler = (async ({locals, request}) => {
 
                     for (const cardId of subjectIds) {
                         const displayOrder = nextDisplayOrderCounters[cardId] ?? 1;
-                        await locals.DB.CardFAQLink.upsert({
-                            cardId,
-                            displayOrder,
-                            label,
-                            link: `/faq/${faqName}#${getKey(keyPrefix, qa)}`,
-                            shortAnswer
-                        }, {transaction});
+                        await locals.DB.CardFAQLink.upsert(
+                            {
+                                cardId,
+                                displayOrder,
+                                label,
+                                link: `/faq/${faqName}#${getKey(keyPrefix, qa)}`,
+                                shortAnswer,
+                            },
+                            { transaction }
+                        );
                         nextDisplayOrderCounters[cardId] = displayOrder + 1;
                     }
                 }
@@ -99,10 +121,11 @@ export const POST: RequestHandler = (async ({locals, request}) => {
 
         for (const cardId in Object.keys(nextDisplayOrderCounters)) {
             await locals.DB.CardFAQLink.destroy({
-                where: {cardId, displayOrder: {[Op.gte]: nextDisplayOrderCounters[cardId]}}, transaction
+                where: { cardId, displayOrder: { [Op.gte]: nextDisplayOrderCounters[cardId] } },
+                transaction,
             });
         }
     });
 
-    return json({success: true});
+    return json({ success: true });
 }) satisfies RequestHandler;

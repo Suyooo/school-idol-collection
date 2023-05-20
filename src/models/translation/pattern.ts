@@ -1,27 +1,26 @@
-import {AfterUpdate, Attribute, Table} from "@sequelize/core/decorators-legacy";
-import {DataTypes, Model} from "@sequelize/core";
-import type {QueryOptions} from "@sequelize/core";
-
+import { DataTypes, Model } from "@sequelize/core";
+import type { QueryOptions } from "@sequelize/core";
+import { AfterUpdate, Attribute, Table } from "@sequelize/core/decorators-legacy";
 import TriggerEnum from "$lib/enums/trigger.js";
 import PatternGroupType from "$lib/translation/patternGroupType.js";
-import type {PatternGroupTypeID} from "$lib/translation/patternGroupType.js";
+import type { PatternGroupTypeID } from "$lib/translation/patternGroupType.js";
 
 @Table({
     modelName: "TranslationPattern",
-    timestamps: false
+    timestamps: false,
 })
 export default class TranslationPattern extends Model {
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         allowNull: false,
-        autoIncrement: true
+        autoIncrement: true,
     })
     declare id: number;
 
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
+        allowNull: false,
     })
     declare triggers: number;
 
@@ -35,19 +34,19 @@ export default class TranslationPattern extends Model {
 
     @Attribute({
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare regex: string;
 
     @Attribute({
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare template: string;
 
     @Attribute({
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare groupTypes: string;
 
@@ -72,10 +71,11 @@ export default class TranslationPattern extends Model {
     @AfterUpdate
     static async purgeTranslations(pattern: TranslationPattern, options: QueryOptions) {
         await pattern.sequelize.models.Skill.update(
-            {eng: null, patternId: null},
+            { eng: null, patternId: null },
             {
-                where: {patternId: pattern.id},
-                transaction: options.transaction
-            });
+                where: { patternId: pattern.id },
+                transaction: options.transaction,
+            }
+        );
     }
 }

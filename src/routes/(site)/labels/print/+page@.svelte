@@ -1,17 +1,21 @@
 <script lang="ts">
-    import Button from "$lib/style/Button.svelte";
-    import {onMount} from "svelte";
-    import type {ActionData} from "./$types.js";
-    import Label from "./Label.svelte";
+    import { onMount } from "svelte";
     import "../../../../app.css";
+    import Button from "$lib/style/Button.svelte";
+    import type { ActionData } from "./$types.js";
     import Shelving from "./shelf.js";
+    import Label from "./Label.svelte";
 
     export let form: ActionData;
     let width: number = form?.width ? parseInt(form?.width.toString()) : 0;
     let height: number = form?.height ? parseInt(form?.height.toString()) : 0;
     let padding: number = form?.padding ? parseInt(form?.padding.toString()) : 0;
-    let contentWidth: number, contentHeight: number, shelfCardNos: string[][],
-        shelfElements: HTMLTableCellElement[] = [], pageSize: HTMLDivElement, pageStyle: HTMLStyleElement;
+    let contentWidth: number,
+        contentHeight: number,
+        shelfCardNos: string[][],
+        shelfElements: HTMLTableCellElement[] = [],
+        pageSize: HTMLDivElement,
+        pageStyle: HTMLStyleElement;
 
     $: contentWidth = width - padding * 2;
     $: contentHeight = height - padding * 2;
@@ -22,7 +26,11 @@
         // Sort all the labels into horizontal shelves
         const shelfHorz = new Shelving<string>(pageSize.clientWidth);
         for (const i in form.cardNos) {
-            shelfHorz.add(form.cardNos[i], shelfElements[i].children[0].clientWidth, shelfElements[i].children[0].clientHeight);
+            shelfHorz.add(
+                form.cardNos[i],
+                shelfElements[i].children[0].clientWidth,
+                shelfElements[i].children[0].clientHeight
+            );
         }
         shelfCardNos = shelfHorz.get();
 
@@ -32,8 +40,9 @@
             for (const i in shelfCardNos) {
                 // Reorder labels within shelf in height order (to reduce extra cuts needed on the left side due to holes)
                 const sortedCardNos = shelfCardNos[i]
-                    .map((cardNo, ii) => ({cardNo, height: shelfElements[i].children[ii].clientHeight}))
-                    .sort((a, b) => b.height - a.height).map(({cardNo}) => cardNo);
+                    .map((cardNo, ii) => ({ cardNo, height: shelfElements[i].children[ii].clientHeight }))
+                    .sort((a, b) => b.height - a.height)
+                    .map(({ cardNo }) => cardNo);
                 shelfVert.add(sortedCardNos, 1, shelfElements[i].clientHeight);
             }
             shelfCardNos = shelfVert.get().flat();
@@ -65,7 +74,10 @@
         {/if}
         {#if form.duplicateCardNos.length > 0}
             <div class="error">
-                <b>The following cards appear multiple times - they were NOT removed, please make sure you actually want multiple labels for these:</b>
+                <b
+                    >The following cards appear multiple times - they were NOT removed, please make sure you actually
+                    want multiple labels for these:</b
+                >
                 {form.duplicateCardNos.join(", ")}
             </div>
         {/if}
@@ -79,29 +91,40 @@
                 </div>
                 <div class="mt-2">
                     <div class="-indent-5">
-                        <b>①</b> Make sure to print the labels one-sided, at the highest quality and at original (or 100%) scale. Most operating systems also allow you to save a PDF instead of printing the page - that way, you can bring the labels to a print shop if you don't have a printer.
+                        <b>①</b> Make sure to print the labels one-sided, at the highest quality and at original (or 100%)
+                        scale. Most operating systems also allow you to save a PDF instead of printing the page - that way,
+                        you can bring the labels to a print shop if you don't have a printer.
                     </div>
                     <div class="-indent-5">
-                        <b>②</b> Double-check the size with a ruler after the print - the distance between the grey lines should be 63.5mm (2.5in) for cards in portrait orientation and 88mm (3.47in) for cards in landscape orientation.
+                        <b>②</b> Double-check the size with a ruler after the print - the distance between the grey lines
+                        should be 63.5mm (2.5in) for cards in portrait orientation and 88mm (3.47in) for cards in landscape
+                        orientation.
                     </div>
                     <div class="-indent-5">
-                        <b>③</b> Cut out each label along the grey lines. The labels have (hopefully) been aligned in a way that matches up as many labels as possible on one cut line. Then, fold the labels on the black line below the card number and ID.
+                        <b>③</b> Cut out each label along the grey lines. The labels have (hopefully) been aligned in a way
+                        that matches up as many labels as possible on one cut line. Then, fold the labels on the black line
+                        below the card number and ID.
                     </div>
                     <div class="-indent-5">
-                        <b>④</b> Wrap the labels around the cards, then put them into their sleeve or a folder to hold them in place.
+                        <b>④</b> Wrap the labels around the cards, then put them into their sleeve or a folder to hold them
+                        in place.
                     </div>
                 </div>
             {/if}
         </div>
     </div>
-    <div bind:this={pageSize} class="absolute left-[1000vw] print:hidden"
-         style:width={contentWidth+"mm"} style:height={contentHeight+"mm"}></div>
-    <table class="sheets" style:margin={"0 "+padding+"mm"} style:--page-padding={padding+"mm"}>
-        {#each (shelfCardNos ?? form.cardNos.map(c => [c])) as shelf, i}
+    <div
+        bind:this={pageSize}
+        class="absolute left-[1000vw] print:hidden"
+        style:width={contentWidth + "mm"}
+        style:height={contentHeight + "mm"}
+    />
+    <table class="sheets" style:margin={"0 " + padding + "mm"} style:--page-padding={padding + "mm"}>
+        {#each shelfCardNos ?? form.cardNos.map((c) => [c]) as shelf, i}
             <tr class="shelf">
-                <td style:width={contentWidth+"mm"} bind:this={shelfElements[i]}>
+                <td style:width={contentWidth + "mm"} bind:this={shelfElements[i]}>
                     {#each shelf as cardNo}
-                        <Label {cardNo} byCardNo={form.byCardNo} byCardId={form.byCardId}/>
+                        <Label {cardNo} byCardNo={form.byCardNo} byCardId={form.byCardId} />
                     {/each}
                 </td>
             </tr>

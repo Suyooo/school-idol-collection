@@ -8,12 +8,12 @@ enum CardMemberRarity {
     Secret = 4,
     PR = 5,
     N = 6,
-    SSR = 7
+    SSR = 7,
 }
 
 enum CardSongRarity {
     M = 0,
-    GR = 1
+    GR = 1,
 }
 
-export {CardMemberRarity, CardSongRarity};
+export { CardMemberRarity, CardSongRarity };

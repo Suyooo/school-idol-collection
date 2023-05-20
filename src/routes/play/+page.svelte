@@ -1,20 +1,20 @@
 <script context="module" lang="ts">
-    import "../../app.css";
-    import FieldObject from "./FieldObject.svelte";
     import { setContext } from "svelte";
-    import PopupMenu from "./PopupMenu.svelte";
-    import { LocalClientGameLogic } from "$lib/play/logic/local.js";
-    import type StackObject from "./StackObject.svelte";
-    import { StackType, type HandCardSchema } from "$lib/play/schema.js";
-    import type { ClientGameLogic, ClientGameSchema, ClientPlayerSchema } from "$lib/play/schema.js";
-    import HandObject from "./HandObject.svelte";
-    import { writable, type Readable, type Writable } from "svelte/store";
-    import { loadCardInfo, type CardWithImageData } from "$lib/play/cardInfo.js";
-    import Spinner from "$lib/style/icons/Spinner.svelte";
+    import { type Readable, type Writable, writable } from "svelte/store";
+    import "../../app.css";
     import { cardTitle } from "$lib/card/strings.js";
-    import CardInfoRows from "../(site)/card/[cardNo]/CardInfoRows.svelte";
-    import Button from "$lib/style/Button.svelte";
     import Language from "$lib/enums/language.js";
+    import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
+    import { LocalClientGameLogic } from "$lib/play/logic/local.js";
+    import type { ClientGameLogic, ClientGameSchema, ClientPlayerSchema } from "$lib/play/schema.js";
+    import { type HandCardSchema, StackType } from "$lib/play/schema.js";
+    import Button from "$lib/style/Button.svelte";
+    import Spinner from "$lib/style/icons/Spinner.svelte";
+    import CardInfoRows from "../(site)/card/[cardNo]/CardInfoRows.svelte";
+    import FieldObject from "./FieldObject.svelte";
+    import HandObject from "./HandObject.svelte";
+    import PopupMenu from "./PopupMenu.svelte";
+    import type StackObject from "./StackObject.svelte";
 
     export type OpenMenuFunction = (
         x: number,

@@ -1,22 +1,30 @@
 <script lang="ts">
-    import {goto} from "$app/navigation";
+    import { goto } from "$app/navigation";
     import TriggerEnum from "$lib/enums/trigger.js";
-    import Button from "$lib/style/Button.svelte";
     import PatternGroupType from "$lib/translation/patternGroupType.js";
-    import type {PatternGroupTypeID} from "../../../../../../../lib/translation/patternGroupType.js";
-    import type {PageData} from './$types.js';
+    import Button from "$lib/style/Button.svelte";
+    import type { PatternGroupTypeID } from "../../../../../../../lib/translation/patternGroupType.js";
+    import type { PageData } from "./$types.js";
     import Pill from "./Pill.svelte";
 
     export let data: PageData;
     // Not reactive to stop inputs getting reset on every change. There should be no links from this route to itself
-    let {isNew, patternId, triggers, groupTypeIds, example, regex, template} = data;
+    let { isNew, patternId, triggers, groupTypeIds, example, regex, template } = data;
 
-    let lastMatch: RegExpExecArray = <RegExpExecArray>[""], lastSuccessful: boolean = false, result: string = "",
-        regexTextarea: HTMLTextAreaElement, templateTextarea: HTMLTextAreaElement, disabled: boolean,
-        errorRegex: string | undefined, errorTemplate: string | undefined;
+    let lastMatch: RegExpExecArray = <RegExpExecArray>[""],
+        lastSuccessful: boolean = false,
+        result: string = "",
+        regexTextarea: HTMLTextAreaElement,
+        templateTextarea: HTMLTextAreaElement,
+        disabled: boolean,
+        errorRegex: string | undefined,
+        errorTemplate: string | undefined;
 
     $: {
-        example; regex; template; groupTypeIds;
+        example;
+        regex;
+        template;
+        groupTypeIds;
         update();
     }
 
@@ -58,19 +66,22 @@
         if (!lastSuccessful || disabled) return;
         disabled = true;
         const sendData = {
-            triggers, regex, template, groupTypeIds: groupTypeIds.slice(0, lastMatch.length - 1)
+            triggers,
+            regex,
+            template,
+            groupTypeIds: groupTypeIds.slice(0, lastMatch.length - 1),
         };
 
         fetch(`/admin/pattern/edit/${isNew ? "new" : patternId}`, {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(sendData)
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(sendData),
         })
             .then((res) => {
                 if (res.status !== 200) {
                     throw new Error(res.status + " " + res.statusText);
                 }
-                res.json().then(j => goto(`/admin/pattern/apply/${j.patternId}`));
+                res.json().then((j) => goto(`/admin/pattern/apply/${j.patternId}`));
             })
             .catch((e) => {
                 alert("Failed to edit: " + e.message);
@@ -92,7 +103,7 @@
             <div class="row">
                 {#each TriggerEnum.all as t}
                     <div class="col-quarter">
-                        <input type="checkbox" id="trig{t.id}" bind:checked={triggers[t.id]}/>
+                        <input type="checkbox" id="trig{t.id}" bind:checked={triggers[t.id]} />
                         <label for="trig{t.id}">{t.toName()}</label>
                     </div>
                 {/each}
@@ -106,7 +117,7 @@
                 <div class="col-half px-2">
                     <h6>Regex</h6>
                     {#key data}
-                        <textarea id="regex" bind:value={regex} bind:this={regexTextarea}></textarea>
+                        <textarea id="regex" bind:value={regex} bind:this={regexTextarea} />
                     {/key}
                     {#if errorRegex}
                         <div class="error">{errorRegex}</div>
@@ -121,7 +132,7 @@
                 <div class="col-half px-2">
                     <h6>Template</h6>
                     {#key data}
-                        <textarea id="template" bind:value={template} bind:this={templateTextarea}></textarea>
+                        <textarea id="template" bind:value={template} bind:this={templateTextarea} />
                     {/key}
                     {#if errorTemplate}
                         <div class="error">{errorTemplate}</div>
@@ -137,7 +148,9 @@
                     <Pill refocus={templateTextarea}>[PURE]</Pill>
                     <Pill refocus={templateTextarea}>[COOL]</Pill>
                     <Pill refocus={templateTextarea}>the Any Piece requirement is reduced by &lt;X&gt;</Pill>
-                    <Pill refocus={templateTextarea}>the Attribute Piece requirement changes to [&lt;X&gt;&lt;X&gt;&lt;X&gt;]</Pill>
+                    <Pill refocus={templateTextarea}
+                        >the Attribute Piece requirement changes to [&lt;X&gt;&lt;X&gt;&lt;X&gt;]</Pill
+                    >
                     <Pill refocus={templateTextarea}>you have Members on Stand-By</Pill>
                     <Pill refocus={templateTextarea}>on Stand-By on your Stage</Pill>
                     <Pill refocus={templateTextarea}>If you do,</Pill>
@@ -157,9 +170,11 @@
                     <Pill refocus={templateTextarea}>returned Member</Pill>
                     <Pill refocus={templateTextarea}>differently named (group) Members (with)</Pill>
                     <Pill refocus={templateTextarea}>gain ♪Live Points +&lt;X&gt;♪</Pill>
-                    <i class="text-sm"><br>Capitalization: "Stage" "Stand-By" "Hand" "Deck" "Member" "Song" "card" "Live
-                        Outfit" "Live Points" "Attribute" "Collection" "Idolized"<br>
-                        In quotes: Names, Groups, Years, Song Names, Card Names/IDs</i>
+                    <i class="text-sm"
+                        ><br />Capitalization: "Stage" "Stand-By" "Hand" "Deck" "Member" "Song" "card" "Live Outfit"
+                        "Live Points" "Attribute" "Collection" "Idolized"<br />
+                        In quotes: Names, Groups, Years, Song Names, Card Names/IDs</i
+                    >
                 </div>
             </div>
         </div>
@@ -167,13 +182,18 @@
     <h5>Groups</h5>
     <div class="panel">
         <div class="panel-inner" id="groupslist">
-            {#each {length: lastMatch.length - 1} as _, g}
+            {#each { length: lastMatch.length - 1 } as _, g}
                 <h6>Group {g} <span>{lastMatch[g + 1]}</span></h6>
                 <div class="row">
                     {#each PatternGroupType.all as t}
                         <div class="col-quarter">
-                            <input type="radio" name="group{g}" id="group{g}_type{t.id}"
-                                   bind:group={groupTypeIds[g]} value={t.id}>
+                            <input
+                                type="radio"
+                                name="group{g}"
+                                id="group{g}_type{t.id}"
+                                bind:group={groupTypeIds[g]}
+                                value={t.id}
+                            />
                             <label for="group{g}_type{t.id}">{t.name}</label>
                         </div>
                     {/each}
@@ -191,7 +211,7 @@
                 <div class="col-half px-2">
                     <h6>Example</h6>
                     {#key data}
-                        <textarea id="example" bind:value={example}></textarea>
+                        <textarea id="example" bind:value={example} />
                     {/key}
                 </div>
                 <div class="col-half px-2">

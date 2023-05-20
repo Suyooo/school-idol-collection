@@ -1,10 +1,10 @@
 <script context="module" lang="ts">
     import { getContext } from "svelte";
-    import HandCardObject from "./HandCardObject.svelte";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
-    import type { ClientGameLogic, HandCardSchema } from "$lib/play/schema.js";
     import type { DropEvent } from "@interactjs/types/index";
+    import type { ClientGameLogic, HandCardSchema } from "$lib/play/schema.js";
+    import HandCardObject from "./HandCardObject.svelte";
 </script>
 
 <script lang="ts">
@@ -40,7 +40,7 @@
     let disableSidewaysAnimations: boolean = false;
     function skipAnimations() {
         disableSidewaysAnimations = true;
-        requestAnimationFrame(() => disableSidewaysAnimations = false);
+        requestAnimationFrame(() => (disableSidewaysAnimations = false));
     }
 
     function action(node: HTMLElement) {

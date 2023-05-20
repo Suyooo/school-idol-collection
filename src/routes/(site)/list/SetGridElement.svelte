@@ -6,7 +6,7 @@
 
 <a href="/set/{set.id}" class="grid-item">
     <div class="imgcont">
-        <img src="/images/cards/{set.id}/set.jpg" alt="{set.id}">
+        <img src="/images/cards/{set.id}/set.jpg" alt={set.id} />
     </div>
     <div class="namecont">
         <span>⏵</span><span>{set.eng}</span>

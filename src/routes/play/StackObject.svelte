@@ -1,10 +1,10 @@
 <script context="module" lang="ts">
-    import {getContext} from "svelte";
-    import {get} from "svelte/store";
-    import {ClientGameLogic, StackSide, StackType} from "$lib/play/schema.js";
-    import type {OpenMenuFunction} from "./+page.svelte";
+    import { getContext } from "svelte";
+    import { get } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
+    import { ClientGameLogic, StackSide, StackType } from "$lib/play/schema.js";
+    import type { OpenMenuFunction } from "./+page.svelte";
 </script>
 
 <script lang="ts">
@@ -52,7 +52,10 @@
                 {
                     label: "⟪SCOUT⟫",
                     handler: () => {
-                        let toDraw = Math.max(4 - get(get(get(logic.game).players)[logic.clientPlayerId].hand).length, 0);
+                        let toDraw = Math.max(
+                            4 - get(get(get(logic.game).players)[logic.clientPlayerId].hand).length,
+                            0
+                        );
                         for (; toDraw > 0; toDraw--) logic.requestStackToHand(StackSide.TOP);
                     },
                     condition: stackType === StackType.DECK,
@@ -106,19 +109,19 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-        class="objstack"
-        class:objstackdeck={stackType === StackType.DECK}
-        class:objstacksetlist={stackType === StackType.SET_LIST}
-        style:--stack-color={color}
-        style:left={`${x}px`}
-        style:top={`${y - 60}px`}
-        style:transform={`translateX(${shakeX}px)`}
-        class:almostempty={cardNos.length <= 1}
-        class:empty={cardNos.length === 0}
-        on:click={menu}
-        use:action
+    class="objstack"
+    class:objstackdeck={stackType === StackType.DECK}
+    class:objstacksetlist={stackType === StackType.SET_LIST}
+    style:--stack-color={color}
+    style:left={`${x}px`}
+    style:top={`${y - 60}px`}
+    style:transform={`translateX(${shakeX}px)`}
+    class:almostempty={cardNos.length <= 1}
+    class:empty={cardNos.length === 0}
+    on:click={menu}
+    use:action
 >
-    <div class="stack bottom"/>
+    <div class="stack bottom" />
     <div class="stack top" style:margin-top={`-${stackLength + h}px`}>
         {cardNos.length}
     </div>
@@ -143,10 +146,10 @@
                     @apply absolute left-0 right-0 top-0 bottom-0;
                     content: " ";
                     background: repeating-linear-gradient(
-                            rgba(0, 0, 0, 0.25),
-                            rgba(0, 0, 0, 0.25) 1px,
-                            rgba(0, 0, 0, 0.5) 1px,
-                            rgba(0, 0, 0, 0.5) 2px
+                        rgba(0, 0, 0, 0.25),
+                        rgba(0, 0, 0, 0.25) 1px,
+                        rgba(0, 0, 0, 0.5) 1px,
+                        rgba(0, 0, 0, 0.5) 2px
                     );
                 }
             }

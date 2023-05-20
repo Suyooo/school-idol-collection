@@ -10,15 +10,20 @@ a {
     @apply text-accent-400 underline;
 }
 
-a:focus, a:hover {
+a:focus,
+a:hover {
     @apply text-accent-200;
 }
 
-a:not(.button) *, a:not(.button) *:before {
+a:not(.button) *,
+a:not(.button) *:before {
     @apply underline decoration-accent-400;
 }
 
-a:focus *, a:hover *, a:focus *:before, a:hover *:before {
+a:focus *,
+a:hover *,
+a:focus *:before,
+a:hover *:before {
     @apply decoration-accent-200;
 }
 
@@ -78,7 +83,8 @@ span.rarity {
     @apply text-accent-300 font-bold;
 }
 
-h1, h2 {
+h1,
+h2 {
     @apply text-accent-400 font-bold uppercase tracking-widest text-2xl mt-4 mb-4;
 }
 
@@ -112,10 +118,12 @@ tr > th {
 
 .skill-icon:before {
     @apply absolute -left-4 top-0 select-none underline pointer-events-none;
-    content: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    content: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 }
 
-.skill-icon::selection { color: transparent; }
+.skill-icon::selection {
+    color: transparent;
+}
 
 ul {
     @apply list-disc list-inside;
@@ -126,7 +134,8 @@ div.anchor {
 }
 
 @keyframes highlight-faq {
-    0%, 100% {
+    0%,
+    100% {
         @apply bg-transparent;
     }
     50% {
@@ -134,7 +143,9 @@ div.anchor {
     }
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
     @apply bg-primary-900 border-primary-100 p-2;
 }
 

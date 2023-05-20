@@ -1,8 +1,8 @@
 <script lang="ts">
+    import type TranslationPattern from "$models/translation/pattern.js";
     import TriggerEnum from "$lib/enums/trigger.js";
     import TriggerComponent from "$lib/format/TriggerComponent.svelte";
-    import type TranslationPattern from "$models/translation/pattern.js";
-    import type {PageData} from './$types.js';
+    import type { PageData } from "./$types.js";
 
     export let data: PageData;
     let list: TranslationPattern[];
@@ -18,37 +18,37 @@
         <div class="panel-inner">
             <table>
                 <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Triggers</th>
-                    <th>Regex</th>
-                    <th>Template</th>
-                    <th>Apply</th>
-                </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Triggers</th>
+                        <th>Regex</th>
+                        <th>Template</th>
+                        <th>Apply</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {#if list.length === 0}
-                    <tr>
-                        <td colspan="3">No Translation Patterns</td>
-                    </tr>
-                {/if}
-                {#each list as pattern}
-                    <tr>
-                        <td>{pattern.id}</td>
-                        <td>
-                            {#if pattern.triggers === 0}
-                                <i>Flavour</i>
-                            {:else}
-                                {#each TriggerEnum.bitmaskToTriggers(pattern.triggers) as trigger}
-                                    <TriggerComponent {trigger}/>
-                                {/each}
-                            {/if}
-                        </td>
-                        <td>{pattern.regex}</td>
-                        <td>{pattern.template}</td>
-                        <td><a href="/admin/pattern/apply/{pattern.id}">Apply</a></td>
-                    </tr>
-                {/each}
+                    {#if list.length === 0}
+                        <tr>
+                            <td colspan="3">No Translation Patterns</td>
+                        </tr>
+                    {/if}
+                    {#each list as pattern}
+                        <tr>
+                            <td>{pattern.id}</td>
+                            <td>
+                                {#if pattern.triggers === 0}
+                                    <i>Flavour</i>
+                                {:else}
+                                    {#each TriggerEnum.bitmaskToTriggers(pattern.triggers) as trigger}
+                                        <TriggerComponent {trigger} />
+                                    {/each}
+                                {/if}
+                            </td>
+                            <td>{pattern.regex}</td>
+                            <td>{pattern.template}</td>
+                            <td><a href="/admin/pattern/apply/{pattern.id}">Apply</a></td>
+                        </tr>
+                    {/each}
                 </tbody>
             </table>
         </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { makeNodesRenderable } from "$lib/format/format.js";
+    import type { ParseNodePrepared } from "$lib/format/format.js";
     import SkillNodeRenderer from "$lib/format/SkillNodeRenderer.svelte";
-    import {makeNodesRenderable} from "$lib/format/format.js";
-    import type {ParseNodePrepared} from "$lib/format/format.js";
     import Link from "$lib/style/icons/Link.svelte";
 
     export let key: string;
@@ -14,23 +14,26 @@
 </script>
 
 <div class="w-full group relative">
-    <button class="absolute -left-2 top-0 flex justify-center hidden group-hover:block z-50"
-            label="Copy Link to This Question" on:click={copyLink}>
-        <Link/>
+    <button
+        class="absolute -left-2 top-0 flex justify-center hidden group-hover:block z-50"
+        label="Copy Link to This Question"
+        on:click={copyLink}
+    >
+        <Link />
     </button>
-    <div class="anchor absolute left-0 top-[-15vh]" id="{key}"></div>
+    <div class="anchor absolute left-0 top-[-15vh]" id={key} />
     <div class="question">
         {#if typeof question === "string"}
             {@html question}
         {:else}
-            <SkillNodeRenderer nodes={makeNodesRenderable(question)}/>
+            <SkillNodeRenderer nodes={makeNodesRenderable(question)} />
         {/if}
     </div>
     <div class="answer">
         {#if typeof answer === "string"}
             {@html answer}
         {:else}
-            <SkillNodeRenderer nodes={makeNodesRenderable(answer)}/>
+            <SkillNodeRenderer nodes={makeNodesRenderable(answer)} />
         {/if}
     </div>
 </div>
@@ -44,7 +47,8 @@
         }
     }
 
-    .question, .answer {
+    .question,
+    .answer {
         @apply relative pl-12;
 
         &:after {
@@ -68,7 +72,8 @@
         }
     }
 
-    div.anchor:target + .question, div.anchor:target + .question + .answer {
-        animation: highlight-faq .25s ease-in-out 2;
+    div.anchor:target + .question,
+    div.anchor:target + .question + .answer {
+        animation: highlight-faq 0.25s ease-in-out 2;
     }
 </style>

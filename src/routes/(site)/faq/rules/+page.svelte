@@ -1,10 +1,10 @@
 <script lang="ts">
-    import {CardOrientation} from "$lib/enums/cardOrientation.js";
-    import Star from "$lib/format/Star.svelte";
-    import CardImage from "$lib/format/CardImage.svelte";
-    import TriggerComponent from "$lib/format/TriggerComponent.svelte";
+    import { CardOrientation } from "$lib/enums/cardOrientation.js";
     import TriggerEnum from "$lib/enums/trigger.js";
+    import CardImage from "$lib/format/CardImage.svelte";
     import Idolized from "$lib/format/Idolized.svelte";
+    import Star from "$lib/format/Star.svelte";
+    import TriggerComponent from "$lib/format/TriggerComponent.svelte";
 </script>
 
 <svelte:head><title>How To Play → Rules &bull; SIC</title></svelte:head>
@@ -14,8 +14,9 @@
     <div class="panel">
         <div class="panel-inner">
             <h4>Base Rules</h4>
-            To get an overview of the base rules, <a href="https://llsic-en.carrd.co/">Your Sinclair has translated the
-            official rule sheet here</a>.<br>
+            To get an overview of the base rules,<a href="https://llsic-en.carrd.co/"
+                >Your Sinclair has translated the official rule sheet here</a
+            >.<br />
             This rule sheet is enough to start trying out the game - the rules following below are just further details!
         </div>
     </div>
@@ -23,53 +24,53 @@
     <div class="panel">
         <div class="panel-inner">
             <h4>Rule Modifications</h4>
-            Here, some of the rules that you can easily change up when play SIC are highlighted. While the recommended
-            rule for each modification is listed, you can decide yourself whether you want to use these defaults or not.
-            When playing casually with others, you should talk about these to make sure everyone is on the same page,
-            while they're usually already decided by the organizers at events or tournaments.
+            Here, some of the rules that you can easily change up when play SIC are highlighted. While the recommended rule
+            for each modification is listed, you can decide yourself whether you want to use these defaults or not. When
+            playing casually with others, you should talk about these to make sure everyone is on the same page, while they're
+            usually already decided by the organizers at events or tournaments.
 
             <h5 id="option_cost">Star Rule</h5>
             <p>
-                All Member cards have a Cost, from 0 <Star repl="Stars"/> to 3 <Star repl="Stars"/>, depending on their
-                rarity.<br>
-                You can set an upper limit on the total Cost of a Deck, so everyone can build more balanced Decks. The
-                recommended Cost limit is 20 <Star repl="Stars"/>.<br>
-                <br>
-                If you want a simpler game, you can reduce the limit to something like 10 <Star repl="Stars"/>. Of
+                All Member cards have a Cost, from 0 <Star repl="Stars" /> to 3 <Star repl="Stars" />, depending on
+                their rarity.<br />
+                You can set an upper limit on the total Cost of a Deck, so everyone can build more balanced Decks. The recommended
+                Cost limit is 20 <Star repl="Stars" />.<br />
+                <br />
+                If you want a simpler game, you can reduce the limit to something like 10 <Star repl="Stars" />. Of
                 course, you can use any number you want as the limit, or even remove it and play with no Cost limit.
             </p>
 
             <h5 id="option_birthday">Birthday Bonus</h5>
             <p>
-                Some Member cards have Birthday Bonus Pieces in their profile.<br>
-                If the game is taking place in the same month as that Member's birthday, you can add these Bonus Pieces
-                to the card's base Pieces. (For example, if the Member's birthday is August 3rd, the Bonus Pieces can be
-                used in all games being played in August.)<br>
-                <br>
-                "Same month" is the recommended condition, but you can change this rule to only apply on the same day,
-                or leave Birthday Bonuses out completely. These are of course not the only possibilities, feel free to
-                get creative - for example, at the start of a match, every player could choose one Member to get the
-                Birthday Bonus for that match.
+                Some Member cards have Birthday Bonus Pieces in their profile.<br />
+                If the game is taking place in the same month as that Member's birthday, you can add these Bonus Pieces to
+                the card's base Pieces. (For example, if the Member's birthday is August 3rd, the Bonus Pieces can be used
+                in all games being played in August.)<br />
+                <br />
+                "Same month" is the recommended condition, but you can change this rule to only apply on the same day, or
+                leave Birthday Bonuses out completely. These are of course not the only possibilities, feel free to get creative
+                - for example, at the start of a match, every player could choose one Member to get the Birthday Bonus for
+                that match.
             </p>
 
             <h5 id="option_goal">Live Points Goal</h5>
             <p>
-                This game is balanced around a goal of 9 Live Points, which is the recommended target.<br>
-                However, if you want to play longer games, you can also increase the Live Points Goal, or, if you want
-                to play multiple shorter games, lower it.<br>
-                <br>
-                If you are setting a very high Live Points Target, please be careful and make sure that every player's
-                Set List actually has enough Base Live Points to reach the target.<br>
-                <br>
-                You can also try completely different rules - such as setting a turn limit instead of a point goal, and
-                seeing who has the most Live Points at the end.
+                This game is balanced around a goal of 9 Live Points, which is the recommended target.<br />
+                However, if you want to play longer games, you can also increase the Live Points Goal, or, if you want to
+                play multiple shorter games, lower it.<br />
+                <br />
+                If you are setting a very high Live Points Target, please be careful and make sure that every player's Set
+                List actually has enough Base Live Points to reach the target.<br />
+                <br />
+                You can also try completely different rules - such as setting a turn limit instead of a point goal, and seeing
+                who has the most Live Points at the end.
             </p>
 
             <h5 id="option_multi">Three or More Players</h5>
             <p>
-                You can not only play the game one on one, but also with three or more players.<br>
-                It is recommended to play in clockwise order, and deciding the starting player with a game of
-                Rock-Paper-Scissors.<br>
+                You can not only play the game one on one, but also with three or more players.<br />
+                It is recommended to play in clockwise order, and deciding the starting player with a game of Rock-Paper-Scissors.<br
+                />
                 If a player reaches the Live Points Goal, they will go out of the game as a winner. The players in first
                 place, second place, third place and so on are decided by the order in which they win and go out.
             </p>
@@ -79,17 +80,17 @@
                 Since the cards have illustrations on their back, it is recommended to use card sleeves when playing to
                 hide the back, so other players can't see what cards you have on your hand, and you can't see what you
                 will draw next. SIC cards come with sleeves to put them in. Of course, you can use any card sleeve you
-                like!<br>
+                like!<br />
                 It is recommended to use one unified sleeve for the cards in the Deck and another unified sleeve for the
-                cards in the Set List. This will make the game easier to play.<br>
-                <br>
+                cards in the Set List. This will make the game easier to play.<br />
+                <br />
                 If you bought a Trial Deck, the cards in it come without an illustration on the back, but with a unified
-                design instead. As long as you only use Trial Deck cards with the same design, these will not need
-                sleeving.<br>
+                design instead. As long as you only use Trial Deck cards with the same design, these will not need sleeving.<br
+                />
                 While cards you bring into play from your Collection also do not need sleeving, they do require sleeving
-                if they could be turned face-down at any point. If you plan to bring Member or Song cards from your
-                Collection into play, it might be a good idea to sleeve them - they must have the same sleeving as your
-                other cards of the same type.
+                if they could be turned face-down at any point. If you plan to bring Member or Song cards from your Collection
+                into play, it might be a good idea to sleeve them - they must have the same sleeving as your other cards
+                of the same type.
             </p>
         </div>
     </div>
@@ -101,19 +102,19 @@
             <h5>Pairs and Trios</h5>
             <div>
                 <div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
-                    <a href="/card/LL14-059"><CardImage cardNo="LL14-059" orientation={CardOrientation.PORTRAIT}/></a>
-                    <a href="/card/LL14-060"><CardImage cardNo="LL14-060" orientation={CardOrientation.PORTRAIT}/></a>
+                    <a href="/card/LL14-059"><CardImage cardNo="LL14-059" orientation={CardOrientation.PORTRAIT} /></a>
+                    <a href="/card/LL14-060"><CardImage cardNo="LL14-060" orientation={CardOrientation.PORTRAIT} /></a>
                 </div>
-                Certain cards can be linked into Pairs or Trios. Their illustrations will combine into one larger image
-                if you do so.<br>
-                <br>
+                Certain cards can be linked into Pairs or Trios. Their illustrations will combine into one larger image if
+                you do so.<br />
+                <br />
                 The <span class="text-highlight-red">"Pair Up"</span> or
                 <span class="text-highlight-red">"Form A Trio"</span> Skill that allows you to form such a group is
-                available as an <TriggerComponent trigger={TriggerEnum.ENTRY}/> Skill on one or more cards of the
-                Pair/Trio, and lists the IDs of the cards it can link up with. Once all the other cards of the Pair/Trio
-                are on your Stage, you can combine them into the Pair or Trio by <b>⟪ENTER⟫</b>ing a card with that
-                Skill last.<br>
-                <br>
+                available as an <TriggerComponent trigger={TriggerEnum.ENTRY} /> Skill on one or more cards of the Pair/Trio,
+                and lists the IDs of the cards it can link up with. Once all the other cards of the Pair/Trio are on your
+                Stage, you can combine them into the Pair or Trio by <b>⟪ENTER⟫</b>ing a card with that Skill last.<br
+                />
+                <br />
                 As a Pair or Trio, the cards will join <b>⟪LIVE⟫</b>s together and activate additional Pair/Trio Skills.
                 For more information, check out <a href="/faq/general#group">the FAQ about Pairs and Trios</a>.
             </div>
@@ -121,45 +122,45 @@
             <h5 class="clear-both">Memories</h5>
             <div>
                 <div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
-                    <a href="/card/LL11-073"><CardImage cardNo="LL11-073" orientation={CardOrientation.LANDSCAPE}/></a>
+                    <a href="/card/LL11-073"><CardImage cardNo="LL11-073" orientation={CardOrientation.LANDSCAPE} /></a>
                 </div>
-                Memory cards are a third type of cards, in addition to the Member and Song cards you already know. They
-                are not part of either your Deck or Set List. Instead, you bring them onto your Stage from your
+                Memory cards are a third type of cards, in addition to the Member and Song cards you already know. They are
+                not part of either your Deck or Set List. Instead, you bring them onto your Stage from your
                 <span class="text-highlight-red">Collection</span> - which refers to all the cards you own, but are not
                 already used in your Deck or Set List. <a href="/faq/general#collection">The FAQ about Collections</a>
-                have more information about how the Collection is defined and how it works in deckbuilding.<br>
-                <br>
-                Memories are comparable to field effects in other TCGs, usually activating passive Skills affecting the
-                cards on your Stage and <b>⟪LIVE⟫</b>s you perform. You can only bring them into play by using the
-                Skills of Member or Song cards refering to that specific Memory. You can check the "See Also" links on
-                the page of a Memory card to find out how to bring it onto your Stage.
+                have more information about how the Collection is defined and how it works in deckbuilding.<br />
+                <br />
+                Memories are comparable to field effects in other TCGs, usually activating passive Skills affecting the cards
+                on your Stage and <b>⟪LIVE⟫</b>s you perform. You can only bring them into play by using the Skills of
+                Member or Song cards refering to that specific Memory. You can check the "See Also" links on the page of
+                a Memory card to find out how to bring it onto your Stage.
             </div>
 
             <h5 class="clear-both">Idolization</h5>
             <div>
                 <div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
-                    <a href="/card/LL15-028"><CardImage cardNo="LL15-028" orientation={CardOrientation.PORTRAIT}/></a>
+                    <a href="/card/LL15-028"><CardImage cardNo="LL15-028" orientation={CardOrientation.PORTRAIT} /></a>
                 </div>
                 Certain cards are able to be Idolized. This works similar to LLSIF: by combining multiple cards, you can
-                get a powered-up version of the Idolizable card.<br>
-                <br>
-                Cards that have a <TriggerComponent trigger={TriggerEnum.SP}/> Skill are Idolizable. You can Idolize
-                these cards by stacking them on top of another card already on your Stage, which must meet the
-                requirements mentioned by the <TriggerComponent trigger={TriggerEnum.SP}/> Skill, such as being a
-                certain member or having a certain Cost.<br>
-                <br>
-                Once Idolized, cards can gain additional Pieces listed as <Idolized repl="[Idolized] Pieces"/>, or use
-                more powerful Skills. You can learn more from the <a href="/faq/general#sp_practice">FAQ about
-                Idolization and Special Practice</a>.
+                get a powered-up version of the Idolizable card.<br />
+                <br />
+                Cards that have a <TriggerComponent trigger={TriggerEnum.SP} /> Skill are Idolizable. You can Idolize these
+                cards by stacking them on top of another card already on your Stage, which must meet the requirements mentioned
+                by the <TriggerComponent trigger={TriggerEnum.SP} /> Skill, such as being a certain member or having a certain
+                Cost.<br />
+                <br />
+                Once Idolized, cards can gain additional Pieces listed as <Idolized repl="[Idolized] Pieces" />, or use
+                more powerful Skills. You can learn more from the
+                <a href="/faq/general#sp_practice">FAQ about Idolization and Special Practice</a>.
             </div>
         </div>
     </div>
     <div class="panel">
         <div class="panel-inner">
             <h4>Official Event Rules</h4>
-            These are the recommended Deck Construction Restrictions and Rule Options from the SIC site, used for
-            official events. These are simply guidelines, something to start off with - if all the players agree (or
-            you're hosting an event and you're the one making the rules), you can do things differently.
+            These are the recommended Deck Construction Restrictions and Rule Options from the SIC site, used for official
+            events. These are simply guidelines, something to start off with - if all the players agree (or you're hosting
+            an event and you're the one making the rules), you can do things differently.
 
             <h5 id="official_options">Rule Options</h5>
             <ul>
@@ -174,8 +175,8 @@
                 <li>Your Deck must have at least 20 Member cards. (There is no maximum.)</li>
                 <li>You must not have more than four Member cards with the same ID in your Deck.</li>
                 <li>
-                    The total Cost of all cards must not exceed 20 <Star repl="Stars"/>.
-                    (It doesn't have to be exactly 20 <Star repl="Stars"/>.)
+                    The total Cost of all cards must not exceed 20 <Star repl="Stars" />. (It doesn't have to be exactly
+                    20 <Star repl="Stars" />.)
                 </li>
             </ul>
 
@@ -218,7 +219,8 @@
 </div>
 
 <style lang="postcss">
-    p,ul {
+    p,
+    ul {
         @apply ml-4;
     }
 </style>

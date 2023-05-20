@@ -1,7 +1,6 @@
 // Wrapper for node-crawler (https://www.npmjs.com/package/crawler) to use promises
-
 import C from "crawler";
-import type {CreateCrawlerOptions, CrawlerRequestOptions} from "crawler";
+import type { CrawlerRequestOptions, CreateCrawlerOptions } from "crawler";
 
 export default class Crawler extends C {
     public constructor(options: CreateCrawlerOptions) {
@@ -9,7 +8,7 @@ export default class Crawler extends C {
             const originalCallback = options.callback;
             options.callback = async (error, res, done) => {
                 try {
-                    const callbackPromise = new Promise<void>(resolve => originalCallback(error, res, resolve));
+                    const callbackPromise = new Promise<void>((resolve) => originalCallback(error, res, resolve));
                     await callbackPromise;
                     res.options.promise.resolve();
                 } catch (e) {
@@ -27,15 +26,17 @@ export default class Crawler extends C {
         super(options);
     }
 
-    public async queue(urisOrOptions: string | ReadonlyArray<string> | CrawlerRequestOptions | ReadonlyArray<CrawlerRequestOptions>): Promise<void> {
+    public async queue(
+        urisOrOptions: string | ReadonlyArray<string> | CrawlerRequestOptions | ReadonlyArray<CrawlerRequestOptions>
+    ): Promise<void> {
         if (Array.isArray(urisOrOptions)) {
             const promiseArray: Promise<void>[] = [];
-            urisOrOptions = urisOrOptions.map(v => {
+            urisOrOptions = urisOrOptions.map((v) => {
                 const p = new Promise<void>((resolve, reject) => {
                     if (typeof v === "string") {
-                        v = {uri: v, promise: {resolve, reject}};
+                        v = { uri: v, promise: { resolve, reject } };
                     } else {
-                        v.promise = {resolve, reject};
+                        v.promise = { resolve, reject };
                     }
                 });
                 promiseArray.push(p);
@@ -46,9 +47,9 @@ export default class Crawler extends C {
         } else {
             const p = new Promise<void>((resolve, reject) => {
                 if (typeof urisOrOptions === "string") {
-                    urisOrOptions = {uri: urisOrOptions, promise: {resolve, reject}};
+                    urisOrOptions = { uri: urisOrOptions, promise: { resolve, reject } };
                 } else {
-                    (<CrawlerRequestOptions>urisOrOptions).promise = {resolve, reject};
+                    (<CrawlerRequestOptions>urisOrOptions).promise = { resolve, reject };
                 }
             });
             super.queue(urisOrOptions);

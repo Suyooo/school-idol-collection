@@ -1,12 +1,14 @@
-import type CardType from "$lib/enums/cardType.js";
 import type { Readable } from "svelte/store";
+import type CardType from "$lib/enums/cardType.js";
 
 export const enum StackType {
-    DECK, SET_LIST
+    DECK,
+    SET_LIST,
 }
 
 export const enum StackSide {
-    TOP, BOTTOM
+    TOP,
+    BOTTOM,
 }
 
 export interface Profile {
@@ -59,7 +61,7 @@ export interface ClientProfile {
 export abstract class ClientGameLogic {
     abstract game: Readable<ClientGameSchema>;
     handlers: ClientGameLogicHandlers = {
-        onShuffle: undefined
+        onShuffle: undefined,
     };
     abstract clientPlayerId: number;
 

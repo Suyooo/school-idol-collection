@@ -1,12 +1,12 @@
 <script lang="ts">
-    import {makeNodesRenderable} from "$lib/format/format.js";
-    import type {ParseNodePrepared} from "$lib/format/format.js";
+    import { makeNodesRenderable } from "$lib/format/format.js";
+    import type { ParseNodePrepared } from "$lib/format/format.js";
     import SkillNodeRenderer from "$lib/format/SkillNodeRenderer.svelte";
 
     export let note: ParseNodePrepared[];
 </script>
 
-<div class="note"><SkillNodeRenderer nodes={makeNodesRenderable(note)}/></div>
+<div class="note"><SkillNodeRenderer nodes={makeNodesRenderable(note)} /></div>
 
 <style lang="postcss">
     .note {

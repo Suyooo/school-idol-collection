@@ -6,7 +6,8 @@
     export let live: boolean = false;
 
     export let lang: Language = Language.ENG;
-    export let cardType: CardType | undefined = undefined; cardType;
+    export let cardType: CardType | undefined = undefined;
+    cardType;
 
     let lbr: string, rbr: string;
     $: lbr = lang.leftSquareBracket;

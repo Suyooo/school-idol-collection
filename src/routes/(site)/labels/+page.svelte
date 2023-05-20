@@ -1,22 +1,26 @@
 <script lang="ts">
+    import type { FormEventHandler } from "svelte/elements";
     import Button from "$lib/style/Button.svelte";
-    import type {FormEventHandler} from "svelte/elements";
-    import type {Snapshot} from "./$types.js";
+    import type { Snapshot } from "./$types.js";
 
-    let width: number, height: number, padding: number, cardNos: string, error: string | undefined,
+    let width: number,
+        height: number,
+        padding: number,
+        cardNos: string,
+        error: string | undefined,
         form: HTMLFormElement;
 
     export const snapshot: Snapshot = {
-        capture: () => ({width, height, padding, cardNos}),
-        restore: value => ({width, height, padding, cardNos} = value)
+        capture: () => ({ width, height, padding, cardNos }),
+        restore: (value) => ({ width, height, padding, cardNos } = value),
     };
 
     const setPreset: FormEventHandler<HTMLSelectElement> = (e) => {
         if (e.currentTarget.value) {
-            [width, height, padding] = e.currentTarget.value.split("x").map(x => parseInt(x));
+            [width, height, padding] = e.currentTarget.value.split("x").map((x) => parseInt(x));
             (<HTMLOptionElement>e.currentTarget.children[0]).selected = true;
         }
-    }
+    };
 
     function submit() {
         if (!width || !height) {
@@ -62,23 +66,26 @@
                         </div>
                         <div class="mt-4">
                             <b>Custom Size:</b>
-                            <input type="number" name="width" bind:value={width}> x
-                            <input type="number" name="height" bind:value={height}> mm
+                            <input type="number" name="width" bind:value={width} /> x
+                            <input type="number" name="height" bind:value={height} /> mm
                         </div>
                         <div class="mt-1">
                             <b>Custom Page Margins:</b>
-                            <input type="number" name="padding" bind:value={padding}> mm
+                            <input type="number" name="padding" bind:value={padding} /> mm
                         </div>
                     </div>
                     <div class="col-half lg:pl-4">
                         <h6>Card Numbers</h6>
                         <div class="mb-2">
                             Enter the card numbers (starting with "LL", "EX" or "PR") of the cards that you want to
-                            print labels for. Seperate them with commas, spaces or line breaks.<br>
+                            print labels for. Seperate them with commas, spaces or line breaks.<br />
                             For faster entry, you can leave out the "-", and case does not matter.
                         </div>
-                        <textarea name="cardNos" bind:value={cardNos}
-                                  placeholder={"LL01-001\nLL01-002\nLL01-003\n..."}></textarea>
+                        <textarea
+                            name="cardNos"
+                            bind:value={cardNos}
+                            placeholder={"LL01-001\nLL01-002\nLL01-003\n..."}
+                        />
                     </div>
                 </div>
             </form>

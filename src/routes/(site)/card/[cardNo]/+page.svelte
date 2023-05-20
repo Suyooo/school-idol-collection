@@ -1,12 +1,12 @@
 <script lang="ts">
-    import CardImage from "$lib/format/CardImage.svelte";
-    import type {PageData} from './$types.js';
-    import {cardTitle} from "$lib/card/strings.js";
     import type Card from "$models/card/card.js";
+    import { cardTitle } from "$lib/card/strings.js";
+    import Language from "$lib/enums/language.js";
     import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
+    import CardImage from "$lib/format/CardImage.svelte";
+    import type { PageData } from "./$types.js";
     import CardInfoRows from "./CardInfoRows.svelte";
     import CardPageButtons from "./CardPageButtons.svelte";
-    import Language from "$lib/enums/language.js";
 
     export let data: PageData;
     let card: Card & Required<CardPageExtraInfo>;
@@ -21,28 +21,32 @@
     <div class="row lg:flex">
         <div class="col-quarter imgcont">
             <div>
-                <CardImage {card}/>
+                <CardImage {card} />
             </div>
             <div>
-                <CardImage {card} back/>
+                <CardImage {card} back />
             </div>
         </div>
         <div class="col-threequarters">
             <div class="mb-4">
-                <CardPageButtons prevCardNo={card.prevCardNo} nextCardNo={card.nextCardNo} cardSet={card.cardSet}
-                                 listLinksOnLargeOnly/>
+                <CardPageButtons
+                    prevCardNo={card.prevCardNo}
+                    nextCardNo={card.nextCardNo}
+                    cardSet={card.cardSet}
+                    listLinksOnLargeOnly
+                />
             </div>
 
             <div class="panel">
                 <div class="panel-inner">
                     <h4>{@html cardTitle(card, true, Language.ENG, true)}</h4>
-                    <CardInfoRows {card}/>
+                    <CardInfoRows {card} />
                 </div>
             </div>
             <div class="cardcopyright">{card.copyright}</div>
 
             <div class="mt-4">
-                <CardPageButtons prevCardNo={card.prevCardNo} nextCardNo={card.nextCardNo} cardSet={card.cardSet}/>
+                <CardPageButtons prevCardNo={card.prevCardNo} nextCardNo={card.nextCardNo} cardSet={card.cardSet} />
             </div>
         </div>
     </div>

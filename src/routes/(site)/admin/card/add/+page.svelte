@@ -1,7 +1,8 @@
 <script lang="ts">
     import Button from "$lib/style/Button.svelte";
 
-    let cardNo: string = "", disabled: boolean = false;
+    let cardNo: string = "",
+        disabled: boolean = false;
 
     function submitCard() {
         if (disabled) return;
@@ -9,8 +10,8 @@
 
         fetch(`/admin/card/add`, {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({cardNo})
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cardNo }),
         })
             .then(async (res) => {
                 if (res.status !== 200) {
@@ -34,7 +35,7 @@
 <div class="content">
     <div class="panel">
         <div class="panel-inner">
-            Download Single Card: <input bind:value={cardNo}>
+            Download Single Card: <input bind:value={cardNo} />
             <div class="flex items-center justify-end w-full">
                 <Button label="Download" accent on:click={submitCard} {disabled}>Download</Button>
             </div>

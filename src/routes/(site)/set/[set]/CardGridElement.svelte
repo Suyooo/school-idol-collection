@@ -1,17 +1,17 @@
 <script lang="ts">
-    import {CardSongRarity} from "$lib/enums/cardRarity.js";
-    import CardImage from "$lib/format/CardImage.svelte";
     import type Card from "$models/card/card.js";
-    import {cardRarityShort, cardType} from "$lib/card/strings.js";
-    import {cardIsMember, cardIsSong} from "$lib/card/types.js";
+    import { cardRarityShort, cardType } from "$lib/card/strings.js";
+    import { cardIsMember, cardIsSong } from "$lib/card/types.js";
+    import { CardSongRarity } from "$lib/enums/cardRarity.js";
+    import CardImage from "$lib/format/CardImage.svelte";
 
     export let card: Card;
 </script>
 
 <a href="/card/{card.cardNo}" class="grid-item">
     <div class="imgcont">
-        <CardImage {card}/>
-        <CardImage {card} back/>
+        <CardImage {card} />
+        <CardImage {card} back />
     </div>
     <div class="namecont">
         <span>⏵</span>

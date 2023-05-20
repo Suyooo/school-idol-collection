@@ -1,26 +1,24 @@
 <script context="module" lang="ts">
     import { getContext } from "svelte";
+    import type { Readable } from "svelte/store";
+    import interact from "@interactjs/interact/index";
+    import "@interactjs/actions/drop";
+    import CardType from "$lib/enums/cardType.js";
     import {
-        StackType,
+        type ClientFieldCardSchema,
         type ClientGameLogic,
         type ClientGameSchema,
         type ClientPlayerSchema,
-        type ClientFieldCardSchema,
         type ClientProfile,
+        StackType,
     } from "$lib/play/schema.js";
-    import type { Readable } from "svelte/store";
-    import FieldCardObject from "./FieldCardObject.svelte";
-    import StackObject from "./StackObject.svelte";
     import Minus from "$lib/style/icons/Minus.svelte";
     import Plus from "$lib/style/icons/Plus.svelte";
-    import interact from "@interactjs/interact/index";
-    import "@interactjs/actions/drop";
+    import FieldCardObject from "./FieldCardObject.svelte";
+    import StackObject from "./StackObject.svelte";
 </script>
 
 <script lang="ts">
-    import {cardIsMember} from "$lib/card/types";
-    import CardType from "$lib/enums/cardType.js";
-
     export let playerIdx: number;
     export let isClient: boolean;
     export let deckComponent: StackObject;
@@ -67,11 +65,7 @@
     }
 </script>
 
-<div
-    class="objfield"
-    style:--player-color={$profile.fieldColor}
-    use:action
->
+<div class="objfield" style:--player-color={$profile.fieldColor} use:action>
     <div class="background">
         <div class="area deck" />
         <div class="area setlist" />
@@ -81,12 +75,8 @@
         <div class="livepoints">{$livePoints}</div>
         <div class="livepointsbelow">
             {#if isClient}
-                <button on:click={() => logic.requestLPUpdate(1)}
-                    ><Plus /></button
-                >
-                <button on:click={() => logic.requestLPUpdate(-1)}
-                    ><Minus /></button
-                >
+                <button on:click={() => logic.requestLPUpdate(1)}><Plus /></button>
+                <button on:click={() => logic.requestLPUpdate(-1)}><Minus /></button>
             {:else}
                 Live Points
             {/if}
@@ -123,7 +113,7 @@
         width: 720px;
         height: 360px;
         border-color: var(--player-color);
-    
+
         &:global(.ui-droppable-hover) {
             @apply outline outline-4 -outline-offset-4 outline-white/50;
         }

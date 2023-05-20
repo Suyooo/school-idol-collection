@@ -1,14 +1,14 @@
-import {cardLink, cardTitle} from "$lib/card/strings.js";
-import Language from "$lib/enums/language.js";
-import {isTextNode, parseSkillToNodes} from "$lib/format/format.js";
-import type {ParseNodePrepared} from "$lib/format/format.js";
 import type Card from "$models/card/card.js";
-import type {DBObject} from "$models/db.js";
+import type { DBObject } from "$models/db.js";
+import { cardLink, cardTitle } from "$lib/card/strings.js";
+import Language from "$lib/enums/language.js";
+import { isTextNode, parseSkillToNodes } from "$lib/format/format.js";
+import type { ParseNodePrepared } from "$lib/format/format.js";
 
 export type Faq = FaqSection[];
 
 export interface FaqSection {
-    subjects: (string | { from: string, to: string })[];
+    subjects: (string | { from: string; to: string })[];
     notes?: string[];
     seeAlso?: string[];
     qa?: [FaqQA] | [FaqQAWithKey, FaqQAWithKey, ...FaqQAWithKey[]];
@@ -26,10 +26,10 @@ export interface FaqQAWithKey extends FaqQA {
 export type FaqPrepared = {
     sections: FaqSectionPrepared[];
     cards: { [key: string]: Card };
-}
+};
 
 export interface FaqSectionPrepared {
-    subjects: (string | { from: string, to: string })[];
+    subjects: (string | { from: string; to: string })[];
     notes?: ParseNodePrepared[][];
     seeAlso?: FaqSeeAlsoPrepared[];
     qa?: FaqQAPrepared[];
@@ -46,15 +46,17 @@ export interface FaqQAPrepared {
     answer: ParseNodePrepared[];
 }
 
-function isMultipleQA(qa?: [FaqQA] | [FaqQAWithKey, FaqQAWithKey, ...FaqQAWithKey[]]): qa is [FaqQAWithKey, FaqQAWithKey, ...FaqQAWithKey[]] {
+function isMultipleQA(
+    qa?: [FaqQA] | [FaqQAWithKey, FaqQAWithKey, ...FaqQAWithKey[]]
+): qa is [FaqQAWithKey, FaqQAWithKey, ...FaqQAWithKey[]] {
     return qa !== undefined && qa.length > 1;
 }
 
 function isKeyedQA(qa: FaqQA | FaqQAWithKey): qa is FaqQAWithKey {
-    return (<{key: string | undefined}>qa).key !== undefined;
+    return (<{ key: string | undefined }>qa).key !== undefined;
 }
 
-export function getKeyPrefix(subjects: (string | { from: string, to: string })[]) {
+export function getKeyPrefix(subjects: (string | { from: string; to: string })[]) {
     if (subjects.length === 0) {
         return null;
     } else if (typeof subjects[0] === "string") {
@@ -82,9 +84,13 @@ export async function getFaqLinkLabel(DB: DBObject, link: string) {
         const card = (await DB.Card.withScope(["viewForLink"]).findByPk(anchorName))!;
         return cardTitle(card, true);
     } else {
-        const faqEntry = await DB.CardFAQLink.findOne({where: {link}});
+        const faqEntry = await DB.CardFAQLink.findOne({ where: { link } });
         if (faqEntry === null) {
-            throw new Error("No link label in database for " + link + ", add exception in prepareFaq.ts:getFaqLinkLabel until FAQ is applied");
+            throw new Error(
+                "No link label in database for " +
+                    link +
+                    ", add exception in prepareFaq.ts:getFaqLinkLabel until FAQ is applied"
+            );
         }
         return faqEntry.label;
     }
@@ -108,20 +114,20 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
     const faqPromises: Promise<void>[] = [];
 
     const retFaq: FaqPrepared = {
-        sections: faq.map(section => {
+        sections: faq.map((section) => {
             const keyPrefix = getKeyPrefix(section.subjects);
             for (const subject of section.subjects) {
                 if (typeof subject === "string") {
-                    if (seenSubjects.some(c => c === subject)) {
+                    if (seenSubjects.some((c) => c === subject)) {
                         throw new Error("Duplicate subject for different FAQ sections. " + subject);
                     }
                     seenSubjects.push(subject);
                     cardsToLoad.push(subject);
                 } else {
-                    if (seenSubjects.some(c => c === subject.from)) {
+                    if (seenSubjects.some((c) => c === subject.from)) {
                         throw new Error("Duplicate subject for different FAQ sections. " + subject.from);
                     }
-                    if (seenSubjects.some(c => c === subject.to)) {
+                    if (seenSubjects.some((c) => c === subject.to)) {
                         throw new Error("Duplicate subject for different FAQ sections. " + subject.to);
                     }
                     seenSubjects.push(subject.from);
@@ -133,47 +139,59 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
 
             const qaConst = section.qa;
             if (isMultipleQA(qaConst)) {
-                if (qaConst.some((q, i) => qaConst.findIndex(qq => qq.key === q.key) !== i)) {
+                if (qaConst.some((q, i) => qaConst.findIndex((qq) => qq.key === q.key) !== i)) {
                     throw new Error("Duplicate key in FAQ section. " + JSON.stringify(section.subjects));
                 }
             }
 
             return <FaqSectionPrepared>{
                 subjects: section.subjects,
-                notes: section.notes?.map(n => parseSkillToNodes(n, Language.ENG, true)),
-                seeAlso: section.seeAlso?.map(seeAlso => {
+                notes: section.notes?.map((n) => parseSkillToNodes(n, Language.ENG, true)),
+                seeAlso: section.seeAlso?.map((seeAlso) => {
                     const faqObj = <Partial<FaqSeeAlsoPrepared>>{
-                        link: seeAlso
+                        link: seeAlso,
                     };
-                    faqPromises.push(getFaqLinkLabel(DB, seeAlso)
-                        .then(label => {
-                            faqObj.label = parseSkillToNodes(label, Language.ENG, true);
-                        }).catch(() => {
-                            faqObj.label = parseSkillToNodes("UNLABELED LINK UNLABELED LINK UNLABELED LINK UNLABELED LINK", Language.ENG, true);
-                        }));
+                    faqPromises.push(
+                        getFaqLinkLabel(DB, seeAlso)
+                            .then((label) => {
+                                faqObj.label = parseSkillToNodes(label, Language.ENG, true);
+                            })
+                            .catch(() => {
+                                faqObj.label = parseSkillToNodes(
+                                    "UNLABELED LINK UNLABELED LINK UNLABELED LINK UNLABELED LINK",
+                                    Language.ENG,
+                                    true
+                                );
+                            })
+                    );
                     return <FaqSeeAlsoPrepared>faqObj;
                 }),
-                qa: section.qa?.map(qa => {
+                qa: section.qa?.map((qa) => {
                     cardsToLoad.push(...getLinkedCards(qa.question), ...getLinkedCards(qa.answer));
                     return <FaqQAPrepared>{
                         key: getKey(keyPrefix, qa),
                         question: parseSkillToNodes(
                             qa.question.replace(/{{red:([^}]*?)}}/g, "<span class='text-highlight-red'>$1</span>"),
-                            Language.ENG, true),
+                            Language.ENG,
+                            true
+                        ),
                         answer: parseSkillToNodes(
                             qa.answer.replace(/{{red:([^}]*?)}}/g, "<span class='text-highlight-red'>$1</span>"),
-                            Language.ENG, true)
+                            Language.ENG,
+                            true
+                        ),
                     };
-                })
-            }
+                }),
+            };
         }),
-        cards: {}
-    }
+        cards: {},
+    };
 
-    const cards = await DB.Card.withScope(["viewForLink"])
-        .findAll({where: {cardNo: cardsToLoad.filter((c, i) => cardsToLoad.indexOf(c) === i)}});
+    const cards = await DB.Card.withScope(["viewForLink"]).findAll({
+        where: { cardNo: cardsToLoad.filter((c, i) => cardsToLoad.indexOf(c) === i) },
+    });
     for (const card of cards) {
-        retFaq.cards[card.cardNo] = card.get({plain: true});
+        retFaq.cards[card.cardNo] = card.get({ plain: true });
     }
 
     function replReplace(_match: string, cardNo: string, possessive: string) {

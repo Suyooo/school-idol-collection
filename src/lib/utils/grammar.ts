@@ -8,5 +8,5 @@ export function aOrAn(s: string): string {
 
 export function ordinal(n: number) {
     // https://stackoverflow.com/a/39466341/1381397
-    return n + (["st","nd","rd"][((n+90)%100-10)%10-1]||"th");
+    return n + (["st", "nd", "rd"][((((n + 90) % 100) - 10) % 10) - 1] || "th");
 }

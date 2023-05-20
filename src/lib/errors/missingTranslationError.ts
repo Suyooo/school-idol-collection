@@ -1,2 +1,1 @@
-export default class MissingTranslationError extends Error {
-}
+export default class MissingTranslationError extends Error {}

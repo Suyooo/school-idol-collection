@@ -1,8 +1,8 @@
 <script lang="ts">
-    import {goto} from "$app/navigation";
+    import { goto } from "$app/navigation";
+    import type { SearchUiOptions } from "$lib/search/ui.js";
+    import { uiOptionIsSet, uiOptionsToUrl } from "$lib/search/ui.js";
     import Button from "$lib/style/Button.svelte";
-    import type {SearchUiOptions} from "$lib/search/ui.js";
-    import {uiOptionIsSet, uiOptionsToUrl} from "$lib/search/ui.js";
 
     export let options: SearchUiOptions = {};
 
@@ -18,7 +18,7 @@
     <div class="col-half lg:pr-4">
         <div>
             <b>Name:</b>
-            <input bind:value={options.cardName} placeholder="—">
+            <input bind:value={options.cardName} placeholder="—" />
         </div>
         <div>
             <b>Group:</b>
@@ -46,11 +46,11 @@
         </div>
         <div>
             <b>Card Set:</b>
-            <input bind:value={options.cardSet} placeholder="—">
+            <input bind:value={options.cardSet} placeholder="—" />
         </div>
         <div>
             <b>Skill Text:</b>
-            <input bind:value={options.skillText} placeholder="—">
+            <input bind:value={options.skillText} placeholder="—" />
         </div>
     </div>
     <div class="col-half mt-4 lg:mt-0 lg:pl-4">
@@ -107,7 +107,7 @@
             </div>
             <div>
                 <b>Costume:</b>
-                <input bind:value={options.memberCostume} placeholder="—">
+                <input bind:value={options.memberCostume} placeholder="—" />
             </div>
             <div class="!mt-4">
                 <b>Pieces:</b>
@@ -129,7 +129,7 @@
             </div>
             <div class="pl-8">
                 <b class="whitespace-nowrap">
-                    <img class="skill-icon" src="/images/icons/piece_smile.png" alt="Smile"> Pieces:
+                    <img class="skill-icon" src="/images/icons/piece_smile.png" alt="Smile" /> Pieces:
                 </b>
                 <select bind:value={options.memberPiecesSmile}>
                     <option value="" selected>—</option>
@@ -149,7 +149,7 @@
             </div>
             <div class="pl-8">
                 <b class="whitespace-nowrap">
-                    <img class="skill-icon" src="/images/icons/piece_pure.png" alt="Pure"> Pieces:
+                    <img class="skill-icon" src="/images/icons/piece_pure.png" alt="Pure" /> Pieces:
                 </b>
                 <select bind:value={options.memberPiecesPure}>
                     <option value="" selected>—</option>
@@ -169,7 +169,7 @@
             </div>
             <div class="pl-8">
                 <b class="whitespace-nowrap">
-                    <img class="skill-icon" src="/images/icons/piece_cool.png" alt="Cool"> Pieces:
+                    <img class="skill-icon" src="/images/icons/piece_cool.png" alt="Cool" /> Pieces:
                 </b>
                 <select bind:value={options.memberPiecesCool}>
                     <option value="" selected>—</option>
@@ -189,7 +189,7 @@
             </div>
             <div class="pl-8">
                 <b class="whitespace-nowrap">
-                    <img class="skill-icon" src="/images/icons/piece_all.png" alt="All"> Pieces:
+                    <img class="skill-icon" src="/images/icons/piece_all.png" alt="All" /> Pieces:
                 </b>
                 <select bind:value={options.memberPiecesAll}>
                     <option value="" selected>—</option>
@@ -245,7 +245,7 @@
             </div>
             <div>
                 <b>Base Live Points:</b>
-                <input type="number" min="0" bind:value={options.songLivePoints} placeholder="—">
+                <input type="number" min="0" bind:value={options.songLivePoints} placeholder="—" />
                 {#if uiOptionIsSet(options.songLivePoints)}
                     <select bind:value={options.songLivePointsMod}>
                         <option value="" selected>exactly</option>
@@ -284,7 +284,7 @@
             {:else if options.songRequirementType === "attributepiece"}
                 <div>
                     <b class="whitespace-nowrap">
-                        <img class="skill-icon" src="/images/icons/piece_smile.png" alt="Smile">
+                        <img class="skill-icon" src="/images/icons/piece_smile.png" alt="Smile" />
                         Requirement:
                     </b>
                     <select bind:value={options.songPiecesSmile}>
@@ -305,7 +305,7 @@
                 </div>
                 <div>
                     <b class="whitespace-nowrap">
-                        <img class="skill-icon" src="/images/icons/piece_pure.png" alt="Pure"> Requirement:
+                        <img class="skill-icon" src="/images/icons/piece_pure.png" alt="Pure" /> Requirement:
                     </b>
                     <select bind:value={options.songPiecesPure}>
                         <option value="" selected>—</option>
@@ -325,7 +325,7 @@
                 </div>
                 <div>
                     <b class="whitespace-nowrap">
-                        <img class="skill-icon" src="/images/icons/piece_cool.png" alt="Cool">
+                        <img class="skill-icon" src="/images/icons/piece_cool.png" alt="Cool" />
                         Requirement:
                     </b>
                     <select bind:value={options.songPiecesCool}>

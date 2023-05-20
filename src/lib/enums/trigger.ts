@@ -1,10 +1,25 @@
-import EnumError from "$lib/errors/enumError.js";
 import Language from "$lib/enums/language.js";
+import EnumError from "$lib/errors/enumError.js";
 
 type NameJpn =
-    "登場時" | "ライブ参加時" | "ライブ成功時" | "ライブ中" | "スタート時" | "オート" | "自動" | "待機中" | "特別練習";
+    | "登場時"
+    | "ライブ参加時"
+    | "ライブ成功時"
+    | "ライブ中"
+    | "スタート時"
+    | "オート"
+    | "自動"
+    | "待機中"
+    | "特別練習";
 type NameEng =
-    "Entry" | "Live Join" | "Live Success" | "While Live" | "Starter" | "Auto" | "On Stand-By" | "Special Practice";
+    | "Entry"
+    | "Live Join"
+    | "Live Success"
+    | "While Live"
+    | "Starter"
+    | "Auto"
+    | "On Stand-By"
+    | "Special Practice";
 type Name = NameJpn | NameEng;
 type CssClassName = "entry" | "join" | "success" | "live" | "start" | "auto" | "standby" | "sp";
 export type TriggerID = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -21,8 +36,7 @@ export default class TriggerEnum {
     public static readonly all: TriggerEnum[] = [];
     public static readonly allWithMemoryAlts: TriggerEnum[] = [];
 
-    private constructor(id: TriggerID, className: CssClassName,
-                        eng: NameEng, jpn: NameJpn, jpnMemoryAlt?: NameJpn) {
+    private constructor(id: TriggerID, className: CssClassName, eng: NameEng, jpn: NameJpn, jpnMemoryAlt?: NameJpn) {
         this.id = id;
         this.cssClassName = className;
         this.nameEng = eng;
@@ -71,7 +85,7 @@ export default class TriggerEnum {
     }
 
     static triggersToBitmask(triggers: TriggerEnum[]): number {
-        return triggers.map(t => 1 << t.id).reduce((acc, i) => acc + i, 0);
+        return triggers.map((t) => 1 << t.id).reduce((acc, i) => acc + i, 0);
     }
 
     static bitmaskToTriggers(triggerBitmask: number): TriggerEnum[] {

@@ -26,17 +26,29 @@ export default class PieceInfo {
     }
 
     addPiece(attr: AttributeEnum): PieceInfo {
-        return new PieceInfo(this.all + (attr.id === 0 ? 1 : 0), this.smile + (attr.id === 1 ? 1 : 0),
-            this.pure + (attr.id === 2 ? 1 : 0), this.cool + (attr.id === 3 ? 1 : 0));
+        return new PieceInfo(
+            this.all + (attr.id === 0 ? 1 : 0),
+            this.smile + (attr.id === 1 ? 1 : 0),
+            this.pure + (attr.id === 2 ? 1 : 0),
+            this.cool + (attr.id === 3 ? 1 : 0)
+        );
     }
 
     add(other: PieceInfo): PieceInfo {
-        return new PieceInfo(this.all + other.all, this.smile + other.smile,
-            this.pure + other.pure, this.cool + other.cool);
+        return new PieceInfo(
+            this.all + other.all,
+            this.smile + other.smile,
+            this.pure + other.pure,
+            this.cool + other.cool
+        );
     }
 
     sub(other: PieceInfo): PieceInfo {
-        return new PieceInfo(this.all - other.all, this.smile - other.smile,
-            this.pure - other.pure, this.cool - other.cool);
+        return new PieceInfo(
+            this.all - other.all,
+            this.smile - other.smile,
+            this.pure - other.pure,
+            this.cool - other.cool
+        );
     }
 }

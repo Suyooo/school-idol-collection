@@ -1,50 +1,71 @@
+import { type Readable, type Writable, derived, get, readonly, writable } from "svelte/store";
 import CardType from "$lib/enums/cardType.js";
-import { writable, type Readable, type Writable, derived, readonly, get } from "svelte/store";
-import { StackType, ClientGameLogic, StackSide, type ClientGameSchema, type ClientPlayerSchema, type ClientFieldCardSchema, type FieldCardSchema, type ClientProfile, type HandCardSchema } from "../schema.js";
+import {
+    type ClientFieldCardSchema,
+    ClientGameLogic,
+    type ClientGameSchema,
+    type ClientPlayerSchema,
+    type ClientProfile,
+    type FieldCardSchema,
+    type HandCardSchema,
+    StackSide,
+    StackType,
+} from "../schema.js";
 
 export class LocalClientGameLogic extends ClientGameLogic {
     private storeCardFlips = new Map<number, Writable<boolean>>();
-    private storeCardPositions = new Map<number, Writable<{ x: number, y: number, z: number; }>>();
+    private storeCardPositions = new Map<number, Writable<{ x: number; y: number; z: number }>>();
     private storePlayers = [
         {
             profile: writable<ClientProfile>({
                 name: "Local Player",
                 fieldColor: "skyblue",
                 deckColor: "lightblue",
-                setListColor: "lightpink"
+                setListColor: "lightpink",
             }),
             matchUuid: "local",
             livePoints: writable(0),
-            field: writable(new Map<number, ClientFieldCardSchema>),
-            hand: writable<(HandCardSchema)[]>([]),
+            field: writable(new Map<number, ClientFieldCardSchema>()),
+            hand: writable<HandCardSchema[]>([]),
             deck: writable<string[]>([]),
             setList: writable<string[]>([]),
-        }
+        },
     ];
     private storeGame = writable({
         players: writable<ClientPlayerSchema[]>(this.storePlayers),
         turnOrder: writable([0]),
         round: writable(1),
-        turnPlayerIdx: writable(0)
+        turnPlayerIdx: writable(0),
     });
 
-    game: Readable<ClientGameSchema> = derived(this.storeGame, gameObj => ({
-        players: derived(gameObj.players, playersObj => playersObj.map(playerObj => ({
-            profile: readonly(playerObj.profile),
-            matchUuid: playerObj.matchUuid,
-            livePoints: readonly(playerObj.livePoints),
-            field: derived(playerObj.field, fieldObj => new Map([...fieldObj.entries()].map(([cardId, cardObj]) => [cardId, {
-                ...cardObj,
-                flipped: readonly(cardObj.flipped),
-                position: readonly(cardObj.position)
-            }]))),
-            hand: readonly(playerObj.hand),
-            deck: readonly(playerObj.deck),
-            setList: readonly(playerObj.setList),
-        }))),
+    game: Readable<ClientGameSchema> = derived(this.storeGame, (gameObj) => ({
+        players: derived(gameObj.players, (playersObj) =>
+            playersObj.map((playerObj) => ({
+                profile: readonly(playerObj.profile),
+                matchUuid: playerObj.matchUuid,
+                livePoints: readonly(playerObj.livePoints),
+                field: derived(
+                    playerObj.field,
+                    (fieldObj) =>
+                        new Map(
+                            [...fieldObj.entries()].map(([cardId, cardObj]) => [
+                                cardId,
+                                {
+                                    ...cardObj,
+                                    flipped: readonly(cardObj.flipped),
+                                    position: readonly(cardObj.position),
+                                },
+                            ])
+                        )
+                ),
+                hand: readonly(playerObj.hand),
+                deck: readonly(playerObj.deck),
+                setList: readonly(playerObj.setList),
+            }))
+        ),
         turnOrder: readonly(gameObj.turnOrder),
         round: readonly(gameObj.round),
-        turnPlayerIdx: readonly(gameObj.turnPlayerIdx)
+        turnPlayerIdx: readonly(gameObj.turnPlayerIdx),
     }));
     clientPlayerId: number = 0;
 
@@ -56,15 +77,19 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.storePlayers[0].profile.set(profile);
         this.storePlayers[0].deck.set(["LL01-001", "LL01-002", "LL01-003"]);
         this.storePlayers[0].setList.set(["LL01-064", "LL01-065", "LL01-066"]);
-        this.storePlayers[0].hand.set([{id: -2, cardNo: "LL01-004"}, {id: -3, cardNo: "LL01-005"}, {id: -4, cardNo: "LL01-006"}]);
+        this.storePlayers[0].hand.set([
+            { id: -2, cardNo: "LL01-004" },
+            { id: -3, cardNo: "LL01-005" },
+            { id: -4, cardNo: "LL01-006" },
+        ]);
         this.storeCardFlips.set(-1, writable(false));
         this.storeCardPositions.set(-1, writable({ x: 10, y: 10, z: 10 }));
-        this.storePlayers[0].field.update(m => {
+        this.storePlayers[0].field.update((m) => {
             m.set(-1, {
                 cardNo: "LL01-063",
                 cardType: CardType.MEMBER,
                 flipped: this.storeCardFlips.get(-1)!,
-                position: this.storeCardPositions.get(-1)!
+                position: this.storeCardPositions.get(-1)!,
             });
             return m;
         });
@@ -76,7 +101,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     private addToStack(target: StackType, side: StackSide, cardNo: string) {
         const prop = this.targetToProperty(target);
-        this.storePlayers[0][prop].update(arr => {
+        this.storePlayers[0][prop].update((arr) => {
             if (side === StackSide.TOP) arr.push(cardNo);
             else arr.unshift(cardNo);
             return arr;
@@ -86,7 +111,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     private removeFromStack(target: StackType, side: StackSide): string {
         let val: string;
         const prop = this.targetToProperty(target);
-        this.storePlayers[0][prop].update(arr => {
+        this.storePlayers[0][prop].update((arr) => {
             if (side === StackSide.TOP) val = arr.pop()!;
             else val = arr.shift()!;
             return arr;
@@ -102,12 +127,12 @@ export class LocalClientGameLogic extends ClientGameLogic {
             cardNo,
             cardType,
             flipped: thisFlip,
-            position: thisPos
+            position: thisPos,
         };
 
         this.storeCardPositions.set(thisId, thisPos);
         this.storeCardFlips.set(thisId, thisFlip);
-        this.storePlayers[0].field.update(map => {
+        this.storePlayers[0].field.update((map) => {
             map.set(thisId, thisCard);
             return map;
         });
@@ -115,7 +140,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     private removeFromField(id: number): FieldCardSchema {
         let ret: FieldCardSchema;
-        this.storePlayers[0].field.update(map => {
+        this.storePlayers[0].field.update((map) => {
             const card = map.get(id)!;
             const flipped = get(card.flipped);
             const position = get(card.position);
@@ -130,11 +155,11 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     private addToHand(cardNo: string, idx?: number) {
         const thisId = this.nextId++;
-        this.storePlayers[0].hand.update(arr => {
+        this.storePlayers[0].hand.update((arr) => {
             if (idx === undefined) {
-                arr.push({id: thisId, cardNo});
+                arr.push({ id: thisId, cardNo });
             } else {
-                arr.splice(idx, 0, {id: thisId, cardNo});
+                arr.splice(idx, 0, { id: thisId, cardNo });
             }
             return arr;
         });
@@ -142,7 +167,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     private removeFromHand(idx: number): string {
         let cardNo: string;
-        this.storePlayers[0].hand.update(arr => {
+        this.storePlayers[0].hand.update((arr) => {
             cardNo = arr.splice(idx, 1)[0].cardNo;
             return arr;
         });
@@ -181,7 +206,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     requestShuffle(target: StackType) {
         const prop = this.targetToProperty(target);
-        this.storePlayers[0][prop].update(arr => this.shuffleArray(arr));
+        this.storePlayers[0][prop].update((arr) => this.shuffleArray(arr));
         if (this.handlers.onShuffle) this.handlers.onShuffle(0, target);
     }
 
@@ -193,7 +218,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     }
 
     requestFieldMove(id: number, x: number, y: number) {
-        this.storeCardPositions.get(id)!.update(pos => {
+        this.storeCardPositions.get(id)!.update((pos) => {
             pos.x = x;
             pos.y = y;
             pos.z = this.nextZ++;
@@ -202,7 +227,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     }
 
     requestFieldFlip(id: number) {
-        this.storeCardFlips.get(id)!.update(flip => !flip);
+        this.storeCardFlips.get(id)!.update((flip) => !flip);
     }
 
     requestHandMove(idx: number, newIdx: number) {
@@ -210,6 +235,6 @@ export class LocalClientGameLogic extends ClientGameLogic {
     }
 
     requestLPUpdate(delta: number) {
-        this.storePlayers[0].livePoints.update(lp => Math.max(lp + delta, 0));
+        this.storePlayers[0].livePoints.update((lp) => Math.max(lp + delta, 0));
     }
 }

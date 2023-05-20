@@ -4,10 +4,13 @@
 
     export let repl: string;
     export let lang: Language = Language.ENG; // TODO: JP Language
-    export let cardType: CardType | undefined = undefined; cardType;
+    export let cardType: CardType | undefined = undefined;
+    cardType;
 </script>
 
-<span><span class="skill-icon" title={repl}>{repl}</span>{#if lang === Language.ENG}&nbsp;Pieces{/if}</span>
+<span
+    ><span class="skill-icon" title={repl}>{repl}</span>{#if lang === Language.ENG}&nbsp;Pieces{/if}</span
+>
 
 <style lang="postcss">
     .skill-icon {

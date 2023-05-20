@@ -1,28 +1,26 @@
-import {Attribute, BelongsToMany, Table} from "@sequelize/core/decorators-legacy";
-import {DataTypes, Model} from "@sequelize/core";
-
+import { DataTypes, Model } from "@sequelize/core";
+import { Attribute, BelongsToMany, Table } from "@sequelize/core/decorators-legacy";
 import type Card from "$models/card/card.js";
 import type Link from "$models/skill/link.js";
 import type Skill from "$models/skill/skill.js";
-
-import type {AnnotationID} from "$lib/enums/annotation.js";
+import type { AnnotationID } from "$lib/enums/annotation.js";
 
 @Table({
     modelName: "Annotation",
-    timestamps: false
+    timestamps: false,
 })
 export default class Annotation extends Model {
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         allowNull: false,
-        autoIncrement: true
+        autoIncrement: true,
     })
     declare id: number;
 
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
+        allowNull: false,
     })
     declare skillId: number;
     /* inverse of association in Skill */
@@ -30,19 +28,19 @@ export default class Annotation extends Model {
 
     @Attribute({
         type: DataTypes.BOOLEAN,
-        allowNull: false
+        allowNull: false,
     })
     declare isEng: boolean;
 
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
+        allowNull: false,
     })
     declare type: AnnotationID;
 
     @Attribute({
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     })
     declare parameter: string;
 
@@ -53,8 +51,8 @@ export default class Annotation extends Model {
         inverse: { as: "linkedBy" },
         through: {
             model: (s) => s.models.Link,
-            unique: false
-        }
+            unique: false,
+        },
     })
     declare links: (Card & { Link: Link })[];
 }

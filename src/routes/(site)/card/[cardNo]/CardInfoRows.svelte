@@ -1,13 +1,5 @@
 <script lang="ts">
     import type Card from "$models/card/card.js";
-    import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
-    import GroupEnum from "$lib/enums/group.js";
-    import Ability from "$lib/format/Ability.svelte";
-    import PieceCount from "$lib/format/PieceCount.svelte";
-    import Skill from "$lib/format/Skill.svelte";
-    import AttributeEnum from "$lib/enums/attribute.js";
-    import Language from "$lib/enums/language.js";
-    import { escapeForUrl } from "$lib/utils/string.js";
     import {
         cardBirthday,
         cardCost,
@@ -28,6 +20,14 @@
         cardIsMember,
         cardIsSong,
     } from "$lib/card/types.js";
+    import AttributeEnum from "$lib/enums/attribute.js";
+    import GroupEnum from "$lib/enums/group.js";
+    import Language from "$lib/enums/language.js";
+    import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
+    import { escapeForUrl } from "$lib/utils/string.js";
+    import Ability from "$lib/format/Ability.svelte";
+    import PieceCount from "$lib/format/PieceCount.svelte";
+    import Skill from "$lib/format/Skill.svelte";
 
     export let card: Card;
     export let hideSharedId: boolean = false;

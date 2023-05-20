@@ -1,20 +1,24 @@
 <script lang="ts">
-    import {goto} from "$app/navigation";
+    import { goto } from "$app/navigation";
+    import type Card from "$models/card/card.js";
+    import type { SearchUiOptions } from "$lib/search/ui.js";
+    import { urlToUiOptions } from "$lib/search/ui.js";
     import Skill from "$lib/format/Skill.svelte";
     import Button from "$lib/style/Button.svelte";
     import GridPanel from "$lib/style/GridPanel.svelte";
     import Collapse from "$lib/style/icons/Collapse.svelte";
     import Expand from "$lib/style/icons/Expand.svelte";
-    import type Card from "$models/card/card.js";
-    import type {SearchUiOptions} from "$lib/search/ui.js";
-    import {urlToUiOptions} from "$lib/search/ui.js";
-    import SearchOptions from "../SearchOptions.svelte";
-    import type {PageData} from './$types.js';
+    import type { PageData } from "./$types.js";
     import CardGridElement from "../../set/[set]/CardGridElement.svelte";
+    import SearchOptions from "../SearchOptions.svelte";
 
     export let data: PageData;
-    let cards: Card[], queryUrl: string, options: SearchUiOptions, showOptions: boolean = false, queryExplain: string[],
-        pagination: { page: number, totalResults: number, pageSize: number };
+    let cards: Card[],
+        queryUrl: string,
+        options: SearchUiOptions,
+        showOptions: boolean = false,
+        queryExplain: string[],
+        pagination: { page: number; totalResults: number; pageSize: number };
     $: {
         cards = data.cards;
         showOptions = false;
@@ -33,19 +37,22 @@
     Search Results:
     {#each queryExplain as q, i}
         {#if i > 0},{/if}
-        <Skill skill={q}/>
+        <Skill skill={q} />
     {/each}
 </h5>
 
 <div class="content">
     <div class="flex items-center">
-        <Button accent classes="w-6 h-6 !px-0 !rounded-full flex items-center justify-center"
-                on:click={() => showOptions = !showOptions}
-                label={showOptions ? "Collapse Search Options" : "Expand Search Options"}>
+        <Button
+            accent
+            classes="w-6 h-6 !px-0 !rounded-full flex items-center justify-center"
+            on:click={() => (showOptions = !showOptions)}
+            label={showOptions ? "Collapse Search Options" : "Expand Search Options"}
+        >
             {#if showOptions}
-                <Collapse/>
+                <Collapse />
             {:else}
-                <Expand/>
+                <Expand />
             {/if}
         </Button>
         <span class="ml-4">Change Search Query</span>
@@ -53,7 +60,7 @@
     <div class="panel mt-4" class:hidden={!showOptions}>
         <div class="panel-inner">
             {#key queryUrl}
-                <SearchOptions {options}/>
+                <SearchOptions {options} />
             {/key}
         </div>
     </div>
@@ -64,7 +71,7 @@
         There are no results for this query.
     {:else}
         <GridPanel items={cards} key="cardNo" let:item={card}>
-            <CardGridElement {card}/>
+            <CardGridElement {card} />
         </GridPanel>
 
         {#if pagination.totalResults > pagination.pageSize}
@@ -75,9 +82,13 @@
                     of {pagination.totalResults}
                 </div>
                 <div class="max-w-md flex flex-wrap gap-2 justify-center">
-                    {#each {length: Math.ceil(pagination.totalResults / pagination.pageSize)} as _, i}
-                        <Button classes="w-12 px-0" accent={i + 1 === pagination.page} label={`Page ${i + 1}`}
-                                on:click={() => goto(`/search/${queryUrl}/page:${i + 1}`)}>{i + 1}</Button>
+                    {#each { length: Math.ceil(pagination.totalResults / pagination.pageSize) } as _, i}
+                        <Button
+                            classes="w-12 px-0"
+                            accent={i + 1 === pagination.page}
+                            label={`Page ${i + 1}`}
+                            on:click={() => goto(`/search/${queryUrl}/page:${i + 1}`)}>{i + 1}</Button
+                        >
                     {/each}
                 </div>
             </div>

@@ -1,27 +1,28 @@
 <script lang="ts">
-    import type CardType from "$lib/enums/cardType.js";
-    import Piece from "$lib/format/Piece.svelte";
     import AttributeEnum from "$lib/enums/attribute.js";
+    import type CardType from "$lib/enums/cardType.js";
     import Language from "$lib/enums/language.js";
-    import {uppercaseFirst} from "$lib/utils/string.js";
+    import { uppercaseFirst } from "$lib/utils/string.js";
+    import Piece from "$lib/format/Piece.svelte";
 
-    export let pieces: { piecesAll?: number, piecesSmile?: number, piecesPure?: number, piecesCool?: number };
+    export let pieces: { piecesAll?: number; piecesSmile?: number; piecesPure?: number; piecesCool?: number };
     export let showZero: boolean = false;
     export let isSongReq: boolean = false;
 
     export let lang: Language = Language.ENG;
-    export let cardType: CardType | undefined = undefined; cardType;
+    export let cardType: CardType | undefined = undefined;
+    cardType;
 
     const attrs = AttributeEnum.allForPieces;
     let display: [number | null, number | null, number | null, number | null];
     let totalPieces = 0;
     $: {
         totalPieces = 0;
-        display = <[number | null, number | null, number | null, number | null]>attrs.map(attr => {
+        display = <[number | null, number | null, number | null, number | null]>attrs.map((attr) => {
             const piecesKey = <keyof typeof pieces>("pieces" + uppercaseFirst(attr.toCssClassName()));
             const pieceCount: number | undefined = pieces[piecesKey];
             totalPieces += pieceCount ?? 0;
-            return (pieceCount === undefined || (pieceCount === 0 && !showZero)) ? null : pieces[piecesKey];
+            return pieceCount === undefined || (pieceCount === 0 && !showZero) ? null : pieces[piecesKey];
         });
     }
 </script>
@@ -29,10 +30,12 @@
 {#if totalPieces > 0 || showZero}
     <!-- I wish there was an easier way to avoid whitespace -->
     {#each attrs as attr, i}{#if display[i] !== null}<span
-                class="pieceno {attr.toCssClassName()}" class:reduced-gap={isSongReq}><Piece
-                {lang} {attr} noText={isSongReq}/>{#if !isSongReq}<span
-                class="text-none">{lang.times}&nbsp;</span>{/if}<span>{display[i]}</span>{#if !isSongReq}<span
-                class="text-none">&nbsp;</span>{/if}</span>{/if}{/each}
+                class="pieceno {attr.toCssClassName()}"
+                class:reduced-gap={isSongReq}
+                ><Piece {lang} {attr} noText={isSongReq} />{#if !isSongReq}<span class="text-none"
+                        >{lang.times}&nbsp;</span
+                    >{/if}<span>{display[i]}</span>{#if !isSongReq}<span class="text-none">&nbsp;</span>{/if}</span
+            >{/if}{/each}
 {:else}
     —
 {/if}

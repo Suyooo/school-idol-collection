@@ -12,7 +12,6 @@ const config = {
 		alias: {
 			"$lib": "src/lib",
 			"$models": "src/models",
-			"$style": "src/style",
 		}
 	}
 };

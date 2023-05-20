@@ -1,6 +1,18 @@
 import EnumError from "$lib/errors/enumError.js";
 
-type Name = "???" | "—" | "µ's" | "Aqours" | "Printemps" | "lily white" | "BiBi" | "CYaRon!" | "AZALEA" | "Guilty Kiss" | "Saint Snow" | "Saint Aqours Snow";
+type Name =
+    | "???"
+    | "—"
+    | "µ's"
+    | "Aqours"
+    | "Printemps"
+    | "lily white"
+    | "BiBi"
+    | "CYaRon!"
+    | "AZALEA"
+    | "Guilty Kiss"
+    | "Saint Snow"
+    | "Saint Aqours Snow";
 export type GroupID = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 export default class GroupEnum {
@@ -38,7 +50,7 @@ export default class GroupEnum {
     }
 
     toIdsWithSuper(): GroupID[] {
-        if (this.superGroup === null) return [this.id]
+        if (this.superGroup === null) return [this.id];
         else return [this.id, ...this.superGroup.toIdsWithSuper()];
     }
 
@@ -58,7 +70,7 @@ export default class GroupEnum {
     static getSubIdsFromId(n: number): GroupID[] {
         const a = GroupEnum.idMapWithSubs.get(<GroupID>n);
         if (a === undefined) throw new EnumError("Trigger", "ID (subgroups included)", n);
-        else return a.map(g => g.id);
+        else return a.map((g) => g.id);
     }
 
     static fromId(n: number): GroupEnum {

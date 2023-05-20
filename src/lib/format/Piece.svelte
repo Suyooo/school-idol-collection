@@ -1,6 +1,6 @@
 <script lang="ts">
     import AttributeEnum from "$lib/enums/attribute.js";
-    import type {AttributeID} from "$lib/enums/attribute.js";
+    import type { AttributeID } from "$lib/enums/attribute.js";
     import type CardType from "$lib/enums/cardType.js";
     import Language from "$lib/enums/language.js";
 
@@ -9,22 +9,25 @@
     export let noText: boolean = false;
 
     export let lang: Language = Language.ENG;
-    export let cardType: CardType | undefined = undefined; cardType;
+    export let cardType: CardType | undefined = undefined;
+    cardType;
 
     $: {
         if (attrId !== undefined) attr = AttributeEnum.fromId(attrId);
     }
 </script>
 
-<span class="skill-icon {attr.toCssClassName()}"
-      title={lang.leftSquareBracket + attr.toPieceAttributeName(lang) + lang.rightSquareBracket}>
+<span
+    class="skill-icon {attr.toCssClassName()}"
+    title={lang.leftSquareBracket + attr.toPieceAttributeName(lang) + lang.rightSquareBracket}
+>
     {#if !noText}{lang.leftSquareBracket}{attr.toPieceAttributeName(lang)}{lang.rightSquareBracket}{/if}
 </span>
 
 <style lang="postcss">
     .skill-icon {
         @apply w-[1em];
-        background-position-y: .166em;
+        background-position-y: 0.166em;
 
         &.all {
             background-image: url("/images/icons/piece_all.png");

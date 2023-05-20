@@ -1,15 +1,14 @@
 <script context="module" lang="ts">
     import { getContext, onMount } from "svelte";
-    import { CardOrientation } from "$lib/enums/cardOrientation.js";
-    import Spinner from "$lib/style/icons/Spinner.svelte";
-    import CardType from "$lib/enums/cardType.js";
     import type { Readable, Writable } from "svelte/store";
-    import { loadCardInfo, type CardWithImageData } from "$lib/play/cardInfo.js";
     import interact from "@interactjs/interact/index";
-    import "@interactjs/auto-start";
     import "@interactjs/actions/drag";
+    import "@interactjs/auto-start";
     import "@interactjs/modifiers";
-    import { StackSide, type ClientGameLogic } from "$lib/play/schema.js";
+    import CardType from "$lib/enums/cardType.js";
+    import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
+    import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
+    import Spinner from "$lib/style/icons/Spinner.svelte";
     import type { OpenMenuFunction } from "./+page.svelte";
 </script>
 

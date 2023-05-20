@@ -1,7 +1,8 @@
 <script lang="ts">
     import Button from "$lib/style/Button.svelte";
 
-    let faqName: string = "", disabled: boolean = false;
+    let faqName: string = "",
+        disabled: boolean = false;
 
     function submit() {
         if (disabled) return;
@@ -9,8 +10,8 @@
 
         fetch(`/admin/card/faq`, {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({faqName})
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ faqName }),
         })
             .then((res) => {
                 if (res.status !== 200) {
@@ -34,7 +35,7 @@
 <div class="content">
     <div class="panel">
         <div class="panel-inner">
-            Enter name of the FAQ page: <input bind:value={faqName}>
+            Enter name of the FAQ page: <input bind:value={faqName} />
             <div class="flex items-center justify-end w-full">
                 <Button label="Apply" accent on:click={submit} {disabled}>Apply</Button>
             </div>

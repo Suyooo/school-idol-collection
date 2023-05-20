@@ -3,8 +3,10 @@
     import Language from "$lib/enums/language.js";
 
     export let repl: string;
-    export let lang: Language = Language.ENG; lang;
-    export let cardType: CardType | undefined = undefined; cardType;
+    export let lang: Language = Language.ENG;
+    lang;
+    export let cardType: CardType | undefined = undefined;
+    cardType;
 </script>
 
 <span class="skill-icon" title={repl}>{repl}</span>

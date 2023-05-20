@@ -1,7 +1,7 @@
 <script lang="ts">
-    import {cardIsMember} from "$lib/card/types.js";
-    import {CardOrientation} from "$lib/enums/cardOrientation.js";
-    import {CardMemberRarity} from "$lib/enums/cardRarity.js";
+    import { cardIsMember } from "$lib/card/types.js";
+    import { CardOrientation } from "$lib/enums/cardOrientation.js";
+    import { CardMemberRarity } from "$lib/enums/cardRarity.js";
     import type Card from "../../models/card/card.js";
 
     export let card: Card | undefined = undefined;
@@ -15,15 +15,20 @@
         const usedCardNo = <string>(card?.cardNo ?? cardNo);
         set = usedCardNo.split("-")[0];
         secret = card ? cardIsMember(card) && card.member.rarity === CardMemberRarity.Secret : false;
-        isLandscape = (card ? (back ? card.backOrientation : card.frontOrientation) : orientation) === CardOrientation.LANDSCAPE;
+        isLandscape =
+            (card ? (back ? card.backOrientation : card.frontOrientation) : orientation) === CardOrientation.LANDSCAPE;
         if (secret) url = `/images/cards/secret.jpg`;
-        else url = `/images/cards/${set}/${usedCardNo}-${back ? 'back' : 'front'}.jpg`;
+        else url = `/images/cards/${set}/${usedCardNo}-${back ? "back" : "front"}.jpg`;
     }
 </script>
 
 {#key card}
-    <img src={url} alt="{card?.cardNo ?? cardNo} {back ? 'Back' : 'Front'} Illustration"
-         class:card-v={!isLandscape} class:card-h={isLandscape}>
+    <img
+        src={url}
+        alt="{card?.cardNo ?? cardNo} {back ? 'Back' : 'Front'} Illustration"
+        class:card-v={!isLandscape}
+        class:card-h={isLandscape}
+    />
 {/key}
 
 <style lang="postcss">

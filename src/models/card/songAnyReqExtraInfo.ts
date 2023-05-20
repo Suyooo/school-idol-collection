@@ -1,21 +1,19 @@
-import {Attribute, Table} from "@sequelize/core/decorators-legacy";
-import {DataTypes, Model} from "@sequelize/core";
-
-import type {CardSong} from "$models/card/card.js";
+import { DataTypes, Model } from "@sequelize/core";
+import { Attribute, Table } from "@sequelize/core/decorators-legacy";
+import type { CardSong } from "$models/card/card.js";
 import type CardSongExtraInfo from "$models/card/songExtraInfo.js";
-import {pieceInfoGetter} from "$models/utils/pieceInfoGetterSetter.js";
-
+import { pieceInfoGetter } from "$models/utils/pieceInfoGetterSetter.js";
 import type PieceInfo from "$lib/types/pieceInfo.js";
 
 @Table({
     modelName: "CardSongAnyReqExtraInfo",
-    timestamps: false
+    timestamps: false,
 })
 export default class CardSongAnyReqExtraInfo extends Model {
     @Attribute({
         type: DataTypes.STRING,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
     })
     declare cardNo: string;
     /* inverse of association in CardSongExtraInfo */
@@ -28,11 +26,11 @@ export default class CardSongAnyReqExtraInfo extends Model {
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        validate: {min: 0}
+        validate: { min: 0 },
     })
     declare piecesAll: number;
 
     get pieces(): PieceInfo {
-        return pieceInfoGetter(this,"piecesAll");
+        return pieceInfoGetter(this, "piecesAll");
     }
 }

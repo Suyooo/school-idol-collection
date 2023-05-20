@@ -11,12 +11,12 @@
 <div class="panel">
     <div class="panel-inner">
         <h4><a href="/admin/card">Cards</a></h4>
-        <CardLinkList/>
+        <CardLinkList />
     </div>
 </div>
 <div class="panel">
     <div class="panel-inner">
         <h4><a href="/admin/pattern">Patterns</a></h4>
-        <PatternLinkList/>
+        <PatternLinkList />
     </div>
 </div>

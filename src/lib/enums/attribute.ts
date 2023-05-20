@@ -1,5 +1,5 @@
-import EnumError from "$lib/errors/enumError.js";
 import Language from "$lib/enums/language.js";
+import EnumError from "$lib/errors/enumError.js";
 
 type ColorNameJpn = "黄" | "赤" | "緑" | "青" | "オレンジ";
 type ColorNameEng = "Yellow" | "Red" | "Green" | "Blue" | "Orange";
@@ -30,10 +30,16 @@ export default class AttributeEnum {
     static readonly all: AttributeEnum[] = [];
     static readonly allForPieces: AttributeEnum[] = [];
 
-    private constructor(id: AttributeID, cssClassName: CssClassName,
-                        colorNameEng: ColorNameEng, colorNameJpn: ColorNameJpn,
-                        songAttributeNameEng: SongAttributeNameEng, songAttributeNameJpn: SongAttributeNameJpn,
-                        pieceAttributeNameEng?: PieceAttributeNameEng, pieceAttributeNameJpn?: PieceAttributeNameJpn) {
+    private constructor(
+        id: AttributeID,
+        cssClassName: CssClassName,
+        colorNameEng: ColorNameEng,
+        colorNameJpn: ColorNameJpn,
+        songAttributeNameEng: SongAttributeNameEng,
+        songAttributeNameJpn: SongAttributeNameJpn,
+        pieceAttributeNameEng?: PieceAttributeNameEng,
+        pieceAttributeNameJpn?: PieceAttributeNameJpn
+    ) {
         this.id = id;
         this.cssClassName = cssClassName;
         this.colorNameEng = colorNameEng;

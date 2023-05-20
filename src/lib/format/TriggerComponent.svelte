@@ -1,8 +1,8 @@
 <script lang="ts">
-    import TriggerEnum from "$lib/enums/trigger.js";
-    import type {TriggerID} from "$lib/enums/trigger.js";
     import CardType from "$lib/enums/cardType.js";
     import Language from "$lib/enums/language.js";
+    import TriggerEnum from "$lib/enums/trigger.js";
+    import type { TriggerID } from "$lib/enums/trigger.js";
 
     export let trigger: TriggerEnum;
     export let triggerId: TriggerID | undefined = undefined;
@@ -20,8 +20,11 @@
     $: rbr = lang.rightSquareBracket;
 </script>
 
-<span class="skill-icon {trigger.toCssClassName()}" class:closing
-      title={closing ? undefined : lbr + trigger.toName(lang, cardType === CardType.MEMORY) + rbr}>
+<span
+    class="skill-icon {trigger.toCssClassName()}"
+    class:closing
+    title={closing ? undefined : lbr + trigger.toName(lang, cardType === CardType.MEMORY) + rbr}
+>
     {closing ? "" : lbr + trigger.toName(lang, cardType === CardType.MEMORY) + rbr}
 </span>
 

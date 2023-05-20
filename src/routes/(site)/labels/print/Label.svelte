@@ -1,16 +1,18 @@
 <script lang="ts">
-    import {cardHasGroup} from "$lib/card/types.js";
-    import {cardIsMember, cardIsSong} from "$lib/card/types.js";
-    import CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
-    import {CardOrientation} from "$lib/enums/cardOrientation.js";
-    import {CardMemberRarity, CardSongRarity} from "$lib/enums/cardRarity.js";
-    import Skill from "$lib/format/Skill.svelte";
     import type Card from "$models/card/card.js";
+    import { cardHasGroup } from "$lib/card/types.js";
+    import { cardIsMember, cardIsSong } from "$lib/card/types.js";
+    import CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
+    import { CardOrientation } from "$lib/enums/cardOrientation.js";
+    import { CardMemberRarity, CardSongRarity } from "$lib/enums/cardRarity.js";
+    import Skill from "$lib/format/Skill.svelte";
 
     export let cardNo: string;
     export let byCardNo: { [cardNo: string]: Card };
     export let byCardId: { [cardId: number]: Card };
-    let card: Card, showGroupSkills: boolean, isLandscape: boolean | undefined = undefined;
+    let card: Card,
+        showGroupSkills: boolean,
+        isLandscape: boolean | undefined = undefined;
 
     $: {
         card = byCardNo[cardNo];
@@ -21,14 +23,15 @@
 
 <div class="label" class:narrow={!isLandscape} class:wide={isLandscape}>
     <div class="skillsallcards">
-        {#each (card.member && card.member.group && showGroupSkills
-            ? card.member.group.expectedMemberIds.split("|").filter(c => c !== "").map(c => byCardNo[byCardId[parseInt(c)].cardNo])
-            : [card]) as c}
+        {#each card.member && card.member.group && showGroupSkills ? card.member.group.expectedMemberIds
+                  .split("|")
+                  .filter((c) => c !== "")
+                  .map((c) => byCardNo[byCardId[parseInt(c)].cardNo]) : [card] as c}
             {#if c.skills.length > 0}
                 <div class="skillscard" class:othergroupmember={c.cardNo !== cardNo}>
                     {#each c.skills as skill (skill.id)}
                         <div>
-                            <Skill skill={skill} cardType={c.type}/>
+                            <Skill {skill} cardType={c.type} />
                         </div>
                     {/each}
                 </div>
@@ -36,12 +39,15 @@
         {/each}
     </div>
     {#if card.member && card.member.group && showGroupSkills}
-        <div class="skillsgroup" class:pair={card.member.group.type === CardMemberGroupType.PAIR}
-             class:trio={card.member.group.type === CardMemberGroupType.TRIO}
-             style:--group-pos={card.member.group.expectedMemberIds.split("|").indexOf(card.id.toString()) - 1}>
+        <div
+            class="skillsgroup"
+            class:pair={card.member.group.type === CardMemberGroupType.PAIR}
+            class:trio={card.member.group.type === CardMemberGroupType.TRIO}
+            style:--group-pos={card.member.group.expectedMemberIds.split("|").indexOf(card.id.toString()) - 1}
+        >
             {#each card.member.group.skills as skill (skill.id)}
                 <div>
-                    <Skill skill={skill} cardType={card.type}/>
+                    <Skill {skill} cardType={card.type} />
                 </div>
             {/each}
         </div>
@@ -51,16 +57,20 @@
             <span><span><span>⏵</span></span><span>{card.member.costumeEng ?? card.member.costumeJpn}</span></span>
         </div>
     {/if}
-    <hr>
+    <hr />
     <div class="ids">
         <div>
             {card.cardNo}
-            {cardIsMember(card) ? CardMemberRarity[card.member.rarity] : cardIsSong(card) ? CardSongRarity[card.song.rarity] : "ME"}
+            {cardIsMember(card)
+                ? CardMemberRarity[card.member.rarity]
+                : cardIsSong(card)
+                ? CardSongRarity[card.song.rarity]
+                : "ME"}
         </div>
-        <div>ID: {card.id.toString().padStart(4,"0")}</div>
+        <div>ID: {card.id.toString().padStart(4, "0")}</div>
     </div>
-    <hr>
-    <div class="fold"></div>
+    <hr />
+    <div class="fold" />
 </div>
 
 <style lang="postcss">
@@ -100,8 +110,8 @@
 
                 & > .skillscard {
                     border: 0.25mm solid black;
-                    padding: .5mm .75mm .5mm .5mm;
-                    text-indent: -.25mm;
+                    padding: 0.5mm 0.75mm 0.5mm 0.5mm;
+                    text-indent: -0.25mm;
                     flex: 0 0 100%;
                     flex-wrap: nowrap;
 
@@ -118,11 +128,13 @@
 
             &.skillsgroup {
                 --group-pos: 0;
-                padding: .5mm .75mm .5mm .5mm;
-                text-indent: -.25mm;
+                padding: 0.5mm 0.75mm 0.5mm 0.5mm;
+                text-indent: -0.25mm;
                 font-stretch: semi-condensed;
                 border: 0.25mm solid black;
-                margin-left: calc((-100% + var(--group-skill-overlap) * 2) * var(--group-pos) + var(--group-skill-margin));
+                margin-left: calc(
+                    (-100% + var(--group-skill-overlap) * 2) * var(--group-pos) + var(--group-skill-margin)
+                );
 
                 &.pair {
                     width: calc(200% - var(--group-skill-margin) * 2 - var(--group-skill-overlap) * 2);
@@ -134,33 +146,33 @@
             }
 
             &.costume {
-                margin-left: .5mm;
-                margin-right: .5mm;
+                margin-left: 0.5mm;
+                margin-right: 0.5mm;
 
                 & > span {
                     @apply rounded-full inline-flex items-center;
                     padding: 0 2.5mm 0 2mm;
-                    border: .5mm solid hotpink;
+                    border: 0.5mm solid hotpink;
                     color: hotpink;
                     font-size: 2mm;
 
                     & > span:first-child {
                         @apply rounded-full box-content flex items-center justify-center;
-                        border: .5mm solid hotpink;
+                        border: 0.5mm solid hotpink;
                         width: 1.5mm;
                         height: 1.5mm;
                         margin-right: 2mm;
 
                         & > span {
-                            margin-top: -.3mm;
-                            margin-left: .15mm;
+                            margin-top: -0.3mm;
+                            margin-left: 0.15mm;
                         }
                     }
 
                     & > span:last-child {
                         font-weight: bold;
                         font-stretch: semi-condensed;
-                        margin-top: -.25mm;
+                        margin-top: -0.25mm;
                     }
                 }
             }

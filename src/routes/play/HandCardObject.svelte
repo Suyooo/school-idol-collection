@@ -1,15 +1,15 @@
 <script context="module" lang="ts">
     import { createEventDispatcher, getContext, onMount } from "svelte";
-    import Spinner from "$lib/style/icons/Spinner.svelte";
-    import { loadCardInfo, type CardWithImageData } from "$lib/play/cardInfo.js";
+    import { fly } from "svelte-reduced-motion/transition";
     import type { Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
-    import "@interactjs/auto-start";
     import "@interactjs/actions/drag";
+    import "@interactjs/auto-start";
     import "@interactjs/modifiers";
-    import { StackSide, type ClientGameLogic } from "$lib/play/schema.js";
+    import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
+    import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
+    import Spinner from "$lib/style/icons/Spinner.svelte";
     import type { OpenMenuFunction } from "./+page.svelte";
-    import { fly } from "svelte-reduced-motion/transition";
 </script>
 
 <script lang="ts">

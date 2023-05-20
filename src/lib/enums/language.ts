@@ -6,8 +6,14 @@ export default class Language {
     readonly rightSquareBracket: string;
     readonly times: string;
 
-    private constructor(name: "jpn" | "eng", leftRoundBracket: string, rightRoundBracket: string,
-                        leftSquareBracket: string, rightSquareBracket: string, times: string) {
+    private constructor(
+        name: "jpn" | "eng",
+        leftRoundBracket: string,
+        rightRoundBracket: string,
+        leftSquareBracket: string,
+        rightSquareBracket: string,
+        times: string
+    ) {
         this.name = name;
         this.leftRoundBracket = leftRoundBracket;
         this.rightRoundBracket = rightRoundBracket;

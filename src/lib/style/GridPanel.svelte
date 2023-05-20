@@ -6,7 +6,7 @@
 
 <div class="panel">
     {#each items as item, i (key ? item[key] : i)}
-        <slot {item}></slot>
+        <slot {item} />
     {/each}
 </div>
 
@@ -33,11 +33,13 @@
                 @apply flex-grow leading-[1.1rem] my-1;
             }
 
-            & > :global(.namecont), & > :global(.linecont) {
+            & > :global(.namecont),
+            & > :global(.linecont) {
                 @apply flex font-bold pr-2 no-underline;
             }
 
-            & > :global(.namecont > span), & > :global(.linecont > span) {
+            & > :global(.namecont > span),
+            & > :global(.linecont > span) {
                 @apply pl-2 flex-grow-0 flex-shrink-0 basis-0;
             }
 
@@ -53,7 +55,8 @@
                 @apply text-white text-center text-xs uppercase tracking-widest no-underline;
             }
 
-            & > :global(.namecont > span:last-child), & > :global(.linecont > span) {
+            & > :global(.namecont > span:last-child),
+            & > :global(.linecont > span) {
                 @apply flex-grow;
             }
         }

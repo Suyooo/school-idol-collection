@@ -1,15 +1,15 @@
 <script lang="ts">
-    import {onMount} from "svelte";
-    import type {SearchUiOptions} from "$lib/search/ui.js";
-    import {urlToUiOptions} from "$lib/search/ui.js";
+    import { onMount } from "svelte";
+    import type { SearchUiOptions } from "$lib/search/ui.js";
+    import { urlToUiOptions } from "$lib/search/ui.js";
+    import type { Snapshot } from "./$types.js";
     import SearchOptions from "./SearchOptions.svelte";
-    import type {Snapshot} from "./$types.js";
 
     let options: SearchUiOptions = {};
 
     export const snapshot: Snapshot = {
         capture: () => options,
-        restore: value => options = value
+        restore: (value) => (options = value),
     };
 
     onMount(() => {
@@ -26,7 +26,7 @@
 <div class="content">
     <div class="panel">
         <div class="panel-inner">
-            <SearchOptions {options}/>
+            <SearchOptions {options} />
         </div>
     </div>
 </div>

@@ -29,7 +29,8 @@
         @apply gap-x-4 whitespace-nowrap;
     }
 
-    .buttons > .col-min :global(a), .buttons > .col-min :global(div) {
+    .buttons > .col-min :global(a),
+    .buttons > .col-min :global(div) {
         @apply flex-grow flex-shrink-0 basis-0 lg:flex-grow-0 text-center;
     }
 </style>

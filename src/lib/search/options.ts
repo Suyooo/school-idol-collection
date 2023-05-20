@@ -1,18 +1,17 @@
-import type {Includeable, ScopeOptions} from "@sequelize/core";
-import SearchFilterError from "$lib/errors/searchFilterError.js";
-import {escapeForUrl} from "$lib/utils/string.js";
-import type {IncludeOptions} from "@sequelize/core/_non-semver-use-at-your-own-risk_/model.js";
-import AttributeEnum from "../enums/attribute.js";
-import {CardMemberRarity, CardSongRarity} from "../enums/cardRarity.js";
+import type { Includeable, ScopeOptions } from "@sequelize/core";
+import type { IncludeOptions } from "@sequelize/core/_non-semver-use-at-your-own-risk_/model.js";
 import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import GroupEnum from "$lib/enums/group.js";
-import type {GroupID} from "$lib/enums/group.js";
+import type { GroupID } from "$lib/enums/group.js";
+import SearchFilterError from "$lib/errors/searchFilterError.js";
+import { escapeForUrl } from "$lib/utils/string.js";
+import AttributeEnum from "../enums/attribute.js";
+import { CardMemberRarity, CardSongRarity } from "../enums/cardRarity.js";
 
 export default abstract class SearchFilter {
     abstract readonly key: string;
 
-    protected constructor(_split?: string[]) {
-    }
+    protected constructor(_split?: string[]) {}
 
     abstract getExplainString(): string;
 
@@ -64,12 +63,12 @@ export class SearchFilterMemory extends SearchFilter0 {
 export class SearchFilterSet extends SearchFilter1 {
     readonly key = "set";
     getExplainString = () => `In Set ${this.param}`;
-    getScopeElements = () => [<ScopeOptions>{method: ["filterSet", this.param]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["filterSet", this.param] }];
 }
 
 export abstract class SearchFilterMemberRarity extends SearchFilter0 {
     abstract readonly rarity: CardMemberRarity;
-    getScopeElements = () => [<ScopeOptions>{method: ["searchMemberRarity", this.rarity]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["searchMemberRarity", this.rarity] }];
 }
 
 export class SearchFilterMemberRarityR extends SearchFilterMemberRarity {
@@ -122,7 +121,7 @@ export class SearchFilterMemberRaritySSR extends SearchFilterMemberRarity {
 
 export abstract class SearchFilterMemberNames extends SearchFilter0 {
     abstract readonly group: GroupID;
-    getScopeElements = () => [<ScopeOptions>{method: ["searchGroup", GroupEnum.getSubIdsFromId(this.group)]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["searchGroup", GroupEnum.getSubIdsFromId(this.group)] }];
 }
 
 export class SearchFilterMemberGroupMuse extends SearchFilterMemberNames {
@@ -181,7 +180,7 @@ export class SearchFilterMemberGroupSaintSnow extends SearchFilterMemberNames {
 
 export abstract class SearchFilterSongRarity extends SearchFilter0 {
     abstract readonly rarity: CardSongRarity;
-    getScopeElements = () => [<ScopeOptions>{method: ["searchSongRarity", this.rarity]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["searchSongRarity", this.rarity] }];
 }
 
 export class SearchFilterSongRarityM extends SearchFilterSongRarity {
@@ -210,31 +209,31 @@ export class SearchFilterMemberIdolizableNo extends SearchFilter0 {
 
 export class SearchFilterMemberAbilityNone extends SearchFilter0 {
     readonly key = "noability";
-    getScopeElements = () => [<ScopeOptions>{method: ["searchAbility", false, false]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", false, false] }];
     getExplainString = () => "No Ability";
 }
 
 export class SearchFilterMemberAbilityRush extends SearchFilter0 {
     readonly key = "rush";
-    getScopeElements = () => [<ScopeOptions>{method: ["searchAbility", true, null]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", true, null] }];
     getExplainString = () => "[RUSH] Ability";
 }
 
 export class SearchFilterMemberAbilityLive extends SearchFilter0 {
     readonly key = "live";
-    getScopeElements = () => [<ScopeOptions>{method: ["searchAbility", null, true]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", null, true] }];
     getExplainString = () => "[LIVE] Ability";
 }
 
 export class SearchFilterMemberAbilityRushOrLive extends SearchFilter0 {
     readonly key = "rushorlive";
-    getScopeElements = () => [<ScopeOptions>{method: ["searchAbility", true, true]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", true, true] }];
     getExplainString = () => "[RUSH/LIVE] Ability";
 }
 
 export class SearchFilterCardID extends SearchFilter1 {
     readonly key = "id";
-    getScopeElements = () => [<ScopeOptions>{method: ["filterId", parseInt(this.param)]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["filterId", parseInt(this.param)] }];
     getExplainString = () => "Card ID " + this.param;
 }
 
@@ -248,7 +247,7 @@ export class SearchFilterMemberYear extends SearchFilter1 {
         }
     }
 
-    getScopeElements = () => [<ScopeOptions>{method: ["searchYear", parseInt(this.param)]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["searchYear", parseInt(this.param)] }];
     getExplainString = () => {
         switch (this.param) {
             case "1":
@@ -268,9 +267,13 @@ export abstract class SearchFilterTranslatableLike extends SearchFilter1 {
 
     getScopeElements = () => {
         if (this.include) {
-            return [<ScopeOptions>{method: ["searchGenericMultiColumnLikeWithInclude", this.param, this.columnNames, this.include]}]
+            return [
+                <ScopeOptions>{
+                    method: ["searchGenericMultiColumnLikeWithInclude", this.param, this.columnNames, this.include],
+                },
+            ];
         }
-        return [<ScopeOptions>{method: ["searchGenericMultiColumnLike", this.param, this.columnNames]}]
+        return [<ScopeOptions>{ method: ["searchGenericMultiColumnLike", this.param, this.columnNames] }];
     };
     getExplainString = () => `${this.explainName} contains "${this.param}"`;
 }
@@ -288,7 +291,7 @@ export class SearchFilterCostume extends SearchFilterTranslatableLike {
     readonly include = {
         association: "member",
         required: true,
-        attributes: ["costumeJpn", "costumeEng"]
+        attributes: ["costumeJpn", "costumeEng"],
     };
 }
 
@@ -300,7 +303,7 @@ export class SearchFilterSkill extends SearchFilterTranslatableLike {
         association: "skills",
         separate: false,
         required: true,
-        attributes: ["jpn", "eng"]
+        attributes: ["jpn", "eng"],
     };
 }
 
@@ -311,11 +314,17 @@ export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
     readonly explainAfter: boolean = false;
     readonly include: Includeable | undefined = undefined;
 
-    getScopeElements = () => [<ScopeOptions>{method: ["searchGenericNumberWithMod", this.param, this.column, this.columnLiteral, this.include]}];
+    getScopeElements = () => [
+        <ScopeOptions>{
+            method: ["searchGenericNumberWithMod", this.param, this.column, this.columnLiteral, this.include],
+        },
+    ];
     getExplainString = () => {
-        const mod = this.param.endsWith("+") ? " or more" : (this.param.endsWith("-") ? " or less" : "");
+        const mod = this.param.endsWith("+") ? " or more" : this.param.endsWith("-") ? " or less" : "";
         if (this.explainAfter) {
-            return `${parseInt(this.param)}${mod} ${this.param === "1" ? this.explainName.substring(0, this.explainName.length - 1) : this.explainName}`;
+            return `${parseInt(this.param)}${mod} ${
+                this.param === "1" ? this.explainName.substring(0, this.explainName.length - 1) : this.explainName
+            }`;
         } else {
             return `${this.explainName} is ${parseInt(this.param)}${mod}`;
         }
@@ -330,7 +339,7 @@ export class SearchFilterMemberCost extends SearchFilterNumberWithMod {
     readonly include: Includeable = {
         association: "member",
         required: true,
-        attributes: ["cost"]
+        attributes: ["cost"],
     };
 }
 
@@ -350,7 +359,7 @@ export class SearchFilterMemberPiecesAll extends SearchFilterNumberWithMod {
     readonly include: Includeable = {
         association: "member",
         required: true,
-        attributes: ["piecesAll"]
+        attributes: ["piecesAll"],
     };
 }
 
@@ -362,7 +371,7 @@ export class SearchFilterMemberPiecesSmile extends SearchFilterNumberWithMod {
     readonly include: Includeable = {
         association: "member",
         required: true,
-        attributes: ["piecesSmile"]
+        attributes: ["piecesSmile"],
     };
 }
 
@@ -374,7 +383,7 @@ export class SearchFilterMemberPiecesPure extends SearchFilterNumberWithMod {
     readonly include: Includeable = {
         association: "member",
         required: true,
-        attributes: ["piecesPure"]
+        attributes: ["piecesPure"],
     };
 }
 
@@ -386,7 +395,7 @@ export class SearchFilterMemberPiecesCool extends SearchFilterNumberWithMod {
     readonly include: Includeable = {
         association: "member",
         required: true,
-        attributes: ["piecesCool"]
+        attributes: ["piecesCool"],
     };
 }
 
@@ -404,7 +413,7 @@ export class SearchFilterMemberBonusNo extends SearchFilter0 {
 
 export abstract class SearchFilterSongAttribute extends SearchFilter0 {
     abstract readonly attribute: AttributeEnum;
-    getScopeElements = () => [<ScopeOptions>{method: ["searchSongAttribute", this.attribute.id]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["searchSongAttribute", this.attribute.id] }];
     getExplainString = () => `Attribute is ${this.attribute.toSongAttributeName()}`;
 }
 
@@ -435,7 +444,7 @@ export class SearchFilterSongAttributeOrange extends SearchFilterSongAttribute {
 
 export abstract class SearchFilterSongReqType extends SearchFilter0 {
     abstract readonly reqType: CardSongRequirementType;
-    getScopeElements = () => [<ScopeOptions>{method: ["searchSongReqType", this.reqType]}];
+    getScopeElements = () => [<ScopeOptions>{ method: ["searchSongReqType", this.reqType] }];
 }
 
 export class SearchFilterSongReqTypeAny extends SearchFilterSongReqType {
@@ -458,7 +467,7 @@ export class SearchFilterSongLivePoints extends SearchFilterNumberWithMod {
     readonly include: Includeable = {
         association: "song",
         required: true,
-        attributes: ["lpBase"]
+        attributes: ["lpBase"],
     };
 }
 
@@ -470,11 +479,13 @@ export class SearchFilterSongReqSmile extends SearchFilterNumberWithMod {
     readonly include: Includeable = {
         association: "song",
         required: true,
-        include: [{
-            association: "attrRequirement",
-            required: true,
-            attributes: ["piecesSmile"]
-        }]
+        include: [
+            {
+                association: "attrRequirement",
+                required: true,
+                attributes: ["piecesSmile"],
+            },
+        ],
     };
 }
 
@@ -486,11 +497,13 @@ export class SearchFilterSongReqPure extends SearchFilterNumberWithMod {
     readonly include: Includeable = {
         association: "song",
         required: true,
-        include: [{
-            association: "attrRequirement",
-            required: true,
-            attributes: ["piecesPure"]
-        }]
+        include: [
+            {
+                association: "attrRequirement",
+                required: true,
+                attributes: ["piecesPure"],
+            },
+        ],
     };
 }
 
@@ -502,11 +515,13 @@ export class SearchFilterSongReqCool extends SearchFilterNumberWithMod {
     readonly include: Includeable = {
         association: "song",
         required: true,
-        include: [{
-            association: "attrRequirement",
-            required: true,
-            attributes: ["piecesCool"]
-        }]
+        include: [
+            {
+                association: "attrRequirement",
+                required: true,
+                attributes: ["piecesCool"],
+            },
+        ],
     };
 }
 
@@ -518,11 +533,13 @@ export class SearchFilterSongReqAny extends SearchFilterNumberWithMod {
     readonly include: Includeable = {
         association: "song",
         required: true,
-        include: [{
-            association: "anyRequirement",
-            required: true,
-            attributes: ["piecesAll"]
-        }]
+        include: [
+            {
+                association: "anyRequirement",
+                required: true,
+                attributes: ["piecesAll"],
+            },
+        ],
     };
 }
 
@@ -580,10 +597,10 @@ const map = new Map<string, new (split?: string[]) => SearchFilter>([
     ["required", SearchFilterSongReqAny],
     ["smilerequired", SearchFilterSongReqSmile],
     ["purerequired", SearchFilterSongReqPure],
-    ["coolrequired", SearchFilterSongReqCool]
+    ["coolrequired", SearchFilterSongReqCool],
 ]);
 
-export function getSearchFilter(key: string): { new(split: string[]): SearchFilter } {
+export function getSearchFilter(key: string): { new (split: string[]): SearchFilter } {
     if (map.has(key)) {
         return map.get(key)!;
     } else {

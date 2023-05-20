@@ -1,9 +1,9 @@
 <script lang="ts">
+    import { page } from "$app/stores";
+    import type Card from "$models/card/card.js";
     import Button from "$lib/style/Button.svelte";
     import GridPanel from "$lib/style/GridPanel.svelte";
-    import type {PageData} from './$types.js';
-    import type Card from "$models/card/card.js";
-    import {page} from "$app/stores";
+    import type { PageData } from "./$types.js";
     import CardGridElement from "./CardGridElement.svelte";
 
     export let data: PageData;
@@ -18,7 +18,7 @@
 <h5>{$page.params.set}</h5>
 <div class="content">
     <GridPanel items={cards} key="cardNo" let:item={card}>
-        <CardGridElement {card}/>
+        <CardGridElement {card} />
     </GridPanel>
 </div>
 

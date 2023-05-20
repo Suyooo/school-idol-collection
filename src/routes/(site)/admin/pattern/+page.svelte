@@ -8,6 +8,6 @@
 
 <div class="panel">
     <div class="panel-inner">
-        <LinkList/>
+        <LinkList />
     </div>
 </div>

@@ -1,22 +1,25 @@
 <script lang="ts">
+    import { isCardSkillShortInfo } from "$lib/translation/skills.js";
+    import type { ShortSkillInfo } from "$lib/translation/skills.js";
     import Button from "$lib/style/Button.svelte";
-    import {isCardSkillShortInfo} from "$lib/translation/skills.js";
-    import type {ShortSkillInfo} from "$lib/translation/skills.js";
-    import type {PageData} from './$types.js';
+    import type { PageData } from "./$types.js";
 
     export let data: PageData;
-    let id: number, applicable: ShortSkillInfo[], checkboxes: HTMLInputElement[] = [], disabled: boolean = false;
+    let id: number,
+        applicable: ShortSkillInfo[],
+        checkboxes: HTMLInputElement[] = [],
+        disabled: boolean = false;
     $: id = data.id;
     $: applicable = data.applicable;
 
     function toggleAll(e: Event) {
-        checkboxes.forEach(c => c.checked = ((<HTMLInputElement>e.target).checked));
+        checkboxes.forEach((c) => (c.checked = (<HTMLInputElement>e.target).checked));
     }
 
     function submit() {
         if (disabled) return;
         disabled = true;
-        const applyTo = checkboxes.map((c, i) => c.checked ? applicable[i].skillId : null).filter(v => v !== null);
+        const applyTo = checkboxes.map((c, i) => (c.checked ? applicable[i].skillId : null)).filter((v) => v !== null);
         if (applyTo.length === 0) {
             disabled = false;
             return;
@@ -24,8 +27,8 @@
 
         fetch(`/admin/pattern/apply/${id}`, {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(applyTo)
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(applyTo),
         })
             .then((res) => {
                 if (res.status !== 200) {
@@ -51,35 +54,35 @@
         <div class="panel-inner">
             <table>
                 <thead>
-                <tr>
-                    <th>Card</th>
-                    <th>JPN</th>
-                    <th>ENG</th>
-                    <th>Apply</th>
-                </tr>
+                    <tr>
+                        <th>Card</th>
+                        <th>JPN</th>
+                        <th>ENG</th>
+                        <th>Apply</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {#each applicable as a, i}
+                    {#each applicable as a, i}
+                        <tr>
+                            {#if isCardSkillShortInfo(a)}
+                                <th><a href="/card/{a.cardNo}/">{a.cardNo}</a></th>
+                            {:else}
+                                <th><a href="/card/{a.firstCardNo}/">Group #{a.groupId}</a></th>
+                            {/if}
+                            <td>{a.skillJpn}</td>
+                            <td>{a.skillEng}</td>
+                            <td><input type="checkbox" data-skill={a.skillId} bind:this={checkboxes[i]} /></td>
+                        </tr>
+                    {/each}
                     <tr>
-                        {#if isCardSkillShortInfo(a)}
-                            <th><a href="/card/{a.cardNo}/">{a.cardNo}</a></th>
-                        {:else}
-                            <th><a href="/card/{a.firstCardNo}/">Group #{a.groupId}</a></th>
-                        {/if}
-                        <td>{a.skillJpn}</td>
-                        <td>{a.skillEng}</td>
-                        <td><input type="checkbox" data-skill="{a.skillId}" bind:this={checkboxes[i]}></td>
+                        <td />
+                        <td />
+                        <td />
+                        <td class="whitespace-nowrap">
+                            <input id="all" type="checkbox" on:change={toggleAll} />
+                            <label for="all">All</label>
+                        </td>
                     </tr>
-                {/each}
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="whitespace-nowrap">
-                        <input id="all" type="checkbox" on:change={toggleAll}>
-                        <label for="all">All</label>
-                    </td>
-                </tr>
                 </tbody>
             </table>
 

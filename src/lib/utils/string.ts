@@ -2,7 +2,7 @@ export const specialCharactersRegex = /[-[\]{}()*+?.,\\^$|#]/g;
 export const isIntegerRegex = /^\d+$/;
 
 export function toNumWithFullwidth(fw: string): number {
-    return parseInt(fw.normalize('NFKC'));
+    return parseInt(fw.normalize("NFKC"));
 }
 
 export function escapeForRegex(s: string): string {

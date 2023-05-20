@@ -1,15 +1,18 @@
 <script lang="ts">
+    import { goto as gotoInThisTab } from "$app/navigation";
     import "../../app.css";
-    import {goto as gotoInThisTab} from "$app/navigation";
+    import { couldBeEntryCardNo, entryCardNoToCanonical } from "$lib/utils/entry.js";
+    import { stringIsInteger } from "$lib/utils/string.js";
     import Button from "$lib/style/Button.svelte";
     import Collapse from "$lib/style/icons/Collapse.svelte";
     import Menu from "$lib/style/icons/Menu.svelte";
     import Search from "$lib/style/icons/Search.svelte";
     import Spinner from "$lib/style/icons/Spinner.svelte";
-    import {couldBeEntryCardNo, entryCardNoToCanonical} from "$lib/utils/entry.js";
-    import {stringIsInteger} from "$lib/utils/string.js";
 
-    let menuExpanded: boolean = false, quicksearch: string = "", searching: boolean = false, isAltDown: boolean = false;
+    let menuExpanded: boolean = false,
+        quicksearch: string = "",
+        searching: boolean = false,
+        isAltDown: boolean = false;
 
     async function goto(url: string) {
         if (isAltDown) {
@@ -60,13 +63,16 @@
                 <div class="logo">SIC</div>
                 <div class="expand">
                     <div>
-                        <Button accent classes="w-9 h-9 !px-0 !rounded-full flex items-center justify-center"
-                                on:click={() => menuExpanded = !menuExpanded}
-                                label={menuExpanded ? "Collapse Menu" : "Expand Menu"}>
+                        <Button
+                            accent
+                            classes="w-9 h-9 !px-0 !rounded-full flex items-center justify-center"
+                            on:click={() => (menuExpanded = !menuExpanded)}
+                            label={menuExpanded ? "Collapse Menu" : "Expand Menu"}
+                        >
                             {#if menuExpanded}
-                                <Collapse/>
+                                <Collapse />
                             {:else}
-                                <Menu/>
+                                <Menu />
                             {/if}
                         </Button>
                     </div>
@@ -83,14 +89,21 @@
             {#if import.meta.env.DEV}
                 <Button accent classes="!rounded-full mr-4" href="/admin" label="Admin">Admin</Button>
             {/if}
-            <input placeholder="Quick Search (Card No., ID or Name)" bind:value={quicksearch}
-                aria-label="Quick Search. Enter a card number, ID or name" disabled={searching}>
-            <button class:text-primary-400={quicksearch === ""} disabled={quicksearch === "" || searching}
-                    aria-label="Submit Quick Search">
+            <input
+                placeholder="Quick Search (Card No., ID or Name)"
+                bind:value={quicksearch}
+                aria-label="Quick Search. Enter a card number, ID or name"
+                disabled={searching}
+            />
+            <button
+                class:text-primary-400={quicksearch === ""}
+                disabled={quicksearch === "" || searching}
+                aria-label="Submit Quick Search"
+            >
                 {#if searching}
-                    <Spinner/>
+                    <Spinner />
                 {:else}
-                    <Search/>
+                    <Search />
                 {/if}
             </button>
         </form>
@@ -103,7 +116,7 @@
 
 <style lang="postcss">
     .header {
-        @apply w-full bg-primary-700 ;
+        @apply w-full bg-primary-700;
 
         & .cont {
             @apply flex flex-col sm:flex-row gap-y-2 items-start justify-between;
@@ -129,15 +142,15 @@
                     & a {
                         @apply hidden px-6 py-2 bg-primary-500 hover:bg-primary-400 text-white rounded-full no-underline whitespace-nowrap;
 
-                        &:nth-child(-n+1) {
+                        &:nth-child(-n + 1) {
                             @apply md:block;
                         }
 
-                        &:nth-child(-n+2) {
+                        &:nth-child(-n + 2) {
                             @apply lg:block;
                         }
 
-                        &:nth-child(-n+3) {
+                        &:nth-child(-n + 3) {
                             @apply 2xl:block;
                         }
                     }
