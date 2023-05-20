@@ -109,9 +109,10 @@
 
 <style lang="postcss">
     .objfield {
-        @apply absolute left-0 top-0 box-content border border-solid;
+        @apply relative flex-shrink-0 box-content border border-solid;
         width: 720px;
         height: 360px;
+        margin: 10px;
         border-color: var(--player-color);
 
         &:global(.ui-droppable-hover) {

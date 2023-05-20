@@ -2,7 +2,7 @@ const colors = require("tailwindcss/colors");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: ['./src/**/*.{html,js,svelte,ts}'],
+    content: ["./src/**/*.{html,js,svelte,ts}"],
     theme: {
         extend: {
             colors: {
@@ -13,33 +13,33 @@ module.exports = {
                     all: "#ffd87f",
                     smile: "#fa7dca",
                     pure: "#84cc91",
-                    cool: "#a2e3ff"
+                    cool: "#a2e3ff",
                 },
                 highlight: {
                     red: "#ff8888",
-                    blue: "#88ffff"
-                }
+                    blue: "#88ffff",
+                },
             },
             borderRadius: {
                 "card-v": "4.66% / 3.33%",
                 "card-h": "3.33% / 4.66%",
                 "card-fallback": "6px",
-                "4xl": "2rem"
+                "4xl": "2rem",
             },
             fontSize: {
-                "none": ["0px", "0"],
-                "2xs": "0.6rem"
+                none: ["0px", "0"],
+                "2xs": "0.6rem",
             },
             zIndex: {
                 "play-field": 1,
                 "play-stack": 5,
                 "play-card": 10,
+                "play-ui": 2099999997,
                 "play-hand": 2099999998,
                 "play-card-dragging": 2099999999,
-                "play-ui": 2100000000,
-                "play-menu": 2100000001
-            }
-        }
+                "play-menu": 2100000001,
+            },
+        },
     },
     safelist: ["text-attribute-smile", "text-attribute-pure", "text-attribute-cool", "text-attribute-all"],
     plugins: [],

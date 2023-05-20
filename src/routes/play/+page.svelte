@@ -90,16 +90,18 @@
 
 <div class="play">
     <div class="leftside">
-        {#key $players}
-            {#each $players as _, i}
-                <FieldObject
-                    playerIdx={i}
-                    isClient={i === logic.clientPlayerId}
-                    bind:deckComponent={deckComponents[i]}
-                    bind:setListComponent={setListComponents[i]}
-                />
-            {/each}
-        {/key}
+        <div class="fields">
+            {#key $players}
+                {#each $players as _, i}
+                    <FieldObject
+                        playerIdx={i}
+                        isClient={i === logic.clientPlayerId}
+                        bind:deckComponent={deckComponents[i]}
+                        bind:setListComponent={setListComponents[i]}
+                    />
+                {/each}
+            {/key}
+        </div>
 
         <HandObject hand={$handCards} />
     </div>
@@ -153,11 +155,16 @@
     }
 
     .leftside {
-        @apply relative flex-1 h-screen overflow-hidden;
+        @apply relative flex-1 flex items-center justify-center h-screen overflow-hidden;
+
+        & .fields {
+            @apply w-full flex flex-col max-h-screen items-center justify-start overflow-y-auto pb-[15vh];
+        }
     }
 
     .rightside {
-        @apply p-2 bg-primary-700 relative basis-[30rem] flex-shrink-0 h-screen overflow-x-hidden;
+        @apply p-2 bg-primary-700 relative flex-shrink-0 h-screen overflow-x-hidden;
+        flex-basis: 30rem;
     }
 
     h4 {

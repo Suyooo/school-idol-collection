@@ -44,6 +44,20 @@ export class LocalClientGameLogic extends ClientGameLogic {
             deck: writable<string[]>([]),
             setList: writable<string[]>([]),
         },
+        {
+            profile: writable<ClientProfile>({
+                name: "Another Player",
+                fieldColor: "skyblue",
+                deckColor: "lightblue",
+                setListColor: "lightpink",
+            }),
+            matchUuid: "local2",
+            livePoints: writable(0),
+            field: writable(new Map<number, ClientFieldCardSchema>()),
+            hand: writable<HandCardSchema[]>([]),
+            deck: writable<string[]>([]),
+            setList: writable<string[]>([]),
+        },
     ];
     private storeGame = writable({
         players: writable<ClientPlayerSchema[]>(this.storePlayers),
