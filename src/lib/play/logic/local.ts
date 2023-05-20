@@ -10,7 +10,7 @@ import {
     type HandCardSchema,
     StackSide,
     StackType,
-} from "../schema.js";
+} from "$lib/play/schema.js";
 
 export class LocalClientGameLogic extends ClientGameLogic {
     private storeCardFlips = new Map<number, Writable<boolean>>();
