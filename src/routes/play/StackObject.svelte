@@ -81,7 +81,7 @@
                 },
                 {
                     label: "Shuffle",
-                    handler: () => logic.requestShuffle(StackType.DECK),
+                    handler: () => logic.requestShuffle(stackType),
                 },
             ],
             true
