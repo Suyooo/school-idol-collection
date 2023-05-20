@@ -149,7 +149,7 @@
         &:after {
             @apply absolute text-center text-accent-500 leading-none pointer-events-none;
             content: " ";
-            left: 10px;
+            left: 16%;
             top: -1em;
             width: 130px;
             height: 1em;
@@ -162,7 +162,7 @@
         }
 
         &:last-child:after {
-            left: 65px;
+            left: 100%;
         }
 
         &.indicator-after {
@@ -171,7 +171,7 @@
             &:after {
                 @apply absolute text-center text-accent-500 leading-none;
                 content: "🠛";
-                left: 45px;
+                left: 66%;
             }
 
             &:first-child:after {
@@ -179,13 +179,13 @@
             }
 
             &:last-child:after {
-                left: 65px;
+                left: 100%;
             }
 
             &:first-child:last-child {
                 margin-right: 0;
                 &:after {
-                    left: -65px;
+                    left: -32px;
                 }
             }
         }

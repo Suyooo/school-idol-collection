@@ -19,22 +19,21 @@
             return 0;
         }
 
-        const cardCenterX = event.dragEvent.rect.left + event.dragEvent.rect.width / 2;
-        const handCenterX = event.target.clientWidth / 2;
-
-        if (hand.length - sizeOffset === 1) {
-            return cardCenterX < handCenterX ? 0 : 1;
-        } else {
-            // TODO: scroll position of hand row
-            const totalCardWidth = (hand.length - sizeOffset + 1) * 65;
-            let checkX = handCenterX - Math.floor(totalCardWidth / 2) + 32;
-            let ret = 0;
-            while (cardCenterX > checkX && ret < hand.length - sizeOffset) {
-                checkX += 65;
-                ret++;
+        let i = 0;
+        for (const e of event.target.children) {
+            if (e.classList.contains("emptycard") || e.classList.contains("dragging")) {
+                continue;
             }
-            return ret;
+
+            console.log(e.getBoundingClientRect().left, event.dragEvent.rect.left);
+
+            if (e.getBoundingClientRect().left > event.dragEvent.rect.left) {
+                break;
+            }
+            i++;
         }
+        console.log(i);
+        return i;
     }
 
     let disableSidewaysAnimations: boolean = false;
@@ -49,6 +48,7 @@
             overlap: "center",
             listeners: {
                 enter(event) {
+                    node.classList.add("hovering");
                     event.relatedTarget.classList.add("inhand");
                     if (event.relatedTarget.classList.contains("objcardhand")) {
                         draggingHandCardIdx = parseInt(event.relatedTarget.dataset.idx!);
@@ -59,14 +59,16 @@
                     indicatorPos = getHandIndex(event);
                 },
                 leave(event) {
+                    node.classList.remove("hovering");
                     event.relatedTarget.classList.remove("inhand");
                     indicatorPos = draggingHandCardIdx = null;
                 },
                 drop(event) {
+                    node.classList.remove("hovering");
+                    skipAnimations();
                     if (event.relatedTarget.classList.contains("objcardfieldmember")) {
                         logic.requestFieldToHand(parseInt(event.relatedTarget.dataset.id!), getHandIndex(event));
                     } else {
-                        skipAnimations();
                         const oldIdx = parseInt(event.relatedTarget.dataset.idx!);
                         const newIdx = getHandIndex(event);
                         logic.requestHandMove(oldIdx, newIdx);
@@ -104,12 +106,27 @@
         right: 0;
         bottom: -15vh;
         height: 30vh;
-        padding-top: 1vh;
+        padding: 0 1em;
+
+        & > :global(*):last-child {
+            flex-shrink: 0;
+        }
+
+        &:global(.hovering) {
+            & :global(.objcardhand) {
+                @apply !brightness-100;
+
+                & :global(.card) {
+                    @apply !mt-0;
+                }
+            }
+        }
 
         &:after {
             @apply pointer-events-none;
             content: " ";
             width: 65px;
+            flex-shrink: 0;
         }
     }
 </style>
