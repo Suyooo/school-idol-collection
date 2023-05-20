@@ -3,6 +3,7 @@
     import { type Readable, type Writable, writable } from "svelte/store";
     import "../../app.css";
     import { cardTitle } from "$lib/card/strings.js";
+    import { CardOrientation } from "$lib/enums/cardOrientation.js";
     import Language from "$lib/enums/language.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { LocalClientGameLogic } from "$lib/play/logic/local.js";
@@ -26,8 +27,6 @@
 </script>
 
 <script lang="ts">
-    import CardImage from "$lib/format/CardImage.svelte";
-
     let menuX: number,
         menuY: number,
         menuHeader: string,
@@ -111,11 +110,14 @@
             {:then card}
                 <div class="panel-inner">
                     <h4>{@html cardTitle(card, true, Language.ENG, true)}</h4>
-                    <div class="relative">
+                    <div class="sidebar-info">
                         <CardInfoRows {card} hideSharedId hideBacklinks hideFaq forceSingleColumn />
-                        <div class="absolute -right-2 top-0">
-                            <CardImage {card} />
-                        </div>
+                        <img
+                            src={card.imageDataUrl}
+                            alt={`${card.cardNo} Front Illustration`}
+                            class:rounded-card-v={card.frontOrientation === CardOrientation.PORTRAIT}
+                            class:rounded-card-h={card.frontOrientation === CardOrientation.LANDSCAPE}
+                        />
                     </div>
                 </div>
                 <div class="cardcopyright">{card.copyright}</div>
@@ -172,6 +174,14 @@
 
     .panel-inner :global(.row) {
         @apply -mx-4;
+    }
+
+    .sidebar-info {
+        @apply relative;
+
+        & img {
+            @apply absolute -right-2 top-0;
+        }
     }
 
     .cardcopyright {
