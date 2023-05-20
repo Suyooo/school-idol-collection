@@ -17,7 +17,7 @@
     export let id: number;
     export let cardNo: string;
     export let cardType: CardType;
-    export let flipped: boolean;
+    export let flipped: Readable<boolean>;
     export let position: Readable<{ x: number; y: number; z: number }>;
     export let flippedColor: string;
     const logic: ClientGameLogic = getContext("logic");
@@ -101,9 +101,20 @@
             destroy: () => interactable.unset(),
         };
     }
-    function checkFlip() {
-        if (!hasMovedSinceMouseDown) {
-            logic.requestFieldFlip(id);
+    function cardMenu(event: MouseEvent) {
+        if (event.button === 0 && !hasMovedSinceMouseDown) {
+            openMenu(
+                event.pageX,
+                event.pageY,
+                `${cardNo}`,
+                [
+                    {
+                        label: "Flip",
+                        handler: () => logic.requestFieldFlip(id),
+                    },
+                ],
+                true
+            );
         }
     }
 
@@ -130,7 +141,7 @@
     style:z-index={$position.z}
     style:--flipped-color={flippedColor}
     on:mousedown={() => (hasMovedSinceMouseDown = false)}
-    on:mouseup={checkFlip}
+    on:mouseup={cardMenu}
     on:contextmenu|preventDefault={updateSidebar}
     use:action
 >
