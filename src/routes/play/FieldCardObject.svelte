@@ -1,16 +1,16 @@
 <script context="module" lang="ts">
-    import {getContext, onMount} from "svelte";
-    import {CardOrientation} from "$lib/enums/cardOrientation.js";
+    import { getContext, onMount } from "svelte";
+    import { CardOrientation } from "$lib/enums/cardOrientation.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import CardType from "$lib/enums/cardType.js";
-    import type {Readable, Writable} from "svelte/store";
-    import {loadCardInfo, type CardWithImageData} from "$lib/play/cardInfo.js";
+    import type { Readable, Writable } from "svelte/store";
+    import { loadCardInfo, type CardWithImageData } from "$lib/play/cardInfo.js";
     import interact from "@interactjs/interact/index";
     import "@interactjs/auto-start";
     import "@interactjs/actions/drag";
     import "@interactjs/modifiers";
-    import {StackSide, type ClientGameLogic} from "$lib/play/schema.js";
-    import type {OpenMenuFunction} from "./+page.svelte";
+    import { StackSide, type ClientGameLogic } from "$lib/play/schema.js";
+    import type { OpenMenuFunction } from "./+page.svelte";
 </script>
 
 <script lang="ts">
@@ -26,14 +26,14 @@
     let element: HTMLElement;
     $: if (element) element.dataset.id = id.toString();
 
-    let card: CardWithImageData | undefined, loadPromise: Promise<CardWithImageData> = new Promise(() => null);
+    let loadPromise: Promise<CardWithImageData> = new Promise(() => null);
     onMount(() => {
         loadPromise = loadCardInfo(cardNo);
     });
 
     let displayPosition: { x: number; y: number };
-    $: displayPosition = {x: $position.x, y: $position.y};
-
+    $: displayPosition = { x: $position.x, y: $position.y };
+    let hasMovedSinceMouseDown = false;
     function action(node: HTMLElement) {
         const interactable = interact(node)
             .styleCursor(false)
@@ -45,6 +45,7 @@
                     move(event) {
                         displayPosition.x += event.dx;
                         displayPosition.y += event.dy;
+                        hasMovedSinceMouseDown = true;
                     },
                     end(event) {
                         if (event.relatedTarget?.classList.contains("objhand")) {
@@ -76,7 +77,7 @@
                                 );
                             }
                         }
-                    }
+                    },
                 },
                 modifiers: [
                     interact.modifiers.snap({
@@ -86,7 +87,7 @@
                                 y: 10,
                             }),
                         ],
-                        relativePoints: [{x: 0, y: 0}],
+                        relativePoints: [{ x: 0, y: 0 }],
                         offset: "parent",
                     }),
                     interact.modifiers.restrictRect({
@@ -99,6 +100,11 @@
         return {
             destroy: () => interactable.unset(),
         };
+    }
+    function checkFlip() {
+        if (!hasMovedSinceMouseDown) {
+            logic.requestFieldFlip(id);
+        }
     }
 
     let sidebarCardNo: Writable<string | undefined> = getContext("sidebarCardNo");
@@ -114,26 +120,31 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-        bind:this={element}
-        class="objcardfield"
-        class:objcardfieldmember={cardType === CardType.MEMBER}
-        class:objcardfieldsong={cardType === CardType.SONG}
-        class:objcardfieldmemory={cardType === CardType.MEMORY}
-        style:left={`${displayPosition.x}px`}
-        style:top={`${displayPosition.y}px`}
-        style:z-index={$position.z}
-        style:--flipped-color={flippedColor}
-        on:dblclick={() => logic.requestFieldFlip(id)}
-        on:contextmenu|preventDefault={updateSidebar}
-        use:action
+    bind:this={element}
+    class="objcardfield"
+    class:objcardfieldmember={cardType === CardType.MEMBER}
+    class:objcardfieldsong={cardType === CardType.SONG}
+    class:objcardfieldmemory={cardType === CardType.MEMORY}
+    style:left={`${displayPosition.x}px`}
+    style:top={`${displayPosition.y}px`}
+    style:z-index={$position.z}
+    style:--flipped-color={flippedColor}
+    on:mousedown={() => (hasMovedSinceMouseDown = false)}
+    on:mouseup={checkFlip}
+    on:contextmenu|preventDefault={updateSidebar}
+    use:action
 >
-    <div class="card" class:card-v={cardType === CardType.MEMBER} class:card-h={cardType !== CardType.MEMBER}
-         class:highlight={cardNo === $sidebarCardNo}>
+    <div
+        class="card"
+        class:card-v={cardType === CardType.MEMBER}
+        class:card-h={cardType !== CardType.MEMBER}
+        class:highlight={cardNo === $sidebarCardNo}
+    >
         {#await loadPromise}
-            <Spinner/>
+            <Spinner />
         {:then card}
             {#if !$flipped}
-                <img src={card.imageDataUrl} alt={cardNo}/>
+                <img src={card.imageDataUrl} alt={cardNo} />
             {:else}
                 <div class="flipped">?</div>
             {/if}
