@@ -49,7 +49,7 @@ export interface FieldCardSchema {
 }
 
 export interface FieldGroupSchema {
-    cards: FieldCardSchema[];
+    cards: Map<number, FieldCardSchema>;
     position: {
         x: number;
         y: number;
@@ -86,6 +86,7 @@ export abstract class ClientGameLogic {
     abstract requestFieldFlip(id: number): void;
     abstract requestHandMove(idx: number, newIdx: number): void;
     abstract requestGroupMove(id: number, x: number, y: number): void;
+    abstract requestGroupDestroy(id: number): void;
     abstract requestLPUpdate(delta: number): void;
 }
 
@@ -124,7 +125,7 @@ export interface ClientFieldCardSchema {
 }
 
 export interface ClientFieldGroupSchema {
-    cards: ClientFieldCardSchema[];
+    cards: Map<number, ClientFieldCardSchema>;
     position: Readable<{
         x: number;
         y: number;

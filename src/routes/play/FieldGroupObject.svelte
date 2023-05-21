@@ -9,7 +9,7 @@
 
 <script lang="ts">
     export let id: number;
-    export let cards: ClientFieldCardSchema[];
+    export let cards: Map<number, ClientFieldCardSchema>;
     export let position: Readable<{ x: number; y: number }>;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
@@ -58,11 +58,11 @@
             openMenu(
                 event.pageX,
                 event.pageY,
-                `Group (${cards.length} card${cards.length === 1 ? "" : "s"})`,
+                `Group (${cards.size} card${cards.size === 1 ? "" : "s"})`,
                 [
                     {
                         label: "Ungroup",
-                        handler: () => {},
+                        handler: () => logic.requestGroupDestroy(id),
                     },
                 ],
                 true
@@ -81,13 +81,13 @@
     on:mouseup={groupMenu}
     use:action
 >
-    {#each cards as card, idx (idx)}
+    {#each [...cards.entries()] as [id, card] (id)}
         <FieldCardObject {id} {...card} flippedColor={"white"} blockInteract />
     {/each}
 </div>
 
 <style lang="postcss">
     .objgroup {
-        @apply absolute;
+        @apply absolute brightness-75;
     }
 </style>

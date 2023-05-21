@@ -121,29 +121,38 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.storeGroupPositions.set(-5, writable({ x: 189, y: 9 }));
         this.storePlayers[0].groups.update((m) => {
             m.set(-5, {
-                cards: [
-                    {
-                        cardNo: "LL01-010",
-                        cardType: CardType.MEMBER,
-                        flipped: this.storeCardFlips.get(-6)!,
-                        position: this.storeCardPositions.get(-6)!,
-                        idolizedBaseCardNo: undefined,
-                    },
-                    {
-                        cardNo: "LL01-011",
-                        cardType: CardType.MEMBER,
-                        flipped: this.storeCardFlips.get(-7)!,
-                        position: this.storeCardPositions.get(-7)!,
-                        idolizedBaseCardNo: undefined,
-                    },
-                    {
-                        cardNo: "LL01-012",
-                        cardType: CardType.MEMBER,
-                        flipped: this.storeCardFlips.get(-8)!,
-                        position: this.storeCardPositions.get(-8)!,
-                        idolizedBaseCardNo: undefined,
-                    },
-                ],
+                cards: new Map([
+                    [
+                        -6,
+                        {
+                            cardNo: "LL01-010",
+                            cardType: CardType.MEMBER,
+                            flipped: this.storeCardFlips.get(-6)!,
+                            position: this.storeCardPositions.get(-6)!,
+                            idolizedBaseCardNo: undefined,
+                        },
+                    ],
+                    [
+                        -7,
+                        {
+                            cardNo: "LL01-011",
+                            cardType: CardType.MEMBER,
+                            flipped: this.storeCardFlips.get(-7)!,
+                            position: this.storeCardPositions.get(-7)!,
+                            idolizedBaseCardNo: undefined,
+                        },
+                    ],
+                    [
+                        -8,
+                        {
+                            cardNo: "LL01-012",
+                            cardType: CardType.MEMBER,
+                            flipped: this.storeCardFlips.get(-8)!,
+                            position: this.storeCardPositions.get(-8)!,
+                            idolizedBaseCardNo: undefined,
+                        },
+                    ],
+                ]),
                 position: this.storeGroupPositions.get(-5)!,
             });
             return m;
@@ -296,6 +305,28 @@ export class LocalClientGameLogic extends ClientGameLogic {
             pos.y = y;
             return pos;
         });
+    }
+
+    requestGroupDestroy(id: number): void {
+        this.storePlayers[0].groups.update((groupMap) => {
+            const group = groupMap.get(id)!;
+            const groupPos = get(group.position);
+            this.storePlayers[0].field.update((fieldMap) => {
+                for (const [cardId, card] of group.cards.entries()) {
+                    this.storeCardPositions.get(cardId)!.update((pos) => {
+                        pos.x += groupPos.x;
+                        pos.y += groupPos.y;
+                        pos.z = this.nextZ++;
+                        return pos;
+                    });
+                    fieldMap.set(cardId, card);
+                }
+                return fieldMap;
+            });
+            groupMap.delete(id);
+            return groupMap;
+        });
+        this.storeGroupPositions.delete(id);
     }
 
     requestLPUpdate(delta: number) {

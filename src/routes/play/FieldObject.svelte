@@ -87,6 +87,10 @@
             {/if}
         </div>
     </div>
+
+    {#each [...$groups.entries()] as [id, group] (id)}
+        <FieldGroupObject {id} {...group} />
+    {/each}
     {#each [...$field.entries()] as [id, card] (id)}
         <FieldCardObject
             {id}
@@ -94,9 +98,7 @@
             flippedColor={card.cardType === CardType.MEMBER ? $profile.deckColor : $profile.setListColor}
         />
     {/each}
-    {#each [...$groups.entries()] as [id, group] (id)}
-        <FieldGroupObject {id} {...group} />
-    {/each}
+
     <StackObject
         bind:this={deckComponent}
         cardNos={$deck}
