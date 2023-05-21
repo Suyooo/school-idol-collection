@@ -5,6 +5,7 @@
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
+    import type { SnapFunction } from "@interactjs/types";
     import CardType from "$lib/enums/cardType.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
@@ -32,7 +33,7 @@
 
     let displayPosition: { x: number; y: number };
     $: displayPosition = { x: $position.x, y: $position.y };
-    let hasMovedSinceMouseDown = false;
+    let hasMovedSinceMouseDown = true;
     function action(node: HTMLElement) {
         const interactable = interact(node)
             .styleCursor(false)
@@ -80,14 +81,8 @@
                 },
                 modifiers: [
                     interact.modifiers.snap({
-                        targets: [
-                            interact.snappers.grid({
-                                x: 10,
-                                y: 10,
-                            }),
-                        ],
+                        targets: [getContext<SnapFunction>("snap")],
                         relativePoints: [{ x: 0, y: 0 }],
-                        offset: "parent",
                     }),
                     interact.modifiers.restrictRect({
                         restriction: "parent",
@@ -115,6 +110,7 @@
                 true
             );
         }
+        hasMovedSinceMouseDown = true;
     }
 
     let sidebarCardNo: Writable<string | undefined> = getContext("sidebarCardNo");
