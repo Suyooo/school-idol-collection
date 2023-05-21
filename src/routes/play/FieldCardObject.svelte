@@ -138,6 +138,7 @@
     class:objcardfieldmember={cardType === CardType.MEMBER}
     class:objcardfieldsong={cardType === CardType.SONG}
     class:objcardfieldmemory={cardType === CardType.MEMORY}
+    class:block-interact={blockInteract}
     style:left={`${displayPosition.x}px`}
     style:top={`${displayPosition.y}px`}
     style:z-index={$position.z}
@@ -167,7 +168,7 @@
 
 <style lang="postcss">
     .objcardfield {
-        @apply absolute w-min select-none touch-none z-play-card cursor-grab hover:brightness-110;
+        @apply absolute w-min select-none touch-none z-play-card cursor-grab;
 
         & .card {
             @apply flex items-center justify-center overflow-hidden shadow-sm shadow-black;
@@ -187,15 +188,22 @@
             }
 
             & img {
-                @apply w-full;
+                @apply w-full hover:brightness-110;
             }
 
             & .flipped {
-                @apply text-3xl font-bold opacity-50;
+                @apply text-3xl font-bold opacity-50 hover:brightness-110;
             }
 
             &.highlight {
                 @apply outline outline-4 outline-accent-500;
+            }
+        }
+
+        &.block-interact {
+            & img,
+            & .flipped {
+                @apply brightness-75;
             }
         }
 

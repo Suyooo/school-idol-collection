@@ -88,6 +88,10 @@
 
 <style lang="postcss">
     .objgroup {
-        @apply absolute brightness-75;
+        @apply absolute;
+
+        &:global(.dragging) {
+            @apply !z-play-card-dragging cursor-grabbing;
+        }
     }
 </style>

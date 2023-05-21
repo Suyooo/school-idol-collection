@@ -232,7 +232,9 @@
 
         &:hover,
         &:global(.dragging) {
-            @apply brightness-110;
+            & img {
+                @apply brightness-110;
+            }
         }
 
         &:not(.dragging):hover .card {
