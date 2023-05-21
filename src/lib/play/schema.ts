@@ -30,6 +30,7 @@ export interface PlayerSchema {
     matchUuid: string;
     livePoints: number;
     field: Map<number, FieldCardSchema>;
+    groups: Map<number, FieldGroupSchema>;
     hand: HandCardSchema[];
     deck: string[];
     setList: string[];
@@ -43,6 +44,15 @@ export interface FieldCardSchema {
         x: number;
         y: number;
         z: number;
+    };
+    idolizedBaseCardNo: string | undefined;
+}
+
+export interface FieldGroupSchema {
+    cards: FieldCardSchema[];
+    position: {
+        x: number;
+        y: number;
     };
 }
 
@@ -94,6 +104,7 @@ export interface ClientPlayerSchema {
     matchUuid: string;
     livePoints: Readable<number>;
     field: Readable<Map<number, ClientFieldCardSchema>>;
+    groups: Readable<Map<number, ClientFieldGroupSchema>>;
     hand: Readable<HandCardSchema[]>;
     deck: Readable<string[]>;
     setList: Readable<string[]>;
@@ -107,5 +118,14 @@ export interface ClientFieldCardSchema {
         x: number;
         y: number;
         z: number;
+    }>;
+    idolizedBaseCardNo: string | undefined;
+}
+
+export interface ClientFieldGroupSchema {
+    cards: ClientFieldCardSchema[];
+    position: Readable<{
+        x: number;
+        y: number;
     }>;
 }

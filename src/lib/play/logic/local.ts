@@ -2,6 +2,7 @@ import { type Readable, type Writable, derived, get, readonly, writable } from "
 import CardType from "$lib/enums/cardType.js";
 import {
     type ClientFieldCardSchema,
+    type ClientFieldGroupSchema,
     ClientGameLogic,
     type ClientGameSchema,
     type ClientPlayerSchema,
@@ -15,6 +16,7 @@ import {
 export class LocalClientGameLogic extends ClientGameLogic {
     private storeCardFlips = new Map<number, Writable<boolean>>();
     private storeCardPositions = new Map<number, Writable<{ x: number; y: number; z: number }>>();
+    private storeGroupPositions = new Map<number, Writable<{ x: number; y: number }>>();
     private storePlayers = [
         {
             profile: writable<ClientProfile>({
@@ -26,34 +28,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
             matchUuid: "local",
             livePoints: writable(0),
             field: writable(new Map<number, ClientFieldCardSchema>()),
-            hand: writable<HandCardSchema[]>([]),
-            deck: writable<string[]>([]),
-            setList: writable<string[]>([]),
-        },
-        {
-            profile: writable<ClientProfile>({
-                name: "Other Player",
-                fieldColor: "skyblue",
-                deckColor: "lightblue",
-                setListColor: "lightpink",
-            }),
-            matchUuid: "local2",
-            livePoints: writable(0),
-            field: writable(new Map<number, ClientFieldCardSchema>()),
-            hand: writable<HandCardSchema[]>([]),
-            deck: writable<string[]>([]),
-            setList: writable<string[]>([]),
-        },
-        {
-            profile: writable<ClientProfile>({
-                name: "Another Player",
-                fieldColor: "skyblue",
-                deckColor: "lightblue",
-                setListColor: "lightpink",
-            }),
-            matchUuid: "local2",
-            livePoints: writable(0),
-            field: writable(new Map<number, ClientFieldCardSchema>()),
+            groups: writable(new Map<number, ClientFieldGroupSchema>()),
             hand: writable<HandCardSchema[]>([]),
             deck: writable<string[]>([]),
             setList: writable<string[]>([]),
@@ -86,6 +61,19 @@ export class LocalClientGameLogic extends ClientGameLogic {
                             ])
                         )
                 ),
+                groups: derived(
+                    playerObj.groups,
+                    (groupsObj) =>
+                        new Map(
+                            [...groupsObj.entries()].map(([groupId, groupObj]) => [
+                                groupId,
+                                {
+                                    ...groupObj,
+                                    position: readonly(groupObj.position),
+                                },
+                            ])
+                        )
+                ),
                 hand: readonly(playerObj.hand),
                 deck: readonly(playerObj.deck),
                 setList: readonly(playerObj.setList),
@@ -110,14 +98,53 @@ export class LocalClientGameLogic extends ClientGameLogic {
             { id: -3, cardNo: "LL01-005" },
             { id: -4, cardNo: "LL01-006" },
         ]);
+
         this.storeCardFlips.set(-1, writable(false));
-        this.storeCardPositions.set(-1, writable({ x: 10, y: 10, z: 10 }));
+        this.storeCardPositions.set(-1, writable({ x: 79, y: 9, z: 9 }));
         this.storePlayers[0].field.update((m) => {
             m.set(-1, {
                 cardNo: "LL01-063",
                 cardType: CardType.MEMBER,
                 flipped: this.storeCardFlips.get(-1)!,
                 position: this.storeCardPositions.get(-1)!,
+                idolizedBaseCardNo: undefined,
+            });
+            return m;
+        });
+
+        this.storeCardFlips.set(-6, writable(false));
+        this.storeCardPositions.set(-6, writable({ x: 0, y: 0, z: 5 }));
+        this.storeCardFlips.set(-7, writable(false));
+        this.storeCardPositions.set(-7, writable({ x: 10, y: 0, z: 6 }));
+        this.storeCardFlips.set(-8, writable(false));
+        this.storeCardPositions.set(-8, writable({ x: 20, y: 0, z: 7 }));
+        this.storeGroupPositions.set(-5, writable({ x: 129, y: 9 }));
+        this.storePlayers[0].groups.update((m) => {
+            m.set(-5, {
+                cards: [
+                    {
+                        cardNo: "LL01-010",
+                        cardType: CardType.MEMBER,
+                        flipped: this.storeCardFlips.get(-6)!,
+                        position: this.storeCardPositions.get(-6)!,
+                        idolizedBaseCardNo: undefined,
+                    },
+                    {
+                        cardNo: "LL01-011",
+                        cardType: CardType.MEMBER,
+                        flipped: this.storeCardFlips.get(-7)!,
+                        position: this.storeCardPositions.get(-7)!,
+                        idolizedBaseCardNo: undefined,
+                    },
+                    {
+                        cardNo: "LL01-012",
+                        cardType: CardType.MEMBER,
+                        flipped: this.storeCardFlips.get(-8)!,
+                        position: this.storeCardPositions.get(-8)!,
+                        idolizedBaseCardNo: undefined,
+                    },
+                ],
+                position: this.storeGroupPositions.get(-5)!,
             });
             return m;
         });
@@ -156,6 +183,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
             cardType,
             flipped: thisFlip,
             position: thisPos,
+            idolizedBaseCardNo: undefined,
         };
 
         this.storeCardPositions.set(thisId, thisPos);
