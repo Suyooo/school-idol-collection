@@ -183,7 +183,14 @@ export class LocalClientGameLogic extends ClientGameLogic {
         return val!;
     }
 
-    private addToField(cardNo: string, cardType: CardType, x: number, y: number, flipped: boolean = false) {
+    private addToField(
+        cardNo: string,
+        cardType: CardType,
+        x: number,
+        y: number,
+        flipped: boolean = false,
+        idolizedBaseCardNo?: string
+    ) {
         const thisId = this.nextId++;
         const thisFlip = writable(flipped);
         const thisPos = writable({ x, y, z: this.nextZ++ });
@@ -192,7 +199,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
             cardType,
             flipped: thisFlip,
             position: thisPos,
-            idolizedBaseCardNo: undefined,
+            idolizedBaseCardNo,
         };
 
         this.storeCardPositions.set(thisId, thisPos);
@@ -333,9 +340,31 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.storePlayers[0].livePoints.update((lp) => Math.max(lp + delta, 0));
     }
 
-    requestIdolizeFromField(idBaseCard: number, idIdolizeCard: number): void {}
+    requestIdolizeFromField(idBaseCard: number, idIdolizeCard: number): void {
+        const baseCard = this.removeFromField(idBaseCard);
+        const idolizeCard = this.removeFromField(idIdolizeCard);
+        this.addToField(
+            idolizeCard.cardNo,
+            CardType.MEMBER,
+            baseCard.position.x,
+            baseCard.position.y,
+            false,
+            baseCard.cardNo
+        );
+    }
 
-    requestIdolizeFromHand(idBaseCard: number, idxIdolizeCard: number): void {}
+    requestIdolizeFromHand(idBaseCard: number, idxIdolizeCard: number): void {
+        const baseCard = this.removeFromField(idBaseCard);
+        const idolizeCardNo = this.removeFromHand(idxIdolizeCard);
+        this.addToField(
+            idolizeCardNo,
+            CardType.MEMBER,
+            baseCard.position.x,
+            baseCard.position.y,
+            false,
+            baseCard.cardNo
+        );
+    }
 
     requestIdolizeUndo(id: number): void {
         const card = this.removeFromField(id);

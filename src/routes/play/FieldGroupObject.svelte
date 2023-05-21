@@ -77,6 +77,7 @@
     class="objgroup"
     style:left={`${displayPosition.x}px`}
     style:top={`${displayPosition.y}px`}
+    style:width={`${65 + 10 * (cards.size - 2)}px`}
     on:mousedown={() => (wasPickedUp = false)}
     on:mouseup={groupMenu}
     use:action
@@ -89,6 +90,7 @@
 <style lang="postcss">
     .objgroup {
         @apply absolute;
+        height: 91px;
 
         &:global(.dragging) {
             @apply !z-play-card-dragging cursor-grabbing;

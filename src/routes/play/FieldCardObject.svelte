@@ -9,6 +9,7 @@
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
+    import CardGridElement from "../(site)/set/[set]/CardGridElement.svelte";
     import { type OpenMenuFunction, snapFunction } from "./+page.svelte";
 </script>
 
@@ -27,6 +28,7 @@
 
     let element: HTMLElement;
     $: if (element) element.dataset.id = id.toString();
+    $: if (element) element.dataset.cardNo = cardNo;
 
     let loadPromise: Promise<CardWithImageData> = new Promise(() => null);
     onMount(() => {
@@ -78,6 +80,26 @@
                                     ],
                                     true
                                 );
+                            } else if (
+                                cardType === CardType.MEMBER &&
+                                event.relatedTarget?.classList.contains("objcardfieldmember")
+                            ) {
+                                openMenu(
+                                    event.page.x,
+                                    event.page.y,
+                                    `${cardNo} &rarr; ${event.relatedTarget.dataset.cardNo}`,
+                                    [
+                                        {
+                                            label: "Idolize",
+                                            handler: () =>
+                                                logic.requestIdolizeFromField(
+                                                    parseInt(event.relatedTarget.dataset.id),
+                                                    id
+                                                ),
+                                        },
+                                    ],
+                                    true
+                                );
                             }
                         }
                     },
@@ -93,6 +115,34 @@
                     }),
                 ],
             });
+        if (cardType === CardType.MEMBER && idolizedBaseCardNo === undefined) {
+            interactable.dropzone({
+                accept: ".objcardfieldmember, .objcardhand",
+                overlap: "center",
+                checker: (dragEvent, _event, _dropped, _dropzone, dropzoneElement, _draggable, draggableElement) => {
+                    // This checker is neccessary because overlap=1 doesn't work:
+                    // It uses the previous position, and does not take dx/dy into account
+                    // Which results in the hovering class being applied one grid move after it was actually hovered
+                    const dropzoneBox = dropzoneElement.getBoundingClientRect();
+                    const draggableBox = draggableElement.getBoundingClientRect();
+                    return (
+                        Math.abs(draggableBox.left + dragEvent.dx - dropzoneBox.left) < 5 &&
+                        Math.abs(draggableBox.top + dragEvent.dy - dropzoneBox.top) < 5
+                    );
+                },
+                listeners: {
+                    enter() {
+                        node.classList.add("hovering");
+                    },
+                    leave() {
+                        node.classList.remove("hovering");
+                    },
+                    drop() {
+                        node.classList.remove("hovering");
+                    },
+                },
+            });
+        }
 
         return {
             destroy: () => interactable.unset(),
@@ -220,7 +270,7 @@
         &.block-interact {
             & img.image,
             & .flipped {
-                @apply brightness-75;
+                @apply brightness-90;
             }
         }
 
@@ -241,6 +291,12 @@
                         height: 130px;
                     }
                 }
+            }
+        }
+
+        &:global(.hovering) {
+            & .card {
+                @apply outline outline-4 outline-primary-300;
             }
         }
     }

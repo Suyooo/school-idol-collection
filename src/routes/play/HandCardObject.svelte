@@ -61,6 +61,35 @@
                             // handled in HandObject
                             node.classList.remove("dragging");
                             startOffset.x = startOffset.y = displayPosition.x = displayPosition.y = 0;
+                        } else if (event.relatedTarget?.classList.contains("objcardfieldmember")) {
+                            const box = node.getBoundingClientRect();
+                            node.classList.remove("dragging");
+                            startOffset.x = startOffset.y = displayPosition.x = displayPosition.y = 0;
+                            openMenu(
+                                event.page.x,
+                                event.page.y,
+                                `${cardNo} &rarr; ${event.relatedTarget.dataset.cardNo}`,
+                                [
+                                    {
+                                        label: "⟪ENTER⟫ Idolized",
+                                        handler: () =>
+                                            logic.requestIdolizeFromHand(parseInt(event.relatedTarget.dataset.id), idx),
+                                    },
+                                    {
+                                        label: "⟪ENTER⟫ Unidolized",
+                                        handler: () =>
+                                            logic.requestHandToField(
+                                                idx,
+                                                box.left - playerField.offsetLeft - 1,
+                                                box.top -
+                                                    playerField.offsetTop +
+                                                    playerField.parentElement!.scrollTop -
+                                                    1
+                                            ),
+                                    },
+                                ],
+                                true
+                            );
                         } else {
                             node.classList.remove("dragging");
                             startOffset.x = startOffset.y = displayPosition.x = displayPosition.y = 0;
