@@ -104,11 +104,21 @@
             openMenu(
                 event.pageX,
                 event.pageY,
-                `${cardNo}`,
+                `${cardNo}${idolizedBaseCardNo !== undefined ? " (Idolized)" : ""}`,
                 [
                     {
                         label: "Flip",
                         handler: () => logic.requestFieldFlip(id),
+                    },
+                    {
+                        label: "Check Base Card",
+                        handler: () => updateSidebar(idolizedBaseCardNo),
+                        condition: idolizedBaseCardNo !== undefined,
+                    },
+                    {
+                        label: "Undo Idolization",
+                        handler: () => logic.requestIdolizeUndo(id),
+                        condition: idolizedBaseCardNo !== undefined,
                     },
                 ],
                 true
@@ -119,14 +129,14 @@
 
     let sidebarCardNo: Writable<string | undefined> = getContext("sidebarCardNo");
 
-    function updateSidebar() {
-        if ($flipped) {
+    function updateSidebar(newCardNo?: string) {
+        if (newCardNo === undefined && $flipped) {
             return;
         }
-        if ($sidebarCardNo === cardNo) {
+        if (newCardNo === undefined && $sidebarCardNo === cardNo) {
             $sidebarCardNo = undefined;
         } else {
-            $sidebarCardNo = cardNo;
+            $sidebarCardNo = newCardNo ?? cardNo;
         }
     }
 </script>
@@ -145,7 +155,7 @@
     style:--flipped-color={flippedColor}
     on:mousedown={() => (wasPickedUp = false)}
     on:mouseup={cardMenu}
-    on:contextmenu|preventDefault={updateSidebar}
+    on:contextmenu|preventDefault={() => updateSidebar()}
     use:action
 >
     <div
@@ -158,9 +168,12 @@
             <Spinner />
         {:then card}
             {#if !$flipped}
-                <img src={card.imageDataUrl} alt={cardNo} />
+                <img class="image" src={card.imageDataUrl} alt={cardNo} />
             {:else}
-                <div class="flipped">✖</div>
+                <div class="flipped" />
+            {/if}
+            {#if idolizedBaseCardNo !== undefined}
+                <img class="icon" src="/images/icons/idolized.png" alt="Idolized" />
             {/if}
         {/await}
     </div>
@@ -171,8 +184,7 @@
         @apply absolute w-min select-none touch-none z-play-card cursor-grab;
 
         & .card {
-            @apply flex items-center justify-center overflow-hidden shadow-sm shadow-black;
-            background-color: var(--flipped-color);
+            @apply flex items-center justify-center bg-primary-300 overflow-hidden shadow-sm shadow-black;
             transition: width 0.3s, height 0.3s, shadow-blur 0.3s;
 
             &.card-v {
@@ -187,21 +199,26 @@
                 height: 65px;
             }
 
-            & img {
+            & img.image {
                 @apply w-full hover:brightness-110;
             }
 
             & .flipped {
-                @apply text-3xl font-bold opacity-50 hover:brightness-110;
+                @apply w-full h-full hover:brightness-110;
+                background-color: var(--flipped-color);
             }
 
             &.highlight {
                 @apply outline outline-4 outline-accent-500;
             }
+
+            & img.icon {
+                @apply absolute w-1/4 right-0.5 top-0.5;
+            }
         }
 
         &.block-interact {
-            & img,
+            & img.image,
             & .flipped {
                 @apply brightness-75;
             }

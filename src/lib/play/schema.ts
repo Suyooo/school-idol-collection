@@ -88,6 +88,9 @@ export abstract class ClientGameLogic {
     abstract requestGroupMove(id: number, x: number, y: number): void;
     abstract requestGroupDestroy(id: number): void;
     abstract requestLPUpdate(delta: number): void;
+    abstract requestIdolizeFromField(idBaseCard: number, idIdolizeCard: number): void;
+    abstract requestIdolizeFromHand(idBaseCard: number, idxIdolizeCard: number): void;
+    abstract requestIdolizeUndo(id: number): void;
 }
 
 export interface ClientGameLogicHandlers {

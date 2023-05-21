@@ -26,9 +26,9 @@
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:zoom="4.0000002"
-     inkscape:cx="1614.7499"
-     inkscape:cy="1506.3749"
+     inkscape:zoom="2.0000001"
+     inkscape:cx="1728.9999"
+     inkscape:cy="1440.2499"
      inkscape:window-width="1850"
      inkscape:window-height="1000"
      inkscape:window-x="34"
@@ -751,6 +751,11 @@
            x="253.44484"
            y="405.19962">Idolized</tspan></text>
     </g>
+    <g
+       aria-label="or"
+       id="text48438-3-3"
+       style="font-size:17.8784px;font-family:'Odin Rounded';-inkscape-font-specification:'Odin Rounded';letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;stroke:#ff5599;stroke-width:3.04372;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       transform="matrix(0.85075013,0,0,0.85075013,212.05321,-4.5281252)" />
     <rect
        style="display:inline;fill:#ff00ff;fill-opacity:1;stroke:none;stroke-width:2.32769;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
        id="rect280216-8-6-0-6-5-3"
@@ -776,7 +781,7 @@
        style="font-size:21.3333px;line-height:1.25;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect826);display:inline;fill:#000000;stroke:none;stroke-width:3.04372;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"><tspan
          x="1330.9824"
          y="1568.0454"
-         id="tspan1573">Odin Rounded</tspan></text>
+         id="tspan810">Odin Rounded</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,67.531404,5.4437979)"
@@ -784,7 +789,21 @@
        style="font-size:21.3333px;line-height:1.25;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect826-3);display:inline;fill:#000000;stroke:none;stroke-width:3.04372;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"><tspan
          x="1330.9824"
          y="1568.0454"
-         id="tspan1575">Kosugi Maru</tspan></text>
+         id="tspan812">Kosugi Maru</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5563px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'Odin Rounded';letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;stroke:#71c837;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="474.65033"
+       y="397.97516"
+       id="text2515-6"
+       inkscape:export-filename="idolized.png"
+       inkscape:export-xdpi="602"
+       inkscape:export-ydpi="602"><tspan
+         sodipodi:role="line"
+         id="tspan2513-7"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Odin Rounded';-inkscape-font-specification:'Odin Rounded';stroke:#71c837;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"
+         x="474.65033"
+         y="397.97516">🡅</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"

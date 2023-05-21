@@ -103,11 +103,11 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.storeCardPositions.set(-1, writable({ x: 79, y: 9, z: 9 }));
         this.storePlayers[0].field.update((m) => {
             m.set(-1, {
-                cardNo: "LL01-063",
+                cardNo: "LL15-028",
                 cardType: CardType.MEMBER,
                 flipped: this.storeCardFlips.get(-1)!,
                 position: this.storeCardPositions.get(-1)!,
-                idolizedBaseCardNo: undefined,
+                idolizedBaseCardNo: "LL15-019",
             });
             return m;
         });
@@ -183,9 +183,9 @@ export class LocalClientGameLogic extends ClientGameLogic {
         return val!;
     }
 
-    private addToField(cardNo: string, cardType: CardType, x: number, y: number) {
+    private addToField(cardNo: string, cardType: CardType, x: number, y: number, flipped: boolean = false) {
         const thisId = this.nextId++;
-        const thisFlip = writable(false);
+        const thisFlip = writable(flipped);
         const thisPos = writable({ x, y, z: this.nextZ++ });
         const thisCard = {
             cardNo,
@@ -331,5 +331,15 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     requestLPUpdate(delta: number) {
         this.storePlayers[0].livePoints.update((lp) => Math.max(lp + delta, 0));
+    }
+
+    requestIdolizeFromField(idBaseCard: number, idIdolizeCard: number): void {}
+
+    requestIdolizeFromHand(idBaseCard: number, idxIdolizeCard: number): void {}
+
+    requestIdolizeUndo(id: number): void {
+        const card = this.removeFromField(id);
+        this.addToField(card.idolizedBaseCardNo!, CardType.MEMBER, card.position.x, card.position.y);
+        this.addToField(card.cardNo, CardType.MEMBER, card.position.x + 10, card.position.y);
     }
 }
