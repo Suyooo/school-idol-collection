@@ -6,6 +6,7 @@
     import CardType from "$lib/enums/cardType.js";
     import {
         type ClientFieldCardSchema,
+        type ClientFieldGroupSchema,
         type ClientGameLogic,
         type ClientGameSchema,
         type ClientPlayerSchema,
@@ -15,6 +16,7 @@
     import Minus from "$lib/style/icons/Minus.svelte";
     import Plus from "$lib/style/icons/Plus.svelte";
     import FieldCardObject from "./FieldCardObject.svelte";
+    import FieldGroupObject from "./FieldGroupObject.svelte";
     import StackObject from "./StackObject.svelte";
 </script>
 
@@ -32,6 +34,7 @@
         profile: Readable<ClientProfile>,
         livePoints: Readable<number>,
         field: Readable<Map<number, ClientFieldCardSchema>>,
+        groups: Readable<Map<number, ClientFieldGroupSchema>>,
         deck: Readable<string[]>,
         setList: Readable<string[]>;
     $: game = logic.game;
@@ -40,6 +43,7 @@
     $: profile = player.profile;
     $: livePoints = player.livePoints;
     $: field = player.field;
+    $: groups = player.groups;
     $: deck = player.deck;
     $: setList = player.setList;
 
@@ -89,6 +93,9 @@
             {...card}
             flippedColor={card.cardType === CardType.MEMBER ? $profile.deckColor : $profile.setListColor}
         />
+    {/each}
+    {#each [...$groups.entries()] as [id, group] (id)}
+        <FieldGroupObject {id} {...group} />
     {/each}
     <StackObject
         bind:this={deckComponent}

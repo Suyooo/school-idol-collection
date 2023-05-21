@@ -118,7 +118,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.storeCardPositions.set(-7, writable({ x: 10, y: 0, z: 6 }));
         this.storeCardFlips.set(-8, writable(false));
         this.storeCardPositions.set(-8, writable({ x: 20, y: 0, z: 7 }));
-        this.storeGroupPositions.set(-5, writable({ x: 129, y: 9 }));
+        this.storeGroupPositions.set(-5, writable({ x: 189, y: 9 }));
         this.storePlayers[0].groups.update((m) => {
             m.set(-5, {
                 cards: [
@@ -288,6 +288,14 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     requestHandMove(idx: number, newIdx: number) {
         this.addToHand(this.removeFromHand(idx), newIdx);
+    }
+
+    requestGroupMove(id: number, x: number, y: number) {
+        this.storeGroupPositions.get(id)!.update((pos) => {
+            pos.x = x;
+            pos.y = y;
+            return pos;
+        });
     }
 
     requestLPUpdate(delta: number) {

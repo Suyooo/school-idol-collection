@@ -85,6 +85,7 @@ export abstract class ClientGameLogic {
     abstract requestFieldMove(id: number, x: number, y: number): void;
     abstract requestFieldFlip(id: number): void;
     abstract requestHandMove(idx: number, newIdx: number): void;
+    abstract requestGroupMove(id: number, x: number, y: number): void;
     abstract requestLPUpdate(delta: number): void;
 }
 

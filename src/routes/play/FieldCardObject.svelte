@@ -20,6 +20,7 @@
     export let position: Readable<{ x: number; y: number; z: number }>;
     export let idolizedBaseCardNo: string | undefined;
     export let flippedColor: string;
+    export let blockInteract: boolean = false;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
     const playerFieldStore: Writable<HTMLDivElement> = getContext("playerField");
@@ -36,6 +37,7 @@
     $: displayPosition = { x: $position.x, y: $position.y };
     let wasPickedUp = true;
     function action(node: HTMLElement) {
+        if (blockInteract) return;
         const interactable = interact(node)
             .styleCursor(false)
             .draggable({
@@ -96,8 +98,9 @@
             destroy: () => interactable.unset(),
         };
     }
+
     function cardMenu(event: MouseEvent) {
-        if (event.button === 0 && !wasPickedUp) {
+        if (!blockInteract && event.button === 0 && !wasPickedUp) {
             openMenu(
                 event.pageX,
                 event.pageY,
@@ -164,7 +167,7 @@
 
 <style lang="postcss">
     .objcardfield {
-        @apply absolute w-min select-none touch-none z-play-card cursor-grab;
+        @apply absolute w-min select-none touch-none z-play-card cursor-grab hover:brightness-110;
 
         & .card {
             @apply flex items-center justify-center overflow-hidden shadow-sm shadow-black;
@@ -194,10 +197,6 @@
             &.highlight {
                 @apply outline outline-4 outline-accent-500;
             }
-        }
-
-        &:hover {
-            @apply brightness-110;
         }
 
         &:global(.dragging) {
