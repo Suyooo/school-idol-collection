@@ -6,6 +6,7 @@
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
+    import type { SnapFunction } from "@interactjs/types";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
@@ -19,6 +20,10 @@
     export let disableSidewaysAnimations: boolean;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
+
+    const playerFieldStore: Writable<HTMLDivElement> = getContext("playerField");
+    let playerField: HTMLDivElement;
+    $: playerField = $playerFieldStore;
 
     let element: HTMLElement;
     $: if (element) element.dataset.idx = idx.toString();
@@ -49,8 +54,11 @@
                     end(event) {
                         if (event.relatedTarget?.classList.contains("objfield")) {
                             const box = node.getBoundingClientRect();
-                            // TODO: scroll position of field view
-                            logic.requestHandToField(idx, box.left - 1, box.top - 1);
+                            logic.requestHandToField(
+                                idx,
+                                box.left - playerField.offsetLeft - 1,
+                                box.top - playerField.offsetTop + playerField.parentElement!.scrollTop - 1
+                            );
                         } else if (event.relatedTarget?.classList.contains("objhand")) {
                             // handled in HandObject
                             node.classList.remove("dragging");
@@ -82,14 +90,8 @@
                 },
                 modifiers: [
                     interact.modifiers.snap({
-                        targets: [
-                            interact.snappers.grid({
-                                x: 10,
-                                y: 10,
-                            }),
-                        ],
+                        targets: [getContext<SnapFunction>("snap")],
                         relativePoints: [{ x: 0, y: 0 }],
-                        offset: { x: 0, y: 0 },
                     }),
                 ],
             });
@@ -142,7 +144,7 @@
 <style lang="postcss">
     .objcardhand,
     .emptycard {
-        @apply relative mt-4 select-none;
+        @apply relative select-none;
         transition: margin-left 0.3s, margin-right 0.3s;
         margin-right: 0;
 

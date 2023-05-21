@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
     import { setContext } from "svelte";
     import { type Readable, type Writable, writable } from "svelte/store";
+    import type { SnapFunction } from "@interactjs/types";
     import "../../app.css";
     import { cardTitle } from "$lib/card/strings.js";
     import { CardOrientation } from "$lib/enums/cardOrientation.js";
@@ -62,7 +63,28 @@
         deckColor: "#FF8246",
         setListColor: "#27C1B7",
     });
-    let deckComponents: StackObject[] = [],
+
+    const fieldElements: HTMLDivElement[] = [];
+    const playerField: Writable<HTMLDivElement> = writable();
+    $: $playerField = fieldElements[logic.clientPlayerId];
+    setContext("playerField", playerField);
+    setContext<SnapFunction>("snap", (x, y, interaction) => {
+        if (interaction.element?.classList.contains("inhand")) {
+            return { x, y };
+        }
+
+        const l = fieldElements[logic.clientPlayerId].offsetLeft;
+        const t = fieldElements[logic.clientPlayerId].offsetTop;
+        const s = fieldElements[logic.clientPlayerId].parentElement!.scrollTop;
+
+        return {
+            x: Math.round((x - l) / 10) * 10 + l,
+            y: Math.round((y - t + s) / 10) * 10 + t - s,
+            range: Infinity,
+        };
+    });
+
+    const deckComponents: StackObject[] = [],
         setListComponents: StackObject[] = [];
     logic.handlers.onShuffle = (playerId: number, target: StackType) => {
         (target === StackType.DECK ? deckComponents : setListComponents)[playerId].shake();
@@ -76,8 +98,8 @@
     $: handCards = $players[logic.clientPlayerId].hand;
     setContext("logic", logic);
 
-    let sidebarCardNo: Writable<string | undefined> = writable(undefined),
-        sidebarCardPromise: Promise<CardWithImageData> = new Promise(() => null);
+    const sidebarCardNo: Writable<string | undefined> = writable(undefined);
+    let sidebarCardPromise: Promise<CardWithImageData> = new Promise(() => null);
     $: {
         if ($sidebarCardNo !== undefined) {
             sidebarCardPromise = loadCardInfo($sidebarCardNo);
@@ -96,6 +118,7 @@
                     <FieldObject
                         playerIdx={i}
                         isClient={i === logic.clientPlayerId}
+                        bind:fieldElement={fieldElements[i]}
                         bind:deckComponent={deckComponents[i]}
                         bind:setListComponent={setListComponents[i]}
                     />

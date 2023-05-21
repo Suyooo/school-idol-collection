@@ -21,6 +21,7 @@
 <script lang="ts">
     export let playerIdx: number;
     export let isClient: boolean;
+    export let fieldElement: HTMLDivElement;
     export let deckComponent: StackObject;
     export let setListComponent: StackObject;
     const logic: ClientGameLogic = getContext("logic");
@@ -65,7 +66,7 @@
     }
 </script>
 
-<div class="objfield" style:--player-color={$profile.fieldColor} use:action>
+<div class="objfield" style:--player-color={$profile.fieldColor} use:action bind:this={fieldElement}>
     <div class="background">
         <div class="area deck" />
         <div class="area setlist" />

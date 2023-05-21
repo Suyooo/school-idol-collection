@@ -25,14 +25,11 @@
                 continue;
             }
 
-            console.log(e.getBoundingClientRect().left, event.dragEvent.rect.left);
-
             if (e.getBoundingClientRect().left > event.dragEvent.rect.left) {
                 break;
             }
             i++;
         }
-        console.log(i);
         return i;
     }
 
@@ -101,12 +98,11 @@
 
 <style lang="postcss">
     .objhand {
-        @apply absolute z-play-hand flex items-start justify-center bg-primary-600 border-4 border-solid border-transparent select-none;
+        @apply absolute z-play-hand flex items-start justify-center bg-primary-600 border-4 border-solid border-transparent select-none px-4 pt-4;
         left: 0;
         right: 0;
         bottom: -15vh;
         height: 30vh;
-        padding: 0 1em;
 
         & > :global(*):last-child {
             flex-shrink: 0;

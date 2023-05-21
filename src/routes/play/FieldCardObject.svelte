@@ -33,7 +33,7 @@
 
     let displayPosition: { x: number; y: number };
     $: displayPosition = { x: $position.x, y: $position.y };
-    let hasMovedSinceMouseDown = true;
+    let wasPickedUp = true;
     function action(node: HTMLElement) {
         const interactable = interact(node)
             .styleCursor(false)
@@ -41,11 +41,11 @@
                 listeners: {
                     start() {
                         node.classList.add("dragging");
+                        wasPickedUp = true;
                     },
                     move(event) {
                         displayPosition.x += event.dx;
                         displayPosition.y += event.dy;
-                        hasMovedSinceMouseDown = true;
                     },
                     end(event) {
                         if (event.relatedTarget?.classList.contains("objhand")) {
@@ -96,7 +96,7 @@
         };
     }
     function cardMenu(event: MouseEvent) {
-        if (event.button === 0 && !hasMovedSinceMouseDown) {
+        if (event.button === 0 && !wasPickedUp) {
             openMenu(
                 event.pageX,
                 event.pageY,
@@ -110,7 +110,7 @@
                 true
             );
         }
-        hasMovedSinceMouseDown = true;
+        wasPickedUp = true;
     }
 
     let sidebarCardNo: Writable<string | undefined> = getContext("sidebarCardNo");
@@ -138,7 +138,7 @@
     style:top={`${displayPosition.y}px`}
     style:z-index={$position.z}
     style:--flipped-color={flippedColor}
-    on:mousedown={() => (hasMovedSinceMouseDown = false)}
+    on:mousedown={() => (wasPickedUp = false)}
     on:mouseup={cardMenu}
     on:contextmenu|preventDefault={updateSidebar}
     use:action
