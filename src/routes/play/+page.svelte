@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
     import { setContext } from "svelte";
-    import { type Readable, type Writable, writable } from "svelte/store";
+    import { type Readable, type Writable, get, writable } from "svelte/store";
     import type { SnapFunction } from "@interactjs/types";
     import "../../app.css";
     import { cardTitle } from "$lib/card/strings.js";
@@ -25,6 +25,25 @@
         entries: { label: string; handler: () => void; condition?: boolean }[],
         cancelable: boolean
     ) => void;
+
+    export function snapFunction(playerFieldStore: Writable<HTMLDivElement>): SnapFunction {
+        return (x, y, interaction) => {
+            if (interaction.element?.classList.contains("inhand")) {
+                return { x, y };
+            }
+
+            const playerField = get(playerFieldStore);
+            const l = playerField.offsetLeft;
+            const t = playerField.offsetTop;
+            const s = playerField.parentElement!.scrollTop;
+
+            return {
+                x: Math.round((x - l) / 10) * 10 + l,
+                y: Math.round((y - t + s) / 10) * 10 + t - s,
+                range: Infinity,
+            };
+        };
+    }
 </script>
 
 <script lang="ts">
@@ -68,21 +87,6 @@
     const playerField: Writable<HTMLDivElement> = writable();
     $: $playerField = fieldElements[logic.clientPlayerId];
     setContext("playerField", playerField);
-    setContext<SnapFunction>("snap", (x, y, interaction) => {
-        if (interaction.element?.classList.contains("inhand")) {
-            return { x, y };
-        }
-
-        const l = fieldElements[logic.clientPlayerId].offsetLeft;
-        const t = fieldElements[logic.clientPlayerId].offsetTop;
-        const s = fieldElements[logic.clientPlayerId].parentElement!.scrollTop;
-
-        return {
-            x: Math.round((x - l) / 10) * 10 + l,
-            y: Math.round((y - t + s) / 10) * 10 + t - s,
-            range: Infinity,
-        };
-    });
 
     const deckComponents: StackObject[] = [],
         setListComponents: StackObject[] = [];
@@ -181,7 +185,7 @@
         @apply relative flex-1 flex items-center justify-center h-screen overflow-hidden;
 
         & .fields {
-            @apply w-full flex flex-col max-h-screen items-center justify-start overflow-y-auto pb-[15vh];
+            @apply w-full flex flex-col h-screen items-center justify-start overflow-y-auto pb-[15vh];
         }
     }
 
@@ -198,7 +202,7 @@
         @apply pb-0;
 
         &.text {
-            @apply py-2 select-none text-center;
+            @apply py-12 select-none text-center;
         }
     }
 

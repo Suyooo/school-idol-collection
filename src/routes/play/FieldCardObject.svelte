@@ -5,12 +5,11 @@
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
-    import type { SnapFunction } from "@interactjs/types";
     import CardType from "$lib/enums/cardType.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
-    import type { OpenMenuFunction } from "./+page.svelte";
+    import { type OpenMenuFunction, snapFunction } from "./+page.svelte";
 </script>
 
 <script lang="ts">
@@ -19,9 +18,11 @@
     export let cardType: CardType;
     export let flipped: Readable<boolean>;
     export let position: Readable<{ x: number; y: number; z: number }>;
+    export let idolizedBaseCardNo: string | undefined;
     export let flippedColor: string;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
+    const playerFieldStore: Writable<HTMLDivElement> = getContext("playerField");
 
     let element: HTMLElement;
     $: if (element) element.dataset.id = id.toString();
@@ -81,7 +82,7 @@
                 },
                 modifiers: [
                     interact.modifiers.snap({
-                        targets: [getContext<SnapFunction>("snap")],
+                        targets: [snapFunction(playerFieldStore)],
                         relativePoints: [{ x: 0, y: 0 }],
                     }),
                     interact.modifiers.restrictRect({
