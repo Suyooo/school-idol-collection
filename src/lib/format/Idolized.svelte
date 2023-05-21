@@ -3,18 +3,24 @@
     import Language from "$lib/enums/language.js";
 
     export let repl: string;
-    export let lang: Language = Language.ENG; // TODO: JP Language
+    export let lang: Language = Language.ENG;
     export let cardType: CardType | undefined = undefined;
     cardType;
 </script>
 
 <span
-    ><span class="skill-icon" title={repl}>{repl}</span>{#if lang === Language.ENG}&nbsp;Pieces{/if}</span
+    ><span class="skill-icon" class:ja={lang === Language.JPN} title={repl}>{repl}</span
+    >{#if lang === Language.ENG}&nbsp;Pieces{/if}</span
 >
 
 <style lang="postcss">
     .skill-icon {
         @apply w-[3.285em] mt-[0.03em];
-        background-image: url("/images/icons/idolized.png");
+        background-image: url("/images/icons/idolized_en.png");
+
+        &.ja {
+            @apply w-[2.133em];
+            background-image: url("/images/icons/idolized_ja.png");
+        }
     }
 </style>
