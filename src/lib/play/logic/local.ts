@@ -101,59 +101,40 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
         this.storeCardFlips.set(-1, writable(false));
         this.storeCardPositions.set(-1, writable({ x: 79, y: 9, z: 9 }));
-        this.storePlayers[0].field.update((m) => {
-            m.set(-1, {
-                cardNo: "LL15-028",
-                cardType: CardType.MEMBER,
-                flipped: this.storeCardFlips.get(-1)!,
-                position: this.storeCardPositions.get(-1)!,
-                idolizedBaseCardNo: "LL15-019",
-            });
-            return m;
-        });
-
         this.storeCardFlips.set(-6, writable(false));
         this.storeCardPositions.set(-6, writable({ x: 0, y: 0, z: 5 }));
         this.storeCardFlips.set(-7, writable(false));
         this.storeCardPositions.set(-7, writable({ x: 10, y: 0, z: 6 }));
         this.storeCardFlips.set(-8, writable(false));
         this.storeCardPositions.set(-8, writable({ x: 20, y: 0, z: 7 }));
-        this.storeGroupPositions.set(-5, writable({ x: 189, y: 9 }));
-        this.storePlayers[0].groups.update((m) => {
-            m.set(-5, {
-                cards: new Map([
-                    [
-                        -6,
-                        {
-                            cardNo: "LL01-010",
-                            cardType: CardType.MEMBER,
-                            flipped: this.storeCardFlips.get(-6)!,
-                            position: this.storeCardPositions.get(-6)!,
-                            idolizedBaseCardNo: undefined,
-                        },
-                    ],
-                    [
-                        -7,
-                        {
-                            cardNo: "LL01-011",
-                            cardType: CardType.MEMBER,
-                            flipped: this.storeCardFlips.get(-7)!,
-                            position: this.storeCardPositions.get(-7)!,
-                            idolizedBaseCardNo: undefined,
-                        },
-                    ],
-                    [
-                        -8,
-                        {
-                            cardNo: "LL01-012",
-                            cardType: CardType.MEMBER,
-                            flipped: this.storeCardFlips.get(-8)!,
-                            position: this.storeCardPositions.get(-8)!,
-                            idolizedBaseCardNo: undefined,
-                        },
-                    ],
-                ]),
-                position: this.storeGroupPositions.get(-5)!,
+        this.storePlayers[0].field.update((m) => {
+            m.set(-1, {
+                cardNo: "LL01-069",
+                cardType: CardType.SONG,
+                flipped: this.storeCardFlips.get(-1)!,
+                position: this.storeCardPositions.get(-1)!,
+                idolizedBaseCardNo: undefined,
+            });
+            m.set(-6, {
+                cardNo: "LL01-010",
+                cardType: CardType.MEMBER,
+                flipped: this.storeCardFlips.get(-6)!,
+                position: this.storeCardPositions.get(-6)!,
+                idolizedBaseCardNo: undefined,
+            });
+            m.set(-7, {
+                cardNo: "LL01-011",
+                cardType: CardType.MEMBER,
+                flipped: this.storeCardFlips.get(-7)!,
+                position: this.storeCardPositions.get(-7)!,
+                idolizedBaseCardNo: undefined,
+            });
+            m.set(-8, {
+                cardNo: "LL01-012",
+                cardType: CardType.MEMBER,
+                flipped: this.storeCardFlips.get(-8)!,
+                position: this.storeCardPositions.get(-8)!,
+                idolizedBaseCardNo: undefined,
             });
             return m;
         });

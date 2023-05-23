@@ -83,7 +83,7 @@
     use:action
 >
     {#each [...cards.entries()] as [id, card] (id)}
-        <FieldCardObject {id} {...card} flippedColor={"white"} blockInteract />
+        <FieldCardObject {id} {...card} flippedColor={"white"} grouped />
     {/each}
 </div>
 

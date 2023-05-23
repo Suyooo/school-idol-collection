@@ -14,6 +14,8 @@
 </script>
 
 <script lang="ts">
+    import Button from "$lib/style/Button.svelte";
+
     export let id: number;
     export let cardNo: string;
     export let cardType: CardType;
@@ -21,10 +23,11 @@
     export let position: Readable<{ x: number; y: number; z: number }>;
     export let idolizedBaseCardNo: string | undefined;
     export let flippedColor: string;
-    export let blockInteract: boolean = false;
+    export let grouped: boolean = false;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
     const playerFieldStore: Writable<HTMLDivElement> = getContext("playerField");
+    const liveModeCards: Writable<Set<number>> = getContext("liveModeCards");
 
     let element: HTMLElement;
     $: if (element) element.dataset.id = id.toString();
@@ -41,7 +44,7 @@
     $: displayPosition = { x: $position.x, y: $position.y };
     let wasPickedUp = true;
     function action(node: HTMLElement) {
-        if (blockInteract) return;
+        if (grouped) return;
         const interactable = interact(node)
             .styleCursor(false)
             .draggable({
@@ -152,12 +155,35 @@
     }
 
     function cardMenu(event: MouseEvent) {
-        if (!blockInteract && event.button === 0 && !wasPickedUp) {
+        if (event.button !== 0 || wasPickedUp) {
+            return;
+        }
+        if ($liveModeCards.size > 0) {
+            if (cardType === CardType.MEMBER) {
+                liveModeCards.update((m) => {
+                    if (m.has(id)) {
+                        m.delete(id);
+                    } else {
+                        m.add(id);
+                    }
+                    return m;
+                });
+            }
+        } else if (!grouped) {
             openMenu(
                 event.pageX,
                 event.pageY,
                 `${cardNo}${idolizedBaseCardNo !== undefined ? " (Idolized)" : ""}`,
                 [
+                    {
+                        label: "Prepare ⟪LIVE⟫",
+                        handler: () =>
+                            liveModeCards.update((m) => {
+                                m.add(id);
+                                return m;
+                            }),
+                        condition: cardType == CardType.SONG,
+                    },
                     {
                         label: "Flip",
                         handler: () => logic.requestFieldFlip(id),
@@ -176,7 +202,6 @@
                 true
             );
         }
-        wasPickedUp = true;
     }
 
     let sidebarCardNo: Writable<string | undefined> = getContext("sidebarCardNo");
@@ -191,6 +216,17 @@
             $sidebarCardNo = newCardNo ?? cardNo;
         }
     }
+
+    function createLiveGroup() {
+        endLiveMode();
+    }
+
+    function endLiveMode() {
+        liveModeCards.update((m) => {
+            m.clear();
+            return m;
+        });
+    }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -200,7 +236,8 @@
     class:objcardfieldmember={cardType === CardType.MEMBER}
     class:objcardfieldsong={cardType === CardType.SONG}
     class:objcardfieldmemory={cardType === CardType.MEMORY}
-    class:block-interact={blockInteract}
+    class:lowlight={grouped}
+    class:disabled={$liveModeCards.size > 0 && !$liveModeCards.has(id)}
     class:idolizable={card !== undefined && cardIsMember(card) && cardIsIdolizable(card)}
     style:left={`${displayPosition.x}px`}
     style:top={`${displayPosition.y}px`}
@@ -230,6 +267,10 @@
             {/if}
         {/await}
     </div>
+    {#if cardType === CardType.SONG && $liveModeCards.has(id)}
+        <Button accent classes="mt-1 w-full" label="Live" on:click={createLiveGroup}>⟪LIVE⟫</Button>
+        <Button classes="mt-1 w-full" label="Cancel" on:click={endLiveMode}>Cancel</Button>
+    {/if}
 </div>
 
 <style lang="postcss">
@@ -270,10 +311,24 @@
             }
         }
 
-        &.block-interact {
+        &.lowlight {
             & img.image,
             & .flipped {
-                @apply brightness-90;
+                @apply brightness-90 hover:brightness-100;
+            }
+        }
+
+        &.disabled {
+            & img.image,
+            & .flipped {
+                @apply brightness-75 hover:brightness-75;
+            }
+
+            &.objcardfieldmember {
+                & img.image,
+                & .flipped {
+                    @apply hover:brightness-100;
+                }
             }
         }
 

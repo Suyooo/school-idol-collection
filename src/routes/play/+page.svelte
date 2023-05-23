@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
     import { setContext } from "svelte";
-    import { type Readable, type Writable, get, writable } from "svelte/store";
+    import { type Readable, type Writable, derived, get, writable } from "svelte/store";
     import type { SnapFunction } from "@interactjs/types";
     import "../../app.css";
     import { cardTitle } from "$lib/card/strings.js";
@@ -110,6 +110,11 @@
         }
     }
     setContext("sidebarCardNo", sidebarCardNo);
+
+    const liveModeCards: Writable<Set<number>> = writable(new Set());
+    const liveModeEnabled: Readable<boolean> = derived(liveModeCards, (cards) => cards.size > 0);
+    setContext("liveModeCards", liveModeCards);
+    setContext("liveModeEnabled", liveModeEnabled);
 </script>
 
 <svelte:body on:mousedown={() => (menuEntries = undefined)} />

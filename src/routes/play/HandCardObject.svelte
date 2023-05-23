@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
     import { createEventDispatcher, getContext, onMount } from "svelte";
     import { fly } from "svelte-reduced-motion/transition";
-    import type { Writable } from "svelte/store";
+    import type { Readable, Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
@@ -21,6 +21,7 @@
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
     const playerFieldStore: Writable<HTMLDivElement> = getContext("playerField");
+    const liveModeEnabled: Readable<boolean> = getContext("liveModeEnabled");
 
     let element: HTMLElement;
     $: if (element) element.dataset.idx = idx.toString();
@@ -150,6 +151,7 @@
         class:indicator-after={indicatorAfter}
         class:disable-sideways-animations={disableSidewaysAnimations}
         class:idolizable={card !== undefined && cardIsMember(card) && cardIsIdolizable(card)}
+        class:disabled={$liveModeEnabled}
         style:left={`${startOffset.x + displayPosition.x}px`}
         style:top={`${startOffset.y + displayPosition.y}px`}
         in:fly={{ y: -200 }}
@@ -269,6 +271,14 @@
         &:global(.dragging) {
             & img {
                 @apply brightness-110;
+            }
+        }
+
+        &.disabled {
+            @apply pointer-events-none;
+
+            & img {
+                @apply brightness-50;
             }
         }
 

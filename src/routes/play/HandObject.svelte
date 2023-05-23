@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
     import { getContext } from "svelte";
+    import type { Readable } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
     import type { DropEvent } from "@interactjs/types/index";
@@ -10,6 +11,7 @@
 <script lang="ts">
     export let hand: HandCardSchema[];
     const logic: ClientGameLogic = getContext("logic");
+    const liveModeEnabled: Readable<boolean> = getContext("liveModeEnabled");
 
     let draggingHandCardIdx: number | null = null;
     let indicatorPos: number | null = null;
@@ -43,6 +45,7 @@
         const interactable = interact(node).dropzone({
             accept: ".objcardfieldmember, .objcardhand",
             overlap: "center",
+            checker: (_dragEvent, _event, dropped) => dropped && !$liveModeEnabled,
             listeners: {
                 enter(event) {
                     node.classList.add("hovering");

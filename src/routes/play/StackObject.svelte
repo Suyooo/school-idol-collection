@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
     import { getContext } from "svelte";
-    import { get } from "svelte/store";
+    import { type Readable, get } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
     import { ClientGameLogic, StackSide, StackType } from "$lib/play/schema.js";
@@ -15,6 +15,7 @@
     export let color: string;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu = getContext<OpenMenuFunction>("openMenu");
+    const liveModeEnabled: Readable<boolean> = getContext("liveModeEnabled");
 
     let stackLength: number, h: number;
     $: stackLength = Math.min(cardNos.length - 1, 60);
@@ -24,6 +25,7 @@
         const interactable = interact(node).dropzone({
             accept: stackType === StackType.DECK ? ".objcardfieldmember, .objcardhand" : ".objcardfieldsong",
             overlap: "center",
+            checker: (_dragEvent, _event, dropped) => dropped && !$liveModeEnabled,
             listeners: {
                 enter() {
                     node.classList.add("hovering");
@@ -112,12 +114,13 @@
     class="objstack"
     class:objstackdeck={stackType === StackType.DECK}
     class:objstacksetlist={stackType === StackType.SET_LIST}
+    class:almostempty={cardNos.length <= 1}
+    class:empty={cardNos.length === 0}
+    class:disabled={$liveModeEnabled}
     style:--stack-color={color}
     style:left={`${x}px`}
     style:top={`${y - 60}px`}
     style:transform={`translateX(${shakeX}px)`}
-    class:almostempty={cardNos.length <= 1}
-    class:empty={cardNos.length === 0}
     on:click={menu}
     use:action
 >
@@ -200,6 +203,10 @@
 
         &:global(.hovering) .stack.top {
             @apply border-4 border-white/50;
+        }
+
+        &.disabled {
+            @apply pointer-events-none brightness-50;
         }
     }
 </style>
