@@ -5,11 +5,11 @@
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
+    import { cardIsIdolizable, cardIsMember } from "$lib/card/types.js";
     import CardType from "$lib/enums/cardType.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
-    import CardGridElement from "../(site)/set/[set]/CardGridElement.svelte";
     import { type OpenMenuFunction, snapFunction } from "./+page.svelte";
 </script>
 
@@ -30,9 +30,11 @@
     $: if (element) element.dataset.id = id.toString();
     $: if (element) element.dataset.cardNo = cardNo;
 
-    let loadPromise: Promise<CardWithImageData> = new Promise(() => null);
+    let loadPromise: Promise<CardWithImageData> = new Promise(() => null),
+        card: CardWithImageData;
     onMount(() => {
         loadPromise = loadCardInfo(cardNo);
+        loadPromise.then((loadedCard) => (card = loadedCard));
     });
 
     let displayPosition: { x: number; y: number };
@@ -117,7 +119,7 @@
             });
         if (cardType === CardType.MEMBER && idolizedBaseCardNo === undefined) {
             interactable.dropzone({
-                accept: ".objcardfieldmember, .objcardhand",
+                accept: ".objcardfieldmember.idolizable, .objcardhand.idolizable",
                 overlap: "center",
                 checker: (dragEvent, _event, _dropped, _dropzone, dropzoneElement, _draggable, draggableElement) => {
                     // This checker is neccessary because overlap=1 doesn't work:
@@ -199,6 +201,7 @@
     class:objcardfieldsong={cardType === CardType.SONG}
     class:objcardfieldmemory={cardType === CardType.MEMORY}
     class:block-interact={blockInteract}
+    class:idolizable={card !== undefined && cardIsMember(card) && cardIsIdolizable(card)}
     style:left={`${displayPosition.x}px`}
     style:top={`${displayPosition.y}px`}
     style:z-index={$position.z}

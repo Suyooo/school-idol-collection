@@ -6,6 +6,7 @@
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
+    import { cardIsIdolizable, cardIsMember } from "$lib/card/types.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
@@ -24,9 +25,13 @@
     let element: HTMLElement;
     $: if (element) element.dataset.idx = idx.toString();
 
-    let loadPromise: Promise<CardWithImageData> = new Promise(() => null);
+    let loadPromise: Promise<CardWithImageData> = new Promise(() => null),
+        card: CardWithImageData;
     onMount(() => {
-        if (cardNo !== null) loadPromise = loadCardInfo(cardNo);
+        if (cardNo !== null) {
+            loadPromise = loadCardInfo(cardNo);
+            loadPromise.then((loadedCard) => (card = loadedCard));
+        }
     });
 
     let startOffset: { x: number; y: number } = { x: 0, y: 0 };
@@ -144,6 +149,7 @@
         class="objcardhand"
         class:indicator-after={indicatorAfter}
         class:disable-sideways-animations={disableSidewaysAnimations}
+        class:idolizable={card !== undefined && cardIsMember(card) && cardIsIdolizable(card)}
         style:left={`${startOffset.x + displayPosition.x}px`}
         style:top={`${startOffset.y + displayPosition.y}px`}
         in:fly={{ y: -200 }}
