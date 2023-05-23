@@ -9,13 +9,12 @@
     import CardType from "$lib/enums/cardType.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
+    import Button from "$lib/style/Button.svelte";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import { type OpenMenuFunction, snapFunction } from "./+page.svelte";
 </script>
 
 <script lang="ts">
-    import Button from "$lib/style/Button.svelte";
-
     export let id: number;
     export let cardNo: string;
     export let cardType: CardType;
@@ -27,7 +26,7 @@
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
     const playerFieldStore: Writable<HTMLDivElement> = getContext("playerField");
-    const liveModeCards: Writable<Set<number>> = getContext("liveModeCards");
+    const liveModeCards: Writable<number[]> = getContext("liveModeCards");
 
     let element: HTMLElement;
     $: if (element) element.dataset.id = id.toString();
@@ -158,13 +157,14 @@
         if (event.button !== 0 || wasPickedUp) {
             return;
         }
-        if ($liveModeCards.size > 0) {
+        if ($liveModeCards.length > 0) {
             if (cardType === CardType.MEMBER) {
                 liveModeCards.update((m) => {
-                    if (m.has(id)) {
-                        m.delete(id);
+                    const idx = m.indexOf(id);
+                    if (idx !== -1) {
+                        m.splice(idx, 1);
                     } else {
-                        m.add(id);
+                        m.push(id);
                     }
                     return m;
                 });
@@ -177,11 +177,7 @@
                 [
                     {
                         label: "Prepare ⟪LIVE⟫",
-                        handler: () =>
-                            liveModeCards.update((m) => {
-                                m.add(id);
-                                return m;
-                            }),
+                        handler: () => liveModeCards.set([id]),
                         condition: cardType == CardType.SONG,
                     },
                     {
@@ -218,14 +214,30 @@
     }
 
     function createLiveGroup() {
+        const cards = $liveModeCards.map((card, i) => {
+            if (i === 0) {
+                // x == (65 + ($liveModeCards.length - 2) * 10) / 2 - 91 / 2
+                return {
+                    id: card,
+                    x: ($liveModeCards.length - 2) * 5 - 13,
+                    y: 13,
+                    z: $liveModeCards.length,
+                };
+            } else {
+                return {
+                    id: card,
+                    x: (i - 1) * 10,
+                    y: 0,
+                    z: i - 1,
+                };
+            }
+        });
+        logic.requestGroupCreate($position.x - cards[0].x, $position.y - cards[0].y, cards);
         endLiveMode();
     }
 
     function endLiveMode() {
-        liveModeCards.update((m) => {
-            m.clear();
-            return m;
-        });
+        liveModeCards.set([]);
     }
 </script>
 
@@ -237,7 +249,7 @@
     class:objcardfieldsong={cardType === CardType.SONG}
     class:objcardfieldmemory={cardType === CardType.MEMORY}
     class:lowlight={grouped}
-    class:disabled={$liveModeCards.size > 0 && !$liveModeCards.has(id)}
+    class:disabled={$liveModeCards.length > 0 && $liveModeCards.indexOf(id) === -1}
     class:idolizable={card !== undefined && cardIsMember(card) && cardIsIdolizable(card)}
     style:left={`${displayPosition.x}px`}
     style:top={`${displayPosition.y}px`}
@@ -267,7 +279,7 @@
             {/if}
         {/await}
     </div>
-    {#if cardType === CardType.SONG && $liveModeCards.has(id)}
+    {#if cardType === CardType.SONG && $liveModeCards.indexOf(id) !== -1}
         <Button accent classes="mt-1 w-full" label="Live" on:click={createLiveGroup}>⟪LIVE⟫</Button>
         <Button classes="mt-1 w-full" label="Cancel" on:click={endLiveMode}>Cancel</Button>
     {/if}

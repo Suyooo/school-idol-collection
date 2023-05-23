@@ -111,8 +111,8 @@
     }
     setContext("sidebarCardNo", sidebarCardNo);
 
-    const liveModeCards: Writable<Set<number>> = writable(new Set());
-    const liveModeEnabled: Readable<boolean> = derived(liveModeCards, (cards) => cards.size > 0);
+    const liveModeCards: Writable<number[]> = writable([]);
+    const liveModeEnabled: Readable<boolean> = derived(liveModeCards, (cards) => cards.length > 0);
     setContext("liveModeCards", liveModeCards);
     setContext("liveModeEnabled", liveModeEnabled);
 </script>

@@ -287,6 +287,34 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.addToHand(this.removeFromHand(idx), newIdx);
     }
 
+    requestGroupCreate(x: number, y: number, cards: { id: number; x: number; y: number; z: number }[]): void {
+        const groupId = this.nextId++;
+        const groupPosStore = writable({ x, y });
+        this.storeGroupPositions.set(groupId, groupPosStore);
+        this.storePlayers[0].groups.update((groupMap) => {
+            const groupCards = new Map<number, ClientFieldCardSchema>();
+            this.storePlayers[0].field.update((fieldMap) => {
+                for (const { id: cardId, x: cardX, y: cardY, z: cardZ } of cards) {
+                    this.storeCardPositions.get(cardId)!.update((pos) => {
+                        pos.x = cardX;
+                        pos.y = cardY;
+                        pos.z = cardZ;
+                        return pos;
+                    });
+                    groupCards.set(cardId, fieldMap.get(cardId)!);
+                    fieldMap.delete(cardId);
+                }
+                return fieldMap;
+            });
+
+            groupMap.set(groupId, {
+                cards: groupCards,
+                position: groupPosStore,
+            });
+            return groupMap;
+        });
+    }
+
     requestGroupMove(id: number, x: number, y: number) {
         this.storeGroupPositions.get(id)!.update((pos) => {
             pos.x = x;
@@ -300,15 +328,18 @@ export class LocalClientGameLogic extends ClientGameLogic {
             const group = groupMap.get(id)!;
             const groupPos = get(group.position);
             this.storePlayers[0].field.update((fieldMap) => {
+                let maxZ = 0;
                 for (const [cardId, card] of group.cards.entries()) {
                     this.storeCardPositions.get(cardId)!.update((pos) => {
                         pos.x += groupPos.x;
                         pos.y += groupPos.y;
-                        pos.z = this.nextZ++;
+                        pos.z += this.nextZ + 1;
+                        maxZ = Math.max(maxZ, this.nextZ);
                         return pos;
                     });
                     fieldMap.set(cardId, card);
                 }
+                this.nextZ = maxZ + 1;
                 return fieldMap;
             });
             groupMap.delete(id);
