@@ -91,49 +91,37 @@ export class LocalClientGameLogic extends ClientGameLogic {
     constructor(profile: ClientProfile) {
         super();
         this.storePlayers[0].profile.set(profile);
-        this.storePlayers[0].deck.set(["LL01-001", "LL01-002", "LL01-003"]);
-        this.storePlayers[0].setList.set(["LL01-064", "LL01-065", "LL01-066"]);
-        this.storePlayers[0].hand.set([
-            { id: -2, cardNo: "LL01-004" },
-            { id: -3, cardNo: "LL01-005" },
-            { id: -4, cardNo: "LL01-006" },
+        this.storePlayers[0].deck.set([
+            "LL15-051",
+            "LL04-039",
+            "LL09-039",
+            "EX09-060",
+            "LL12-048",
+            "LL10-053",
+            "LL14-048",
+            "EX09-022",
+            "LL07-035",
+            "LL07-031",
+            "EX09-021",
+            "LL04-030",
+            "EX09-013",
+            "EX09-017",
+            "EX09-026",
+            "EX09-004",
+            "LL11-033",
+            "EX09-012",
+            "EX09-008",
         ]);
+        this.storePlayers[0].setList.set(["LL09-055", "LL07-060", "LL04-058", "LL05-061", "EX09-033", "EX09-031"]);
 
         this.storeCardFlips.set(-1, writable(false));
-        this.storeCardPositions.set(-1, writable({ x: 79, y: 9, z: 9 }));
-        this.storeCardFlips.set(-6, writable(false));
-        this.storeCardPositions.set(-6, writable({ x: 0, y: 0, z: 5 }));
-        this.storeCardFlips.set(-7, writable(false));
-        this.storeCardPositions.set(-7, writable({ x: 10, y: 0, z: 6 }));
-        this.storeCardFlips.set(-8, writable(false));
-        this.storeCardPositions.set(-8, writable({ x: 20, y: 0, z: 7 }));
+        this.storeCardPositions.set(-1, writable({ x: 209, y: 59, z: 9 }));
         this.storePlayers[0].field.update((m) => {
             m.set(-1, {
-                cardNo: "LL01-069",
-                cardType: CardType.SONG,
+                cardNo: "LL10-084",
+                cardType: CardType.MEMBER,
                 flipped: this.storeCardFlips.get(-1)!,
                 position: this.storeCardPositions.get(-1)!,
-                idolizedBaseCardNo: undefined,
-            });
-            m.set(-6, {
-                cardNo: "LL01-010",
-                cardType: CardType.MEMBER,
-                flipped: this.storeCardFlips.get(-6)!,
-                position: this.storeCardPositions.get(-6)!,
-                idolizedBaseCardNo: undefined,
-            });
-            m.set(-7, {
-                cardNo: "LL01-011",
-                cardType: CardType.MEMBER,
-                flipped: this.storeCardFlips.get(-7)!,
-                position: this.storeCardPositions.get(-7)!,
-                idolizedBaseCardNo: undefined,
-            });
-            m.set(-8, {
-                cardNo: "LL01-012",
-                cardType: CardType.MEMBER,
-                flipped: this.storeCardFlips.get(-8)!,
-                position: this.storeCardPositions.get(-8)!,
                 idolizedBaseCardNo: undefined,
             });
             return m;
