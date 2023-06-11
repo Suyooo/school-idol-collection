@@ -349,6 +349,11 @@ export class SearchFilterMemberPieces extends SearchFilterNumberWithMod {
     readonly columnLiteral = true;
     readonly explainName = "Pieces";
     readonly explainAfter = true;
+    readonly include: Includeable = {
+        association: "member",
+        required: true,
+        attributes: ["piecesSmile", "piecesPure", "piecesCool", "piecesAll"],
+    };
 }
 
 export class SearchFilterMemberPiecesAll extends SearchFilterNumberWithMod {
