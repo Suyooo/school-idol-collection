@@ -3,7 +3,9 @@ import type Card from "$models/card/card.js";
 import type { RequestHandler } from "./$types.js";
 
 export const GET: RequestHandler = (async ({ params, locals }) => {
-    const cards = await locals.DB.Card.withScope([
+    const cards = await (
+        await locals.DB
+    ).models.Card.withScope([
         "viewForLink",
         "viewRarity",
         "orderCardNo",

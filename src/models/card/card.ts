@@ -1,4 +1,4 @@
-import { DataTypes, Model, Op, Sequelize, literal } from "@sequelize/core";
+import { DataTypes, Model, Op, literal } from "@sequelize/core";
 import type { OrderItem } from "@sequelize/core";
 import { Attribute, HasMany, HasOne, Table } from "@sequelize/core/decorators-legacy";
 import type CardFAQLink from "$models/card/faqLink.js";
@@ -16,7 +16,7 @@ import type CardMemberIdolizeType from "$lib/enums/cardMemberIdolizeType.js";
 import type { CardOrientation } from "$lib/enums/cardOrientation.js";
 import CardType from "$lib/enums/cardType.js";
 import type { GroupID } from "$lib/enums/group.js";
-import DB from "../db.js";
+import type { Sequelize } from "../db.js";
 
 export const cardOrder = (col: string) => <OrderItem[]>(<unknown>[[literal(col + " LIKE 'LL%' DESC, " + col)]]);
 
@@ -239,6 +239,6 @@ export function addScopes(sequelize: Sequelize) {
         where: { type: CardType.MEMORY },
     }));
     CardBase.addScope("filterHasSkill", () => ({
-        include: [{ model: DB.Skill, required: true }],
+        include: [{ model: sequelize.models.Skill, required: true }],
     }));
 }

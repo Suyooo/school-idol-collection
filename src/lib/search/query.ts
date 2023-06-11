@@ -7,9 +7,9 @@ export function getScopesFromFilters(filters: SearchFilter[]): (string | ScopeOp
     return filters.map((f) => f.getScopeElements()).flat();
 }
 
-export default function searchQuery(
+export default async function searchQuery(
     filters: SearchFilter[],
     scopes: (string | ScopeOptions)[] = []
-): ModelStatic<Card> {
-    return DB.Card.withScope([...scopes, ...getScopesFromFilters(filters)]);
+): Promise<ModelStatic<Card>> {
+    return (await DB).models.Card.withScope([...scopes, ...getScopesFromFilters(filters)]);
 }

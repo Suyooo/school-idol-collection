@@ -1,5 +1,5 @@
 import type Card from "$models/card/card.js";
-import type { DBObject } from "$models/db.js";
+import type { Sequelize } from "$models/db.js";
 import { cardLink, cardTitle } from "$lib/card/strings.js";
 import Language from "$lib/enums/language.js";
 import { isTextNode, parseSkillToNodes } from "$lib/format/format.js";
@@ -78,13 +78,13 @@ export function getKey(prefix: string | null, qa?: FaqQA | FaqQAWithKey) {
     }
 }
 
-export async function getFaqLinkLabel(DB: DBObject, link: string) {
+export async function getFaqLinkLabel(DB: Sequelize, link: string) {
     const anchorName = link.split("#").at(-1)!;
     if (anchorName.match(/(LL\d\d|EX\d\d|PR)-\d\d\d/)) {
-        const card = (await DB.Card.withScope(["viewForLink"]).findByPk(anchorName))!;
+        const card = (await DB.models.Card.withScope(["viewForLink"]).findByPk(anchorName))!;
         return cardTitle(card, true);
     } else {
-        const faqEntry = await DB.CardFAQLink.findOne({ where: { link } });
+        const faqEntry = await DB.models.CardFAQLink.findOne({ where: { link } });
         if (faqEntry === null) {
             throw new Error(
                 "No link label in database for " +
@@ -108,7 +108,7 @@ export function getLinkedCards(s: string) {
     return cards;
 }
 
-export default async function prepareFaq(DB: DBObject, faq: Faq) {
+export default async function prepareFaq(DB: Sequelize, faq: Faq) {
     const cardsToLoad: string[] = [];
     const seenSubjects: string[] = [];
     const faqPromises: Promise<void>[] = [];
@@ -187,7 +187,7 @@ export default async function prepareFaq(DB: DBObject, faq: Faq) {
         cards: {},
     };
 
-    const cards = await DB.Card.withScope(["viewForLink"]).findAll({
+    const cards = await DB.models.Card.withScope(["viewForLink"]).findAll({
         where: { cardNo: cardsToLoad.filter((c, i) => cardsToLoad.indexOf(c) === i) },
     });
     for (const card of cards) {

@@ -3,6 +3,8 @@ import type TranslationPattern from "$models/translation/pattern.js";
 import type { RequestHandler } from "./$types.js";
 
 export const POST: RequestHandler = (async ({ params, locals, request }) => {
+    const DB = await locals.DB;
+
     const sentData = await request.json();
     const data = {
         regex: sentData.regex,
@@ -15,9 +17,9 @@ export const POST: RequestHandler = (async ({ params, locals, request }) => {
     let pattern: TranslationPattern;
 
     if (params.pattern === "new") {
-        pattern = await locals.DB.TranslationPattern.create(data);
+        pattern = await DB.models.TranslationPattern.create(data);
     } else {
-        const loadedPattern = await locals.DB.TranslationPattern.findByPk(params.pattern);
+        const loadedPattern = await DB.models.TranslationPattern.findByPk(params.pattern);
         if (loadedPattern === null) {
             throw error(404, { message: "This pattern does not exist." });
         }

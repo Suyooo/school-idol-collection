@@ -134,7 +134,9 @@ export class SkillBase extends Model {
                     { transaction: options.transaction }
                 );
                 const cards = (
-                    await searchQuery(type.getSearchFilters(parameter), ["viewCardNoOnly"]).findAll({
+                    await (
+                        await searchQuery(type.getSearchFilters(parameter), ["viewCardNoOnly"])
+                    ).findAll({
                         transaction: options.transaction,
                     })
                 ).map((c) => c.cardNo);
@@ -156,7 +158,9 @@ export class SkillBase extends Model {
                     { transaction: options.transaction }
                 );
                 const cards = (
-                    await searchQuery(type.getSearchFilters(parameter), ["viewCardNoOnly"]).findAll({
+                    await (
+                        await searchQuery(type.getSearchFilters(parameter), ["viewCardNoOnly"])
+                    ).findAll({
                         transaction: options.transaction,
                     })
                 ).map((c) => c.cardNo);

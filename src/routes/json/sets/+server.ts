@@ -3,8 +3,9 @@ import type SetCategory from "$models/set/category.js";
 import type { RequestHandler } from "./$types.js";
 
 export const GET: RequestHandler = (async ({ locals }) => {
-    const categories = await locals.DB.SetCategory.findAll({
-        include: { model: locals.DB.Set, order: ["order"], separate: true },
+    const DB = await locals.DB;
+    const categories = await DB.models.SetCategory.findAll({
+        include: { model: DB.models.Set, order: ["order"], separate: true },
     });
     return json(categories.map((c: SetCategory) => c.get({ plain: true })));
 }) satisfies RequestHandler;

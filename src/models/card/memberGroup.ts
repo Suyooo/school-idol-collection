@@ -4,7 +4,6 @@ import type { CardMember } from "$models/card/card.js";
 import type CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
 import type Skill from "$models/skill/skill.js";
 import type CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
-import DB from "../db.js";
 
 @Table({
     modelName: "CardMemberGroup",
@@ -50,9 +49,9 @@ export default class CardMemberGroup extends Model {
     declare skills: Skill[];
 }
 
-export function addScopes(_sequelize: Sequelize) {
+export function addScopes(sequelize: Sequelize) {
     // TODO: move to decorators once @Scope is implemented
     CardMemberGroup.addScope("filterHasSkill", () => ({
-        include: [{ model: DB.Skill, required: true }],
+        include: [{ model: sequelize.models.Skill, required: true }],
     }));
 }

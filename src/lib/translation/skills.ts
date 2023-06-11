@@ -1,5 +1,5 @@
 import type { QueryOptions } from "@sequelize/core";
-import type { DBObject } from "$models/db.js";
+import type { Sequelize } from "$models/db.js";
 import type TranslationPattern from "$models/translation/pattern.js";
 import Language from "$lib/enums/language.js";
 import TriggerEnum from "$lib/enums/trigger.js";
@@ -44,10 +44,15 @@ export function isGroupSkillShortInfo(s: ShortSkillInfo): s is ShortSkillInfoGro
     return s.hasOwnProperty("groupId");
 }
 
-export async function listUntranslatedSkills(DB: DBObject): Promise<ShortSkillInfo[]> {
-    const allSkills = await DB.Skill.findAll({
+export async function listUntranslatedSkills(DB: Sequelize): Promise<ShortSkillInfo[]> {
+    const allSkills = await DB.models.Skill.findAll({
         where: { eng: null },
-        include: [{ model: DB.CardMemberGroup, include: [{ model: DB.CardMemberExtraInfo, attributes: ["cardNo"] }] }],
+        include: [
+            {
+                model: DB.models.CardMemberGroup,
+                include: [{ model: DB.models.CardMemberExtraInfo, attributes: ["cardNo"] }],
+            },
+        ],
     });
 
     return allSkills.map((skillObj) =>
@@ -64,14 +69,19 @@ export async function listUntranslatedSkills(DB: DBObject): Promise<ShortSkillIn
 }
 
 export async function getApplicableSkills(
-    DB: DBObject,
+    DB: Sequelize,
     pattern: TranslationPattern,
     options?: QueryOptions
 ): Promise<ShortSkillInfo[]> {
     const res = [];
-    const allSkills = await DB.Skill.findAll({
+    const allSkills = await DB.models.Skill.findAll({
         ...options,
-        include: [{ model: DB.CardMemberGroup, include: [{ model: DB.CardMemberExtraInfo, attributes: ["cardNo"] }] }],
+        include: [
+            {
+                model: DB.models.CardMemberGroup,
+                include: [{ model: DB.models.CardMemberExtraInfo, attributes: ["cardNo"] }],
+            },
+        ],
     });
 
     for (const skillObj of allSkills) {
@@ -99,10 +109,10 @@ export async function getApplicableSkills(
     return res;
 }
 
-export async function applyPatternToSkills(DB: DBObject, pattern: TranslationPattern, applyTo: number[]) {
-    await DB.sequelize.transaction(async (transaction) => {
+export async function applyPatternToSkills(DB: Sequelize, pattern: TranslationPattern, applyTo: number[]) {
+    await DB.transaction(async (transaction) => {
         for (const application of applyTo) {
-            const skillObj = await DB.Skill.findByPk(application, { transaction });
+            const skillObj = await DB.models.Skill.findByPk(application, { transaction });
             if (skillObj === null) {
                 throw new PatternApplyError(
                     Error("Pattern should be applied to Skill #" + application + ", but it does not exist"),
@@ -133,12 +143,12 @@ export async function applyPatternToSkills(DB: DBObject, pattern: TranslationPat
 }
 
 export async function tryAllPatterns(
-    DB: DBObject,
+    DB: Sequelize,
     skillLine: string,
     options?: QueryOptions
 ): Promise<{ translatedSkill: string; triggers: TriggerEnum[]; pattern: TranslationPattern } | null> {
     const { skill, triggers } = splitTriggersFromSkill(skillLine);
-    for (const pattern of await DB.TranslationPattern.findAll(options)) {
+    for (const pattern of await DB.models.TranslationPattern.findAll(options)) {
         const res = await applyPatternOrNull(DB, skill, triggers, pattern, options);
         if (res !== null) {
             return { translatedSkill: res, triggers, pattern };
@@ -148,7 +158,7 @@ export async function tryAllPatterns(
 }
 
 async function applyPatternOrNull(
-    DB: DBObject,
+    DB: Sequelize,
     skill: string,
     triggers: TriggerEnum[],
     pattern: TranslationPattern,

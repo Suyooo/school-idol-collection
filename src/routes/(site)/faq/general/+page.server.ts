@@ -233,7 +233,7 @@ export const _data: Faq = [
 ];
 
 export const load: PageServerLoad = (async ({ locals }) => {
-    const faq = <any>await prepareFaq(locals.DB, _data);
+    const faq = <any>await prepareFaq(await locals.DB, _data);
     faq.sections[0].qa[24].question = `What if I can't do something a Skill tells me to do? For example: <ul><li>"⟪SCOUT⟫" or "Draw three cards", but there's not enough cards in the Deck </li><li>"⟪ENTER⟫ one Member", but there's no Members able to ⟪ENTER⟫</li></ul>`;
     return faq;
 }) satisfies PageServerLoad;

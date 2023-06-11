@@ -47,7 +47,9 @@ export const actions = {
                 .filter((cardId) => byCardId[cardId] === undefined)
                 .map(async (cardId) => {
                     const cardNo = (
-                        await locals.DB.Card.withScope(["viewCardNoOnly", "orderCardNo"]).findOne({
+                        await (
+                            await locals.DB
+                        ).models.Card.withScope(["viewCardNoOnly", "orderCardNo"]).findOne({
                             where: { id: cardId },
                         })
                     )?.cardNo;

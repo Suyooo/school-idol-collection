@@ -11,7 +11,7 @@ import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePiec
 import type CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";
 import type CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo.js";
 import type CardSongExtraInfo from "$models/card/songExtraInfo.js";
-import type { DBObject } from "$models/db.js";
+import type { Sequelize } from "$models/db.js";
 import type Skill from "$models/skill/skill.js";
 import AnnotationEnum from "$lib/enums/annotation.js";
 import AttributeEnum from "$lib/enums/attribute.js";
@@ -97,7 +97,7 @@ export const POST: RequestHandler = (async ({ locals, request }) => {
                 if (type !== CardType.MEMBER || info["レアリティ"] !== "Secret") {
                     await downloadImages(res.$, cardNo, set);
                 }
-                await importCard(info, locals.DB, cardNo, set, inSetNo, type);
+                await importCard(info, await locals.DB, cardNo, set, inSetNo, type);
                 done();
             }
         },
@@ -283,13 +283,13 @@ const trioSkillPattern = /\n?<トリオスキル>\n?(.*)/s;
 
 async function importCard(
     info: { [k: string]: string | null },
-    DB: DBObject,
+    DB: Sequelize,
     cardNo: string,
     set: string,
     inSetNo: number,
     type: CardType
 ) {
-    await DB.sequelize.transaction(async (transaction) => {
+    await DB.transaction(async (transaction) => {
         const card: Partial<Card> = {
             cardNo: info["カードNo."]!,
             id: parseInt(info["ID"]!),
@@ -302,7 +302,7 @@ async function importCard(
         let orientationCheckCardNo = info["カードNo."]!;
 
         if (type === CardType.MEMBER) {
-            const checkNameTable = await DB.TranslationName.findByPk(card.nameJpn, { transaction });
+            const checkNameTable = await DB.models.TranslationName.findByPk(card.nameJpn, { transaction });
             if (checkNameTable !== null) {
                 card.nameEng = checkNameTable.eng;
                 card.group = checkNameTable.group;
@@ -354,7 +354,9 @@ async function importCard(
             memberInfo.costumeJpn = info["衣装"];
 
             if (memberInfo.costumeJpn) {
-                const checkCostumeTable = await DB.TranslationSong.findByPk(memberInfo.costumeJpn, { transaction });
+                const checkCostumeTable = await DB.models.TranslationSong.findByPk(memberInfo.costumeJpn, {
+                    transaction,
+                });
                 if (checkCostumeTable !== null) {
                     memberInfo.costumeEng = checkCostumeTable.eng;
                 }
@@ -429,7 +431,7 @@ async function importCard(
             // - we are importing a non-leader card after the group is known: we can set the group on it right away
             // CardMemberGroup.expectedMemberIds is storing the IDs read from the leader. That way, if importing a
             // non-leader card, we can simply check if their ID appears in that column to add it to a known group.
-            const findExistingGroup = await DB.CardMemberGroup.findOne({
+            const findExistingGroup = await DB.models.CardMemberGroup.findOne({
                 where: {
                     expectedMemberIds: { [Op.like]: "%|" + card.id + "|%" },
                 },
@@ -482,12 +484,12 @@ async function importCard(
 
                     // Actually create the group, then check whether the group's other Members were already imported
                     memberInfo.groupId = (
-                        await DB.CardMemberGroup.create(group, {
-                            include: [DB.Skill],
+                        await DB.models.CardMemberGroup.create(group, {
+                            include: [DB.models.Skill],
                             transaction,
                         })
                     ).id;
-                    const existingMembers = await DB.Card.withScope(["cardNoOnly"]).findAll({
+                    const existingMembers = await DB.models.Card.withScope(["cardNoOnly"]).findAll({
                         where: {
                             id: {
                                 [Op.in]: memberIds,
@@ -496,7 +498,7 @@ async function importCard(
                         transaction,
                     });
                     if (existingMembers.length > 0) {
-                        await DB.CardMemberExtraInfo.update(
+                        await DB.models.CardMemberExtraInfo.update(
                             { groupId: memberInfo.groupId },
                             {
                                 where: {
@@ -514,7 +516,7 @@ async function importCard(
             (card as CardMember).member = memberInfo as CardMemberExtraInfo;
         } else if (type === CardType.SONG) {
             const checkSongTable = await Promise.all(
-                card.nameJpn!.split("／").map((s: string) => DB.TranslationSong.findByPk(s, { transaction }))
+                card.nameJpn!.split("／").map((s: string) => DB.models.TranslationSong.findByPk(s, { transaction }))
             );
             if (checkSongTable.every((s) => s !== null)) {
                 card.nameEng = checkSongTable.map((s) => s!.eng).join("/");
@@ -571,35 +573,35 @@ async function importCard(
         card.backOrientation = await checkImageOrientation(orientationCheckCardNo, "back");
 
         // Add the card to the database
-        await DB.Card.destroy({ where: { cardNo }, transaction });
-        await DB.Card.create(card, {
+        await DB.models.Card.destroy({ where: { cardNo }, transaction });
+        await DB.models.Card.create(card, {
             include: [
                 {
-                    model: DB.CardMemberExtraInfo,
-                    include: [DB.CardMemberIdolizePieceExtraInfo],
+                    model: DB.models.CardMemberExtraInfo,
+                    include: [DB.models.CardMemberIdolizePieceExtraInfo],
                 },
                 {
-                    model: DB.CardSongExtraInfo,
-                    include: [DB.CardSongAnyReqExtraInfo, DB.CardSongAttrReqExtraInfo],
+                    model: DB.models.CardSongExtraInfo,
+                    include: [DB.models.CardSongAnyReqExtraInfo, DB.models.CardSongAttrReqExtraInfo],
                 },
-                DB.Skill,
+                DB.models.Skill,
             ],
             transaction,
         });
 
         // Find any already existing annotations that now link to this new card
-        for (const annotation of await DB.Annotation.findAll({ transaction })) {
+        for (const annotation of await DB.models.Annotation.findAll({ transaction })) {
             const type = AnnotationEnum.fromId(annotation.type);
             const scopes = getScopesFromFilters(type.getSearchFilters(annotation.parameter));
             if (
                 (
-                    await DB.Card.withScope(scopes).findAll({
+                    await DB.models.Card.withScope(scopes).findAll({
                         attributes: ["cardNo"],
                         transaction,
                     })
                 ).some((r) => r.cardNo === cardNo)
             ) {
-                await DB.Link.upsert(
+                await DB.models.Link.upsert(
                     {
                         from: annotation.id,
                         to: cardNo,

@@ -1,5 +1,5 @@
 import type { QueryOptions } from "@sequelize/core";
-import type { DBObject } from "$models/db.js";
+import type { Sequelize } from "$models/db.js";
 import AttributeEnum from "$lib/enums/attribute.js";
 import MissingTranslationError from "$lib/errors/missingTranslationError.js";
 import NotFoundError from "$lib/errors/notFoundError.js";
@@ -13,14 +13,14 @@ export type PatternGroupTypeID = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export default class PatternGroupType {
     readonly id: PatternGroupTypeID;
     readonly name: string;
-    readonly getReplacement: (DB: DBObject | null, match: string, options?: QueryOptions) => Promise<string>;
+    readonly getReplacement: (DB: Sequelize | null, match: string, options?: QueryOptions) => Promise<string>;
     readonly getExtraReplacements: (match: string, thisNum: number) => Map<string, string> | null;
     static all: PatternGroupType[] = [];
 
     private constructor(
         id: PatternGroupTypeID,
         name: string,
-        getReplacement: (DB: DBObject | null, match: string, options?: QueryOptions) => Promise<string>,
+        getReplacement: (DB: Sequelize | null, match: string, options?: QueryOptions) => Promise<string>,
         getExtraReplacements: ((match: string, thisNum: number) => Map<string, string>) | null
     ) {
         this.id = id;
@@ -37,10 +37,10 @@ export default class PatternGroupType {
             new PatternGroupType(
                 0,
                 "Name or Group",
-                async function (DB: DBObject | null, match: string, options?: QueryOptions) {
+                async function (DB: Sequelize | null, match: string, options?: QueryOptions) {
                     if (DB === null) return "EXAMPLE NAME";
                     const skilltext = skilltextPattern.exec(match)?.[1];
-                    const n = (await DB.TranslationName.findByPk(match, options))?.eng;
+                    const n = (await DB.models.TranslationName.findByPk(match, options))?.eng;
                     if (n === undefined) throw new NotFoundError(match + " is not a known name");
                     return skilltext ? "{{skilltext:" + n + "}}" : n;
                 },
@@ -52,9 +52,9 @@ export default class PatternGroupType {
             new PatternGroupType(
                 1,
                 "Song Name",
-                async function (DB: DBObject | null, match: string, options?: QueryOptions) {
+                async function (DB: Sequelize | null, match: string, options?: QueryOptions) {
                     if (DB === null) return "EXAMPLE SONG";
-                    const n = (await DB.TranslationSong.findByPk(match, options))?.eng;
+                    const n = (await DB.models.TranslationSong.findByPk(match, options))?.eng;
                     if (n === undefined) throw new NotFoundError(match + " is not a known song");
                     return n;
                 },
@@ -66,9 +66,9 @@ export default class PatternGroupType {
             new PatternGroupType(
                 2,
                 "Costume Name",
-                async function (DB: DBObject | null, match: string, options?: QueryOptions) {
+                async function (DB: Sequelize | null, match: string, options?: QueryOptions) {
                     if (DB === null) return "EXAMPLE COSTUME";
-                    const n = (await DB.TranslationSong.findByPk(match, options))?.eng;
+                    const n = (await DB.models.TranslationSong.findByPk(match, options))?.eng;
                     if (n === undefined) throw new NotFoundError(match + " is not a known song");
                     return n;
                 },
@@ -80,10 +80,10 @@ export default class PatternGroupType {
             new PatternGroupType(
                 3,
                 "Memory Name",
-                async function (DB: DBObject | null, match: string, options?: QueryOptions) {
+                async function (DB: Sequelize | null, match: string, options?: QueryOptions) {
                     if (DB === null) return "EXAMPLE MEMORY";
                     const n = (
-                        await DB.Card.withScope(["filterMemories", "viewForLink"]).findOne({
+                        await DB.models.Card.withScope(["filterMemories", "viewForLink"]).findOne({
                             ...options,
                             where: {
                                 nameJpn: match,
@@ -102,7 +102,7 @@ export default class PatternGroupType {
             new PatternGroupType(
                 4,
                 "Number (as digits)",
-                async function (_DB: DBObject | null, match: string) {
+                async function (_DB: Sequelize | null, match: string) {
                     return toNumWithFullwidth(match).toFixed(0);
                 },
                 generateNumberReplacements
@@ -113,7 +113,7 @@ export default class PatternGroupType {
             new PatternGroupType(
                 5,
                 "Number (as text)",
-                async function (_DB: DBObject | null, match: string) {
+                async function (_DB: Sequelize | null, match: string) {
                     const n = toNumWithFullwidth(match);
                     if (n === 0) return "zero";
                     if (n === 1) return "one";
@@ -138,7 +138,7 @@ export default class PatternGroupType {
             new PatternGroupType(
                 6,
                 "Ordinal",
-                async function (_DB: DBObject | null, match: string) {
+                async function (_DB: Sequelize | null, match: string) {
                     const n = toNumWithFullwidth(match);
                     const nMod10 = n % 10;
                     const nMod100 = n % 100;
@@ -155,7 +155,7 @@ export default class PatternGroupType {
             new PatternGroupType(
                 7,
                 "Pieces",
-                async function (_DB: DBObject | null, match: string) {
+                async function (_DB: Sequelize | null, match: string) {
                     let s = "";
                     for (const jpnPieceName of match.substring(1, match.length - 1).split("】【")) {
                         s += "[" + AttributeEnum.fromPieceAttributeName(jpnPieceName).toPieceAttributeName() + "]";

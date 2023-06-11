@@ -3932,7 +3932,7 @@ export const _data: { [key: string]: Faq } = {
 
 export const load: PageServerLoad = (async ({ params, locals }) => {
     if (_data.hasOwnProperty(params.faqPage)) {
-        return await prepareFaq(locals.DB, _data[params.faqPage]);
+        return await prepareFaq(await locals.DB, _data[params.faqPage]);
     } else {
         throw error(404, "This FAQ page does not exist.");
     }

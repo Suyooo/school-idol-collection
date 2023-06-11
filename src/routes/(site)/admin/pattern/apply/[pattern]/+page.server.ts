@@ -3,10 +3,11 @@ import { getApplicableSkills } from "$lib/translation/skills.js";
 import type { PageServerLoad } from "./$types.js";
 
 export const load: PageServerLoad = (async ({ params, locals }) => {
-    const pattern = await locals.DB.TranslationPattern.findByPk(parseInt(params.pattern));
+    const DB = await locals.DB;
+    const pattern = await DB.models.TranslationPattern.findByPk(parseInt(params.pattern));
     if (pattern === null) {
         throw error(404, { message: "This pattern does not exist." });
     }
 
-    return { id: pattern.id, applicable: await getApplicableSkills(locals.DB, pattern) };
+    return { id: pattern.id, applicable: await getApplicableSkills(DB, pattern) };
 }) satisfies PageServerLoad;

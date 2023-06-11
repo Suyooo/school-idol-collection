@@ -3,11 +3,12 @@ import { applyPatternToSkills } from "$lib/translation/skills.js";
 import type { RequestHandler } from "./$types.js";
 
 export const POST: RequestHandler = (async ({ params, locals, request }) => {
-    const pattern = await locals.DB.TranslationPattern.findByPk(params.pattern);
+    const DB = await locals.DB;
+    const pattern = await DB.models.TranslationPattern.findByPk(params.pattern);
     if (pattern === null) {
         throw error(404, { message: "This pattern does not exist." });
     }
 
-    await applyPatternToSkills(locals.DB, pattern, await request.json());
+    await applyPatternToSkills(DB, pattern, await request.json());
     return json({ success: true });
 }) satisfies RequestHandler;

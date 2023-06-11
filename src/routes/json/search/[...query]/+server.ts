@@ -47,7 +47,8 @@ export const GET: RequestHandler = (async ({ params }) => {
         queryExplain = filters.map((f) => parseSkillToNodes(f.getExplainString(), Language.ENG, true));
     }
 
-    const { count, rows } = await searchQuery(filters, ["viewForLink", "viewRarity", "orderCardNo"]).findAndCountAll({
+    const query = await searchQuery(filters, ["viewForLink", "viewRarity", "orderCardNo"]);
+    const { count, rows } = await query.findAndCountAll({
         offset: (page - 1) * PAGE_SIZE,
         limit: PAGE_SIZE,
     });
