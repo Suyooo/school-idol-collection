@@ -66,7 +66,7 @@ export default class AnnotationEnum {
             return (
                 "/search/" +
                 this.getSearchFilters(parameter)
-                    .map((f) => f.getFilterString())
+                    .map((f) => f.getUrlPart())
                     .join("/")
             );
         }

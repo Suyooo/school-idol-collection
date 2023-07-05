@@ -15,8 +15,8 @@
 
 <div class="w-full group relative">
     <button
-        class="absolute -left-2 top-0 flex justify-center hidden group-hover:block z-50"
-        label="Copy Link to This Question"
+        class="absolute -left-2 top-0 justify-center hidden group-hover:block z-50"
+        title="Copy Link to This Question"
         on:click={copyLink}
     >
         <Link />

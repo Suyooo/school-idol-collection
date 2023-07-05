@@ -60,7 +60,7 @@ export const GET: RequestHandler = (async ({ params }) => {
             totalResults: count,
             pageSize: PAGE_SIZE,
         },
-        queryUrl: filters.map((f) => f.getFilterString()).join("/"),
+        queryUrl: filters.map((f) => f.getUrlPart()).join("/"),
         queryExplain,
     });
 }) satisfies RequestHandler;

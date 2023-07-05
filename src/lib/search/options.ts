@@ -15,7 +15,7 @@ export default abstract class SearchFilter {
 
     abstract getExplainString(): string;
 
-    abstract getFilterString(): string;
+    abstract getUrlPart(): string;
 
     abstract getScopeElements(): (string | ScopeOptions)[];
 }
@@ -25,7 +25,7 @@ export abstract class SearchFilter0 extends SearchFilter {
         super(split);
     }
 
-    getFilterString = () => this.key;
+    getUrlPart = () => this.key;
 }
 
 export abstract class SearchFilter1 extends SearchFilter {
@@ -39,7 +39,7 @@ export abstract class SearchFilter1 extends SearchFilter {
         }
     }
 
-    getFilterString = () => this.key + ":" + escapeForUrl(this.param);
+    getUrlPart = () => this.key + ":" + escapeForUrl(this.param);
 }
 
 export class SearchFilterMember extends SearchFilter0 {
@@ -329,7 +329,7 @@ export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
             return `${this.explainName} is ${parseInt(this.param)}${mod}`;
         }
     };
-    getFilterString = () => this.key + ":" + this.param;
+    getUrlPart = () => this.key + ":" + this.param;
 }
 
 export class SearchFilterMemberCost extends SearchFilterNumberWithMod {

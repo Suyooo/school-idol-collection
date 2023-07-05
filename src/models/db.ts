@@ -45,7 +45,7 @@ const sequelize = new OrigSequelize({
     dialect: "sqlite",
     storage: "cardlist.db",
     models: modelList,
-    logging: false,
+    logging: true,
     logQueryParameters: true,
 });
 
