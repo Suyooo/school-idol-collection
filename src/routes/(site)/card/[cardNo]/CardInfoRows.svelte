@@ -35,22 +35,22 @@
     export let hideFaq: boolean = false;
     export let forceSingleColumn: boolean = false;
 
-    let cardAsExtraInfo: Card & Required<CardPageExtraInfo>;
-    $: if (!hideSharedId) cardAsExtraInfo = <Card & Required<CardPageExtraInfo>>card;
+    let cardWithSharedIdCards: Card & CardPageExtraInfo<true, boolean>;
+    $: if (!hideSharedId) cardWithSharedIdCards = card as Card & CardPageExtraInfo<true, boolean>;
 </script>
 
 <div class="row gap">
     <div class="inforow" class:col-half={!forceSingleColumn}>
         <div>
             Card ID
-            {#if !hideSharedId && cardAsExtraInfo.sameId.length > 0}
+            {#if !hideSharedId && cardWithSharedIdCards.sameId.length > 0}
                 <br /><span>Shared With</span>
             {/if}
         </div>
         <div>
             {cardId(card)}
             {#if !hideSharedId}
-                {#each cardAsExtraInfo.sameId as sameIdCard (sameIdCard.cardNo)}
+                {#each cardWithSharedIdCards.sameId as sameIdCard (sameIdCard.cardNo)}
                     <br />
                     <a href="/card/{sameIdCard.cardNo}"
                         >{sameIdCard.cardNo}

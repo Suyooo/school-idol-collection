@@ -1,6 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import type Card from "$models/card/card.js";
+    import type { ParseNodePrepared } from "$lib/format/format.js";
     import type { SearchUiOptions } from "$lib/search/ui.js";
     import { urlToUiOptions } from "$lib/search/ui.js";
     import Skill from "$lib/format/Skill.svelte";
@@ -17,7 +18,7 @@
         queryUrl: string,
         options: SearchUiOptions,
         showOptions: boolean = false,
-        queryExplain: string[],
+        queryExplain: ParseNodePrepared[][],
         pagination: { page: number; totalResults: number; pageSize: number };
     $: {
         cards = data.cards;

@@ -98,7 +98,7 @@ export const GET: RequestHandler = (async ({ params, locals }) => {
             message: "This card does not exist.",
         });
     }
-    const cardData: Card & CardPageExtraInfo = card.get({ plain: true });
+    const cardData: Card & CardPageExtraInfo<boolean, boolean> = card.get({ plain: true });
 
     cardData.cardSet = cardData.cardNo.split("-")[0];
     cardData.linkedBy = cardData.linkedBy.filter((l, i) => {
@@ -126,14 +126,19 @@ export const GET: RequestHandler = (async ({ params, locals }) => {
     }
 
     if (options.some((o) => o === "neighbors")) {
-        cardData.prevCardNo =
-            (await DB.m.Card.withScope(["viewCardNoOnly", { method: ["filterBefore", cardData.cardNo] }]).findOne())
-                ?.cardNo ?? null;
-        if (cardData.prevCardNo && cardData.prevCardNo.split("-")[0] !== cardData.cardSet) cardData.prevCardNo = null;
-        cardData.nextCardNo =
-            (await DB.m.Card.withScope(["viewCardNoOnly", { method: ["filterAfter", cardData.cardNo] }]).findOne())
-                ?.cardNo ?? null;
-        if (cardData.nextCardNo && cardData.nextCardNo.split("-")[0] !== cardData.cardSet) cardData.nextCardNo = null;
+        cardData.neighbors = {
+            prev:
+                (await DB.m.Card.withScope(["viewCardNoOnly", { method: ["filterBefore", cardData.cardNo] }]).findOne())
+                    ?.cardNo ?? null,
+            next:
+                (await DB.m.Card.withScope(["viewCardNoOnly", { method: ["filterAfter", cardData.cardNo] }]).findOne())
+                    ?.cardNo ?? null,
+        };
+        // Remove neighbors if they do not share the same card set
+        if (cardData.neighbors.prev && cardData.neighbors.prev.split("-")[0] !== cardData.cardSet)
+            cardData.neighbors.prev = null;
+        if (cardData.neighbors.next && cardData.neighbors.next.split("-")[0] !== cardData.cardSet)
+            cardData.neighbors.next = null;
     }
 
     if (options.some((o) => o === "preparse")) {

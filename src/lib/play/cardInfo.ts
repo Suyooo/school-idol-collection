@@ -13,7 +13,7 @@ export function loadCardInfo(cardNo: string): Promise<CardWithImageData> {
     if (promise === undefined) {
         promise = retryPromise(fetch(`/json/card/${cardNo}/sameid/preparse`))
             .then((res) => res.json())
-            .then(async (card: CardWithImageData & CardPageExtraInfo) => {
+            .then(async (card: CardWithImageData & CardPageExtraInfo<true, false>) => {
                 let usedCardNo = cardNo;
                 if (cardIsMember(card) && card.member.rarity === CardMemberRarity.Secret) {
                     usedCardNo = card.sameId![0].cardNo;

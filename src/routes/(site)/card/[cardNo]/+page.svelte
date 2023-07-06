@@ -9,7 +9,7 @@
     import CardPageButtons from "./CardPageButtons.svelte";
 
     export let data: PageData;
-    let card: Card & Required<CardPageExtraInfo>;
+    let card: Card & CardPageExtraInfo<true, true>;
     $: card = data.card;
 </script>
 
@@ -30,8 +30,8 @@
         <div class="col-threequarters">
             <div class="mb-4">
                 <CardPageButtons
-                    prevCardNo={card.prevCardNo}
-                    nextCardNo={card.nextCardNo}
+                    prevCardNo={card.neighbors.prev}
+                    nextCardNo={card.neighbors.next}
                     cardSet={card.cardSet}
                     listLinksOnLargeOnly
                 />
@@ -46,7 +46,11 @@
             <div class="cardcopyright">{card.copyright}</div>
 
             <div class="mt-4">
-                <CardPageButtons prevCardNo={card.prevCardNo} nextCardNo={card.nextCardNo} cardSet={card.cardSet} />
+                <CardPageButtons
+                    prevCardNo={card.neighbors.prev}
+                    nextCardNo={card.neighbors.next}
+                    cardSet={card.cardSet}
+                />
             </div>
         </div>
     </div>
