@@ -158,15 +158,17 @@
         on:contextmenu|preventDefault={updateSidebar}
         use:action
     >
-        {#await loadPromise}
-            <div class="card">
-                <Spinner />
-            </div>
-        {:then card}
-            <div class="card" class:highlight={cardNo === $sidebarCardNo}>
-                <img src={card.imageDataUrl} alt={cardNo} />
-            </div>
-        {/await}
+        <div class="cardholder">
+            {#await loadPromise}
+                <div class="card">
+                    <Spinner />
+                </div>
+            {:then card}
+                <div class="card" class:highlight={cardNo === $sidebarCardNo}>
+                    <img src={card.imageDataUrl} alt={cardNo} />
+                </div>
+            {/await}
+        </div>
     </div>
 {:else}
     <div
@@ -240,6 +242,11 @@
         @apply cursor-grab;
         width: 65px;
         height: 91px;
+
+        & .cardholder {
+            width: 130px;
+            height: 500px;
+        }
 
         & .card {
             @apply absolute flex items-start justify-center text-black bg-primary-200 overflow-hidden rounded-card-v shadow-md shadow-black;
