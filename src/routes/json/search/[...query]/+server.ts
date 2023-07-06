@@ -1,28 +1,21 @@
 import { error, json } from "@sveltejs/kit";
 import type Card from "$models/card/card.js";
-import Language from "$lib/enums/language.js";
 import SearchFilterError from "$lib/errors/searchFilterError.js";
-import { parseSkillToNodes } from "$lib/format/format.js";
 import { getSearchFilter } from "$lib/search/options.js";
 import searchQuery from "$lib/search/query.js";
 import type CardSearchResult from "$lib/types/cardSearchResult.js";
 import type { RequestHandler } from "./$types.js";
 
-const PAGE_SIZE = 60 as const;
+const PAGE_SIZE = 60;
 
 export const GET: RequestHandler = (async ({ params }) => {
     const filters = [];
-    let includeUiParameters = false;
     let page = 1;
 
     try {
         const filterQueries = params.query.split(/(?<!\/)\/(?!\/)/g).map((f) => f.replace(/\/\//g, "/"));
 
         for (const filterQuery of filterQueries) {
-            if (filterQuery === "ui") {
-                includeUiParameters = true;
-                continue;
-            }
             if (filterQuery.startsWith("page:")) {
                 page = parseInt(filterQuery.substring(5));
                 continue;
@@ -49,7 +42,7 @@ export const GET: RequestHandler = (async ({ params }) => {
         limit: PAGE_SIZE,
     });
 
-    const res = {
+    return json({
         cards: rows.map((c: Card) => c.get({ plain: true })),
         pagination: {
             page: page,
@@ -57,11 +50,6 @@ export const GET: RequestHandler = (async ({ params }) => {
             pageSize: PAGE_SIZE,
         },
         queryUrl: filters.map((f) => f.getUrlPart()).join("/"),
-    } as CardSearchResult<boolean>;
-
-    if (includeUiParameters) {
-        res.queryExplain = filters.map((f) => parseSkillToNodes(f.getExplainString(), Language.ENG, true));
-    }
-
-    return json(res);
+        queryExplain: filters.map((f) => f.getExplainString()),
+    } as CardSearchResult<false>);
 }) satisfies RequestHandler;

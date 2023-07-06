@@ -5,21 +5,22 @@ import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
 import { retryPromise } from "$lib/utils/promise.js";
 
 export type CardWithImageData = Card & { imageDataUrl: string };
-const cardInfoCache = new Map<string, Promise<CardWithImageData>>();
+const cardInfoCache = new Map<string, Promise<CardWithImageData & CardPageExtraInfo<false, false>>>();
 
-export function loadCardInfo(cardNo: string): Promise<CardWithImageData> {
+export function loadCardInfo(cardNo: string): Promise<CardWithImageData & CardPageExtraInfo<false, false>> {
     let promise = cardInfoCache.get(cardNo);
 
     if (promise === undefined) {
-        promise = retryPromise(fetch(`/json/card/${cardNo}/sameid/preparse`))
+        promise = retryPromise(fetch(`/json/card/${cardNo}`))
             .then((res) => res.json())
-            .then(async (card: CardWithImageData & CardPageExtraInfo<true, false>) => {
+            .then(async (card: Card & CardPageExtraInfo<false, false>) => {
+                const newCard = card as CardWithImageData & CardPageExtraInfo<false, false>;
                 let usedCardNo = cardNo;
-                if (cardIsMember(card) && card.member.rarity === CardMemberRarity.Secret) {
-                    usedCardNo = card.sameId![0].cardNo;
+                if (cardIsMember(newCard) && newCard.member.rarity === CardMemberRarity.Secret) {
+                    usedCardNo = newCard.member.baseIfSecret!;
                 }
 
-                card.imageDataUrl = await fetch(`/images/cards/${usedCardNo.split("-")[0]}/${usedCardNo}-front.jpg`)
+                newCard.imageDataUrl = await fetch(`/images/cards/${usedCardNo.split("-")[0]}/${usedCardNo}-front.jpg`)
                     .then((response) => response.blob())
                     .then(
                         (blob) =>
@@ -32,7 +33,7 @@ export function loadCardInfo(cardNo: string): Promise<CardWithImageData> {
                                 reader.readAsDataURL(blob);
                             })
                     );
-                return card;
+                return newCard;
             });
         cardInfoCache.set(cardNo, promise);
     }

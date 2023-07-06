@@ -3,15 +3,12 @@ import { error, json } from "@sveltejs/kit";
 import type Card from "$models/card/card.js";
 import { cardOrder } from "$models/card/card.js";
 import AnnotationEnum from "$lib/enums/annotation.js";
-import Language from "$lib/enums/language.js";
-import { parseSkillToNodes } from "$lib/format/format.js";
 import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
 import type { RequestHandler } from "./$types.js";
 
 export const GET: RequestHandler = (async ({ params, locals }) => {
     const DB = await locals.DB;
 
-    const options = params.options.split("/");
     const card = await DB.m.Card.findByPk(params.cardNo, {
         include: [
             {
@@ -98,9 +95,8 @@ export const GET: RequestHandler = (async ({ params, locals }) => {
             message: "This card does not exist.",
         });
     }
-    const cardData: Card & CardPageExtraInfo<boolean, boolean> = card.get({ plain: true });
+    const cardData: Card = card.get({ plain: true });
 
-    cardData.cardSet = cardData.cardNo.split("-")[0];
     cardData.linkedBy = cardData.linkedBy.filter((l, i) => {
         // Filter this card itself
         if (l.skill.cardNo === cardData.cardNo) return false;
@@ -115,47 +111,6 @@ export const GET: RequestHandler = (async ({ params, locals }) => {
             cardData.member?.group && cardData.member.group.memberExtraInfos.some((m) => m.cardNo === l.skill.cardNo)
         );
     });
-
-    if (options.some((o) => o === "sameid")) {
-        cardData.sameId = await DB.m.Card.withScope(["viewForLink", "viewRarity", "orderCardNo"]).findAll({
-            where: {
-                id: cardData.id,
-                cardNo: { [Op.not]: cardData.cardNo },
-            },
-        });
-    }
-
-    if (options.some((o) => o === "neighbors")) {
-        cardData.neighbors = {
-            prev:
-                (await DB.m.Card.withScope(["viewCardNoOnly", { method: ["filterBefore", cardData.cardNo] }]).findOne())
-                    ?.cardNo ?? null,
-            next:
-                (await DB.m.Card.withScope(["viewCardNoOnly", { method: ["filterAfter", cardData.cardNo] }]).findOne())
-                    ?.cardNo ?? null,
-        };
-        // Remove neighbors if they do not share the same card set
-        if (cardData.neighbors.prev && cardData.neighbors.prev.split("-")[0] !== cardData.cardSet)
-            cardData.neighbors.prev = null;
-        if (cardData.neighbors.next && cardData.neighbors.next.split("-")[0] !== cardData.cardSet)
-            cardData.neighbors.next = null;
-    }
-
-    if (options.some((o) => o === "preparse")) {
-        cardData.skills.forEach((skill) => {
-            skill.jpnPreparsed = parseSkillToNodes(skill, Language.JPN, false, card.type);
-            skill.engPreparsed = skill.eng ? parseSkillToNodes(skill, Language.ENG, false, card.type) : null;
-        });
-        if (cardData.member?.group) {
-            cardData.member.group.skills.forEach((skill) => {
-                skill.jpnPreparsed = parseSkillToNodes(skill, Language.JPN);
-                skill.engPreparsed = skill.eng ? parseSkillToNodes(skill, Language.ENG) : null;
-            });
-        }
-        for (const faq of cardData.faqs) {
-            faq.labelPreparsed = parseSkillToNodes(faq.label, Language.ENG, true);
-        }
-    }
 
     return json(cardData);
 }) satisfies RequestHandler;
