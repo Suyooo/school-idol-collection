@@ -5,7 +5,13 @@
     export let y: number = 0;
 </script>
 
-<div class="panel" style:left={`${x}px`} style:top={`${y}px`} on:mousedown|stopPropagation={() => null}>
+<div
+    class="panel"
+    style:left={`${x}px`}
+    style:top={`${y}px`}
+    on:mousedown|stopPropagation={() => null}
+    on:contextmenu|preventDefault={() => null}
+>
     <div class="panel-inner">
         <h4>{@html header}</h4>
         {#each entries as entry}

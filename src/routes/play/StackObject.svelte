@@ -109,6 +109,7 @@
     }
 </script>
 
+<!-- TODO: on:contextmenu opens deck list in side bar -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
     class="objstack"
@@ -122,6 +123,7 @@
     style:top={`${y - 60}px`}
     style:transform={`translateX(${shakeX}px)`}
     on:click={menu}
+    on:contextmenu|preventDefault={menu}
     use:action
 >
     <div class="stack bottom" />

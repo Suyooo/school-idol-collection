@@ -70,7 +70,13 @@
     }
 </script>
 
-<div class="objfield" style:--player-color={$profile.fieldColor} use:action bind:this={fieldElement}>
+<div
+    class="objfield"
+    style:--player-color={$profile.fieldColor}
+    use:action
+    bind:this={fieldElement}
+    on:contextmenu|preventDefault={() => null}
+>
     <div class="background">
         <div class="area deck" />
         <div class="area setlist" />
