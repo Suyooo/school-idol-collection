@@ -110,7 +110,7 @@
         cardNos={$deck}
         stackType={StackType.DECK}
         x={616}
-        y={288}
+        y={293}
         color={$profile.deckColor}
     />
     <StackObject
@@ -118,7 +118,7 @@
         cardNos={$setList}
         stackType={StackType.SET_LIST}
         x={39}
-        y={314}
+        y={319}
         color={$profile.setListColor}
     />
 </div>
@@ -127,7 +127,7 @@
     .objfield {
         @apply relative flex-shrink-0 box-content border border-solid;
         width: 720px;
-        height: 396px;
+        height: 401px;
         margin: 10px;
         border-color: var(--player-color);
 
