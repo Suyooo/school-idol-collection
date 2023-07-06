@@ -40,12 +40,8 @@ export const POST: RequestHandler = (async ({ locals, request }) => {
                     allSubjects.push(cur);
                     while (cur !== subject.to) {
                         cur =
-                            (
-                                await DB.models.Card.withScope([
-                                    "viewCardNoOnly",
-                                    { method: ["filterAfter", cur] },
-                                ]).findOne()
-                            )?.cardNo ?? null;
+                            (await DB.m.Card.withScope(["viewCardNoOnly", { method: ["filterAfter", cur] }]).findOne())
+                                ?.cardNo ?? null;
                         if (cur === null || cur.split("-")[0] !== startSet) {
                             throw error(500, { message: `Range ${subject.from} to ${subject.to} failed.` });
                         }
@@ -56,7 +52,7 @@ export const POST: RequestHandler = (async ({ locals, request }) => {
 
             const subjectIds: number[] = [];
             for (const cardNo of allSubjects) {
-                const id = (await DB.models.Card.withScope(["viewIdOnly"]).findOne({ where: { cardNo } }))?.id;
+                const id = (await DB.m.Card.withScope(["viewIdOnly"]).findOne({ where: { cardNo } }))?.id;
                 if (id !== undefined && subjectIds.indexOf(id) === -1) {
                     subjectIds.push(id);
                 }
@@ -68,10 +64,7 @@ export const POST: RequestHandler = (async ({ locals, request }) => {
                     const label = await getFaqLinkLabel(await locals.DB, seeAlso);
                     for (const cardId of subjectIds) {
                         const displayOrder = nextDisplayOrderCounters[cardId] ?? 1;
-                        await DB.models.CardFAQLink.upsert(
-                            { cardId, displayOrder, label, link: seeAlso },
-                            { transaction }
-                        );
+                        await DB.m.CardFAQLink.upsert({ cardId, displayOrder, label, link: seeAlso }, { transaction });
                         nextDisplayOrderCounters[cardId] = displayOrder + 1;
                     }
                 }
@@ -80,7 +73,7 @@ export const POST: RequestHandler = (async ({ locals, request }) => {
             if (section.qa) {
                 for (const qa of section.qa) {
                     const cardsToLoad = getLinkedCards(qa.question);
-                    const loadedCards = await DB.models.Card.withScope(["viewForLink"]).findAll({
+                    const loadedCards = await DB.m.Card.withScope(["viewForLink"]).findAll({
                         where: { cardNo: cardsToLoad.filter((c, i) => cardsToLoad.indexOf(c) === i) },
                     });
 
@@ -105,7 +98,7 @@ export const POST: RequestHandler = (async ({ locals, request }) => {
 
                     for (const cardId of subjectIds) {
                         const displayOrder = nextDisplayOrderCounters[cardId] ?? 1;
-                        await DB.models.CardFAQLink.upsert(
+                        await DB.m.CardFAQLink.upsert(
                             {
                                 cardId,
                                 displayOrder,
@@ -122,7 +115,7 @@ export const POST: RequestHandler = (async ({ locals, request }) => {
         }
 
         for (const cardId in Object.keys(nextDisplayOrderCounters)) {
-            await DB.models.CardFAQLink.destroy({
+            await DB.m.CardFAQLink.destroy({
                 where: { cardId, displayOrder: { [Op.gte]: nextDisplayOrderCounters[cardId] } },
                 transaction,
             });

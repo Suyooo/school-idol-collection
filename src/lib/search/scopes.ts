@@ -1,14 +1,15 @@
 import { Op, literal, where } from "@sequelize/core";
-import type { Includeable, Sequelize } from "@sequelize/core";
+import type { Includeable } from "@sequelize/core";
 import type { IncludeOptions } from "@sequelize/core/_non-semver-use-at-your-own-risk_/model.js";
 import { CardBase } from "$models/card/card.js";
+import type { Sequelize } from "$models/db.js";
 import type CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import type { GroupID } from "$lib/enums/group.js";
 
 export function addScopes(sequelize: Sequelize) {
     CardBase.addScope("searchMemberRarity", (rarity: number) => ({
         include: {
-            model: sequelize.models.CardMemberExtraInfo,
+            model: sequelize.m.CardMemberExtraInfo,
             required: true,
             where: { "$member.rarity$": rarity },
         },
@@ -18,28 +19,28 @@ export function addScopes(sequelize: Sequelize) {
     }));
     CardBase.addScope("searchSongRarity", (rarity: number) => ({
         include: {
-            model: sequelize.models.CardSongExtraInfo,
+            model: sequelize.m.CardSongExtraInfo,
             required: true,
             where: { "$song.rarity$": rarity },
         },
     }));
     CardBase.addScope("searchIdolizable", () => ({
         include: {
-            model: sequelize.models.CardMemberExtraInfo,
+            model: sequelize.m.CardMemberExtraInfo,
             required: true,
             where: { "$member.idolizeType$": { [Op.gt]: 0 } },
         },
     }));
     CardBase.addScope("searchNotIdolizable", () => ({
         include: {
-            model: sequelize.models.CardMemberExtraInfo,
+            model: sequelize.m.CardMemberExtraInfo,
             required: true,
             where: { "$member.idolizeType$": 0 },
         },
     }));
     CardBase.addScope("searchAbility", (rush: boolean | null, live: boolean | null) => ({
         include: {
-            model: sequelize.models.CardMemberExtraInfo,
+            model: sequelize.m.CardMemberExtraInfo,
             required: true,
             where: {
                 ...(rush === null ? {} : { "$member.abilityRush$": rush }),
@@ -49,7 +50,7 @@ export function addScopes(sequelize: Sequelize) {
     }));
     CardBase.addScope("searchYear", (year: 1 | 2 | 3) => ({
         include: {
-            model: sequelize.models.CardMemberExtraInfo,
+            model: sequelize.m.CardMemberExtraInfo,
             required: true,
             where: { year },
         },
@@ -81,28 +82,28 @@ export function addScopes(sequelize: Sequelize) {
     );
     CardBase.addScope("searchBonus", () => ({
         include: {
-            model: sequelize.models.CardMemberExtraInfo,
+            model: sequelize.m.CardMemberExtraInfo,
             required: true,
             where: { "$member.pieceBdayAttribute$": { [Op.not]: null } },
         },
     }));
     CardBase.addScope("searchNoBonus", () => ({
         include: {
-            model: sequelize.models.CardMemberExtraInfo,
+            model: sequelize.m.CardMemberExtraInfo,
             required: true,
             where: { "$member.pieceBdayAttribute$": null },
         },
     }));
     CardBase.addScope("searchSongAttribute", (attribute: number) => ({
         include: {
-            model: sequelize.models.CardSongExtraInfo,
+            model: sequelize.m.CardSongExtraInfo,
             required: true,
             where: { "$song.attribute$": attribute },
         },
     }));
     CardBase.addScope("searchSongReqType", (reqType: CardSongRequirementType) => ({
         include: {
-            model: sequelize.models.CardSongExtraInfo,
+            model: sequelize.m.CardSongExtraInfo,
             required: true,
             where: { "$song.requirementType$": reqType },
         },

@@ -49,7 +49,7 @@ export const actions = {
                     const cardNo = (
                         await (
                             await locals.DB
-                        ).models.Card.withScope(["viewCardNoOnly", "orderCardNo"]).findOne({
+                        ).m.Card.withScope(["viewCardNoOnly", "orderCardNo"]).findOne({
                             where: { id: cardId },
                         })
                     )?.cardNo;

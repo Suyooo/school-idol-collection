@@ -1,7 +1,8 @@
-import { DataTypes, Model, Sequelize } from "@sequelize/core";
+import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, HasMany, Table } from "@sequelize/core/decorators-legacy";
 import type { CardMember } from "$models/card/card.js";
 import type CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
+import type { Sequelize } from "$models/db.js";
 import type Skill from "$models/skill/skill.js";
 import type CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
 
@@ -52,6 +53,6 @@ export default class CardMemberGroup extends Model {
 export function addScopes(sequelize: Sequelize) {
     // TODO: move to decorators once @Scope is implemented
     CardMemberGroup.addScope("filterHasSkill", () => ({
-        include: [{ model: sequelize.models.Skill, required: true }],
+        include: [{ model: sequelize.m.Skill, required: true }],
     }));
 }

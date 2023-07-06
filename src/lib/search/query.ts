@@ -11,5 +11,5 @@ export default async function searchQuery(
     filters: SearchFilter[],
     scopes: (string | ScopeOptions)[] = []
 ): Promise<ModelStatic<Card>> {
-    return (await DB).models.Card.withScope([...scopes, ...getScopesFromFilters(filters)]);
+    return (await DB).m.Card.withScope([...scopes, ...getScopesFromFilters(filters)]);
 }

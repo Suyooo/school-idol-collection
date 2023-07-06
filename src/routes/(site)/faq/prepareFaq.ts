@@ -81,10 +81,10 @@ export function getKey(prefix: string | null, qa?: FaqQA | FaqQAWithKey) {
 export async function getFaqLinkLabel(DB: Sequelize, link: string) {
     const anchorName = link.split("#").at(-1)!;
     if (anchorName.match(/(LL\d\d|EX\d\d|PR)-\d\d\d/)) {
-        const card = (await DB.models.Card.withScope(["viewForLink"]).findByPk(anchorName))!;
+        const card = (await DB.m.Card.withScope(["viewForLink"]).findByPk(anchorName))!;
         return cardTitle(card, true);
     } else {
-        const faqEntry = await DB.models.CardFAQLink.findOne({ where: { link } });
+        const faqEntry = await DB.m.CardFAQLink.findOne({ where: { link } });
         if (faqEntry === null) {
             throw new Error(
                 "No link label in database for " +
@@ -187,7 +187,7 @@ export default async function prepareFaq(DB: Sequelize, faq: Faq) {
         cards: {},
     };
 
-    const cards = await DB.models.Card.withScope(["viewForLink"]).findAll({
+    const cards = await DB.m.Card.withScope(["viewForLink"]).findAll({
         where: { cardNo: cardsToLoad.filter((c, i) => cardsToLoad.indexOf(c) === i) },
     });
     for (const card of cards) {

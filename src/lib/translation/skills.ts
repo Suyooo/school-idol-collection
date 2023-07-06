@@ -45,12 +45,12 @@ export function isGroupSkillShortInfo(s: ShortSkillInfo): s is ShortSkillInfoGro
 }
 
 export async function listUntranslatedSkills(DB: Sequelize): Promise<ShortSkillInfo[]> {
-    const allSkills = await DB.models.Skill.findAll({
+    const allSkills = await DB.m.Skill.findAll({
         where: { eng: null },
         include: [
             {
-                model: DB.models.CardMemberGroup,
-                include: [{ model: DB.models.CardMemberExtraInfo, attributes: ["cardNo"] }],
+                model: DB.m.CardMemberGroup,
+                include: [{ model: DB.m.CardMemberExtraInfo, attributes: ["cardNo"] }],
             },
         ],
     });
@@ -74,12 +74,12 @@ export async function getApplicableSkills(
     options?: QueryOptions
 ): Promise<ShortSkillInfo[]> {
     const res = [];
-    const allSkills = await DB.models.Skill.findAll({
+    const allSkills = await DB.m.Skill.findAll({
         ...options,
         include: [
             {
-                model: DB.models.CardMemberGroup,
-                include: [{ model: DB.models.CardMemberExtraInfo, attributes: ["cardNo"] }],
+                model: DB.m.CardMemberGroup,
+                include: [{ model: DB.m.CardMemberExtraInfo, attributes: ["cardNo"] }],
             },
         ],
     });
@@ -112,7 +112,7 @@ export async function getApplicableSkills(
 export async function applyPatternToSkills(DB: Sequelize, pattern: TranslationPattern, applyTo: number[]) {
     await DB.transaction(async (transaction) => {
         for (const application of applyTo) {
-            const skillObj = await DB.models.Skill.findByPk(application, { transaction });
+            const skillObj = await DB.m.Skill.findByPk(application, { transaction });
             if (skillObj === null) {
                 throw new PatternApplyError(
                     Error("Pattern should be applied to Skill #" + application + ", but it does not exist"),
@@ -148,7 +148,7 @@ export async function tryAllPatterns(
     options?: QueryOptions
 ): Promise<{ translatedSkill: string; triggers: TriggerEnum[]; pattern: TranslationPattern } | null> {
     const { skill, triggers } = splitTriggersFromSkill(skillLine);
-    for (const pattern of await DB.models.TranslationPattern.findAll(options)) {
+    for (const pattern of await DB.m.TranslationPattern.findAll(options)) {
         const res = await applyPatternOrNull(DB, skill, triggers, pattern, options);
         if (res !== null) {
             return { translatedSkill: res, triggers, pattern };

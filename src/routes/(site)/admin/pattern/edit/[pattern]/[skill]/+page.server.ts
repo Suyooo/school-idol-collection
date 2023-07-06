@@ -8,7 +8,7 @@ import type { PageServerLoad } from "./$types.js";
 export const load: PageServerLoad = (async ({ params, locals }) => {
     const DB = await locals.DB;
 
-    const skill = await DB.models.Skill.findByPk(params.skill);
+    const skill = await DB.m.Skill.findByPk(params.skill);
     if (skill === null) {
         throw error(404, { message: "This skill does not exist." });
     }
@@ -24,7 +24,7 @@ export const load: PageServerLoad = (async ({ params, locals }) => {
             groupTypeIds: [],
         };
     } else {
-        const pattern = await DB.models.TranslationPattern.findByPk(params.pattern);
+        const pattern = await DB.m.TranslationPattern.findByPk(params.pattern);
         if (pattern === null) {
             throw error(404, { message: "This pattern does not exist." });
         }

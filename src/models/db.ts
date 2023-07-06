@@ -56,7 +56,7 @@ async function addScopes(sq: Sequelize) {
 }
 
 export interface Sequelize extends OrigSequelize {
-    models: {
+    m: {
         Card: ModelStatic<Card>;
         CardMemberGroup: ModelStatic<CardMemberGroup>;
         CardFAQLink: ModelStatic<CardFAQLink>;
@@ -81,6 +81,40 @@ export interface Sequelize extends OrigSequelize {
     };
 }
 const DB: Promise<Sequelize> = Promise.all(modelList.map((m) => m.sync()))
+    .then(() => {
+        /*
+         * This might seem odd - why make this object? Doesn't sequelize.models exist?
+         * Yes, but for some reason, there is some kind of "scope spillage" - where a scope would keep applying to all
+         * queries of that model if it was used once. I spent three days on this problem and have no idea why or how it
+         * happens, it doesn't seem intended. To avoid any unexplainable behaviour due to this bug, let's simply skip
+         * using the models manager, and have constant references to the original, unscoped models here.
+         */
+        (sequelize as Sequelize).m = {
+            Card: <ModelStatic<Card>>sequelize.models.Card,
+            CardMemberGroup: <ModelStatic<CardMemberGroup>>sequelize.models.CardMemberGroup,
+            CardFAQLink: <ModelStatic<CardFAQLink>>sequelize.models.CardFAQLink,
+
+            CardMemberExtraInfo: <ModelStatic<CardMemberExtraInfo>>sequelize.models.CardMemberExtraInfo,
+            CardMemberIdolizePieceExtraInfo: <ModelStatic<CardMemberIdolizePieceExtraInfo>>(
+                sequelize.models.CardMemberIdolizePieceExtraInfo
+            ),
+
+            CardSongExtraInfo: <ModelStatic<CardSongExtraInfo>>sequelize.models.CardSongExtraInfo,
+            CardSongAnyReqExtraInfo: <ModelStatic<CardSongAnyReqExtraInfo>>sequelize.models.CardSongAnyReqExtraInfo,
+            CardSongAttrReqExtraInfo: <ModelStatic<CardSongAttrReqExtraInfo>>sequelize.models.CardSongAttrReqExtraInfo,
+
+            Skill: <ModelStatic<Skill>>sequelize.models.Skill,
+            Link: <ModelStatic<Link>>sequelize.models.Link,
+            Annotation: <ModelStatic<Annotation>>sequelize.models.Annotation,
+
+            TranslationName: <ModelStatic<TranslationName>>sequelize.models.TranslationName,
+            TranslationSong: <ModelStatic<TranslationSong>>sequelize.models.TranslationSong,
+            TranslationPattern: <ModelStatic<TranslationPattern>>sequelize.models.TranslationPattern,
+
+            Set: <ModelStatic<Set>>sequelize.models.Set,
+            SetCategory: <ModelStatic<SetCategory>>sequelize.models.SetCategory,
+        };
+    })
     .then(() => addScopes(sequelize as Sequelize))
     .then(() => sequelize as Sequelize);
 

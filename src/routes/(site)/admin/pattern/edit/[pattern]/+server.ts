@@ -17,9 +17,9 @@ export const POST: RequestHandler = (async ({ params, locals, request }) => {
     let pattern: TranslationPattern;
 
     if (params.pattern === "new") {
-        pattern = await DB.models.TranslationPattern.create(data);
+        pattern = await DB.m.TranslationPattern.create(data);
     } else {
-        const loadedPattern = await DB.models.TranslationPattern.findByPk(params.pattern);
+        const loadedPattern = await DB.m.TranslationPattern.findByPk(params.pattern);
         if (loadedPattern === null) {
             throw error(404, { message: "This pattern does not exist." });
         }

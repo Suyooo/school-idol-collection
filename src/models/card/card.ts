@@ -205,14 +205,14 @@ export function addScopes(sequelize: Sequelize) {
     CardBase.addScope("viewForLink", () => ({
         attributes: ["cardNo", "id", "type", "nameJpn", "nameEng", "frontOrientation", "backOrientation"],
         include: [
-            { model: sequelize.models.CardMemberExtraInfo, attributes: ["rarity"] },
-            { model: sequelize.models.CardSongExtraInfo, attributes: ["rarity"] },
+            { model: sequelize.m.CardMemberExtraInfo, attributes: ["rarity"] },
+            { model: sequelize.m.CardSongExtraInfo, attributes: ["rarity"] },
         ],
     }));
     CardBase.addScope("viewRarity", () => ({
         include: [
-            { model: sequelize.models.CardMemberExtraInfo, attributes: ["rarity"] },
-            { model: sequelize.models.CardSongExtraInfo, attributes: ["rarity"] },
+            { model: sequelize.m.CardMemberExtraInfo, attributes: ["rarity"] },
+            { model: sequelize.m.CardSongExtraInfo, attributes: ["rarity"] },
         ],
     }));
     CardBase.addScope("filterId", (id) => ({
@@ -239,6 +239,6 @@ export function addScopes(sequelize: Sequelize) {
         where: { type: CardType.MEMORY },
     }));
     CardBase.addScope("filterHasSkill", () => ({
-        include: [{ model: sequelize.models.Skill, required: true }],
+        include: [{ model: sequelize.m.Skill, required: true }],
     }));
 }

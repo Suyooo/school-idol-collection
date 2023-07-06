@@ -4,7 +4,7 @@ import type { RequestHandler } from "./$types.js";
 
 export const POST: RequestHandler = (async ({ params, locals, request }) => {
     const DB = await locals.DB;
-    const pattern = await DB.models.TranslationPattern.findByPk(params.pattern);
+    const pattern = await DB.m.TranslationPattern.findByPk(params.pattern);
     if (pattern === null) {
         throw error(404, { message: "This pattern does not exist." });
     }

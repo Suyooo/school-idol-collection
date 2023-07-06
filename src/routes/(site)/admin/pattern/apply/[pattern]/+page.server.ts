@@ -4,7 +4,7 @@ import type { PageServerLoad } from "./$types.js";
 
 export const load: PageServerLoad = (async ({ params, locals }) => {
     const DB = await locals.DB;
-    const pattern = await DB.models.TranslationPattern.findByPk(parseInt(params.pattern));
+    const pattern = await DB.m.TranslationPattern.findByPk(parseInt(params.pattern));
     if (pattern === null) {
         throw error(404, { message: "This pattern does not exist." });
     }

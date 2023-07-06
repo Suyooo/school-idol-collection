@@ -12,53 +12,53 @@ export const GET: RequestHandler = (async ({ params, locals }) => {
     const DB = await locals.DB;
 
     const options = params.options.split("/");
-    const card = await DB.models.Card.findByPk(params.cardNo, {
+    const card = await DB.m.Card.findByPk(params.cardNo, {
         include: [
             {
-                model: DB.models.Skill,
+                model: DB.m.Skill,
                 include: [
                     {
-                        model: DB.models.Annotation,
-                        include: [{ model: DB.models.Card }],
+                        model: DB.m.Annotation,
+                        include: [{ model: DB.m.Card }],
                     },
                 ],
             },
             {
-                model: DB.models.CardMemberExtraInfo,
+                model: DB.m.CardMemberExtraInfo,
                 include: [
                     {
-                        model: DB.models.CardMemberGroup,
+                        model: DB.m.CardMemberGroup,
                         include: [
                             {
-                                model: DB.models.Skill,
+                                model: DB.m.Skill,
                                 include: [
                                     {
-                                        model: DB.models.Annotation,
-                                        include: [DB.models.Card],
+                                        model: DB.m.Annotation,
+                                        include: [DB.m.Card],
                                     },
                                 ],
                             },
                             {
-                                model: DB.models.CardMemberExtraInfo,
+                                model: DB.m.CardMemberExtraInfo,
                                 include: [
                                     {
-                                        model: DB.models.Card,
-                                        include: [DB.models.CardMemberExtraInfo],
+                                        model: DB.m.Card,
+                                        include: [DB.m.CardMemberExtraInfo],
                                     },
                                 ],
                             },
                         ],
                     },
-                    DB.models.CardMemberIdolizePieceExtraInfo,
+                    DB.m.CardMemberIdolizePieceExtraInfo,
                 ],
             },
             {
-                model: DB.models.CardSongExtraInfo,
-                include: [DB.models.CardSongAnyReqExtraInfo, DB.models.CardSongAttrReqExtraInfo],
+                model: DB.m.CardSongExtraInfo,
+                include: [DB.m.CardSongAnyReqExtraInfo, DB.m.CardSongAttrReqExtraInfo],
             },
-            { model: DB.models.CardFAQLink },
+            { model: DB.m.CardFAQLink },
             {
-                model: DB.models.Annotation,
+                model: DB.m.Annotation,
                 where: {
                     type: {
                         [Op.in]: AnnotationEnum.allShowBacklink.map((a) => a.id),
@@ -67,21 +67,21 @@ export const GET: RequestHandler = (async ({ params, locals }) => {
                 required: false,
                 include: [
                     {
-                        model: DB.models.Skill,
+                        model: DB.m.Skill,
                         include: [
                             {
-                                model: DB.models.Card,
+                                model: DB.m.Card,
                                 include: [
-                                    { model: DB.models.CardMemberExtraInfo, attributes: ["rarity"] },
-                                    { model: DB.models.CardSongExtraInfo, attributes: ["rarity"] },
+                                    { model: DB.m.CardMemberExtraInfo, attributes: ["rarity"] },
+                                    { model: DB.m.CardSongExtraInfo, attributes: ["rarity"] },
                                 ],
                             },
                             {
-                                model: DB.models.CardMemberGroup,
+                                model: DB.m.CardMemberGroup,
                                 include: [
                                     {
-                                        model: DB.models.CardMemberExtraInfo,
-                                        include: [DB.models.Card],
+                                        model: DB.m.CardMemberExtraInfo,
+                                        include: [DB.m.Card],
                                     },
                                 ],
                             },
@@ -117,7 +117,7 @@ export const GET: RequestHandler = (async ({ params, locals }) => {
     });
 
     if (options.some((o) => o === "sameid")) {
-        cardData.sameId = await DB.models.Card.withScope(["viewForLink", "viewRarity", "orderCardNo"]).findAll({
+        cardData.sameId = await DB.m.Card.withScope(["viewForLink", "viewRarity", "orderCardNo"]).findAll({
             where: {
                 id: cardData.id,
                 cardNo: { [Op.not]: cardData.cardNo },
@@ -127,15 +127,11 @@ export const GET: RequestHandler = (async ({ params, locals }) => {
 
     if (options.some((o) => o === "neighbors")) {
         cardData.prevCardNo =
-            (
-                await DB.models.Card.withScope([
-                    "viewCardNoOnly",
-                    { method: ["filterBefore", cardData.cardNo] },
-                ]).findOne()
-            )?.cardNo ?? null;
+            (await DB.m.Card.withScope(["viewCardNoOnly", { method: ["filterBefore", cardData.cardNo] }]).findOne())
+                ?.cardNo ?? null;
         if (cardData.prevCardNo && cardData.prevCardNo.split("-")[0] !== cardData.cardSet) cardData.prevCardNo = null;
         cardData.nextCardNo =
-            (await DB.models.Card.withScope(["viewCardNoOnly", { method: ["filterAfter", cardData.cardNo] }]).findOne())
+            (await DB.m.Card.withScope(["viewCardNoOnly", { method: ["filterAfter", cardData.cardNo] }]).findOne())
                 ?.cardNo ?? null;
         if (cardData.nextCardNo && cardData.nextCardNo.split("-")[0] !== cardData.cardSet) cardData.nextCardNo = null;
     }
