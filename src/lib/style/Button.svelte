@@ -4,7 +4,7 @@
     export let href: string | undefined = undefined;
     export let style: string = "";
     export let classes: string = "";
-    export let target: string = "_self";
+    export let target: string | undefined = undefined;
     export let label: string;
 </script>
 
