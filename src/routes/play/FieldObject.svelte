@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
     import { getContext } from "svelte";
-    import type { Readable } from "svelte/store";
+    import type { Readable, Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
     import CardType from "$lib/enums/cardType.js";
@@ -27,6 +27,7 @@
     export let deckComponent: StackObject;
     export let setListComponent: StackObject;
     const logic: ClientGameLogic = getContext("logic");
+    const fieldZoom: Writable<number> = getContext("fieldZoom");
 
     let game: Readable<ClientGameSchema>,
         players: Readable<ClientPlayerSchema[]>,
@@ -73,6 +74,7 @@
 <div
     class="objfield"
     style:--player-color={$profile.fieldColor}
+    style:--zoom={$fieldZoom}
     use:action
     bind:this={fieldElement}
     on:contextmenu|preventDefault={() => null}
@@ -118,8 +120,8 @@
         bind:this={setListComponent}
         cardNos={$setList}
         stackType={StackType.SET_LIST}
-        x={39}
-        y={319}
+        x={40}
+        y={320}
         color={$profile.setListColor}
     />
 </div>
@@ -127,9 +129,9 @@
 <style lang="postcss">
     .objfield {
         @apply relative flex-shrink-0 box-content border border-solid;
-        width: 720px;
-        height: 401px;
-        margin: 10px;
+        width: calc(720px * var(--zoom));
+        height: calc(401px * var(--zoom));
+        margin: calc(10px * var(--zoom));
         border-color: var(--player-color);
 
         &:global(.ui-droppable-hover) {
@@ -144,84 +146,94 @@
                 border-color: var(--player-color);
 
                 &.setlist {
-                    left: 32px;
-                    right: 120px;
-                    height: 75.5px;
-                    bottom: 10px;
+                    left: calc(33px * var(--zoom));
+                    right: calc(120px * var(--zoom));
+                    height: calc(75.5px * var(--zoom));
+                    bottom: calc(10px * var(--zoom));
 
                     &:before {
                         content: "Set List";
-                        left: -1.5rem;
-                        top: 0px;
-                        bottom: 0px;
-                        writing-mode: vertical-rl;
+                        left: calc(-1rem * var(--zoom));
+                        top: -100%;
+                        bottom: -100%;
                         transform: rotate(180deg);
                     }
                 }
 
                 &.deck {
-                    right: 32px;
-                    width: 77.5px;
-                    bottom: 10px;
-                    height: 102px;
+                    right: calc(32px * var(--zoom));
+                    width: calc(77.5px * var(--zoom));
+                    bottom: calc(10px * var(--zoom));
+                    height: calc(102px * var(--zoom));
 
                     &:before {
                         content: "Deck";
-                        right: -1.5rem;
+                        right: calc(-1rem * var(--zoom));
                         top: 0px;
                         bottom: 0px;
-                        writing-mode: vertical-rl;
                     }
                 }
 
                 &:before {
-                    @apply absolute text-sm font-bold text-center uppercase tracking-widest;
+                    @apply absolute font-bold text-center uppercase tracking-widest;
                     color: var(--player-color);
+                    font-size: calc(1rem * var(--zoom));
+                    line-height: calc(-1.5rem * var(--zoom));
+                    writing-mode: vertical-rl;
                 }
             }
 
             & .line {
                 @apply absolute border-l border-solid z-play-field;
-                width: 1px;
-                top: 10px;
-                bottom: 98px;
+                width: calc(1px * var(--zoom));
+                top: calc(10px * var(--zoom));
+                bottom: calc(98px * var(--zoom));
                 border-color: var(--player-color);
 
                 &.live {
-                    left: 281px;
+                    left: calc(281px * var(--zoom));
                 }
                 &.info {
-                    left: 61px;
+                    left: calc(61px * var(--zoom));
                 }
             }
 
             & .name {
-                @apply absolute text-white text-2xl font-bold overflow-hidden text-ellipsis text-center z-play-ui;
+                @apply absolute text-white font-bold overflow-hidden text-ellipsis text-center z-play-ui;
                 left: 0px;
-                width: 60px;
-                top: 60px;
-                bottom: 96px;
-                line-height: 60px;
+                width: calc(60px * var(--zoom));
+                top: calc(60px * var(--zoom));
+                bottom: calc(96px * var(--zoom));
+                font-size: calc(30px * var(--zoom));
+                line-height: calc(60px * var(--zoom));
                 writing-mode: vertical-rl;
                 transform: rotate(180deg);
             }
 
             & .livepoints {
-                @apply absolute text-white text-3xl font-bold text-center z-play-ui;
+                @apply absolute text-white font-bold text-center z-play-ui;
                 left: 0px;
-                width: 60px;
-                top: 5px;
+                width: calc(60px * var(--zoom));
+                top: calc(5px * var(--zoom));
+                font-size: calc(30px * var(--zoom));
+                line-height: calc(30px * var(--zoom));
             }
 
             & .livepointsbelow {
-                @apply absolute flex items-center justify-around text-xs text-center uppercase font-normal tracking-tighter leading-none z-play-ui pointer-events-auto;
+                @apply absolute flex items-center justify-around text-center uppercase font-normal tracking-tighter leading-none z-play-ui pointer-events-auto;
                 left: 0px;
-                width: 60px;
-                top: 35px;
-                height: 25px;
+                width: calc(60px * var(--zoom));
+                top: calc(35px * var(--zoom));
+                height: calc(25px * var(--zoom));
+                font-size: calc(12.5px * var(--zoom));
+                line-height: calc(12.5px * var(--zoom));
 
                 & button {
                     @apply flex items-center justify-center bg-accent-600 hover:bg-accent-400 text-white rounded-full;
+                    width: calc(20px * var(--zoom));
+                    height: calc(20px * var(--zoom));
+                    font-size: calc(15px * var(--zoom));
+                    line-height: calc(20px * var(--zoom));
                 }
             }
         }

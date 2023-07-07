@@ -2,8 +2,9 @@
     import { getContext } from "svelte";
     import type { Readable, Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
+    import type { SnapFunction } from "@interactjs/types/index";
     import type { ClientFieldCardSchema, ClientGameLogic } from "$lib/play/schema.js";
-    import { type OpenMenuFunction, snapFunction } from "./+page.svelte";
+    import type { OpenMenuFunction } from "./+page.svelte";
     import FieldCardObject from "./FieldCardObject.svelte";
 </script>
 
@@ -13,10 +14,12 @@
     export let position: Readable<{ x: number; y: number }>;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
-    const playerFieldStore: Writable<HTMLDivElement> = getContext("playerField");
+    const fieldZoom: Writable<number> = getContext("fieldZoom");
+    const snapFunction: () => SnapFunction = getContext("snapFunction");
+    const fieldPositionFunction: (box: DOMRect) => [number, number] = getContext("fieldPositionFunction");
 
     let displayPosition: { x: number; y: number };
-    $: displayPosition = { x: $position.x, y: $position.y };
+    $: displayPosition = { x: $position.x * $fieldZoom, y: $position.y * $fieldZoom };
     let wasPickedUp = true;
     function action(node: HTMLElement) {
         const interactable = interact(node)
@@ -33,12 +36,13 @@
                     },
                     end() {
                         node.classList.remove("dragging");
-                        logic.requestGroupMove(id, displayPosition.x, displayPosition.y);
+                        const pos = fieldPositionFunction(node.getBoundingClientRect());
+                        logic.requestGroupMove(id, pos[0], pos[1]);
                     },
                 },
                 modifiers: [
                     interact.modifiers.snap({
-                        targets: [snapFunction(playerFieldStore)],
+                        targets: [snapFunction()],
                         relativePoints: [{ x: 0, y: 0 }],
                     }),
                     interact.modifiers.restrictRect({
@@ -76,6 +80,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div
     class="objgroup"
+    style:--zoom={$fieldZoom}
     style:left={`${displayPosition.x}px`}
     style:top={`${displayPosition.y}px`}
     style:width={`${65 + 10 * (cards.size - 2)}px`}

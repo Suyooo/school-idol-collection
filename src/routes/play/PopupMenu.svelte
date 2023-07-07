@@ -24,7 +24,7 @@
 
 <style lang="postcss">
     .panel {
-        @apply absolute rounded-tl-none select-none z-play-menu;
+        @apply absolute rounded-tl-none select-none z-play-menu border-2 border-primary-900 border-solid;
 
         & .panel-inner {
             @apply p-0 flex flex-col gap-y-1;

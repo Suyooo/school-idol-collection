@@ -6,11 +6,12 @@
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
+    import type { SnapFunction } from "@interactjs/types/index";
     import { cardIsIdolizable, cardIsMember } from "$lib/card/types.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
-    import { type OpenMenuFunction, snapFunction } from "./+page.svelte";
+    import type { OpenMenuFunction } from "./+page.svelte";
 </script>
 
 <script lang="ts">
@@ -22,6 +23,9 @@
     const openMenu: OpenMenuFunction = getContext("openMenu");
     const playerFieldStore: Writable<HTMLDivElement> = getContext("playerField");
     const liveModeEnabled: Readable<boolean> = getContext("liveModeEnabled");
+    const fieldZoom: Writable<number> = getContext("fieldZoom");
+    const snapFunction: () => SnapFunction = getContext("snapFunction");
+    const fieldPositionFunction: (box: DOMRect) => [number, number] = getContext("fieldPositionFunction");
 
     let element: HTMLElement;
     $: if (element) element.dataset.idx = idx.toString();
@@ -57,12 +61,8 @@
                     },
                     end(event) {
                         if (event.relatedTarget?.classList.contains("objfield")) {
-                            const box = node.getBoundingClientRect();
-                            logic.requestHandToField(
-                                idx,
-                                box.left - playerField.offsetLeft - 1,
-                                box.top - playerField.offsetTop + playerField.parentElement!.scrollTop - 1
-                            );
+                            const pos = fieldPositionFunction(node.getBoundingClientRect());
+                            logic.requestHandToField(idx, pos[0], pos[1]);
                         } else if (event.relatedTarget?.classList.contains("objhand")) {
                             // handled in HandObject
                             node.classList.remove("dragging");
@@ -123,7 +123,7 @@
                 },
                 modifiers: [
                     interact.modifiers.snap({
-                        targets: [snapFunction(playerFieldStore)],
+                        targets: [snapFunction()],
                         relativePoints: [{ x: 0, y: 0 }],
                     }),
                 ],
@@ -152,6 +152,7 @@
         class:disable-sideways-animations={disableSidewaysAnimations}
         class:idolizable={card !== undefined && cardIsMember(card) && cardIsIdolizable(card)}
         class:disabled={$liveModeEnabled}
+        style:--zoom={$fieldZoom}
         style:left={`${startOffset.x + displayPosition.x}px`}
         style:top={`${startOffset.y + displayPosition.y}px`}
         in:fly|global={{ y: -200 }}
@@ -272,8 +273,8 @@
 
         &:global(.dragging:not(.inhand)) .card {
             @apply shadow-sm shadow-black;
-            width: 65px;
-            height: 91px;
+            width: calc(65px * var(--zoom));
+            height: calc(91px * var(--zoom));
         }
 
         &:hover,

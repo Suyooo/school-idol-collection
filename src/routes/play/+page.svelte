@@ -25,25 +25,6 @@
         entries: { label: string; handler: () => void; condition?: boolean }[],
         cancelable: boolean
     ) => void;
-
-    export function snapFunction(playerFieldStore: Writable<HTMLDivElement>): SnapFunction {
-        return (x, y, interaction) => {
-            if (interaction.element?.classList.contains("inhand")) {
-                return { x, y };
-            }
-
-            const playerField = get(playerFieldStore);
-            const l = playerField.offsetLeft;
-            const t = playerField.offsetTop;
-            const s = playerField.parentElement!.scrollTop;
-
-            return {
-                x: Math.round((x - l) / 10) * 10 + l,
-                y: Math.round((y - t + s) / 10) * 10 + t - s,
-                range: Infinity,
-            };
-        };
-    }
 </script>
 
 <script lang="ts">
@@ -115,6 +96,43 @@
     const liveModeEnabled: Readable<boolean> = derived(liveModeCards, (cards) => cards.length > 0);
     setContext("liveModeCards", liveModeCards);
     setContext("liveModeEnabled", liveModeEnabled);
+
+    const fieldZoom: Writable<number> = writable(1);
+    let currentZoom: number;
+    $: currentZoom = $fieldZoom;
+    function snapFunction(): SnapFunction {
+        return (x, y, interaction) => {
+            if (interaction.element?.classList.contains("inhand")) {
+                return { x, y };
+            }
+
+            const gridSize = Math.round(10 * currentZoom);
+            const field = fieldElements[logic.clientPlayerId];
+            const left = field.offsetLeft + 1;
+            const top = field.offsetTop + 1;
+            const scroll = field.parentElement!.scrollTop;
+
+            return {
+                x: Math.round((x - left) / gridSize) * gridSize + left,
+                y: Math.round((y - top + scroll) / gridSize) * gridSize + top - scroll,
+                range: Infinity,
+            };
+        };
+    }
+    function fieldPositionFunction(boundingBox: DOMRect): [number, number] {
+        const field = fieldElements[logic.clientPlayerId];
+        const left = field.offsetLeft;
+        const top = field.offsetTop;
+        const scroll = field.parentElement!.scrollTop;
+
+        return [
+            Math.round((boundingBox.left - left - 1) / currentZoom),
+            Math.round((boundingBox.top - top + scroll - 1) / currentZoom),
+        ];
+    }
+    setContext("fieldZoom", fieldZoom);
+    setContext("snapFunction", snapFunction);
+    setContext("fieldPositionFunction", fieldPositionFunction);
 </script>
 
 <svelte:body on:mousedown={() => (menuEntries = undefined)} />
@@ -136,6 +154,14 @@
         </div>
 
         <HandObject hand={$handCards} />
+
+        <Button classes="absolute right-2 top-2 w-6 h-6 !p-0" label="Zoom In" on:click={() => ($fieldZoom += 0.1)}
+            >+</Button
+        >
+        <Button classes="absolute right-2 top-10 w-6 h-6 !p-0" label="Zoom Out" on:click={() => ($fieldZoom -= 0.1)}
+            >-</Button
+        >
+        <span class="absolute right-10 top-2">{Math.round($fieldZoom * 100)}%</span>
     </div>
     <div class="rightside">
         {#if $sidebarCardNo !== undefined}
@@ -190,13 +216,13 @@
         @apply relative flex-1 flex items-center justify-center h-screen overflow-hidden;
 
         & .fields {
-            @apply w-full flex flex-col h-screen items-center justify-start overflow-y-auto pb-[15vh];
+            @apply w-full flex flex-col h-screen items-center justify-center overflow-y-auto pb-[15vh];
         }
     }
 
     .rightside {
         @apply p-2 bg-primary-700 relative flex-shrink-0 h-screen overflow-x-hidden;
-        flex-basis: 30rem;
+        flex-basis: 25%;
     }
 
     h4 {

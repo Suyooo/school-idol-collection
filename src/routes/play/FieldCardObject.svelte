@@ -5,13 +5,14 @@
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
+    import type { SnapFunction } from "@interactjs/types/index";
     import { cardIsIdolizable, cardIsMember } from "$lib/card/types.js";
     import CardType from "$lib/enums/cardType.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
     import Button from "$lib/style/Button.svelte";
     import Spinner from "$lib/style/icons/Spinner.svelte";
-    import { type OpenMenuFunction, snapFunction } from "./+page.svelte";
+    import type { OpenMenuFunction } from "./+page.svelte";
 </script>
 
 <script lang="ts">
@@ -25,8 +26,10 @@
     export let grouped: boolean = false;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
-    const playerFieldStore: Writable<HTMLDivElement> = getContext("playerField");
     const liveModeCards: Writable<number[]> = getContext("liveModeCards");
+    const fieldZoom: Writable<number> = getContext("fieldZoom");
+    const snapFunction: () => SnapFunction = getContext("snapFunction");
+    const fieldPositionFunction: (box: DOMRect) => [number, number] = getContext("fieldPositionFunction");
 
     let element: HTMLElement;
     $: if (element) element.dataset.id = id.toString();
@@ -40,7 +43,7 @@
     });
 
     let displayPosition: { x: number; y: number };
-    $: displayPosition = { x: $position.x, y: $position.y };
+    $: displayPosition = { x: $position.x * $fieldZoom, y: $position.y * $fieldZoom };
     let wasPickedUp = true;
     function action(node: HTMLElement) {
         if (grouped) return;
@@ -61,7 +64,8 @@
                             // handled in HandObject
                         } else {
                             node.classList.remove("dragging");
-                            logic.requestFieldMove(id, displayPosition.x, displayPosition.y);
+                            const pos = fieldPositionFunction(node.getBoundingClientRect());
+                            logic.requestFieldMove(id, pos[0], pos[1]);
                             if (
                                 event.relatedTarget?.classList.contains(
                                     cardType === CardType.MEMBER ? "objstackdeck" : "objstacksetlist"
@@ -110,7 +114,7 @@
                 },
                 modifiers: [
                     interact.modifiers.snap({
-                        targets: [snapFunction(playerFieldStore)],
+                        targets: [snapFunction()],
                         relativePoints: [{ x: 0, y: 0 }],
                     }),
                     interact.modifiers.restrictRect({
@@ -252,10 +256,11 @@
     class:lowlight={grouped}
     class:disabled={$liveModeCards.length > 0 && $liveModeCards.indexOf(id) === -1}
     class:idolizable={card !== undefined && cardIsMember(card) && cardIsIdolizable(card)}
+    style:--flipped-color={flippedColor}
+    style:--zoom={$fieldZoom}
     style:left={`${displayPosition.x}px`}
     style:top={`${displayPosition.y}px`}
     style:z-index={$position.z}
-    style:--flipped-color={flippedColor}
     on:mousedown={() => (wasPickedUp = false)}
     on:mouseup={cardMenu}
     on:contextmenu|preventDefault={() => updateSidebar()}
@@ -293,18 +298,17 @@
 
         & .card {
             @apply flex items-center justify-center text-black bg-primary-200 overflow-hidden shadow-sm shadow-black;
-            transition: width 0.3s, height 0.3s, shadow-blur 0.3s;
 
             &.card-v {
                 @apply rounded-card-v;
-                width: 65px;
-                height: 91px;
+                width: calc(65px * var(--zoom));
+                height: calc(91px * var(--zoom));
             }
 
             &.card-h {
                 @apply rounded-card-h;
-                width: 91px;
-                height: 65px;
+                width: calc(91px * var(--zoom));
+                height: calc(65px * var(--zoom));
             }
 
             & img.image {
@@ -321,7 +325,9 @@
             }
 
             & img.icon {
-                @apply absolute w-1/4 right-0.5 top-0.5;
+                @apply absolute w-1/4;
+                top: calc(5px * var(--zoom));
+                right: calc(5px * var(--zoom));
             }
         }
 
@@ -348,6 +354,10 @@
 
         &:global(.dragging) {
             @apply !z-play-card-dragging cursor-grabbing;
+
+            & .card {
+                transition: width 0.3s, height 0.3s, shadow-blur 0.3s;
+            }
 
             &:global(.inhand) {
                 & .card {

@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
     import { getContext } from "svelte";
-    import { type Readable, get } from "svelte/store";
+    import { type Readable, type Writable, get } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
     import { ClientGameLogic, StackSide, StackType } from "$lib/play/schema.js";
@@ -16,6 +16,7 @@
     const logic: ClientGameLogic = getContext("logic");
     const openMenu = getContext<OpenMenuFunction>("openMenu");
     const liveModeEnabled: Readable<boolean> = getContext("liveModeEnabled");
+    const fieldZoom: Writable<number> = getContext("fieldZoom");
 
     let stackLength: number, h: number;
     $: stackLength = Math.min(cardNos.length - 1, 60);
@@ -119,15 +120,17 @@
     class:empty={cardNos.length === 0}
     class:disabled={$liveModeEnabled}
     style:--stack-color={color}
-    style:left={`${x}px`}
-    style:top={`${y - 60}px`}
+    style:--zoom={$fieldZoom}
+    style:left={`${x * $fieldZoom}px`}
+    style:top={`${(y - 60) * $fieldZoom}px`}
     style:transform={`translateX(${shakeX}px)`}
     on:click={menu}
     on:contextmenu|preventDefault={menu}
     use:action
 >
+    <div class="stack floor" />
     <div class="stack bottom" />
-    <div class="stack top" style:margin-top={`-${stackLength + h}px`}>
+    <div class="stack top" style:bottom={`${stackLength * $fieldZoom}px`}>
         {cardNos.length}
     </div>
 </button>
@@ -141,16 +144,21 @@
         }
 
         & .stack {
-            background-color: var(--stack-color);
+            &.floor {
+                @apply absolute left-0 bottom-0 border border-solid box-border;
+                border-color: var(--stack-color);
+            }
 
             &.bottom {
-                @apply relative;
-                margin-top: 60px;
+                @apply absolute left-0 bottom-0;
+                background-color: var(--stack-color);
+                margin-top: calc(60px * var(--zoom));
 
                 &:after {
                     @apply absolute left-0 right-0 top-0 bottom-0;
                     content: " ";
                     background: repeating-linear-gradient(
+                        0deg,
                         rgba(0, 0, 0, 0.25),
                         rgba(0, 0, 0, 0.25) 1px,
                         rgba(0, 0, 0, 0.5) 1px,
@@ -160,46 +168,51 @@
             }
 
             &.top {
-                @apply relative flex items-center justify-center text-xl font-bold border border-solid border-black/50;
+                @apply absolute left-0 flex items-center justify-center font-bold border border-solid border-black/25;
+                background-color: var(--stack-color);
+                font-size: calc(2rem * var(--zoom));
             }
         }
 
-        &.objstackdeck .stack {
-            @apply rounded-card-v;
-            width: 65px;
-            height: 91px;
+        &.objstackdeck {
+            width: calc(65px * var(--zoom));
+            height: calc(151px * var(--zoom));
 
-            &.bottom:after {
-                @apply rounded-card-v;
-            }
-        }
-
-        &.objstacksetlist .stack {
-            @apply rounded-card-h;
-            width: 91px;
-            height: 65px;
-
-            &.bottom:after {
-                @apply rounded-card-h;
-            }
-        }
-
-        &.almostempty {
             & .stack {
-                &.bottom {
-                    @apply opacity-0;
+                @apply rounded-card-v;
+                width: calc(65px * var(--zoom));
+                height: calc(91px * var(--zoom));
+
+                &.bottom:after {
+                    @apply rounded-card-v;
                 }
             }
+        }
+
+        &.objstacksetlist {
+            width: calc(91px * var(--zoom));
+            height: calc(125px * var(--zoom));
+
+            & .stack {
+                @apply rounded-card-h;
+                width: calc(91px * var(--zoom));
+                height: calc(65px * var(--zoom));
+
+                &.bottom:after {
+                    @apply rounded-card-h;
+                }
+            }
+        }
+
+        &.almostempty .stack.bottom {
+            @apply opacity-0;
         }
 
         &.empty {
             @apply cursor-not-allowed;
 
-            & .stack {
-                &.top {
-                    @apply bg-transparent;
-                    border-color: var(--stack-color);
-                }
+            & .stack.top {
+                @apply bg-transparent border-transparent;
             }
         }
 
