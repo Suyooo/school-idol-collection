@@ -77,13 +77,13 @@ export class CardBase extends Model {
     declare song: CardSongExtraInfo | null;
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: false,
     })
     declare nameJpn: string;
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: true,
     })
     declare nameEng: string | null;
@@ -114,7 +114,7 @@ export class CardBase extends Model {
     declare backOrientation: CardOrientation;
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: false,
     })
     declare copyright: string;

@@ -8,14 +8,22 @@ import type { GroupID } from "$lib/enums/group.js";
 })
 export default class TranslationSong extends Model {
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+    })
+    declare id: number;
+
+    @Attribute({
+        type: DataTypes.STRING(4096),
+        unique: true,
         allowNull: false,
     })
     declare jpn: string;
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: false,
     })
     declare eng: string;

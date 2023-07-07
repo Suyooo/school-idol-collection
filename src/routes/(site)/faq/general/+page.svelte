@@ -44,7 +44,7 @@
             <Question {...data.sections[0].qa[11]} />
             <Question {...data.sections[0].qa[12]} />
             <Question {...data.sections[0].qa[13]} />
-            <div class="anchor" id="sp_practice" />
+            <div class="anchor" id="idolization" />
             <h5>What does "Special Practice" mean?</h5>
             <Question {...data.sections[0].qa[14]} />
             <Question {...data.sections[0].qa[15]} />

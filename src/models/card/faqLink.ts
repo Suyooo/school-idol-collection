@@ -26,20 +26,20 @@ export default class CardFAQLink extends Model {
     declare displayOrder: number;
 
     @Attribute({
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING(4096),
         allowNull: false,
     })
     declare label: string;
     declare labelPreparsed?: ParseNodePrepared[];
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: false,
     })
     declare link: string;
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: true,
     })
     declare shortAnswer?: string;

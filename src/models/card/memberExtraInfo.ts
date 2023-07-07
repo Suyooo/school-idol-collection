@@ -158,13 +158,13 @@ export default class CardMemberExtraInfo extends Model {
     declare pieceBdayAttribute: AttributeID | null;
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: true,
     })
     declare costumeJpn: string | null;
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: true,
     })
     declare costumeEng: string | null;

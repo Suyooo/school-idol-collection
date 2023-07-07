@@ -16,13 +16,13 @@ export default class SetCategory extends Model {
     declare id: number;
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: false,
     })
     declare jpn: string;
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: false,
     })
     declare eng: string;

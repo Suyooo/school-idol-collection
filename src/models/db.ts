@@ -42,8 +42,13 @@ const modelList: ModelStatic<any>[] = [
 ];
 
 const sequelize = new OrigSequelize({
-    dialect: "sqlite",
-    storage: "cardlist.db",
+    dialect: "mariadb",
+    dialectOptions: {
+        user: "sic",
+        password: "sic",
+        database: "sic",
+        socketPath: "/var/run/mysqld/mysqld.sock",
+    },
     models: modelList,
     logging: false,
     logQueryParameters: true,

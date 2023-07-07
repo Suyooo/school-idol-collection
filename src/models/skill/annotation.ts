@@ -39,7 +39,7 @@ export default class Annotation extends Model {
     declare type: AnnotationID;
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: false,
     })
     declare parameter: string;

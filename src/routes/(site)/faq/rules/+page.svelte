@@ -151,7 +151,7 @@
                 <br />
                 Once Idolized, cards can gain additional Pieces listed as <Idolized repl="[Idolized] Pieces" />, or use
                 more powerful Skills. You can learn more from the
-                <a href="/faq/general#sp_practice">FAQ about Idolization and Special Practice</a>.
+                <a href="/faq/general#idolization">FAQ about Idolization and Special Practice</a>.
             </div>
         </div>
     </div>

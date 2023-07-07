@@ -3792,10 +3792,6 @@ export const _data: { [key: string]: Faq } = {
             seeAlso: ["/faq/LL02#LL02-057"],
         },
         {
-            subjects: ["EX15-031"],
-            seeAlso: ["/faq/LL02#LL02-058"],
-        },
-        {
             subjects: ["EX15-032"],
             seeAlso: ["/faq/LL02#LL02-059"],
         },

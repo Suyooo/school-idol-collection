@@ -1,4 +1,4 @@
-import { BelongsToMany, DataTypes, Model } from "@sequelize/core";
+import { type BelongsToMany, DataTypes, Model } from "@sequelize/core";
 import type { QueryOptions } from "@sequelize/core";
 import {
     AfterCreate,
@@ -84,14 +84,14 @@ export class SkillBase extends Model {
     declare pattern: TranslationPattern | null;
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: false,
     })
     declare jpn: string;
     declare jpnPreparsed?: ParseNodePrepared[];
 
     @Attribute({
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(4096),
         allowNull: true,
     })
     declare eng: string | null;

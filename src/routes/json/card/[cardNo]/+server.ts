@@ -3,7 +3,6 @@ import { error, json } from "@sveltejs/kit";
 import type Card from "$models/card/card.js";
 import { cardOrder } from "$models/card/card.js";
 import AnnotationEnum from "$lib/enums/annotation.js";
-import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
 import type { RequestHandler } from "./$types.js";
 
 export const GET: RequestHandler = (async ({ params, locals }) => {
@@ -67,18 +66,14 @@ export const GET: RequestHandler = (async ({ params, locals }) => {
                         model: DB.m.Skill,
                         include: [
                             {
-                                model: DB.m.Card,
-                                include: [
-                                    { model: DB.m.CardMemberExtraInfo, attributes: ["rarity"] },
-                                    { model: DB.m.CardSongExtraInfo, attributes: ["rarity"] },
-                                ],
+                                model: DB.m.Card.withScope("viewForLink"),
                             },
                             {
                                 model: DB.m.CardMemberGroup,
                                 include: [
                                     {
                                         model: DB.m.CardMemberExtraInfo,
-                                        include: [DB.m.Card],
+                                        include: [DB.m.Card.withScope("viewForLink")],
                                     },
                                 ],
                             },

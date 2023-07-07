@@ -15,7 +15,7 @@
         "@sequelize/core": "^7.0.0-alpha.23",
         "cheerio": "^1.0.0-rc.12",
         "crawler": "^1.4.0",
-        "sqlite3": "^5.1.4"
+        "mariadb": "^3.1.1"
     },
     "devDependencies": {
         "@interactjs/actions": "^1.10.17",
