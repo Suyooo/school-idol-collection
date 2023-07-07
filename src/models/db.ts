@@ -1,3 +1,4 @@
+import dbSettings from "../../dbSettings.json";
 import { Sequelize as OrigSequelize } from "@sequelize/core";
 import type { ModelStatic } from "@sequelize/core";
 import type Card from "$models/card/card.js";
@@ -43,12 +44,7 @@ const modelList: ModelStatic<any>[] = [
 
 const sequelize = new OrigSequelize({
     dialect: "mariadb",
-    dialectOptions: {
-        user: "sic",
-        password: "sic",
-        database: "sic",
-        socketPath: "/var/run/mysqld/mysqld.sock",
-    },
+    dialectOptions: dbSettings,
     models: modelList,
     logging: false,
     logQueryParameters: true,

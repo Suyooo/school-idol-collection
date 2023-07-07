@@ -14,3 +14,4 @@ old/server/frontend/static/images/EX*
 old/server/frontend/static/images/PR*
 import/*
 static/images/cards/*
+dbSettings.json
