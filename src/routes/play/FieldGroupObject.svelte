@@ -73,6 +73,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div
     class="objgroup"
     style:left={`${displayPosition.x}px`}
@@ -81,6 +82,7 @@
     on:mousedown={() => (wasPickedUp = false)}
     on:mouseup={groupMenu}
     use:action
+    role="listitem"
 >
     {#each [...cards.entries()] as [id, card] (id)}
         <FieldCardObject {id} {...card} flippedColor={"white"} grouped />

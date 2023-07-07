@@ -76,6 +76,7 @@
     use:action
     bind:this={fieldElement}
     on:contextmenu|preventDefault={() => null}
+    role="presentation"
 >
     <div class="background">
         <div class="area deck" />

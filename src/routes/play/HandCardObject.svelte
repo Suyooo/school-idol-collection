@@ -154,9 +154,10 @@
         class:disabled={$liveModeEnabled}
         style:left={`${startOffset.x + displayPosition.x}px`}
         style:top={`${startOffset.y + displayPosition.y}px`}
-        in:fly={{ y: -200 }}
+        in:fly|global={{ y: -200 }}
         on:contextmenu|preventDefault={updateSidebar}
         use:action
+        role="listitem"
     >
         <div class="cardholder">
             {#await loadPromise}
@@ -175,6 +176,7 @@
         class="emptycard"
         class:indicator-after={indicatorAfter}
         class:disable-sideways-animations={disableSidewaysAnimations}
+        role="presentation"
     />
 {/if}
 
@@ -249,7 +251,7 @@
         }
 
         & .card {
-            @apply absolute flex items-start justify-center text-black bg-primary-200 overflow-hidden rounded-card-v shadow-md shadow-black;
+            @apply absolute flex items-center justify-center text-black bg-primary-200 overflow-hidden rounded-card-v shadow-md shadow-black;
             left: 0;
             width: 130px;
             height: 182px;

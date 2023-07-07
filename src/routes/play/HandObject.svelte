@@ -84,7 +84,7 @@
     }
 </script>
 
-<div class="objhand" use:action>
+<div class="objhand" role="list" use:action>
     <HandCardObject idx={-1} cardNo={null} indicatorAfter={indicatorPos === 0} {disableSidewaysAnimations} />
     {#each hand as handCard, idx (handCard.id)}
         <HandCardObject

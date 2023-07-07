@@ -11,6 +11,8 @@
     style:top={`${y}px`}
     on:mousedown|stopPropagation={() => null}
     on:contextmenu|preventDefault={() => null}
+    role="menu"
+    tabindex="0"
 >
     <div class="panel-inner">
         <h4>{@html header}</h4>

@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 import type Skill from "$models/skill/skill.js";
 import AnnotationEnum from "$lib/enums/annotation.js";
 import AttributeEnum from "$lib/enums/attribute.js";
@@ -24,7 +24,7 @@ export interface ComponentNode {
 }
 
 export interface ComponentNodeRenderable {
-    component: new (...args: any) => SvelteComponentTyped<any>;
+    component: new (...args: any) => SvelteComponent<any>;
     props: { [key: string | number | symbol]: any };
 }
 
@@ -460,7 +460,7 @@ function formElementNodes(nodes: ParseNode[]) {
     }
 }
 
-const componentDict: { [key: string]: new (...args: any) => SvelteComponentTyped<any> } = {
+const componentDict: { [key: string]: new (...args: any) => SvelteComponent<any> } = {
     Annotation: AnnotationComponent,
     Ability,
     Idolized,

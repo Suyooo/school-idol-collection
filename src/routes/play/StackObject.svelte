@@ -111,7 +111,7 @@
 
 <!-- TODO: on:contextmenu opens deck list in side bar -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
+<button
     class="objstack"
     class:objstackdeck={stackType === StackType.DECK}
     class:objstacksetlist={stackType === StackType.SET_LIST}
@@ -130,7 +130,7 @@
     <div class="stack top" style:margin-top={`-${stackLength + h}px`}>
         {cardNos.length}
     </div>
-</div>
+</button>
 
 <style lang="postcss">
     .objstack {

@@ -242,6 +242,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div
     bind:this={element}
     class="objcardfield"
@@ -259,6 +260,7 @@
     on:mouseup={cardMenu}
     on:contextmenu|preventDefault={() => updateSidebar()}
     use:action
+    role="listitem"
 >
     <div
         class="card"
@@ -290,7 +292,7 @@
         @apply absolute w-min select-none touch-none z-play-card cursor-grab;
 
         & .card {
-            @apply flex items-center justify-center bg-primary-300 overflow-hidden shadow-sm shadow-black;
+            @apply flex items-center justify-center text-black bg-primary-200 overflow-hidden shadow-sm shadow-black;
             transition: width 0.3s, height 0.3s, shadow-blur 0.3s;
 
             &.card-v {
