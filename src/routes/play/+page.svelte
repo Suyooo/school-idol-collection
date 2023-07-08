@@ -125,18 +125,32 @@
             };
         };
     }
-    function fieldPositionFunction(boundingBox: DOMRect): Point;
-    function fieldPositionFunction(x: number, y: number): Point;
     function fieldPositionFunction(a: DOMRect | number, b?: number): Point {
-        const x = typeof a === "number" ? a : a.left;
-        const y = typeof a === "number" ? b! : a.top;
+        const isFixedXY = typeof a === "number";
+        const x = isFixedXY ? a : a.left;
+        const y = isFixedXY ? b! : a.top;
 
         const field = fieldElements[logic.clientPlayerId];
         const left = field.offsetLeft + 1;
         const top = field.offsetTop + 1;
         const scroll = field.parentElement!.scrollTop;
 
-        return { x: Math.round((x - left) / currentZoom), y: Math.round((y - top + scroll) / currentZoom) };
+        const res = { x: Math.round((x - left) / currentZoom), y: Math.round((y - top + scroll) / currentZoom) };
+        if (!isFixedXY) {
+            // If called with a DOM rect as parameter, it's a card drop action. Restrict it to the field area
+            if (res.x < 0) {
+                res.x = 0;
+            } else if (res.x + a.width >= field.offsetWidth - 1) {
+                res.x = field.offsetWidth - a.width - 2;
+            }
+            if (res.y < 0) {
+                res.y = 0;
+            } else if (res.y + a.height >= field.offsetHeight - 1) {
+                res.y = field.offsetHeight - a.height - 2;
+            }
+        }
+
+        return res;
     }
     setContext("fieldZoom", fieldZoom);
     setContext("snapFunction", snapFunction);

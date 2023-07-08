@@ -128,7 +128,7 @@
 
 <style lang="postcss">
     .objfield {
-        @apply relative flex-shrink-0 box-content border border-solid min-w-0;
+        @apply relative flex-shrink-0 box-content border border-solid min-w-0 select-none;
         width: calc(720px * var(--zoom));
         height: calc(401px * var(--zoom));
         border-color: var(--player-color);
@@ -138,7 +138,7 @@
         }
 
         & .background {
-            @apply select-none pointer-events-none;
+            @apply pointer-events-none;
 
             & .area {
                 @apply absolute border border-solid z-play-field box-content rounded-md;
