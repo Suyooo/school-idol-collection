@@ -128,10 +128,9 @@
 
 <style lang="postcss">
     .objfield {
-        @apply relative flex-shrink-0 box-content border border-solid;
+        @apply relative flex-shrink-0 box-content border border-solid min-w-0;
         width: calc(720px * var(--zoom));
         height: calc(401px * var(--zoom));
-        margin: calc(10px * var(--zoom));
         border-color: var(--player-color);
 
         &:global(.ui-droppable-hover) {
@@ -154,8 +153,8 @@
                     &:before {
                         content: "Set List";
                         left: calc(-1rem * var(--zoom));
-                        top: -100%;
-                        bottom: -100%;
+                        top: calc(-10px * var(--zoom));
+                        bottom: calc(-10px * var(--zoom));
                         transform: rotate(180deg);
                     }
                 }

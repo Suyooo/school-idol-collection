@@ -6,12 +6,12 @@
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
-    import type { SnapFunction } from "@interactjs/types/index";
+    import type { Point, SnapFunction } from "@interactjs/types/index";
     import { cardIsIdolizable, cardIsMember } from "$lib/card/types.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
-    import type { OpenMenuFunction } from "./+page.svelte";
+    import type { FieldPositionFunction, OpenMenuFunction } from "./+page.svelte";
 </script>
 
 <script lang="ts">
@@ -21,11 +21,10 @@
     export let disableSidewaysAnimations: boolean;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
-    const playerFieldStore: Writable<HTMLDivElement> = getContext("playerField");
     const liveModeEnabled: Readable<boolean> = getContext("liveModeEnabled");
     const fieldZoom: Writable<number> = getContext("fieldZoom");
     const snapFunction: () => SnapFunction = getContext("snapFunction");
-    const fieldPositionFunction: (box: DOMRect) => [number, number] = getContext("fieldPositionFunction");
+    const fieldPositionFunction: FieldPositionFunction = getContext("fieldPositionFunction");
 
     let element: HTMLElement;
     $: if (element) element.dataset.idx = idx.toString();
@@ -41,8 +40,6 @@
 
     let startOffset: { x: number; y: number } = { x: 0, y: 0 };
     let displayPosition: { x: number; y: number } = { x: 0, y: 0 };
-    let playerField: HTMLDivElement;
-    $: playerField = $playerFieldStore;
     const dispatch = createEventDispatcher();
     function action(node: HTMLElement) {
         const interactable = interact(node)
@@ -62,13 +59,13 @@
                     end(event) {
                         if (event.relatedTarget?.classList.contains("objfield")) {
                             const pos = fieldPositionFunction(node.getBoundingClientRect());
-                            logic.requestHandToField(idx, pos[0], pos[1]);
+                            logic.requestHandToField(idx, pos.x, pos.y);
                         } else if (event.relatedTarget?.classList.contains("objhand")) {
                             // handled in HandObject
                             node.classList.remove("dragging");
                             startOffset.x = startOffset.y = displayPosition.x = displayPosition.y = 0;
                         } else if (event.relatedTarget?.classList.contains("objcardfieldmember")) {
-                            const box = node.getBoundingClientRect();
+                            const pos = fieldPositionFunction(node.getBoundingClientRect());
                             node.classList.remove("dragging");
                             startOffset.x = startOffset.y = displayPosition.x = displayPosition.y = 0;
                             openMenu(
@@ -83,15 +80,9 @@
                                     },
                                     {
                                         label: "⟪ENTER⟫ Unidolized",
-                                        handler: () =>
-                                            logic.requestHandToField(
-                                                idx,
-                                                box.left - playerField.offsetLeft - 1,
-                                                box.top -
-                                                    playerField.offsetTop +
-                                                    playerField.parentElement!.scrollTop -
-                                                    1
-                                            ),
+                                        handler: () => {
+                                            logic.requestHandToField(idx, pos.x, pos.y);
+                                        },
                                     },
                                 ],
                                 true
@@ -259,7 +250,7 @@
             transition: margin-top 0.3s, width 0.3s, height 0.3s, shadow-blur 0.3s, opacity 0.3s;
 
             & img {
-                @apply w-full;
+                @apply w-full h-full;
             }
 
             &.highlight {

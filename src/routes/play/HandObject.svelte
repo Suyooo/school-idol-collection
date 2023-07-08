@@ -52,6 +52,13 @@
                     event.relatedTarget.classList.add("inhand");
                     if (event.relatedTarget.classList.contains("objcardhand")) {
                         draggingHandCardIdx = parseInt(event.relatedTarget.dataset.idx!);
+                        if (hand.length === 1) {
+                            skipAnimations();
+                        }
+                    } else {
+                        if (hand.length === 0) {
+                            skipAnimations();
+                        }
                     }
                     indicatorPos = getHandIndex(event);
                 },
@@ -101,11 +108,12 @@
 
 <style lang="postcss">
     .objhand {
-        @apply absolute z-play-hand flex items-start justify-center bg-primary-600 border-4 border-solid border-transparent select-none px-4 pt-4;
-        left: 0;
+        @apply w-full z-play-hand flex items-start justify-center bg-primary-600 border-4 border-solid border-transparent select-none px-4 pt-4;
+        /*left: 0;
         right: 0;
         bottom: -15vh;
-        height: 30vh;
+        height: 30vh;*/
+        height: 15vh;
 
         & > :global(*):last-child {
             flex-shrink: 0;

@@ -2,6 +2,7 @@
     import { setContext } from "svelte";
     import { type Readable, type Writable, derived, get, writable } from "svelte/store";
     import type { SnapFunction } from "@interactjs/types";
+    import type { Point } from "@interactjs/types/index";
     import "../../app.css";
     import { cardTitle } from "$lib/card/strings.js";
     import { CardOrientation } from "$lib/enums/cardOrientation.js";
@@ -25,6 +26,11 @@
         entries: { label: string; handler: () => void; condition?: boolean }[],
         cancelable: boolean
     ) => void;
+
+    export type FieldPositionFunction = {
+        (boundingBox: DOMRect): Point;
+        (x: number, y: number): Point;
+    };
 </script>
 
 <script lang="ts">
@@ -119,16 +125,18 @@
             };
         };
     }
-    function fieldPositionFunction(boundingBox: DOMRect): [number, number] {
+    function fieldPositionFunction(boundingBox: DOMRect): Point;
+    function fieldPositionFunction(x: number, y: number): Point;
+    function fieldPositionFunction(a: DOMRect | number, b?: number): Point {
+        const x = typeof a === "number" ? a : a.left;
+        const y = typeof a === "number" ? b! : a.top;
+
         const field = fieldElements[logic.clientPlayerId];
-        const left = field.offsetLeft;
-        const top = field.offsetTop;
+        const left = field.offsetLeft + 1;
+        const top = field.offsetTop + 1;
         const scroll = field.parentElement!.scrollTop;
 
-        return [
-            Math.round((boundingBox.left - left - 1) / currentZoom),
-            Math.round((boundingBox.top - top + scroll - 1) / currentZoom),
-        ];
+        return { x: Math.round((x - left) / currentZoom), y: Math.round((y - top + scroll) / currentZoom) };
     }
     setContext("fieldZoom", fieldZoom);
     setContext("snapFunction", snapFunction);
@@ -139,18 +147,20 @@
 
 <div class="play">
     <div class="leftside">
-        <div class="fields">
-            {#key $players}
-                {#each $players as _, i}
-                    <FieldObject
-                        playerIdx={i}
-                        isClient={i === logic.clientPlayerId}
-                        bind:fieldElement={fieldElements[i]}
-                        bind:deckComponent={deckComponents[i]}
-                        bind:setListComponent={setListComponents[i]}
-                    />
-                {/each}
-            {/key}
+        <div class="fieldscont">
+            <div class="fields">
+                {#key $players}
+                    {#each $players as _, i}
+                        <FieldObject
+                            playerIdx={i}
+                            isClient={i === logic.clientPlayerId}
+                            bind:fieldElement={fieldElements[i]}
+                            bind:deckComponent={deckComponents[i]}
+                            bind:setListComponent={setListComponents[i]}
+                        />
+                    {/each}
+                {/key}
+            </div>
         </div>
 
         <HandObject hand={$handCards} />
@@ -161,7 +171,7 @@
         <Button classes="absolute right-2 top-10 w-6 h-6 !p-0" label="Zoom Out" on:click={() => ($fieldZoom -= 0.1)}
             >-</Button
         >
-        <span class="absolute right-10 top-2">{Math.round($fieldZoom * 100)}%</span>
+        <span class="absolute right-10 top-2">{Math.round($fieldZoom * 50)}%</span>
     </div>
     <div class="rightside">
         {#if $sidebarCardNo !== undefined}
@@ -213,10 +223,13 @@
     }
 
     .leftside {
-        @apply relative flex-1 flex items-center justify-center h-screen overflow-hidden;
+        @apply relative flex-1 flex flex-col items-center justify-center h-screen overflow-hidden;
 
-        & .fields {
-            @apply w-full flex flex-col h-screen items-center justify-center overflow-y-auto pb-[15vh];
+        & .fieldscont {
+            @apply w-full overflow-x-auto overflow-y-auto flex-grow p-4;
+            & .fields {
+                @apply mx-auto w-min min-h-full flex flex-col items-start justify-center gap-y-8;
+            }
         }
     }
 

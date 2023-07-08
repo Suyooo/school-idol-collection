@@ -2,9 +2,9 @@
     import { getContext } from "svelte";
     import type { Readable, Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
-    import type { SnapFunction } from "@interactjs/types/index";
+    import type { Point, SnapFunction } from "@interactjs/types/index";
     import type { ClientFieldCardSchema, ClientGameLogic } from "$lib/play/schema.js";
-    import type { OpenMenuFunction } from "./+page.svelte";
+    import type { FieldPositionFunction, OpenMenuFunction } from "./+page.svelte";
     import FieldCardObject from "./FieldCardObject.svelte";
 </script>
 
@@ -16,7 +16,7 @@
     const openMenu: OpenMenuFunction = getContext("openMenu");
     const fieldZoom: Writable<number> = getContext("fieldZoom");
     const snapFunction: () => SnapFunction = getContext("snapFunction");
-    const fieldPositionFunction: (box: DOMRect) => [number, number] = getContext("fieldPositionFunction");
+    const fieldPositionFunction: FieldPositionFunction = getContext("fieldPositionFunction");
 
     let displayPosition: { x: number; y: number };
     $: displayPosition = { x: $position.x * $fieldZoom, y: $position.y * $fieldZoom };
@@ -29,15 +29,18 @@
                     start() {
                         node.classList.add("dragging");
                         wasPickedUp = true;
+                        const pos = fieldPositionFunction(0, 0);
+                        displayPosition.x -= pos.x * $fieldZoom;
+                        displayPosition.y -= pos.y * $fieldZoom;
                     },
                     move(event) {
                         displayPosition.x += event.dx;
                         displayPosition.y += event.dy;
                     },
                     end() {
-                        node.classList.remove("dragging");
                         const pos = fieldPositionFunction(node.getBoundingClientRect());
-                        logic.requestGroupMove(id, pos[0], pos[1]);
+                        node.classList.remove("dragging");
+                        logic.requestGroupMove(id, pos.x, pos.y);
                     },
                 },
                 modifiers: [
@@ -100,7 +103,7 @@
         height: 91px;
 
         &:global(.dragging) {
-            @apply !z-play-card-dragging cursor-grabbing;
+            @apply fixed !z-play-card-dragging cursor-grabbing;
         }
     }
 </style>

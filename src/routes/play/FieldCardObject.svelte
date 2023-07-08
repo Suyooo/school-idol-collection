@@ -5,14 +5,14 @@
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
-    import type { SnapFunction } from "@interactjs/types/index";
+    import type { Point, SnapFunction } from "@interactjs/types/index";
     import { cardIsIdolizable, cardIsMember } from "$lib/card/types.js";
     import CardType from "$lib/enums/cardType.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
     import Button from "$lib/style/Button.svelte";
     import Spinner from "$lib/style/icons/Spinner.svelte";
-    import type { OpenMenuFunction } from "./+page.svelte";
+    import type { FieldPositionFunction, OpenMenuFunction } from "./+page.svelte";
 </script>
 
 <script lang="ts">
@@ -29,7 +29,7 @@
     const liveModeCards: Writable<number[]> = getContext("liveModeCards");
     const fieldZoom: Writable<number> = getContext("fieldZoom");
     const snapFunction: () => SnapFunction = getContext("snapFunction");
-    const fieldPositionFunction: (box: DOMRect) => [number, number] = getContext("fieldPositionFunction");
+    const fieldPositionFunction: FieldPositionFunction = getContext("fieldPositionFunction");
 
     let element: HTMLElement;
     $: if (element) element.dataset.id = id.toString();
@@ -54,6 +54,9 @@
                     start() {
                         node.classList.add("dragging");
                         wasPickedUp = true;
+                        const pos = fieldPositionFunction(0, 0);
+                        displayPosition.x -= pos.x * $fieldZoom;
+                        displayPosition.y -= pos.y * $fieldZoom;
                     },
                     move(event) {
                         displayPosition.x += event.dx;
@@ -63,9 +66,9 @@
                         if (event.relatedTarget?.classList.contains("objhand")) {
                             // handled in HandObject
                         } else {
-                            node.classList.remove("dragging");
                             const pos = fieldPositionFunction(node.getBoundingClientRect());
-                            logic.requestFieldMove(id, pos[0], pos[1]);
+                            node.classList.remove("dragging");
+                            logic.requestFieldMove(id, pos.x, pos.y);
                             if (
                                 event.relatedTarget?.classList.contains(
                                     cardType === CardType.MEMBER ? "objstackdeck" : "objstacksetlist"
@@ -312,7 +315,7 @@
             }
 
             & img.image {
-                @apply w-full hover:brightness-110;
+                @apply w-full h-full hover:brightness-110;
             }
 
             & .flipped {
@@ -353,7 +356,7 @@
         }
 
         &:global(.dragging) {
-            @apply !z-play-card-dragging cursor-grabbing;
+            @apply fixed !z-play-card-dragging cursor-grabbing;
 
             & .card {
                 transition: width 0.3s, height 0.3s, shadow-blur 0.3s;
