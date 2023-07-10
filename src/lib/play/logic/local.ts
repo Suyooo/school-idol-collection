@@ -12,6 +12,7 @@ import {
     StackSide,
     StackType,
 } from "$lib/play/schema.js";
+import { mapGet } from "$lib/utils/map.js";
 
 export class LocalClientGameLogic extends ClientGameLogic {
     private storeCardFlips = new Map<number, Writable<boolean>>();
@@ -120,8 +121,8 @@ export class LocalClientGameLogic extends ClientGameLogic {
             m.set(-1, {
                 cardNo: "LL10-084",
                 cardType: CardType.MEMBER,
-                flipped: this.storeCardFlips.get(-1)!,
-                position: this.storeCardPositions.get(-1)!,
+                flipped: mapGet(this.storeCardFlips, -1),
+                position: mapGet(this.storeCardPositions, -1),
                 idolizedBaseCardNo: undefined,
             });
             return m;
@@ -182,7 +183,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     private removeFromField(id: number): FieldCardSchema {
         let ret: FieldCardSchema;
         this.storePlayers[0].field.update((map) => {
-            const card = map.get(id)!;
+            const card = mapGet(map, id);
             const flipped = get(card.flipped);
             const position = get(card.position);
             ret = { ...card, flipped, position };
@@ -259,7 +260,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     }
 
     requestFieldMove(id: number, x: number, y: number) {
-        this.storeCardPositions.get(id)!.update((pos) => {
+        mapGet(this.storeCardPositions, id).update((pos) => {
             pos.x = x;
             pos.y = y;
             pos.z = this.nextZ++;
@@ -268,7 +269,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     }
 
     requestFieldFlip(id: number) {
-        this.storeCardFlips.get(id)!.update((flip) => !flip);
+        mapGet(this.storeCardFlips, id).update((flip) => !flip);
     }
 
     requestHandMove(idx: number, newIdx: number) {
@@ -283,13 +284,13 @@ export class LocalClientGameLogic extends ClientGameLogic {
             const groupCards = new Map<number, ClientFieldCardSchema>();
             this.storePlayers[0].field.update((fieldMap) => {
                 for (const { id: cardId, x: cardX, y: cardY, z: cardZ } of cards) {
-                    this.storeCardPositions.get(cardId)!.update((pos) => {
+                    mapGet(this.storeCardPositions, cardId).update((pos) => {
                         pos.x = cardX;
                         pos.y = cardY;
                         pos.z = cardZ;
                         return pos;
                     });
-                    groupCards.set(cardId, fieldMap.get(cardId)!);
+                    groupCards.set(cardId, mapGet(fieldMap, cardId));
                     fieldMap.delete(cardId);
                 }
                 return fieldMap;
@@ -304,7 +305,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     }
 
     requestGroupMove(id: number, x: number, y: number) {
-        this.storeGroupPositions.get(id)!.update((pos) => {
+        mapGet(this.storeGroupPositions, id).update((pos) => {
             pos.x = x;
             pos.y = y;
             return pos;
@@ -313,12 +314,12 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     requestGroupDestroy(id: number): void {
         this.storePlayers[0].groups.update((groupMap) => {
-            const group = groupMap.get(id)!;
+            const group = mapGet(groupMap, id);
             const groupPos = get(group.position);
             this.storePlayers[0].field.update((fieldMap) => {
                 let maxZ = 0;
                 for (const [cardId, card] of group.cards.entries()) {
-                    this.storeCardPositions.get(cardId)!.update((pos) => {
+                    mapGet(this.storeCardPositions, cardId).update((pos) => {
                         pos.x += groupPos.x;
                         pos.y += groupPos.y;
                         pos.z += this.nextZ + 1;

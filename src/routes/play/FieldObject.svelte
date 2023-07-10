@@ -21,6 +21,8 @@
 </script>
 
 <script lang="ts">
+    import PlusMinusButtons from "./PlusMinusButtons.svelte";
+
     export let playerIdx: number;
     export let isClient: boolean;
     export let fieldElement: HTMLDivElement;
@@ -77,8 +79,6 @@
     style:--zoom={$fieldZoom}
     use:action
     bind:this={fieldElement}
-    on:contextmenu|preventDefault={() => null}
-    role="presentation"
 >
     <div class="background">
         <div class="area deck" />
@@ -86,15 +86,13 @@
         <div class="line live" />
         <div class="line info" />
         <div class="name">{$profile.name}</div>
-        <div class="livepoints">{$livePoints}</div>
-        <div class="livepointsbelow">
-            {#if isClient}
-                <button on:click={() => logic.requestLPUpdate(1)}><Plus /></button>
-                <button on:click={() => logic.requestLPUpdate(-1)}><Minus /></button>
-            {:else}
-                Live Points
-            {/if}
+        <div class="livepoints">
+            {$livePoints}
+            <div class="livepointsbuttons">
+                <PlusMinusButtons value={$livePoints} update={(d) => logic.requestLPUpdate(d)} limit={99} accent />
+            </div>
         </div>
+        <div class="livepointslabel">Live Points</div>
     </div>
 
     {#each [...$groups.entries()] as [id, group] (id)}
@@ -218,8 +216,12 @@
                 line-height: calc(30px * var(--zoom));
             }
 
-            & .livepointsbelow {
-                @apply absolute flex items-center justify-around text-center uppercase font-normal tracking-tighter leading-none z-play-ui pointer-events-auto;
+            & .livepointsbuttons {
+                @apply absolute z-play-ui pointer-events-auto right-0 top-1;
+            }
+
+            & .livepointslabel {
+                @apply absolute flex items-center justify-around text-center uppercase font-normal tracking-tighter leading-none z-play-ui;
                 left: 0px;
                 width: calc(60px * var(--zoom));
                 top: calc(35px * var(--zoom));
@@ -233,6 +235,10 @@
                     height: calc(20px * var(--zoom));
                     font-size: calc(15px * var(--zoom));
                     line-height: calc(20px * var(--zoom));
+
+                    &.disable {
+                        @apply !bg-primary-500 pointer-events-none;
+                    }
                 }
             }
         }

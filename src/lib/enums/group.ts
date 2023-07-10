@@ -1,4 +1,5 @@
 import EnumError from "$lib/errors/enumError.js";
+import { mapGet } from "$lib/utils/map.js";
 
 type Name =
     | "???"
@@ -34,7 +35,7 @@ export default class GroupEnum {
         GroupEnum.idMap.set(this.id, this);
         GroupEnum.idMapWithSubs.set(this.id, [this]);
         if (this.superGroup !== null) {
-            GroupEnum.idMapWithSubs.get(this.superGroup.id)!.push(this);
+            mapGet(GroupEnum.idMapWithSubs, this.superGroup.id).push(this);
         }
         GroupEnum.nameMap.set(this.name, this);
     }

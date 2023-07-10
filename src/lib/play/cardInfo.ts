@@ -4,7 +4,8 @@ import { CardMemberRarity } from "$lib/enums/cardRarity.js";
 import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
 import { retryPromise } from "$lib/utils/promise.js";
 
-export type CardWithImageData = Card & { imageDataUrl: string };
+export type CardImageData = { imageDataUrl: string };
+export type CardWithImageData = Card & CardImageData;
 const cardInfoCache = new Map<string, Promise<CardWithImageData & CardPageExtraInfo<false, false>>>();
 
 export function loadCardInfo(cardNo: string): Promise<CardWithImageData & CardPageExtraInfo<false, false>> {

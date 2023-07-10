@@ -2,7 +2,7 @@
     import { getContext } from "svelte";
     import type { Readable, Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
-    import type { Point, SnapFunction } from "@interactjs/types/index";
+    import type { SnapFunction } from "@interactjs/types/index";
     import type { ClientFieldCardSchema, ClientGameLogic } from "$lib/play/schema.js";
     import type { FieldPositionFunction, OpenMenuFunction } from "./+page.svelte";
     import FieldCardObject from "./FieldCardObject.svelte";
@@ -20,7 +20,7 @@
 
     let displayPosition: { x: number; y: number };
     $: displayPosition = { x: $position.x * $fieldZoom, y: $position.y * $fieldZoom };
-    let wasPickedUp = true;
+    let wasMoved = true;
     function action(node: HTMLElement) {
         const interactable = interact(node)
             .styleCursor(false)
@@ -28,12 +28,14 @@
                 listeners: {
                     start() {
                         node.classList.add("dragging");
-                        wasPickedUp = true;
                         const pos = fieldPositionFunction(0, 0);
                         displayPosition.x -= pos.x * $fieldZoom;
                         displayPosition.y -= pos.y * $fieldZoom;
                     },
                     move(event) {
+                        if (Math.abs(event.dx) > 2 || Math.abs(event.dy) > 2) {
+                            wasMoved = true;
+                        }
                         displayPosition.x += event.dx;
                         displayPosition.y += event.dy;
                     },
@@ -60,8 +62,10 @@
         };
     }
 
-    function groupMenu(event: MouseEvent) {
-        if (event.button === 0 && !wasPickedUp) {
+    const memberCardsWidth: number = 65 + 10 * (cards.size - 2);
+
+    function onClick(event: MouseEvent) {
+        if (event.button === 0 && !wasMoved) {
             openMenu(
                 event.pageX,
                 event.pageY,
@@ -75,7 +79,7 @@
                 true
             );
         }
-        wasPickedUp = true;
+        wasMoved = true;
     }
 </script>
 
@@ -86,12 +90,18 @@
     style:--zoom={$fieldZoom}
     style:left={`${displayPosition.x}px`}
     style:top={`${displayPosition.y}px`}
-    style:width={`${65 + 10 * (cards.size - 2)}px`}
-    on:mousedown={() => (wasPickedUp = false)}
-    on:mouseup={groupMenu}
+    on:mousedown={() => (wasMoved = false)}
+    on:mouseup={onClick}
     use:action
     role="listitem"
 >
+    <div
+        class="hoveroutline"
+        style:width={`${Math.max(memberCardsWidth, 91) * $fieldZoom}px`}
+        style:margin-left={`-${Math.max(0, ((91 - memberCardsWidth) / 2) * $fieldZoom)}px`}
+    >
+        &nbsp;
+    </div>
     {#each [...cards.entries()] as [id, card] (id)}
         <FieldCardObject {id} {...card} flippedColor={"white"} grouped />
     {/each}
@@ -100,7 +110,11 @@
 <style lang="postcss">
     .objgroup {
         @apply absolute;
-        height: 91px;
+
+        &:hover .hoveroutline {
+            @apply rounded-md outline outline-offset-4 outline-2 outline-primary-100;
+            height: calc(91px * var(--zoom));
+        }
 
         &:global(.dragging) {
             @apply fixed !z-play-card-dragging cursor-grabbing;

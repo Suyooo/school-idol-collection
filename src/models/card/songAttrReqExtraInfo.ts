@@ -2,8 +2,6 @@ import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, Table } from "@sequelize/core/decorators-legacy";
 import type { CardSong } from "$models/card/card.js";
 import type CardSongExtraInfo from "$models/card/songExtraInfo.js";
-import { pieceInfoGetter } from "$models/utils/pieceInfoGetterSetter.js";
-import type PieceInfo from "$lib/types/pieceInfo.js";
 
 @Table({
     modelName: "CardSongAttrReqExtraInfo",
@@ -43,8 +41,4 @@ export default class CardSongAttrReqExtraInfo extends Model {
         validate: { min: 0 },
     })
     declare piecesCool: number;
-
-    get pieces(): PieceInfo {
-        return pieceInfoGetter(this, undefined, "piecesSmile", "piecesPure", "piecesCool");
-    }
 }

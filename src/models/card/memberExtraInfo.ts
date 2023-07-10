@@ -3,11 +3,9 @@ import { Attribute, HasOne, Table } from "@sequelize/core/decorators-legacy";
 import type { CardMember } from "$models/card/card.js";
 import type CardMemberGroup from "$models/card/memberGroup.js";
 import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo.js";
-import { pieceInfoGetter } from "$models/utils/pieceInfoGetterSetter.js";
 import type { AttributeID } from "$lib/enums/attribute.js";
 import CardMemberIdolizeType from "$lib/enums/cardMemberIdolizeType.js";
 import type { CardMemberRarity } from "$lib/enums/cardRarity.js";
-import type PieceInfo from "$lib/types/pieceInfo.js";
 
 @Table({
     modelName: "CardMemberExtraInfo",
@@ -146,10 +144,6 @@ export default class CardMemberExtraInfo extends Model {
         validate: { min: 0 },
     })
     declare piecesCool: number;
-
-    get pieces(): PieceInfo {
-        return pieceInfoGetter(this, "piecesAll", "piecesSmile", "piecesPure", "piecesCool");
-    }
 
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,

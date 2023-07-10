@@ -6,7 +6,7 @@
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
-    import type { Point, SnapFunction } from "@interactjs/types/index";
+    import type { SnapFunction } from "@interactjs/types/index";
     import { cardIsIdolizable, cardIsMember } from "$lib/card/types.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
@@ -125,13 +125,10 @@
         };
     }
 
-    let sidebarCardNo: Writable<string | undefined> = getContext("sidebarCardNo");
+    const [sidebarCardNo, setSidebarCard] =
+        getContext<[Readable<string | undefined>, (c: string | undefined) => void]>("sidebarCardNo");
     function updateSidebar() {
-        if ($sidebarCardNo === cardNo) {
-            $sidebarCardNo = undefined;
-        } else {
-            $sidebarCardNo = cardNo!;
-        }
+        setSidebarCard(cardNo!);
     }
 </script>
 

@@ -12,11 +12,14 @@
     import type { ClientGameLogic, ClientGameSchema, ClientPlayerSchema } from "$lib/play/schema.js";
     import { type HandCardSchema, StackType } from "$lib/play/schema.js";
     import Button from "$lib/style/Button.svelte";
+    import Minus from "$lib/style/icons/Minus.svelte";
+    import Plus from "$lib/style/icons/Plus.svelte";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import CardInfoRows from "../(site)/card/[cardNo]/CardInfoRows.svelte";
     import FieldObject from "./FieldObject.svelte";
     import HandObject from "./HandObject.svelte";
     import PopupMenu from "./PopupMenu.svelte";
+    import SidebarLiveMode from "./SidebarLiveMode.svelte";
     import type StackObject from "./StackObject.svelte";
 
     export type OpenMenuFunction = (
@@ -96,7 +99,14 @@
             sidebarCardPromise = loadCardInfo($sidebarCardNo);
         }
     }
-    setContext("sidebarCardNo", sidebarCardNo);
+    function setSidebarCard(newCardNo: string | undefined) {
+        if (newCardNo === undefined || $sidebarCardNo === newCardNo) {
+            $sidebarCardNo = undefined;
+        } else {
+            $sidebarCardNo = newCardNo;
+        }
+    }
+    setContext("sidebarCardNo", [sidebarCardNo, setSidebarCard]);
 
     const liveModeCards: Writable<number[]> = writable([]);
     const liveModeEnabled: Readable<boolean> = derived(liveModeCards, (cards) => cards.length > 0);
@@ -160,7 +170,7 @@
 <svelte:body on:mousedown={() => (menuEntries = undefined)} />
 
 <div class="play">
-    <div class="leftside">
+    <div class="leftside" on:contextmenu|preventDefault={() => null} role="presentation">
         <div class="fieldscont">
             <div class="fields">
                 {#key $players}
@@ -179,47 +189,50 @@
 
         <HandObject hand={$handCards} />
 
-        <Button classes="absolute right-2 top-2 w-6 h-6 !p-0" label="Zoom In" on:click={() => ($fieldZoom += 0.1)}
-            >+</Button
-        >
-        <Button classes="absolute right-2 top-10 w-6 h-6 !p-0" label="Zoom Out" on:click={() => ($fieldZoom -= 0.1)}
-            >-</Button
-        >
+        <Button classes="absolute right-2 top-2 w-6 h-6 !p-0" label="Zoom In" on:click={() => ($fieldZoom += 0.1)}>
+            <Plus />
+        </Button>
+        <Button classes="absolute right-2 top-10 w-6 h-6 !p-0" label="Zoom Out" on:click={() => ($fieldZoom -= 0.1)}>
+            <Minus />
+        </Button>
         <span class="absolute right-10 top-2">{Math.round($fieldZoom * 50)}%</span>
     </div>
     <div class="rightside">
-        {#if $sidebarCardNo !== undefined}
-            {#await sidebarCardPromise}
-                <Spinner />
-            {:then card}
-                <div class="panel-inner">
-                    <h4>{@html cardTitle(card, true, Language.ENG, true)}</h4>
-                    <div class="sidebar-info">
-                        <CardInfoRows {card} hideSharedId hideBacklinks hideFaq forceSingleColumn />
-                        <img
-                            src={card.imageDataUrl}
-                            alt={`${card.cardNo} Front Illustration`}
-                            class:rounded-card-v={card.frontOrientation === CardOrientation.PORTRAIT}
-                            class:rounded-card-h={card.frontOrientation === CardOrientation.LANDSCAPE}
-                        />
-                    </div>
-                </div>
-                <div class="cardcopyright">{card.copyright}</div>
-            {/await}
-            <Button
-                accent
-                href={`/card/${$sidebarCardNo}`}
-                classes="float-right mt-1"
-                target="_blank"
-                label="Open Card Page in New Tab"
-            >
-                Open Card Page
-            </Button>
-        {:else}
-            <div class="panel">
-                <div class="panel-inner text">Right-click on a card to show details!</div>
-            </div>
+        {#if $liveModeEnabled}
+            <SidebarLiveMode />
         {/if}
+        <div class="panel">
+            {#if $sidebarCardNo !== undefined}
+                {#await sidebarCardPromise}
+                    <Spinner />
+                {:then card}
+                    <div class="panel-inner">
+                        <h4>{@html cardTitle(card, true, Language.ENG, true)}</h4>
+                        <div class="sidebar-info">
+                            <CardInfoRows {card} hideSharedId hideBacklinks hideFaq forceSingleColumn />
+                            <img
+                                src={card.imageDataUrl}
+                                alt={`${card.cardNo} Front Illustration`}
+                                class:rounded-card-v={card.frontOrientation === CardOrientation.PORTRAIT}
+                                class:rounded-card-h={card.frontOrientation === CardOrientation.LANDSCAPE}
+                            />
+                        </div>
+                    </div>
+                    <div class="cardcopyright">{card.copyright}</div>
+                {/await}
+                <Button
+                    accent
+                    href={`/card/${$sidebarCardNo}`}
+                    classes="float-right mt-1"
+                    target="_blank"
+                    label="Open Card Page in New Tab"
+                >
+                    Open Card Page
+                </Button>
+            {:else}
+                <div class="panel-inner text">Right-click on a card to show details!</div>
+            {/if}
+        </div>
     </div>
 </div>
 
@@ -248,7 +261,7 @@
     }
 
     .rightside {
-        @apply p-2 bg-primary-700 relative flex-shrink-0 h-screen overflow-x-hidden;
+        @apply min-w-[32rem] bg-primary-700 relative flex-shrink-0 h-screen overflow-x-hidden overflow-y-scroll;
         flex-basis: 25%;
     }
 

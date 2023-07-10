@@ -5,12 +5,11 @@
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
-    import type { Point, SnapFunction } from "@interactjs/types/index";
+    import type { SnapFunction } from "@interactjs/types/index";
     import { cardIsIdolizable, cardIsMember } from "$lib/card/types.js";
     import CardType from "$lib/enums/cardType.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
-    import Button from "$lib/style/Button.svelte";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import type { FieldPositionFunction, OpenMenuFunction } from "./+page.svelte";
 </script>
@@ -44,7 +43,7 @@
 
     let displayPosition: { x: number; y: number };
     $: displayPosition = { x: $position.x * $fieldZoom, y: $position.y * $fieldZoom };
-    let wasPickedUp = true;
+    let wasMoved = true;
     function action(node: HTMLElement) {
         if (grouped) return;
         const interactable = interact(node)
@@ -53,12 +52,14 @@
                 listeners: {
                     start() {
                         node.classList.add("dragging");
-                        wasPickedUp = true;
                         const pos = fieldPositionFunction(0, 0);
                         displayPosition.x -= pos.x * $fieldZoom;
                         displayPosition.y -= pos.y * $fieldZoom;
                     },
                     move(event) {
+                        if (Math.abs(event.dx) > 2 || Math.abs(event.dy) > 2) {
+                            wasMoved = true;
+                        }
                         displayPosition.x += event.dx;
                         displayPosition.y += event.dy;
                     },
@@ -160,21 +161,28 @@
         };
     }
 
-    function cardMenu(event: MouseEvent) {
-        if (event.button !== 0 || wasPickedUp) {
+    function onClick(event: MouseEvent) {
+        if (event.button !== 0 || wasMoved) {
             return;
         }
         if ($liveModeCards.length > 0) {
-            if (cardType === CardType.MEMBER) {
-                liveModeCards.update((m) => {
-                    const idx = m.indexOf(id);
-                    if (idx !== -1) {
-                        m.splice(idx, 1);
-                    } else {
-                        m.push(id);
-                    }
-                    return m;
-                });
+            if (!grouped && !$flipped) {
+                if (cardType === CardType.MEMBER) {
+                    liveModeCards.update((m) => {
+                        const idx = m.indexOf(id);
+                        if (idx !== -1) {
+                            m.splice(idx, 1);
+                        } else {
+                            m.push(id);
+                        }
+                        return m;
+                    });
+                } else if (cardType === CardType.SONG) {
+                    liveModeCards.update((m) => {
+                        m[0] = id;
+                        return m;
+                    });
+                }
             }
         } else if (!grouped) {
             openMenu(
@@ -207,44 +215,18 @@
         }
     }
 
-    let sidebarCardNo: Writable<string | undefined> = getContext("sidebarCardNo");
+    const [sidebarCardNo, setSidebarCard] =
+        getContext<[Readable<string | undefined>, (c: string | undefined) => void]>("sidebarCardNo");
 
-    function updateSidebar(newCardNo?: string) {
-        if (newCardNo === undefined && $flipped) {
+    function updateSidebar(overrideCardNo?: string) {
+        if (overrideCardNo === undefined && $flipped) {
             return;
         }
-        if (newCardNo === undefined && $sidebarCardNo === cardNo) {
-            $sidebarCardNo = undefined;
+        if (overrideCardNo === undefined && $sidebarCardNo === cardNo) {
+            setSidebarCard(undefined);
         } else {
-            $sidebarCardNo = newCardNo ?? cardNo;
+            setSidebarCard(overrideCardNo ?? cardNo);
         }
-    }
-
-    function createLiveGroup() {
-        const cards = $liveModeCards.map((card, i) => {
-            if (i === 0) {
-                // x == (65 + ($liveModeCards.length - 2) * 10) / 2 - 91 / 2
-                return {
-                    id: card,
-                    x: ($liveModeCards.length - 2) * 5 - 13,
-                    y: 13,
-                    z: $liveModeCards.length,
-                };
-            } else {
-                return {
-                    id: card,
-                    x: (i - 1) * 10,
-                    y: 0,
-                    z: i - 1,
-                };
-            }
-        });
-        logic.requestGroupCreate($position.x - cards[0].x, $position.y - cards[0].y, cards);
-        endLiveMode();
-    }
-
-    function endLiveMode() {
-        liveModeCards.set([]);
     }
 </script>
 
@@ -257,15 +239,17 @@
     class:objcardfieldsong={cardType === CardType.SONG}
     class:objcardfieldmemory={cardType === CardType.MEMORY}
     class:lowlight={grouped}
-    class:disabled={$liveModeCards.length > 0 && $liveModeCards.indexOf(id) === -1}
+    class:livemode-unselected={$liveModeCards.length > 0 && $liveModeCards.indexOf(id) === -1}
+    class:livemode-selected={$liveModeCards.length > 0 && $liveModeCards.indexOf(id) !== -1}
+    class:livemode-unselectable={$liveModeCards.length > 0 && ($flipped || grouped)}
     class:idolizable={card !== undefined && cardIsMember(card) && cardIsIdolizable(card)}
     style:--flipped-color={flippedColor}
     style:--zoom={$fieldZoom}
     style:left={`${displayPosition.x}px`}
     style:top={`${displayPosition.y}px`}
     style:z-index={$position.z}
-    on:mousedown={() => (wasPickedUp = false)}
-    on:mouseup={cardMenu}
+    on:mousedown={() => (wasMoved = false)}
+    on:mouseup={onClick}
     on:contextmenu|preventDefault={() => updateSidebar()}
     use:action
     role="listitem"
@@ -289,10 +273,6 @@
             {/if}
         {/await}
     </div>
-    {#if cardType === CardType.SONG && $liveModeCards.indexOf(id) !== -1}
-        <Button accent classes="mt-1 w-full" label="Live" on:click={createLiveGroup}>⟪LIVE⟫</Button>
-        <Button classes="mt-1 w-full" label="Cancel" on:click={endLiveMode}>Cancel</Button>
-    {/if}
 </div>
 
 <style lang="postcss">
@@ -341,7 +321,11 @@
             }
         }
 
-        &.disabled {
+        &.livemode-selected {
+            @apply outline outline-2 outline-offset-4 outline-primary-100 rounded-md;
+        }
+
+        &.livemode-unselected {
             & img.image,
             & .flipped {
                 @apply brightness-75 hover:brightness-75;
@@ -353,6 +337,10 @@
                     @apply hover:brightness-100;
                 }
             }
+        }
+
+        &.livemode-unselectable {
+            @apply pointer-events-none brightness-50;
         }
 
         &:global(.dragging) {

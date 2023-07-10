@@ -24,7 +24,6 @@ import CardType from "$lib/enums/cardType.js";
 import ImportError from "$lib/errors/importError.js";
 import { getScopesFromFilters } from "$lib/search/query.js";
 import { appendTriggersToString, tryAllPatterns } from "$lib/translation/skills.js";
-import PieceInfo from "$lib/types/pieceInfo.js";
 import type { RequestHandler } from "./$types.js";
 import Crawler from "./promiseCrawler.js";
 
@@ -369,15 +368,15 @@ async function importCard(
                 card.member!.baseIfSecret = orientationCheckCardNo = set + "-" + paddedInSetNo;
             }
 
-            let pieces = new PieceInfo(0, 0, 0, 0);
-            if (info["ピース1"]) pieces = pieces.addPiece(AttributeEnum.fromSongAttributeName(info["ピース1"]));
-            if (info["ピース2"]) pieces = pieces.addPiece(AttributeEnum.fromSongAttributeName(info["ピース2"]));
-            if (info["ピース3"]) pieces = pieces.addPiece(AttributeEnum.fromSongAttributeName(info["ピース3"]));
-            if (info["ピース4"]) pieces = pieces.addPiece(AttributeEnum.fromSongAttributeName(info["ピース4"]));
-            memberInfo.piecesAll = pieces.all;
-            memberInfo.piecesSmile = pieces.smile;
-            memberInfo.piecesPure = pieces.pure;
-            memberInfo.piecesCool = pieces.cool;
+            let pieces = [0, 0, 0, 0];
+            if (info["ピース1"]) pieces[AttributeEnum.fromSongAttributeName(info["ピース1"]).id]++;
+            if (info["ピース2"]) pieces[AttributeEnum.fromSongAttributeName(info["ピース2"]).id]++;
+            if (info["ピース3"]) pieces[AttributeEnum.fromSongAttributeName(info["ピース3"]).id]++;
+            if (info["ピース4"]) pieces[AttributeEnum.fromSongAttributeName(info["ピース4"]).id]++;
+            memberInfo.piecesAll = pieces[AttributeEnum.ALL.id];
+            memberInfo.piecesSmile = pieces[AttributeEnum.SMILE.id];
+            memberInfo.piecesPure = pieces[AttributeEnum.PURE.id];
+            memberInfo.piecesCool = pieces[AttributeEnum.COOL.id];
             memberInfo.pieceBdayAttribute = info["ボーナス"]
                 ? AttributeEnum.fromSongAttributeName(info["ボーナス"]).id
                 : null;
@@ -386,22 +385,22 @@ async function importCard(
                 if (skillText.indexOf("<覚醒>") !== -1) {
                     // Idolized Piece Bonus is listed in the Skill text - find and parse it
                     memberInfo.idolizeType = CardMemberIdolizeType.WITH_PIECES;
-                    const idolizePieceInfo: Partial<CardMemberIdolizePieceExtraInfo> = {};
+                    const idolizePieces: Partial<CardMemberIdolizePieceExtraInfo> = {};
                     const idolPieceMatch = idolizedPiecesPattern.exec(skillText);
                     if (idolPieceMatch === null)
                         throw new ImportError("Can't read Idolized Pieces scraped from website", cardNo);
 
-                    let idolizationPieces = new PieceInfo(0, 0, 0, 0);
+                    let idolizationPieces = [0, 0, 0, 0];
                     for (const piece of idolPieceMatch[1].split("/")) {
-                        idolizationPieces = idolizationPieces.addPiece(
-                            AttributeEnum.fromSongAttributeName(piece.substring(1, piece.length - 1))
-                        );
+                        idolizationPieces[
+                            AttributeEnum.fromSongAttributeName(piece.substring(1, piece.length - 1)).id
+                        ]++;
                     }
-                    idolizePieceInfo.piecesAll = idolizationPieces.all;
-                    idolizePieceInfo.piecesSmile = idolizationPieces.smile;
-                    idolizePieceInfo.piecesPure = idolizationPieces.pure;
-                    idolizePieceInfo.piecesCool = idolizationPieces.cool;
-                    memberInfo.idolizeBonus = idolizePieceInfo as CardMemberIdolizePieceExtraInfo;
+                    idolizePieces.piecesAll = pieces[AttributeEnum.ALL.id];
+                    idolizePieces.piecesSmile = pieces[AttributeEnum.SMILE.id];
+                    idolizePieces.piecesPure = pieces[AttributeEnum.PURE.id];
+                    idolizePieces.piecesCool = pieces[AttributeEnum.COOL.id];
+                    memberInfo.idolizeBonus = idolizePieces as CardMemberIdolizePieceExtraInfo;
                     skillText = skillText.substring(0, idolPieceMatch.index);
                 } else {
                     memberInfo.idolizeType = CardMemberIdolizeType.NO_PIECES;
