@@ -6,6 +6,7 @@ import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePiec
 import type { AttributeID } from "$lib/enums/attribute.js";
 import CardMemberIdolizeType from "$lib/enums/cardMemberIdolizeType.js";
 import type { CardMemberRarity } from "$lib/enums/cardRarity.js";
+import type { RangeCost, RangeDay, RangeMonth, RangeYear } from "$lib/types/ranges.js";
 
 @Table({
     modelName: "CardMemberExtraInfo",
@@ -65,57 +66,25 @@ export default class CardMemberExtraInfo extends Model {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
     })
-    declare cost: 0 | 1 | 2 | 3;
+    declare cost: RangeCost;
 
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: true,
     })
-    declare birthDay:
-        | 1
-        | 2
-        | 3
-        | 4
-        | 5
-        | 6
-        | 7
-        | 8
-        | 9
-        | 10
-        | 11
-        | 12
-        | 13
-        | 14
-        | 15
-        | 16
-        | 17
-        | 18
-        | 19
-        | 20
-        | 21
-        | 22
-        | 23
-        | 24
-        | 25
-        | 26
-        | 27
-        | 28
-        | 29
-        | 30
-        | 31
-        | null;
+    declare birthDay: RangeDay | null;
 
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: true,
     })
-    declare birthMonth: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | null;
+    declare birthMonth: RangeMonth | null;
 
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: true,
     })
-    declare year: 1 | 2 | 3 | null;
+    declare year: RangeYear | null;
 
     @Attribute({
         type: DataTypes.INTEGER.UNSIGNED,

@@ -25,6 +25,7 @@ import CardType from "$lib/enums/cardType.js";
 import ImportError from "$lib/errors/importError.js";
 import { getScopesFromFilters } from "$lib/search/query.js";
 import { appendTriggersToString, tryAllPatterns } from "$lib/translation/skills.js";
+import type { RangeCost, RangeDay, RangeMonth, RangeYear } from "$lib/types/ranges.js";
 import type { RequestHandler } from "./$types.js";
 
 const nameNormalizations: { [k: string]: string } = {};
@@ -302,45 +303,14 @@ async function importCard(
 
             const memberInfo: Partial<CardMemberExtraInfo> = {};
             memberInfo.rarity = CardMemberRarity[info["レアリティ"] as keyof typeof CardMemberRarity];
-            memberInfo.cost = (info["コスト"] ? info["コスト"].length : 0) as 0 | 1 | 2 | 3;
+            memberInfo.cost = info["コスト"] ? (info["コスト"].length as RangeCost) : 0;
             if (info["誕生日"] !== "？？？") {
                 const bdMatch = birthdayPattern.exec(info["誕生日"]!);
                 if (bdMatch === null) throw new ImportError("Invalid birthday scraped from website", cardNo);
-                memberInfo.birthDay = parseInt(bdMatch[2]) as
-                    | 1
-                    | 2
-                    | 3
-                    | 4
-                    | 5
-                    | 6
-                    | 7
-                    | 8
-                    | 9
-                    | 10
-                    | 11
-                    | 12
-                    | 13
-                    | 14
-                    | 15
-                    | 16
-                    | 17
-                    | 18
-                    | 19
-                    | 20
-                    | 21
-                    | 22
-                    | 23
-                    | 24
-                    | 25
-                    | 26
-                    | 27
-                    | 28
-                    | 29
-                    | 30
-                    | 31;
-                memberInfo.birthMonth = parseInt(bdMatch[1]) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+                memberInfo.birthDay = parseInt(bdMatch[2]) as RangeDay;
+                memberInfo.birthMonth = parseInt(bdMatch[1]) as RangeMonth;
             }
-            memberInfo.year = (info["学年"] ? parseInt(info["学年"].charAt(0)) : null) as 1 | 2 | 3 | null;
+            memberInfo.year = info["学年"] ? (parseInt(info["学年"].charAt(0)) as RangeYear) : null;
             memberInfo.abilityRush = info["特技"] ? info["特技"].indexOf("RUSH") !== -1 : false;
             memberInfo.abilityLive = info["特技"] ? info["特技"].indexOf("LIVE") !== -1 : false;
             memberInfo.costumeJpn = info["衣装"];
