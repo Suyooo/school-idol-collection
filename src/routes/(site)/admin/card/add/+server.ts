@@ -1,5 +1,6 @@
 // noinspection JSNonASCIINames
 import * as fs from "fs";
+import { JSDOM } from "jsdom";
 import probeImageSize from "probe-image-size";
 import { Op } from "@sequelize/core";
 import { error, json } from "@sveltejs/kit";
@@ -25,7 +26,6 @@ import ImportError from "$lib/errors/importError.js";
 import { getScopesFromFilters } from "$lib/search/query.js";
 import { appendTriggersToString, tryAllPatterns } from "$lib/translation/skills.js";
 import type { RequestHandler } from "./$types.js";
-import Crawler from "./promiseCrawler.js";
 
 const nameNormalizations: { [k: string]: string } = {};
 for (const n of [
@@ -52,74 +52,65 @@ for (const n of [
     nameNormalizations[n.replace(" ", "　")] = n;
 }
 
-export const POST: RequestHandler = (async ({ locals, request }) => {
-    const cardNo = (await request.json()).cardNo;
-
-    const cardCrawler = new Crawler({
-        rateLimit: 1000,
-        callback: async (error, res, done) => {
-            if (error) {
-                done();
-                throw error;
-            } else {
-                const info: { [k: string]: string | null } = {};
-                if (res.$(".status").length === 0) {
-                    done();
-                    throw new ImportError("Card page does not exist.", res.request.uri.pathname!);
-                }
-                fillInfoObject(info, res.$);
-
-                const cardNo = info["カードNo."]!;
-                const set = cardNo.split("-")[0];
-                const inSetNo = parseInt(cardNo.substring(5));
-
-                // As far as I am aware, EX15-055 to EX15-072 do not actually exist (dupes of EX15-E01 to EX15-E18)
-                if (set == "EX15" && cardNo.charAt(5) != "E" && inSetNo >= 55) {
-                    done();
-                    throw new ImportError("This card does not exist in reality, only on the site.", cardNo);
-                }
-
-                // Guess Card type
-                let type: CardType;
-                if (info["種別"] === "メンバー") {
-                    // Members (and only Members) list their own type on their own page
-                    type = CardType.MEMBER;
-                } else if (info["カードの色"] === null) {
-                    // Memories use the page layout for Song cards, but list their Attribute as none
-                    type = CardType.MEMORY;
-                } else {
-                    // Otherwise it's a Song card
-                    type = CardType.SONG;
-                }
-
-                applyFixes(info, cardNo, set, inSetNo, type);
-                if (type !== CardType.MEMBER || info["レアリティ"] !== "Secret") {
-                    await downloadImages(res.$, cardNo, set);
-                }
-                await importCard(info, await locals.DB, cardNo, set, inSetNo, type);
-                done();
-            }
-        },
-    });
-
-    try {
-        await cardCrawler.queue(`https://lovelive-sic.com/cardlist/list/?cardno=${cardNo}`);
-    } catch (e: any) {
-        throw error(500, e.message);
+export const POST: RequestHandler = (async ({ locals, request, fetch }) => {
+    const res = await fetch(`https://lovelive-sic.com/cardlist/list/?cardno=${(await request.json()).cardNo}`);
+    if (!res.ok) {
+        throw error(500, `Status code ${res.status} when fetching card page (${res.statusText})`);
     }
+
+    const document = new JSDOM(await res.text()).window.document;
+    const info: { [k: string]: string | null } = {};
+    if (document.querySelector(".status") === null) {
+        throw error(500, `Page is not a card page (${res.url})`);
+    }
+    fillInfoObject(info, document);
+
+    const cardNo = info["カードNo."]!;
+    const set = cardNo.split("-")[0];
+    const inSetNo = parseInt(cardNo.substring(5));
+
+    // As far as I am aware, EX15-055 to EX15-072 do not actually exist (dupes of EX15-E01 to EX15-E18)
+    if (set == "EX15" && cardNo.charAt(5) != "E" && inSetNo >= 55) {
+        throw error(500, `This card does not exist in reality, only on the site (${cardNo})`);
+    }
+
+    // Guess Card type
+    let type: CardType;
+    if (info["種別"] === "メンバー") {
+        // Members (and only Members) list their own type on their own page
+        type = CardType.MEMBER;
+    } else if (info["カードの色"] === null) {
+        // Memories use the page layout for Song cards, but list their Attribute as none
+        type = CardType.MEMORY;
+    } else {
+        // Otherwise it's a Song card
+        type = CardType.SONG;
+    }
+
+    applyFixes(info, cardNo, set, inSetNo, type);
+    if (type !== CardType.MEMBER || info["レアリティ"] !== "Secret") {
+        await downloadImages(document, cardNo, set, fetch);
+    }
+    await importCard(info, await locals.DB, cardNo, set, inSetNo, type);
+
     return json({ success: true });
 }) satisfies RequestHandler;
 
-function fillInfoObject(info: { [k: string]: string | null }, $: cheerio.CheerioAPI) {
-    $(".status tr").each((_i, e) => {
-        if ($("td", e).length > 0) {
-            const k = $("th", e).text();
-            let x: string | null = $("td", e).find("br").replaceWith("\n").end().text();
+function innerText(e: Element | null) {
+    if (e === null) return "[null]";
+    return [...e.childNodes].map((e) => (e.nodeName === "BR" ? "\n" : e.textContent)).join("");
+}
+
+function fillInfoObject(info: { [k: string]: string | null }, document: Document) {
+    document.querySelectorAll(".status tr").forEach((e) => {
+        if (e.querySelector("td") !== null) {
+            const k = innerText(e.querySelector("th"));
+            let x: string | null = innerText(e.querySelector("td"));
             // normalize "none" values
             if (x === "―" || x === "－" || x === "─" || x === "-") x = null;
             info[k] = x;
         } else {
-            info["name"] = $("th", e).text();
+            info["name"] = innerText(e.querySelector("th"));
             // Normalize spaces in name (some PR cards use different/no spaces in names)
             if (nameNormalizations.hasOwnProperty(info["name"])) {
                 info["name"] = nameNormalizations[info["name"]];
@@ -237,32 +228,33 @@ function applyFixes(
     }
 }
 
-async function downloadImages($: cheerio.CheerioAPI, cardNo: string, set: string) {
-    const frontUrl = $(".illust-1 img").attr("src");
-    const backUrl = $(".illust-2 img").attr("src");
+async function downloadImages(
+    document: Document,
+    cardNo: string,
+    set: string,
+    fetch: (url: string) => Promise<Response>
+) {
+    const frontUrl = (document.querySelector(".illust-1 img") as HTMLImageElement).src;
+    const backUrl = (document.querySelector(".illust-2 img") as HTMLImageElement).src;
 
-    const imageCrawler = new Crawler({
-        encoding: null,
-        jQuery: false,
-        rateLimit: 1000,
-        callback: (err, res, done) => {
-            if (err) {
-                done();
-                throw err;
-            } else {
-                if (!fs.existsSync(`static/images/cards/${set}`)) fs.mkdirSync(`static/images/cards/${set}`);
-                fs.createWriteStream(`static/images/cards/${set}/${cardNo}-${res.options.filename}.jpg`).write(
-                    res.body
-                );
-                done();
+    async function dl(url: string, filename: string) {
+        const res = await fetch(url);
+        if (!fs.existsSync(`static/images/cards/${set}`)) fs.mkdirSync(`static/images/cards/${set}`);
+        if (res.ok && res.body) {
+            const out = fs.createWriteStream(`static/images/cards/${set}/${cardNo}-${filename}.jpg`);
+            const reader = res.body.getReader();
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) {
+                    out.close();
+                    break;
+                }
+                out.write(value);
             }
-        },
-    });
+        }
+    }
 
-    await Promise.all([
-        imageCrawler.queue({ uri: frontUrl, filename: "front" }),
-        imageCrawler.queue({ uri: backUrl, filename: "back" }),
-    ]);
+    await Promise.all([dl(frontUrl, "front"), dl(backUrl, "back")]);
 }
 
 async function checkImageOrientation(cardNo: string, side: string) {
