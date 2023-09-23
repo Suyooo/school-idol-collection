@@ -301,7 +301,8 @@ async function importCard(
         let orientationCheckCardNo = info["カードNo."]!;
 
         if (type === CardType.MEMBER) {
-            const checkNameTable = await DB.m.TranslationName.findByPk(card.nameJpn, { transaction });
+            const checkNameTable = await DB.m.TranslationName.findOne({ where: { jpn: card.nameJpn }, transaction });
+
             if (checkNameTable !== null) {
                 card.nameEng = checkNameTable.eng;
                 card.group = checkNameTable.group;
@@ -353,7 +354,8 @@ async function importCard(
             memberInfo.costumeJpn = info["衣装"];
 
             if (memberInfo.costumeJpn) {
-                const checkCostumeTable = await DB.m.TranslationSong.findByPk(memberInfo.costumeJpn, {
+                const checkCostumeTable = await DB.m.TranslationSong.findOne({
+                    where: { jpn: memberInfo.costumeJpn },
                     transaction,
                 });
                 if (checkCostumeTable !== null) {
@@ -515,7 +517,12 @@ async function importCard(
             (card as CardMember).member = memberInfo as CardMemberExtraInfo;
         } else if (type === CardType.SONG) {
             const checkSongTable = await Promise.all(
-                card.nameJpn!.split("／").map((s: string) => DB.m.TranslationSong.findByPk(s, { transaction }))
+                card.nameJpn!.split("／").map((s: string) =>
+                    DB.m.TranslationSong.findOne({
+                        where: { jpn: s },
+                        transaction,
+                    })
+                )
             );
             if (checkSongTable.every((s) => s !== null)) {
                 card.nameEng = checkSongTable.map((s) => s!.eng).join("/");
