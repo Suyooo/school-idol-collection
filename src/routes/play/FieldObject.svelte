@@ -13,8 +13,6 @@
         type ClientProfile,
         StackType,
     } from "$lib/play/schema.js";
-    import Minus from "$lib/style/icons/Minus.svelte";
-    import Plus from "$lib/style/icons/Plus.svelte";
     import FieldCardObject from "./FieldCardObject.svelte";
     import FieldGroupObject from "./FieldGroupObject.svelte";
     import StackObject from "./StackObject.svelte";
@@ -51,6 +49,10 @@
     $: setList = player.setList;
 
     function action(node: HTMLElement) {
+        if (!isClient) {
+            return {};
+        }
+
         const interactable = interact(node).dropzone({
             accept: ".objcardhand",
             overlap: "center",
@@ -89,7 +91,13 @@
         <div class="livepoints">
             {$livePoints}
             <div class="livepointsbuttons">
-                <PlusMinusButtons value={$livePoints} update={(d) => logic.requestLPUpdate(d)} limit={99} accent />
+                <PlusMinusButtons
+                    value={$livePoints}
+                    update={(d) => logic.requestLPUpdate(d)}
+                    limit={99}
+                    accent
+                    size="{10.5 * $fieldZoom}px"
+                />
             </div>
         </div>
         <div class="livepointslabel">Live Points</div>
@@ -222,7 +230,9 @@
             }
 
             & .livepointsbuttons {
-                @apply absolute z-play-ui pointer-events-auto right-0 top-1;
+                @apply absolute z-play-ui pointer-events-auto;
+                top: calc(5px * var(--zoom));
+                right: calc(1px * var(--zoom));
             }
 
             & .livepointslabel {
@@ -233,18 +243,6 @@
                 height: calc(25px * var(--zoom));
                 font-size: calc(12.5px * var(--zoom));
                 line-height: calc(12.5px * var(--zoom));
-
-                & button {
-                    @apply flex items-center justify-center bg-accent-600 hover:bg-accent-400 text-white rounded-full;
-                    width: calc(20px * var(--zoom));
-                    height: calc(20px * var(--zoom));
-                    font-size: calc(15px * var(--zoom));
-                    line-height: calc(20px * var(--zoom));
-
-                    &.disable {
-                        @apply !bg-primary-500 pointer-events-none;
-                    }
-                }
             }
         }
     }

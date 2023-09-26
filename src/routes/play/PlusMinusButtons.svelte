@@ -10,9 +10,10 @@
     export let swapped: boolean = false;
     export let limit: number = 9;
     export let accent: boolean = false;
+    export let size: string = "0.75rem";
 </script>
 
-<div class="extra-buttons">
+<div class="extra-buttons" style:--size={size}>
     <Button label="Add Piece" on:click={() => update(1)} disabled={value >= (swapped ? 0 : limit)} {accent}>
         <Plus />
     </Button>
@@ -26,7 +27,12 @@
         @apply flex flex-col gap-y-0;
 
         & :global(button) {
-            @apply !p-0 w-3 h-3 !leading-3;
+            @apply !p-0;
+            width: var(--size);
+            height: var(--size);
+            line-height: var(--size) !important;
+            border-radius: calc(var(--size) / 3);
+
             &:not(.accent) {
                 &:hover {
                     @apply bg-primary-600;
@@ -40,6 +46,10 @@
             }
             &:last-child {
                 @apply rounded-t-none;
+            }
+
+            & :global(svg) {
+                stroke-width: calc(4px * var(--zoom, 1));
             }
         }
     }
