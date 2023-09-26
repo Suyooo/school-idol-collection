@@ -145,7 +145,8 @@
 
         & .stack {
             &.floor {
-                @apply absolute left-0 bottom-0 border border-solid box-border;
+                @apply absolute left-0 bottom-0 border-solid box-border;
+                border-width: calc(1px * var(--zoom));
                 border-color: var(--stack-color);
             }
 
@@ -168,7 +169,8 @@
             }
 
             &.top {
-                @apply absolute left-0 flex items-center justify-center font-bold border border-solid border-black/25;
+                @apply absolute left-0 flex items-center justify-center font-bold border-solid border-black/25;
+                border-width: calc(1px * var(--zoom));
                 background-color: var(--stack-color);
                 font-size: calc(2rem * var(--zoom));
             }
@@ -217,7 +219,8 @@
         }
 
         &:global(.hovering) .stack.top {
-            @apply border-4 border-white/50;
+            @apply border-white/50;
+            border-width: calc(4px * var(--zoom));
         }
 
         &.disabled {

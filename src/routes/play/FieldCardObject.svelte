@@ -304,7 +304,8 @@
             }
 
             &.highlight {
-                @apply outline outline-4 outline-accent-500;
+                @apply outline outline-accent-500;
+                outline-width: calc(4px * var(--zoom));
             }
 
             & img.icon {
@@ -322,7 +323,9 @@
         }
 
         &.livemode-selected {
-            @apply outline outline-2 outline-offset-4 outline-primary-100 rounded-md;
+            @apply outline outline-primary-100 rounded-md;
+            outline-width: calc(2px * var(--zoom));
+            outline-offset: calc(4px * var(--zoom));
         }
 
         &.livemode-unselected {
@@ -369,7 +372,8 @@
 
         &:global(.hovering) {
             & .card {
-                @apply outline outline-4 outline-primary-300;
+                @apply outline outline-primary-300;
+                outline-width: calc(4px * var(--zoom));
             }
         }
     }

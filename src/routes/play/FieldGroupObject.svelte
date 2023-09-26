@@ -112,8 +112,10 @@
         @apply absolute;
 
         &:hover .hoveroutline {
-            @apply rounded-md outline outline-offset-4 outline-2 outline-primary-100;
+            @apply rounded-md outline outline-primary-100;
             height: calc(91px * var(--zoom));
+            outline-offset: calc(2px * var(--zoom));
+            outline-width: calc(4px * var(--zoom));
         }
 
         &:global(.dragging) {

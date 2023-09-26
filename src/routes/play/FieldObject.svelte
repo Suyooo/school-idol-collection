@@ -126,20 +126,24 @@
 
 <style lang="postcss">
     .objfield {
-        @apply relative flex-shrink-0 box-content border border-solid min-w-0 select-none;
+        @apply relative flex-shrink-0 box-content border-solid min-w-0 select-none;
         width: calc(720px * var(--zoom));
         height: calc(401px * var(--zoom));
+        border-width: calc(1px * var(--zoom));
         border-color: var(--player-color);
 
-        &:global(.ui-droppable-hover) {
-            @apply outline outline-4 -outline-offset-4 outline-white/50;
+        &:global(.hovering) {
+            @apply outline outline-white/50;
+            outline-offset: calc(-4px * var(--zoom));
+            outline-width: calc(4px * var(--zoom));
         }
 
         & .background {
             @apply pointer-events-none;
 
             & .area {
-                @apply absolute border border-solid z-play-field box-content rounded-md;
+                @apply absolute border-solid z-play-field box-content rounded-md;
+                border-width: calc(1px * var(--zoom));
                 border-color: var(--player-color);
 
                 &.setlist {
@@ -181,7 +185,8 @@
             }
 
             & .line {
-                @apply absolute border-l border-solid z-play-field;
+                @apply absolute  border-solid z-play-field;
+                border-left-width: calc(1px * var(--zoom));
                 width: calc(1px * var(--zoom));
                 top: calc(10px * var(--zoom));
                 bottom: calc(98px * var(--zoom));

@@ -108,11 +108,7 @@
 
 <style lang="postcss">
     .objhand {
-        @apply w-full z-play-hand flex items-start justify-center bg-primary-600 border-4 border-solid border-transparent select-none px-4 pt-4;
-        /*left: 0;
-        right: 0;
-        bottom: -15vh;
-        height: 30vh;*/
+        @apply w-full z-play-hand flex items-start justify-center bg-primary-600 border-8 border-solid border-transparent select-none px-4 pt-4;
         height: 15vh;
 
         & > :global(*):last-child {
@@ -120,6 +116,7 @@
         }
 
         &:global(.hovering) {
+            @apply border-white/50;
             & :global(.objcardhand) {
                 @apply !brightness-100;
 

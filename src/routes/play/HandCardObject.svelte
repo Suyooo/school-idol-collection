@@ -251,7 +251,7 @@
             }
 
             &.highlight {
-                @apply outline outline-4 outline-accent-500;
+                @apply outline outline-8 outline-accent-500;
             }
         }
 
