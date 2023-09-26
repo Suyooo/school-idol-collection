@@ -105,17 +105,6 @@
         <div class="livepointslabel">Live Points</div>
     </div>
 
-    {#each [...$groups.entries()] as [id, group] (id)}
-        <FieldGroupObject {id} {...group} />
-    {/each}
-    {#each [...$field.entries()] as [id, card] (id)}
-        <FieldCardObject
-            {id}
-            {...card}
-            flippedColor={card.cardType === CardType.MEMBER ? $profile.deckColor : $profile.setListColor}
-        />
-    {/each}
-
     <StackObject
         bind:this={deckComponent}
         cardNos={$deck}
@@ -132,6 +121,17 @@
         y={320}
         color={$profile.setListColor}
     />
+
+    {#each [...$groups.entries()] as [id, group] (id)}
+        <FieldGroupObject {id} {...group} />
+    {/each}
+    {#each [...$field.entries()] as [id, card] (id)}
+        <FieldCardObject
+            {id}
+            {...card}
+            flippedColor={card.cardType === CardType.MEMBER ? $profile.deckColor : $profile.setListColor}
+        />
+    {/each}
 </div>
 
 <style lang="postcss">

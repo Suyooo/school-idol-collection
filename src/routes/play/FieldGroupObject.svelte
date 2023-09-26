@@ -110,7 +110,7 @@
 
 <style lang="postcss">
     .objgroup {
-        @apply absolute;
+        @apply absolute z-play-card;
 
         &:hover .hoveroutline {
             @apply rounded-md outline outline-primary-100;

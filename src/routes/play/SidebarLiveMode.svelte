@@ -37,15 +37,18 @@
     $: player = $players[logic.clientPlayerId];
     $: field = player.field;
 
-    let cardSong: {
-            id: number;
-            fieldInfo: ClientFieldCardSchema;
-            cardInfo: CardSong & CardImageData;
-            pieces: {
-                base: [number, number, number, number];
-                extra: [number, number, number, number];
-            };
-        },
+    let cardSong:
+            | undefined
+            | {
+                  id: number;
+                  fieldInfo: ClientFieldCardSchema;
+                  cardInfo: CardSong & CardImageData;
+                  lpExtra: number;
+                  pieces: {
+                      base: [number, number, number, number];
+                      extra: [number, number, number, number];
+                  };
+              },
         cardMembers: Map<
             number,
             {
@@ -73,6 +76,7 @@
                             id: $liveModeCards[0],
                             fieldInfo,
                             cardInfo,
+                            lpExtra: 0,
                             pieces: {
                                 base: cardHasAnyPieceRequirement(cardInfo)
                                     ? [cardInfo.song.anyRequirement.piecesAll, 0, 0, 0]
@@ -133,6 +137,9 @@
                 }
                 cardMembers = cardMembers;
             }
+        } else {
+            cardSong = undefined;
+            cardMembers.clear();
         }
     }
 
@@ -158,6 +165,8 @@
     }
 
     function createLiveGroup() {
+        if ($liveModeCards.length <= 1) return;
+
         const cards = $liveModeCards.map((card, i) => {
             if (i === 0) {
                 // x == (65 + ($liveModeCards.length - 2) * 10) / 2 - 91 / 2
@@ -179,7 +188,7 @@
 
         const songCardPosition = storeGet(mapGet($field, $liveModeCards[0]).position);
         logic.requestGroupCreate(songCardPosition.x - cards[0].x, songCardPosition.y - cards[0].y, cards);
-        if (cardSong?.cardInfo) logic.requestLPUpdate(cardSong.cardInfo.song.lpBase);
+        if (cardSong?.cardInfo) logic.requestLPUpdate(cardSong.cardInfo.song.lpBase + cardSong.lpExtra);
         endLiveMode();
     }
 
@@ -189,164 +198,219 @@
 </script>
 
 {#if cardSong !== undefined}
-    <div class="panel" transition:slide={{}} on:contextmenu|preventDefault={() => null} role="presentation">
-        <div class="buttons">
-            <Button classes="mt-1 w-full" label="Cancel" on:click={endLiveMode}>Cancel</Button>
-            <Button accent classes="mt-1 w-full" label="Live" on:click={createLiveGroup}>⟪LIVE⟫</Button>
-        </div>
-        <div
-            class="livemodeitem"
-            on:contextmenu|preventDefault={() => setSidebarCard(cardSong.cardInfo.cardNo)}
-            role="presentation"
-        >
-            {#key cardSong.id}
-                <div class="panel-inner" transition:slide={{}}>
-                    <div class="flex items-center w-full p-2 gap-x-2 song">
-                        <div class="image">
-                            <img
-                                src={cardSong.cardInfo.imageDataUrl}
-                                alt={cardSong.cardInfo.cardNo}
-                                class:outline={cardSong.cardInfo.cardNo === $sidebarCardNo}
-                            />
-                        </div>
-                        <div class="panel-inner flex-grow">
-                            <h4>{@html cardTitle(cardSong.cardInfo, true, Language.ENG)}</h4>
-                            <div class="p-2 flex flex-col gap-y-1">
-                                {#if cardHasAnyPieceRequirement(cardSong.cardInfo)}
-                                    <SidebarLiveModeReqRow
-                                        requirement={{ base: cardSong.pieces.base[0], extra: cardSong.pieces.extra[0] }}
-                                        {totalPieces}
-                                        countedPieces={[true, true, true, true]}
-                                        attr={"none"}
-                                        canCheck
-                                        updateExtraFunc={(d) => (cardSong.pieces.extra[0] += d)}
-                                    />
-                                {:else}
-                                    <SidebarLiveModeReqRow
-                                        requirement={{ base: cardSong.pieces.base[1], extra: cardSong.pieces.extra[1] }}
-                                        {totalPieces}
-                                        countedPieces={[false, true, false, false]}
-                                        attr={AttributeEnum.SMILE}
-                                        updateExtraFunc={(d) => (cardSong.pieces.extra[1] += d)}
-                                    />
-                                    <SidebarLiveModeReqRow
-                                        requirement={{ base: cardSong.pieces.base[2], extra: cardSong.pieces.extra[2] }}
-                                        {totalPieces}
-                                        countedPieces={[false, false, true, false]}
-                                        attr={AttributeEnum.PURE}
-                                        updateExtraFunc={(d) => (cardSong.pieces.extra[2] += d)}
-                                    />
-                                    <SidebarLiveModeReqRow
-                                        requirement={{ base: cardSong.pieces.base[3], extra: cardSong.pieces.extra[3] }}
-                                        {totalPieces}
-                                        countedPieces={[false, false, false, true]}
-                                        attr={AttributeEnum.COOL}
-                                        updateExtraFunc={(d) => (cardSong.pieces.extra[3] += d)}
-                                    />
-                                    <hr />
-                                    <SidebarLiveModeReqRow
-                                        requirement={{
-                                            base: Math.max(
-                                                0,
-                                                Math.max(
-                                                    0,
-                                                    cardSong.pieces.base[1] + cardSong.pieces.extra[1] - totalPieces[1]
-                                                ) +
-                                                    Math.max(
-                                                        0,
-                                                        cardSong.pieces.base[2] +
-                                                            cardSong.pieces.extra[2] -
-                                                            totalPieces[2]
-                                                    ) +
-                                                    Math.max(
-                                                        0,
-                                                        cardSong.pieces.base[3] +
-                                                            cardSong.pieces.extra[3] -
-                                                            totalPieces[3]
-                                                    )
-                                            ),
-                                            extra: 0,
-                                        }}
-                                        {totalPieces}
-                                        countedPieces={[true, false, false, false]}
-                                        attr={AttributeEnum.ALL}
-                                        isAllAltRow
-                                        canCheck
-                                    />
-                                {/if}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {/key}
-        </div>
-        {#each cardMembers.entries() as [id, card] (id)}
+    <div transition:slide={{}} on:contextmenu|preventDefault={() => null} role="presentation">
+        <div class="panel">
+            <div class="buttons">
+                <Button classes="mt-1 w-full" label="Cancel" on:click={endLiveMode}>Cancel</Button>
+                <Button
+                    accent
+                    classes="mt-1 w-full"
+                    label="Live"
+                    on:click={createLiveGroup}
+                    disabled={$liveModeCards.length <= 1}>⟪LIVE⟫</Button
+                >
+            </div>
             <div
                 class="livemodeitem"
-                transition:slide={{}}
-                on:contextmenu|preventDefault={() => setSidebarCard(card.cardInfo.cardNo)}
+                on:contextmenu|preventDefault={() => cardSong !== undefined && setSidebarCard(cardSong.cardInfo.cardNo)}
                 role="presentation"
             >
-                <div class="panel-inner h-12">
-                    <div class="h-12 flex items-center w-full p-2 gap-x-2">
-                        <div class="image">
-                            <img
-                                src={card.cardInfo.imageDataUrl}
-                                alt={card.cardInfo.cardNo}
-                                class:outline={card.cardInfo.cardNo === $sidebarCardNo}
-                            />
-                        </div>
-                        <b class="basis-20">{card.cardInfo.cardNo}</b>
-                        {#each AttributeEnum.allForPieces as attr, i}
-                            {@const nonExtraSum = card.pieces.base[i] + card.pieces.idolized[i]}
-                            {@const totalSum = nonExtraSum + card.pieces.extra[i]}
-                            {@const lowlight = totalSum === 0}
-                            <div class="memberattr">
-                                <div>
-                                    <Piece {attr} />
-                                    <span class="count {attr.toCssClassName()}" class:!text-primary-300={lowlight}>
-                                        {#if card.pieces.idolized[i] > 0}
-                                            <img class="idolize-icon" src="/images/icons/idolized.png" alt="Idolized" />
-                                        {/if}
-                                        {nonExtraSum}
-                                        {#if card.pieces.extra[i] > 0}
-                                            + {card.pieces.extra[i]}
-                                        {/if}
-                                    </span>
+                {#key cardSong.id}
+                    <div class="panel-inner" transition:slide={{}}>
+                        <div class="flex items-center w-full p-2 gap-x-2 song">
+                            <div class="image flex flex-col items-center">
+                                <img
+                                    src={cardSong.cardInfo.imageDataUrl}
+                                    alt={cardSong.cardInfo.cardNo}
+                                    class:outline={cardSong.cardInfo.cardNo === $sidebarCardNo}
+                                />
+                                <div class="livepoints" class:!text-[1.75rem]={cardSong.lpExtra === 0}>
+                                    {cardSong.cardInfo.song.lpBase}
+                                    {#if cardSong.lpExtra > 0}
+                                        + {cardSong.lpExtra}
+                                    {:else if cardSong.lpExtra < 0}
+                                        - {-cardSong.lpExtra}
+                                    {/if}
+                                    <div class="livepointsbuttons">
+                                        <PlusMinusButtons
+                                            value={cardSong.cardInfo.song.lpBase + cardSong.lpExtra}
+                                            update={(d) => {
+                                                if (cardSong !== undefined) cardSong.lpExtra += d;
+                                            }}
+                                            limit={99}
+                                            accent
+                                            size="0.875rem"
+                                        />
+                                    </div>
                                 </div>
-                                <PlusMinusButtons
-                                    value={card.pieces.extra[i]}
-                                    update={(d) => (card.pieces.extra[i] += d)}
+                                <div class="livepointslabel">Live Points</div>
+                            </div>
+                            <div class="panel-inner flex-grow">
+                                <h4>{@html cardTitle(cardSong.cardInfo, true, Language.ENG)}</h4>
+                                <div class="p-2 flex flex-col gap-y-1">
+                                    {#if cardHasAnyPieceRequirement(cardSong.cardInfo)}
+                                        <SidebarLiveModeReqRow
+                                            requirement={{
+                                                base: cardSong.pieces.base[0],
+                                                extra: cardSong.pieces.extra[0],
+                                            }}
+                                            {totalPieces}
+                                            countedPieces={[true, true, true, true]}
+                                            attr={"none"}
+                                            canCheck
+                                            updateExtraFunc={(d) => {
+                                                if (cardSong !== undefined) cardSong.pieces.extra[0] += d;
+                                            }}
+                                        />
+                                    {:else}
+                                        <SidebarLiveModeReqRow
+                                            requirement={{
+                                                base: cardSong.pieces.base[1],
+                                                extra: cardSong.pieces.extra[1],
+                                            }}
+                                            {totalPieces}
+                                            countedPieces={[false, true, false, false]}
+                                            attr={AttributeEnum.SMILE}
+                                            updateExtraFunc={(d) => {
+                                                if (cardSong !== undefined) cardSong.pieces.extra[1] += d;
+                                            }}
+                                        />
+                                        <SidebarLiveModeReqRow
+                                            requirement={{
+                                                base: cardSong.pieces.base[2],
+                                                extra: cardSong.pieces.extra[2],
+                                            }}
+                                            {totalPieces}
+                                            countedPieces={[false, false, true, false]}
+                                            attr={AttributeEnum.PURE}
+                                            updateExtraFunc={(d) => {
+                                                if (cardSong !== undefined) cardSong.pieces.extra[2] += d;
+                                            }}
+                                        />
+                                        <SidebarLiveModeReqRow
+                                            requirement={{
+                                                base: cardSong.pieces.base[3],
+                                                extra: cardSong.pieces.extra[3],
+                                            }}
+                                            {totalPieces}
+                                            countedPieces={[false, false, false, true]}
+                                            attr={AttributeEnum.COOL}
+                                            updateExtraFunc={(d) => {
+                                                if (cardSong !== undefined) cardSong.pieces.extra[3] += d;
+                                            }}
+                                        />
+                                        <hr />
+                                        <SidebarLiveModeReqRow
+                                            requirement={{
+                                                base: Math.max(
+                                                    0,
+                                                    Math.max(
+                                                        0,
+                                                        cardSong.pieces.base[1] +
+                                                            cardSong.pieces.extra[1] -
+                                                            totalPieces[1]
+                                                    ) +
+                                                        Math.max(
+                                                            0,
+                                                            cardSong.pieces.base[2] +
+                                                                cardSong.pieces.extra[2] -
+                                                                totalPieces[2]
+                                                        ) +
+                                                        Math.max(
+                                                            0,
+                                                            cardSong.pieces.base[3] +
+                                                                cardSong.pieces.extra[3] -
+                                                                totalPieces[3]
+                                                        )
+                                                ),
+                                                extra: 0,
+                                            }}
+                                            {totalPieces}
+                                            countedPieces={[true, false, false, false]}
+                                            attr={AttributeEnum.ALL}
+                                            isAllAltRow
+                                            canCheck
+                                        />
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {/key}
+            </div>
+            {#each cardMembers.entries() as [id, card] (id)}
+                <div
+                    class="livemodeitem"
+                    transition:slide={{}}
+                    on:contextmenu|preventDefault={() => setSidebarCard(card.cardInfo.cardNo)}
+                    role="presentation"
+                >
+                    <div class="panel-inner h-12">
+                        <div class="h-12 flex items-center w-full p-2 gap-x-2">
+                            <div class="image">
+                                <img
+                                    src={card.cardInfo.imageDataUrl}
+                                    alt={card.cardInfo.cardNo}
+                                    class:outline={card.cardInfo.cardNo === $sidebarCardNo}
                                 />
                             </div>
-                        {/each}
+                            <b class="basis-20">{card.cardInfo.cardNo}</b>
+                            {#each AttributeEnum.allForPieces as attr, i}
+                                {@const nonExtraSum = card.pieces.base[i] + card.pieces.idolized[i]}
+                                {@const totalSum = nonExtraSum + card.pieces.extra[i]}
+                                {@const lowlight = totalSum === 0}
+                                <div class="memberattr">
+                                    <div>
+                                        <Piece {attr} />
+                                        <span class="count {attr.toCssClassName()}" class:!text-primary-300={lowlight}>
+                                            {#if card.pieces.idolized[i] > 0}
+                                                <img
+                                                    class="idolize-icon"
+                                                    src="/images/icons/idolized.png"
+                                                    alt="Idolized"
+                                                />
+                                            {/if}
+                                            {nonExtraSum}
+                                            {#if card.pieces.extra[i] > 0}
+                                                + {card.pieces.extra[i]}
+                                            {/if}
+                                        </span>
+                                    </div>
+                                    <PlusMinusButtons
+                                        value={card.pieces.extra[i]}
+                                        update={(d) => (card.pieces.extra[i] += d)}
+                                    />
+                                </div>
+                            {/each}
+                        </div>
                     </div>
                 </div>
+            {/each}
+            <div class="livemodeitem flex justify-between">
+                <Button
+                    label="Select All Cards"
+                    classes="!py-1"
+                    on:click={() =>
+                        ($liveModeCards = [
+                            $liveModeCards[0],
+                            ...[...$field.entries()]
+                                .filter(([id, card]) => card.cardType === CardType.MEMBER)
+                                .map(([id]) => id),
+                        ])}
+                >
+                    Select All
+                </Button>
+                <Button
+                    label="Remove All Cards"
+                    classes="!py-1"
+                    disabled={cardMembers.size === 0}
+                    on:click={() => ($liveModeCards = [$liveModeCards[0]])}
+                >
+                    Remove All
+                </Button>
             </div>
-        {/each}
-        <div class="livemodeitem flex justify-between">
-            <Button
-                label="Select All Cards"
-                classes="!py-1"
-                on:click={() =>
-                    ($liveModeCards = [
-                        $liveModeCards[0],
-                        ...[...$field.entries()]
-                            .filter(([id, card]) => card.cardType === CardType.MEMBER)
-                            .map(([id]) => id),
-                    ])}
-            >
-                Select All
-            </Button>
-            <Button
-                label="Remove All Cards"
-                classes="!py-1"
-                disabled={cardMembers.size === 0}
-                on:click={() => ($liveModeCards = [$liveModeCards[0]])}
-            >
-                Remove All
-            </Button>
         </div>
+        <hr class="m-4 mb-2" />
     </div>
 {/if}
 
@@ -419,5 +483,16 @@
                 @apply text-attribute-cool;
             }
         }
+    }
+
+    .livepoints {
+        @apply mt-2 relative w-full pr-4 text-xl font-bold text-center !leading-[1.75rem];
+
+        & .livepointsbuttons {
+            @apply absolute top-0 right-0;
+        }
+    }
+    .livepointslabel {
+        @apply mt-1 w-full text-xs text-center uppercase tracking-tighter leading-none;
     }
 </style>

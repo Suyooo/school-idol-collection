@@ -207,9 +207,7 @@
         <span class="absolute right-10 top-2">{Math.round($fieldZoom * 50)}%</span>
     </div>
     <div class="rightside">
-        {#if $liveModeEnabled}
-            <SidebarLiveMode />
-        {/if}
+        <SidebarLiveMode />
         <div class="panel">
             {#if $sidebarCardNo !== undefined}
                 {#await sidebarCardPromise}
