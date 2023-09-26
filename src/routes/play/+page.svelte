@@ -218,7 +218,14 @@
                     <div class="panel-inner">
                         <h4>{@html cardTitle(card, true, Language.ENG, true)}</h4>
                         <div class="sidebar-info">
-                            <CardInfoRows {card} hideSharedId hideBacklinks hideFaq forceSingleColumn />
+                            <CardInfoRows
+                                {card}
+                                hideSharedId
+                                hideBacklinks
+                                hideFaq
+                                forceSingleColumn
+                                linkTarget="_blank"
+                            />
                             <img
                                 src={card.imageDataUrl}
                                 alt={`${card.cardNo} Front Illustration`}
