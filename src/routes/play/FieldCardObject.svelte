@@ -167,6 +167,7 @@
         if (event.button !== 0 || wasMoved) {
             return;
         }
+        wasMoved = true;
         if ($liveModeCards.length > 0) {
             if (!grouped && !$flipped) {
                 if (cardType === CardType.MEMBER) {
