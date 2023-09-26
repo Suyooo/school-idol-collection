@@ -90,15 +90,17 @@
         <div class="name">{$profile.name}</div>
         <div class="livepoints">
             {$livePoints}
-            <div class="livepointsbuttons">
-                <PlusMinusButtons
-                    value={$livePoints}
-                    update={(d) => logic.requestLPUpdate(d)}
-                    limit={99}
-                    accent
-                    size="{10.5 * $fieldZoom}px"
-                />
-            </div>
+            {#if isClient}
+                <div class="livepointsbuttons">
+                    <PlusMinusButtons
+                        value={$livePoints}
+                        update={(d) => logic.requestLPUpdate(d)}
+                        limit={99}
+                        accent
+                        size="{10.5 * $fieldZoom}px"
+                    />
+                </div>
+            {/if}
         </div>
         <div class="livepointslabel">Live Points</div>
     </div>

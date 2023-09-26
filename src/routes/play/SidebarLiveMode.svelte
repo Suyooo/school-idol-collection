@@ -302,7 +302,7 @@
                             {@const totalSum = nonExtraSum + card.pieces.extra[i]}
                             {@const lowlight = totalSum === 0}
                             <div class="memberattr">
-                                <div class:grayscale={lowlight}>
+                                <div>
                                     <Piece {attr} />
                                     <span class="count {attr.toCssClassName()}" class:!text-primary-300={lowlight}>
                                         {#if card.pieces.idolized[i] > 0}

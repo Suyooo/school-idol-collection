@@ -23,6 +23,7 @@
     import type StackObject from "./StackObject.svelte";
 
     export type OpenMenuFunction = (
+        openedBy: string | undefined,
         x: number,
         y: number,
         header: string,
@@ -37,12 +38,14 @@
 </script>
 
 <script lang="ts">
-    let menuX: number,
+    let menuOpenedByCardNo: string | undefined,
+        menuX: number,
         menuY: number,
         menuHeader: string,
         menuEntries: { label: string; handler: () => void }[] | undefined = undefined;
 
-    const openMenu: OpenMenuFunction = (x, y, header, entries, cancelable) => {
+    const openMenu: OpenMenuFunction = (openedBy, x, y, header, entries, cancelable) => {
+        menuOpenedByCardNo = openedBy;
         menuX = x;
         menuY = y;
         menuHeader = header;
@@ -65,6 +68,12 @@
         }
     };
     setContext("openMenu", openMenu);
+
+    function closeMenuToSidebar(e: Event) {
+        menuEntries = undefined;
+        if (menuOpenedByCardNo !== undefined) setSidebarCard(menuOpenedByCardNo);
+        e.preventDefault();
+    }
 
     const logic: ClientGameLogic = new LocalClientGameLogic({
         name: "Suyooo",
@@ -237,7 +246,7 @@
 </div>
 
 {#if menuEntries}
-    <PopupMenu x={menuX} y={menuY} header={menuHeader} entries={menuEntries} />
+    <PopupMenu x={menuX} y={menuY} header={menuHeader} entries={menuEntries} on:contextmenu={closeMenuToSidebar} />
 {/if}
 
 <style lang="postcss">

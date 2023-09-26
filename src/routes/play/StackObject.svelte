@@ -48,6 +48,7 @@
     function menu(e: MouseEvent) {
         if (cardNos.length === 0) return;
         openMenu(
+            undefined,
             e.pageX,
             e.pageY,
             stackType === StackType.DECK ? "Deck" : "Set List",

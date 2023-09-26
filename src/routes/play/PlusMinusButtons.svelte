@@ -11,9 +11,10 @@
     export let limit: number = 9;
     export let accent: boolean = false;
     export let size: string = "0.75rem";
+    export let horizontal: boolean = false;
 </script>
 
-<div class="extra-buttons" style:--size={size}>
+<div class="extra-buttons" style:--size={size} class:flex-col={!horizontal}>
     <Button label="Add Piece" on:click={() => update(1)} disabled={value >= (swapped ? 0 : limit)} {accent}>
         <Plus />
     </Button>
@@ -24,14 +25,14 @@
 
 <style lang="postcss">
     .extra-buttons {
-        @apply flex flex-col gap-y-0;
+        @apply flex gap-y-0 overflow-hidden;
+        border-radius: calc(var(--size) / 3);
 
         & :global(button) {
-            @apply !p-0;
+            @apply !p-0 rounded-none;
             width: var(--size);
             height: var(--size);
             line-height: var(--size) !important;
-            border-radius: calc(var(--size) / 3);
 
             &:not(.accent) {
                 &:hover {
@@ -40,12 +41,6 @@
                 &:active {
                     @apply bg-primary-400;
                 }
-            }
-            &:first-child {
-                @apply rounded-b-none;
-            }
-            &:last-child {
-                @apply rounded-t-none;
             }
 
             & :global(svg) {

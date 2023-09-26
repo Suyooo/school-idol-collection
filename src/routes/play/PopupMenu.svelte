@@ -10,7 +10,7 @@
     style:left={`${x}px`}
     style:top={`${y}px`}
     on:mousedown|stopPropagation={() => null}
-    on:contextmenu|preventDefault={() => null}
+    on:contextmenu
     role="menu"
     tabindex="0"
 >

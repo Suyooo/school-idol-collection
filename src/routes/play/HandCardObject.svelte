@@ -69,6 +69,7 @@
                             node.classList.remove("dragging");
                             startOffset.x = startOffset.y = displayPosition.x = displayPosition.y = 0;
                             openMenu(
+                                undefined,
                                 event.page.x,
                                 event.page.y,
                                 `${cardNo} &rarr; ${event.relatedTarget.dataset.cardNo}`,
@@ -92,6 +93,7 @@
                             startOffset.x = startOffset.y = displayPosition.x = displayPosition.y = 0;
                             if (event.relatedTarget?.classList.contains("objstackdeck")) {
                                 openMenu(
+                                    undefined,
                                     event.page.x,
                                     event.page.y,
                                     `${cardNo} &rarr; Deck`,

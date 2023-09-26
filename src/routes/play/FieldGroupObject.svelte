@@ -67,6 +67,7 @@
     function onClick(event: MouseEvent) {
         if (event.button === 0 && !wasMoved) {
             openMenu(
+                undefined,
                 event.pageX,
                 event.pageY,
                 `Group (${cards.size} card${cards.size === 1 ? "" : "s"})`,

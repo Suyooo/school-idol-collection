@@ -76,6 +76,7 @@
                                 )
                             ) {
                                 openMenu(
+                                    undefined,
                                     event.page.x,
                                     event.page.y,
                                     `${cardNo} &rarr; ${cardType === CardType.MEMBER ? "Deck" : "Set List"}`,
@@ -97,6 +98,7 @@
                                 event.relatedTarget?.classList.contains("objcardfieldmember")
                             ) {
                                 openMenu(
+                                    undefined,
                                     event.page.x,
                                     event.page.y,
                                     `${cardNo} &rarr; ${event.relatedTarget.dataset.cardNo}`,
@@ -186,6 +188,7 @@
             }
         } else if (!grouped) {
             openMenu(
+                cardNo,
                 event.pageX,
                 event.pageY,
                 `${cardNo}${idolizedBaseCardNo !== undefined ? " (Idolized)" : ""}`,
