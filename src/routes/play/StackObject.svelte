@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
     import { getContext } from "svelte";
-    import { type Readable, type Writable, get } from "svelte/store";
+    import type { Readable, Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
     import { textColorForBackground } from "$lib/play/profile.js";
@@ -57,13 +57,7 @@
             [
                 {
                     label: "⟪SCOUT⟫",
-                    handler: () => {
-                        let toDraw = Math.max(
-                            4 - get(get(get(logic.game).players)[logic.clientPlayerId].hand).length,
-                            0
-                        );
-                        for (; toDraw > 0; toDraw--) logic.requestStackToHand(StackSide.TOP);
-                    },
+                    handler: () => logic.requestScout(),
                     condition: stackType === StackType.DECK,
                 },
                 {

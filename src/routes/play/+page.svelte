@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
     import { setContext } from "svelte";
-    import { type Readable, type Writable, derived, get, writable } from "svelte/store";
+    import { type Readable, type Writable, derived, writable } from "svelte/store";
     import type { SnapFunction } from "@interactjs/types";
     import type { Point } from "@interactjs/types/index";
     import "../../app.css";
@@ -172,6 +172,9 @@
     setContext("fieldPositionFunction", fieldPositionFunction);
 </script>
 
+<svelte:head>
+    <title>SIC</title>
+</svelte:head>
 <svelte:body on:mousedown={() => (menuEntries = undefined)} />
 
 <div class="play">

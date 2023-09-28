@@ -140,6 +140,7 @@
         } else {
             cardSong = undefined;
             cardMembers.clear();
+            totalPieces.fill(0);
         }
     }
 
@@ -149,10 +150,7 @@
         updateTotalPieces();
     }
     function updateTotalPieces() {
-        for (let i = 0; i < 4; i++) {
-            totalPieces[i] = 0;
-        }
-
+        totalPieces.fill(0);
         for (const {
             pieces: { base, idolized, extra },
         } of cardMembers.values()) {

@@ -142,15 +142,15 @@ export class LocalClientGameLogic extends ClientGameLogic {
         });
     }
 
-    private removeFromStack(target: StackType, side: StackSide): string {
-        let val: string;
+    private removeFromStack(target: StackType, side: StackSide): string | undefined {
+        let val: string | undefined;
         const prop = this.targetToProperty(target);
         this.storePlayers[0][prop].update((arr) => {
-            if (side === StackSide.TOP) val = arr.pop()!;
-            else val = arr.shift()!;
+            if (side === StackSide.TOP) val = arr.pop();
+            else val = arr.shift();
             return arr;
         });
-        return val!;
+        return val;
     }
 
     private addToField(
@@ -180,10 +180,14 @@ export class LocalClientGameLogic extends ClientGameLogic {
         });
     }
 
-    private removeFromField(id: number): FieldCardSchema {
-        let ret: FieldCardSchema;
+    private removeFromField(id: number): FieldCardSchema | undefined {
+        let ret: FieldCardSchema | undefined = undefined;
         this.storePlayers[0].field.update((map) => {
-            const card = mapGet(map, id);
+            const card = map.get(id);
+            if (card === undefined) {
+                return map;
+            }
+
             const flipped = get(card.flipped);
             const position = get(card.position);
             ret = { ...card, flipped, position };
@@ -192,7 +196,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
         });
         this.storeCardFlips.delete(id);
         this.storeCardPositions.delete(id);
-        return ret!;
+        return ret;
     }
 
     private addToHand(cardNo: string, idx?: number) {
@@ -207,43 +211,58 @@ export class LocalClientGameLogic extends ClientGameLogic {
         });
     }
 
-    private removeFromHand(idx: number): string {
-        let cardNo: string;
+    private removeFromHand(idx: number): string | undefined {
+        let cardNo: string | undefined;
         this.storePlayers[0].hand.update((arr) => {
-            cardNo = arr.splice(idx, 1)[0].cardNo;
+            cardNo = arr.splice(idx, 1)[0]?.cardNo;
             return arr;
         });
-        return cardNo!;
+        return cardNo;
     }
 
     requestStackToField(target: StackType, side: StackSide, x: number, y: number) {
         const cardNo = this.removeFromStack(target, side);
+        if (cardNo === undefined) return;
         this.addToField(cardNo, target === StackType.DECK ? CardType.MEMBER : CardType.SONG, x, y);
     }
 
     requestHandToField(idx: number, x: number, y: number) {
         const cardNo = this.removeFromHand(idx);
+        if (cardNo === undefined) return;
         this.addToField(cardNo, CardType.MEMBER, x, y);
     }
 
     requestFieldToStack(id: number, side: StackSide) {
         const card = this.removeFromField(id);
+        if (card === undefined) return;
         this.addToStack(card.cardType === CardType.MEMBER ? StackType.DECK : StackType.SET_LIST, side, card.cardNo);
     }
 
     requestHandToStack(idx: number, side: StackSide) {
         const cardNo = this.removeFromHand(idx);
+        if (cardNo === undefined) return;
         this.addToStack(StackType.DECK, side, cardNo);
     }
 
     requestFieldToHand(id: number, idx?: number) {
         const card = this.removeFromField(id);
+        if (card === undefined) return;
         this.addToHand(card.cardNo, idx);
     }
 
     requestStackToHand(side: StackSide) {
         const cardNo = this.removeFromStack(StackType.DECK, side);
+        if (cardNo === undefined) return;
         this.addToHand(cardNo);
+    }
+
+    requestScout() {
+        let toDraw = Math.max(4 - get(this.storePlayers[0].hand).length, 0);
+        for (; toDraw > 0; toDraw--) {
+            const cardNo = this.removeFromStack(StackType.DECK, StackSide.TOP);
+            if (cardNo === undefined) break;
+            this.addToHand(cardNo);
+        }
     }
 
     requestShuffle(target: StackType) {
@@ -273,7 +292,9 @@ export class LocalClientGameLogic extends ClientGameLogic {
     }
 
     requestHandMove(idx: number, newIdx: number) {
-        this.addToHand(this.removeFromHand(idx), newIdx);
+        const cardNo = this.removeFromHand(idx);
+        if (cardNo === undefined) return;
+        this.addToHand(cardNo, newIdx);
     }
 
     requestGroupCreate(x: number, y: number, cards: { id: number; x: number; y: number; z: number }[]): void {
@@ -344,6 +365,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     requestIdolizeFromField(idBaseCard: number, idIdolizeCard: number): void {
         const baseCard = this.removeFromField(idBaseCard);
         const idolizeCard = this.removeFromField(idIdolizeCard);
+        if (baseCard === undefined || idolizeCard === undefined) return;
         this.addToField(
             idolizeCard.cardNo,
             CardType.MEMBER,
@@ -357,6 +379,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     requestIdolizeFromHand(idBaseCard: number, idxIdolizeCard: number): void {
         const baseCard = this.removeFromField(idBaseCard);
         const idolizeCardNo = this.removeFromHand(idxIdolizeCard);
+        if (baseCard === undefined || idolizeCardNo === undefined) return;
         this.addToField(
             idolizeCardNo,
             CardType.MEMBER,
@@ -369,6 +392,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     requestIdolizeUndo(id: number): void {
         const card = this.removeFromField(id);
+        if (card === undefined) return;
         this.addToField(card.idolizedBaseCardNo!, CardType.MEMBER, card.position.x, card.position.y);
         this.addToField(card.cardNo, CardType.MEMBER, card.position.x + 10, card.position.y);
     }

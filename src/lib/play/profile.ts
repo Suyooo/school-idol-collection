@@ -1,7 +1,8 @@
 import { browser } from "$app/environment";
 import { v4 as uuidv4 } from "uuid";
 
-const STORAGE_KEY: string = "sic-profile";
+const STORAGE_KEY_PROFILE: string = "sic-profile";
+const STORAGE_KEY_HOTKEYS: string = "sic-hotkeys";
 
 export interface Profile {
     name: string;
@@ -23,7 +24,7 @@ export function loadProfileOrNew(): Profile {
         };
     }
 
-    const stored: string | null = localStorage.getItem(STORAGE_KEY);
+    const stored: string | null = localStorage.getItem(STORAGE_KEY_PROFILE);
     const storedJson: any | null = stored === null ? null : JSON.parse(stored);
 
     const ret: Profile = {
@@ -42,7 +43,7 @@ export function loadProfileOrNew(): Profile {
 }
 
 export function saveProfile(profile: Profile) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+    localStorage.setItem(STORAGE_KEY_PROFILE, JSON.stringify(profile));
 }
 
 export function textColorForBackground(colorAsHex: string) {
@@ -58,17 +59,45 @@ export function textColorForBackground(colorAsHex: string) {
     }
 }
 
-export type HotkeyAction = "scout" | "enter" | "live" | "draw" | "flip";
+export type HotkeyAction = "scout" | "enter" | "live" | "draw" | "song" | "flip";
+export type Hotkeys = { [a in HotkeyAction]: string };
 
-export interface Hotkey {
-    action: HotkeyAction;
-    key: string;
-}
-
-const HOTKEY_DEFAULTS: { [a in HotkeyAction]: string } = {
+const HOTKEY_DEFAULTS: Hotkeys = {
     scout: "S",
     enter: "E",
-    live: "L",
+    live: "A",
     draw: "D",
+    song: "W",
     flip: "F",
 };
+
+export function loadHotkeysOrDefault(): { [a in HotkeyAction]: string } {
+    if (!browser) {
+        // SSR - return empty object and let client side load the actual data
+        return {} as Hotkeys;
+    }
+
+    const stored: string | null = localStorage.getItem(STORAGE_KEY_HOTKEYS);
+    if (stored === null) return HOTKEY_DEFAULTS;
+    const storedJson: any = JSON.parse(stored);
+
+    const ret: Partial<Hotkeys> = {};
+    for (const action of Object.keys(HOTKEY_DEFAULTS) as HotkeyAction[]) {
+        ret[action] = storedJson[action] ?? HOTKEY_DEFAULTS[action];
+    }
+
+    return ret as Hotkeys;
+}
+
+export function saveHotkeys(hotkeys: Partial<Hotkeys>) {
+    localStorage.setItem(STORAGE_KEY_HOTKEYS, JSON.stringify(hotkeys));
+}
+
+export function keyEventToHotkeyName(e: KeyboardEvent): string | undefined {
+    if (e.repeat || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey) return undefined;
+
+    if (e.key === " ") return "Space";
+    let k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
+    if (e.code.startsWith("Numpad")) k = "Num " + k;
+    return k;
+}

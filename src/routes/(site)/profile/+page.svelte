@@ -1,22 +1,45 @@
 <script lang="ts" context="module">
-    import { type Profile, loadProfileOrNew, saveProfile, textColorForBackground } from "$lib/play/profile.js";
+    import {
+        type HotkeyAction,
+        type Hotkeys,
+        type Profile,
+        keyEventToHotkeyName,
+        loadHotkeysOrDefault,
+        loadProfileOrNew,
+        saveHotkeys as saveHotkeysToStorage,
+        saveProfile as saveProfileToStorage,
+        textColorForBackground,
+    } from "$lib/play/profile.js";
     import { stringIsHexColor } from "$lib/utils/string.js";
     import Button from "$lib/style/Button.svelte";
 </script>
 
 <script lang="ts">
-    let profile: Profile = loadProfileOrNew();
-    let buttonLabel: string = "Save";
+    let profile: Profile = loadProfileOrNew(),
+        hotkeys: Hotkeys = loadHotkeysOrDefault();
+    let profileButtonLabel: string = "Save Profile";
+    let hotkeysButtonLabel: string = "Save Hotkeys";
 
     function validate(s: string) {
         if (stringIsHexColor(s)) return s;
         return "#000000";
     }
 
-    function save() {
-        buttonLabel = "Profile Saved!";
-        setTimeout(() => (buttonLabel = "Save"), 2000);
-        saveProfile(profile);
+    function saveProfile() {
+        saveProfileToStorage(profile);
+        profileButtonLabel = "Profile Saved!";
+        setTimeout(() => (profileButtonLabel = "Save Profile"), 2000);
+    }
+
+    function setHotkey(e: KeyboardEvent, action: HotkeyAction) {
+        const key = keyEventToHotkeyName(e);
+        if (key) hotkeys[action] = key;
+    }
+
+    function saveHotkeys() {
+        saveHotkeysToStorage(hotkeys);
+        hotkeysButtonLabel = "Hotkeys Saved!";
+        setTimeout(() => (hotkeysButtonLabel = "Save Hotkeys"), 2000);
     }
 </script>
 
@@ -31,9 +54,9 @@
             <div class="my-4 rounded-3xl px-4 py-2 bg-yellow-800 text-justify">
                 <b>Note: </b> While these options allow you to customize your play field, there is no in-built multiplayer
                 (yet). As such, this info will be only visible to you yourself. However, if you want to play with others,
-                you can still do that by screen-sharing your play field with others on something like Discord :)
+                you can still do that by screen-sharing your play field with others on something like Discord!
             </div>
-            <div class="flex gap-4 flex-col lg:flex-row">
+            <div class="flex gap-4 flex-col lg:flex-row items-start">
                 <div class="grid grid-cols-[1fr,2fr] gap-2 items-center">
                     <h5 class="col-span-2 m-0">Profile</h5>
                     <b>Player Name</b>
@@ -53,18 +76,19 @@
                         <input type="color" bind:value={profile.setListColor} />
                         <input class="flex-grow" bind:value={profile.setListColor} pattern={"#[a-fA-F0-9]{6}"} />
                     </div>
-                    <Button
-                        label="Save"
-                        accent
-                        classes="w-full col-span-2"
-                        on:click={save}
-                        disabled={profile.name.length === 0 ||
-                            !stringIsHexColor(profile.fieldColor) ||
-                            !stringIsHexColor(profile.deckColor) ||
-                            !stringIsHexColor(profile.setListColor)}
-                    >
-                        {buttonLabel}
-                    </Button>
+                    <div class="w-full col-span-full flex justify-end">
+                        <Button
+                            label="Save Profile"
+                            accent
+                            on:click={saveProfile}
+                            disabled={profile.name.length === 0 ||
+                                !stringIsHexColor(profile.fieldColor) ||
+                                !stringIsHexColor(profile.deckColor) ||
+                                !stringIsHexColor(profile.setListColor)}
+                        >
+                            {profileButtonLabel}
+                        </Button>
+                    </div>
                 </div>
                 <div class="flex-grow flex flex-col">
                     <h5>Preview</h5>
@@ -115,7 +139,58 @@
                     </div>
                 </div>
             </div>
-            hotkeys
+            <h5>Hotkeys</h5>
+            <div
+                class="grid grid-cols-[1fr,2fr] sm:grid-cols[repeat(2,1fr_2fr)] lg:grid-cols-[repeat(3,1fr_2fr)] xl:grid-cols-[repeat(4,1fr_2fr)] gap-2 items-center"
+            >
+                <b>⟪SCOUT⟫</b>
+                <input
+                    class="max-w-[8rem]"
+                    bind:value={hotkeys["scout"]}
+                    on:keydown={(e) => setHotkey(e, "scout")}
+                    on:beforeinput|preventDefault={() => null}
+                />
+                <b>⟪ENTER⟫</b>
+                <input
+                    class="max-w-[8rem]"
+                    bind:value={hotkeys["enter"]}
+                    on:keydown={(e) => setHotkey(e, "enter")}
+                    on:beforeinput|preventDefault={() => null}
+                />
+                <b>Prepare ⟪LIVE⟫</b>
+                <input
+                    class="max-w-[8rem]"
+                    bind:value={hotkeys["live"]}
+                    on:keydown={(e) => setHotkey(e, "live")}
+                    on:beforeinput|preventDefault={() => null}
+                />
+                <b>Draw card from Deck</b>
+                <input
+                    class="max-w-[8rem]"
+                    bind:value={hotkeys["draw"]}
+                    on:keydown={(e) => setHotkey(e, "draw")}
+                    on:beforeinput|preventDefault={() => null}
+                />
+                <b>Reveal Song card</b>
+                <input
+                    class="max-w-[8rem]"
+                    bind:value={hotkeys["song"]}
+                    on:keydown={(e) => setHotkey(e, "song")}
+                    on:beforeinput|preventDefault={() => null}
+                />
+                <b>Flip card</b>
+                <input
+                    class="max-w-[8rem]"
+                    bind:value={hotkeys["flip"]}
+                    on:keydown={(e) => setHotkey(e, "flip")}
+                    on:beforeinput|preventDefault={() => null}
+                />
+                <div class="w-full col-span-full flex justify-end">
+                    <Button label="Save Hotkeys" accent on:click={saveHotkeys} disabled={false}>
+                        {hotkeysButtonLabel}
+                    </Button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

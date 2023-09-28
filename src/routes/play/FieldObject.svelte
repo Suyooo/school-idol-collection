@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
     import type { Readable, Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
@@ -11,6 +11,7 @@
         type ClientGameSchema,
         type ClientPlayerSchema,
         type ClientProfile,
+        StackSide,
         StackType,
     } from "$lib/play/schema.js";
     import FieldCardObject from "./FieldCardObject.svelte";
@@ -19,6 +20,7 @@
 </script>
 
 <script lang="ts">
+    import { type HotkeyAction, keyEventToHotkeyName, loadHotkeysOrDefault } from "$lib/play/profile.js";
     import PlusMinusButtons from "./PlusMinusButtons.svelte";
 
     export let playerIdx: number;
@@ -28,6 +30,7 @@
     export let setListComponent: StackObject;
     const logic: ClientGameLogic = getContext("logic");
     const fieldZoom: Writable<number> = getContext("fieldZoom");
+    const liveModeCards: Writable<number[]> = getContext("liveModeCards");
 
     let game: Readable<ClientGameSchema>,
         players: Readable<ClientPlayerSchema[]>,
@@ -73,6 +76,63 @@
             destroy: () => interactable.unset(),
         };
     }
+
+    onMount(() => {
+        if (isClient) {
+            const hotkeyActions: { [a in HotkeyAction]: () => void } = {
+                scout: () => {
+                    logic.requestScout();
+                },
+                enter: () => {
+                    logic.requestStackToField(StackType.DECK, StackSide.TOP, 616, 293 - $deck.length);
+                },
+                live: () => {
+                    const hoveredCard = fieldElement.querySelector(".objcardfieldsong:hover") as HTMLElement | null;
+                    if (hoveredCard) {
+                        const id = parseInt(hoveredCard.dataset["id"]!);
+                        liveModeCards.update((prev) => {
+                            if (prev.length === 0 || prev[0] !== id) {
+                                prev[0] = id;
+                                return prev;
+                            } else {
+                                return [];
+                            }
+                        });
+                        parseInt(hoveredCard.dataset["id"]!);
+                    }
+                },
+                draw: () => {
+                    logic.requestStackToHand(StackSide.TOP);
+                },
+                song: () => {
+                    logic.requestStackToField(StackType.SET_LIST, StackSide.TOP, 40, 320 - $setList.length);
+                },
+                flip: () => {
+                    const hoveredCard = fieldElement.querySelector(".objcardfield:hover") as HTMLElement | null;
+                    if (hoveredCard) {
+                        logic.requestFieldFlip(parseInt(hoveredCard.dataset["id"]!));
+                    }
+                },
+            };
+
+            const hotkeyHandlers: { [k: string]: () => void } = {};
+            const hotkeySettings = loadHotkeysOrDefault();
+            for (const action of Object.keys(hotkeySettings) as HotkeyAction[]) {
+                hotkeyHandlers[hotkeySettings[action]] = hotkeyActions[action];
+            }
+
+            function checkHotkeyHandlers(e: KeyboardEvent) {
+                const key = keyEventToHotkeyName(e);
+                if (key) {
+                    const handler = hotkeyHandlers[key];
+                    if (handler) handler();
+                }
+            }
+
+            document.addEventListener("keydown", checkHotkeyHandlers);
+            return () => document.removeEventListener("keydown", checkHotkeyHandlers);
+        }
+    });
 </script>
 
 <div
