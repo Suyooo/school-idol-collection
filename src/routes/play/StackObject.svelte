@@ -173,7 +173,7 @@
                 @apply absolute left-0 flex items-center justify-center font-bold border-solid border-black/25;
                 border-width: calc(1px * var(--zoom));
                 background-color: var(--stack-color);
-                font-size: calc(2rem * var(--zoom));
+                font-size: calc(32px * var(--zoom));
             }
         }
 

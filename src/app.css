@@ -146,11 +146,15 @@ div.anchor {
 input,
 textarea,
 select {
-    @apply bg-primary-900 border-primary-100 p-2;
+    @apply bg-background border border-primary-500 p-2;
 }
 
 input::placeholder {
     @apply text-primary-400;
+}
+
+input:invalid {
+    @apply outline outline-4 outline-red-500;
 }
 
 textarea {

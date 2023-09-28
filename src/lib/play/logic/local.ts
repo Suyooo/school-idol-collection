@@ -21,7 +21,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
     private storePlayers = [
         {
             profile: writable<ClientProfile>({
-                name: "Local Player",
+                name: "Player",
                 fieldColor: "skyblue",
                 deckColor: "lightblue",
                 setListColor: "lightpink",

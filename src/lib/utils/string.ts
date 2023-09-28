@@ -1,5 +1,6 @@
-export const specialCharactersRegex = /[-[\]{}()*+?.,\\^$|#]/g;
-export const isIntegerRegex = /^\d+$/;
+const specialCharactersRegex = /[-[\]{}()*+?.,\\^$|#]/g;
+const isIntegerRegex = /^\d+$/;
+const isHexColorRegex = /^#[0-9a-fA-F]{6}$/;
 
 export function toNumWithFullwidth(fw: string): number {
     return parseInt(fw.normalize("NFKC"));
@@ -19,4 +20,8 @@ export function uppercaseFirst(s: string): string {
 
 export function stringIsInteger(s: string): boolean {
     return isIntegerRegex.test(s);
+}
+
+export function stringIsHexColor(s: string): boolean {
+    return isHexColorRegex.test(s);
 }

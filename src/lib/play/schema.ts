@@ -1,5 +1,6 @@
 import type { Readable } from "svelte/store";
 import type CardType from "$lib/enums/cardType.js";
+import type { Profile } from "./profile.js";
 
 export const enum StackType {
     DECK,
@@ -9,14 +10,6 @@ export const enum StackType {
 export const enum StackSide {
     TOP,
     BOTTOM,
-}
-
-export interface Profile {
-    name: string;
-    uuid: string;
-    fieldColor: string;
-    deckColor: string;
-    setListColor: string;
 }
 
 export interface GameSchema {
@@ -61,12 +54,7 @@ export interface HandCardSchema {
     cardNo: string;
 }
 
-export interface ClientProfile {
-    name: string;
-    fieldColor: string;
-    deckColor: string;
-    setListColor: string;
-}
+export type ClientProfile = Omit<Profile, "uuid">;
 
 export abstract class ClientGameLogic {
     abstract game: Readable<ClientGameSchema>;

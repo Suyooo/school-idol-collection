@@ -136,7 +136,7 @@
 
 <style lang="postcss">
     .objfield {
-        @apply relative flex-shrink-0 box-content border-solid min-w-0 select-none;
+        @apply relative flex-shrink-0 box-content border-solid min-w-0 select-none rounded-md;
         width: calc(720px * var(--zoom));
         height: calc(401px * var(--zoom));
         border-width: calc(1px * var(--zoom));
@@ -164,7 +164,7 @@
 
                     &:before {
                         content: "Set List";
-                        left: calc(-1rem * var(--zoom));
+                        left: calc(-25px * var(--zoom));
                         top: calc(-10px * var(--zoom));
                         bottom: calc(-10px * var(--zoom));
                         transform: rotate(180deg);
@@ -179,7 +179,7 @@
 
                     &:before {
                         content: "Deck";
-                        right: calc(-1rem * var(--zoom));
+                        right: calc(-25px * var(--zoom));
                         top: 0px;
                         bottom: 0px;
                     }
@@ -188,14 +188,14 @@
                 &:before {
                     @apply absolute font-bold text-center uppercase tracking-widest;
                     color: var(--player-color);
-                    font-size: calc(1rem * var(--zoom));
-                    line-height: calc(-1.5rem * var(--zoom));
+                    font-size: calc(14px * var(--zoom));
+                    line-height: calc(21px * var(--zoom));
                     writing-mode: vertical-rl;
                 }
             }
 
             & .line {
-                @apply absolute  border-solid z-play-field;
+                @apply absolute border-solid z-play-field;
                 border-left-width: calc(1px * var(--zoom));
                 width: calc(1px * var(--zoom));
                 top: calc(10px * var(--zoom));

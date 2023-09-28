@@ -9,6 +9,7 @@
     import Language from "$lib/enums/language.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
     import { LocalClientGameLogic } from "$lib/play/logic/local.js";
+    import { loadProfileOrNew } from "$lib/play/profile.js";
     import type { ClientGameLogic, ClientGameSchema, ClientPlayerSchema } from "$lib/play/schema.js";
     import { type HandCardSchema, StackType } from "$lib/play/schema.js";
     import Button from "$lib/style/Button.svelte";
@@ -75,12 +76,7 @@
         e.preventDefault();
     }
 
-    const logic: ClientGameLogic = new LocalClientGameLogic({
-        name: "Suyooo",
-        fieldColor: "skyblue",
-        deckColor: "#FF8246",
-        setListColor: "#27C1B7",
-    });
+    const logic: ClientGameLogic = new LocalClientGameLogic(loadProfileOrNew());
 
     const fieldElements: HTMLDivElement[] = [];
     const playerField: Writable<HTMLDivElement> = writable();
