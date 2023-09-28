@@ -50,7 +50,7 @@ export function textColorForBackground(colorAsHex: string) {
         parseInt(colorAsHex.substring(1, 3), 16) * 0.299 +
             parseInt(colorAsHex.substring(3, 5), 16) * 0.587 +
             parseInt(colorAsHex.substring(5), 16) * 0.114 >
-        150
+        186
     ) {
         return "#000000";
     } else {
@@ -64,3 +64,11 @@ export interface Hotkey {
     action: HotkeyAction;
     key: string;
 }
+
+const HOTKEY_DEFAULTS: { [a in HotkeyAction]: string } = {
+    scout: "S",
+    enter: "E",
+    live: "L",
+    draw: "D",
+    flip: "F",
+};

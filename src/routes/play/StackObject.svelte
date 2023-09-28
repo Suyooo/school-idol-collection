@@ -3,7 +3,9 @@
     import { type Readable, type Writable, get } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
+    import { textColorForBackground } from "$lib/play/profile.js";
     import { ClientGameLogic, StackSide, StackType } from "$lib/play/schema.js";
+    import { stringIsHexColor } from "$lib/utils/string.js";
     import type { OpenMenuFunction } from "./+page.svelte";
 </script>
 
@@ -120,7 +122,8 @@
     class:almostempty={cardNos.length <= 1}
     class:empty={cardNos.length === 0}
     class:disabled={$liveModeEnabled}
-    style:--stack-color={color}
+    style:--stack-color={stringIsHexColor(color) ? color : "#000000"}
+    style:--text-color={textColorForBackground(color)}
     style:--zoom={$fieldZoom}
     style:left={`${x * $fieldZoom}px`}
     style:top={`${(y - 60) * $fieldZoom}px`}
@@ -174,6 +177,7 @@
                 border-width: calc(1px * var(--zoom));
                 background-color: var(--stack-color);
                 font-size: calc(32px * var(--zoom));
+                color: var(--text-color);
             }
         }
 

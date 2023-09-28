@@ -14,9 +14,8 @@
     <div class="panel">
         <div class="panel-inner">
             <h4>Base Rules</h4>
-            To get an overview of the base rules,<a href="https://llsic-en.carrd.co/"
-                >Your Sinclair has translated the official rule sheet here</a
-            >.<br />
+            To get an overview of the base rules,
+            <a href="https://llsic-en.carrd.co/"> Your Sinclair has translated the official rule sheet here </a>.<br />
             This rule sheet is enough to start trying out the game - the rules following below are just further details!
         </div>
     </div>
@@ -79,18 +78,17 @@
             <p>
                 Since the cards have illustrations on their back, it is recommended to use card sleeves when playing to
                 hide the back, so other players can't see what cards you have on your hand, and you can't see what you
-                will draw next. SIC cards come with sleeves to put them in. Of course, you can use any card sleeve you
-                like!<br />
+                will draw next. That's why when you buy SIC cards, they will always come with sleeves to put them in. Of
+                course, you can use any card sleeve you like!<br />
                 It is recommended to use one unified sleeve for the cards in the Deck and another unified sleeve for the
                 cards in the Set List. This will make the game easier to play.<br />
                 <br />
                 If you bought a Trial Deck, the cards in it come without an illustration on the back, but with a unified
-                design instead. As long as you only use Trial Deck cards with the same design, these will not need sleeving.<br
-                />
-                While cards you bring into play from your Collection also do not need sleeving, they do require sleeving
-                if they could be turned face-down at any point. If you plan to bring Member or Song cards from your Collection
-                into play, it might be a good idea to sleeve them - they must have the same sleeving as your other cards
-                of the same type.
+                design instead. As long as you only use Trial Deck cards and they all have the same design, these will not
+                need sleeving.<br />
+                Cards you bring into play from your Collection do not need sleeving, unless they could be turned face-down
+                at any point. In that case, sleeving is required. If you plan to bring Member or Song cards from your Collection
+                into play, make sure they have the same sleeving as your other cards of the same type.
             </p>
         </div>
     </div>
@@ -141,16 +139,17 @@
                 <div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
                     <a href="/card/LL15-028"><CardImage cardNo="LL15-028" orientation={CardOrientation.PORTRAIT} /></a>
                 </div>
-                Certain cards are able to be Idolized. This works similar to LLSIF: by combining multiple cards, you can
-                get a powered-up version of the Idolizable card.<br />
+                Certain cards are able to be Idolized. This works a little like Idolization in the original LLSIF: by combining
+                multiple cards, you can get a powered-up version of the Idolizable card.<br />
                 <br />
                 Cards that have a <TriggerComponent trigger={TriggerEnum.SP} /> Skill are Idolizable. You can Idolize these
                 cards by stacking them on top of another card already on your Stage, which must meet the requirements mentioned
                 by the <TriggerComponent trigger={TriggerEnum.SP} /> Skill, such as being a certain member or having a certain
                 Cost.<br />
                 <br />
-                Once Idolized, cards can gain additional Pieces listed as <Idolized repl="[Idolized] Pieces" />, or use
-                more powerful Skills. You can learn more from the
+                Once Idolized, cards can gain additional Pieces listed as <Idolized repl="[Idolized] Pieces" /> (the smaller
+                Pieces below the regular ones, right above the Member's birthday), or use more powerful Skills. You can learn
+                more from the
                 <a href="/faq/general#idolization">FAQ about Idolization and Special Practice</a>.
             </div>
         </div>
