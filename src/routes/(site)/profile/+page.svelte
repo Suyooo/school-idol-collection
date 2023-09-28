@@ -58,7 +58,7 @@
             </div>
             <div class="flex gap-4 flex-col lg:flex-row items-start">
                 <div class="grid grid-cols-[1fr,2fr] gap-2 items-center">
-                    <h5 class="col-span-2 m-0">Profile</h5>
+                    <h6 class="col-span-2 m-0">Profile</h6>
                     <b>Player Name</b>
                     <input bind:value={profile.name} />
                     <b>Field Borders</b>
@@ -91,7 +91,7 @@
                     </div>
                 </div>
                 <div class="flex-grow flex flex-col">
-                    <h5>Preview</h5>
+                    <h6>Preview</h6>
                     <div
                         class="bg-background flex-grow relative overflow-hidden w-full min-w-[360px] max-w-[500px] min-h-[300px] self-center"
                     >
@@ -139,7 +139,7 @@
                     </div>
                 </div>
             </div>
-            <h5>Hotkeys</h5>
+            <h6>Hotkeys</h6>
             <div
                 class="grid grid-cols-[1fr,2fr] sm:grid-cols[repeat(2,1fr_2fr)] lg:grid-cols-[repeat(3,1fr_2fr)] xl:grid-cols-[repeat(4,1fr_2fr)] gap-2 items-center"
             >

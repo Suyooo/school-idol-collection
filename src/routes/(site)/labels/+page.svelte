@@ -50,6 +50,7 @@
 </svelte:head>
 
 <div class="content">
+    <h3>Label Printer</h3>
     <div class="panel">
         <div class="panel-inner">
             <form action="/labels/print" method="POST" target="_blank" bind:this={form}>
@@ -95,6 +96,26 @@
                 {/if}
                 <Button label="Print" accent on:click={submit}>Print</Button>
             </div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-inner">
+            <h4>How to Use</h4>
+            <div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
+                <img class="max-w-md" src="/images/photos/labels_example.jpg" alt="Example for the Label Printer" />
+            </div>
+            If you own SIC cards, the&nbsp;<b>Label Printer</b> allows you to create small tags for each card. With
+            these, you can add translations for Skills and Live Costumes to their sleeving, and play without having to
+            learn all the card info!<br /><br />
+            Enter the card numbers of your deck above, and select the paper size your printer uses. The site will generate
+            a document with all the labels you need. Once you've printed it, all you need is scissors to cut everything out.<br
+            /><br />
+            If you don't own a printer, you can also bring the labels to a public printer or print shop. Most desktop operating
+            systems allow you to save any printable page as PDF - just look for something like "Save as PDF" in the printer
+            list after pressing the "Print" button.<br /><br />
+            (Note that it is not guaranteed that cards with these labels are tournament legal, as they cover up the original
+            card info and text. Please ask the organizers about whether you can use the labeled cards before playing with
+            them!)
         </div>
     </div>
 </div>

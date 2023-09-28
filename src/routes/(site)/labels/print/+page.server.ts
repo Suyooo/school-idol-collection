@@ -19,7 +19,7 @@ export const actions = {
 
         await Promise.all(
             cardNos.map((cardNo) =>
-                fetch(`/json/card/${cardNo}/preparse`).then((r) => {
+                fetch(`/json/card/${cardNo}`).then((r) => {
                     if (!r.ok) {
                         invalidCardNos.push(cardNo);
                     } else {

@@ -92,8 +92,7 @@
                 <div class="mt-2">
                     <div class="-indent-5">
                         <b>①</b> Make sure to print the labels one-sided, at the highest quality and at original (or 100%)
-                        scale. Most operating systems also allow you to save a PDF instead of printing the page - that way,
-                        you can bring the labels to a print shop if you don't have a printer.
+                        scale.
                     </div>
                     <div class="-indent-5">
                         <b>②</b> Double-check the size with a ruler after the print - the distance between the grey lines
