@@ -149,6 +149,7 @@
                     bind:value={hotkeys["scout"]}
                     on:keydown={(e) => setHotkey(e, "scout")}
                     on:beforeinput|preventDefault={() => null}
+                    pattern={Object.values(hotkeys).filter((e) => e === hotkeys["scout"]).length > 1 ? "" : undefined}
                 />
                 <b>⟪ENTER⟫</b>
                 <input
@@ -156,6 +157,7 @@
                     bind:value={hotkeys["enter"]}
                     on:keydown={(e) => setHotkey(e, "enter")}
                     on:beforeinput|preventDefault={() => null}
+                    pattern={Object.values(hotkeys).filter((e) => e === hotkeys["enter"]).length > 1 ? "" : undefined}
                 />
                 <b>Prepare ⟪LIVE⟫</b>
                 <input
@@ -163,6 +165,7 @@
                     bind:value={hotkeys["live"]}
                     on:keydown={(e) => setHotkey(e, "live")}
                     on:beforeinput|preventDefault={() => null}
+                    pattern={Object.values(hotkeys).filter((e) => e === hotkeys["live"]).length > 1 ? "" : undefined}
                 />
                 <b>Draw card from Deck</b>
                 <input
@@ -170,6 +173,7 @@
                     bind:value={hotkeys["draw"]}
                     on:keydown={(e) => setHotkey(e, "draw")}
                     on:beforeinput|preventDefault={() => null}
+                    pattern={Object.values(hotkeys).filter((e) => e === hotkeys["draw"]).length > 1 ? "" : undefined}
                 />
                 <b>Reveal Song card</b>
                 <input
@@ -177,6 +181,7 @@
                     bind:value={hotkeys["song"]}
                     on:keydown={(e) => setHotkey(e, "song")}
                     on:beforeinput|preventDefault={() => null}
+                    pattern={Object.values(hotkeys).filter((e) => e === hotkeys["song"]).length > 1 ? "" : undefined}
                 />
                 <b>Flip card</b>
                 <input
@@ -184,9 +189,15 @@
                     bind:value={hotkeys["flip"]}
                     on:keydown={(e) => setHotkey(e, "flip")}
                     on:beforeinput|preventDefault={() => null}
+                    pattern={Object.values(hotkeys).filter((e) => e === hotkeys["flip"]).length > 1 ? "" : undefined}
                 />
                 <div class="w-full col-span-full flex justify-end">
-                    <Button label="Save Hotkeys" accent on:click={saveHotkeys} disabled={false}>
+                    <Button
+                        label="Save Hotkeys"
+                        accent
+                        on:click={saveHotkeys}
+                        disabled={Object.values(hotkeys).some((v, i, a) => a.indexOf(v) !== i)}
+                    >
                         {hotkeysButtonLabel}
                     </Button>
                 </div>
