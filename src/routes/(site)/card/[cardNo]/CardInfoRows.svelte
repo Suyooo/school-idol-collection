@@ -34,7 +34,6 @@
     export let hideBacklinks: boolean = false;
     export let hideFaq: boolean = false;
     export let forceSingleColumn: boolean = false;
-    export let linkTarget: string | undefined = undefined;
     let cardWithSharedIdCards: Card & CardPageExtraInfo<true, boolean>;
     $: if (!hideSharedId) cardWithSharedIdCards = card as Card & CardPageExtraInfo<true, boolean>;
 </script>
@@ -52,10 +51,10 @@
             {#if !hideSharedId}
                 {#each cardWithSharedIdCards.sameId as sameIdCard (sameIdCard.cardNo)}
                     <br />
-                    <a href="/card/{sameIdCard.cardNo}" target={linkTarget}
-                        >{sameIdCard.cardNo}
-                        <span class="rarity">{cardRarityShort(sameIdCard)}</span></a
-                    >
+                    <a href="/card/{sameIdCard.cardNo}">
+                        {sameIdCard.cardNo}
+                        <span class="rarity">{cardRarityShort(sameIdCard)}</span>
+                    </a>
                 {/each}
             {/if}
         </div>
@@ -131,10 +130,7 @@
         <div>Costume</div>
         <div>
             {#if card.member.costumeJpn !== null}
-                <a
-                    href="/search/costume:{escapeForUrl(card.member.costumeEng ?? card.member.costumeJpn)}"
-                    target={linkTarget}
-                >
+                <a href="/search/costume:{escapeForUrl(card.member.costumeEng ?? card.member.costumeJpn)}">
                     {card.member.costumeEng ?? card.member.costumeJpn}
                 </a>
             {:else}
@@ -214,10 +210,7 @@
         <div>
             {#if import.meta.env.DEV}
                 {#each card.skills as skill (skill.id)}
-                    <span
-                        ><a href="/admin/pattern/edit/{skill.patternId ?? 'new'}/{skill.id}" target={linkTarget}>🖉</a
-                        ></span
-                    ><br />
+                    <span><a href="/admin/pattern/edit/{skill.patternId ?? 'new'}/{skill.id}">🖉</a></span><br />
                 {/each}
             {/if}
         </div>
@@ -238,7 +231,7 @@
             {#each card.member.group.memberExtraInfos as member (member.cardNo)}
                 {#if member.cardNo !== card.cardNo}
                     <div>
-                        <a href="/card/{member.cardNo}" target={linkTarget}>{@html cardTitle(member.card, true)}</a>
+                        <a href="/card/{member.cardNo}">{@html cardTitle(member.card, true)}</a>
                     </div>
                 {/if}
             {/each}
@@ -258,10 +251,7 @@
         <div>
             {#if import.meta.env.DEV}
                 {#each card.member.group.skills as skill (skill.id)}
-                    <span
-                        ><a href="/admin/pattern/edit/{skill.patternId ?? 'new'}/{skill.id}" target={linkTarget}>🖉</a
-                        ></span
-                    ><br />
+                    <span><a href="/admin/pattern/edit/{skill.patternId ?? 'new'}/{skill.id}">🖉</a></span><br />
                 {/each}
             {/if}
         </div>
@@ -301,7 +291,7 @@
         <div>Related FAQ</div>
         <div class="faqs">
             {#each card.faqs as faq (faq.cardId + "_" + faq.displayOrder)}
-                <a href={faq.link} target={linkTarget}>
+                <a href={faq.link}>
                     <Skill skill={faq.labelPreparsed ?? faq.label} parseAsHelpText />
                     {#if faq.shortAnswer}
                         <span class="text-primary-100">({faq.shortAnswer})</span>

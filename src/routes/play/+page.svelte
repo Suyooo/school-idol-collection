@@ -188,6 +188,8 @@
 </svelte:head>
 <svelte:body on:mousedown={() => (menuEntries = undefined)} />
 
+<base target="_blank" />
+
 <div class="play">
     <div class="leftside" on:contextmenu|preventDefault={() => null} role="presentation">
         <div class="fieldscont" bind:this={fieldsContainerElement}>
@@ -226,14 +228,7 @@
                     <div class="panel-inner">
                         <h4>{@html cardTitle(card, true, Language.ENG, true)}</h4>
                         <div class="sidebar-info">
-                            <CardInfoRows
-                                {card}
-                                hideSharedId
-                                hideBacklinks
-                                hideFaq
-                                forceSingleColumn
-                                linkTarget="_blank"
-                            />
+                            <CardInfoRows {card} hideSharedId hideBacklinks hideFaq forceSingleColumn />
                             <img
                                 src={card.imageDataUrl}
                                 alt={`${card.cardNo} Front Illustration`}
