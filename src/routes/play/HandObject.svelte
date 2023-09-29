@@ -62,6 +62,11 @@
                     }
                     indicatorPos = getHandIndex(event);
                 },
+                activate(event) {
+                    if (event.relatedTarget.classList.contains("objcardhand")) {
+                        indicatorPos = getHandIndex(event);
+                    }
+                },
                 move(event) {
                     indicatorPos = getHandIndex(event);
                 },
@@ -100,6 +105,8 @@
             indicatorAfter={indicatorPos !== null && draggingHandCardIdx !== idx
                 ? indicatorPos === idx + 1 - (draggingHandCardIdx !== null && idx > draggingHandCardIdx ? 1 : 0)
                 : false}
+            isLastWithoutDraggedCard={(idx === hand.length - 1 && draggingHandCardIdx !== hand.length - 1) ||
+                (idx === hand.length - 2 && draggingHandCardIdx === hand.length - 1)}
             {disableSidewaysAnimations}
             on:handCardPickedUp={skipAnimations}
         />
@@ -109,10 +116,6 @@
 <style lang="postcss">
     .objhand {
         @apply flex-grow flex items-start justify-center bg-primary-600 border-8 border-solid border-transparent select-none px-4 pt-4;
-
-        & > :global(*):last-child {
-            flex-shrink: 0;
-        }
 
         &:global(.hovering) {
             @apply border-white/50;
@@ -125,11 +128,11 @@
             }
         }
 
-        &:after {
+        /*&:after {
             @apply pointer-events-none;
             content: " ";
             width: 65px;
             flex-shrink: 0;
-        }
+        }*/
     }
 </style>

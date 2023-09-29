@@ -18,6 +18,7 @@
     export let idx: number;
     export let cardNo: string | null;
     export let indicatorAfter: boolean;
+    export let isLastWithoutDraggedCard: boolean = false;
     export let disableSidewaysAnimations: boolean;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
@@ -142,6 +143,7 @@
         class:disable-sideways-animations={disableSidewaysAnimations}
         class:idolizable={card !== undefined && cardIsMember(card) && cardIsIdolizable(card)}
         class:disabled={$liveModeEnabled}
+        class:last-without-drag={isLastWithoutDraggedCard}
         style:--zoom={$fieldZoom}
         style:left={`${startOffset.x + displayPosition.x}px`}
         style:top={`${startOffset.y + displayPosition.y}px`}
@@ -232,9 +234,15 @@
     }
 
     .objcardhand {
-        @apply cursor-grab;
-        width: 65px;
+        @apply flex-grow cursor-grab;
+        width: 1px;
         height: 91px;
+        max-width: 65px;
+
+        &.last-without-drag {
+            width: 130px;
+            max-width: 130px;
+        }
 
         & .cardholder {
             width: 130px;
