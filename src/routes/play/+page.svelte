@@ -146,7 +146,7 @@
         const left = field.offsetLeft + 1 - field.parentElement!.parentElement!.scrollLeft;
         const top = field.offsetTop + 1 - field.parentElement!.parentElement!.scrollTop;
 
-        const res = { x: Math.round((x - left) / $fieldZoom), y: Math.round((y - top) / $fieldZoom) };
+        const res = { x: x - left, y: y - top };
         if (!isFixedXY) {
             // If called with a DOM rect as parameter, it's a card drop action. Restrict it to the field area
             if (res.x < 0) {
@@ -161,6 +161,8 @@
             }
         }
 
+        res.x = Math.round(res.x / $fieldZoom);
+        res.y = Math.round(res.y / $fieldZoom);
         return res;
     }
     setContext("fieldZoom", fieldZoom);

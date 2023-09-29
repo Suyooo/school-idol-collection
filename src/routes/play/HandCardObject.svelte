@@ -58,14 +58,14 @@
                     },
                     end(event) {
                         if (event.relatedTarget?.classList.contains("objfield")) {
-                            const pos = fieldPositionFunction(node.getBoundingClientRect());
+                            const pos = fieldPositionFunction(node.children[0].children[0].getBoundingClientRect());
                             logic.requestHandToField(idx, pos.x, pos.y);
                         } else if (event.relatedTarget?.classList.contains("objhand")) {
                             // handled in HandObject
                             node.classList.remove("dragging");
                             startOffset.x = startOffset.y = displayPosition.x = displayPosition.y = 0;
                         } else if (event.relatedTarget?.classList.contains("objcardfieldmember")) {
-                            const pos = fieldPositionFunction(node.getBoundingClientRect());
+                            const pos = fieldPositionFunction(node.children[0].children[0].getBoundingClientRect());
                             node.classList.remove("dragging");
                             startOffset.x = startOffset.y = displayPosition.x = displayPosition.y = 0;
                             openMenu(
