@@ -117,7 +117,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
         this.storePlayers[0].setList.set(["LL09-055", "LL07-060", "LL04-058", "LL05-061", "EX09-033", "EX09-031"]);
 
         this.storeCardFlips.set(-1, writable(false));
-        this.storeCardPositions.set(-1, writable({ x: 209, y: 59, z: 9 }));
+        this.storeCardPositions.set(-1, writable({ x: 410, y: 60, z: 9 }));
         this.storePlayers[0].field.update((m) => {
             m.set(-1, {
                 cardNo: "LL10-084",
@@ -396,5 +396,12 @@ export class LocalClientGameLogic extends ClientGameLogic {
         if (card === undefined) return;
         this.addToField(card.idolizedBaseCardNo!, CardType.MEMBER, card.position.x, card.position.y);
         this.addToField(card.cardNo, CardType.MEMBER, card.position.x + 10, card.position.y);
+    }
+
+    requestNextTurn(): void {
+        this.storeGame.update((g) => {
+            g.round.update((r) => r + 1);
+            return g;
+        });
     }
 }

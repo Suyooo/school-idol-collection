@@ -108,8 +108,7 @@
 
 <style lang="postcss">
     .objhand {
-        @apply w-full z-play-hand flex items-start justify-center bg-primary-600 border-8 border-solid border-transparent select-none px-4 pt-4;
-        height: 15vh;
+        @apply flex-grow flex items-start justify-center bg-primary-600 border-8 border-solid border-transparent select-none px-4 pt-4;
 
         & > :global(*):last-child {
             flex-shrink: 0;

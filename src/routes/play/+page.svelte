@@ -13,8 +13,6 @@
     import type { ClientGameLogic, ClientGameSchema, ClientPlayerSchema } from "$lib/play/schema.js";
     import { type HandCardSchema, StackType } from "$lib/play/schema.js";
     import Button from "$lib/style/Button.svelte";
-    import Minus from "$lib/style/icons/Minus.svelte";
-    import Plus from "$lib/style/icons/Plus.svelte";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import CardInfoRows from "../(site)/card/[cardNo]/CardInfoRows.svelte";
     import FieldObject from "./FieldObject.svelte";
@@ -95,6 +93,9 @@
         players: Readable<ClientPlayerSchema[]>,
         handCards: Readable<HandCardSchema[]>;
     $: game = logic.game;
+    $: round = $game.round;
+    $: turnOrder = $game.turnOrder;
+    $: turnPlayerIdx = $game.turnPlayerIdx;
     $: players = $game.players;
     $: handCards = $players[logic.clientPlayerId].hand;
     setContext("logic", logic);
@@ -212,11 +213,25 @@
                 {/key}
             </div>
         </div>
-
-        <HandObject hand={$handCards} />
+        <div class="bottombar">
+            <div class="w-[12.5%] p-2 flex-shrink-0 bg-primary-700 grid grid-rows-[1fr_1.5fr] items-center">
+                <div class="text-center text-xl font-bold uppercase tracking-widest">Round {$round}</div>
+                <div class="flex flex-col items-center">
+                    {#if $turnOrder[$turnPlayerIdx] === logic.clientPlayerId}
+                        <div>Your Turn</div>
+                        <Button classes="mt-1" label="Finish Turn" accent on:click={() => logic.requestNextTurn()}>
+                            Finish Turn
+                        </Button>
+                    {:else}
+                        OTHER PLAYER's Turn
+                    {/if}
+                </div>
+            </div>
+            <HandObject hand={$handCards} />
+        </div>
 
         <div
-            class="absolute right-2 top-2 text-primary-400 hover:text-white transition-colors flex gap-x-2 select-none"
+            class="absolute right-2 top-2 text-primary-400 hover:text-white transition-colors flex items-center gap-x-2 select-none"
         >
             {Math.round($fieldZoom * 50)}%
             <PlusMinusButtons
@@ -286,6 +301,11 @@
             & .fields {
                 @apply mx-auto w-min min-h-full flex flex-col items-start justify-center gap-y-8;
             }
+        }
+
+        & .bottombar {
+            @apply w-full flex-shrink-0 flex items-stretch z-play-hand;
+            height: 15vh;
         }
     }
 
