@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-    import { setContext } from "svelte";
+    import { onMount, setContext } from "svelte";
     import { type Readable, type Writable, derived, writable } from "svelte/store";
     import type { SnapFunction } from "@interactjs/types";
     import type { Point } from "@interactjs/types/index";
@@ -119,15 +119,13 @@
     setContext("liveModeEnabled", liveModeEnabled);
 
     const fieldZoom: Writable<number> = writable(1);
-    let currentZoom: number;
-    $: currentZoom = $fieldZoom;
     function snapFunction(): SnapFunction {
         return (x, y, interaction) => {
             if (interaction.element?.classList.contains("inhand")) {
                 return { x, y };
             }
 
-            const gridSize = Math.round(10 * currentZoom);
+            const gridSize = Math.round(10 * $fieldZoom);
             const field = fieldElements[logic.clientPlayerId];
             const left = field.offsetLeft + 1;
             const top = field.offsetTop + 1;
@@ -150,7 +148,7 @@
         const top = field.offsetTop + 1;
         const scroll = field.parentElement!.scrollTop;
 
-        const res = { x: Math.round((x - left) / currentZoom), y: Math.round((y - top + scroll) / currentZoom) };
+        const res = { x: Math.round((x - left) / $fieldZoom), y: Math.round((y - top + scroll) / $fieldZoom) };
         if (!isFixedXY) {
             // If called with a DOM rect as parameter, it's a card drop action. Restrict it to the field area
             if (res.x < 0) {
@@ -170,6 +168,21 @@
     setContext("fieldZoom", fieldZoom);
     setContext("snapFunction", snapFunction);
     setContext("fieldPositionFunction", fieldPositionFunction);
+
+    let fieldsContainerElement: HTMLDivElement;
+    onMount(() => {
+        const maxZoomByWidth =
+            Math.floor((fieldsContainerElement.clientWidth / (fieldElements[0].clientWidth + 60)) * 10) / 10;
+        const playerNoFactor = $players.length > 1 ? 2 : 1;
+        if (fieldElements[0].clientHeight * maxZoomByWidth * playerNoFactor > fieldsContainerElement.clientHeight) {
+            $fieldZoom =
+                Math.floor(
+                    (fieldsContainerElement.clientHeight / (fieldElements[0].clientHeight * playerNoFactor + 20)) * 10
+                ) / 10;
+        } else {
+            $fieldZoom = maxZoomByWidth;
+        }
+    });
 </script>
 
 <svelte:head>
@@ -179,7 +192,7 @@
 
 <div class="play">
     <div class="leftside" on:contextmenu|preventDefault={() => null} role="presentation">
-        <div class="fieldscont">
+        <div class="fieldscont" bind:this={fieldsContainerElement}>
             <div class="fields">
                 {#key $players}
                     {#each $players as _, i}
