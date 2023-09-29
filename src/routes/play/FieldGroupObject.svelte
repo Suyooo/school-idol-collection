@@ -113,10 +113,11 @@
         @apply absolute z-play-card;
 
         &:hover .hoveroutline {
-            @apply rounded-md outline outline-primary-100;
+            @apply outline outline-primary-100;
             height: calc(91px * var(--zoom));
             outline-offset: calc(2px * var(--zoom));
             outline-width: calc(4px * var(--zoom));
+            border-radius: calc(6px * var(--zoom));
         }
 
         &:global(.dragging) {

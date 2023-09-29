@@ -327,9 +327,10 @@
         }
 
         &.livemode-selected {
-            @apply outline outline-primary-100 rounded-md;
+            @apply outline outline-primary-100;
             outline-width: calc(2px * var(--zoom));
             outline-offset: calc(4px * var(--zoom));
+            border-radius: calc(6px * var(--zoom));
         }
 
         &.livemode-unselected {

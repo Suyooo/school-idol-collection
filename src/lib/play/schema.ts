@@ -81,6 +81,7 @@ export abstract class ClientGameLogic {
     abstract requestIdolizeFromField(idBaseCard: number, idIdolizeCard: number): void;
     abstract requestIdolizeFromHand(idBaseCard: number, idxIdolizeCard: number): void;
     abstract requestIdolizeUndo(id: number): void;
+    abstract requestNextTurn(): void;
 }
 
 export interface ClientGameLogicHandlers {

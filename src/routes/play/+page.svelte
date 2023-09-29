@@ -39,6 +39,8 @@
 </script>
 
 <script lang="ts">
+    import PlusMinusButtons from "./PlusMinusButtons.svelte";
+
     let menuOpenedByCardNo: string | undefined,
         menuX: number,
         menuY: number,
@@ -213,13 +215,18 @@
 
         <HandObject hand={$handCards} />
 
-        <Button classes="absolute right-2 top-2 w-6 h-6 !p-0" label="Zoom In" on:click={() => ($fieldZoom += 0.1)}>
-            <Plus />
-        </Button>
-        <Button classes="absolute right-2 top-10 w-6 h-6 !p-0" label="Zoom Out" on:click={() => ($fieldZoom -= 0.1)}>
-            <Minus />
-        </Button>
-        <span class="absolute right-10 top-2">{Math.round($fieldZoom * 50)}%</span>
+        <div
+            class="absolute right-2 top-2 text-primary-400 hover:text-white transition-colors flex gap-x-2 select-none"
+        >
+            {Math.round($fieldZoom * 50)}%
+            <PlusMinusButtons
+                value={$fieldZoom - 0.1}
+                limit={19.9}
+                update={(d) => ($fieldZoom += d / 10)}
+                labelPlus="Zoom In"
+                labelMinus="Zoom Out"
+            />
+        </div>
     </div>
     <div class="rightside">
         <SidebarLiveMode />

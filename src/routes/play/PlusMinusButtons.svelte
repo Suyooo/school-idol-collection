@@ -12,13 +12,15 @@
     export let accent: boolean = false;
     export let size: string = "0.75rem";
     export let horizontal: boolean = false;
+    export let labelPlus = "Add Piece";
+    export let labelMinus = "Remove Piece";
 </script>
 
 <div class="extra-buttons" style:--size={size} class:flex-col={!horizontal}>
-    <Button label="Add Piece" on:click={() => update(1)} disabled={value >= (swapped ? 0 : limit)} {accent}>
+    <Button label={labelPlus} on:click={() => update(1)} disabled={value >= (swapped ? 0 : limit)} {accent}>
         <Plus />
     </Button>
-    <Button label="Remove Piece" on:click={() => update(-1)} disabled={value <= (swapped ? -limit : 0)} {accent}>
+    <Button label={labelMinus} on:click={() => update(-1)} disabled={value <= (swapped ? -limit : 0)} {accent}>
         <Minus />
     </Button>
 </div>
@@ -30,9 +32,6 @@
 
         & :global(button) {
             @apply !p-0 rounded-none;
-            width: var(--size);
-            height: var(--size);
-            line-height: var(--size) !important;
 
             &:not(.accent) {
                 &:hover {
@@ -44,7 +43,8 @@
             }
 
             & :global(svg) {
-                stroke-width: calc(4px * var(--zoom, 1));
+                width: var(--size);
+                height: var(--size);
             }
         }
     }

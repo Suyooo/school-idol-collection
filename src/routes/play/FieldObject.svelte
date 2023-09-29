@@ -158,6 +158,8 @@
                         limit={99}
                         accent
                         size="{10.5 * $fieldZoom}px"
+                        labelPlus="Increase LP"
+                        labelMinus="Decrease LP"
                     />
                 </div>
             {/if}
@@ -196,11 +198,12 @@
 
 <style lang="postcss">
     .objfield {
-        @apply relative flex-shrink-0 box-content border-solid min-w-0 select-none rounded-md;
+        @apply relative flex-shrink-0 box-content border-solid min-w-0 select-none;
         width: calc(720px * var(--zoom));
         height: calc(401px * var(--zoom));
         border-width: calc(1px * var(--zoom));
         border-color: var(--player-color);
+        border-radius: calc(6px * var(--zoom));
 
         &:global(.hovering) {
             @apply outline outline-white/50;
@@ -212,9 +215,10 @@
             @apply pointer-events-none;
 
             & .area {
-                @apply absolute border-solid z-play-field box-content rounded-md;
+                @apply absolute border-solid z-play-field box-content;
                 border-width: calc(1px * var(--zoom));
                 border-color: var(--player-color);
+                border-radius: calc(6px * var(--zoom));
 
                 &.setlist {
                     left: calc(33px * var(--zoom));

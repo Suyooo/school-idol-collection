@@ -238,6 +238,8 @@
                                             limit={99}
                                             accent
                                             size="0.875rem"
+                                            labelPlus="Increase LP"
+                                            labelMinus="Decrease LP"
                                         />
                                     </div>
                                 </div>
