@@ -96,7 +96,7 @@ export interface ClientGameSchema {
 
 export interface ClientPlayerSchema {
     profile: Readable<ClientProfile>;
-    matchUuid: string;
+    deckUuid: string;
     livePoints: Readable<number>;
     field: Readable<Map<number, ClientFieldCardSchema>>;
     groups: Readable<Map<number, ClientFieldGroupSchema>>;

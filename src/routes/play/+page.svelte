@@ -127,13 +127,12 @@
 
             const gridSize = Math.round(10 * $fieldZoom);
             const field = fieldElements[logic.clientPlayerId];
-            const left = field.offsetLeft + 1;
-            const top = field.offsetTop + 1;
-            const scroll = field.parentElement!.scrollTop;
+            const left = field.offsetLeft + 1 - field.parentElement!.parentElement!.scrollLeft;
+            const top = field.offsetTop + 1 - field.parentElement!.parentElement!.scrollTop;
 
             return {
                 x: Math.round((x - left) / gridSize) * gridSize + left,
-                y: Math.round((y - top + scroll) / gridSize) * gridSize + top - scroll,
+                y: Math.round((y - top) / gridSize) * gridSize + top,
                 range: Infinity,
             };
         };
@@ -144,11 +143,10 @@
         const y = isFixedXY ? b! : a.top;
 
         const field = fieldElements[logic.clientPlayerId];
-        const left = field.offsetLeft + 1;
-        const top = field.offsetTop + 1;
-        const scroll = field.parentElement!.scrollTop;
+        const left = field.offsetLeft + 1 - field.parentElement!.parentElement!.scrollLeft;
+        const top = field.offsetTop + 1 - field.parentElement!.parentElement!.scrollTop;
 
-        const res = { x: Math.round((x - left) / $fieldZoom), y: Math.round((y - top + scroll) / $fieldZoom) };
+        const res = { x: Math.round((x - left) / $fieldZoom), y: Math.round((y - top) / $fieldZoom) };
         if (!isFixedXY) {
             // If called with a DOM rect as parameter, it's a card drop action. Restrict it to the field area
             if (res.x < 0) {

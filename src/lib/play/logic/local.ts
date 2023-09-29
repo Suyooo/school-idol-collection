@@ -26,7 +26,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
                 deckColor: "lightblue",
                 setListColor: "lightpink",
             }),
-            matchUuid: "local",
+            deckUuid: "local",
             livePoints: writable(0),
             field: writable(new Map<number, ClientFieldCardSchema>()),
             groups: writable(new Map<number, ClientFieldGroupSchema>()),
@@ -46,7 +46,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
         players: derived(gameObj.players, (playersObj) =>
             playersObj.map((playerObj) => ({
                 profile: readonly(playerObj.profile),
-                matchUuid: playerObj.matchUuid,
+                deckUuid: playerObj.deckUuid,
                 livePoints: readonly(playerObj.livePoints),
                 field: derived(
                     playerObj.field,
@@ -91,6 +91,7 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     constructor(profile: ClientProfile) {
         super();
+        // TODO: REMOVE TEST DECK
         this.storePlayers[0].profile.set(profile);
         this.storePlayers[0].deck.set([
             "LL15-051",
