@@ -185,6 +185,7 @@
     });
 </script>
 
+<svelte:window on:beforeunload|preventDefault={() => ""} />
 <svelte:head>
     <title>SIC</title>
 </svelte:head>
