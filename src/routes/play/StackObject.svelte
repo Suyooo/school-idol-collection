@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
     import { getContext } from "svelte";
-    import type { Readable, Writable } from "svelte/store";
+    import type { Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
     import { textColorForBackground } from "$lib/play/profile.js";
@@ -17,7 +17,6 @@
     export let color: string;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu = getContext<OpenMenuFunction>("openMenu");
-    const liveModeEnabled: Readable<boolean> = getContext("liveModeEnabled");
     const fieldZoom: Writable<number> = getContext("fieldZoom");
 
     let stackLength: number, h: number;
@@ -28,7 +27,6 @@
         const interactable = interact(node).dropzone({
             accept: stackType === StackType.DECK ? ".objcardfieldmember, .objcardhand" : ".objcardfieldsong",
             overlap: "center",
-            checker: (_dragEvent, _event, dropped) => dropped && !$liveModeEnabled,
             listeners: {
                 enter() {
                     node.classList.add("hovering");
@@ -115,7 +113,6 @@
     class:objstacksetlist={stackType === StackType.SET_LIST}
     class:almostempty={cardNos.length <= 1}
     class:empty={cardNos.length === 0}
-    class:disabled={$liveModeEnabled}
     style:--stack-color={stringIsHexColor(color) ? color : "#000000"}
     style:--text-color={textColorForBackground(color)}
     style:--zoom={$fieldZoom}

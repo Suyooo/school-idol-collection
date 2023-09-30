@@ -9,6 +9,7 @@
     import type { SnapFunction } from "@interactjs/types/index";
     import { cardIsIdolizable, cardIsMember } from "$lib/card/types.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
+    import type { LiveModeStore } from "$lib/play/livemode.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import type { FieldPositionFunction, OpenMenuFunction } from "./+page.svelte";
@@ -22,7 +23,7 @@
     export let disableSidewaysAnimations: boolean;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
-    const liveModeEnabled: Readable<boolean> = getContext("liveModeEnabled");
+    const liveModeCards: LiveModeStore = getContext("liveModeCards");
     const fieldZoom: Writable<number> = getContext("fieldZoom");
     const snapFunction: () => SnapFunction = getContext("snapFunction");
     const fieldPositionFunction: FieldPositionFunction = getContext("fieldPositionFunction");
@@ -77,8 +78,11 @@
                                 [
                                     {
                                         label: "⟪ENTER⟫ Idolized",
-                                        handler: () =>
-                                            logic.requestIdolizeFromHand(parseInt(event.relatedTarget.dataset.id), idx),
+                                        handler: () => {
+                                            const baseId = parseInt(event.relatedTarget.dataset.id);
+                                            liveModeCards.removeMember(baseId);
+                                            logic.requestIdolizeFromHand(baseId, idx);
+                                        },
                                     },
                                     {
                                         label: "⟪ENTER⟫ Unidolized",
@@ -142,7 +146,6 @@
         class:indicator-after={indicatorAfter}
         class:disable-sideways-animations={disableSidewaysAnimations}
         class:idolizable={card !== undefined && cardIsMember(card) && cardIsIdolizable(card)}
-        class:disabled={$liveModeEnabled}
         class:last-without-drag={isLastWithoutDraggedCard}
         style:--zoom={$fieldZoom}
         style:left={`${startOffset.x + displayPosition.x}px`}

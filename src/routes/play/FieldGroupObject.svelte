@@ -112,12 +112,15 @@
     .objgroup {
         @apply absolute z-play-card;
 
+        & .hoveroutline {
+            height: calc(91px * var(--zoom));
+            border-radius: calc(6px * var(--zoom));
+        }
+
         &:hover .hoveroutline {
             @apply outline outline-primary-100;
-            height: calc(91px * var(--zoom));
             outline-offset: calc(2px * var(--zoom));
             outline-width: calc(4px * var(--zoom));
-            border-radius: calc(6px * var(--zoom));
         }
 
         &:global(.dragging) {

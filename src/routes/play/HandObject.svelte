@@ -1,6 +1,5 @@
 <script context="module" lang="ts">
     import { getContext } from "svelte";
-    import type { Readable } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
     import type { DropEvent } from "@interactjs/types/index";
@@ -11,7 +10,7 @@
 <script lang="ts">
     export let hand: HandCardSchema[];
     const logic: ClientGameLogic = getContext("logic");
-    const liveModeEnabled: Readable<boolean> = getContext("liveModeEnabled");
+    const liveModeCards: LiveModeStore = getContext("liveModeCards");
 
     let draggingHandCardIdx: number | null = null;
     let indicatorPos: number | null = null;
@@ -23,7 +22,11 @@
 
         let i = 0;
         for (const e of event.target.children) {
-            if (e.classList.contains("emptycard") || e.classList.contains("dragging")) {
+            if (
+                e.classList.contains("emptycard") ||
+                e.classList.contains("dragging") ||
+                e.classList.contains("indicator")
+            ) {
                 continue;
             }
 
@@ -32,6 +35,7 @@
             }
             i++;
         }
+        console.log(i);
         return i;
     }
 
@@ -45,10 +49,8 @@
         const interactable = interact(node).dropzone({
             accept: ".objcardfieldmember, .objcardhand",
             overlap: "center",
-            checker: (_dragEvent, _event, dropped) => dropped && !$liveModeEnabled,
             listeners: {
                 enter(event) {
-                    node.classList.add("hovering");
                     event.relatedTarget.classList.add("inhand");
                     if (event.relatedTarget.classList.contains("objcardhand")) {
                         draggingHandCardIdx = parseInt(event.relatedTarget.dataset.idx!);
@@ -56,6 +58,7 @@
                             skipAnimations();
                         }
                     } else {
+                        node.classList.add("hovering");
                         if (hand.length === 0) {
                             skipAnimations();
                         }
@@ -64,6 +67,10 @@
                 },
                 activate(event) {
                     if (event.relatedTarget.classList.contains("objcardhand")) {
+                        draggingHandCardIdx = parseInt(event.relatedTarget.dataset.idx!);
+                        if (hand.length === 1) {
+                            skipAnimations();
+                        }
                         indicatorPos = getHandIndex(event);
                     }
                 },
@@ -79,7 +86,9 @@
                     node.classList.remove("hovering");
                     skipAnimations();
                     if (event.relatedTarget.classList.contains("objcardfieldmember")) {
-                        logic.requestFieldToHand(parseInt(event.relatedTarget.dataset.id!), getHandIndex(event));
+                        const baseId = parseInt(event.relatedTarget.dataset.id!);
+                        liveModeCards.removeMember(baseId);
+                        logic.requestFieldToHand(baseId, getHandIndex(event));
                     } else {
                         const oldIdx = parseInt(event.relatedTarget.dataset.idx!);
                         const newIdx = getHandIndex(event);

@@ -37,6 +37,7 @@
 </script>
 
 <script lang="ts">
+    import { type LiveModeStore, createLiveModeStore } from "$lib/play/livemode.js";
     import PlusMinusButtons from "./PlusMinusButtons.svelte";
 
     let menuOpenedByCardNo: string | undefined,
@@ -116,10 +117,8 @@
     }
     setContext("sidebarCardNo", [sidebarCardNo, setSidebarCard]);
 
-    const liveModeCards: Writable<number[]> = writable([]);
-    const liveModeEnabled: Readable<boolean> = derived(liveModeCards, (cards) => cards.length > 0);
+    const liveModeCards: LiveModeStore = createLiveModeStore();
     setContext("liveModeCards", liveModeCards);
-    setContext("liveModeEnabled", liveModeEnabled);
 
     const fieldZoom: Writable<number> = writable(1);
     function snapFunction(): SnapFunction {

@@ -20,6 +20,7 @@
 </script>
 
 <script lang="ts">
+    import type { LiveModeStore } from "$lib/play/livemode.js";
     import { type HotkeyAction, keyEventToHotkeyName, loadHotkeysOrDefault } from "$lib/play/profile.js";
     import PlusMinusButtons from "./PlusMinusButtons.svelte";
 
@@ -30,7 +31,7 @@
     export let setListComponent: StackObject;
     const logic: ClientGameLogic = getContext("logic");
     const fieldZoom: Writable<number> = getContext("fieldZoom");
-    const liveModeCards: Writable<number[]> = getContext("liveModeCards");
+    const liveModeCards: LiveModeStore = getContext("liveModeCards");
 
     let game: Readable<ClientGameSchema>,
         players: Readable<ClientPlayerSchema[]>,
@@ -89,16 +90,7 @@
                 live: () => {
                     const hoveredCard = fieldElement.querySelector(".objcardfieldsong:hover") as HTMLElement | null;
                     if (hoveredCard) {
-                        const id = parseInt(hoveredCard.dataset["id"]!);
-                        liveModeCards.update((prev) => {
-                            if (prev.length === 0 || prev[0] !== id) {
-                                prev[0] = id;
-                                return prev;
-                            } else {
-                                return [];
-                            }
-                        });
-                        parseInt(hoveredCard.dataset["id"]!);
+                        liveModeCards.toggleSong(parseInt(hoveredCard.dataset.id!));
                     }
                 },
                 draw: () => {
@@ -110,7 +102,7 @@
                 flip: () => {
                     const hoveredCard = fieldElement.querySelector(".objcardfield:hover") as HTMLElement | null;
                     if (hoveredCard) {
-                        logic.requestFieldFlip(parseInt(hoveredCard.dataset["id"]!));
+                        logic.requestFieldFlip(parseInt(hoveredCard.dataset.id!));
                     }
                 },
             };

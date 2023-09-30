@@ -9,6 +9,7 @@
     import CardType from "$lib/enums/cardType.js";
     import Language from "$lib/enums/language.js";
     import { type CardImageData, loadCardInfo } from "$lib/play/cardInfo.js";
+    import type { LiveModeStore } from "$lib/play/livemode.js";
     import type {
         ClientFieldCardSchema,
         ClientGameLogic,
@@ -24,7 +25,7 @@
 
 <script lang="ts">
     const logic: ClientGameLogic = getContext("logic");
-    const liveModeCards: Writable<number[]> = getContext("liveModeCards");
+    const liveModeCards: LiveModeStore = getContext("liveModeCards");
     const [sidebarCardNo, setSidebarCard] =
         getContext<[Readable<string | undefined>, (c: string | undefined) => void]>("sidebarCardNo");
 
@@ -191,7 +192,7 @@
     }
 
     function endLiveMode() {
-        $liveModeCards = [];
+        liveModeCards.end();
     }
 </script>
 
@@ -199,14 +200,10 @@
     <div transition:slide={{}} on:contextmenu|preventDefault={() => null} role="presentation">
         <div class="panel">
             <div class="buttons">
-                <Button classes="mt-1 w-full" label="Cancel" on:click={endLiveMode}>Cancel</Button>
-                <Button
-                    accent
-                    classes="mt-1 w-full"
-                    label="Live"
-                    on:click={createLiveGroup}
-                    disabled={$liveModeCards.length <= 1}>⟪LIVE⟫</Button
-                >
+                <Button label="Cancel" on:click={endLiveMode}>Cancel</Button>
+                <Button accent label="Live" on:click={createLiveGroup} disabled={$liveModeCards.length <= 1}>
+                    ⟪LIVE⟫
+                </Button>
             </div>
             <div
                 class="livemodeitem"
@@ -410,7 +407,6 @@
                 </Button>
             </div>
         </div>
-        <hr class="m-4 mb-2" />
     </div>
 {/if}
 
@@ -424,7 +420,10 @@
     }
 
     .buttons {
-        @apply flex flex-row gap-x-2 items-center justify-between;
+        @apply w-full flex flex-row gap-x-2 items-center;
+        & > :global(*) {
+            @apply flex-grow basis-0;
+        }
     }
 
     .livemodeitem {

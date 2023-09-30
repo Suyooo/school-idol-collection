@@ -12,6 +12,7 @@ import {
     StackSide,
     StackType,
 } from "$lib/play/schema.js";
+import { shuffleArray } from "$lib/utils/array.js";
 import { mapGet } from "$lib/utils/map.js";
 
 export class LocalClientGameLogic extends ClientGameLogic {
@@ -268,15 +269,8 @@ export class LocalClientGameLogic extends ClientGameLogic {
 
     requestShuffle(target: StackType) {
         const prop = this.targetToProperty(target);
-        this.storePlayers[0][prop].update((arr) => this.shuffleArray(arr));
+        this.storePlayers[0][prop].update((arr) => shuffleArray(arr));
         if (this.handlers.onShuffle) this.handlers.onShuffle(0, target);
-    }
-
-    private shuffleArray(deck: string[]) {
-        return deck
-            .map((v) => ({ v, r: Math.random() }))
-            .sort((a, b) => a.r - b.r)
-            .map((e) => e.v);
     }
 
     requestFieldMove(id: number, x: number, y: number) {
@@ -399,9 +393,6 @@ export class LocalClientGameLogic extends ClientGameLogic {
     }
 
     requestNextTurn(): void {
-        this.storeGame.update((g) => {
-            g.round.update((r) => r + 1);
-            return g;
-        });
+        get(this.storeGame).round.update((r) => r + 1);
     }
 }

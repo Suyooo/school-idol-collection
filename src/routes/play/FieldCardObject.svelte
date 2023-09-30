@@ -9,6 +9,7 @@
     import { cardIsIdolizable, cardIsMember } from "$lib/card/types.js";
     import CardType from "$lib/enums/cardType.js";
     import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
+    import type { LiveModeStore } from "$lib/play/livemode.js";
     import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
     import Spinner from "$lib/style/icons/Spinner.svelte";
     import type { FieldPositionFunction, OpenMenuFunction } from "./+page.svelte";
@@ -25,7 +26,7 @@
     export let grouped: boolean = false;
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
-    const liveModeCards: Writable<number[]> = getContext("liveModeCards");
+    const liveModeCards: LiveModeStore = getContext("liveModeCards");
     const fieldZoom: Writable<number> = getContext("fieldZoom");
     const snapFunction: () => SnapFunction = getContext("snapFunction");
     const fieldPositionFunction: FieldPositionFunction = getContext("fieldPositionFunction");
@@ -83,11 +84,17 @@
                                     [
                                         {
                                             label: "Put on Top",
-                                            handler: () => logic.requestFieldToStack(id, StackSide.TOP),
+                                            handler: () => {
+                                                liveModeCards.removeMember(id);
+                                                logic.requestFieldToStack(id, StackSide.TOP);
+                                            },
                                         },
                                         {
                                             label: "Put on Bottom",
-                                            handler: () => logic.requestFieldToStack(id, StackSide.BOTTOM),
+                                            handler: () => {
+                                                liveModeCards.removeMember(id);
+                                                logic.requestFieldToStack(id, StackSide.BOTTOM);
+                                            },
                                             condition: !event.relatedTarget.classList.contains("empty"),
                                         },
                                     ],
@@ -105,11 +112,11 @@
                                     [
                                         {
                                             label: "Idolize",
-                                            handler: () =>
-                                                logic.requestIdolizeFromField(
-                                                    parseInt(event.relatedTarget.dataset.id),
-                                                    id
-                                                ),
+                                            handler: () => {
+                                                const baseId = parseInt(event.relatedTarget.dataset.id);
+                                                liveModeCards.removeMember(baseId);
+                                                logic.requestIdolizeFromField(baseId, id);
+                                            },
                                         },
                                     ],
                                     true
@@ -169,22 +176,11 @@
         }
         wasMoved = true;
         if ($liveModeCards.length > 0) {
-            if (!grouped && !$flipped) {
+            if (!grouped) {
                 if (cardType === CardType.MEMBER) {
-                    liveModeCards.update((m) => {
-                        const idx = m.indexOf(id);
-                        if (idx !== -1) {
-                            m.splice(idx, 1);
-                        } else {
-                            m.push(id);
-                        }
-                        return m;
-                    });
+                    liveModeCards.toggleMember(id);
                 } else if (cardType === CardType.SONG) {
-                    liveModeCards.update((m) => {
-                        m[0] = id;
-                        return m;
-                    });
+                    liveModeCards.setSong(id);
                 }
             }
         } else if (!grouped) {
@@ -196,7 +192,7 @@
                 [
                     {
                         label: "Prepare ⟪LIVE⟫",
-                        handler: () => liveModeCards.set([id]),
+                        handler: () => liveModeCards.toggleSong(id),
                         condition: cardType == CardType.SONG,
                     },
                     {
@@ -210,7 +206,10 @@
                     },
                     {
                         label: "Undo Idolization",
-                        handler: () => logic.requestIdolizeUndo(id),
+                        handler: () => {
+                            liveModeCards.removeMember(id);
+                            logic.requestIdolizeUndo(id);
+                        },
                         condition: idolizedBaseCardNo !== undefined,
                     },
                 ],
@@ -245,7 +244,7 @@
     class:lowlight={grouped}
     class:livemode-unselected={$liveModeCards.length > 0 && $liveModeCards.indexOf(id) === -1}
     class:livemode-selected={$liveModeCards.length > 0 && $liveModeCards.indexOf(id) !== -1}
-    class:livemode-unselectable={$liveModeCards.length > 0 && ($flipped || grouped)}
+    class:livemode-unselectable={$liveModeCards.length > 0 && grouped}
     class:idolizable={card !== undefined && cardIsMember(card) && cardIsIdolizable(card)}
     style:--flipped-color={flippedColor}
     style:--zoom={$fieldZoom}
@@ -336,19 +335,12 @@
         &.livemode-unselected {
             & img.image,
             & .flipped {
-                @apply brightness-75 hover:brightness-75;
-            }
-
-            &.objcardfieldmember {
-                & img.image,
-                & .flipped {
-                    @apply hover:brightness-100;
-                }
+                @apply brightness-75 hover:brightness-100;
             }
         }
 
         &.livemode-unselectable {
-            @apply pointer-events-none brightness-50;
+            @apply brightness-50;
         }
 
         &:global(.dragging) {
