@@ -4,8 +4,10 @@ type LiveModeElement = number;
 
 export type LiveModeStore = Readable<LiveModeElement[]> & {
     end: () => void;
+    removeAllMembers: () => void;
     setSong: (e: LiveModeElement) => void;
     toggleSong: (e: LiveModeElement) => void;
+    setMembers: (e: LiveModeElement[]) => void;
     removeMember: (e: LiveModeElement) => void;
     toggleMember: (e: LiveModeElement) => void;
 };
@@ -16,6 +18,7 @@ export function createLiveModeStore(): LiveModeStore {
     return {
         subscribe,
         end: () => set([]),
+        removeAllMembers: () => update((arr) => [arr[0]]),
         setSong: (e: LiveModeElement) => {
             update((arr) => {
                 if (arr.length === 0) {
@@ -36,6 +39,11 @@ export function createLiveModeStore(): LiveModeStore {
                     arr[0] = e;
                     return arr;
                 }
+            });
+        },
+        setMembers: (es: LiveModeElement[]) => {
+            update((arr) => {
+                return [arr[0], ...es];
             });
         },
         removeMember: (e: LiveModeElement) => {

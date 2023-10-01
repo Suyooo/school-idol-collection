@@ -442,13 +442,14 @@
                 <Button
                     label="Select All Cards"
                     classes="!py-1"
+                    disabled={$liveModeCards.length - 1 ===
+                        [...$field.values()].filter((card) => card.cardType === CardType.MEMBER).length}
                     on:click={() =>
-                        ($liveModeCards = [
-                            $liveModeCards[0],
-                            ...[...$field.entries()]
-                                .filter(([id, card]) => card.cardType === CardType.MEMBER)
-                                .map(([id]) => id),
-                        ])}
+                        liveModeCards.setMembers(
+                            [...$field.entries()]
+                                .filter(([_id, card]) => card.cardType === CardType.MEMBER)
+                                .map(([id]) => id)
+                        )}
                 >
                     Select All
                 </Button>
@@ -456,7 +457,7 @@
                     label="Remove All Cards"
                     classes="!py-1"
                     disabled={cardMembers.size === 0}
-                    on:click={() => ($liveModeCards = [$liveModeCards[0]])}
+                    on:click={() => liveModeCards.removeAllMembers()}
                 >
                     Remove All
                 </Button>
