@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
     import { onMount, setContext } from "svelte";
     import { type Readable, type Writable, derived, writable } from "svelte/store";
+    import "svooltip/styles.css";
     import type { SnapFunction } from "@interactjs/types";
     import type { Point } from "@interactjs/types/index";
     import "../../app.css";

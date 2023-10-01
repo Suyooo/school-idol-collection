@@ -2,6 +2,7 @@
     import { getContext } from "svelte";
     import { slide } from "svelte-reduced-motion/transition";
     import { type Readable, type Writable, get as storeGet } from "svelte/store";
+    import { tooltip } from "svooltip";
     import type { CardMember, CardSong } from "$models/card/card.js";
     import { cardTitle } from "$lib/card/strings.js";
     import { cardHasAnyPieceRequirement, cardHasIdolizationPieces, cardIsIdolizable } from "$lib/card/types.js";
@@ -61,8 +62,10 @@
                     idolized: [number, number, number, number];
                     extra: [number, number, number, number];
                 };
+                unsubscribe: () => void;
             }
-        > = new Map();
+        > = new Map(),
+        flippedCards: Set<number> = new Set();
     $: {
         $liveModeCards;
         updateCards();
@@ -71,76 +74,85 @@
         if ($liveModeCards.length > 0) {
             if ($liveModeCards[0] !== cardSong?.id) {
                 const fieldInfo = mapGet($field, $liveModeCards[0]);
-                (loadCardInfo(mapGet($field, $liveModeCards[0]).cardNo) as Promise<CardSong & CardImageData>).then(
-                    (cardInfo) => {
-                        cardSong = {
-                            id: $liveModeCards[0],
-                            fieldInfo,
-                            cardInfo,
-                            lpExtra: 0,
-                            pieces: {
-                                base: cardHasAnyPieceRequirement(cardInfo)
-                                    ? [cardInfo.song.anyRequirement.piecesAll, 0, 0, 0]
-                                    : [
-                                          0,
-                                          cardInfo.song.attrRequirement.piecesSmile,
-                                          cardInfo.song.attrRequirement.piecesPure,
-                                          cardInfo.song.attrRequirement.piecesCool,
-                                      ],
-                                extra: [0, 0, 0, 0],
-                            },
-                        };
-                    }
-                );
+                (loadCardInfo(fieldInfo.cardNo) as Promise<CardSong & CardImageData>).then((cardInfo) => {
+                    cardSong = {
+                        id: $liveModeCards[0],
+                        fieldInfo,
+                        cardInfo,
+                        lpExtra: 0,
+                        pieces: {
+                            base: cardHasAnyPieceRequirement(cardInfo)
+                                ? [cardInfo.song.anyRequirement.piecesAll, 0, 0, 0]
+                                : [
+                                      0,
+                                      cardInfo.song.attrRequirement.piecesSmile,
+                                      cardInfo.song.attrRequirement.piecesPure,
+                                      cardInfo.song.attrRequirement.piecesCool,
+                                  ],
+                            extra: [0, 0, 0, 0],
+                        },
+                    };
+                });
             }
 
             const previousCardMembers = new Set(cardMembers.keys());
             for (const card of $liveModeCards.slice(1)) {
                 if (!cardMembers.has(card)) {
                     const fieldInfo = mapGet($field, card);
-                    (loadCardInfo(mapGet($field, card).cardNo) as Promise<CardMember & CardImageData>).then(
-                        (cardInfo) => {
-                            const isIdolized =
-                                fieldInfo.idolizedBaseCardNo !== undefined &&
-                                cardIsIdolizable(cardInfo) &&
-                                cardHasIdolizationPieces(cardInfo);
-                            cardMembers = cardMembers.set(card, {
-                                id: card,
-                                fieldInfo,
-                                cardInfo: cardInfo,
-                                pieces: {
-                                    base: [
-                                        cardInfo.member.piecesAll,
-                                        cardInfo.member.piecesSmile,
-                                        cardInfo.member.piecesPure,
-                                        cardInfo.member.piecesCool,
-                                    ],
-                                    idolized: isIdolized
-                                        ? [
-                                              cardInfo.member.idolizeBonus.piecesAll,
-                                              cardInfo.member.idolizeBonus.piecesSmile,
-                                              cardInfo.member.idolizeBonus.piecesPure,
-                                              cardInfo.member.idolizeBonus.piecesCool,
-                                          ]
-                                        : [0, 0, 0, 0],
-                                    extra: [0, 0, 0, 0],
-                                },
-                            });
-                        }
-                    );
+                    (loadCardInfo(fieldInfo.cardNo) as Promise<CardMember & CardImageData>).then((cardInfo) => {
+                        const isIdolized =
+                            fieldInfo.idolizedBaseCardNo !== undefined &&
+                            cardIsIdolizable(cardInfo) &&
+                            cardHasIdolizationPieces(cardInfo);
+                        cardMembers = cardMembers.set(card, {
+                            id: card,
+                            fieldInfo,
+                            cardInfo: cardInfo,
+                            pieces: {
+                                base: [
+                                    cardInfo.member.piecesAll,
+                                    cardInfo.member.piecesSmile,
+                                    cardInfo.member.piecesPure,
+                                    cardInfo.member.piecesCool,
+                                ],
+                                idolized: isIdolized
+                                    ? [
+                                          cardInfo.member.idolizeBonus.piecesAll,
+                                          cardInfo.member.idolizeBonus.piecesSmile,
+                                          cardInfo.member.idolizeBonus.piecesPure,
+                                          cardInfo.member.idolizeBonus.piecesCool,
+                                      ]
+                                    : [0, 0, 0, 0],
+                                extra: [0, 0, 0, 0],
+                            },
+                            unsubscribe: fieldInfo.flipped.subscribe((b) => {
+                                if (b) {
+                                    flippedCards.add(card);
+                                } else {
+                                    flippedCards.delete(card);
+                                }
+                                flippedCards = flippedCards;
+                            }),
+                        });
+                    });
                 } else {
                     previousCardMembers.delete(card);
                 }
             }
             if (previousCardMembers.size > 0) {
                 for (const removedCard of previousCardMembers) {
+                    cardMembers.get(removedCard)?.unsubscribe();
                     cardMembers.delete(removedCard);
                 }
                 cardMembers = cardMembers;
             }
         } else {
             cardSong = undefined;
+            for (const v of cardMembers.values()) {
+                v.unsubscribe();
+            }
             cardMembers.clear();
+            flippedCards.clear();
             totalPieces.fill(0);
         }
     }
@@ -194,6 +206,11 @@
     function endLiveMode() {
         liveModeCards.end();
     }
+
+    let blockedByEmpty: boolean, blockedByFlip: boolean, canLive: boolean;
+    $: blockedByEmpty = cardMembers.size === 0;
+    $: blockedByFlip = flippedCards.size > 0;
+    $: canLive = !(blockedByEmpty || blockedByFlip);
 </script>
 
 {#if cardSong !== undefined}
@@ -201,9 +218,20 @@
         <div class="panel">
             <div class="buttons">
                 <Button label="Cancel" on:click={endLiveMode}>Cancel</Button>
-                <Button accent label="Live" on:click={createLiveGroup} disabled={$liveModeCards.length <= 1}>
-                    ⟪LIVE⟫
-                </Button>
+                <div
+                    use:tooltip={{
+                        content: blockedByEmpty
+                            ? "No Member cards have been selected."
+                            : "All cards must be flipped face-up.",
+                        placement: "bottom",
+                        offset: -5,
+                        visibility: !canLive,
+                    }}
+                >
+                    <Button accent classes="w-full" label="Live" on:click={createLiveGroup} disabled={!canLive}>
+                        ⟪LIVE⟫
+                    </Button>
+                </div>
             </div>
             <div
                 class="livemodeitem"

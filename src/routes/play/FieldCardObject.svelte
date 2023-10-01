@@ -85,14 +85,22 @@
                                         {
                                             label: "Put on Top",
                                             handler: () => {
-                                                liveModeCards.removeMember(id);
+                                                if (cardType === CardType.MEMBER) {
+                                                    liveModeCards.removeMember(id);
+                                                } else if ($liveModeCards[0] === id) {
+                                                    liveModeCards.end();
+                                                }
                                                 logic.requestFieldToStack(id, StackSide.TOP);
                                             },
                                         },
                                         {
                                             label: "Put on Bottom",
                                             handler: () => {
-                                                liveModeCards.removeMember(id);
+                                                if (cardType === CardType.MEMBER) {
+                                                    liveModeCards.removeMember(id);
+                                                } else if ($liveModeCards[0] === id) {
+                                                    liveModeCards.end();
+                                                }
                                                 logic.requestFieldToStack(id, StackSide.BOTTOM);
                                             },
                                             condition: !event.relatedTarget.classList.contains("empty"),
