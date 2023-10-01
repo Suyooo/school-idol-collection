@@ -20,6 +20,7 @@
     import { mapGet } from "$lib/utils/map.js";
     import Piece from "$lib/format/Piece.svelte";
     import Button from "$lib/style/Button.svelte";
+    import Checked from "$lib/style/icons/Checked.svelte";
     import PlusMinusButtons from "./PlusMinusButtons.svelte";
     import SidebarLiveModeReqRow from "./SidebarLiveModeReqRow.svelte";
 </script>
@@ -141,6 +142,7 @@
             }
             if (previousCardMembers.size > 0) {
                 for (const removedCard of previousCardMembers) {
+                    checkedCards.delete(removedCard);
                     cardMembers.get(removedCard)?.unsubscribe();
                     cardMembers.delete(removedCard);
                 }
@@ -153,6 +155,7 @@
             }
             cardMembers.clear();
             flippedCards.clear();
+            checkedCards.clear();
             totalPieces.fill(0);
         }
     }
@@ -173,6 +176,16 @@
                 totalPieces[i] += extra[i];
             }
         }
+    }
+
+    let checkedCards: Set<number> = new Set();
+    function toggleCardCheck(id: number) {
+        if (checkedCards.has(id)) {
+            checkedCards.delete(id);
+        } else {
+            checkedCards.add(id);
+        }
+        checkedCards = checkedCards;
     }
 
     function createLiveGroup() {
@@ -207,10 +220,10 @@
         liveModeCards.end();
     }
 
-    let blockedByEmpty: boolean, blockedByFlip: boolean, canLive: boolean;
+    let blockedByEmpty: boolean, blockedByFlip: boolean, liveIsBlocked: boolean;
     $: blockedByEmpty = cardMembers.size === 0;
     $: blockedByFlip = flippedCards.size > 0;
-    $: canLive = !(blockedByEmpty || blockedByFlip);
+    $: liveIsBlocked = blockedByEmpty || blockedByFlip;
 </script>
 
 {#if cardSong !== undefined}
@@ -225,10 +238,10 @@
                             : "All cards must be flipped face-up.",
                         placement: "bottom",
                         offset: -5,
-                        visibility: !canLive,
+                        visibility: liveIsBlocked,
                     }}
                 >
-                    <Button accent classes="w-full" label="Live" on:click={createLiveGroup} disabled={!canLive}>
+                    <Button accent classes="w-full" label="Live" on:click={createLiveGroup} disabled={liveIsBlocked}>
                         ⟪LIVE⟫
                     </Button>
                 </div>
@@ -242,11 +255,18 @@
                     <div class="panel-inner" transition:slide={{}}>
                         <div class="flex items-center w-full p-2 gap-x-2 song">
                             <div class="image flex flex-col items-center">
-                                <img
-                                    src={cardSong.cardInfo.imageDataUrl}
-                                    alt={cardSong.cardInfo.cardNo}
-                                    class:outline={cardSong.cardInfo.cardNo === $sidebarCardNo}
-                                />
+                                <button class="relative" on:click={() => toggleCardCheck(cardSong?.id ?? 0)}>
+                                    <img
+                                        src={cardSong.cardInfo.imageDataUrl}
+                                        alt={cardSong.cardInfo.cardNo}
+                                        class:outline={cardSong.cardInfo.cardNo === $sidebarCardNo}
+                                    />
+                                    {#if checkedCards.has(cardSong.id)}
+                                        <div class="absolute -bottom-1 -right-2 text-green-400 bg-white rounded-full">
+                                            <Checked />
+                                        </div>
+                                    {/if}
+                                </button>
                                 <div class="livepoints" class:!text-[1.75rem]={cardSong.lpExtra === 0}>
                                     {cardSong.cardInfo.song.lpBase}
                                     {#if cardSong.lpExtra > 0}
@@ -372,14 +392,21 @@
                 >
                     <div class="panel-inner h-12">
                         <div class="h-12 flex items-center w-full p-2 gap-x-2">
-                            <div class="image">
-                                <img
-                                    src={card.cardInfo.imageDataUrl}
-                                    alt={card.cardInfo.cardNo}
-                                    class:outline={card.cardInfo.cardNo === $sidebarCardNo}
-                                />
-                            </div>
-                            <b class="basis-20">{card.cardInfo.cardNo}</b>
+                            <button class="flex gap-2 items-center basis-[6.5rem]" on:click={() => toggleCardCheck(id)}>
+                                <div class="relative image flex-shrink-0">
+                                    <img
+                                        src={card.cardInfo.imageDataUrl}
+                                        alt={card.cardInfo.cardNo}
+                                        class:outline={card.cardInfo.cardNo === $sidebarCardNo}
+                                    />
+                                    {#if checkedCards.has(id)}
+                                        <div class="absolute -bottom-1 -right-2 text-green-400 bg-white rounded-full">
+                                            <Checked />
+                                        </div>
+                                    {/if}
+                                </div>
+                                <b class="">{card.cardInfo.cardNo}</b>
+                            </button>
                             {#each AttributeEnum.allForPieces as attr, i}
                                 {@const nonExtraSum = card.pieces.base[i] + card.pieces.idolized[i]}
                                 {@const totalSum = nonExtraSum + card.pieces.extra[i]}
