@@ -1,6 +1,4 @@
 <script lang="ts" context="module">
-    import { fade } from "svelte/transition";
-    import { browser } from "$app/environment";
     import { Splide, SplideSlide } from "@splidejs/svelte-splide";
     import "@splidejs/svelte-splide/css";
     import type { PageServerData } from "./$types.js";
@@ -23,28 +21,24 @@
             <div class="flippable-set-element">
                 <SetGridElement set={data.latestSet} />
             </div>
-            {#if browser}
-                <div class="col-span-2" in:fade>
-                    <Splide
-                        options={{
-                            label: `Cards from Set ${data.latestSet.id}`,
-                            autoplay: true,
-                            interval: 3000,
-                            rewind: true,
-                        }}
-                    >
-                        {#each data.latestSetCards as slot, i (i)}
-                            <SplideSlide>
-                                <div class="mb-8 sm:mb-0">
-                                    <CardGridElement
-                                        card={slot[!browser || i === 0 ? 0 : Math.floor(Math.random() * slot.length)]}
-                                    />
-                                </div>
-                            </SplideSlide>
-                        {/each}
-                    </Splide>
-                </div>
-            {/if}
+            <div class="col-span-2">
+                <Splide
+                    options={{
+                        label: `Cards from Set ${data.latestSet.id}`,
+                        autoplay: true,
+                        interval: 3000,
+                        rewind: true,
+                    }}
+                >
+                    {#each data.latestSetCards as slot, i (i)}
+                        <SplideSlide>
+                            <div class="mb-8 sm:mb-0">
+                                <CardGridElement card={slot[Math.floor(Math.random() * slot.length)]} />
+                            </div>
+                        </SplideSlide>
+                    {/each}
+                </Splide>
+            </div>
         </div>
     </div>
     <div class="content">
