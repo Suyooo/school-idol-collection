@@ -2858,7 +2858,7 @@ export const _data: { [key: string]: Faq } = {
             qa: [
                 {
                     question: `What is the Attribute of this Song card?`,
-                    answer: `The Attribute of this Song card is Orange.<br>This Attribute is different from the Smil, Pure, Cool and Neutral Attributes. For example, when resolving {{link:LL03-060}}'s Skill and counting the amount of different Attributes, this Song card's Attribute is counted as a separate Attribute from the other four. (If you have Smile, Pure, Cool, Neutral, and Orange Song cards face-up, the amount of different Attributes is five.)`,
+                    answer: `The Attribute of this Song card is "Orange".<br>This Attribute is different from the Smile, Pure, Cool and Neutral Attributes. For example, when resolving {{link:LL03-060}}'s Skill and counting the amount of different Attributes, this Song card's Attribute is counted as a separate Attribute from the other four. (If you have Smile, Pure, Cool, Neutral, and Orange Song cards face-up, the amount of different Attributes is five.)`,
                 },
             ],
         },
