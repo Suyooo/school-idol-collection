@@ -364,7 +364,7 @@
     }
 
     .card {
-        @apply absolute flex items-center justify-center shadow-sm shadow-black;
+        @apply absolute flex items-center justify-center shadow-card-field;
 
         &.h {
             @apply rounded-card-h;

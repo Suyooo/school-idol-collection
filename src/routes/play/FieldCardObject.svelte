@@ -291,8 +291,7 @@
         @apply absolute w-min select-none touch-none z-play-card cursor-grab;
 
         & .card {
-            @apply flex items-center justify-center text-black bg-primary-200 overflow-hidden shadow-sm shadow-black;
-
+            @apply flex items-center justify-center text-black bg-primary-200 overflow-hidden shadow-card-field;
             &.card-v {
                 @apply rounded-card-v;
                 width: calc(65px * var(--zoom));
@@ -352,15 +351,15 @@
         }
 
         &:global(.dragging) {
-            @apply fixed !z-play-card-dragging cursor-grabbing;
+            @apply fixed !z-play-card-dragging cursor-grabbing opacity-80;
 
             & .card {
-                transition: width 0.3s, height 0.3s, shadow-blur 0.3s;
+                transition: width 0.3s, height 0.3s, box-shadow 0.3s;
             }
 
             &:global(.inhand) {
                 & .card {
-                    @apply shadow-md shadow-black;
+                    @apply shadow-card-hand;
 
                     &.card-v {
                         width: 130px;

@@ -3,8 +3,10 @@
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
     import type { DropEvent } from "@interactjs/types/index";
+    import type { LiveModeStore } from "$lib/play/livemode.js";
     import type { ClientGameLogic, HandCardSchema } from "$lib/play/schema.js";
     import HandCardObject from "./HandCardObject.svelte";
+    import HandIndicator from "./HandIndicator.svelte";
 </script>
 
 <script lang="ts">
@@ -35,7 +37,6 @@
             }
             i++;
         }
-        console.log(i);
         return i;
     }
 
@@ -68,9 +69,7 @@
                 activate(event) {
                     if (event.relatedTarget.classList.contains("objcardhand")) {
                         draggingHandCardIdx = parseInt(event.relatedTarget.dataset.idx!);
-                        if (hand.length === 1) {
-                            skipAnimations();
-                        }
+                        skipAnimations();
                         indicatorPos = getHandIndex(event);
                     }
                 },
@@ -80,7 +79,7 @@
                 leave(event) {
                     node.classList.remove("hovering");
                     event.relatedTarget.classList.remove("inhand");
-                    indicatorPos = draggingHandCardIdx = null;
+                    indicatorPos = null;
                 },
                 drop(event) {
                     node.classList.remove("hovering");
@@ -106,25 +105,24 @@
 </script>
 
 <div class="objhand" role="list" use:action>
-    <HandCardObject idx={-1} cardNo={null} indicatorAfter={indicatorPos === 0} {disableSidewaysAnimations} />
+    <HandIndicator show={indicatorPos === 0} isLastItem={hand.length === 0} {disableSidewaysAnimations} />
     {#each hand as handCard, idx (handCard.id)}
-        <HandCardObject
-            {idx}
-            cardNo={handCard.cardNo}
-            indicatorAfter={indicatorPos !== null && draggingHandCardIdx !== idx
+        {@const isLastItem =
+            (idx === hand.length - 1 && draggingHandCardIdx !== hand.length - 1) ||
+            (idx === hand.length - 2 && draggingHandCardIdx === hand.length - 1)}
+        {@const indicatorAfterThis =
+            indicatorPos !== null && draggingHandCardIdx !== idx
                 ? indicatorPos === idx + 1 - (draggingHandCardIdx !== null && idx > draggingHandCardIdx ? 1 : 0)
                 : false}
-            isLastWithoutDraggedCard={(idx === hand.length - 1 && draggingHandCardIdx !== hand.length - 1) ||
-                (idx === hand.length - 2 && draggingHandCardIdx === hand.length - 1)}
-            {disableSidewaysAnimations}
-            on:handCardPickedUp={skipAnimations}
-        />
+        <HandCardObject {idx} cardNo={handCard.cardNo} {isLastItem} {disableSidewaysAnimations} />
+        <HandIndicator show={indicatorAfterThis} {isLastItem} {disableSidewaysAnimations} />
     {/each}
 </div>
 
 <style lang="postcss">
     .objhand {
         @apply flex-grow flex items-start justify-center bg-primary-600 border-8 border-solid border-transparent select-none px-4 pt-4;
+        padding-bottom: 100%;
 
         &:global(.hovering) {
             @apply border-white/50;
@@ -136,12 +134,5 @@
                 }
             }
         }
-
-        /*&:after {
-            @apply pointer-events-none;
-            content: " ";
-            width: 65px;
-            flex-shrink: 0;
-        }*/
     }
 </style>

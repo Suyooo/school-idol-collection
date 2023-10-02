@@ -39,6 +39,10 @@ module.exports = {
                 "play-card-dragging": 2099999999,
                 "play-menu": 2100000001,
             },
+            boxShadow: {
+                "card-field": "0 0 2px 0 black",
+                "card-hand": "0 0 6px -1px black",
+            },
         },
     },
     safelist: ["text-attribute-smile", "text-attribute-pure", "text-attribute-cool", "text-attribute-all"],

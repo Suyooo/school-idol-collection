@@ -124,7 +124,7 @@
         }
 
         &:global(.dragging) {
-            @apply fixed !z-play-card-dragging cursor-grabbing;
+            @apply fixed !z-play-card-dragging cursor-grabbing opacity-80;
         }
     }
 </style>

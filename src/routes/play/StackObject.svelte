@@ -218,9 +218,5 @@
             @apply border-white/50;
             border-width: calc(4px * var(--zoom));
         }
-
-        &.disabled {
-            @apply pointer-events-none brightness-50;
-        }
     }
 </style>

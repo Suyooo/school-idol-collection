@@ -227,7 +227,7 @@
 </script>
 
 {#if cardSong !== undefined}
-    <div transition:slide={{}} on:contextmenu|preventDefault={() => null} role="presentation">
+    <div class="pb-4" transition:slide={{}} on:contextmenu|preventDefault={() => null} role="presentation">
         <div class="panel">
             <div class="buttons">
                 <Button label="Cancel" on:click={endLiveMode}>Cancel</Button>
