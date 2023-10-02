@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import { makeNodesRenderable } from "$lib/format/format.js";
     import type { ParseNodePrepared } from "$lib/format/format.js";
     import SkillNodeRenderer from "$lib/format/SkillNodeRenderer.svelte";
@@ -11,6 +12,11 @@
     function copyLink() {
         navigator.clipboard.writeText(window.location.origin + window.location.pathname + "#" + key);
     }
+
+    let target: boolean = false;
+    onMount(() => {
+        if (window.location.hash === `#${key}`) target = true;
+    });
 </script>
 
 <div class="w-full group relative">
@@ -21,7 +27,7 @@
     >
         <Link />
     </button>
-    <div class="anchor absolute left-0 top-[-15vh]" id={key} />
+    <div class="anchor absolute left-0 top-[-15vh]" class:target id={key} />
     <div class="question">
         {#if typeof question === "string"}
             {@html question}
@@ -72,8 +78,8 @@
         }
     }
 
-    div.anchor:target + .question,
-    div.anchor:target + .question + .answer {
+    div.anchor.target + .question,
+    div.anchor.target + .question + .answer {
         animation: highlight-faq 0.25s ease-in-out 2;
     }
 </style>
