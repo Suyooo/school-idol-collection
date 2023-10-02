@@ -61,7 +61,7 @@
     <div class="cont">
         <div class="menu">
             <div class="top">
-                <div class="logo">SIC</div>
+                <a class="logo" href="/">SIC</a>
                 <div class="expand">
                     <div>
                         <Button
@@ -129,7 +129,7 @@
                     @apply w-full sm:w-max flex-shrink flex sm:ml-0 items-center justify-between sm:justify-start;
 
                     & .logo {
-                        @apply text-3xl;
+                        @apply text-3xl no-underline cursor-pointer;
                     }
 
                     & .expand {

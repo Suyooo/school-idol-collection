@@ -24,6 +24,7 @@
         "@interactjs/modifiers": "^1.10.17",
         "@interactjs/snappers": "^1.10.17",
         "@interactjs/types": "^1.10.17",
+        "@splidejs/svelte-splide": "^0.2.9",
         "@sveltejs/adapter-node": "^1.1.0",
         "@sveltejs/adapter-static": "^1.0.1",
         "@sveltejs/kit": "^1.20.4",

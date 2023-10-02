@@ -26,3 +26,52 @@
         <span>{card.cardNo}</span><span>{cardType(card)}</span>
     </div>
 </a>
+
+<style lang="postcss">
+    .grid-item {
+        @apply no-underline flex flex-col bg-primary-500 p-1 rounded-2xl;
+
+        & > * {
+            @apply flex-grow-0 flex-shrink-0 basis-0;
+        }
+
+        & > .imgcont {
+            @apply flex content-center items-center justify-center basis-36 w-full rounded-xl px-2 mb-1 overflow-hidden bg-primary-700 gap-2;
+
+            & > :global(img) {
+                @apply max-h-32 object-contain max-w-[50%] basis-0;
+            }
+        }
+
+        & > .namecont {
+            @apply flex-grow leading-[1.1rem] my-1;
+        }
+
+        & > .namecont,
+        & > .linecont {
+            @apply flex font-bold pr-2 no-underline;
+        }
+
+        & > .namecont > span,
+        & > .linecont > span {
+            @apply pl-2 flex-grow-0 flex-shrink-0 basis-0;
+        }
+
+        & > .namecont > span:last-child {
+            @apply underline;
+        }
+
+        & > .namecont > span:first-child {
+            @apply text-primary-300 no-underline;
+        }
+
+        & > .linecont > span {
+            @apply text-white text-center text-xs uppercase tracking-widest no-underline;
+        }
+
+        & > .namecont > span:last-child,
+        & > .linecont > span {
+            @apply flex-grow;
+        }
+    }
+</style>

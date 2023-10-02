@@ -89,11 +89,11 @@ h2 {
 }
 
 h3 {
-    @apply m-0 mb-4 py-1 w-full text-3xl text-accent-400 font-bold tracking-widest text-center bg-primary-500 rounded-2xl;
+    @apply m-0 mb-4 py-1 w-full text-3xl text-accent-400 font-bold tracking-widest text-center bg-primary-600 rounded-2xl;
 }
 
 h4 {
-    @apply m-0 mb-4 -mx-4 py-1 text-2xl text-accent-400 font-bold tracking-widest text-center bg-primary-500;
+    @apply m-0 mb-4 -mx-4 py-1 text-2xl text-accent-400 font-bold tracking-widest text-center bg-primary-600;
 }
 
 h5 {
