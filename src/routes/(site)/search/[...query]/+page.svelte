@@ -34,15 +34,15 @@
     <title>Search Results &bull; SIC</title>
 </svelte:head>
 
-<h5>
-    Search Results:
-    {#each queryExplain as q, i}
-        {#if i > 0},{/if}
-        <Skill skill={q} />
-    {/each}
-</h5>
+<h3>Search Results</h3>
 
 <div class="content">
+    <div class="font-bold text-accent-300 mb-4">
+        {#each queryExplain as q, i}
+            {#if i > 0},{/if}
+            <Skill skill={q} />
+        {/each}
+    </div>
     <div class="flex items-center">
         <Button
             accent

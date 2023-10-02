@@ -19,7 +19,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
     <div class="content col-span-2">
         <h3>Newest Set</h3>
-        <div class="panel grid grid-cols-1 sm:grid-cols-3 gap-2 full-img-element">
+        <div class="panel grid grid-cols-1 sm:grid-cols-3 gap-y-2 gap-x-4 full-img-element">
             <div class="flippable-set-element">
                 <SetGridElement set={data.latestSet} />
             </div>

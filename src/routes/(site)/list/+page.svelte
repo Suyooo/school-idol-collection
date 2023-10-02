@@ -14,8 +14,8 @@
 </svelte:head>
 
 {#each categories as cat (cat.id)}
-    <h5>{cat.eng}</h5>
-    <div class="content">
+    <div class="content mt-4 first:mt-0">
+        <h3>{cat.eng}</h3>
         <GridPanel items={cat.sets} key="id" let:item={set}>
             <SetGridElement {set} />
         </GridPanel>

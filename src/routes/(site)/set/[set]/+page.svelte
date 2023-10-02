@@ -1,23 +1,20 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import type Card from "$models/card/card.js";
     import Button from "$lib/style/Button.svelte";
     import GridPanel from "$lib/style/GridPanel.svelte";
     import type { PageData } from "./$types.js";
     import CardGridElement from "./CardGridElement.svelte";
 
     export let data: PageData;
-    let cards: Card[];
-    $: cards = data.cards;
 </script>
 
 <svelte:head>
     <title>{$page.params.set} Card List &bull; SIC</title>
 </svelte:head>
 
-<h5>{$page.params.set}</h5>
 <div class="content">
-    <GridPanel items={cards} key="cardNo" let:item={card}>
+    <h3>{data.set.eng}</h3>
+    <GridPanel items={data.cards} key="cardNo" let:item={card}>
         <CardGridElement {card} />
     </GridPanel>
 </div>
