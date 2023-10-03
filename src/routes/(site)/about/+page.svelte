@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>About &bull; SIC</title>
+</svelte:head>
+
 <div class="content">
     <h3>About</h3>
     <div class="panel">
