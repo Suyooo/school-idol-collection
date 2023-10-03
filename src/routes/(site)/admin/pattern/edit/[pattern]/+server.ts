@@ -1,5 +1,5 @@
+import type TranslationPattern from "$m/translation/pattern.js";
 import { error, json } from "@sveltejs/kit";
-import type TranslationPattern from "$models/translation/pattern.js";
 import type { RequestHandler } from "./$types.js";
 
 export const POST: RequestHandler = (async ({ params, locals, request }) => {

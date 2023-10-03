@@ -1,6 +1,6 @@
+import type SetCategory from "$m/set/category.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, Table } from "@sequelize/core/decorators-legacy";
-import type SetCategory from "$models/set/category.js";
 
 @Table({
     modelName: "Set",

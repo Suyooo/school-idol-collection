@@ -1,6 +1,6 @@
+import type CardSearchResult from "$l/types/cardSearchResult.js";
+import { addPreparse } from "$l/types/cardSearchResult.js";
 import { error } from "@sveltejs/kit";
-import type CardSearchResult from "$lib/types/cardSearchResult.js";
-import { addPreparse } from "$lib/types/cardSearchResult.js";
 import type { PageServerLoad } from "./$types.js";
 
 export const load: PageServerLoad = (async ({ params, fetch }) => {

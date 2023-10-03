@@ -1,8 +1,8 @@
+import Language from "$l/enums/language.js";
+import { parseSkillToNodes } from "$l/format/format.js";
+import type Card from "$m/card/card.js";
+import type { Sequelize } from "$m/db.js";
 import { Op } from "@sequelize/core";
-import type Card from "$models/card/card.js";
-import type { Sequelize } from "$models/db.js";
-import Language from "$lib/enums/language.js";
-import { parseSkillToNodes } from "$lib/format/format.js";
 
 export default interface CardPageExtraInfo<IncludeSameId extends boolean, IncludeNeighbors extends boolean> {
     cardSet: string;

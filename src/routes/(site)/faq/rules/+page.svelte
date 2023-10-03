@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { CardOrientation } from "$lib/enums/cardOrientation.js";
-    import TriggerEnum from "$lib/enums/trigger.js";
-    import CardImage from "$lib/format/CardImage.svelte";
-    import Idolized from "$lib/format/Idolized.svelte";
-    import Star from "$lib/format/Star.svelte";
-    import TriggerComponent from "$lib/format/TriggerComponent.svelte";
+    import { CardOrientation } from "$l/enums/cardOrientation.js";
+    import TriggerEnum from "$l/enums/trigger.js";
+    import CardImage from "$l/format/CardImage.svelte";
+    import Idolized from "$l/format/Idolized.svelte";
+    import Star from "$l/format/Star.svelte";
+    import TriggerComponent from "$l/format/TriggerComponent.svelte";
 </script>
 
 <svelte:head><title>How To Play → Rules &bull; SIC</title></svelte:head>
@@ -15,7 +15,9 @@
         <div class="panel-inner">
             <h4>Base Rules</h4>
             To get an overview of the base rules,
-            <a href="https://llsic-en.carrd.co/"> Your Sinclair has translated the official rule sheet here </a>.<br />
+            <a href="https://llsic-en.carrd.co/" target="_blank">
+                Your Sinclair has translated the official rule sheet here
+            </a>.<br />
             This rule sheet is enough to start trying out the game - the rules following below are just further details!
         </div>
     </div>

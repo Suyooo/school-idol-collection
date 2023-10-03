@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type Card from "$models/card/card.js";
-    import { cardLink } from "$lib/card/strings.js";
+    import type Card from "$m/card/card.js";
+    import { cardLink } from "$l/card/strings.js";
 
     export let subjects: (Card | { from: Card; to: Card })[];
 

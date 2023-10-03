@@ -1,9 +1,9 @@
+import TriggerEnum from "$l/enums/trigger.js";
+import PatternGroupType from "$l/translation/patternGroupType.js";
+import type { PatternGroupTypeID } from "$l/translation/patternGroupType.js";
 import { DataTypes, Model } from "@sequelize/core";
 import type { QueryOptions } from "@sequelize/core";
 import { AfterUpdate, Attribute, Table } from "@sequelize/core/decorators-legacy";
-import TriggerEnum from "$lib/enums/trigger.js";
-import PatternGroupType from "$lib/translation/patternGroupType.js";
-import type { PatternGroupTypeID } from "$lib/translation/patternGroupType.js";
 
 @Table({
     modelName: "TranslationPattern",

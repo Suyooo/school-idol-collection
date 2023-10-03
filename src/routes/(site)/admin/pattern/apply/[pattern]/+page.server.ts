@@ -1,5 +1,5 @@
+import { getApplicableSkills } from "$l/translation/skills.js";
 import { error } from "@sveltejs/kit";
-import { getApplicableSkills } from "$lib/translation/skills.js";
 import type { PageServerLoad } from "./$types.js";
 
 export const load: PageServerLoad = (async ({ params, locals }) => {

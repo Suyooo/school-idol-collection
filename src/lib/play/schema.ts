@@ -1,5 +1,5 @@
 import type { Readable } from "svelte/store";
-import type CardType from "$lib/enums/cardType.js";
+import type CardType from "$l/enums/cardType.js";
 import type { Profile } from "./profile.js";
 
 export const enum StackType {

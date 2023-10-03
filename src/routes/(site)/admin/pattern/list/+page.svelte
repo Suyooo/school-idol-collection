@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type TranslationPattern from "$models/translation/pattern.js";
-    import TriggerEnum from "$lib/enums/trigger.js";
-    import TriggerComponent from "$lib/format/TriggerComponent.svelte";
+    import type TranslationPattern from "$m/translation/pattern.js";
+    import TriggerEnum from "$l/enums/trigger.js";
+    import TriggerComponent from "$l/format/TriggerComponent.svelte";
     import type { PageData } from "./$types.js";
 
     export let data: PageData;

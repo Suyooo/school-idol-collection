@@ -1,0 +1,94 @@
+diff --git a/node_modules/@interactjs/types/index.d.ts b/node_modules/@interactjs/types/index.d.ts
+index 82919f8..25512fa 100644
+--- a/node_modules/@interactjs/types/index.d.ts
++++ b/node_modules/@interactjs/types/index.d.ts
+@@ -15,10 +15,11 @@ declare module "@interactjs/core/options" {
+         deltaSource?: 'page' | 'client';
+         context?: Node;
+     }
+-    export interface PerActionDefaults {
++    import { BaseEvent } from "@interactjs/core/BaseEvent";
++    export interface PerActionDefaults<DropEvent = BaseEvent> {
+         enabled?: boolean;
+         origin?: Point | string | Element;
+-        listeners?: Listeners;
++        listeners?: Listeners<DropEvent>;
+         allowFrom?: string | Element;
+         ignoreFrom?: string | Element;
+     }
+@@ -516,12 +517,14 @@ declare module "@interactjs/core/types" {
+     export type NativePointerEventType = typeof _NativePointerEventType;
+     export type PointerEventType = MouseEvent | TouchEvent | Partial<NativePointerEventType> | InteractEvent;
+     export type PointerType = MouseEvent | Touch | Partial<NativePointerEventType> | InteractEvent;
+-    export type EventTypes = string | ListenerMap | Array<string | ListenerMap>;
+-    export type Listener = (...args: any[]) => any;
+-    export type Listeners = ListenerMap | ListenerMap[];
+-    export type ListenersArg = Listener | ListenerMap | Array<Listener | ListenerMap>;
+-    export interface ListenerMap {
+-        [index: string]: ListenersArg | ListenersArg[];
++
++    import { BaseEvent } from "@interactjs/core/BaseEvent";
++    export type EventTypes<EvType = BaseEvent> = string | ListenerMap<EvType> | Array<string | ListenerMap<EvType>>;
++    export type Listener<EvType = BaseEvent> = (event: EvType) => void;
++    export type Listeners<EvType = BaseEvent> = ListenerMap<EvType> | ListenerMap<EvType>[];
++    export type ListenersArg<EvType = BaseEvent> = Listener<EvType> | ListenerMap<EvType> | Array<Listener<EvType> | ListenerMap<EvType>>;
++    export interface ListenerMap<EvType = BaseEvent> {
++        [index: string]: ListenersArg<EvType> | ListenersArg<EvType>[];
+     }
+     export type ArrayElementType<T> = T extends Array<infer P> ? P : never;
+ }
+@@ -1170,13 +1173,13 @@ declare module "@interactjs/actions/drag/plugin" {
+     }
+     export type DragEvent = InteractEvent<'drag'>;
+     export type DraggableMethod = ActionMethod<DraggableOptions>;
+-    export interface DraggableOptions extends PerActionDefaults {
++    export interface DraggableOptions extends PerActionDefaults<DragEvent> {
+         startAxis?: 'x' | 'y' | 'xy';
+         lockAxis?: 'x' | 'y' | 'xy' | 'start';
+-        oninertiastart?: ListenersArg;
+-        onstart?: ListenersArg;
+-        onmove?: ListenersArg;
+-        onend?: ListenersArg;
++        oninertiastart?: ListenersArg<DragEvent>;
++        onstart?: ListenersArg<DragEvent>;
++        onmove?: ListenersArg<DragEvent>;
++        onend?: ListenersArg<DragEvent>;
+     }
+     const drag: Plugin;
+     export default drag;
+@@ -1228,19 +1231,19 @@ declare module "@interactjs/actions/drop/plugin" {
+     dropElement: Element, // drop zone element
+     draggable: Interactable, // draggable's Interactable
+     draggableElement: Element) => boolean;
+-    export interface DropzoneOptions extends PerActionDefaults {
++    export interface DropzoneOptions extends PerActionDefaults<DropEvent> {
+         accept?: string | Element | (({ dropzone, draggableElement }: {
+             dropzone: Interactable;
+             draggableElement: Element;
+         }) => boolean);
+         overlap?: 'pointer' | 'center' | number;
+         checker?: DropFunctionChecker;
+-        ondropactivate?: ListenersArg;
+-        ondropdeactivate?: ListenersArg;
+-        ondragenter?: ListenersArg;
+-        ondragleave?: ListenersArg;
+-        ondropmove?: ListenersArg;
+-        ondrop?: ListenersArg;
++        ondropactivate?: ListenersArg<DropEvent>;
++        ondropdeactivate?: ListenersArg<DropEvent>;
++        ondragenter?: ListenersArg<DropEvent>;
++        ondragleave?: ListenersArg<DropEvent>;
++        ondropmove?: ListenersArg<DropEvent>;
++        ondrop?: ListenersArg<DropEvent>;
+     }
+     export interface DropzoneMethod {
+         (this: Interactable, options: DropzoneOptions | boolean): Interactable;
+diff --git a/node_modules/@interactjs/types/typings.d.ts b/node_modules/@interactjs/types/typings.d.ts
+index fa7bba4..4c72975 100644
+--- a/node_modules/@interactjs/types/typings.d.ts
++++ b/node_modules/@interactjs/types/typings.d.ts
+@@ -1,3 +1,4 @@
++/// <reference path="index.d.ts" />
+ import * as Interact from '@interactjs/types/index'
+ 
+ export as namespace Interact

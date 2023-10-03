@@ -1,5 +1,5 @@
+import type SetCategory from "$m/set/category.js";
 import { json } from "@sveltejs/kit";
-import type SetCategory from "$models/set/category.js";
 import type { RequestHandler } from "./$types.js";
 
 export const GET: RequestHandler = (async ({ locals }) => {

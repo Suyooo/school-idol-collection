@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type Card from "$models/card/card.js";
-    import { cardHasGroup } from "$lib/card/types.js";
-    import { cardIsMember, cardIsSong } from "$lib/card/types.js";
-    import CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
-    import { CardOrientation } from "$lib/enums/cardOrientation.js";
-    import { CardMemberRarity, CardSongRarity } from "$lib/enums/cardRarity.js";
-    import Skill from "$lib/format/Skill.svelte";
+    import type Card from "$m/card/card.js";
+    import { cardHasGroup } from "$l/card/types.js";
+    import { cardIsMember, cardIsSong } from "$l/card/types.js";
+    import CardMemberGroupType from "$l/enums/cardMemberGroupType.js";
+    import { CardOrientation } from "$l/enums/cardOrientation.js";
+    import { CardMemberRarity, CardSongRarity } from "$l/enums/cardRarity.js";
+    import Skill from "$l/format/Skill.svelte";
 
     export let cardNo: string;
     export let byCardNo: { [cardNo: string]: Card };

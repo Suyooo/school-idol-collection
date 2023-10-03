@@ -1,8 +1,6 @@
-import type Card from "$models/card/card.js";
-import type Annotation from "$models/skill/annotation.js";
-import type { AttributeID } from "$lib/enums/attribute.js";
-import Language from "$lib/enums/language.js";
-import EnumError from "$lib/errors/enumError.js";
+import type { AttributeID } from "$l/enums/attribute.js";
+import Language from "$l/enums/language.js";
+import EnumError from "$l/errors/enumError.js";
 import SearchFilter, {
     SearchFilterCardID,
     SearchFilterCostume,
@@ -10,7 +8,9 @@ import SearchFilter, {
     SearchFilterName,
     SearchFilterSkill,
     SearchFilterSong,
-} from "$lib/search/options.js";
+} from "$l/search/options.js";
+import type Card from "$m/card/card.js";
+import type Annotation from "$m/skill/annotation.js";
 
 type Key = "card" | "song" | "mem" | "costume" | "skilltext";
 export type AnnotationID = 0 | 1 | 2 | 3 | 4;

@@ -1,17 +1,17 @@
 <script context="module" lang="ts">
     import { getContext, onMount } from "svelte";
     import type { Readable, Writable } from "svelte/store";
-    import interact from "@interactjs/interact/index";
+    import interact from "@interactjs/interact";
     import "@interactjs/actions/drag";
     import "@interactjs/auto-start";
     import "@interactjs/modifiers";
-    import type { SnapFunction } from "@interactjs/types/index";
-    import { cardIsIdolizable, cardIsMember } from "$lib/card/types.js";
-    import CardType from "$lib/enums/cardType.js";
-    import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
-    import type { LiveModeStore } from "$lib/play/livemode.js";
-    import { type ClientGameLogic, StackSide } from "$lib/play/schema.js";
-    import Spinner from "$lib/style/icons/Spinner.svelte";
+    import "@interactjs/types";
+    import { cardIsIdolizable, cardIsMember } from "$l/card/types.js";
+    import CardType from "$l/enums/cardType.js";
+    import { type CardWithImageData, loadCardInfo } from "$l/play/cardInfo.js";
+    import type { LiveModeStore } from "$l/play/livemode.js";
+    import { type ClientGameLogic, StackSide } from "$l/play/schema.js";
+    import Spinner from "$l/style/icons/Spinner.svelte";
     import type { FieldPositionFunction, OpenMenuFunction } from "./+page.svelte";
 </script>
 
@@ -28,7 +28,7 @@
     const openMenu: OpenMenuFunction = getContext("openMenu");
     const liveModeCards: LiveModeStore = getContext("liveModeCards");
     const fieldZoom: Writable<number> = getContext("fieldZoom");
-    const snapFunction: () => SnapFunction = getContext("snapFunction");
+    const snapFunction: () => Interact.SnapFunction = getContext("snapFunction");
     const fieldPositionFunction: FieldPositionFunction = getContext("fieldPositionFunction");
 
     let element: HTMLElement;
@@ -121,7 +121,7 @@
                                         {
                                             label: "Idolize",
                                             handler: () => {
-                                                const baseId = parseInt(event.relatedTarget.dataset.id);
+                                                const baseId = parseInt(event.relatedTarget!.dataset.id!);
                                                 liveModeCards.removeMember(baseId);
                                                 logic.requestIdolizeFromField(baseId, id);
                                             },

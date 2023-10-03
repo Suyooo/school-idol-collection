@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import type Card from "$models/card/card.js";
+    import type Card from "$m/card/card.js";
     import type { FaqSectionPrepared } from "../prepareFaq.js";
     import Note from "../Note.svelte";
     import Question from "../Question.svelte";

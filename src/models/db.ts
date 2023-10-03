@@ -1,27 +1,27 @@
+import { addScopes as addScopesSearch } from "$l/search/scopes.js";
+import type Card from "$m/card/card.js";
+import { CardBase } from "$m/card/card.js";
+import { addScopes as addScopesCardBase } from "$m/card/card.js";
+import CardFAQLink from "$m/card/faqLink.js";
+import CardMemberExtraInfo from "$m/card/memberExtraInfo.js";
+import CardMemberGroup from "$m/card/memberGroup.js";
+import { addScopes as addScopesCardMemberGroup } from "$m/card/memberGroup.js";
+import CardMemberIdolizePieceExtraInfo from "$m/card/memberIdolizePieceExtraInfo.js";
+import CardSongAnyReqExtraInfo from "$m/card/songAnyReqExtraInfo.js";
+import CardSongAttrReqExtraInfo from "$m/card/songAttrReqExtraInfo.js";
+import CardSongExtraInfo from "$m/card/songExtraInfo.js";
+import SetCategory from "$m/set/category.js";
+import Set from "$m/set/set.js";
+import Annotation from "$m/skill/annotation.js";
+import Link from "$m/skill/link.js";
+import type Skill from "$m/skill/skill.js";
+import { SkillBase } from "$m/skill/skill.js";
+import TranslationName from "$m/translation/name.js";
+import TranslationPattern from "$m/translation/pattern.js";
+import TranslationSong from "$m/translation/song.js";
 import dbSettings from "../../dbSettings.json";
 import { Sequelize as OrigSequelize } from "@sequelize/core";
 import type { ModelStatic } from "@sequelize/core";
-import type Card from "$models/card/card.js";
-import { CardBase } from "$models/card/card.js";
-import { addScopes as addScopesCardBase } from "$models/card/card.js";
-import CardFAQLink from "$models/card/faqLink.js";
-import CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
-import CardMemberGroup from "$models/card/memberGroup.js";
-import { addScopes as addScopesCardMemberGroup } from "$models/card/memberGroup.js";
-import CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo.js";
-import CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";
-import CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo.js";
-import CardSongExtraInfo from "$models/card/songExtraInfo.js";
-import SetCategory from "$models/set/category.js";
-import Set from "$models/set/set.js";
-import Annotation from "$models/skill/annotation.js";
-import Link from "$models/skill/link.js";
-import type Skill from "$models/skill/skill.js";
-import { SkillBase } from "$models/skill/skill.js";
-import TranslationName from "$models/translation/name.js";
-import TranslationPattern from "$models/translation/pattern.js";
-import TranslationSong from "$models/translation/song.js";
-import { addScopes as addScopesSearch } from "$lib/search/scopes.js";
 
 const modelList: ModelStatic<any>[] = [
     CardBase,

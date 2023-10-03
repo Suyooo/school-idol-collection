@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type Card from "$models/card/card.js";
-    import { cardTitle } from "$lib/card/strings.js";
-    import Language from "$lib/enums/language.js";
-    import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
-    import CardImage from "$lib/format/CardImage.svelte";
+    import type Card from "$m/card/card.js";
+    import { cardTitle } from "$l/card/strings.js";
+    import Language from "$l/enums/language.js";
+    import type CardPageExtraInfo from "$l/types/cardPageExtraInfo.js";
+    import CardImage from "$l/format/CardImage.svelte";
     import type { PageData } from "./$types.js";
     import CardInfoRows from "./CardInfoRows.svelte";
     import CardPageButtons from "./CardPageButtons.svelte";

@@ -1,5 +1,5 @@
-import EnumError from "$lib/errors/enumError.js";
-import { mapGet } from "$lib/utils/map.js";
+import EnumError from "$l/errors/enumError.js";
+import { mapGet } from "$l/utils/map.js";
 
 type Name =
     | "???"

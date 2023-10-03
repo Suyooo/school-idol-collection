@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { cardIsMember } from "$lib/card/types.js";
-    import { CardOrientation } from "$lib/enums/cardOrientation.js";
-    import { CardMemberRarity } from "$lib/enums/cardRarity.js";
+    import { cardIsMember } from "$l/card/types.js";
+    import { CardOrientation } from "$l/enums/cardOrientation.js";
+    import { CardMemberRarity } from "$l/enums/cardRarity.js";
     import type Card from "../../models/card/card.js";
 
     export let card: Card | undefined = undefined;

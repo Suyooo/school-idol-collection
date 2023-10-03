@@ -1,7 +1,7 @@
+import type { ParseNodePrepared } from "$l/format/format.js";
+import type Card from "$m/card/card.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, Table } from "@sequelize/core/decorators-legacy";
-import type Card from "$models/card/card.js";
-import type { ParseNodePrepared } from "$lib/format/format.js";
 
 @Table({
     modelName: "CardFAQLink",

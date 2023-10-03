@@ -1,9 +1,9 @@
 <script lang="ts">
-    import AttributeEnum from "$lib/enums/attribute.js";
-    import type CardType from "$lib/enums/cardType.js";
-    import Language from "$lib/enums/language.js";
-    import { uppercaseFirst } from "$lib/utils/string.js";
-    import Piece from "$lib/format/Piece.svelte";
+    import AttributeEnum from "$l/enums/attribute.js";
+    import type CardType from "$l/enums/cardType.js";
+    import Language from "$l/enums/language.js";
+    import { uppercaseFirst } from "$l/utils/string.js";
+    import Piece from "$l/format/Piece.svelte";
 
     export let pieces: { piecesAll?: number; piecesSmile?: number; piecesPure?: number; piecesCool?: number };
     export let showZero: boolean = false;

@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { makeNodesRenderable } from "$lib/format/format.js";
-    import type { ParseNodePrepared } from "$lib/format/format.js";
-    import SkillNodeRenderer from "$lib/format/SkillNodeRenderer.svelte";
+    import { makeNodesRenderable } from "$l/format/format.js";
+    import type { ParseNodePrepared } from "$l/format/format.js";
+    import SkillNodeRenderer from "$l/format/SkillNodeRenderer.svelte";
 
     export let note: ParseNodePrepared[];
 </script>

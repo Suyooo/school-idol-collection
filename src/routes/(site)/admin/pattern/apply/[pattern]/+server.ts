@@ -1,5 +1,5 @@
+import { applyPatternToSkills } from "$l/translation/skills.js";
 import { error, json } from "@sveltejs/kit";
-import { applyPatternToSkills } from "$lib/translation/skills.js";
 import type { RequestHandler } from "./$types.js";
 
 export const POST: RequestHandler = (async ({ params, locals, request }) => {

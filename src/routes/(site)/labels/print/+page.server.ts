@@ -1,6 +1,6 @@
-import type Card from "$models/card/card.js";
-import { cardHasGroup, cardIsMember } from "$lib/card/types.js";
-import { couldBeEntryCardNo, entryCardNoToCanonical } from "$lib/utils/entry.js";
+import { cardHasGroup, cardIsMember } from "$l/card/types.js";
+import { couldBeEntryCardNo, entryCardNoToCanonical } from "$l/utils/entry.js";
+import type Card from "$m/card/card.js";
 import type { Actions } from "./$types.js";
 
 export const actions = {

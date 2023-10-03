@@ -1,5 +1,5 @@
 import { type Readable, type Writable, derived, get, readonly, writable } from "svelte/store";
-import CardType from "$lib/enums/cardType.js";
+import CardType from "$l/enums/cardType.js";
 import {
     type ClientFieldCardSchema,
     type ClientFieldGroupSchema,
@@ -11,9 +11,9 @@ import {
     type HandCardSchema,
     StackSide,
     StackType,
-} from "$lib/play/schema.js";
-import { shuffleArray } from "$lib/utils/array.js";
-import { mapGet } from "$lib/utils/map.js";
+} from "$l/play/schema.js";
+import { shuffleArray } from "$l/utils/array.js";
+import { mapGet } from "$l/utils/map.js";
 
 export class LocalClientGameLogic extends ClientGameLogic {
     private storeCardFlips = new Map<number, Writable<boolean>>();

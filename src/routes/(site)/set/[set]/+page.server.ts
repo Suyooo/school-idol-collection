@@ -1,6 +1,6 @@
+import type Card from "$m/card/card.js";
+import type Set from "$m/set/set.js";
 import { error } from "@sveltejs/kit";
-import type Card from "$models/card/card.js";
-import type Set from "$models/set/set.js";
 import type { PageServerLoad } from "./$types.js";
 
 export const load: PageServerLoad = (async ({ params, fetch }) => {

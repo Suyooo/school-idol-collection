@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
-    import Button from "$lib/style/Button.svelte";
-    import Minus from "$lib/style/icons/Minus.svelte";
-    import Plus from "$lib/style/icons/Plus.svelte";
+    import Button from "$l/style/Button.svelte";
+    import Minus from "$l/style/icons/Minus.svelte";
+    import Plus from "$l/style/icons/Plus.svelte";
 </script>
 
 <script lang="ts">

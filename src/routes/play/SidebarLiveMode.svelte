@@ -3,24 +3,24 @@
     import { slide } from "svelte-reduced-motion/transition";
     import { type Readable, type Writable, get as storeGet } from "svelte/store";
     import { tooltip } from "svooltip";
-    import type { CardMember, CardSong } from "$models/card/card.js";
-    import { cardTitle } from "$lib/card/strings.js";
-    import { cardHasAnyPieceRequirement, cardHasIdolizationPieces, cardIsIdolizable } from "$lib/card/types.js";
-    import AttributeEnum from "$lib/enums/attribute.js";
-    import CardType from "$lib/enums/cardType.js";
-    import Language from "$lib/enums/language.js";
-    import { type CardImageData, loadCardInfo } from "$lib/play/cardInfo.js";
-    import type { LiveModeStore } from "$lib/play/livemode.js";
+    import type { CardMember, CardSong } from "$m/card/card.js";
+    import { cardTitle } from "$l/card/strings.js";
+    import { cardHasAnyPieceRequirement, cardHasIdolizationPieces, cardIsIdolizable } from "$l/card/types.js";
+    import AttributeEnum from "$l/enums/attribute.js";
+    import CardType from "$l/enums/cardType.js";
+    import Language from "$l/enums/language.js";
+    import { type CardImageData, loadCardInfo } from "$l/play/cardInfo.js";
+    import type { LiveModeStore } from "$l/play/livemode.js";
     import type {
         ClientFieldCardSchema,
         ClientGameLogic,
         ClientGameSchema,
         ClientPlayerSchema,
-    } from "$lib/play/schema.js";
-    import { mapGet } from "$lib/utils/map.js";
-    import Piece from "$lib/format/Piece.svelte";
-    import Button from "$lib/style/Button.svelte";
-    import Checked from "$lib/style/icons/Checked.svelte";
+    } from "$l/play/schema.js";
+    import { mapGet } from "$l/utils/map.js";
+    import Piece from "$l/format/Piece.svelte";
+    import Button from "$l/style/Button.svelte";
+    import Checked from "$l/style/icons/Checked.svelte";
     import PlusMinusButtons from "./PlusMinusButtons.svelte";
     import SidebarLiveModeReqRow from "./SidebarLiveModeReqRow.svelte";
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Button from "$lib/style/Button.svelte";
+    import Button from "$l/style/Button.svelte";
 
     let cardNo: string = "",
         disabled: boolean = false;

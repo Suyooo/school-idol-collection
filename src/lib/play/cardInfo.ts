@@ -1,8 +1,8 @@
-import type Card from "$models/card/card.js";
-import { cardIsMember } from "$lib/card/types.js";
-import { CardMemberRarity } from "$lib/enums/cardRarity.js";
-import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
-import { retryPromise } from "$lib/utils/promise.js";
+import { cardIsMember } from "$l/card/types.js";
+import { CardMemberRarity } from "$l/enums/cardRarity.js";
+import type CardPageExtraInfo from "$l/types/cardPageExtraInfo.js";
+import { retryPromise } from "$l/utils/promise.js";
+import type Card from "$m/card/card.js";
 
 export type CardImageData = { imageDataUrl: string };
 export type CardWithImageData = Card & CardImageData;

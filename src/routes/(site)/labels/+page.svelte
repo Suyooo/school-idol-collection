@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { FormEventHandler } from "svelte/elements";
-    import Button from "$lib/style/Button.svelte";
+    import Button from "$l/style/Button.svelte";
     import type { Snapshot } from "./$types.js";
 
     let width: number,

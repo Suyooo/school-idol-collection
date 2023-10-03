@@ -1,0 +1,15 @@
+diff --git a/node_modules/@splidejs/svelte-splide/index.d.ts b/node_modules/@splidejs/svelte-splide/index.d.ts
+index 658ad62..66d74dd 100644
+--- a/node_modules/@splidejs/svelte-splide/index.d.ts
++++ b/node_modules/@splidejs/svelte-splide/index.d.ts
+@@ -1,2 +1,2 @@
+-export * from './components';
++export { Splide, SplideSlide, SplideTrack } from './components';
+ export type { Options } from '@splidejs/splide';
+diff --git a/node_modules/@splidejs/svelte-splide/index.js b/node_modules/@splidejs/svelte-splide/index.js
+index b2b1b81..3912ee1 100644
+--- a/node_modules/@splidejs/svelte-splide/index.js
++++ b/node_modules/@splidejs/svelte-splide/index.js
+@@ -1 +1 @@
+-export * from './components';
++export { Splide, SplideSlide, SplideTrack } from './components';

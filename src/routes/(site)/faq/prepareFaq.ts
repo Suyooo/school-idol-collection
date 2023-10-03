@@ -1,9 +1,9 @@
-import type Card from "$models/card/card.js";
-import type { Sequelize } from "$models/db.js";
-import { cardLink, cardTitle } from "$lib/card/strings.js";
-import Language from "$lib/enums/language.js";
-import { isTextNode, parseSkillToNodes } from "$lib/format/format.js";
-import type { ParseNodePrepared } from "$lib/format/format.js";
+import { cardLink, cardTitle } from "$l/card/strings.js";
+import Language from "$l/enums/language.js";
+import { isTextNode, parseSkillToNodes } from "$l/format/format.js";
+import type { ParseNodePrepared } from "$l/format/format.js";
+import type Card from "$m/card/card.js";
+import type { Sequelize } from "$m/db.js";
 
 export type Faq = FaqSection[];
 

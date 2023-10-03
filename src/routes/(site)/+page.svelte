@@ -1,11 +1,11 @@
 <script lang="ts" context="module">
     import { Splide, SplideSlide } from "@splidejs/svelte-splide";
     import "@splidejs/svelte-splide/css";
-    import Search from "$lib/style/icons/Search.svelte";
-    import CardList from "$lib/style/icons/home/CardList.svelte";
-    import HowToPlay from "$lib/style/icons/home/HowToPlay.svelte";
-    import More from "$lib/style/icons/home/More.svelte";
-    import Print from "$lib/style/icons/home/Print.svelte";
+    import Search from "$l/style/icons/Search.svelte";
+    import CardList from "$l/style/icons/home/CardList.svelte";
+    import HowToPlay from "$l/style/icons/home/HowToPlay.svelte";
+    import More from "$l/style/icons/home/More.svelte";
+    import Print from "$l/style/icons/home/Print.svelte";
     import type { PageServerData } from "./$types.js";
     import SetGridElement from "./list/SetGridElement.svelte";
     import CardGridElement from "./set/[set]/CardGridElement.svelte";
@@ -22,7 +22,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
     <div class="content col-span-2">
         <h3>Newest Set</h3>
-        <div class="panel grid grid-cols-1 sm:grid-cols-3 gap-y-2 gap-x-4 full-img-element">
+        <div class="panel grid grid-cols-1 sm:grid-cols-3 gap-y-2 sm:gap-y-0 sm:gap-x-4 full-img-element">
             <div class="flippable-set-element">
                 <SetGridElement set={data.latestSet} />
             </div>
@@ -33,6 +33,7 @@
                         autoplay: true,
                         interval: 3000,
                         rewind: true,
+                        type: "loop",
                     }}
                 >
                     {#each data.latestSetCards as slot, i (i)}

@@ -1,6 +1,6 @@
+import type Set from "$m/set/set.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, HasMany, Table } from "@sequelize/core/decorators-legacy";
-import type Set from "$models/set/set.js";
 
 @Table({
     modelName: "SetCategory",
@@ -28,7 +28,6 @@ export default class SetCategory extends Model {
     declare eng: string;
 
     @HasMany((s) => s.models.Set, {
-        as: "sets",
         foreignKey: "categoryId",
         inverse: { as: "category" },
     })

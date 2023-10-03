@@ -1,10 +1,10 @@
+import AttributeEnum from "$l/enums/attribute.js";
+import MissingTranslationError from "$l/errors/missingTranslationError.js";
+import NotFoundError from "$l/errors/notFoundError.js";
+import * as Grammar from "$l/utils/grammar.js";
+import { toNumWithFullwidth } from "$l/utils/string.js";
+import type { Sequelize } from "$m/db.js";
 import type { QueryOptions } from "@sequelize/core";
-import type { Sequelize } from "$models/db.js";
-import AttributeEnum from "$lib/enums/attribute.js";
-import MissingTranslationError from "$lib/errors/missingTranslationError.js";
-import NotFoundError from "$lib/errors/notFoundError.js";
-import * as Grammar from "$lib/utils/grammar.js";
-import { toNumWithFullwidth } from "$lib/utils/string.js";
 
 const skilltextPattern = /{{skilltext:([^}]*?)}}/;
 

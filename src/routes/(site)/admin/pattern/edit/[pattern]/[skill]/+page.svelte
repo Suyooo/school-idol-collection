@@ -1,8 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import TriggerEnum from "$lib/enums/trigger.js";
-    import PatternGroupType from "$lib/translation/patternGroupType.js";
-    import Button from "$lib/style/Button.svelte";
+    import TriggerEnum from "$l/enums/trigger.js";
+    import PatternGroupType from "$l/translation/patternGroupType.js";
+    import Button from "$l/style/Button.svelte";
     import type { PatternGroupTypeID } from "../../../../../../../lib/translation/patternGroupType.js";
     import type { PageData } from "./$types.js";
     import Pill from "./Pill.svelte";

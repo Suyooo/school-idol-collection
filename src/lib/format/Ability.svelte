@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type CardType from "$lib/enums/cardType.js";
-    import Language from "$lib/enums/language.js";
+    import type CardType from "$l/enums/cardType.js";
+    import Language from "$l/enums/language.js";
 
     export let rush: boolean = false;
     export let live: boolean = false;

@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
-    import AttributeEnum from "$lib/enums/attribute.js";
-    import Piece from "$lib/format/Piece.svelte";
+    import AttributeEnum from "$l/enums/attribute.js";
+    import Piece from "$l/format/Piece.svelte";
     import PlusMinusButtons from "./PlusMinusButtons.svelte";
 </script>
 

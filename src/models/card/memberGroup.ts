@@ -1,10 +1,10 @@
+import type CardMemberGroupType from "$l/enums/cardMemberGroupType.js";
+import type { CardMember } from "$m/card/card.js";
+import type CardMemberExtraInfo from "$m/card/memberExtraInfo.js";
+import type { Sequelize } from "$m/db.js";
+import type Skill from "$m/skill/skill.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, HasMany, Table } from "@sequelize/core/decorators-legacy";
-import type { CardMember } from "$models/card/card.js";
-import type CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
-import type { Sequelize } from "$models/db.js";
-import type Skill from "$models/skill/skill.js";
-import type CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
 
 @Table({
     modelName: "CardMemberGroup",
@@ -26,7 +26,6 @@ export default class CardMemberGroup extends Model {
     declare type: CardMemberGroupType;
 
     @HasMany((s) => s.models.CardMemberExtraInfo, {
-        as: "memberExtraInfos",
         foreignKey: "groupId",
         inverse: { as: "group" },
     })
@@ -43,7 +42,6 @@ export default class CardMemberGroup extends Model {
     declare expectedMemberIds: string;
 
     @HasMany((s) => s.models.Skill, {
-        as: "skills",
         foreignKey: { name: "groupId", onDelete: "CASCADE" },
         inverse: { as: "group" },
     })

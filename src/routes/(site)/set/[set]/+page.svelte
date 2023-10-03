@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import Button from "$lib/style/Button.svelte";
-    import GridPanel from "$lib/style/GridPanel.svelte";
+    import Button from "$l/style/Button.svelte";
+    import GridPanel from "$l/style/GridPanel.svelte";
     import type { PageData } from "./$types.js";
     import CardGridElement from "./CardGridElement.svelte";
 

@@ -2,8 +2,8 @@
     import { getContext } from "svelte";
     import type { Readable, Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
-    import type { SnapFunction } from "@interactjs/types/index";
-    import type { ClientFieldCardSchema, ClientGameLogic } from "$lib/play/schema.js";
+    import "@interactjs/types";
+    import type { ClientFieldCardSchema, ClientGameLogic } from "$l/play/schema.js";
     import type { FieldPositionFunction, OpenMenuFunction } from "./+page.svelte";
     import FieldCardObject from "./FieldCardObject.svelte";
 </script>
@@ -15,7 +15,7 @@
     const logic: ClientGameLogic = getContext("logic");
     const openMenu: OpenMenuFunction = getContext("openMenu");
     const fieldZoom: Writable<number> = getContext("fieldZoom");
-    const snapFunction: () => SnapFunction = getContext("snapFunction");
+    const snapFunction: () => Interact.SnapFunction = getContext("snapFunction");
     const fieldPositionFunction: FieldPositionFunction = getContext("fieldPositionFunction");
 
     let displayPosition: { x: number; y: number };

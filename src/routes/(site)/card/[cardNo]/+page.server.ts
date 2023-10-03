@@ -1,5 +1,5 @@
+import { addExtraInfo } from "$l/types/cardPageExtraInfo.js";
 import { error } from "@sveltejs/kit";
-import { addExtraInfo } from "$lib/types/cardPageExtraInfo.js";
 import type { PageServerLoad } from "./$types.js";
 
 export const load: PageServerLoad = (async ({ params, fetch, locals }) => {

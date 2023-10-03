@@ -1,6 +1,6 @@
+import type { GroupID } from "$l/enums/group.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, Table } from "@sequelize/core/decorators-legacy";
-import type { GroupID } from "$lib/enums/group.js";
 
 @Table({
     modelName: "TranslationSong",

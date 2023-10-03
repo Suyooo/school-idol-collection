@@ -1,6 +1,6 @@
-import type Card from "$models/card/card.js";
-import Language from "$lib/enums/language.js";
-import { type ParseNodePrepared, parseSkillToNodes } from "$lib/format/format.js";
+import Language from "$l/enums/language.js";
+import { type ParseNodePrepared, parseSkillToNodes } from "$l/format/format.js";
+import type Card from "$m/card/card.js";
 
 export default interface CardSearchResult<IsPreparsed extends boolean> {
     cards: Card[];

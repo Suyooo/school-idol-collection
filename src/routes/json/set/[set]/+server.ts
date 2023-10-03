@@ -1,5 +1,5 @@
+import type Card from "$m/card/card.js";
 import { error, json } from "@sveltejs/kit";
-import type Card from "$models/card/card.js";
 import type { RequestHandler } from "./$types.js";
 
 export const GET: RequestHandler = (async ({ params, locals }) => {

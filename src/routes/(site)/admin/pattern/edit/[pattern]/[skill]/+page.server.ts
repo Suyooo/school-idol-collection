@@ -1,8 +1,8 @@
+import TriggerEnum from "$l/enums/trigger.js";
+import type PatternGroupType from "$l/translation/patternGroupType.js";
+import { splitTriggersFromSkill } from "$l/translation/skills.js";
+import { escapeForRegex } from "$l/utils/string.js";
 import { error } from "@sveltejs/kit";
-import TriggerEnum from "$lib/enums/trigger.js";
-import type PatternGroupType from "$lib/translation/patternGroupType.js";
-import { splitTriggersFromSkill } from "$lib/translation/skills.js";
-import { escapeForRegex } from "$lib/utils/string.js";
 import type { PageServerLoad } from "./$types.js";
 
 export const load: PageServerLoad = (async ({ params, locals }) => {

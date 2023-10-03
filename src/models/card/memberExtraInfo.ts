@@ -1,12 +1,12 @@
+import type { AttributeID } from "$l/enums/attribute.js";
+import CardMemberIdolizeType from "$l/enums/cardMemberIdolizeType.js";
+import type { CardMemberRarity } from "$l/enums/cardRarity.js";
+import type { RangeCost, RangeDay, RangeMonth, RangeYear } from "$l/types/ranges.js";
+import type { CardMember } from "$m/card/card.js";
+import type CardMemberGroup from "$m/card/memberGroup.js";
+import type CardMemberIdolizePieceExtraInfo from "$m/card/memberIdolizePieceExtraInfo.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, HasOne, Table } from "@sequelize/core/decorators-legacy";
-import type { CardMember } from "$models/card/card.js";
-import type CardMemberGroup from "$models/card/memberGroup.js";
-import type CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo.js";
-import type { AttributeID } from "$lib/enums/attribute.js";
-import CardMemberIdolizeType from "$lib/enums/cardMemberIdolizeType.js";
-import type { CardMemberRarity } from "$lib/enums/cardRarity.js";
-import type { RangeCost, RangeDay, RangeMonth, RangeYear } from "$lib/types/ranges.js";
 
 @Table({
     modelName: "CardMemberExtraInfo",
@@ -159,7 +159,6 @@ export default class CardMemberExtraInfo extends Model {
     declare group: CardMemberGroup | null;
 
     @HasOne((s) => s.models.CardMemberIdolizePieceExtraInfo, {
-        as: "idolizeBonus",
         foreignKey: "cardNo",
         inverse: { as: "cardMemberExtraInfo" },
     })

@@ -1,8 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import type { SearchUiOptions } from "$lib/search/ui.js";
-    import { uiOptionIsSet, uiOptionsToUrl } from "$lib/search/ui.js";
-    import Button from "$lib/style/Button.svelte";
+    import type { SearchUiOptions } from "$l/search/ui.js";
+    import { uiOptionIsSet, uiOptionsToUrl } from "$l/search/ui.js";
+    import Button from "$l/style/Button.svelte";
 
     export let options: SearchUiOptions = {};
 

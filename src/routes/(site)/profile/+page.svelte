@@ -9,9 +9,9 @@
         saveHotkeys as saveHotkeysToStorage,
         saveProfile as saveProfileToStorage,
         textColorForBackground,
-    } from "$lib/play/profile.js";
-    import { stringIsHexColor } from "$lib/utils/string.js";
-    import Button from "$lib/style/Button.svelte";
+    } from "$l/play/profile.js";
+    import { stringIsHexColor } from "$l/utils/string.js";
+    import Button from "$l/style/Button.svelte";
 </script>
 
 <script lang="ts">

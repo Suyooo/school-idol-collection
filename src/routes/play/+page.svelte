@@ -2,19 +2,18 @@
     import { onMount, setContext } from "svelte";
     import { type Readable, type Writable, writable } from "svelte/store";
     import "svooltip/styles.css";
-    import type { SnapFunction } from "@interactjs/types";
-    import type { Point } from "@interactjs/types/index";
+    import "@interactjs/types";
     import "../../app.css";
-    import { cardTitle } from "$lib/card/strings.js";
-    import { CardOrientation } from "$lib/enums/cardOrientation.js";
-    import Language from "$lib/enums/language.js";
-    import { type CardWithImageData, loadCardInfo } from "$lib/play/cardInfo.js";
-    import { LocalClientGameLogic } from "$lib/play/logic/local.js";
-    import { loadProfileOrNew } from "$lib/play/profile.js";
-    import type { ClientGameLogic, ClientGameSchema, ClientPlayerSchema } from "$lib/play/schema.js";
-    import { type HandCardSchema, StackType } from "$lib/play/schema.js";
-    import Button from "$lib/style/Button.svelte";
-    import Spinner from "$lib/style/icons/Spinner.svelte";
+    import { cardTitle } from "$l/card/strings.js";
+    import { CardOrientation } from "$l/enums/cardOrientation.js";
+    import Language from "$l/enums/language.js";
+    import { type CardWithImageData, loadCardInfo } from "$l/play/cardInfo.js";
+    import { LocalClientGameLogic } from "$l/play/logic/local.js";
+    import { loadProfileOrNew } from "$l/play/profile.js";
+    import type { ClientGameLogic, ClientGameSchema, ClientPlayerSchema } from "$l/play/schema.js";
+    import { type HandCardSchema, StackType } from "$l/play/schema.js";
+    import Button from "$l/style/Button.svelte";
+    import Spinner from "$l/style/icons/Spinner.svelte";
     import CardInfoRows from "../(site)/card/[cardNo]/CardInfoRows.svelte";
     import FieldObject from "./FieldObject.svelte";
     import HandObject from "./HandObject.svelte";
@@ -32,13 +31,13 @@
     ) => void;
 
     export type FieldPositionFunction = {
-        (boundingBox: DOMRect): Point;
-        (x: number, y: number): Point;
+        (boundingBox: DOMRect): Interact.Point;
+        (x: number, y: number): Interact.Point;
     };
 </script>
 
 <script lang="ts">
-    import { type LiveModeStore, createLiveModeStore } from "$lib/play/livemode.js";
+    import { type LiveModeStore, createLiveModeStore } from "$l/play/livemode.js";
     import PlusMinusButtons from "./PlusMinusButtons.svelte";
 
     let menuOpenedByCardNo: string | undefined,
@@ -122,7 +121,7 @@
     setContext("liveModeCards", liveModeCards);
 
     const fieldZoom: Writable<number> = writable(1);
-    function snapFunction(): SnapFunction {
+    function snapFunction(): Interact.SnapFunction {
         return (x, y, interaction) => {
             if (interaction.element?.classList.contains("inhand")) {
                 return { x, y };
@@ -140,7 +139,7 @@
             };
         };
     }
-    function fieldPositionFunction(a: DOMRect | number, b?: number): Point {
+    function fieldPositionFunction(a: DOMRect | number, b?: number): Interact.Point {
         const isFixedXY = typeof a === "number";
         const x = isFixedXY ? a : a.left;
         const y = isFixedXY ? b! : a.top;

@@ -8,13 +8,13 @@ const config = {
     preprocess: vitePreprocess(),
     moduleExtensions: [".js", ".mjs", ".cjs", ".ts"],
     kit: {
-        adapter: adapter(),
         alias: {
-            $lib: "src/lib",
-            $models: "src/models",
+            $l: "src/lib",
+            $m: "src/models",
         },
+        adapter: adapter(),
         prerender: {
-            handleHttpError: ({ path, referrer, message }) => {
+            handleHttpError: ({ path, message }) => {
                 if (path.startsWith("/admin")) {
                     return;
                 }

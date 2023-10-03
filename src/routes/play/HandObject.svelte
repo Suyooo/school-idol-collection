@@ -2,9 +2,9 @@
     import { getContext } from "svelte";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
-    import type { DropEvent } from "@interactjs/types/index";
-    import type { LiveModeStore } from "$lib/play/livemode.js";
-    import type { ClientGameLogic, HandCardSchema } from "$lib/play/schema.js";
+    import "@interactjs/types";
+    import type { LiveModeStore } from "$l/play/livemode.js";
+    import type { ClientGameLogic, HandCardSchema } from "$l/play/schema.js";
     import HandCardObject from "./HandCardObject.svelte";
     import HandIndicator from "./HandIndicator.svelte";
 </script>
@@ -16,7 +16,7 @@
 
     let draggingHandCardIdx: number | null = null;
     let indicatorPos: number | null = null;
-    export function getHandIndex(event: DropEvent): number {
+    export function getHandIndex(event: Interact.DropEvent): number {
         const sizeOffset = draggingHandCardIdx === null ? 0 : 1;
         if (hand.length - sizeOffset === 0) {
             return 0;
@@ -52,9 +52,9 @@
             overlap: "center",
             listeners: {
                 enter(event) {
-                    event.relatedTarget.classList.add("inhand");
-                    if (event.relatedTarget.classList.contains("objcardhand")) {
-                        draggingHandCardIdx = parseInt(event.relatedTarget.dataset.idx!);
+                    event.relatedTarget!.classList.add("inhand");
+                    if (event.relatedTarget!.classList.contains("objcardhand")) {
+                        draggingHandCardIdx = parseInt(event.relatedTarget!.dataset.idx!);
                         if (hand.length === 1) {
                             skipAnimations();
                         }

@@ -3,9 +3,9 @@
     import type { Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
-    import { textColorForBackground } from "$lib/play/profile.js";
-    import { ClientGameLogic, StackSide, StackType } from "$lib/play/schema.js";
-    import { stringIsHexColor } from "$lib/utils/string.js";
+    import { textColorForBackground } from "$l/play/profile.js";
+    import { ClientGameLogic, StackSide, StackType } from "$l/play/schema.js";
+    import { stringIsHexColor } from "$l/utils/string.js";
     import type { OpenMenuFunction } from "./+page.svelte";
 </script>
 

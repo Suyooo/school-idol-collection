@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type Card from "$models/card/card.js";
+    import type Card from "$m/card/card.js";
     import {
         cardBirthday,
         cardCost,
@@ -10,7 +10,7 @@
         cardTitle,
         cardType,
         cardYear,
-    } from "$lib/card/strings.js";
+    } from "$l/card/strings.js";
     import {
         cardHasAttrPieceRequirement,
         cardHasBirthdayPieces,
@@ -19,15 +19,15 @@
         cardIsIdolizable,
         cardIsMember,
         cardIsSong,
-    } from "$lib/card/types.js";
-    import AttributeEnum from "$lib/enums/attribute.js";
-    import GroupEnum from "$lib/enums/group.js";
-    import Language from "$lib/enums/language.js";
-    import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
-    import { escapeForUrl } from "$lib/utils/string.js";
-    import Ability from "$lib/format/Ability.svelte";
-    import PieceCount from "$lib/format/PieceCount.svelte";
-    import Skill from "$lib/format/Skill.svelte";
+    } from "$l/card/types.js";
+    import AttributeEnum from "$l/enums/attribute.js";
+    import GroupEnum from "$l/enums/group.js";
+    import Language from "$l/enums/language.js";
+    import type CardPageExtraInfo from "$l/types/cardPageExtraInfo.js";
+    import { escapeForUrl } from "$l/utils/string.js";
+    import Ability from "$l/format/Ability.svelte";
+    import PieceCount from "$l/format/PieceCount.svelte";
+    import Skill from "$l/format/Skill.svelte";
 
     export let card: Card;
     export let hideSharedId: boolean = false;

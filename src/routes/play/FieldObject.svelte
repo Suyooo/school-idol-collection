@@ -3,7 +3,7 @@
     import type { Readable, Writable } from "svelte/store";
     import interact from "@interactjs/interact/index";
     import "@interactjs/actions/drop";
-    import CardType from "$lib/enums/cardType.js";
+    import CardType from "$l/enums/cardType.js";
     import {
         type ClientFieldCardSchema,
         type ClientFieldGroupSchema,
@@ -13,15 +13,15 @@
         type ClientProfile,
         StackSide,
         StackType,
-    } from "$lib/play/schema.js";
+    } from "$l/play/schema.js";
     import FieldCardObject from "./FieldCardObject.svelte";
     import FieldGroupObject from "./FieldGroupObject.svelte";
     import StackObject from "./StackObject.svelte";
 </script>
 
 <script lang="ts">
-    import type { LiveModeStore } from "$lib/play/livemode.js";
-    import { type HotkeyAction, keyEventToHotkeyName, loadHotkeysOrDefault } from "$lib/play/profile.js";
+    import type { LiveModeStore } from "$l/play/livemode.js";
+    import { type HotkeyAction, keyEventToHotkeyName, loadHotkeysOrDefault } from "$l/play/profile.js";
     import PlusMinusButtons from "./PlusMinusButtons.svelte";
 
     export let playerIdx: number;
