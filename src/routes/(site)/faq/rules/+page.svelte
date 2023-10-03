@@ -127,9 +127,9 @@
                 Memory cards are a third type of cards, in addition to the Member and Song cards you already know. They are
                 not part of either your Deck or Set List. Instead, you bring them onto your Stage from your
                 <span class="text-highlight-red">Collection</span> - which refers to all the cards you own, but are not
-                already used in your Deck or Set List.<br />In tournament games, to make sure you don't have to deal
-                with your entire Collection all the time, it is treated more like an extra deck in other TCGs, which you
-                prepare with all the cards you might want to use during a match.
+                already used in your Deck or Set List.<br />In tournament games, to avoid having to deal with your
+                entire Collection all the time, it is treated more like an extra deck in other TCGs - which you prepare
+                with all the cards you might want to use during a game, before the match.
                 <a href="/faq/general#collection">The FAQ about Collections</a>
                 have more information about how the Collection is defined and how it works in deckbuilding.<br />
                 <br />

@@ -84,6 +84,7 @@
                 <a href="/faq">How To Play</a>
                 <a href="/search">Search</a>
                 <a href="/labels">Label Printer</a>
+                <a href="/about">About</a>
             </div>
         </div>
         <form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
