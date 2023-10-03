@@ -31,7 +31,7 @@ CREATE TABLE `Annotations` (
   PRIMARY KEY (`id`),
   KEY `skillId` (`skillId`),
   CONSTRAINT `Annotations_ibfk_1` FOREIGN KEY (`skillId`) REFERENCES `Skills` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=273 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=275 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -265,7 +265,6 @@ INSERT INTO `Annotations` VALUES
 (237,1476,1,2,'Unchanging Feelings'),
 (238,1476,1,2,'Unchanging Feelings'),
 (240,638,1,3,'Brightest Melody'),
-(241,493,1,4,'Take another turn'),
 (242,966,1,1,'Mogyutto “love” de Sekkin chuu!'),
 (243,966,1,3,'Mogyutto “love” de Sekkin chuu!'),
 (244,607,1,1,'Next SPARKLING!!'),
@@ -283,7 +282,8 @@ INSERT INTO `Annotations` VALUES
 (267,1046,1,3,'MIRAI TICKET'),
 (268,1040,1,3,'MIRAI TICKET'),
 (269,1040,1,1,'MIRAI TICKET'),
-(272,967,1,1,'Mermaid festa vol.1');
+(272,967,1,1,'Mermaid festa vol.1'),
+(274,493,1,4,'Take another turn');
 /*!40000 ALTER TABLE `Annotations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -6664,7 +6664,7 @@ CREATE TABLE `Links` (
   KEY `to` (`to`),
   CONSTRAINT `Links_ibfk_1` FOREIGN KEY (`from`) REFERENCES `Annotations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Links_ibfk_2` FOREIGN KEY (`to`) REFERENCES `Cards` (`cardNo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2666 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2708 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8362,27 +8362,6 @@ INSERT INTO `Links` VALUES
 (2062,240,'LL14-090'),
 (2063,240,'LL14-091'),
 (2064,240,'LL14-092'),
-(2065,241,'LL01-070'),
-(2066,241,'LL03-068'),
-(2067,241,'LL04-063'),
-(2068,241,'LL05-063'),
-(2069,241,'LL06-047'),
-(2070,241,'LL07-046'),
-(2071,241,'LL07-063'),
-(2072,241,'LL08-051'),
-(2073,241,'LL09-061'),
-(2074,241,'LL12-055'),
-(2075,241,'LL12-063'),
-(2076,241,'LL13-060'),
-(2077,241,'LL15-063'),
-(2078,241,'EX05-038'),
-(2079,241,'EX11-004'),
-(2080,241,'EX11-033'),
-(2081,241,'EX11-034'),
-(2082,241,'EX11-047'),
-(2083,241,'EX14-038'),
-(2084,241,'EX15-E06'),
-(2085,241,'PR-173'),
 (2086,242,'LL01-065'),
 (2087,242,'EX01-032'),
 (2088,243,'LL01-019'),
@@ -8728,7 +8707,28 @@ INSERT INTO `Links` VALUES
 (2660,268,'LL06-027'),
 (2661,269,'LL05-063'),
 (2662,269,'LL09-056'),
-(2665,272,'LL02-068');
+(2665,272,'LL02-068'),
+(2687,274,'LL01-070'),
+(2688,274,'LL03-068'),
+(2689,274,'LL04-063'),
+(2690,274,'LL05-063'),
+(2691,274,'LL06-047'),
+(2692,274,'LL07-046'),
+(2693,274,'LL07-063'),
+(2694,274,'LL08-051'),
+(2695,274,'LL09-061'),
+(2696,274,'LL12-055'),
+(2697,274,'LL12-063'),
+(2698,274,'LL13-060'),
+(2699,274,'LL15-063'),
+(2700,274,'EX05-038'),
+(2701,274,'EX11-004'),
+(2702,274,'EX11-033'),
+(2703,274,'EX11-034'),
+(2704,274,'EX11-047'),
+(2705,274,'EX14-038'),
+(2706,274,'EX15-E06'),
+(2707,274,'PR-173');
 /*!40000 ALTER TABLE `Links` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -9347,7 +9347,7 @@ INSERT INTO `Skills` VALUES
 (490,'LL12-052',NULL,1,165,'【ライブ参加時】この《ライブ》に参加するほかのメンバーが持つピースがすべて同じ種類なら、＋【赤】する。','[Live Join] If the all the Pieces of all other Members joining this ⟪LIVE⟫ have the same attribute ([SMILE], [PURE], [COOL] or [ALL]), gain +[SMILE].'),
 (491,'LL12-053',NULL,0,166,'【登場時】『あなたのデッキの１番上のカードを表向きにして、手札からメンバー１人を全員に見せる。』を行ってよい。そうしたら、次にターンを行うあいてはどちらかのメンバーを選び、あなたはそれを《登場》する。','[Entry] You may flip the top card of your deck and show one Member from your Hand to everyone. If you do, the next player in turn order must choose one of these Members. ⟪ENTER⟫ that chosen Member.'),
 (492,'LL12-054',NULL,0,167,'【オート】あなたがこのメンバーを手札からデッキに置くなら、デッキに置く代わりにこのメンバーを《登場》してよい。','[Auto] If you to return this card from your Hand to your Deck, you may ⟪ENTER⟫ it instead of putting it in the Deck.'),
-(493,'LL12-055',NULL,0,168,'【ライブ中】あなたとすべてのあいてのほかの楽曲カードのスキルに書かれている『{{skilltext:もう１回ターンを行う。}}』は『《勧誘》する。』になる。','[While Live] When resolving Skills on your and any other player\'s Song cards besides this one, treat each occurence of \"{{skilltext:Take another turn}}\" as \"⟪SCOUT⟫\".'),
+(493,'LL12-055',NULL,0,168,'【ライブ中】あなたとすべてのあいてのほかの楽曲カードのスキルに書かれている『{{skilltext:もう１回ターンを行う。}}』は『《勧誘》する。』になる。','[While Live] When resolving Skills on your or another player\'s Song cards besides this one, treat each occurence of \"{{skilltext:Take another turn}}\" as \"⟪SCOUT⟫\".'),
 (494,'LL12-056',NULL,0,169,'【オート】あなたのターンに、この楽曲カードが表向きになったとき、《勧誘》する。','[Auto] On your turn, after this card is flipped face-up, ⟪SCOUT⟫.'),
 (495,'LL12-056',NULL,1,170,'【ライブ参加時】あなたのステージにメンバーが９人以上いるなら、この《ライブ》に参加するメンバー１人に＋【緑】する。','[Live Join] If there are nine or more Members on your Stage, one Member joining this ⟪LIVE⟫ gains +[PURE].'),
 (496,'LL12-057',NULL,0,171,'【ライブ参加時】あなたのライブ中の「CYaRon！」の楽曲カード１枚につき、共通スコアが１減る。（この楽曲カードは枚数に含めない。）','[Live Join] For each \"CYaRon!\" Song card that is Live on your Stage, the Any Piece requirement is reduced by 1. (Do not count this card.)'),
@@ -10605,7 +10605,7 @@ INSERT INTO `TranslationPatterns` VALUES
 (165,2,'^この《ライブ》に参加するほかのメンバーが持つピースがすべて同じ種類なら、＋((?:【(?:オール|赤|緑|青)】)+)する。$','If the all the Pieces of all other Members joining this ⟪LIVE⟫ have the same attribute ([SMILE], [PURE], [COOL] or [ALL]), gain +<1>.','7'),
 (166,1,'^『あなたのデッキの１番上のカードを表向きにして、手札からメンバー([０-９]+)人を全員に見せる。』を行ってよい。そうしたら、次にターンを行うあいてはどちらかのメンバーを選び、あなたはそれを《登場》する。$','You may flip the top card of your deck and show <1> Member<1s> from your Hand to everyone. If you do, the next player in turn order must choose one of these Members. ⟪ENTER⟫ that chosen Member.','5'),
 (167,32,'^あなたがこのメンバーを手札からデッキに置くなら、デッキに置く代わりにこのメンバーを《登場》してよい。$','If you to return this card from your Hand to your Deck, you may ⟪ENTER⟫ it instead of putting it in the Deck.',''),
-(168,8,'^あなたとすべてのあいてのほかの楽曲カードのスキルに書かれている『{{skilltext:もう１回ターンを行う。}}』は『《勧誘》する。』になる。$','When resolving Skills on your and any other player\'s Song cards besides this one, treat each occurence of \"{{skilltext:Take another turn}}\" as \"⟪SCOUT⟫\".',''),
+(168,8,'^あなたとすべてのあいてのほかの楽曲カードのスキルに書かれている『{{skilltext:もう１回ターンを行う。}}』は『《勧誘》する。』になる。$','When resolving Skills on your or another player\'s Song cards besides this one, treat each occurence of \"{{skilltext:Take another turn}}\" as \"⟪SCOUT⟫\".',''),
 (169,32,'^あなたのターンに、この楽曲カードが表向きになったとき、《勧誘》する。$','On your turn, after this card is flipped face-up, ⟪SCOUT⟫.',''),
 (170,2,'^あなたのステージにメンバーが([０-９]+)人以上いるなら、この《ライブ》に参加するメンバー([０-９]+)人に＋((?:【(?:オール|赤|緑|青)】)+)する。$','If there are <1> or more Members on your Stage, <2> Member<2s> joining this ⟪LIVE⟫ gain<2sr> +<3>.','557'),
 (171,2,'^あなたのライブ中の「([^「」]+?)」の楽曲カード１枚につき、共通スコアが([０-９]+)減る。（この楽曲カードは枚数に含めない。）$','For each \"<1>\" Song card that is Live on your Stage, the Any Piece requirement is reduced by <2>. (Do not count this card.)','04'),
@@ -11231,4 +11231,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-02 19:15:14
+-- Dump completed on 2023-10-04  0:27:50

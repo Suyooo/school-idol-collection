@@ -1,4 +1,18 @@
-// noinspection JSNonASCIINames
+import * as fs from "fs";
+import { JSDOM } from "jsdom";
+import probeImageSize from "probe-image-size";
+import { Op } from "@sequelize/core";
+import { error, json } from "@sveltejs/kit";
+import type Card from "$m/card/card.js";
+import type { CardMember, CardSongWithAnyReq, CardSongWithAttrReq } from "$m/card/card.js";
+import type CardMemberExtraInfo from "$m/card/memberExtraInfo.js";
+import type CardMemberGroup from "$m/card/memberGroup.js";
+import type CardMemberIdolizePieceExtraInfo from "$m/card/memberIdolizePieceExtraInfo.js";
+import type CardSongAnyReqExtraInfo from "$m/card/songAnyReqExtraInfo.js";
+import type CardSongAttrReqExtraInfo from "$m/card/songAttrReqExtraInfo.js";
+import type CardSongExtraInfo from "$m/card/songExtraInfo.js";
+import type { Sequelize } from "$m/db.js";
+import type Skill from "$m/skill/skill.js";
 import AnnotationEnum from "$l/enums/annotation.js";
 import AttributeEnum from "$l/enums/attribute.js";
 import CardMemberGroupType from "$l/enums/cardMemberGroupType.js";
@@ -11,21 +25,6 @@ import ImportError from "$l/errors/importError.js";
 import { getScopesFromFilters } from "$l/search/query.js";
 import { appendTriggersToString, tryAllPatterns } from "$l/translation/skills.js";
 import type { RangeCost, RangeDay, RangeMonth, RangeYear } from "$l/types/ranges.js";
-import type Card from "$m/card/card.js";
-import type { CardMember, CardSongWithAnyReq, CardSongWithAttrReq } from "$m/card/card.js";
-import type CardMemberExtraInfo from "$m/card/memberExtraInfo.js";
-import type CardMemberGroup from "$m/card/memberGroup.js";
-import type CardMemberIdolizePieceExtraInfo from "$m/card/memberIdolizePieceExtraInfo.js";
-import type CardSongAnyReqExtraInfo from "$m/card/songAnyReqExtraInfo.js";
-import type CardSongAttrReqExtraInfo from "$m/card/songAttrReqExtraInfo.js";
-import type CardSongExtraInfo from "$m/card/songExtraInfo.js";
-import type { Sequelize } from "$m/db.js";
-import type Skill from "$m/skill/skill.js";
-import * as fs from "fs";
-import { JSDOM } from "jsdom";
-import probeImageSize from "probe-image-size";
-import { Op } from "@sequelize/core";
-import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types.js";
 
 const nameNormalizations: { [k: string]: string } = {};
@@ -207,12 +206,20 @@ function applyFixes(
     }
 
     // Fix for EX09 Member cards: Broken birthday dates
-    else if (cardNo === "EX09-055") info["誕生日"] = "1月1日";
-    else if (cardNo === "EX09-056") info["誕生日"] = "4月17日";
-    else if (cardNo === "EX09-057") info["誕生日"] = "7月13日";
-    else if (cardNo === "EX09-058") info["誕生日"] = "3月4日";
-    else if (cardNo === "EX09-059") info["誕生日"] = "6月13日";
-    else if (cardNo === "EX09-060") info["誕生日"] = "9月21日";
+    else if (cardNo === "EX09-055") {
+        info["誕生日"] = "1月1日";
+    } else if (cardNo === "EX09-056") {
+        info["誕生日"] = "4月17日";
+    } else if (cardNo === "EX09-057") {
+        info["誕生日"] = "7月13日";
+    } else if (cardNo === "EX09-058") {
+        info["誕生日"] = "3月4日";
+    } else if (cardNo === "EX09-059") {
+        info["誕生日"] = "6月13日";
+    } else if (cardNo === "EX09-060") {
+        info["誕生日"] = "9月21日";
+    }
+
     // Fix for EX11-041: The Skill text uses a non-matching bracket on one side
     else if (cardNo === "EX11-041") {
         info["スキル"] = info["スキル"]!.substring(0, info["スキル"]!.length - 1) + "）";
