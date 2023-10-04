@@ -1,6 +1,6 @@
-import type { GroupID } from "$l/enums/group.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, Table } from "@sequelize/core/decorators-legacy";
+import type { GroupID } from "$l/enums/group.js";
 
 @Table({
     modelName: "TranslationName",
@@ -16,14 +16,14 @@ export default class TranslationName extends Model {
     declare id: number;
 
     @Attribute({
-        type: DataTypes.STRING(4096),
+        type: DataTypes.STRING(512),
         unique: true,
         allowNull: false,
     })
     declare jpn: string;
 
     @Attribute({
-        type: DataTypes.STRING(4096),
+        type: DataTypes.STRING(512),
         allowNull: false,
     })
     declare eng: string;

@@ -10344,11 +10344,11 @@ DROP TABLE IF EXISTS `TranslationNames`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `TranslationNames` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `jpn` varchar(4096) NOT NULL,
-  `eng` varchar(4096) NOT NULL,
+  `jpn` varchar(512) NOT NULL,
+  `eng` varchar(512) NOT NULL,
   `group` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `translation_names_jpn_unique` (`jpn`) USING HASH
+  UNIQUE KEY `translation_names_jpn_unique` (`jpn`)
 ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -11019,11 +11019,11 @@ DROP TABLE IF EXISTS `TranslationSongs`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `TranslationSongs` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `jpn` varchar(4096) NOT NULL,
-  `eng` varchar(4096) NOT NULL,
+  `jpn` varchar(512) NOT NULL,
+  `eng` varchar(512) NOT NULL,
   `group` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `translation_songs_jpn_unique` (`jpn`) USING HASH
+  UNIQUE KEY `translation_songs_jpn_unique` (`jpn`)
 ) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -11231,4 +11231,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-04  0:27:50
+-- Dump completed on 2023-10-04 17:18:51
