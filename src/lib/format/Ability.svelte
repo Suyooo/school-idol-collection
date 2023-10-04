@@ -16,14 +16,17 @@
 
 {#if rush}
     {#if live}
-        <span class="skill-icon rush" title="{lbr}RUSH{rbr}/{lbr}LIVE{rbr}">{lbr}RUSH{rbr}</span>
-        <span class="skill-icon or" title="{lbr}RUSH{rbr}/{lbr}LIVE{rbr}">/</span>
-        <span class="skill-icon live" title="{lbr}RUSH{rbr}/{lbr}LIVE{rbr}">{lbr}LIVE{rbr}</span>
+        {@const title = `${lbr}RUSH${rbr}/${lbr}LIVE${rbr}`}
+        <span class="skill-icon rush" {title}>{lbr}RUSH{rbr}</span>
+        <span class="skill-icon or" {title}>/</span>
+        <span class="skill-icon live" {title}>{lbr}LIVE{rbr}</span>
     {:else}
-        <span class="skill-icon rush" title="{lbr}RUSH{rbr}">{lbr}RUSH{rbr}</span>
+        {@const title = `${lbr}RUSH${rbr}`}
+        <span class="skill-icon rush" {title}>{title}</span>
     {/if}
 {:else if live}
-    <span class="skill-icon live" title="{lbr}LIVE{rbr}">{lbr}LIVE{rbr}</span>
+    {@const title = `${lbr}LIVE${rbr}`}
+    <span class="skill-icon live" {title}>{title}</span>
 {:else}
     —
 {/if}

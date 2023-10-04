@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+    import { tooltip } from "svooltip";
     import {
         type HotkeyAction,
         type Hotkeys,
@@ -25,6 +26,14 @@
         return "#000000";
     }
 
+    let blockedByEmptyName: boolean, blockedByInvalidColor: boolean, profileIsBlocked: boolean;
+    $: blockedByEmptyName = !profile.name || profile.name.length === 0;
+    $: blockedByInvalidColor =
+        !stringIsHexColor(profile.fieldColor) ||
+        !stringIsHexColor(profile.deckColor) ||
+        !stringIsHexColor(profile.setListColor);
+    $: profileIsBlocked = blockedByEmptyName || blockedByInvalidColor;
+
     function saveProfile() {
         saveProfileToStorage(profile);
         profileButtonLabel = "Profile Saved!";
@@ -35,6 +44,9 @@
         const key = keyEventToHotkeyName(e);
         if (key) hotkeys[action] = key;
     }
+
+    let hotkeysIsBlocked: boolean;
+    $: hotkeysIsBlocked = Object.values(hotkeys).some((v, i, a) => a.indexOf(v) !== i);
 
     function saveHotkeys() {
         saveHotkeysToStorage(hotkeys);
@@ -77,17 +89,20 @@
                         <input class="flex-grow" bind:value={profile.setListColor} pattern={"#[a-fA-F0-9]{6}"} />
                     </div>
                     <div class="w-full col-span-full flex justify-end">
-                        <Button
-                            label="Save Profile"
-                            accent
-                            on:click={saveProfile}
-                            disabled={profile.name.length === 0 ||
-                                !stringIsHexColor(profile.fieldColor) ||
-                                !stringIsHexColor(profile.deckColor) ||
-                                !stringIsHexColor(profile.setListColor)}
+                        <div
+                            use:tooltip={{
+                                content: blockedByEmptyName
+                                    ? "You must set a name."
+                                    : "All colors must be valid hex colors.",
+                                placement: "top",
+                                offset: -5,
+                                visibility: profileIsBlocked,
+                            }}
                         >
-                            {profileButtonLabel}
-                        </Button>
+                            <Button label="Save Profile" accent on:click={saveProfile} disabled={profileIsBlocked}>
+                                {profileButtonLabel}
+                            </Button>
+                        </div>
                     </div>
                 </div>
                 <div class="flex-grow flex flex-col">
@@ -192,14 +207,18 @@
                     pattern={Object.values(hotkeys).filter((e) => e === hotkeys["flip"]).length > 1 ? "" : undefined}
                 />
                 <div class="w-full col-span-full flex justify-end">
-                    <Button
-                        label="Save Hotkeys"
-                        accent
-                        on:click={saveHotkeys}
-                        disabled={Object.values(hotkeys).some((v, i, a) => a.indexOf(v) !== i)}
+                    <div
+                        use:tooltip={{
+                            content: "You cannot bind multiple hotkeys to the same key.",
+                            placement: "top",
+                            offset: -5,
+                            visibility: hotkeysIsBlocked,
+                        }}
                     >
-                        {hotkeysButtonLabel}
-                    </Button>
+                        <Button label="Save Hotkeys" accent on:click={saveHotkeys} disabled={hotkeysIsBlocked}>
+                            {hotkeysButtonLabel}
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
