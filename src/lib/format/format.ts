@@ -1,9 +1,11 @@
 import type { SvelteComponent } from "svelte";
+import type Skill from "$m/skill/skill.js";
 import AnnotationEnum from "$l/enums/annotation.js";
 import AttributeEnum from "$l/enums/attribute.js";
 import CardType from "$l/enums/cardType.js";
 import Language from "$l/enums/language.js";
 import TriggerEnum from "$l/enums/trigger.js";
+import { toNumWithFullwidth } from "$l/utils/string.js";
 import Ability from "$l/format/Ability.svelte";
 import AnnotationComponent from "$l/format/AnnotationComponent.svelte";
 import Idolized from "$l/format/Idolized.svelte";
@@ -11,8 +13,6 @@ import Piece from "$l/format/Piece.svelte";
 import PieceCount from "$l/format/PieceCount.svelte";
 import Star from "$l/format/Star.svelte";
 import TriggerComponent from "$l/format/TriggerComponent.svelte";
-import { toNumWithFullwidth } from "$l/utils/string.js";
-import type Skill from "$m/skill/skill.js";
 
 export interface TextNode {
     text: string;
@@ -82,7 +82,14 @@ export function parseSkillToNodes(
 ): ParseNodePrepared[] {
     const isSkillObj = skill !== null && typeof skill !== "string";
     const skillString: string | null = isSkillObj ? (lang === Language.ENG ? skill.eng : skill.jpn) : skill;
-    if (skillString === null) return <ParseNodePrepared[]>[{ text: "—" }];
+
+    if (skillString === null) {
+        const secret = Symbol();
+        const nodes = <ParseNode[]>[{ secret, element: "i" }, { text: "(no translation yet)" }, { secret }];
+        formElementNodes(nodes);
+        return <ParseNodePrepared[]>nodes;
+    }
+
     const nodes: ParseNode[] = [{ text: skillString }];
 
     if (lang === Language.ENG) {

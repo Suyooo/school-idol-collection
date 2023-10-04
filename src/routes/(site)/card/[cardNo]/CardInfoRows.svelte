@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { slide } from "svelte-reduced-motion/transition";
     import type Card from "$m/card/card.js";
     import {
         cardBirthday,
@@ -28,107 +29,101 @@
     import Ability from "$l/format/Ability.svelte";
     import PieceCount from "$l/format/PieceCount.svelte";
     import Skill from "$l/format/Skill.svelte";
+    import Collapse from "$l/style/icons/Collapse.svelte";
+    import Expand from "$l/style/icons/Expand.svelte";
 
     export let card: Card;
     export let hideSharedId: boolean = false;
     export let hideBacklinks: boolean = false;
     export let hideFaq: boolean = false;
-    export let forceSingleColumn: boolean = false;
     let cardWithSharedIdCards: Card & CardPageExtraInfo<true, boolean>;
     $: if (!hideSharedId) cardWithSharedIdCards = card as Card & CardPageExtraInfo<true, boolean>;
+
+    let showJpnSkill: boolean = card.skills.some((s) => s.eng === null),
+        showJpnGroupSkill: boolean = card.member?.group?.skills.some((s) => s.eng === null) ?? false;
 </script>
 
-<div class="row gap">
-    <div class="inforow" class:col-half={!forceSingleColumn}>
-        <div>
-            Card ID
-            {#if !hideSharedId && cardWithSharedIdCards.sameId.length > 0}
-                <br /><span>Shared With</span>
+<div class="-mx-4 grid" class:!grid-cols-[1fr_2fr_auto]={$$slots.default}>
+    {#if $$slots.default}
+        <div class="col-start-3 self-center" style:grid-row="1 / 20">
+            <slot />
+        </div>
+    {/if}
+
+    <div class="header">
+        Card ID
+        {#if !hideSharedId && cardWithSharedIdCards.sameId.length > 0}
+            <br /><span class="subheader">Shared With</span>
+        {/if}
+    </div>
+    <div class="value">
+        {cardId(card)}
+        {#if !hideSharedId}
+            {#each cardWithSharedIdCards.sameId as sameIdCard (sameIdCard.cardNo)}
+                <br />
+                <a href="/card/{sameIdCard.cardNo}">
+                    {sameIdCard.cardNo}
+                    <span class="rarity">{cardRarityShort(sameIdCard)}</span>
+                </a>
+            {/each}
+        {/if}
+    </div>
+
+    <div class="header">Type</div>
+    <div class="value">{cardType(card)}</div>
+
+    <div class="header">Group</div>
+    <div class="value">{GroupEnum.fromId(card.group).toNameWithSuper(", ")}</div>
+
+    {#if cardIsMember(card)}
+        <div class="header">Cost</div>
+        <div class="value cost">
+            {#each cardCost(card) as c}
+                <span>{c}</span>
+            {/each}
+        </div>
+
+        <div class="header">Birthday</div>
+        <div class="value">{cardBirthday(card)}</div>
+
+        <div class="header">Year</div>
+        <div class="value">{cardYear(card)}</div>
+
+        <div class="header">Ability</div>
+        <div class="value">
+            <Ability rush={card.member.abilityRush} live={card.member.abilityLive} />
+        </div>
+
+        <div class="header">
+            Pieces
+            {#if cardIsIdolizable(card) && cardHasIdolizationPieces(card)}
+                <br /><span class="subheader">Idolized</span>
+            {/if}
+            {#if cardHasBirthdayPieces(card)}
+                <br /><span class="subheader">Birthday</span>
             {/if}
         </div>
-        <div>
-            {cardId(card)}
-            {#if !hideSharedId}
-                {#each cardWithSharedIdCards.sameId as sameIdCard (sameIdCard.cardNo)}
-                    <br />
-                    <a href="/card/{sameIdCard.cardNo}">
-                        {sameIdCard.cardNo}
-                        <span class="rarity">{cardRarityShort(sameIdCard)}</span>
-                    </a>
-                {/each}
+        <div class="value">
+            <PieceCount pieces={card.member} />
+            {#if cardIsIdolizable(card) && cardHasIdolizationPieces(card)}
+                <br />
+                <PieceCount pieces={card.member.idolizeBonus} />
+            {/if}
+            {#if cardHasBirthdayPieces(card)}
+                <br />
+                <PieceCount
+                    pieces={{
+                        piecesAll: card.member.pieceBdayAttribute === AttributeEnum.ALL.id ? 1 : 0,
+                        piecesSmile: card.member.pieceBdayAttribute === AttributeEnum.SMILE.id ? 1 : 0,
+                        piecesPure: card.member.pieceBdayAttribute === AttributeEnum.PURE.id ? 1 : 0,
+                        piecesCool: card.member.pieceBdayAttribute === AttributeEnum.COOL.id ? 1 : 0,
+                    }}
+                />
             {/if}
         </div>
-    </div>
-    <div class="inforow" class:col-half={!forceSingleColumn}>
-        <div>Type</div>
-        <div>{cardType(card)}</div>
-    </div>
-</div>
-{#if cardIsMember(card)}
-    <div class="row">
-        <div class="inforow" class:col-half={!forceSingleColumn}>
-            <div>Group</div>
-            <div>{GroupEnum.fromId(card.group).toNameWithSuper(", ")}</div>
-        </div>
-        <div class="inforow" class:col-half={!forceSingleColumn}>
-            <div>Cost</div>
-            <div class="cost">
-                {#each cardCost(card) as c}
-                    <span>{c}</span>
-                {/each}
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="inforow" class:col-half={!forceSingleColumn}>
-            <div>Birthday</div>
-            <div>{cardBirthday(card)}</div>
-        </div>
-        <div class="inforow" class:col-half={!forceSingleColumn}>
-            <div>Year</div>
-            <div>{cardYear(card)}</div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="inforow" class:col-half={!forceSingleColumn}>
-            <div>Ability</div>
-            <div>
-                <Ability rush={card.member.abilityRush} live={card.member.abilityLive} />
-            </div>
-        </div>
-        <div class="inforow" class:col-half={!forceSingleColumn}>
-            <div>
-                Pieces
-                {#if cardIsIdolizable(card) && cardHasIdolizationPieces(card)}
-                    <br /><span>Idolized</span>
-                {/if}
-                {#if cardHasBirthdayPieces(card)}
-                    <br /><span>Birthday</span>
-                {/if}
-            </div>
-            <div>
-                <PieceCount pieces={card.member} />
-                {#if cardIsIdolizable(card) && cardHasIdolizationPieces(card)}
-                    <br />
-                    <PieceCount pieces={card.member.idolizeBonus} />
-                {/if}
-                {#if cardHasBirthdayPieces(card)}
-                    <br />
-                    <PieceCount
-                        pieces={{
-                            piecesAll: card.member.pieceBdayAttribute === AttributeEnum.ALL.id ? 1 : 0,
-                            piecesSmile: card.member.pieceBdayAttribute === AttributeEnum.SMILE.id ? 1 : 0,
-                            piecesPure: card.member.pieceBdayAttribute === AttributeEnum.PURE.id ? 1 : 0,
-                            piecesCool: card.member.pieceBdayAttribute === AttributeEnum.COOL.id ? 1 : 0,
-                        }}
-                    />
-                {/if}
-            </div>
-        </div>
-    </div>
-    <div class="row inforow" class:multicol={!forceSingleColumn}>
-        <div>Costume</div>
-        <div>
+
+        <div class="header">Costume</div>
+        <div class="value">
             {#if card.member.costumeJpn !== null}
                 <a href="/search/costume:{escapeForUrl(card.member.costumeEng ?? card.member.costumeJpn)}">
                     {card.member.costumeEng ?? card.member.costumeJpn}
@@ -137,97 +132,91 @@
                 —
             {/if}
         </div>
-    </div>
-{:else if cardIsSong(card)}
-    {@const songAttr = AttributeEnum.fromId(card.song.attribute)}
-    <div class="row">
-        <div class="inforow" class:col-half={!forceSingleColumn}>
-            <div>Group</div>
-            <div>{GroupEnum.fromId(card.group).toNameWithSuper(", ", false)}</div>
+    {:else if cardIsSong(card)}
+        {@const songAttr = AttributeEnum.fromId(card.song.attribute)}
+
+        <div class="header">Attribute</div>
+        <div class="value song-attr {songAttr.toCssClassName()}">
+            {songAttr.toSongAttributeName()}
         </div>
-        <div class="inforow" class:col-half={!forceSingleColumn}>
-            <div>Attribute</div>
-            <div class="song-attr {songAttr.toCssClassName()}">
-                {songAttr.toSongAttributeName()}
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="inforow" class:col-half={!forceSingleColumn}>
-            <div>Live Points</div>
-            <div>
-                {card.song.lpBase}
-                {#if card.song.lpBonus}
-                    ({#if card.song.lpBonus.toString().charAt(0) !== "-"}+{/if}{card.song.lpBonus})
-                {/if}
-            </div>
-        </div>
-        <div class="inforow" class:col-half={!forceSingleColumn}>
-            <div>Requirement</div>
-            <div>
-                {#if cardHasAttrPieceRequirement(card)}
-                    <PieceCount
-                        pieces={{
-                            piecesSmile: card.song.attrRequirement.piecesSmile,
-                            piecesPure: card.song.attrRequirement.piecesPure,
-                            piecesCool: card.song.attrRequirement.piecesCool,
-                        }}
-                        showZero
-                    />
-                {:else}
-                    <PieceCount
-                        pieces={{
-                            piecesAll: card.song.anyRequirement.piecesAll,
-                        }}
-                    />
-                {/if}
-            </div>
-        </div>
-    </div>
-{:else}
-    <div class="row inforow" class:multicol={!forceSingleColumn}>
-        <div>Group</div>
-        <div>{GroupEnum.fromId(card.group).toNameWithSuper(", ")}</div>
-    </div>
-{/if}
-{#if card.skills.length === 0}
-    <div class="row inforow gap" class:multicol={!forceSingleColumn}>
-        <div>Skill</div>
-        <div>—</div>
-    </div>
-{:else}
-    <div class="row inforow gap" class:multicol={!forceSingleColumn}>
-        <div>Skill</div>
-        <div>
-            {#each card.skills as skill (skill.id)}
-                <div>
-                    <Skill {skill} lang={Language.JPN} cardType={card.type} />
-                </div>
-            {/each}
-        </div>
-    </div>
-    <div class="row inforow" class:multicol={!forceSingleColumn}>
-        <div>
-            {#if import.meta.env.DEV}
-                {#each card.skills as skill (skill.id)}
-                    <span><a href="/admin/pattern/edit/{skill.patternId ?? 'new'}/{skill.id}">🖉</a></span><br />
-                {/each}
+
+        <div class="header">Live Points</div>
+        <div class="value">
+            {card.song.lpBase}
+            {#if card.song.lpBonus}
+                ({#if card.song.lpBonus.toString().charAt(0) !== "-"}+{/if}{card.song.lpBonus})
             {/if}
         </div>
-        <div>
+
+        <div class="header">Requirement</div>
+        <div class="value">
+            {#if cardHasAttrPieceRequirement(card)}
+                <PieceCount
+                    pieces={{
+                        piecesSmile: card.song.attrRequirement.piecesSmile,
+                        piecesPure: card.song.attrRequirement.piecesPure,
+                        piecesCool: card.song.attrRequirement.piecesCool,
+                    }}
+                    showZero
+                />
+            {:else}
+                <PieceCount
+                    pieces={{
+                        piecesAll: card.song.anyRequirement.piecesAll,
+                    }}
+                />
+            {/if}
+        </div>
+    {/if}
+
+    <div class="gap" />
+
+    {#if card.skills.length === 0}
+        <div class="header wide">Skill</div>
+        <div class="value wide">—</div>
+    {:else}
+        <button class="header wide relative flex items-start group" on:click={() => (showJpnSkill = !showJpnSkill)}>
+            Skill
+            <div class="absolute bottom-2.5 h-4 right-0 group-hover:text-accent-200">
+                {#if showJpnSkill}
+                    <Collapse />
+                {:else}
+                    <Expand />
+                {/if}
+            </div>
+        </button>
+        <div class="value wide">
             {#each card.skills as skill (skill.id)}
                 <div>
                     <Skill {skill} cardType={card.type} />
                 </div>
             {/each}
         </div>
-    </div>
-{/if}
 
-{#if cardIsMember(card) && cardHasGroup(card)}
-    <div class="row inforow gap" class:multicol={!forceSingleColumn}>
-        <div>{cardGroupType(card)} With</div>
-        <div>
+        {#if showJpnSkill}
+            <div class="header wide" transition:slide={{}}>
+                <span class="subheader">Japanese</span>
+                {#if import.meta.env.DEV}
+                    {#each card.skills as skill (skill.id)}
+                        <span><a href="/admin/pattern/edit/{skill.patternId ?? 'new'}/{skill.id}">🖉</a></span><br />
+                    {/each}
+                {/if}
+            </div>
+            <div class="value wide" transition:slide={{}}>
+                {#each card.skills as skill (skill.id)}
+                    <div>
+                        <Skill {skill} lang={Language.JPN} cardType={card.type} />
+                    </div>
+                {/each}
+            </div>
+        {/if}
+    {/if}
+
+    {#if cardIsMember(card) && cardHasGroup(card)}
+        <div class="gap" />
+
+        <div class="header wide">{cardGroupType(card)} With</div>
+        <div class="value wide">
             {#each card.member.group.memberExtraInfos as member (member.cardNo)}
                 {#if member.cardNo !== card.cardNo}
                     <div>
@@ -236,39 +225,52 @@
                 {/if}
             {/each}
         </div>
-    </div>
-    <div class="row inforow" class:multicol={!forceSingleColumn}>
-        <div>{cardGroupType(card)} Skill</div>
-        <div>
-            {#each card.member.group.skills as skill (skill.id)}
-                <div>
-                    <Skill {skill} lang={Language.JPN} />
-                </div>
-            {/each}
-        </div>
-    </div>
-    <div class="row inforow" class:multicol={!forceSingleColumn}>
-        <div>
-            {#if import.meta.env.DEV}
-                {#each card.member.group.skills as skill (skill.id)}
-                    <span><a href="/admin/pattern/edit/{skill.patternId ?? 'new'}/{skill.id}">🖉</a></span><br />
-                {/each}
-            {/if}
-        </div>
-        <div>
+
+        <button
+            class="header wide relative flex items-start group"
+            on:click={() => (showJpnGroupSkill = !showJpnGroupSkill)}
+        >
+            {cardGroupType(card)} Skill
+            <div class="absolute bottom-2.5 h-4 right-0 group-hover:text-accent-200">
+                {#if showJpnGroupSkill}
+                    <Collapse />
+                {:else}
+                    <Expand />
+                {/if}
+            </div>
+        </button>
+        <div class="value wide">
             {#each card.member.group.skills as skill (skill.id)}
                 <div>
                     <Skill {skill} />
                 </div>
             {/each}
         </div>
-    </div>
-{/if}
 
-{#if card.linkedBy.length > 0 && !hideBacklinks}
-    <div class="row inforow gap" class:multicol={!forceSingleColumn}>
-        <div>See Also</div>
-        <div>
+        {#if showJpnGroupSkill}
+            <div class="header wide" transition:slide={{}}>
+                <span class="subheader">Japanese</span>
+                {#if import.meta.env.DEV}
+                    {#each card.member.group.skills as skill (skill.id)}
+                        <span><a href="/admin/pattern/edit/{skill.patternId ?? 'new'}/{skill.id}">🖉</a></span><br />
+                    {/each}
+                {/if}
+            </div>
+            <div class="value wide" transition:slide={{}}>
+                {#each card.member.group.skills as skill (skill.id)}
+                    <div>
+                        <Skill {skill} lang={Language.JPN} />
+                    </div>
+                {/each}
+            </div>
+        {/if}
+    {/if}
+
+    {#if card.linkedBy.length > 0 && !hideBacklinks}
+        <div class="gap" />
+
+        <div class="header wide">See Also</div>
+        <div class="value wide">
             {#each card.linkedBy as link (link.id)}
                 {#if link.skill.card !== null}
                     <div>
@@ -283,13 +285,15 @@
                 {/if}
             {/each}
         </div>
-    </div>
-{/if}
+    {/if}
 
-{#if !hideFaq && card.faqs.length > 0}
-    <div class="row inforow" class:multicol={!forceSingleColumn} class:gap={card.linkedBy.length === 0}>
-        <div>Related FAQ</div>
-        <div class="faqs">
+    {#if card.faqs.length > 0 && !hideFaq}
+        {#if card.linkedBy.length === 0 || hideBacklinks}
+            <div class="gap" />
+        {/if}
+
+        <div class="header wide">Related FAQ</div>
+        <div class="value wide faqs">
             {#each card.faqs as faq (faq.cardId + "_" + faq.displayOrder)}
                 <a href={faq.link}>
                     <Skill skill={faq.labelPreparsed ?? faq.label} parseAsHelpText />
@@ -299,44 +303,35 @@
                 </a>
             {/each}
         </div>
-    </div>
-{/if}
+    {/if}
+</div>
 
 <style lang="postcss">
-    .inforow {
-        @apply flex;
+    .grid {
+        @apply mt-4 grid-cols-[1fr_2fr] lg:grid-cols-[1fr_2fr_1fr_2fr];
 
-        & div {
-            @apply border-t border-primary-700;
+        & .header,
+        & .value {
+            @apply px-2 py-1 border-t border-primary-700;
         }
+        & .header {
+            @apply bg-primary-500 font-bold text-xs uppercase tracking-widest leading-5;
 
-        & > div {
-            @apply px-2 py-1;
-
-            &:first-child {
-                @apply bg-primary-500 font-bold text-xs uppercase tracking-widest leading-5 basis-[30%] flex-grow-0 flex-shrink-0;
-
-                & > span {
-                    @apply float-right font-normal;
-                }
+            & > span.subheader {
+                @apply float-right font-normal;
             }
 
-            &:last-child {
-                @apply flex-grow flex-shrink basis-[70%];
+            &.wide {
+                @apply col-start-1;
             }
         }
-    }
+        & .value.wide {
+            @apply col-start-2 col-end-[-1];
+        }
 
-    .gap {
-        @apply mt-4;
-    }
-
-    .row.inforow.multicol > div:first-child {
-        @apply lg:basis-[15%];
-    }
-
-    .row.inforow.multicol > div:last-child {
-        @apply lg:basis-[85%];
+        & .gap {
+            @apply h-4 col-span-full;
+        }
     }
 
     .cost > span {

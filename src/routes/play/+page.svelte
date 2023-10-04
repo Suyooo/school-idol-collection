@@ -251,15 +251,14 @@
                 {:then card}
                     <div class="panel-inner">
                         <h4>{@html cardTitle(card, true, Language.ENG, true)}</h4>
-                        <div class="sidebar-info">
-                            <CardInfoRows {card} hideSharedId hideBacklinks hideFaq forceSingleColumn />
+                        <CardInfoRows {card} hideSharedId hideBacklinks hideFaq>
                             <img
                                 src={card.imageDataUrl}
                                 alt={`${card.cardNo} Front Illustration`}
                                 class:rounded-card-v={card.frontOrientation === CardOrientation.PORTRAIT}
                                 class:rounded-card-h={card.frontOrientation === CardOrientation.LANDSCAPE}
                             />
-                        </div>
+                        </CardInfoRows>
                     </div>
                     <div class="cardcopyright">{card.copyright}</div>
                 {/await}
@@ -327,14 +326,6 @@
 
     .panel-inner :global(.row) {
         @apply -mx-4;
-    }
-
-    .sidebar-info {
-        @apply relative;
-
-        & img {
-            @apply absolute -right-2 top-0;
-        }
     }
 
     .cardcopyright {
