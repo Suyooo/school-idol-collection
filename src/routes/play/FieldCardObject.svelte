@@ -280,7 +280,7 @@
                 <div class="flipped" />
             {/if}
             {#if idolizedBaseCardNo !== undefined}
-                <img class="icon" src="/images/icons/idolized.png" alt="Idolized" />
+                <img class="icon" src="/images/icons/idolized_icon.png" alt="Idolized" />
             {/if}
         {/await}
     </div>

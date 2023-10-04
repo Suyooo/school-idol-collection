@@ -9,18 +9,18 @@
 </script>
 
 <span
-    ><span class="skill-icon" class:ja={lang === Language.JPN} title={repl}>{repl}</span
+    ><span class="skill-icon" class:jpn={lang === Language.JPN} title={repl}>{repl}</span
     >{#if lang === Language.ENG}&nbsp;Pieces{/if}</span
 >
 
 <style lang="postcss">
     .skill-icon {
         @apply w-[3.285em] mt-[0.03em];
-        background-image: url("/images/icons/idolized_en.png");
+        background-image: url("/images/icons/idolized.png");
 
-        &.ja {
+        &.jpn {
             @apply w-[2.133em];
-            background-image: url("/images/icons/idolized_ja.png");
+            background-image: url("/images/icons/idolized_jpn.png");
         }
     }
 </style>

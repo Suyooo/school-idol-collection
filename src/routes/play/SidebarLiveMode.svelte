@@ -20,7 +20,6 @@
     import { mapGet } from "$l/utils/map.js";
     import Piece from "$l/format/Piece.svelte";
     import Button from "$l/style/Button.svelte";
-    import Checked from "$l/style/icons/Checked.svelte";
     import PlusMinusButtons from "./PlusMinusButtons.svelte";
     import SidebarLiveModeReqRow from "./SidebarLiveModeReqRow.svelte";
 </script>
@@ -262,9 +261,7 @@
                                         class:outline={cardSong.cardInfo.cardNo === $sidebarCardNo}
                                     />
                                     {#if checkedCards.has(cardSong.id)}
-                                        <div class="absolute -bottom-1 -right-2 text-green-400 bg-white rounded-full">
-                                            <Checked />
-                                        </div>
+                                        <img class="checked-icon" src="/images/icons/checked.png" alt="Checked" />
                                     {/if}
                                 </button>
                                 <div class="livepoints" class:!text-[1.75rem]={cardSong.lpExtra === 0}>
@@ -400,9 +397,7 @@
                                         class:outline={card.cardInfo.cardNo === $sidebarCardNo}
                                     />
                                     {#if checkedCards.has(id)}
-                                        <div class="absolute -bottom-1 -right-2 text-green-400 bg-white rounded-full">
-                                            <Checked />
-                                        </div>
+                                        <img class="checked-icon" src="/images/icons/checked.png" alt="Checked" />
                                     {/if}
                                 </div>
                                 <b class="">{card.cardInfo.cardNo}</b>
@@ -418,7 +413,7 @@
                                             {#if card.pieces.idolized[i] > 0}
                                                 <img
                                                     class="idolize-icon"
-                                                    src="/images/icons/idolized.png"
+                                                    src="/images/icons/idolized_icon.png"
                                                     alt="Idolized"
                                                 />
                                             {/if}
@@ -538,6 +533,10 @@
                 @apply text-attribute-cool;
             }
         }
+    }
+
+    .checked-icon {
+        @apply absolute w-4 -bottom-1 -right-2;
     }
 
     .livepoints {

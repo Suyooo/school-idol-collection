@@ -43,7 +43,7 @@
         showJpnGroupSkill: boolean = card.member?.group?.skills.some((s) => s.eng === null) ?? false;
 </script>
 
-<div class="-mx-4 grid" class:!grid-cols-[1fr_2fr_auto]={$$slots.default}>
+<div class="grid" class:!grid-cols-[1fr_2fr_auto]={$$slots.default}>
     {#if $$slots.default}
         <div class="col-start-3 self-center" style:grid-row="1 / 20">
             <slot />
@@ -308,7 +308,7 @@
 
 <style lang="postcss">
     .grid {
-        @apply mt-4 grid-cols-[1fr_2fr] lg:grid-cols-[1fr_2fr_1fr_2fr];
+        @apply -mx-4 mt-2 grid-cols-[1fr_2fr] lg:grid-cols-[1fr_2fr_1fr_2fr];
 
         & .header,
         & .value {
