@@ -9,7 +9,7 @@
     export let form: ActionData;
     let width: number = form?.width ? parseInt(form?.width.toString()) : 0;
     let height: number = form?.height ? parseInt(form?.height.toString()) : 0;
-    let padding: number = form?.padding ? parseInt(form?.padding.toString()) : 0;
+    let margin: number = form?.margin ? parseInt(form?.margin.toString()) : 0;
     let contentWidth: number,
         contentHeight: number,
         shelfCardNos: string[][],
@@ -17,8 +17,8 @@
         pageSize: HTMLDivElement,
         pageStyle: HTMLStyleElement;
 
-    $: contentWidth = width - padding * 2;
-    $: contentHeight = height - padding * 2;
+    $: contentWidth = width - margin * 2;
+    $: contentHeight = height - margin * 2;
 
     onMount(() => {
         if (form === null || form.cardNos.length === 0) return;
@@ -46,7 +46,7 @@
                 shelfVert.add(sortedCardNos, 1, shelfElements[i].clientHeight);
             }
             shelfCardNos = shelfVert.get().flat();
-            pageStyle.innerHTML = `@page { margin: ${padding}mm 0; size: ${width}mm ${height}mm`;
+            pageStyle.innerHTML = `@page { margin: ${margin}mm 0; size: ${width}mm ${height}mm`;
         });
     });
 </script>
@@ -118,7 +118,7 @@
         style:width={contentWidth + "mm"}
         style:height={contentHeight + "mm"}
     />
-    <table class="sheets" style:margin={"0 " + padding + "mm"} style:--page-padding={padding + "mm"}>
+    <table class="sheets" style:margin={"0 " + margin + "mm"} style:--page-margin={margin + "mm"}>
         {#each shelfCardNos ?? form.cardNos.map((c) => [c]) as shelf, i}
             <tr class="shelf">
                 <td style:width={contentWidth + "mm"} bind:this={shelfElements[i]}>
@@ -151,7 +151,7 @@
 
     .sheets {
         @apply m-0 text-black bg-white;
-        border: var(--page-padding) solid white;
+        border: var(--page-margin) solid white;
     }
 
     @media print {
