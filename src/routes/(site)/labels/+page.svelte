@@ -39,7 +39,7 @@
         <div class="panel-inner">
             <form action="/labels/print" method="POST" target="_blank" bind:this={form}>
                 <div class="row items-start">
-                    <div class="col-half lg:pr-4 grid grid-cols-[1fr,2fr] gap-2 items-center">
+                    <div class="col-half lg:pr-4 grid grid-cols-[1fr,2fr] md:grid-cols-[1fr,3fr] gap-2 items-center">
                         <h6 class="col-span-2 m-0">Page Settings</h6>
                         <b>Presets</b>
                         <select on:change={setPreset} class="flex-grow">
@@ -61,7 +61,8 @@
                         <div class="mb-2">
                             Enter the card numbers (starting with "LL", "EX" or "PR") of the cards that you want to
                             print labels for. Seperate them with commas, spaces or line breaks.<br />
-                            For faster entry, you can leave out the "-", and case does not matter.
+                            To make it easier to enter the numbers for lots of cards, you can leave out the "-", and capitalization
+                            does not matter.
                         </div>
                         <textarea
                             name="cardNos"
@@ -97,7 +98,7 @@
             </div>
             If you own SIC cards, the&nbsp;<b>Label Printer</b> allows you to create small tags for your collection.
             With these, you can add translations for Skills and Live Costumes to their sleeving, and play without having
-            to learn all the card info!<br /><br />
+            to memorize all the card info!<br /><br />
             Enter the card numbers of your deck above, and select the paper size your printer uses. The site will generate
             a document with all the labels you need. Once you've printed it, all you need is scissors to cut everything out.<br
             /><br />

@@ -31,9 +31,10 @@
             </div>
             <div class="mt-4 text-sm text-primary-400">
                 Love Live!, School Idol Collection, School Idol Festival, character/song/project/group names and
-                icons/images related to the game are copyrighted: ©2013 Project Love Live! ©2017 Project Love Live!
-                Sunshine!! ©2019 Project Love Live! Movie!! ©KLabGames ©SQUARE ENIX CO. ,LTD. ©bushiroad<br />
-                Copyright owners for the card illustraions are listed on a per-card basis on the card pages accessible through
+                icons/images related to the game are copyrighted:<br />
+                ©2013 Project Love Live! ©2017 Project Love Live! Sunshine!! ©2019 Project Love Live! Movie!! ©KLabGames
+                ©SQUARE ENIX CO. ,LTD. ©bushiroad<br />
+                Copyright owners for the card illustrations are listed on a per-card basis on the card pages accessible through
                 the card list.<br />
                 This is a not-for-profit fan project, and unaffiliated with any of the projects or companies above.
             </div>

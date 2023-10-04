@@ -24,6 +24,7 @@
 </svelte:head>
 
 <div class="content">
+    <h3>Search</h3>
     <div class="panel">
         <div class="panel-inner">
             <SearchOptions {options} />

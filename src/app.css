@@ -157,6 +157,11 @@ input:invalid {
     @apply outline outline-4 outline-red-500;
 }
 
+input:disabled,
+select:disabled {
+    @apply bg-primary-700 text-primary-400;
+}
+
 textarea {
     @apply w-full h-32 mb-2 rounded;
 }
