@@ -10,6 +10,6 @@ import { cardIsMember } from "$l/card/types.js";
             const memberExtraInfo = await DB.m.CardMemberExtraInfo.findByPk(card.cardNo);
             if (memberExtraInfo?.baseIfSecret) continue;
         }
-        downloadCardImages(card.cardNo, card.cardNo.split("-")[0], false);
+        await downloadCardImages(card.cardNo, card.cardNo.split("-")[0], false);
     }
 })();

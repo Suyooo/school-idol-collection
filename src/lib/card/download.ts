@@ -31,7 +31,7 @@ export async function downloadCardImages(
     // Always get images via the links on the card page, as the file names/direct URLs don't always match up...
     // For example, the card/set images for LL15 are in the "ll_16" subfolder
     if (!fs.existsSync(`static/images/cards/${set}`)) {
-        fs.mkdirSync(`static/images/cards/${set}`);
+        fs.mkdirSync(`static/images/cards/${set}`, { recursive: true });
         const setLink = (document.querySelector(".button-container a:last-child") as HTMLAnchorElement).href;
 
         if (!cachedSetListDoc) {
@@ -73,4 +73,7 @@ async function downloadImage(fetchFunc: (url: string) => Promise<Response>, url:
             out.write(value);
         }
     }
+
+    // a little bit of throttle
+    await new Promise((r) => setTimeout(r, 250));
 }
