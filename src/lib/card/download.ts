@@ -17,7 +17,6 @@ export async function downloadCardImages(
     ) {
         return;
     }
-    console.log("Downloading", cardNo);
 
     if (!fetchFunc) fetchFunc = fetch;
     if (!document) {
@@ -47,33 +46,35 @@ export async function downloadCardImages(
                 `.card-expansion-list li a[href='${setLink.substring(setLink.indexOf("/cardlist"))}'] img`
             ) as HTMLImageElement
         ).src;
-        await downloadImage(fetchFunc, setUrl, `static/images/cards/${set}/set.jpg`);
+        await fetchFunc(setUrl).then(saveResponseToFile(`static/images/cards/${set}/set.jpg`));
     }
 
     const frontUrl = (document.querySelector(".illust-1 img") as HTMLImageElement).src;
+    if (frontUrl.endsWith("SECRET.jpg")) return;
     const backUrl = (document.querySelector(".illust-2 img") as HTMLImageElement).src;
+
     await Promise.all([
-        downloadImage(fetchFunc, frontUrl, `static/images/cards/${set}/${cardNo}-front.jpg`),
-        downloadImage(fetchFunc, backUrl, `static/images/cards/${set}/${cardNo}-back.jpg`),
+        fetchFunc(frontUrl).then(saveResponseToFile(`static/images/cards/${set}/${cardNo}-front.jpg`)),
+        fetchFunc(backUrl).then(saveResponseToFile(`static/images/cards/${set}/${cardNo}-back.jpg`)),
     ]);
 }
 
-async function downloadImage(fetchFunc: (url: string) => Promise<Response>, url: string, filename: string) {
-    if (url.endsWith("SECRET.jpg")) return;
-    const res = await fetchFunc(url);
-    if (res.ok && res.body) {
-        const out = fs.createWriteStream(filename);
-        const reader = res.body.getReader();
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) {
-                out.close();
-                break;
+export function saveResponseToFile(filename: string): (res: Response) => Promise<void> {
+    return async (res) => {
+        if (res.ok && res.body) {
+            const out = fs.createWriteStream(filename);
+            const reader = res.body.getReader();
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) {
+                    out.close();
+                    break;
+                }
+                out.write(value);
             }
-            out.write(value);
         }
-    }
 
-    // a little bit of throttle
-    await new Promise((r) => setTimeout(r, 250));
+        // a little bit of throttle
+        await new Promise((r) => setTimeout(r, 250));
+    };
 }
