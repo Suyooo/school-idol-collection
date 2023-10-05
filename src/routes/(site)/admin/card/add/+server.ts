@@ -13,6 +13,7 @@ import type CardSongAttrReqExtraInfo from "$m/card/songAttrReqExtraInfo.js";
 import type CardSongExtraInfo from "$m/card/songExtraInfo.js";
 import type { Sequelize } from "$m/db.js";
 import type Skill from "$m/skill/skill.js";
+import { downloadCardImages } from "$l/card/download.js";
 import AnnotationEnum from "$l/enums/annotation.js";
 import AttributeEnum from "$l/enums/attribute.js";
 import CardMemberGroupType from "$l/enums/cardMemberGroupType.js";
@@ -89,7 +90,7 @@ export const POST: RequestHandler = (async ({ locals, request, fetch }) => {
 
     applyFixes(info, cardNo, set, inSetNo, type);
     if (type !== CardType.MEMBER || info["レアリティ"] !== "Secret") {
-        await downloadImages(document, cardNo, set, fetch);
+        await downloadCardImages(cardNo, set, true, fetch, document);
     }
     await importCard(info, await locals.DB, cardNo, set, inSetNo, type);
 
@@ -234,35 +235,6 @@ function applyFixes(
     else if (cardNo === "PR-096") {
         info["スキル"] = info["スキル"]!.replace("\n", "").replace("。【", "。\n【");
     }
-}
-
-async function downloadImages(
-    document: Document,
-    cardNo: string,
-    set: string,
-    fetch: (url: string) => Promise<Response>
-) {
-    const frontUrl = (document.querySelector(".illust-1 img") as HTMLImageElement).src;
-    const backUrl = (document.querySelector(".illust-2 img") as HTMLImageElement).src;
-
-    async function dl(url: string, filename: string) {
-        const res = await fetch(url);
-        if (!fs.existsSync(`static/images/cards/${set}`)) fs.mkdirSync(`static/images/cards/${set}`);
-        if (res.ok && res.body) {
-            const out = fs.createWriteStream(`static/images/cards/${set}/${cardNo}-${filename}.jpg`);
-            const reader = res.body.getReader();
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) {
-                    out.close();
-                    break;
-                }
-                out.write(value);
-            }
-        }
-    }
-
-    await Promise.all([dl(frontUrl, "front"), dl(backUrl, "back")]);
 }
 
 async function checkImageOrientation(cardNo: string, side: string) {
