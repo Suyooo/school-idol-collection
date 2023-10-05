@@ -4,8 +4,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "cardimages": "vite-node src/scripts/collectCardImages.ts",
         "dev": "vite --host 0.0.0.0 dev",
+        "prebuild": "vite-node src/scripts/collectCardImages.ts",
         "build": "vite build",
         "preview": "vite --host 0.0.0.0 preview",
         "sync": "svelte-kit sync",

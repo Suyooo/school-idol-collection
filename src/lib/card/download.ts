@@ -6,18 +6,9 @@ let cachedSetListDoc: undefined | Document = undefined;
 export async function downloadCardImages(
     cardNo: string,
     set: string,
-    overwrite: boolean,
     fetchFunc?: (url: string) => Promise<Response>,
     document?: Document
 ) {
-    if (
-        !overwrite &&
-        fs.existsSync(`static/images/cards/${set}/${cardNo}-front.jpg`) &&
-        fs.existsSync(`static/images/cards/${set}/${cardNo}-back.jpg`)
-    ) {
-        return;
-    }
-
     if (!fetchFunc) fetchFunc = fetch;
     if (!document) {
         const cardRes = await fetchFunc(`https://lovelive-sic.com/cardlist/list/?cardno=${cardNo}`);
