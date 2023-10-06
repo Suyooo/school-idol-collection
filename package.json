@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "postinstall": "npx playwright install --with-deps && patch-package",
+        "postinstall": "npx playwright install && patch-package",
         "dev": "vite --host 0.0.0.0 dev",
         "sync": "svelte-kit sync",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
