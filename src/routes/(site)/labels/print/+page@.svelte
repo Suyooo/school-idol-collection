@@ -53,7 +53,7 @@
 
 <svelte:head>
     <style bind:this={pageStyle}></style>
-    <title>Labels → Print &bull; SIC</title>
+    <title>Label Printer → Print &bull; SIC</title>
 </svelte:head>
 
 {#if !form || form.cardNos.length + form.invalidCardNos.length + form.filteredCardNos.length === 0}

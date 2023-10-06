@@ -79,28 +79,30 @@
             </div>
         </div>
     </div>
-    <div class="content">
-        <h3>Get Started</h3>
-        <a href="/faq/rules" class="button panel big-link">
-            <HowToPlay />
-            <div>How To Play</div>
-        </a>
-        <a href="/list" class="button panel big-link">
-            <CardList />
-            <div>Browse the Card List</div>
-        </a>
-        <a href="/search" class="button panel big-link">
-            <Search />
-            <div>Search for Cards</div>
-        </a>
-        <a href="/labels" class="button panel big-link">
-            <Print />
-            <div>Print Labels</div>
-        </a>
-        <a href="https://lovelive-sic.com/" target="_blank" class="button panel big-link">
-            <More />
-            <div>Visit the Official Site</div>
-        </a>
+    <div class="content flex flex-col">
+        <h3 class="flex-grow-0">Get Started</h3>
+        <div class="flex-grow flex flex-col justify-between">
+            <a href="/faq/rules" class="button panel big-link">
+                <HowToPlay />
+                <div>How To Play</div>
+            </a>
+            <a href="/list" class="button panel big-link">
+                <CardList />
+                <div>Browse the Card List</div>
+            </a>
+            <a href="/search" class="button panel big-link">
+                <Search />
+                <div>Search for Cards</div>
+            </a>
+            <a href="/labels" class="button panel big-link">
+                <Print />
+                <div>Print Labels</div>
+            </a>
+            <a href="https://lovelive-sic.com/" target="_blank" class="button panel big-link">
+                <More />
+                <div>Visit the Official Site</div>
+            </a>
+        </div>
     </div>
 </div>
 
@@ -130,7 +132,7 @@
     }
 
     .big-link {
-        @apply mt-2 text-xl font-bold px-6 py-4 flex items-center no-underline hover:bg-primary-600 gap-4;
+        @apply mt-2 first:mt-0 text-xl font-bold px-6 py-4 flex items-center no-underline hover:bg-primary-600 gap-4;
 
         & div:last-child {
             @apply flex-grow  text-accent-200;

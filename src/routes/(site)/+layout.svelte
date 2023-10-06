@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import { goto as gotoInThisTab } from "$app/navigation";
     import "svooltip/styles.css";
     import "../../app.css";
@@ -52,6 +53,12 @@
         if (e.key === "Alt") {
             isAltDown = e.type === "keydown";
         }
+    }
+
+    if (import.meta.env.DEV) {
+        onMount(() => {
+            document.body.classList.add("ready");
+        });
     }
 </script>
 
