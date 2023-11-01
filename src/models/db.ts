@@ -1,4 +1,6 @@
-import { addScopes as addScopesSearch } from "$l/search/scopes.js";
+import dbSettings from "../../dbSettings.json";
+import { Sequelize as OrigSequelize } from "@sequelize/core";
+import type { ModelStatic } from "@sequelize/core";
 import type Card from "$m/card/card.js";
 import { CardBase } from "$m/card/card.js";
 import { addScopes as addScopesCardBase } from "$m/card/card.js";
@@ -19,27 +21,27 @@ import { SkillBase } from "$m/skill/skill.js";
 import TranslationName from "$m/translation/name.js";
 import TranslationPattern from "$m/translation/pattern.js";
 import TranslationSong from "$m/translation/song.js";
-import dbSettings from "../../dbSettings.json";
-import { Sequelize as OrigSequelize } from "@sequelize/core";
-import type { ModelStatic } from "@sequelize/core";
+import { addScopes as addScopesSearch } from "$l/search/scopes.js";
 
+// Order is important - this is the order tables are imported and data is imported
+// So tables that have foreign keys must be sorted after the tables they reference
 const modelList: ModelStatic<any>[] = [
     CardBase,
     CardMemberGroup,
-    CardFAQLink,
     CardMemberExtraInfo,
     CardMemberIdolizePieceExtraInfo,
     CardSongExtraInfo,
     CardSongAnyReqExtraInfo,
     CardSongAttrReqExtraInfo,
-    SkillBase,
-    Link,
-    Annotation,
     TranslationName,
     TranslationSong,
     TranslationPattern,
-    Set,
+    SkillBase,
+    Annotation,
+    CardFAQLink,
+    Link,
     SetCategory,
+    Set,
 ];
 
 const sequelize = new OrigSequelize({
@@ -81,7 +83,11 @@ export interface Sequelize extends OrigSequelize {
         SetCategory: ModelStatic<SetCategory>;
     };
 }
-const DB: Promise<Sequelize> = Promise.all(modelList.map((m) => m.sync()))
+const DB: Promise<Sequelize> = new Promise(async (resolve) => {
+    for (const m of modelList) {
+        await m.sync();
+    }
+})
     .then(() => {
         /*
          * This might seem odd - why make this object? Doesn't sequelize.models exist?
