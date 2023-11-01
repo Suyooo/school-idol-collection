@@ -9,6 +9,7 @@ import { cardIsMember } from "$l/card/types.js";
 
     console.log("Collecting card images...");
     let anyDownloaded = false;
+    fs.mkdirSync(`static/images/cards`, { recursive: true });
 
     for (const card of await DB.m.Card.findAll()) {
         if (cardIsMember(card)) {

@@ -9,6 +9,8 @@
         "sync": "svelte-kit sync",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+        "db:import": "vite-node src/scripts/dbImportExport.ts import",
+        "db:export": "vite-node src/scripts/dbImportExport.ts export",
         "test": "npx playwright test",
         "prebuild": "vite-node src/scripts/collectCardImages.ts",
         "build": "vite build",
@@ -49,6 +51,6 @@
         "typescript": "^5.0.0",
         "uuid": "^9.0.1",
         "vite": "^4.0.0",
-        "vite-node": "^0.29.8"
+        "vite-node": "^0.34.6"
     }
 }
