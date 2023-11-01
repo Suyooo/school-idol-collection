@@ -25,7 +25,7 @@ import { addScopes as addScopesSearch } from "$l/search/scopes.js";
 
 // Order is important - this is the order tables are imported and data is imported
 // So tables that have foreign keys must be sorted after the tables they reference
-const modelList: ModelStatic<any>[] = [
+export const modelList: ModelStatic<any>[] = [
     CardBase,
     CardMemberGroup,
     CardMemberExtraInfo,
@@ -83,10 +83,11 @@ export interface Sequelize extends OrigSequelize {
         SetCategory: ModelStatic<SetCategory>;
     };
 }
-const DB: Promise<Sequelize> = new Promise(async (resolve) => {
+const DB: Promise<Sequelize> = new Promise<void>(async (resolve) => {
     for (const m of modelList) {
         await m.sync();
     }
+    resolve();
 })
     .then(() => {
         /*
