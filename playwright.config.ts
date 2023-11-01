@@ -4,11 +4,11 @@ export default defineConfig({
     testDir: "./tests",
     fullyParallel: true,
     forbidOnly: !!process.env.CI,
-    retries: process.env.CI ? 2 : 0,
+    retries: 2,
     workers: process.env.CI ? 1 : undefined,
     use: {
         baseURL: "http://127.0.0.1:5173",
-        trace: "on-first-retry",
+        trace: "off",
     },
 
     projects: [
