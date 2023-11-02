@@ -10,7 +10,7 @@ const config = {
     kit: {
         alias: {
             $l: "src/lib",
-            $m: "src/models",
+            $m: "src/lib/server/models",
         },
         adapter: adapter(),
         prerender: {
