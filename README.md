@@ -4,7 +4,7 @@
 
 ### Database Connection
 
-Uses `mariadb`. Required for both dev (`.env` in root folder) and build (`.env` in dist folder).
+Uses `mariadb`. Required for both dev (loaded from `.env` in root folder) and build (not loaded automatically).
 
 -   `DB_HOST`
 -   `DB_USER`

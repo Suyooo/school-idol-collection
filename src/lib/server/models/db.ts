@@ -1,4 +1,5 @@
 import { env } from "$env/dynamic/private";
+import mariadb from "mariadb";
 import { Sequelize as OrigSequelize } from "@sequelize/core";
 import type { ModelStatic } from "@sequelize/core";
 import type Card from "$m/card/card.js";
@@ -46,6 +47,7 @@ export const modelList: ModelStatic<any>[] = [
 
 const sequelize = new OrigSequelize({
     dialect: "mariadb",
+    dialectModule: mariadb,
     host: env.DB_HOST,
     username: env.DB_USER,
     password: env.DB_PASSWORD,
