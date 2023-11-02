@@ -1,4 +1,4 @@
-import { applyPatternToSkills } from "$l/translation/skills.js";
+import { applyPatternToSkills } from "$lib/translation/skills.js";
 import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types.js";
 

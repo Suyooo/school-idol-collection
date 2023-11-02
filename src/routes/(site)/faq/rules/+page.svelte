@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { CardOrientation } from "$l/enums/cardOrientation.js";
-    import TriggerEnum from "$l/enums/trigger.js";
-    import CardImage from "$l/format/CardImage.svelte";
-    import Idolized from "$l/format/Idolized.svelte";
-    import Star from "$l/format/Star.svelte";
-    import TriggerComponent from "$l/format/TriggerComponent.svelte";
+    import { CardOrientation } from "$lib/enums/cardOrientation.js";
+    import TriggerEnum from "$lib/enums/trigger.js";
+    import CardImage from "$lib/format/CardImage.svelte";
+    import Idolized from "$lib/format/Idolized.svelte";
+    import Star from "$lib/format/Star.svelte";
+    import TriggerComponent from "$lib/format/TriggerComponent.svelte";
 </script>
 
 <svelte:head><title>How To Play → Rules &bull; SIC</title></svelte:head>

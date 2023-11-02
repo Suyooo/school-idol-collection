@@ -1,9 +1,9 @@
-import type { AnnotationID } from "$l/enums/annotation.js";
-import type Card from "$m/card/card.js";
-import type Link from "$m/skill/link.js";
-import type Skill from "$m/skill/skill.js";
+import type Card from "$models/card/card.js";
+import type Link from "$models/skill/link.js";
+import type Skill from "$models/skill/skill.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, BelongsToMany, Table } from "@sequelize/core/decorators-legacy";
+import type { AnnotationID } from "$lib/enums/annotation.js";
 
 @Table({
     modelName: "Annotation",

@@ -1,4 +1,4 @@
-import type Card from "$m/card/card.js";
+import type Card from "$models/card/card.js";
 import type { PageServerLoad } from "./$types.js";
 
 const latestCardNo = "PR-270";

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import "../../../../app.css";
-    import Button from "$l/style/Button.svelte";
+    import Button from "$lib/style/Button.svelte";
     import type { ActionData } from "./$types.js";
     import Shelving from "./shelf.js";
     import Label from "./Label.svelte";

@@ -1,11 +1,11 @@
-import type { AttributeID } from "$l/enums/attribute.js";
-import type { CardSongRarity } from "$l/enums/cardRarity.js";
-import CardSongRequirementType from "$l/enums/cardSongRequirementType.js";
-import type { CardSong } from "$m/card/card.js";
-import type CardSongAnyReqExtraInfo from "$m/card/songAnyReqExtraInfo.js";
-import type CardSongAttrReqExtraInfo from "$m/card/songAttrReqExtraInfo.js";
+import type { CardSong } from "$models/card/card.js";
+import type CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";
+import type CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, HasOne, Table } from "@sequelize/core/decorators-legacy";
+import type { AttributeID } from "$lib/enums/attribute.js";
+import type { CardSongRarity } from "$lib/enums/cardRarity.js";
+import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 
 @Table({
     modelName: "CardSongExtraInfo",

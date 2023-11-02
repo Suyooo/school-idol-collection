@@ -1,7 +1,7 @@
-import { cardTitle } from "$l/card/strings.js";
-import type Card from "$m/card/card.js";
+import type Card from "$models/card/card.js";
 import { Op } from "@sequelize/core";
 import { error, json } from "@sveltejs/kit";
+import { cardTitle } from "$lib/card/strings.js";
 import { _data } from "../../../faq/[faqPage]/+page.server.js";
 import { getFaqLinkLabel, getKey, getKeyPrefix, getLinkedCards } from "../../../faq/prepareFaq.js";
 import type { RequestHandler } from "./$types.js";

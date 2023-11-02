@@ -1,8 +1,8 @@
+import DBPromise from "$models/db.js";
 import fs from "fs";
 import { JSDOM } from "jsdom";
-import DBPromise from "$m/db.js";
-import { downloadCardImages, saveResponseToFile } from "$l/card/download.js";
-import { cardIsMember } from "$l/card/types.js";
+import { downloadCardImages, saveResponseToFile } from "$lib/card/download.js";
+import { cardIsMember } from "$lib/card/types.js";
 
 (async () => {
     const DB = await DBPromise;

@@ -1,7 +1,7 @@
 <script lang="ts">
-    import TriggerEnum from "$l/enums/trigger.js";
-    import Ability from "$l/format/Ability.svelte";
-    import TriggerComponent from "$l/format/TriggerComponent.svelte";
+    import TriggerEnum from "$lib/enums/trigger.js";
+    import Ability from "$lib/format/Ability.svelte";
+    import TriggerComponent from "$lib/format/TriggerComponent.svelte";
     import type { PageData } from "./$types.js";
     import Note from "../Note.svelte";
     import Question from "../Question.svelte";

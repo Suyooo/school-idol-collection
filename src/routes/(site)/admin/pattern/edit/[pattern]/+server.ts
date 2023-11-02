@@ -1,4 +1,4 @@
-import type TranslationPattern from "$m/translation/pattern.js";
+import type TranslationPattern from "$models/translation/pattern.js";
 import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types.js";
 

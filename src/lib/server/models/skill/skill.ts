@@ -1,11 +1,8 @@
-import AnnotationEnum from "$l/enums/annotation.js";
-import type { ParseNodePrepared } from "$l/format/format.js";
-import searchQuery from "$l/search/query.js";
-import type Card from "$m/card/card.js";
-import type CardMemberGroup from "$m/card/memberGroup.js";
-import type Annotation from "$m/skill/annotation.js";
-import type Link from "$m/skill/link.js";
-import type TranslationPattern from "$m/translation/pattern.js";
+import type Card from "$models/card/card.js";
+import type CardMemberGroup from "$models/card/memberGroup.js";
+import type Annotation from "$models/skill/annotation.js";
+import type Link from "$models/skill/link.js";
+import type TranslationPattern from "$models/translation/pattern.js";
 import { type BelongsToMany, DataTypes, Model } from "@sequelize/core";
 import type { QueryOptions } from "@sequelize/core";
 import {
@@ -17,6 +14,9 @@ import {
     HasMany,
     Table,
 } from "@sequelize/core/decorators-legacy";
+import AnnotationEnum from "$lib/enums/annotation.js";
+import type { ParseNodePrepared } from "$lib/format/format.js";
+import searchQuery from "$lib/search/query.js";
 
 @Table({
     modelName: "Skill",

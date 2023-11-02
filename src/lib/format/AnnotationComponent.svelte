@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type Card from "$m/card/card.js";
-    import AnnotationEnum from "$l/enums/annotation.js";
-    import type { AnnotationID } from "$l/enums/annotation.js";
-    import type CardType from "$l/enums/cardType.js";
-    import Language from "$l/enums/language.js";
+    import type Card from "$models/card/card.js";
+    import AnnotationEnum from "$lib/enums/annotation.js";
+    import type { AnnotationID } from "$lib/enums/annotation.js";
+    import type CardType from "$lib/enums/cardType.js";
+    import Language from "$lib/enums/language.js";
 
     export let type: AnnotationEnum;
     export let typeId: AnnotationID | undefined = undefined;

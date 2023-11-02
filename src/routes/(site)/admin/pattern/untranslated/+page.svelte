@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { isCardSkillShortInfo } from "$l/translation/skills.js";
-    import type { ShortSkillInfo } from "$l/translation/skills.js";
+    import { isCardSkillShortInfo } from "$lib/translation/skills.js";
+    import type { ShortSkillInfo } from "$lib/translation/skills.js";
     import type { PageData } from "./$types.js";
 
     export let data: PageData;

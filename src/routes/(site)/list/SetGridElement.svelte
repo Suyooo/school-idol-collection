@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type Set from "$m/set/set.js";
+    import type Set from "$models/set/set.js";
 
     export let set: Set;
 </script>

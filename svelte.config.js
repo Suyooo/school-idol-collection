@@ -9,8 +9,7 @@ const config = {
     moduleExtensions: [".js", ".mjs", ".cjs", ".ts"],
     kit: {
         alias: {
-            $l: "src/lib",
-            $m: "src/lib/server/models",
+            $models: "src/lib/server/models",
         },
         adapter: adapter(),
         prerender: {

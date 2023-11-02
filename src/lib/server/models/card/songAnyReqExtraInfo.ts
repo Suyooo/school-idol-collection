@@ -1,5 +1,5 @@
-import type { CardSong } from "$m/card/card.js";
-import type CardSongExtraInfo from "$m/card/songExtraInfo.js";
+import type { CardSong } from "$models/card/card.js";
+import type CardSongExtraInfo from "$models/card/songExtraInfo.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, Table } from "@sequelize/core/decorators-legacy";
 

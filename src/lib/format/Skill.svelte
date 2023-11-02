@@ -1,10 +1,10 @@
 <script lang="ts">
-    import type Skill from "$m/skill/skill.js";
-    import type CardType from "$l/enums/cardType.js";
-    import Language from "$l/enums/language.js";
-    import { makeNodesRenderable, parseSkillToNodes } from "$l/format/format.js";
-    import type { ParseNodePrepared, ParseNodeRenderable } from "$l/format/format.js";
-    import SkillNodeRenderer from "$l/format/SkillNodeRenderer.svelte";
+    import type Skill from "$models/skill/skill.js";
+    import type CardType from "$lib/enums/cardType.js";
+    import Language from "$lib/enums/language.js";
+    import { makeNodesRenderable, parseSkillToNodes } from "$lib/format/format.js";
+    import type { ParseNodePrepared, ParseNodeRenderable } from "$lib/format/format.js";
+    import SkillNodeRenderer from "$lib/format/SkillNodeRenderer.svelte";
 
     export let skill: string | ParseNodePrepared[] | Skill | null;
     export let lang: Language = Language.ENG;

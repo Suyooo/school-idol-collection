@@ -1,4 +1,4 @@
-import { listUntranslatedSkills } from "$l/translation/skills.js";
+import { listUntranslatedSkills } from "$lib/translation/skills.js";
 import type { PageServerLoad } from "./$types.js";
 
 export const load: PageServerLoad = (async ({ locals }) => {

@@ -1,4 +1,4 @@
-import { addExtraInfo } from "$l/types/cardPageExtraInfo.js";
+import { addExtraInfo } from "$lib/types/cardPageExtraInfo.js";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types.js";
 

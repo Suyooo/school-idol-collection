@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Button from "$l/style/Button.svelte";
+    import Button from "$lib/style/Button.svelte";
 
     export let prevCardNo: string | null;
     export let nextCardNo: string | null;

@@ -1,4 +1,4 @@
-import { escapeForUrl } from "$l/utils/string.js";
+import { escapeForUrl } from "$lib/utils/string.js";
 
 type NumberQueryMod = "" | "-" | "+";
 

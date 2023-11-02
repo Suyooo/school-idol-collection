@@ -1,11 +1,11 @@
 <script lang="ts" context="module">
     import { Splide, SplideSlide } from "@splidejs/svelte-splide";
     import "@splidejs/svelte-splide/css";
-    import Search from "$l/style/icons/Search.svelte";
-    import CardList from "$l/style/icons/home/CardList.svelte";
-    import HowToPlay from "$l/style/icons/home/HowToPlay.svelte";
-    import More from "$l/style/icons/home/More.svelte";
-    import Print from "$l/style/icons/home/Print.svelte";
+    import Search from "$lib/style/icons/Search.svelte";
+    import CardList from "$lib/style/icons/home/CardList.svelte";
+    import HowToPlay from "$lib/style/icons/home/HowToPlay.svelte";
+    import More from "$lib/style/icons/home/More.svelte";
+    import Print from "$lib/style/icons/home/Print.svelte";
     import type { PageServerData } from "./$types.js";
     import SetGridElement from "./list/SetGridElement.svelte";
     import CardGridElement from "./set/[set]/CardGridElement.svelte";

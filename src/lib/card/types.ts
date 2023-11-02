@@ -1,7 +1,4 @@
-import CardMemberIdolizeType from "$l/enums/cardMemberIdolizeType.js";
-import CardSongRequirementType from "$l/enums/cardSongRequirementType.js";
-import CardType from "$l/enums/cardType.js";
-import type Card from "$m/card/card.js";
+import type Card from "$models/card/card.js";
 import type {
     CardMember,
     CardMemberIdolizable,
@@ -12,7 +9,10 @@ import type {
     CardSong,
     CardSongWithAnyReq,
     CardSongWithAttrReq,
-} from "$m/card/card.js";
+} from "$models/card/card.js";
+import CardMemberIdolizeType from "$lib/enums/cardMemberIdolizeType.js";
+import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
+import CardType from "$lib/enums/cardType.js";
 
 export function cardIsMember(card: Card): card is CardMember {
     return card.type === CardType.MEMBER;

@@ -1,10 +1,10 @@
-import { cardIsMember, cardIsSong } from "$l/card/types.js";
-import CardMemberGroupType from "$l/enums/cardMemberGroupType.js";
-import { CardMemberRarity, CardSongRarity } from "$l/enums/cardRarity.js";
-import Language from "$l/enums/language.js";
-import { ordinal } from "$l/utils/grammar.js";
-import type Card from "$m/card/card.js";
-import type { CardMember, CardMemberWithGroup } from "$m/card/card.js";
+import type Card from "$models/card/card.js";
+import type { CardMember, CardMemberWithGroup } from "$models/card/card.js";
+import { cardIsMember, cardIsSong } from "$lib/card/types.js";
+import CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
+import { CardMemberRarity, CardSongRarity } from "$lib/enums/cardRarity.js";
+import Language from "$lib/enums/language.js";
+import { ordinal } from "$lib/utils/grammar.js";
 
 export function cardLink(card: Card, lang: Language = Language.ENG): string {
     return `<a href="/card/${card.cardNo}">${cardTitle(card, true, lang, true)}</a>`;

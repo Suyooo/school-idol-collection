@@ -1,8 +1,8 @@
 <script lang="ts">
-    import CardType from "$l/enums/cardType.js";
-    import Language from "$l/enums/language.js";
-    import TriggerEnum from "$l/enums/trigger.js";
-    import type { TriggerID } from "$l/enums/trigger.js";
+    import CardType from "$lib/enums/cardType.js";
+    import Language from "$lib/enums/language.js";
+    import TriggerEnum from "$lib/enums/trigger.js";
+    import type { TriggerID } from "$lib/enums/trigger.js";
 
     export let trigger: TriggerEnum;
     export let triggerId: TriggerID | undefined = undefined;

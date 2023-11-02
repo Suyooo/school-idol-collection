@@ -1,10 +1,10 @@
-import type CardSongRequirementType from "$l/enums/cardSongRequirementType.js";
-import type { GroupID } from "$l/enums/group.js";
-import { CardBase } from "$m/card/card.js";
-import type { Sequelize } from "$m/db.js";
+import { CardBase } from "$models/card/card.js";
+import type { Sequelize } from "$models/db.js";
 import { Op, literal, where } from "@sequelize/core";
 import type { Includeable } from "@sequelize/core";
 import type { IncludeOptions } from "@sequelize/core/_non-semver-use-at-your-own-risk_/model.js";
+import type CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
+import type { GroupID } from "$lib/enums/group.js";
 
 export function addScopes(sequelize: Sequelize) {
     CardBase.addScope("searchMemberRarity", (rarity: number) => ({

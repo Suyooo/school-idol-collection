@@ -1,4 +1,4 @@
-import type Card from "$m/card/card.js";
+import type Card from "$models/card/card.js";
 import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types.js";
 

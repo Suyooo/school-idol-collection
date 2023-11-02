@@ -5,8 +5,8 @@
 </script>
 
 <script lang="ts">
-    import Collapse from "$l/style/icons/Collapse.svelte";
-    import Expand from "$l/style/icons/Expand.svelte";
+    import Collapse from "$lib/style/icons/Collapse.svelte";
+    import Expand from "$lib/style/icons/Expand.svelte";
 
     export let annotation: CheckAnnotation;
     export let result: Writable<Promise<CheckResultWithUi> | null>;

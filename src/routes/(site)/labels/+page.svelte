@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { FormEventHandler } from "svelte/elements";
     import { tooltip } from "svooltip";
-    import Button from "$l/style/Button.svelte";
+    import Button from "$lib/style/Button.svelte";
     import type { Snapshot } from "./$types.js";
 
     let width: number, height: number, margin: number, cardNos: string, form: HTMLFormElement;

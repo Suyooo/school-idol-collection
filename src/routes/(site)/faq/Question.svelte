@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { makeNodesRenderable } from "$l/format/format.js";
-    import type { ParseNodePrepared } from "$l/format/format.js";
-    import SkillNodeRenderer from "$l/format/SkillNodeRenderer.svelte";
-    import Link from "$l/style/icons/Link.svelte";
+    import { makeNodesRenderable } from "$lib/format/format.js";
+    import type { ParseNodePrepared } from "$lib/format/format.js";
+    import SkillNodeRenderer from "$lib/format/SkillNodeRenderer.svelte";
+    import Link from "$lib/style/icons/Link.svelte";
 
     export let key: string;
     export let question: ParseNodePrepared[] | string;

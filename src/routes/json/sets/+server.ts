@@ -1,4 +1,4 @@
-import type SetCategory from "$m/set/category.js";
+import type SetCategory from "$models/set/category.js";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types.js";
 

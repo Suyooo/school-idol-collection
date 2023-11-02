@@ -3,13 +3,13 @@
     import { goto as gotoInThisTab } from "$app/navigation";
     import "svooltip/styles.css";
     import "../../app.css";
-    import { couldBeEntryCardNo, entryCardNoToCanonical } from "$l/utils/entry.js";
-    import { stringIsInteger } from "$l/utils/string.js";
-    import Button from "$l/style/Button.svelte";
-    import Collapse from "$l/style/icons/Collapse.svelte";
-    import Menu from "$l/style/icons/Menu.svelte";
-    import Search from "$l/style/icons/Search.svelte";
-    import Spinner from "$l/style/icons/Spinner.svelte";
+    import { couldBeEntryCardNo, entryCardNoToCanonical } from "$lib/utils/entry.js";
+    import { stringIsInteger } from "$lib/utils/string.js";
+    import Button from "$lib/style/Button.svelte";
+    import Collapse from "$lib/style/icons/Collapse.svelte";
+    import Menu from "$lib/style/icons/Menu.svelte";
+    import Search from "$lib/style/icons/Search.svelte";
+    import Spinner from "$lib/style/icons/Spinner.svelte";
 
     let menuExpanded: boolean = false,
         quicksearch: string = "",

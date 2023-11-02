@@ -1,18 +1,18 @@
 import type { SvelteComponent } from "svelte";
-import type Skill from "$m/skill/skill.js";
-import AnnotationEnum from "$l/enums/annotation.js";
-import AttributeEnum from "$l/enums/attribute.js";
-import CardType from "$l/enums/cardType.js";
-import Language from "$l/enums/language.js";
-import TriggerEnum from "$l/enums/trigger.js";
-import { toNumWithFullwidth } from "$l/utils/string.js";
-import Ability from "$l/format/Ability.svelte";
-import AnnotationComponent from "$l/format/AnnotationComponent.svelte";
-import Idolized from "$l/format/Idolized.svelte";
-import Piece from "$l/format/Piece.svelte";
-import PieceCount from "$l/format/PieceCount.svelte";
-import Star from "$l/format/Star.svelte";
-import TriggerComponent from "$l/format/TriggerComponent.svelte";
+import type Skill from "$models/skill/skill.js";
+import AnnotationEnum from "$lib/enums/annotation.js";
+import AttributeEnum from "$lib/enums/attribute.js";
+import CardType from "$lib/enums/cardType.js";
+import Language from "$lib/enums/language.js";
+import TriggerEnum from "$lib/enums/trigger.js";
+import { toNumWithFullwidth } from "$lib/utils/string.js";
+import Ability from "$lib/format/Ability.svelte";
+import AnnotationComponent from "$lib/format/AnnotationComponent.svelte";
+import Idolized from "$lib/format/Idolized.svelte";
+import Piece from "$lib/format/Piece.svelte";
+import PieceCount from "$lib/format/PieceCount.svelte";
+import Star from "$lib/format/Star.svelte";
+import TriggerComponent from "$lib/format/TriggerComponent.svelte";
 
 export interface TextNode {
     text: string;

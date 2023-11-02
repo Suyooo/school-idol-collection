@@ -1,7 +1,7 @@
+import type Card from "$models/card/card.js";
 import { json } from "@sveltejs/kit";
-import type Card from "$m/card/card.js";
-import AnnotationEnum from "$l/enums/annotation.js";
-import searchQuery from "$l/search/query.js";
+import AnnotationEnum from "$lib/enums/annotation.js";
+import searchQuery from "$lib/search/query.js";
 import type { CheckResult } from "../+server.js";
 import type { RequestHandler } from "./$types.js";
 

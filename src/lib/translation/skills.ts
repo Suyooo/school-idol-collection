@@ -1,9 +1,9 @@
-import Language from "$l/enums/language.js";
-import TriggerEnum from "$l/enums/trigger.js";
-import PatternApplyError from "$l/errors/patternApplyError.js";
-import type { Sequelize } from "$m/db.js";
-import type TranslationPattern from "$m/translation/pattern.js";
+import type { Sequelize } from "$models/db.js";
+import type TranslationPattern from "$models/translation/pattern.js";
 import type { QueryOptions } from "@sequelize/core";
+import Language from "$lib/enums/language.js";
+import TriggerEnum from "$lib/enums/trigger.js";
+import PatternApplyError from "$lib/errors/patternApplyError.js";
 
 export const checkTriggersPattern = /^(【[^【】]*?】(?:\/【[^【】]*?】)*)(.*?)$/;
 

@@ -1,4 +1,4 @@
-import type Set from "$m/set/set.js";
+import type Set from "$models/set/set.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, HasMany, Table } from "@sequelize/core/decorators-legacy";
 

@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     import { type Writable, writable } from "svelte/store";
-    import Button from "$l/style/Button.svelte";
+    import Button from "$lib/style/Button.svelte";
     import type { CheckResult, CheckSkillList } from "./+server.js";
     import CheckElement from "./CheckElement.svelte";
 

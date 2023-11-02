@@ -1,8 +1,8 @@
 <script lang="ts">
-    import AttributeEnum from "$l/enums/attribute.js";
-    import type { AttributeID } from "$l/enums/attribute.js";
-    import type CardType from "$l/enums/cardType.js";
-    import Language from "$l/enums/language.js";
+    import AttributeEnum from "$lib/enums/attribute.js";
+    import type { AttributeID } from "$lib/enums/attribute.js";
+    import type CardType from "$lib/enums/cardType.js";
+    import Language from "$lib/enums/language.js";
 
     export let attr: AttributeEnum;
     export let attrId: AttributeID | undefined = undefined;

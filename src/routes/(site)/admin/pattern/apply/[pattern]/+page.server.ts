@@ -1,4 +1,4 @@
-import { getApplicableSkills } from "$l/translation/skills.js";
+import { getApplicableSkills } from "$lib/translation/skills.js";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types.js";
 

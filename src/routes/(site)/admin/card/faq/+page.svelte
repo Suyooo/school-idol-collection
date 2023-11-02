@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Button from "$l/style/Button.svelte";
+    import Button from "$lib/style/Button.svelte";
 
     let faqName: string = "",
         disabled: boolean = false;

@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type Card from "$m/card/card.js";
-    import { cardRarityShort, cardType } from "$l/card/strings.js";
-    import { cardIsMember, cardIsSong } from "$l/card/types.js";
-    import { CardSongRarity } from "$l/enums/cardRarity.js";
-    import CardImage from "$l/format/CardImage.svelte";
+    import type Card from "$models/card/card.js";
+    import { cardRarityShort, cardType } from "$lib/card/strings.js";
+    import { cardIsMember, cardIsSong } from "$lib/card/types.js";
+    import { CardSongRarity } from "$lib/enums/cardRarity.js";
+    import CardImage from "$lib/format/CardImage.svelte";
 
     export let card: Card;
 </script>

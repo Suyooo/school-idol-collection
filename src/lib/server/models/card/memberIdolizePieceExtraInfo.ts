@@ -1,5 +1,5 @@
-import type { CardMember } from "$m/card/card.js";
-import type CardMemberExtraInfo from "$m/card/memberExtraInfo.js";
+import type { CardMember } from "$models/card/card.js";
+import type CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, Table } from "@sequelize/core/decorators-legacy";
 

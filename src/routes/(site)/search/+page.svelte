@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import type { SearchUiOptions } from "$l/search/ui.js";
-    import { urlToUiOptions } from "$l/search/ui.js";
+    import type { SearchUiOptions } from "$lib/search/ui.js";
+    import { urlToUiOptions } from "$lib/search/ui.js";
     import type { Snapshot } from "./$types.js";
     import SearchOptions from "./SearchOptions.svelte";
 

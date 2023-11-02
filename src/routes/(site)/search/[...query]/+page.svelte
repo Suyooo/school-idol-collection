@@ -1,14 +1,14 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import type Card from "$m/card/card.js";
-    import type { ParseNodePrepared } from "$l/format/format.js";
-    import type { SearchUiOptions } from "$l/search/ui.js";
-    import { urlToUiOptions } from "$l/search/ui.js";
-    import Skill from "$l/format/Skill.svelte";
-    import Button from "$l/style/Button.svelte";
-    import GridPanel from "$l/style/GridPanel.svelte";
-    import Collapse from "$l/style/icons/Collapse.svelte";
-    import Expand from "$l/style/icons/Expand.svelte";
+    import type Card from "$models/card/card.js";
+    import type { ParseNodePrepared } from "$lib/format/format.js";
+    import type { SearchUiOptions } from "$lib/search/ui.js";
+    import { urlToUiOptions } from "$lib/search/ui.js";
+    import Skill from "$lib/format/Skill.svelte";
+    import Button from "$lib/style/Button.svelte";
+    import GridPanel from "$lib/style/GridPanel.svelte";
+    import Collapse from "$lib/style/icons/Collapse.svelte";
+    import Expand from "$lib/style/icons/Expand.svelte";
     import type { PageData } from "./$types.js";
     import CardGridElement from "../../set/[set]/CardGridElement.svelte";
     import SearchOptions from "../SearchOptions.svelte";

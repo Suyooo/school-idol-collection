@@ -1,10 +1,10 @@
-import type CardMemberGroupType from "$l/enums/cardMemberGroupType.js";
-import type { CardMember } from "$m/card/card.js";
-import type CardMemberExtraInfo from "$m/card/memberExtraInfo.js";
-import type { Sequelize } from "$m/db.js";
-import type Skill from "$m/skill/skill.js";
+import type { CardMember } from "$models/card/card.js";
+import type CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
+import type { Sequelize } from "$models/db.js";
+import type Skill from "$models/skill/skill.js";
 import { DataTypes, Model } from "@sequelize/core";
 import { Attribute, HasMany, Table } from "@sequelize/core/decorators-legacy";
+import type CardMemberGroupType from "$lib/enums/cardMemberGroupType.js";
 
 @Table({
     modelName: "CardMemberGroup",

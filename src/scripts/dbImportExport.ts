@@ -1,5 +1,5 @@
+import DBPromise, { modelList } from "$models/db.js";
 import fs from "fs";
-import DBPromise, { modelList } from "$m/db.js";
 
 (async () => {
     if (process.argv.length < 3 || (process.argv[2] !== "import" && process.argv[2] !== "export")) {
