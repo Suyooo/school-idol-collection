@@ -25387,6 +25387,17 @@
             "frontOrientation": 0,
             "backOrientation": 0,
             "copyright": "©2013 プロジェクトラブライブ！ ©KLabGames ©bushiroad"
+        },
+        {
+            "cardNo": "PR-271",
+            "id": 1858,
+            "type": 0,
+            "nameJpn": "小泉 花陽",
+            "nameEng": "Hanayo Koizumi",
+            "group": 4,
+            "frontOrientation": 0,
+            "backOrientation": 0,
+            "copyright": "©2013 プロジェクトラブライブ！ ©KLabGames ©bushiroad"
         }
     ],
     "CardMemberGroups": [
@@ -66144,6 +66155,26 @@
             "costumeEng": null,
             "abilityRush": false,
             "abilityLive": true,
+            "idolizeType": 0,
+            "groupId": null
+        },
+        {
+            "cardNo": "PR-271",
+            "rarity": 5,
+            "baseIfSecret": null,
+            "cost": 1,
+            "birthDay": 17,
+            "birthMonth": 1,
+            "year": 1,
+            "piecesAll": 0,
+            "piecesSmile": 1,
+            "piecesPure": 0,
+            "piecesCool": 0,
+            "pieceBdayAttribute": null,
+            "costumeJpn": null,
+            "costumeEng": null,
+            "abilityRush": true,
+            "abilityLive": false,
             "idolizeType": 0,
             "groupId": null
         }
