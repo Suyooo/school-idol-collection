@@ -3,165 +3,165 @@
 @tailwind utilities;
 
 body {
-    @apply bg-background text-text font-sans leading-5 overflow-y-scroll;
+	@apply overflow-y-scroll bg-background font-sans leading-5 text-text;
 }
 
 a:not(.button) {
-    @apply text-link underline;
+	@apply text-link underline;
 }
 
 a:not(.button):focus,
 a:not(.button):hover {
-    @apply text-link-hover;
+	@apply text-link-hover;
 }
 
 a:not(.button) *,
 a:not(.button) *:before {
-    @apply underline decoration-link;
+	@apply underline decoration-link;
 }
 
 a:not(.button):focus *,
 a:not(.button):hover *,
 a:not(.button):focus *:before,
 a:not(.button):hover *:before {
-    @apply decoration-link-hover;
+	@apply decoration-link-hover;
 }
 
 .cont {
-    @apply w-full max-w-screen-xl mx-auto p-4;
+	@apply mx-auto w-full max-w-screen-xl p-4;
 }
 
 .row {
-    @apply lg:flex flex-wrap;
+	@apply flex-wrap lg:flex;
 }
 
 .row > * {
-    @apply flex-grow-0 flex-shrink-0 w-full;
+	@apply w-full flex-shrink-0 flex-grow-0;
 }
 
 .row > .col-min {
-    @apply lg:basis-0;
+	@apply lg:basis-0;
 }
 
 .row > .col-quarter {
-    @apply lg:basis-[25%];
+	@apply lg:basis-[25%];
 }
 
 .row > .col-third {
-    @apply lg:basis-[33%];
+	@apply lg:basis-[33%];
 }
 
 .row > .col-half {
-    @apply lg:basis-[50%];
+	@apply lg:basis-[50%];
 }
 
 .row > .col-threequarters {
-    @apply lg:basis-[75%];
+	@apply lg:basis-[75%];
 }
 
 .content {
-    @apply bg-background-content p-4 rounded-4xl;
+	@apply rounded-4xl bg-background-content p-4;
 }
 
 .panel {
-    @apply bg-background-panel p-2 rounded-2xl;
+	@apply rounded-2xl bg-background-panel p-2;
 }
 
 .panel + .panel {
-    @apply mt-6;
+	@apply mt-6;
 }
 
 .panel-inner {
-    @apply rounded-lg px-4 pb-0.5 overflow-hidden;
+	@apply overflow-hidden rounded-lg px-4 pb-0.5;
 }
 
 span.card-id {
-    @apply text-text-cardid font-bold;
+	@apply font-bold text-text-cardid;
 }
 
 span.rarity {
-    @apply text-text-rarity font-bold;
+	@apply font-bold text-text-rarity;
 }
 
 h1,
 h2 {
-    @apply text-text-header font-bold uppercase tracking-widest text-2xl mt-4 mb-4;
+	@apply mb-4 mt-4 text-2xl font-bold uppercase tracking-widest text-text-header;
 }
 
 h3 {
-    @apply m-0 mb-4 py-1 w-full text-3xl text-text-header font-bold tracking-widest text-center bg-background-grid rounded-2xl;
+	@apply m-0 mb-4 w-full rounded-2xl bg-background-grid py-1 text-center text-3xl font-bold tracking-widest text-text-header;
 }
 
 h4 {
-    @apply m-0 mb-4 -mx-4 py-1 text-2xl text-text-header font-bold tracking-widest text-center bg-background-grid;
+	@apply m-0 -mx-4 mb-4 bg-background-grid py-1 text-center text-2xl font-bold tracking-widest text-text-header;
 }
 
 h5 {
-    @apply text-text-header mt-4 mb-2 font-bold text-xl;
+	@apply mb-2 mt-4 text-xl font-bold text-text-header;
 }
 
 h5:first-child {
-    @apply mt-0;
+	@apply mt-0;
 }
 
 h6 {
-    @apply text-text-header mt-4 mb-2 font-bold text-lg;
+	@apply mb-2 mt-4 text-lg font-bold text-text-header;
 }
 
 tr > th {
-    @apply whitespace-nowrap;
+	@apply whitespace-nowrap;
 }
 
 .skill-icon {
-    @apply h-[1.25em] bg-contain bg-no-repeat inline-block overflow-hidden align-top !text-transparent cursor-text select-all relative;
+	@apply relative inline-block h-[1.25em] cursor-text select-all overflow-hidden bg-contain bg-no-repeat align-top !text-transparent;
 }
 
 .skill-icon:before {
-    @apply absolute -left-4 top-0 select-none underline pointer-events-none !text-transparent;
-    content: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+	@apply pointer-events-none absolute -left-4 top-0 select-none !text-transparent underline;
+	content: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 }
 
 .skill-icon::selection {
-    color: transparent;
+	color: transparent;
 }
 
 ul {
-    @apply list-disc list-inside;
+	@apply list-inside list-disc;
 }
 
 div.anchor {
-    @apply block h-0 pt-[15vh] mt-[-15vh] pointer-events-none;
+	@apply pointer-events-none mt-[-15vh] block h-0 pt-[15vh];
 }
 
 @keyframes highlight-faq {
-    0%,
-    100% {
-        @apply bg-transparent;
-    }
-    50% {
-        @apply bg-background-highlight;
-    }
+	0%,
+	100% {
+		@apply bg-transparent;
+	}
+	50% {
+		@apply bg-background-highlight;
+	}
 }
 
 input,
 textarea,
 select {
-    @apply bg-input-background border border-input-border p-2;
+	@apply border border-input-border bg-input-background p-2;
 }
 
 input::placeholder {
-    @apply text-input-placeholder;
+	@apply text-input-placeholder;
 }
 
 input:invalid {
-    @apply outline outline-4 outline-error-border;
+	@apply outline outline-4 outline-error-border;
 }
 
 input:disabled,
 select:disabled {
-    @apply bg-input-disabled-background text-input-disabled-text;
+	@apply bg-input-disabled-background text-input-disabled-text;
 }
 
 textarea {
-    @apply w-full h-32 mb-2 rounded;
+	@apply mb-2 h-32 w-full rounded;
 }

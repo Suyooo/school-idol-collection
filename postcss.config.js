@@ -5,5 +5,5 @@ import tailwindNested from "tailwindcss/nesting/index.js";
 import tailwindConfig from "./tailwind.config.js";
 
 export default {
-    plugins: [tailwindNested(postcssNesting), tailwind(tailwindConfig), autoprefixer],
+	plugins: [tailwindNested(postcssNesting), tailwind(tailwindConfig), autoprefixer],
 };

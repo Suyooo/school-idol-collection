@@ -1,33 +1,33 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    import type { SearchUiOptions } from "$lib/search/ui.js";
-    import { urlToUiOptions } from "$lib/search/ui.js";
-    import type { Snapshot } from "./$types.js";
-    import SearchOptions from "./SearchOptions.svelte";
+	import { onMount } from "svelte";
+	import type { SearchUiOptions } from "$lib/search/ui.js";
+	import { urlToUiOptions } from "$lib/search/ui.js";
+	import type { Snapshot } from "./$types.js";
+	import SearchOptions from "./SearchOptions.svelte";
 
-    let options: SearchUiOptions = {};
+	let options: SearchUiOptions = {};
 
-    export const snapshot: Snapshot = {
-        capture: () => options,
-        restore: (value) => (options = value),
-    };
+	export const snapshot: Snapshot = {
+		capture: () => options,
+		restore: (value) => (options = value),
+	};
 
-    onMount(() => {
-        if (history.state.prefillQueryUrl) {
-            options = urlToUiOptions(history.state.prefillQueryUrl);
-        }
-    });
+	onMount(() => {
+		if (history.state.prefillQueryUrl) {
+			options = urlToUiOptions(history.state.prefillQueryUrl);
+		}
+	});
 </script>
 
 <svelte:head>
-    <title>Search &bull; SIC</title>
+	<title>Search &bull; SIC</title>
 </svelte:head>
 
 <div class="content">
-    <h3>Search</h3>
-    <div class="panel">
-        <div class="panel-inner">
-            <SearchOptions {options} />
-        </div>
-    </div>
+	<h3>Search</h3>
+	<div class="panel">
+		<div class="panel-inner">
+			<SearchOptions {options} />
+		</div>
+	</div>
 </div>

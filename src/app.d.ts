@@ -5,13 +5,13 @@ import type { Sequelize } from "$models/db.js";
 import type { DBObject } from "$models/db.js";
 
 declare global {
-    namespace App {
-        // interface Error {}
-        interface Locals {
-            DB: Promise<Sequelize>;
-        }
+	namespace App {
+		// interface Error {}
+		interface Locals {
+			DB: Promise<Sequelize>;
+		}
 
-        // interface PageData {}
-        // interface Platform {}
-    }
+		// interface PageData {}
+		// interface Platform {}
+	}
 }

@@ -1,23 +1,23 @@
 {
-    "tabWidth": 4,
-    "useTabs": false,
-    "printWidth": 120,
-    "trailingComma": "es5",
-    "semi": true,
-    "importOrderParserPlugins": ["typescript", "decorators"],
-    "importOrder": [
-        "^svelte(.*)$",
-        "<THIRD_PARTY_MODULES>",
-        "^@interactjs/interact",
-        "^@interactjs",
-        "^@(.*)$",
-        "app.css$",
-        "^\\$models/(.*)$",
-        "^\\$lib/(.*).js$",
-        "^\\$lib/(.*).svelte$",
-        "^[./](.*).js$",
-        "^[./](.*).svelte$"
-    ],
-    "importOrderSeparation": false,
-    "importOrderSortSpecifiers": true
+	"plugins": ["prettier-plugin-svelte", "@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+	"useTabs": true,
+	"printWidth": 120,
+	"trailingComma": "es5",
+	"semi": true,
+	"importOrderParserPlugins": ["typescript", "decorators"],
+	"importOrder": [
+		"^svelte(.*)$",
+		"<THIRD_PARTY_MODULES>",
+		"^@interactjs/interact",
+		"^@interactjs",
+		"^@(.*)$",
+		"app.css$",
+		"^\\$models/(.*)$",
+		"^\\$lib/(.*).js$",
+		"^\\$lib/(.*).svelte$",
+		"^[./](.*).js$",
+		"^[./](.*).svelte$"
+	],
+	"importOrderSeparation": false,
+	"importOrderSortSpecifiers": true
 }

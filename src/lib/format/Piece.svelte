@@ -1,48 +1,48 @@
 <script lang="ts">
-    import AttributeEnum from "$lib/enums/attribute.js";
-    import type { AttributeID } from "$lib/enums/attribute.js";
-    import type CardType from "$lib/enums/cardType.js";
-    import Language from "$lib/enums/language.js";
+	import AttributeEnum from "$lib/enums/attribute.js";
+	import type { AttributeID } from "$lib/enums/attribute.js";
+	import type CardType from "$lib/enums/cardType.js";
+	import Language from "$lib/enums/language.js";
 
-    export let attr: AttributeEnum;
-    export let attrId: AttributeID | undefined = undefined;
-    export let noText: boolean = false;
+	export let attr: AttributeEnum;
+	export let attrId: AttributeID | undefined = undefined;
+	export let noText: boolean = false;
 
-    export let lang: Language = Language.ENG;
-    export let cardType: CardType | undefined = undefined;
-    cardType;
+	export let lang: Language = Language.ENG;
+	export let cardType: CardType | undefined = undefined;
+	cardType;
 
-    $: {
-        if (attrId !== undefined) attr = AttributeEnum.fromId(attrId);
-    }
+	$: {
+		if (attrId !== undefined) attr = AttributeEnum.fromId(attrId);
+	}
 </script>
 
 <span
-    class="skill-icon {attr.toCssClassName()}"
-    title={lang.leftSquareBracket + attr.toPieceAttributeName(lang) + lang.rightSquareBracket}
+	class="skill-icon {attr.toCssClassName()}"
+	title={lang.leftSquareBracket + attr.toPieceAttributeName(lang) + lang.rightSquareBracket}
 >
-    {#if !noText}{lang.leftSquareBracket}{attr.toPieceAttributeName(lang)}{lang.rightSquareBracket}{/if}
+	{#if !noText}{lang.leftSquareBracket}{attr.toPieceAttributeName(lang)}{lang.rightSquareBracket}{/if}
 </span>
 
 <style lang="postcss">
-    .skill-icon {
-        @apply w-[1em];
-        background-position-y: 0.166em;
+	.skill-icon {
+		@apply w-[1em];
+		background-position-y: 0.166em;
 
-        &.all {
-            background-image: url("/images/icons/piece_all.png");
-        }
+		&.all {
+			background-image: url("/images/icons/piece_all.png");
+		}
 
-        &.smile {
-            background-image: url("/images/icons/piece_smile.png");
-        }
+		&.smile {
+			background-image: url("/images/icons/piece_smile.png");
+		}
 
-        &.pure {
-            background-image: url("/images/icons/piece_pure.png");
-        }
+		&.pure {
+			background-image: url("/images/icons/piece_pure.png");
+		}
 
-        &.cool {
-            background-image: url("/images/icons/piece_cool.png");
-        }
-    }
+		&.cool {
+			background-image: url("/images/icons/piece_cool.png");
+		}
+	}
 </style>

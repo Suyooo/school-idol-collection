@@ -1,614 +1,614 @@
+import type { Includeable, ScopeOptions } from "@sequelize/core";
+import type { IncludeOptions } from "@sequelize/core/_non-semver-use-at-your-own-risk_/model.js";
 import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import GroupEnum from "$lib/enums/group.js";
 import type { GroupID } from "$lib/enums/group.js";
 import SearchFilterError from "$lib/errors/searchFilterError.js";
 import { escapeForUrl } from "$lib/utils/string.js";
-import type { Includeable, ScopeOptions } from "@sequelize/core";
-import type { IncludeOptions } from "@sequelize/core/_non-semver-use-at-your-own-risk_/model.js";
 import AttributeEnum from "../enums/attribute.js";
 import { CardMemberRarity, CardSongRarity } from "../enums/cardRarity.js";
 
 export default abstract class SearchFilter {
-    abstract readonly key: string;
+	abstract readonly key: string;
 
-    protected constructor(_split?: string[]) {}
+	protected constructor(_split?: string[]) {}
 
-    abstract getExplainString(): string;
+	abstract getExplainString(): string;
 
-    abstract getUrlPart(): string;
+	abstract getUrlPart(): string;
 
-    abstract getScopeElements(): (string | ScopeOptions)[];
+	abstract getScopeElements(): (string | ScopeOptions)[];
 }
 
 export abstract class SearchFilter0 extends SearchFilter {
-    constructor(split?: string[]) {
-        super(split);
-    }
+	constructor(split?: string[]) {
+		super(split);
+	}
 
-    getUrlPart = () => this.key;
+	getUrlPart = () => this.key;
 }
 
 export abstract class SearchFilter1 extends SearchFilter {
-    param!: string;
+	param!: string;
 
-    constructor(split?: string[]) {
-        super(split);
-        if (split !== undefined) {
-            this.param = split.slice(1).join(":");
-            if (this.param.trim() === "") throw new SearchFilterError("Missing parameter", split.join(":"));
-        }
-    }
+	constructor(split?: string[]) {
+		super(split);
+		if (split !== undefined) {
+			this.param = split.slice(1).join(":");
+			if (this.param.trim() === "") throw new SearchFilterError("Missing parameter", split.join(":"));
+		}
+	}
 
-    getUrlPart = () => this.key + ":" + escapeForUrl(this.param);
+	getUrlPart = () => this.key + ":" + escapeForUrl(this.param);
 }
 
 export class SearchFilterMember extends SearchFilter0 {
-    readonly key = "member";
-    getExplainString = () => "Members";
-    getScopeElements = () => ["filterMembers"];
+	readonly key = "member";
+	getExplainString = () => "Members";
+	getScopeElements = () => ["filterMembers"];
 }
 
 export class SearchFilterSong extends SearchFilter0 {
-    readonly key = "song";
-    getExplainString = () => "Songs";
-    getScopeElements = () => ["filterSongs"];
+	readonly key = "song";
+	getExplainString = () => "Songs";
+	getScopeElements = () => ["filterSongs"];
 }
 
 export class SearchFilterMemory extends SearchFilter0 {
-    readonly key = "memory";
-    getExplainString = () => "Memories";
-    getScopeElements = () => ["filterMemories"];
+	readonly key = "memory";
+	getExplainString = () => "Memories";
+	getScopeElements = () => ["filterMemories"];
 }
 
 export class SearchFilterSet extends SearchFilter1 {
-    readonly key = "set";
-    getExplainString = () => `In Set ${this.param}`;
-    getScopeElements = () => [<ScopeOptions>{ method: ["filterSet", this.param] }];
+	readonly key = "set";
+	getExplainString = () => `In Set ${this.param}`;
+	getScopeElements = () => [<ScopeOptions>{ method: ["filterSet", this.param] }];
 }
 
 export abstract class SearchFilterMemberRarity extends SearchFilter0 {
-    abstract readonly rarity: CardMemberRarity;
-    getScopeElements = () => [<ScopeOptions>{ method: ["searchMemberRarity", this.rarity] }];
+	abstract readonly rarity: CardMemberRarity;
+	getScopeElements = () => [<ScopeOptions>{ method: ["searchMemberRarity", this.rarity] }];
 }
 
 export class SearchFilterMemberRarityR extends SearchFilterMemberRarity {
-    readonly key = "r";
-    readonly rarity = CardMemberRarity.R;
-    getExplainString = () => "R Rarity";
+	readonly key = "r";
+	readonly rarity = CardMemberRarity.R;
+	getExplainString = () => "R Rarity";
 }
 
 export class SearchFilterMemberRaritySR extends SearchFilterMemberRarity {
-    readonly key = "sr";
-    readonly rarity = CardMemberRarity.SR;
-    getExplainString = () => "SR Rarity";
+	readonly key = "sr";
+	readonly rarity = CardMemberRarity.SR;
+	getExplainString = () => "SR Rarity";
 }
 
 export class SearchFilterMemberRarityHR extends SearchFilterMemberRarity {
-    readonly key = "hr";
-    readonly rarity = CardMemberRarity.HR;
-    getExplainString = () => "HR Rarity";
+	readonly key = "hr";
+	readonly rarity = CardMemberRarity.HR;
+	getExplainString = () => "HR Rarity";
 }
 
 export class SearchFilterMemberRaritySpecial extends SearchFilterMemberRarity {
-    readonly key = "special";
-    readonly rarity = CardMemberRarity.Special;
-    getExplainString = () => "Special Rarity";
+	readonly key = "special";
+	readonly rarity = CardMemberRarity.Special;
+	getExplainString = () => "Special Rarity";
 }
 
 export class SearchFilterMemberRaritySecret extends SearchFilterMemberRarity {
-    readonly key = "secret";
-    readonly rarity = CardMemberRarity.Secret;
-    getExplainString = () => "Secret Rarity";
+	readonly key = "secret";
+	readonly rarity = CardMemberRarity.Secret;
+	getExplainString = () => "Secret Rarity";
 }
 
 export class SearchFilterMemberRarityPR extends SearchFilterMemberRarity {
-    readonly key = "pr";
-    readonly rarity = CardMemberRarity.PR;
-    getExplainString = () => "PR Rarity";
+	readonly key = "pr";
+	readonly rarity = CardMemberRarity.PR;
+	getExplainString = () => "PR Rarity";
 }
 
 export class SearchFilterMemberRarityN extends SearchFilterMemberRarity {
-    readonly key = "n";
-    readonly rarity = CardMemberRarity.N;
-    getExplainString = () => "N Rarity";
+	readonly key = "n";
+	readonly rarity = CardMemberRarity.N;
+	getExplainString = () => "N Rarity";
 }
 
 export class SearchFilterMemberRaritySSR extends SearchFilterMemberRarity {
-    readonly key = "ssr";
-    readonly rarity = CardMemberRarity.SSR;
-    getExplainString = () => "SSR Rarity";
+	readonly key = "ssr";
+	readonly rarity = CardMemberRarity.SSR;
+	getExplainString = () => "SSR Rarity";
 }
 
 export abstract class SearchFilterMemberNames extends SearchFilter0 {
-    abstract readonly group: GroupID;
-    getScopeElements = () => [<ScopeOptions>{ method: ["searchGroup", GroupEnum.getSubIdsFromId(this.group)] }];
+	abstract readonly group: GroupID;
+	getScopeElements = () => [<ScopeOptions>{ method: ["searchGroup", GroupEnum.getSubIdsFromId(this.group)] }];
 }
 
 export class SearchFilterMemberGroupMuse extends SearchFilterMemberNames {
-    readonly key = "muse";
-    readonly group = 2;
-    getExplainString = () => "µ's";
+	readonly key = "muse";
+	readonly group = 2;
+	getExplainString = () => "µ's";
 }
 
 export class SearchFilterMemberGroupAqours extends SearchFilterMemberNames {
-    readonly key = "aqours";
-    readonly group = 3;
-    getExplainString = () => "Aqours";
+	readonly key = "aqours";
+	readonly group = 3;
+	getExplainString = () => "Aqours";
 }
 
 export class SearchFilterMemberGroupPrintemps extends SearchFilterMemberNames {
-    readonly key = "printemps";
-    readonly group = 4;
-    getExplainString = () => "Printemps";
+	readonly key = "printemps";
+	readonly group = 4;
+	getExplainString = () => "Printemps";
 }
 
 export class SearchFilterMemberGroupLilyWhite extends SearchFilterMemberNames {
-    readonly key = "lilywhite";
-    readonly group = 5;
-    getExplainString = () => "lily white";
+	readonly key = "lilywhite";
+	readonly group = 5;
+	getExplainString = () => "lily white";
 }
 
 export class SearchFilterMemberGroupBiBi extends SearchFilterMemberNames {
-    readonly key = "bibi";
-    readonly group = 6;
-    getExplainString = () => "BiBi";
+	readonly key = "bibi";
+	readonly group = 6;
+	getExplainString = () => "BiBi";
 }
 
 export class SearchFilterMemberGroupCYaRon extends SearchFilterMemberNames {
-    readonly key = "cyaron";
-    readonly group = 7;
-    getExplainString = () => "CYaRon!";
+	readonly key = "cyaron";
+	readonly group = 7;
+	getExplainString = () => "CYaRon!";
 }
 
 export class SearchFilterMemberGroupAzalea extends SearchFilterMemberNames {
-    readonly key = "azalea";
-    readonly group = 8;
-    getExplainString = () => "AZALEA";
+	readonly key = "azalea";
+	readonly group = 8;
+	getExplainString = () => "AZALEA";
 }
 
 export class SearchFilterMemberGroupGuiltyKiss extends SearchFilterMemberNames {
-    readonly key = "guiltykiss";
-    readonly group = 9;
-    getExplainString = () => "Guilty Kiss";
+	readonly key = "guiltykiss";
+	readonly group = 9;
+	getExplainString = () => "Guilty Kiss";
 }
 
 export class SearchFilterMemberGroupSaintSnow extends SearchFilterMemberNames {
-    readonly key = "saintsnow";
-    readonly group = 10;
-    getExplainString = () => "Saint Snow";
+	readonly key = "saintsnow";
+	readonly group = 10;
+	getExplainString = () => "Saint Snow";
 }
 
 export abstract class SearchFilterSongRarity extends SearchFilter0 {
-    abstract readonly rarity: CardSongRarity;
-    getScopeElements = () => [<ScopeOptions>{ method: ["searchSongRarity", this.rarity] }];
+	abstract readonly rarity: CardSongRarity;
+	getScopeElements = () => [<ScopeOptions>{ method: ["searchSongRarity", this.rarity] }];
 }
 
 export class SearchFilterSongRarityM extends SearchFilterSongRarity {
-    readonly key = "m";
-    readonly rarity = CardSongRarity.M;
-    getExplainString = () => "M Rarity";
+	readonly key = "m";
+	readonly rarity = CardSongRarity.M;
+	getExplainString = () => "M Rarity";
 }
 
 export class SearchFilterSongRarityGR extends SearchFilterSongRarity {
-    readonly key = "gr";
-    readonly rarity = CardSongRarity.GR;
-    getExplainString = () => "GR Rarity";
+	readonly key = "gr";
+	readonly rarity = CardSongRarity.GR;
+	getExplainString = () => "GR Rarity";
 }
 
 export class SearchFilterMemberIdolizableYes extends SearchFilter0 {
-    readonly key = "idolizable";
-    getScopeElements = () => ["searchIdolizable"];
-    getExplainString = () => "Idolizable";
+	readonly key = "idolizable";
+	getScopeElements = () => ["searchIdolizable"];
+	getExplainString = () => "Idolizable";
 }
 
 export class SearchFilterMemberIdolizableNo extends SearchFilter0 {
-    readonly key = "idolizable";
-    getScopeElements = () => ["searchNotIdolizable"];
-    getExplainString = () => "Not Idolizable";
+	readonly key = "idolizable";
+	getScopeElements = () => ["searchNotIdolizable"];
+	getExplainString = () => "Not Idolizable";
 }
 
 export class SearchFilterMemberAbilityNone extends SearchFilter0 {
-    readonly key = "noability";
-    getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", false, false] }];
-    getExplainString = () => "No Ability";
+	readonly key = "noability";
+	getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", false, false] }];
+	getExplainString = () => "No Ability";
 }
 
 export class SearchFilterMemberAbilityRush extends SearchFilter0 {
-    readonly key = "rush";
-    getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", true, null] }];
-    getExplainString = () => "[RUSH] Ability";
+	readonly key = "rush";
+	getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", true, null] }];
+	getExplainString = () => "[RUSH] Ability";
 }
 
 export class SearchFilterMemberAbilityLive extends SearchFilter0 {
-    readonly key = "live";
-    getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", null, true] }];
-    getExplainString = () => "[LIVE] Ability";
+	readonly key = "live";
+	getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", null, true] }];
+	getExplainString = () => "[LIVE] Ability";
 }
 
 export class SearchFilterMemberAbilityRushOrLive extends SearchFilter0 {
-    readonly key = "rushorlive";
-    getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", true, true] }];
-    getExplainString = () => "[RUSH/LIVE] Ability";
+	readonly key = "rushorlive";
+	getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", true, true] }];
+	getExplainString = () => "[RUSH/LIVE] Ability";
 }
 
 export class SearchFilterCardID extends SearchFilter1 {
-    readonly key = "id";
-    getScopeElements = () => [<ScopeOptions>{ method: ["filterId", parseInt(this.param)] }];
-    getExplainString = () => "Card ID " + this.param;
+	readonly key = "id";
+	getScopeElements = () => [<ScopeOptions>{ method: ["filterId", parseInt(this.param)] }];
+	getExplainString = () => "Card ID " + this.param;
 }
 
 export class SearchFilterMemberYear extends SearchFilter1 {
-    readonly key = "year";
+	readonly key = "year";
 
-    constructor(split?: string[]) {
-        super(split);
-        if (this.param !== "1" && this.param !== "2" && this.param !== "3") {
-            throw new SearchFilterError("Invalid parameter for School Year filter", this.param);
-        }
-    }
+	constructor(split?: string[]) {
+		super(split);
+		if (this.param !== "1" && this.param !== "2" && this.param !== "3") {
+			throw new SearchFilterError("Invalid parameter for School Year filter", this.param);
+		}
+	}
 
-    getScopeElements = () => [<ScopeOptions>{ method: ["searchYear", parseInt(this.param)] }];
-    getExplainString = () => {
-        switch (this.param) {
-            case "1":
-                return "1st Year";
-            case "2":
-                return "2nd Year";
-            default:
-                return "3rd Year";
-        }
-    };
+	getScopeElements = () => [<ScopeOptions>{ method: ["searchYear", parseInt(this.param)] }];
+	getExplainString = () => {
+		switch (this.param) {
+			case "1":
+				return "1st Year";
+			case "2":
+				return "2nd Year";
+			default:
+				return "3rd Year";
+		}
+	};
 }
 
 export abstract class SearchFilterTranslatableLike extends SearchFilter1 {
-    abstract readonly columnNames: string[];
-    abstract readonly explainName: string;
-    readonly include: IncludeOptions | undefined = undefined;
+	abstract readonly columnNames: string[];
+	abstract readonly explainName: string;
+	readonly include: IncludeOptions | undefined = undefined;
 
-    getScopeElements = () => {
-        if (this.include) {
-            return [
-                <ScopeOptions>{
-                    method: ["searchGenericMultiColumnLikeWithInclude", this.param, this.columnNames, this.include],
-                },
-            ];
-        }
-        return [<ScopeOptions>{ method: ["searchGenericMultiColumnLike", this.param, this.columnNames] }];
-    };
-    getExplainString = () => `${this.explainName} contains "${this.param}"`;
+	getScopeElements = () => {
+		if (this.include) {
+			return [
+				<ScopeOptions>{
+					method: ["searchGenericMultiColumnLikeWithInclude", this.param, this.columnNames, this.include],
+				},
+			];
+		}
+		return [<ScopeOptions>{ method: ["searchGenericMultiColumnLike", this.param, this.columnNames] }];
+	};
+	getExplainString = () => `${this.explainName} contains "${this.param}"`;
 }
 
 export class SearchFilterName extends SearchFilterTranslatableLike {
-    readonly key = "name";
-    readonly columnNames = ["nameJpn", "nameEng"];
-    readonly explainName = "Name";
+	readonly key = "name";
+	readonly columnNames = ["nameJpn", "nameEng"];
+	readonly explainName = "Name";
 }
 
 export class SearchFilterCostume extends SearchFilterTranslatableLike {
-    readonly key = "costume";
-    readonly columnNames = ["$member.costumeJpn$", "$member.costumeEng$"];
-    readonly explainName = "Costume";
-    readonly include = {
-        association: "member",
-        required: true,
-        attributes: ["costumeJpn", "costumeEng"],
-    };
+	readonly key = "costume";
+	readonly columnNames = ["$member.costumeJpn$", "$member.costumeEng$"];
+	readonly explainName = "Costume";
+	readonly include = {
+		association: "member",
+		required: true,
+		attributes: ["costumeJpn", "costumeEng"],
+	};
 }
 
 export class SearchFilterSkill extends SearchFilterTranslatableLike {
-    readonly key = "skill";
-    readonly columnNames = ["$skills.jpn$", "$skills.eng$"];
-    readonly explainName = "Skill";
-    readonly include = {
-        association: "skills",
-        separate: false,
-        required: true,
-        attributes: ["jpn", "eng"],
-    };
+	readonly key = "skill";
+	readonly columnNames = ["$skills.jpn$", "$skills.eng$"];
+	readonly explainName = "Skill";
+	readonly include = {
+		association: "skills",
+		separate: false,
+		required: true,
+		attributes: ["jpn", "eng"],
+	};
 }
 
 export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
-    abstract readonly column: string;
-    readonly columnLiteral: boolean = false;
-    abstract readonly explainName: string;
-    readonly explainAfter: boolean = false;
-    readonly include: Includeable | undefined = undefined;
+	abstract readonly column: string;
+	readonly columnLiteral: boolean = false;
+	abstract readonly explainName: string;
+	readonly explainAfter: boolean = false;
+	readonly include: Includeable | undefined = undefined;
 
-    getScopeElements = () => [
-        <ScopeOptions>{
-            method: ["searchGenericNumberWithMod", this.param, this.column, this.columnLiteral, this.include],
-        },
-    ];
-    getExplainString = () => {
-        const mod = this.param.endsWith("+") ? " or more" : this.param.endsWith("-") ? " or less" : "";
-        if (this.explainAfter) {
-            return `${parseInt(this.param)}${mod} ${
-                this.param === "1" ? this.explainName.substring(0, this.explainName.length - 1) : this.explainName
-            }`;
-        } else {
-            return `${this.explainName} is ${parseInt(this.param)}${mod}`;
-        }
-    };
-    getUrlPart = () => this.key + ":" + this.param;
+	getScopeElements = () => [
+		<ScopeOptions>{
+			method: ["searchGenericNumberWithMod", this.param, this.column, this.columnLiteral, this.include],
+		},
+	];
+	getExplainString = () => {
+		const mod = this.param.endsWith("+") ? " or more" : this.param.endsWith("-") ? " or less" : "";
+		if (this.explainAfter) {
+			return `${parseInt(this.param)}${mod} ${
+				this.param === "1" ? this.explainName.substring(0, this.explainName.length - 1) : this.explainName
+			}`;
+		} else {
+			return `${this.explainName} is ${parseInt(this.param)}${mod}`;
+		}
+	};
+	getUrlPart = () => this.key + ":" + this.param;
 }
 
 export class SearchFilterMemberCost extends SearchFilterNumberWithMod {
-    readonly key = "cost";
-    readonly column = "$member.cost$";
-    readonly explainName = "Cost";
-    readonly include: Includeable = {
-        association: "member",
-        required: true,
-        attributes: ["cost"],
-    };
+	readonly key = "cost";
+	readonly column = "$member.cost$";
+	readonly explainName = "Cost";
+	readonly include: Includeable = {
+		association: "member",
+		required: true,
+		attributes: ["cost"],
+	};
 }
 
 export class SearchFilterMemberPieces extends SearchFilterNumberWithMod {
-    readonly key = "pieces";
-    readonly column = "member.piecesSmile + member.piecesPure + member.piecesCool + member.piecesAll";
-    readonly columnLiteral = true;
-    readonly explainName = "Pieces";
-    readonly explainAfter = true;
-    readonly include: Includeable = {
-        association: "member",
-        required: true,
-        attributes: ["piecesSmile", "piecesPure", "piecesCool", "piecesAll"],
-    };
+	readonly key = "pieces";
+	readonly column = "member.piecesSmile + member.piecesPure + member.piecesCool + member.piecesAll";
+	readonly columnLiteral = true;
+	readonly explainName = "Pieces";
+	readonly explainAfter = true;
+	readonly include: Includeable = {
+		association: "member",
+		required: true,
+		attributes: ["piecesSmile", "piecesPure", "piecesCool", "piecesAll"],
+	};
 }
 
 export class SearchFilterMemberPiecesAll extends SearchFilterNumberWithMod {
-    readonly key = "allpieces";
-    readonly column = "$member.piecesAll$";
-    readonly explainName = "[ALL] Pieces";
-    readonly explainAfter = true;
-    readonly include: Includeable = {
-        association: "member",
-        required: true,
-        attributes: ["piecesAll"],
-    };
+	readonly key = "allpieces";
+	readonly column = "$member.piecesAll$";
+	readonly explainName = "[ALL] Pieces";
+	readonly explainAfter = true;
+	readonly include: Includeable = {
+		association: "member",
+		required: true,
+		attributes: ["piecesAll"],
+	};
 }
 
 export class SearchFilterMemberPiecesSmile extends SearchFilterNumberWithMod {
-    readonly key = "smilepieces";
-    readonly column = "$member.piecesSmile$";
-    readonly explainName = "[SMILE] Pieces";
-    readonly explainAfter = true;
-    readonly include: Includeable = {
-        association: "member",
-        required: true,
-        attributes: ["piecesSmile"],
-    };
+	readonly key = "smilepieces";
+	readonly column = "$member.piecesSmile$";
+	readonly explainName = "[SMILE] Pieces";
+	readonly explainAfter = true;
+	readonly include: Includeable = {
+		association: "member",
+		required: true,
+		attributes: ["piecesSmile"],
+	};
 }
 
 export class SearchFilterMemberPiecesPure extends SearchFilterNumberWithMod {
-    readonly key = "purepieces";
-    readonly column = "$member.piecesPure$";
-    readonly explainName = "[PURE] Pieces";
-    readonly explainAfter = true;
-    readonly include: Includeable = {
-        association: "member",
-        required: true,
-        attributes: ["piecesPure"],
-    };
+	readonly key = "purepieces";
+	readonly column = "$member.piecesPure$";
+	readonly explainName = "[PURE] Pieces";
+	readonly explainAfter = true;
+	readonly include: Includeable = {
+		association: "member",
+		required: true,
+		attributes: ["piecesPure"],
+	};
 }
 
 export class SearchFilterMemberPiecesCool extends SearchFilterNumberWithMod {
-    readonly key = "coolpieces";
-    readonly column = "$member.piecesCool$";
-    readonly explainName = "[COOL] Pieces";
-    readonly explainAfter = true;
-    readonly include: Includeable = {
-        association: "member",
-        required: true,
-        attributes: ["piecesCool"],
-    };
+	readonly key = "coolpieces";
+	readonly column = "$member.piecesCool$";
+	readonly explainName = "[COOL] Pieces";
+	readonly explainAfter = true;
+	readonly include: Includeable = {
+		association: "member",
+		required: true,
+		attributes: ["piecesCool"],
+	};
 }
 
 export class SearchFilterMemberBonusYes extends SearchFilter0 {
-    readonly key = "bonus";
-    getScopeElements = () => ["searchBonus"];
-    getExplainString = () => "With Birthday Bonus";
+	readonly key = "bonus";
+	getScopeElements = () => ["searchBonus"];
+	getExplainString = () => "With Birthday Bonus";
 }
 
 export class SearchFilterMemberBonusNo extends SearchFilter0 {
-    readonly key = "nobonus";
-    getScopeElements = () => ["searchNoBonus"];
-    getExplainString = () => "No Birthday Bonus";
+	readonly key = "nobonus";
+	getScopeElements = () => ["searchNoBonus"];
+	getExplainString = () => "No Birthday Bonus";
 }
 
 export abstract class SearchFilterSongAttribute extends SearchFilter0 {
-    abstract readonly attribute: AttributeEnum;
-    getScopeElements = () => [<ScopeOptions>{ method: ["searchSongAttribute", this.attribute.id] }];
-    getExplainString = () => `Attribute is ${this.attribute.toSongAttributeName()}`;
+	abstract readonly attribute: AttributeEnum;
+	getScopeElements = () => [<ScopeOptions>{ method: ["searchSongAttribute", this.attribute.id] }];
+	getExplainString = () => `Attribute is ${this.attribute.toSongAttributeName()}`;
 }
 
 export class SearchFilterSongAttributeNeutral extends SearchFilterSongAttribute {
-    readonly key = "neutral";
-    readonly attribute = AttributeEnum.ALL;
+	readonly key = "neutral";
+	readonly attribute = AttributeEnum.ALL;
 }
 
 export class SearchFilterSongAttributeSmile extends SearchFilterSongAttribute {
-    readonly key = "smile";
-    readonly attribute = AttributeEnum.SMILE;
+	readonly key = "smile";
+	readonly attribute = AttributeEnum.SMILE;
 }
 
 export class SearchFilterSongAttributePure extends SearchFilterSongAttribute {
-    readonly key = "pure";
-    readonly attribute = AttributeEnum.PURE;
+	readonly key = "pure";
+	readonly attribute = AttributeEnum.PURE;
 }
 
 export class SearchFilterSongAttributeCool extends SearchFilterSongAttribute {
-    readonly key = "cool";
-    readonly attribute = AttributeEnum.COOL;
+	readonly key = "cool";
+	readonly attribute = AttributeEnum.COOL;
 }
 
 export class SearchFilterSongAttributeOrange extends SearchFilterSongAttribute {
-    readonly key = "orange";
-    readonly attribute = AttributeEnum.ORANGE;
+	readonly key = "orange";
+	readonly attribute = AttributeEnum.ORANGE;
 }
 
 export abstract class SearchFilterSongReqType extends SearchFilter0 {
-    abstract readonly reqType: CardSongRequirementType;
-    getScopeElements = () => [<ScopeOptions>{ method: ["searchSongReqType", this.reqType] }];
+	abstract readonly reqType: CardSongRequirementType;
+	getScopeElements = () => [<ScopeOptions>{ method: ["searchSongReqType", this.reqType] }];
 }
 
 export class SearchFilterSongReqTypeAny extends SearchFilterSongReqType {
-    readonly key = "anypiece";
-    readonly reqType = CardSongRequirementType.ANY_PIECE;
-    getExplainString = () => "With Any Piece Requirement";
+	readonly key = "anypiece";
+	readonly reqType = CardSongRequirementType.ANY_PIECE;
+	getExplainString = () => "With Any Piece Requirement";
 }
 
 export class SearchFilterSongReqTypeAttr extends SearchFilterSongReqType {
-    readonly key = "attributepiece";
-    readonly reqType = CardSongRequirementType.ATTR_PIECE;
-    getExplainString = () => "With Attribute Piece Requirement";
+	readonly key = "attributepiece";
+	readonly reqType = CardSongRequirementType.ATTR_PIECE;
+	getExplainString = () => "With Attribute Piece Requirement";
 }
 
 export class SearchFilterSongLivePoints extends SearchFilterNumberWithMod {
-    readonly key = "livepoints";
-    readonly column = "$song.lpBase$";
-    readonly explainName = "Base Live Points";
-    readonly explainAfter = true;
-    readonly include: Includeable = {
-        association: "song",
-        required: true,
-        attributes: ["lpBase"],
-    };
+	readonly key = "livepoints";
+	readonly column = "$song.lpBase$";
+	readonly explainName = "Base Live Points";
+	readonly explainAfter = true;
+	readonly include: Includeable = {
+		association: "song",
+		required: true,
+		attributes: ["lpBase"],
+	};
 }
 
 export class SearchFilterSongReqSmile extends SearchFilterNumberWithMod {
-    readonly key = "smilerequired";
-    readonly column = "$song.attrRequirement.piecesSmile$";
-    readonly explainName = "Required [SMILE] Pieces";
-    readonly explainAfter = true;
-    readonly include: Includeable = {
-        association: "song",
-        required: true,
-        include: [
-            {
-                association: "attrRequirement",
-                required: true,
-                attributes: ["piecesSmile"],
-            },
-        ],
-    };
+	readonly key = "smilerequired";
+	readonly column = "$song.attrRequirement.piecesSmile$";
+	readonly explainName = "Required [SMILE] Pieces";
+	readonly explainAfter = true;
+	readonly include: Includeable = {
+		association: "song",
+		required: true,
+		include: [
+			{
+				association: "attrRequirement",
+				required: true,
+				attributes: ["piecesSmile"],
+			},
+		],
+	};
 }
 
 export class SearchFilterSongReqPure extends SearchFilterNumberWithMod {
-    readonly key = "purerequired";
-    readonly column = "$song.attrRequirement.piecesPure$";
-    readonly explainName = "Required [PURE] Pieces";
-    readonly explainAfter = true;
-    readonly include: Includeable = {
-        association: "song",
-        required: true,
-        include: [
-            {
-                association: "attrRequirement",
-                required: true,
-                attributes: ["piecesPure"],
-            },
-        ],
-    };
+	readonly key = "purerequired";
+	readonly column = "$song.attrRequirement.piecesPure$";
+	readonly explainName = "Required [PURE] Pieces";
+	readonly explainAfter = true;
+	readonly include: Includeable = {
+		association: "song",
+		required: true,
+		include: [
+			{
+				association: "attrRequirement",
+				required: true,
+				attributes: ["piecesPure"],
+			},
+		],
+	};
 }
 
 export class SearchFilterSongReqCool extends SearchFilterNumberWithMod {
-    readonly key = "coolrequired";
-    readonly column = "$song.attrRequirement.piecesCool$";
-    readonly explainName = "Required [COOL] Pieces";
-    readonly explainAfter = true;
-    readonly include: Includeable = {
-        association: "song",
-        required: true,
-        include: [
-            {
-                association: "attrRequirement",
-                required: true,
-                attributes: ["piecesCool"],
-            },
-        ],
-    };
+	readonly key = "coolrequired";
+	readonly column = "$song.attrRequirement.piecesCool$";
+	readonly explainName = "Required [COOL] Pieces";
+	readonly explainAfter = true;
+	readonly include: Includeable = {
+		association: "song",
+		required: true,
+		include: [
+			{
+				association: "attrRequirement",
+				required: true,
+				attributes: ["piecesCool"],
+			},
+		],
+	};
 }
 
 export class SearchFilterSongReqAny extends SearchFilterNumberWithMod {
-    readonly key = "required";
-    readonly column = "$song.anyRequirement.piecesAll$";
-    readonly explainName = "Required Pieces";
-    readonly explainAfter = true;
-    readonly include: Includeable = {
-        association: "song",
-        required: true,
-        include: [
-            {
-                association: "anyRequirement",
-                required: true,
-                attributes: ["piecesAll"],
-            },
-        ],
-    };
+	readonly key = "required";
+	readonly column = "$song.anyRequirement.piecesAll$";
+	readonly explainName = "Required Pieces";
+	readonly explainAfter = true;
+	readonly include: Includeable = {
+		association: "song",
+		required: true,
+		include: [
+			{
+				association: "anyRequirement",
+				required: true,
+				attributes: ["piecesAll"],
+			},
+		],
+	};
 }
 
 const map = new Map<string, new (split?: string[]) => SearchFilter>([
-    ["member", SearchFilterMember],
-    ["song", SearchFilterSong],
-    ["memory", SearchFilterMemory],
-    ["r", SearchFilterMemberRarityR],
-    ["sr", SearchFilterMemberRaritySR],
-    ["hr", SearchFilterMemberRarityHR],
-    ["special", SearchFilterMemberRaritySpecial],
-    ["secret", SearchFilterMemberRaritySecret],
-    ["pr", SearchFilterMemberRarityPR],
-    ["n", SearchFilterMemberRarityN],
-    ["ssr", SearchFilterMemberRaritySSR],
-    ["muse", SearchFilterMemberGroupMuse],
-    ["aqours", SearchFilterMemberGroupAqours],
-    ["printemps", SearchFilterMemberGroupPrintemps],
-    ["lilywhite", SearchFilterMemberGroupLilyWhite],
-    ["bibi", SearchFilterMemberGroupBiBi],
-    ["cyaron", SearchFilterMemberGroupCYaRon],
-    ["azalea", SearchFilterMemberGroupAzalea],
-    ["guiltykiss", SearchFilterMemberGroupGuiltyKiss],
-    ["saintsnow", SearchFilterMemberGroupSaintSnow],
-    ["m", SearchFilterSongRarityM],
-    ["gr", SearchFilterSongRarityGR],
-    ["id", SearchFilterCardID],
-    ["year", SearchFilterMemberYear],
-    ["name", SearchFilterName],
-    ["set", SearchFilterSet],
-    ["costume", SearchFilterCostume],
-    ["skill", SearchFilterSkill],
-    ["cost", SearchFilterMemberCost],
-    ["idolizable", SearchFilterMemberIdolizableYes],
-    ["notidolizable", SearchFilterMemberIdolizableNo],
-    ["noability", SearchFilterMemberAbilityNone],
-    ["rush", SearchFilterMemberAbilityRush],
-    ["live", SearchFilterMemberAbilityLive],
-    ["rushorlive", SearchFilterMemberAbilityRushOrLive],
-    ["pieces", SearchFilterMemberPieces],
-    ["allpieces", SearchFilterMemberPiecesAll],
-    ["smilepieces", SearchFilterMemberPiecesSmile],
-    ["purepieces", SearchFilterMemberPiecesPure],
-    ["coolpieces", SearchFilterMemberPiecesCool],
-    ["bonus", SearchFilterMemberBonusYes],
-    ["nobonus", SearchFilterMemberBonusNo],
-    ["neutral", SearchFilterSongAttributeNeutral],
-    ["smile", SearchFilterSongAttributeSmile],
-    ["pure", SearchFilterSongAttributePure],
-    ["cool", SearchFilterSongAttributeCool],
-    ["orange", SearchFilterSongAttributeOrange],
-    ["livepoints", SearchFilterSongLivePoints],
-    ["anypiece", SearchFilterSongReqTypeAny],
-    ["attributepiece", SearchFilterSongReqTypeAttr],
-    ["required", SearchFilterSongReqAny],
-    ["smilerequired", SearchFilterSongReqSmile],
-    ["purerequired", SearchFilterSongReqPure],
-    ["coolrequired", SearchFilterSongReqCool],
+	["member", SearchFilterMember],
+	["song", SearchFilterSong],
+	["memory", SearchFilterMemory],
+	["r", SearchFilterMemberRarityR],
+	["sr", SearchFilterMemberRaritySR],
+	["hr", SearchFilterMemberRarityHR],
+	["special", SearchFilterMemberRaritySpecial],
+	["secret", SearchFilterMemberRaritySecret],
+	["pr", SearchFilterMemberRarityPR],
+	["n", SearchFilterMemberRarityN],
+	["ssr", SearchFilterMemberRaritySSR],
+	["muse", SearchFilterMemberGroupMuse],
+	["aqours", SearchFilterMemberGroupAqours],
+	["printemps", SearchFilterMemberGroupPrintemps],
+	["lilywhite", SearchFilterMemberGroupLilyWhite],
+	["bibi", SearchFilterMemberGroupBiBi],
+	["cyaron", SearchFilterMemberGroupCYaRon],
+	["azalea", SearchFilterMemberGroupAzalea],
+	["guiltykiss", SearchFilterMemberGroupGuiltyKiss],
+	["saintsnow", SearchFilterMemberGroupSaintSnow],
+	["m", SearchFilterSongRarityM],
+	["gr", SearchFilterSongRarityGR],
+	["id", SearchFilterCardID],
+	["year", SearchFilterMemberYear],
+	["name", SearchFilterName],
+	["set", SearchFilterSet],
+	["costume", SearchFilterCostume],
+	["skill", SearchFilterSkill],
+	["cost", SearchFilterMemberCost],
+	["idolizable", SearchFilterMemberIdolizableYes],
+	["notidolizable", SearchFilterMemberIdolizableNo],
+	["noability", SearchFilterMemberAbilityNone],
+	["rush", SearchFilterMemberAbilityRush],
+	["live", SearchFilterMemberAbilityLive],
+	["rushorlive", SearchFilterMemberAbilityRushOrLive],
+	["pieces", SearchFilterMemberPieces],
+	["allpieces", SearchFilterMemberPiecesAll],
+	["smilepieces", SearchFilterMemberPiecesSmile],
+	["purepieces", SearchFilterMemberPiecesPure],
+	["coolpieces", SearchFilterMemberPiecesCool],
+	["bonus", SearchFilterMemberBonusYes],
+	["nobonus", SearchFilterMemberBonusNo],
+	["neutral", SearchFilterSongAttributeNeutral],
+	["smile", SearchFilterSongAttributeSmile],
+	["pure", SearchFilterSongAttributePure],
+	["cool", SearchFilterSongAttributeCool],
+	["orange", SearchFilterSongAttributeOrange],
+	["livepoints", SearchFilterSongLivePoints],
+	["anypiece", SearchFilterSongReqTypeAny],
+	["attributepiece", SearchFilterSongReqTypeAttr],
+	["required", SearchFilterSongReqAny],
+	["smilerequired", SearchFilterSongReqSmile],
+	["purerequired", SearchFilterSongReqPure],
+	["coolrequired", SearchFilterSongReqCool],
 ]);
 
 export function getSearchFilter(key: string): { new (split: string[]): SearchFilter } {
-    if (map.has(key)) {
-        return map.get(key)!;
-    } else {
-        throw new SearchFilterError("Unknown filter key", key);
-    }
+	if (map.has(key)) {
+		return map.get(key)!;
+	} else {
+		throw new SearchFilterError("Unknown filter key", key);
+	}
 }
