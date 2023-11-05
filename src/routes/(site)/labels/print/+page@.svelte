@@ -142,7 +142,7 @@
 		@apply m-4 max-w-2xl;
 
 		& .error b {
-			@apply text-highlight-red;
+			@apply text-error-text;
 		}
 	}
 

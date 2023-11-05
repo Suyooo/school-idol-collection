@@ -96,6 +96,7 @@ export default {
 						},
 					},
 					error: {
+						text: colors.red[400],
 						border: colors.red[500],
 						background: colors.red[700],
 					},
