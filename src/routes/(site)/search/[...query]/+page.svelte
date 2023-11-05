@@ -34,42 +34,43 @@
     <title>Search Results &bull; SIC</title>
 </svelte:head>
 
-<h3>Search Results</h3>
-
 <div class="content">
-    <div class="font-bold text-accent-300 mb-4">
-        {#each queryExplain as q, i}
-            {#if i > 0},{/if}
-            <Skill skill={q} />
-        {/each}
-    </div>
-    <div class="flex items-center">
-        <Button
-            accent
-            classes="w-6 h-6 !px-0 !rounded-full flex items-center justify-center"
-            on:click={() => (showOptions = !showOptions)}
-            label={showOptions ? "Collapse Search Options" : "Expand Search Options"}
-        >
-            {#if showOptions}
-                <Collapse />
-            {:else}
-                <Expand />
-            {/if}
-        </Button>
-        <span class="ml-4">Change Search Query</span>
-    </div>
-    <div class="panel mt-4" class:hidden={!showOptions}>
-        <div class="panel-inner">
-            {#key queryUrl}
-                <SearchOptions {options} />
-            {/key}
+    <h3>Search Results</h3>
+
+    <div class="panel mb-8">
+        <div class="panel-inner pb-0">
+            <div class="flex items-center">
+                <div class="font-bold text-text-header flex-grow">
+                    {#each queryExplain as q, i}
+                        {#if i > 0},{/if}
+                        <Skill skill={q} />
+                    {/each}
+                </div>
+                <Button
+                    classes="flex items-center"
+                    onpanel
+                    on:click={() => (showOptions = !showOptions)}
+                    label={showOptions ? "Collapse Search Options" : "Expand Search Options"}
+                >
+                    {#if showOptions}
+                        <Collapse />
+                    {:else}
+                        <Expand />
+                    {/if}
+                    <span class="ml-2">Change Search Query</span>
+                </Button>
+            </div>
+            <div class="mt-4" class:hidden={!showOptions}>
+                {#key queryUrl}
+                    <SearchOptions {options} />
+                {/key}
+            </div>
         </div>
     </div>
-</div>
-
-<div class="content mt-4">
     {#if cards.length === 0}
-        There are no results for this query.
+        <div class="panel !bg-error-background">
+            <div class="panel-inner !py-2">There are no results for this query.</div>
+        </div>
     {:else}
         <GridPanel items={cards} key="cardNo" let:item={card}>
             <CardGridElement {card} />

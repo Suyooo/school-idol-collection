@@ -70,7 +70,7 @@
     }
 
     .cardcopyright {
-        @apply text-right text-xs text-primary-500 mt-2 mb-1;
+        @apply text-right text-xs text-text-subtle mt-2 mb-1;
     }
 
     .imgcont {

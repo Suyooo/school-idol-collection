@@ -21,7 +21,7 @@
         <input bind:value={options.cardName} placeholder="—" />
 
         <b>Group</b>
-        <select bind:value={options.group} class:text-primary-400={!uiOptionIsSet(options.group)}>
+        <select bind:value={options.group} class:text-input-placeholder={!uiOptionIsSet(options.group)}>
             <option value="" selected>—</option>
             <option value="muse">µ's</option>
             <option value="aqours">Aqours</option>
@@ -35,7 +35,7 @@
         </select>
 
         <b>Card Type</b>
-        <select bind:value={options.cardType} class:text-primary-400={!uiOptionIsSet(options.cardType)}>
+        <select bind:value={options.cardType} class:text-input-placeholder={!uiOptionIsSet(options.cardType)}>
             <option value="" selected>—</option>
             <option value="member">Member</option>
             <option value="song">Song</option>
@@ -51,7 +51,10 @@
     <div class="col-half mt-4 lg:mt-0 lg:pl-4 grid grid-cols-[1fr,3fr] gap-2 items-center">
         {#if options.cardType === "member"}
             <b>Rarity</b>
-            <select bind:value={options.memberRarity} class:text-primary-400={!uiOptionIsSet(options.memberRarity)}>
+            <select
+                bind:value={options.memberRarity}
+                class:text-input-placeholder={!uiOptionIsSet(options.memberRarity)}
+            >
                 <option value="" selected>—</option>
                 <option value="r">R</option>
                 <option value="sr">SR</option>
@@ -64,7 +67,7 @@
             </select>
 
             <b>School Year</b>
-            <select bind:value={options.memberYear} class:text-primary-400={!uiOptionIsSet(options.memberYear)}>
+            <select bind:value={options.memberYear} class:text-input-placeholder={!uiOptionIsSet(options.memberYear)}>
                 <option value="" selected>—</option>
                 <option value="year:1">1st Year</option>
                 <option value="year:2">2nd Year</option>
@@ -76,7 +79,7 @@
                 <select
                     class="number"
                     bind:value={options.memberCost}
-                    class:text-primary-400={!uiOptionIsSet(options.memberCost)}
+                    class:text-input-placeholder={!uiOptionIsSet(options.memberCost)}
                 >
                     <option value="" selected>—</option>
                     <option value="0">0★</option>
@@ -96,7 +99,10 @@
             </div>
 
             <b>Ability</b>
-            <select bind:value={options.memberAbility} class:text-primary-400={!uiOptionIsSet(options.memberAbility)}>
+            <select
+                bind:value={options.memberAbility}
+                class:text-input-placeholder={!uiOptionIsSet(options.memberAbility)}
+            >
                 <option value="" selected>—</option>
                 <option value="noability">None</option>
                 <option value="rush">[RUSH]</option>
@@ -188,7 +194,7 @@
             <b>Birthday Bonus</b>
             <select
                 bind:value={options.memberPieceBonus}
-                class:text-primary-400={!uiOptionIsSet(options.memberPieceBonus)}
+                class:text-input-placeholder={!uiOptionIsSet(options.memberPieceBonus)}
             >
                 <option value="" selected>—</option>
                 <option value="nobonus">No</option>
@@ -198,7 +204,7 @@
             <b>Idolizable</b>
             <select
                 bind:value={options.memberIdolizable}
-                class:text-primary-400={!uiOptionIsSet(options.memberIdolizable)}
+                class:text-input-placeholder={!uiOptionIsSet(options.memberIdolizable)}
             >
                 <option value="" selected>—</option>
                 <option value="notidolizable">No</option>
@@ -206,14 +212,17 @@
             </select>
         {:else if options.cardType === "song"}
             <b>Rarity</b>
-            <select bind:value={options.songRarity} class:text-primary-400={!uiOptionIsSet(options.songRarity)}>
+            <select bind:value={options.songRarity} class:text-input-placeholder={!uiOptionIsSet(options.songRarity)}>
                 <option value="" selected>—</option>
                 <option value="m">M</option>
                 <option value="gr">GR</option>
             </select>
 
             <b>Attribute</b>
-            <select bind:value={options.songAttribute} class:text-primary-400={!uiOptionIsSet(options.songAttribute)}>
+            <select
+                bind:value={options.songAttribute}
+                class:text-input-placeholder={!uiOptionIsSet(options.songAttribute)}
+            >
                 <option value="" selected>—</option>
                 <option value="neutral">Neutral</option>
                 <option value="smile">Smile</option>
@@ -239,7 +248,7 @@
             <b>Requirement</b>
             <select
                 bind:value={options.songRequirementType}
-                class:text-primary-400={!uiOptionIsSet(options.songRequirementType)}
+                class:text-input-placeholder={!uiOptionIsSet(options.songRequirementType)}
             >
                 <option value="" selected>—</option>
                 <option value="anypiece">Any Piece Requirement</option>

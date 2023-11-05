@@ -12,6 +12,6 @@
 
 <style lang="postcss">
     button {
-        @apply inline-block bg-primary-900 py-1 px-2 rounded-full select-none cursor-pointer mb-1;
+        @apply inline-block bg-background py-1 px-2 rounded-full select-none cursor-pointer mb-1;
     }
 </style>

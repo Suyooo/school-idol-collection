@@ -1,5 +1,6 @@
 <script lang="ts">
     export let accent: boolean = false;
+    export let onpanel: boolean = false;
     export let disabled: boolean = false;
     export let href: string | undefined = undefined;
     export let style: string = "";
@@ -17,7 +18,7 @@
         <slot />
     </a>
 {:else}
-    <button class:accent class={classes} {style} title={label} aria-label={label} on:click>
+    <button class:accent class:onpanel class={classes} {style} title={label} aria-label={label} on:click>
         <slot />
     </button>
 {/if}
@@ -25,33 +26,49 @@
 <style lang="postcss">
     a,
     button {
-        @apply font-bold text-primary-100 bg-primary-700 rounded uppercase px-4 py-2 cursor-pointer text-sm flex items-center justify-center tracking-wide no-underline select-none;
+        @apply font-bold text-button-text bg-button-background rounded uppercase px-4 py-2 cursor-pointer text-sm flex items-center justify-center tracking-wide no-underline select-none;
 
         &:hover {
-            @apply bg-primary-500 text-white;
+            @apply bg-button-hover-background text-button-hover-text;
         }
 
         &:active {
-            @apply bg-primary-300;
+            @apply bg-button-pressed;
         }
 
         &.disabled {
-            @apply bg-primary-950 text-primary-500;
+            @apply bg-button-disabled-background text-button-disabled-text;
         }
 
         &.accent {
-            @apply bg-accent-600 text-accent-100;
+            @apply bg-button-accent-background text-button-accent-text;
 
             &:hover {
-                @apply bg-accent-400 text-white;
+                @apply bg-button-accent-hover-background text-button-accent-hover-text;
             }
 
             &:active {
-                @apply bg-accent-200;
+                @apply bg-button-accent-pressed;
             }
 
             &.disabled {
-                @apply bg-accent-950 text-accent-500;
+                @apply bg-button-accent-disabled-background text-button-accent-disabled-text;
+            }
+        }
+
+        &.onpanel {
+            @apply bg-button-onpanel-background text-button-onpanel-text;
+
+            &:hover {
+                @apply bg-button-onpanel-hover-background text-button-hover-text;
+            }
+
+            &:active {
+                @apply bg-button-pressed;
+            }
+
+            &.disabled {
+                @apply bg-button-disabled-background text-button-disabled-text;
             }
         }
     }

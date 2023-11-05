@@ -15,7 +15,7 @@
 
 <style lang="postcss">
     .grid-item {
-        @apply no-underline flex flex-col bg-primary-500 p-1 rounded-2xl;
+        @apply no-underline flex flex-col bg-background-grid p-1 rounded-2xl;
 
         & > * {
             @apply flex-grow-0 flex-shrink-0 basis-0;
@@ -46,7 +46,7 @@
         }
 
         & > .namecont > span:first-child {
-            @apply text-primary-300 no-underline;
+            @apply text-text-subtle no-underline;
         }
 
         & > .namecont > span:last-child {

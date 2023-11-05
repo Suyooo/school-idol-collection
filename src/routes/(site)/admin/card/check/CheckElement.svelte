@@ -17,7 +17,7 @@
     );
 </script>
 
-<div class="w-full bg-primary-800 px-2 py-1 rounded" class:!bg-red-700={failed}>
+<div class="w-full bg-background-content px-2 py-1 rounded" class:!bg-error-background={failed}>
     <div class="flex">
         <div class="flex-grow">
             {annotation.annotationJpn} / {annotation.annotationEng}

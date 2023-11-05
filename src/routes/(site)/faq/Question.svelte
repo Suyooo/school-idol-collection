@@ -58,7 +58,7 @@
         @apply relative pl-12;
 
         &:after {
-            @apply absolute left-4 top-[0.2rem] w-4 h-4 leading-[0.875rem] text-center text-xs font-bold rounded-full text-black;
+            @apply absolute left-4 top-[0.2rem] w-4 h-4 leading-[0.875rem] text-center text-xs font-bold rounded-full text-background-panel;
         }
     }
 
@@ -66,14 +66,14 @@
         @apply font-bold;
 
         &:after {
-            @apply bg-accent-200;
+            @apply bg-faq-question;
             content: "Q";
         }
     }
 
     .answer {
         &:after {
-            @apply bg-primary-200;
+            @apply bg-faq-answer;
             content: "A";
         }
     }

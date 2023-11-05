@@ -177,7 +177,7 @@
     {:else}
         <button class="header wide relative flex items-start group" on:click={() => (showJpnSkill = !showJpnSkill)}>
             Skill
-            <div class="absolute bottom-2.5 h-4 right-0 group-hover:text-accent-200">
+            <div class="absolute bottom-2.5 h-4 right-0 group-hover:text-link-hover">
                 {#if showJpnSkill}
                     <Collapse />
                 {:else}
@@ -231,7 +231,7 @@
             on:click={() => (showJpnGroupSkill = !showJpnGroupSkill)}
         >
             {cardGroupType(card)} Skill
-            <div class="absolute bottom-2.5 h-4 right-0 group-hover:text-accent-200">
+            <div class="absolute bottom-2.5 h-4 right-0 group-hover:text-link-hover">
                 {#if showJpnGroupSkill}
                     <Collapse />
                 {:else}
@@ -298,7 +298,7 @@
                 <a href={faq.link}>
                     <Skill skill={faq.labelPreparsed ?? faq.label} parseAsHelpText />
                     {#if faq.shortAnswer}
-                        <span class="text-primary-100">({faq.shortAnswer})</span>
+                        <span class="!text-highlight-blue">({faq.shortAnswer})</span>
                     {/if}
                 </a>
             {/each}
@@ -312,10 +312,10 @@
 
         & .header,
         & .value {
-            @apply px-2 py-1 border-t border-primary-700;
+            @apply px-2 py-1 border-t border-background-panel;
         }
         & .header {
-            @apply bg-primary-500 font-bold text-xs uppercase tracking-widest leading-5;
+            @apply bg-background-highlight font-bold text-xs uppercase tracking-widest leading-5;
 
             & > span.subheader {
                 @apply float-right font-normal;
@@ -362,7 +362,7 @@
         @apply relative pl-4 block;
 
         &:before {
-            @apply absolute top-0 left-0 text-primary-300 font-bold;
+            @apply absolute top-0 left-0 text-text-subtle font-bold;
             content: "⏵";
         }
     }

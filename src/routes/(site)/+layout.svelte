@@ -105,7 +105,6 @@
                 disabled={searching}
             />
             <button
-                class:text-primary-400={quicksearch === ""}
                 disabled={quicksearch === "" || searching}
                 aria-label="Submit Quick Search"
             >
@@ -125,13 +124,13 @@
 
 <style lang="postcss">
     .header {
-        @apply w-full bg-primary-700;
+        @apply w-full bg-background-panel;
 
         & .cont {
             @apply flex flex-col sm:flex-row gap-y-2 items-start justify-between;
 
             & .menu {
-                @apply w-full flex flex-col sm:flex-row items-center sm:items-start text-accent-400 font-bold tracking-widest uppercase;
+                @apply w-full flex flex-col sm:flex-row items-center sm:items-start text-text-header font-bold tracking-widest uppercase;
 
                 & .top {
                     @apply w-full sm:w-max flex-shrink flex sm:ml-0 items-center justify-between sm:justify-start;
@@ -149,7 +148,7 @@
                     @apply flex flex-wrap flex-col sm:flex-row items-center gap-x-4 gap-y-2;
 
                     & a {
-                        @apply hidden px-6 py-2 bg-primary-500 hover:bg-primary-400 text-white rounded-full no-underline whitespace-nowrap;
+                        @apply hidden px-6 py-2 bg-button-onpanel-background hover:bg-button-onpanel-hover-background text-button-onpanel-text rounded-full no-underline whitespace-nowrap;
 
                         &:nth-child(-n + 1) {
                             @apply md:block;

@@ -99,7 +99,7 @@
         @apply px-4 py-4;
 
         &:not(:first-child) {
-            @apply border-l border-primary-300;
+            @apply border-l border-table-border;
         }
     }
 </style>

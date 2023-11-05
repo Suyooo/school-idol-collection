@@ -3,29 +3,28 @@
 @tailwind utilities;
 
 body {
-    @apply bg-background text-white font-sans leading-5 overflow-y-scroll;
-    color-scheme: dark;
+    @apply bg-background text-text font-sans leading-5 overflow-y-scroll;
 }
 
-a {
-    @apply text-accent-400 underline;
+a:not(.button) {
+    @apply text-link underline;
 }
 
-a:focus,
-a:hover {
-    @apply text-accent-200;
+a:not(.button):focus,
+a:not(.button):hover {
+    @apply text-link-hover;
 }
 
 a:not(.button) *,
 a:not(.button) *:before {
-    @apply underline decoration-accent-400;
+    @apply underline decoration-link;
 }
 
-a:focus *,
-a:hover *,
-a:focus *:before,
-a:hover *:before {
-    @apply decoration-accent-200;
+a:not(.button):focus *,
+a:not(.button):hover *,
+a:not(.button):focus *:before,
+a:not(.button):hover *:before {
+    @apply decoration-link-hover;
 }
 
 .cont {
@@ -61,11 +60,11 @@ a:hover *:before {
 }
 
 .content {
-    @apply bg-primary-800 p-4 rounded-4xl;
+    @apply bg-background-content p-4 rounded-4xl;
 }
 
 .panel {
-    @apply bg-primary-700 p-2 rounded-2xl;
+    @apply bg-background-panel p-2 rounded-2xl;
 }
 
 .panel + .panel {
@@ -73,32 +72,32 @@ a:hover *:before {
 }
 
 .panel-inner {
-    @apply rounded-lg px-4 pb-1 overflow-hidden;
+    @apply rounded-lg px-4 pb-0.5 overflow-hidden;
 }
 
 span.card-id {
-    @apply text-primary-100 font-bold;
+    @apply text-text-cardid font-bold;
 }
 
 span.rarity {
-    @apply text-accent-300 font-bold;
+    @apply text-text-rarity font-bold;
 }
 
 h1,
 h2 {
-    @apply text-accent-400 font-bold uppercase tracking-widest text-2xl mt-4 mb-4;
+    @apply text-text-header font-bold uppercase tracking-widest text-2xl mt-4 mb-4;
 }
 
 h3 {
-    @apply m-0 mb-4 py-1 w-full text-3xl text-accent-400 font-bold tracking-widest text-center bg-primary-600 rounded-2xl;
+    @apply m-0 mb-4 py-1 w-full text-3xl text-text-header font-bold tracking-widest text-center bg-background-grid rounded-2xl;
 }
 
 h4 {
-    @apply m-0 mb-4 -mx-4 py-1 text-2xl text-accent-400 font-bold tracking-widest text-center bg-primary-600;
+    @apply m-0 mb-4 -mx-4 py-1 text-2xl text-text-header font-bold tracking-widest text-center bg-background-grid;
 }
 
 h5 {
-    @apply text-accent-400 mt-4 mb-2 font-bold text-xl;
+    @apply text-text-header mt-4 mb-2 font-bold text-xl;
 }
 
 h5:first-child {
@@ -106,7 +105,7 @@ h5:first-child {
 }
 
 h6 {
-    @apply text-accent-400 mt-4 mb-2 font-bold text-lg;
+    @apply text-text-header mt-4 mb-2 font-bold text-lg;
 }
 
 tr > th {
@@ -114,11 +113,11 @@ tr > th {
 }
 
 .skill-icon {
-    @apply h-[1.25em] bg-contain bg-no-repeat inline-block overflow-hidden align-top text-transparent cursor-text select-all relative;
+    @apply h-[1.25em] bg-contain bg-no-repeat inline-block overflow-hidden align-top !text-transparent cursor-text select-all relative;
 }
 
 .skill-icon:before {
-    @apply absolute -left-4 top-0 select-none underline pointer-events-none;
+    @apply absolute -left-4 top-0 select-none underline pointer-events-none !text-transparent;
     content: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 }
 
@@ -140,27 +139,27 @@ div.anchor {
         @apply bg-transparent;
     }
     50% {
-        @apply bg-primary-500;
+        @apply bg-background-highlight;
     }
 }
 
 input,
 textarea,
 select {
-    @apply bg-background border border-primary-500 p-2;
+    @apply bg-input-background border border-input-border p-2;
 }
 
 input::placeholder {
-    @apply text-primary-400;
+    @apply text-input-placeholder;
 }
 
 input:invalid {
-    @apply outline outline-4 outline-red-500;
+    @apply outline outline-4 outline-error-border;
 }
 
 input:disabled,
 select:disabled {
-    @apply bg-primary-700 text-primary-400;
+    @apply bg-input-disabled-background text-input-disabled-text;
 }
 
 textarea {

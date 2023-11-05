@@ -29,14 +29,14 @@
 
 <style lang="postcss">
     .grid-item {
-        @apply no-underline flex flex-col bg-primary-500 p-1 rounded-2xl;
+        @apply no-underline flex flex-col bg-background-grid p-1 rounded-2xl;
 
         & > * {
             @apply flex-grow-0 flex-shrink-0 basis-0;
         }
 
         & > .imgcont {
-            @apply flex content-center items-center justify-center basis-36 w-full rounded-xl px-2 mb-1 overflow-hidden bg-primary-700 gap-2;
+            @apply flex content-center items-center justify-center basis-36 w-full rounded-xl px-2 mb-1 overflow-hidden bg-background-panel gap-2;
 
             & > :global(img) {
                 @apply max-h-32 object-contain max-w-[50%] basis-0;
@@ -62,11 +62,11 @@
         }
 
         & > .namecont > span:first-child {
-            @apply text-primary-300 no-underline;
+            @apply text-text-subtle no-underline;
         }
 
         & > .linecont > span {
-            @apply text-white text-center text-xs uppercase tracking-widest no-underline;
+            @apply text-text text-center text-xs uppercase tracking-widest no-underline;
         }
 
         & > .namecont > span:last-child,

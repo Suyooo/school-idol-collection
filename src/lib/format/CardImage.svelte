@@ -33,7 +33,7 @@
 
 <style lang="postcss">
     img {
-        @apply bg-primary-500 rounded-card-fallback;
+        @apply bg-background-highlight rounded-card-fallback;
 
         &.card-v {
             @apply rounded-card-v;

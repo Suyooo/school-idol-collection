@@ -22,11 +22,11 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
     <div class="content col-span-2">
         <h3>Newest Set</h3>
-        <div class="panel grid grid-cols-1 sm:grid-cols-3 gap-y-2 sm:gap-y-0 sm:gap-x-4 full-img-element">
+        <div class=" grid grid-cols-1 sm:grid-cols-3 gap-y-2 sm:gap-y-0 sm:gap-x-4 full-img-element">
             <div class="flippable-set-element">
                 <SetGridElement set={data.latestSet} />
             </div>
-            <div class="col-span-2">
+            <div class="col-span-2 rounded-2xl overflow-hidden">
                 <Splide
                     options={{
                         label: `Cards from Set ${data.latestSet.id}`,
@@ -49,10 +49,8 @@
     </div>
     <div class="content">
         <h3>Newest Card</h3>
-        <div class="panel">
-            <div class="panel-inner full-img-element !p-0">
-                <CardGridElement card={data.latestCard} />
-            </div>
+        <div class="full-img-element !p-0">
+            <CardGridElement card={data.latestCard} />
         </div>
     </div>
     <div class="content col-span-2">
@@ -61,21 +59,19 @@
             <div class="panel-inner text-justify">
                 <b>School Idol Collection</b> is a Collectible Card Game with characters from the Love&nbsp;Live!
                 franchise, where your goal is to perform a successful live show! Manage your Members on the Stage,
-                organize Lives with your favorite songs, and be the first to reach the Live Points goal to win!<br /><br
-                />
-                The game uses costumes and even some mechanics from the original <b>School Idol Festival</b> game and
-                puts a turn-based twist on it. You can play alone or with as many people as you want, dive deep into
-                deckbuilding to find new ways to score points even faster - or just enjoy the illustrations with SIF
-                cards and original designs, and collect them all!<br /><br />
+                organize Lives with songs from your Set List, and be the first to reach the Live Points goal to win!<br
+                /><br />
+                You can play alone or with as many people as you want, dive deep into deckbuilding to find new ways to score
+                points even faster - or just enjoy the illustrations, with both cards from the original School Idol Festival
+                game and original designs, and collect them all!<br /><br />
                 This site aims to be a complete repository for translations of both the game's cards and official help pages.
                 Maybe you already have collected some of the cards because they looked neat, but never knew how the CCG itself
-                works &ndash; in that case, this site is for you! Check out
-                <a href="/faq/rules">the How To Play page</a>, look up your cards with the Quick Search in the top right
-                of the site, and give SIC a try!<br /><br />
-                In the future, this site will hopefully go even farther, with some deckbuilding helpers and even the ability
-                to play-test right in your browser &ndash; to share this little card game I like with everyone, and give
-                other Love&nbsp;Live! fans the chance to experience it. For now, I hope you enjoy browsing through all the
-                cards SIC has to offer!
+                works? Check out <a href="/faq/rules">the How To Play page</a>, look up your cards with the Quick Search
+                in the top right of the site, and give SIC a try!<br /><br />
+                In the future, this site will hopefully offer even more, including some deckbuilding helpers and even the
+                ability to play-test right in your browser &ndash; to share this little card game I like with everyone, and
+                give other Love&nbsp;Live! fans the chance to experience it. But for now, I hope you enjoy browsing through
+                all the cards SIC has to offer!
             </div>
         </div>
     </div>
@@ -132,10 +128,10 @@
     }
 
     .big-link {
-        @apply mt-2 first:mt-0 text-xl font-bold px-6 py-4 flex items-center no-underline hover:bg-primary-600 gap-4;
+        @apply mt-2 first:mt-0 text-xl font-bold px-6 py-4 flex items-center no-underline hover:bg-button-hover-background gap-4;
 
         & div:last-child {
-            @apply flex-grow  text-accent-200;
+            @apply flex-grow text-link;
         }
 
         &:after {

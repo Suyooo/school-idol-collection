@@ -118,7 +118,7 @@
         style:width={contentWidth + "mm"}
         style:height={contentHeight + "mm"}
     />
-    <table class="sheets" style:margin={"0 " + margin + "mm"} style:--page-margin={margin + "mm"}>
+    <table class="sheets" style:margin={"0 " + margin + "mm"} style:--page-margin={margin + "mm"} data-theme="light">
         {#each shelfCardNos ?? form.cardNos.map((c) => [c]) as shelf, i}
             <tr class="shelf">
                 <td style:width={contentWidth + "mm"} bind:this={shelfElements[i]}>

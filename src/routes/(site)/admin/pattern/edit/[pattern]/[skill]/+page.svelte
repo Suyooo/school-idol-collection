@@ -216,7 +216,7 @@
                 </div>
                 <div class="col-half px-2">
                     <h6>Result</h6>
-                    <span class:text-primary-500={!lastSuccessful}>{result}</span>
+                    <span class:text-text-subtle={!lastSuccessful}>{result}</span>
                 </div>
             </div>
         </div>
@@ -232,11 +232,11 @@
         @apply m-0 text-sm;
 
         & span {
-            @apply bg-primary-900 font-normal px-1 normal-case tracking-normal text-white;
+            @apply bg-background font-normal px-1 normal-case tracking-normal text-text;
         }
     }
 
     .error {
-        @apply bg-red-700 rounded mb-2 p-2;
+        @apply bg-error-background rounded mb-2 p-2;
     }
 </style>

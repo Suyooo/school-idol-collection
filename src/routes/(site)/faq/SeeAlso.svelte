@@ -14,7 +14,7 @@
         @apply mb-4 pl-12 relative;
 
         &:before {
-            @apply absolute left-4 top-0 w-4 text-center text-accent-500 font-bold;
+            @apply absolute left-4 top-0 w-4 text-center text-faq-question font-bold;
             content: "⏵";
         }
 
