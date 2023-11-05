@@ -99,15 +99,13 @@
                 <Button accent classes="!rounded-full mr-4" href="/admin" label="Admin">Admin</Button>
             {/if}
             <input
+                class="h-9"
                 placeholder="Quick Search (Card No., ID or Name)"
                 bind:value={quicksearch}
                 aria-label="Quick Search. Enter a card number, ID or name"
                 disabled={searching}
             />
-            <button
-                disabled={quicksearch === "" || searching}
-                aria-label="Submit Quick Search"
-            >
+            <button disabled={quicksearch === "" || searching} aria-label="Submit Quick Search">
                 {#if searching}
                     <Spinner />
                 {:else}
