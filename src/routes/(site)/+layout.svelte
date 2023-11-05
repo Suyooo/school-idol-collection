@@ -73,7 +73,7 @@
                     <div>
                         <Button
                             accent
-                            classes="w-9 h-9 !px-0 !rounded-full flex items-center justify-center"
+                            class="w-10 h-10 !px-0 flex items-center justify-center"
                             on:click={() => (menuExpanded = !menuExpanded)}
                             label={menuExpanded ? "Collapse Menu" : "Expand Menu"}
                         >
@@ -87,19 +87,22 @@
                 </div>
             </div>
             <div class="buttons" class:open={menuExpanded}>
-                <a href="/list">Card List</a>
-                <a href="/faq">How To Play</a>
-                <a href="/search">Search</a>
-                <a href="/labels">Label Printer</a>
-                <a href="/about">About</a>
+                <Button href="/list" label="Card List" class="!tracking-widest !text-base" onpanel>Card List</Button>
+                <Button href="/faq" label="How To Play" class="!tracking-widest !text-base" onpanel>How To Play</Button>
+                <Button href="/search" label="Card Search" class="!tracking-widest !text-base" onpanel>
+                    Card Search
+                </Button>
+                <Button href="/labels" label="Label Printer" class="!tracking-widest !text-base" onpanel>
+                    Label Printer
+                </Button>
+                <Button href="/about" label="About" class="!tracking-widest !text-base" onpanel>About</Button>
             </div>
         </div>
         <form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
             {#if import.meta.env.DEV}
-                <Button accent classes="!rounded-full mr-4" href="/admin" label="Admin">Admin</Button>
+                <Button accent class="mr-4" href="/admin" label="Admin">Admin</Button>
             {/if}
             <input
-                class="h-9"
                 placeholder="Quick Search (Card No., ID or Name)"
                 bind:value={quicksearch}
                 aria-label="Quick Search. Enter a card number, ID or name"
@@ -134,7 +137,7 @@
                     @apply w-full sm:w-max flex-shrink flex sm:ml-0 items-center justify-between sm:justify-start;
 
                     & .logo {
-                        @apply text-3xl no-underline cursor-pointer;
+                        @apply text-3xl leading-10 no-underline cursor-pointer;
                     }
 
                     & .expand {
@@ -145,8 +148,8 @@
                 & .buttons {
                     @apply flex flex-wrap flex-col sm:flex-row items-center gap-x-4 gap-y-2;
 
-                    & a {
-                        @apply hidden px-6 py-2 bg-button-onpanel-background hover:bg-button-onpanel-hover-background text-button-onpanel-text rounded-full no-underline whitespace-nowrap;
+                    & :global(a) {
+                        @apply hidden;
 
                         &:nth-child(-n + 1) {
                             @apply md:block;
@@ -162,7 +165,7 @@
                     }
 
                     &.open {
-                        & a {
+                        & :global(a) {
                             @apply block;
                         }
                     }

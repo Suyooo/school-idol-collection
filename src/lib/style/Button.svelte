@@ -4,7 +4,8 @@
     export let disabled: boolean = false;
     export let href: string | undefined = undefined;
     export let style: string = "";
-    export let classes: string = "";
+    let classes: string = "";
+    export { classes as class };
     export let target: string | undefined = undefined;
     export let label: string;
 </script>
@@ -14,7 +15,7 @@
         <slot />
     </button>
 {:else if href}
-    <a {href} class:accent class={classes} {style} title={label} aria-label={label} {target}>
+    <a {href} class:accent class:onpanel class={`button ${classes}`} {style} title={label} aria-label={label} {target}>
         <slot />
     </a>
 {:else}

@@ -47,7 +47,7 @@
                     {/each}
                 </div>
                 <Button
-                    classes="flex items-center"
+                    class="flex items-center"
                     onpanel
                     on:click={() => (showOptions = !showOptions)}
                     label={showOptions ? "Collapse Search Options" : "Expand Search Options"}
@@ -86,7 +86,7 @@
                 <div class="max-w-md flex flex-wrap gap-2 justify-center">
                     {#each { length: Math.ceil(pagination.totalResults / pagination.pageSize) } as _, i}
                         <Button
-                            classes="w-12 px-0"
+                            class="w-12 px-0"
                             accent={i + 1 === pagination.page}
                             label={`Page ${i + 1}`}
                             on:click={() => goto(`/search/${queryUrl}/page:${i + 1}`)}>{i + 1}</Button
