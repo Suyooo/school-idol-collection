@@ -245,10 +245,12 @@ function apply(nodes: ParseNode[], regex: RegExp, replaceFunc: (match: RegExpExe
 		}
 
 		const replArr = replaceFunc(match);
+		const firstReplNode = replArr[0];
 		let start = match.index;
 		let end = match.index + match[0].length;
 		let needsInlineBlock = false;
 
+		// Make sure punctuation on either side of the match is never line wrapped away
 		if (start > 0 && node.text.substring(start - 1, start).match(/["().!?,;]/)) {
 			replArr.unshift({ text: node.text.substring(start - 1, start) });
 			start--;
@@ -263,12 +265,24 @@ function apply(nodes: ParseNode[], regex: RegExp, replaceFunc: (match: RegExpExe
 			const secret = Symbol();
 			replArr.unshift({ secret, element: "span", class: "inline-block" });
 			replArr.push({ secret });
+			if (isElementMarkerNode(firstReplNode) && firstReplNode.class?.includes("inline-block")) {
+				firstReplNode.class = firstReplNode.class.replace("inline-block", "");
+			}
 		}
 
-		nodes.splice(i, 1, { ...node, text: node.text.substring(0, start) }, ...replArr, {
-			...node,
-			text: node.text.substring(end),
-		});
+		nodes.splice(
+			i,
+			1,
+			{
+				...node,
+				text: node.text.substring(0, start),
+			},
+			...replArr,
+			{
+				...node,
+				text: node.text.substring(end),
+			}
+		);
 		i += 2;
 	}
 }
