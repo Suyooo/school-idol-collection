@@ -77,14 +77,14 @@ export default {
 						},
 					},
 					attribute: {
-						all: "#ffd87f",
-						smile: "#fa7dca",
-						pure: "#84cc91",
-						cool: "#a2e3ff",
+						all: "#ffdd7e",
+						smile: "#fd90b9",
+						pure: "#9adab2",
+						cool: "#87d6f3",
 					},
 					highlight: {
-						red: "#ff8888",
-						blue: "#88ffff",
+						red: "#ffcccc",
+						blue: "#ccddff",
 					},
 					input: {
 						background: colors.slate[900],
@@ -106,6 +106,19 @@ export default {
 					faq: {
 						question: colors.pink[400],
 						answer: colors.slate[400],
+					},
+				}),
+				print: light({
+					link: { DEFAULT: "#ee0000" },
+					attribute: {
+						all: "#ffc533",
+						smile: "#fc3b81",
+						pure: "#3ebb65",
+						cool: "#3fb6e5",
+					},
+					highlight: {
+						red: "#ee0000",
+						blue: "#0000ee",
 					},
 				}),
 			}),

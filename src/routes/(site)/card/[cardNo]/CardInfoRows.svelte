@@ -175,9 +175,9 @@
 		<div class="header wide">Skill</div>
 		<div class="value wide">—</div>
 	{:else}
-		<button class="header wide relative flex items-start group" on:click={() => (showJpnSkill = !showJpnSkill)}>
+		<button class="header wide group relative flex items-start" on:click={() => (showJpnSkill = !showJpnSkill)}>
 			Skill
-			<div class="absolute bottom-2.5 h-4 right-0 group-hover:text-link-hover">
+			<div class="absolute bottom-2.5 right-0 h-4 group-hover:text-link-hover">
 				{#if showJpnSkill}
 					<Collapse />
 				{:else}
@@ -227,11 +227,11 @@
 		</div>
 
 		<button
-			class="header wide relative flex items-start group"
+			class="header wide group relative flex items-start"
 			on:click={() => (showJpnGroupSkill = !showJpnGroupSkill)}
 		>
 			{cardGroupType(card)} Skill
-			<div class="absolute bottom-2.5 h-4 right-0 group-hover:text-link-hover">
+			<div class="absolute bottom-2.5 right-0 h-4 group-hover:text-link-hover">
 				{#if showJpnGroupSkill}
 					<Collapse />
 				{:else}
@@ -298,7 +298,7 @@
 				<a href={faq.link}>
 					<Skill skill={faq.labelPreparsed ?? faq.label} parseAsHelpText />
 					{#if faq.shortAnswer}
-						<span class="!text-highlight-blue">({faq.shortAnswer})</span>
+						<span class="!text-text-cardid">({faq.shortAnswer})</span>
 					{/if}
 				</a>
 			{/each}

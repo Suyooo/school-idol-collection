@@ -99,17 +99,19 @@
 				</div>
 				<div class="mt-2">
 					<div class="-indent-5">
-						<b>①</b> Make sure to print the labels one-sided, at the highest quality and at original (or 100%) scale.
+						<b>①</b> Print the labels one-sided, at the highest quality and at original (or 100%) scale. Check the print
+						preview caregully - you may need to enable "Print Backgrounds" or similar options to make sure that all icons
+						show up!
 					</div>
-					<div class="-indent-5">
+					<div class="mt-2 -indent-5">
 						<b>②</b> Double-check the size with a ruler after the print - the distance between the grey lines should be 63.5mm
 						(2.5in) for cards in portrait orientation and 88mm (3.47in) for cards in landscape orientation.
 					</div>
-					<div class="-indent-5">
+					<div class="mt-2 -indent-5">
 						<b>③</b> Cut out each label along the grey lines. Then, fold the labels on the black line below the card number
 						and ID.
 					</div>
-					<div class="-indent-5">
+					<div class="mt-2 -indent-5">
 						<b>④</b> Wrap the labels around the cards, then put them into their sleeve or a folder to hold them in place.
 					</div>
 				</div>
@@ -131,7 +133,7 @@
 		style:margin={"0 " + margin + "mm"}
 		style:--page-margin={margin + "mm"}
 		class:opacity-0={showSpinner}
-		data-theme="light"
+		data-theme="print"
 	>
 		{#each shelfCardNos ?? form.cardNos.map((c) => [c]) as shelf, i}
 			<tr class="shelf">
@@ -164,7 +166,7 @@
 	}
 
 	.sheets {
-		@apply m-0 bg-white text-black;
+		@apply pointer-events-none m-0 select-none bg-white text-black;
 		border: var(--page-margin) solid white;
 
 		& :global(.skill-icon) {
@@ -172,17 +174,8 @@
 			margin-bottom: -0.19rem;
 		}
 
-		& :global(.text-highlight-red) {
-			color: red !important;
-		}
-
-		& :global(.text-highlight-blue) {
-			color: blue !important;
-		}
-
 		& :global(a) {
-			color: red !important;
-			text-decoration-line: none !important;
+			@apply !no-underline;
 		}
 	}
 
