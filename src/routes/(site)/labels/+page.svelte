@@ -4,11 +4,18 @@
 	import Button from "$lib/style/Button.svelte";
 	import type { Snapshot } from "./$types.js";
 
-	let width: number, height: number, margin: number, cardNos: string, form: HTMLFormElement;
+	let width: number,
+		height: number,
+		margin: number,
+		size: number = 4,
+		spacing: number = 0,
+		wide: string = "semi-condensed",
+		cardNos: string,
+		form: HTMLFormElement;
 
 	export const snapshot: Snapshot = {
-		capture: () => ({ width, height, margin, cardNos }),
-		restore: (value) => ({ width, height, margin, cardNos } = value),
+		capture: () => ({ width, height, margin, size, spacing, wide, cardNos }),
+		restore: (value) => ({ width, height, margin, size, spacing, wide, cardNos } = value),
 	};
 
 	const setPreset: FormEventHandler<HTMLSelectElement> = (e) => {
@@ -18,11 +25,18 @@
 		}
 	};
 
-	let blockedBySize: boolean, blockedByMargin: boolean, blockedByCards: boolean, submitIsBlocked: boolean;
+	let blockedBySize: boolean,
+		blockedByMargin: boolean,
+		blockedByCards: boolean,
+		submitIsBlocked: boolean,
+		blockedByFontSize: boolean,
+		blockedBySpacing: boolean;
 	$: blockedBySize = !width || !height || !margin;
 	$: blockedByMargin = width - margin * 2 < 63.5;
 	$: blockedByCards = !cardNos;
-	$: submitIsBlocked = blockedBySize || blockedByMargin || blockedByCards;
+	$: blockedByFontSize = !size || size <= 0;
+	$: blockedBySpacing = (!spacing && spacing !== 0) || spacing < 0;
+	$: submitIsBlocked = blockedBySize || blockedByMargin || blockedByCards || blockedByFontSize || blockedBySpacing;
 
 	function submit() {
 		form.submit();
@@ -39,22 +53,43 @@
 		<div class="panel-inner">
 			<form action="/labels/print" method="POST" target="_blank" bind:this={form}>
 				<div class="row items-start">
-					<div class="col-half lg:pr-4 grid grid-cols-[1fr,2fr] md:grid-cols-[1fr,3fr] gap-2 items-center">
+					<div class="col-half grid grid-cols-[1fr,2fr] items-center gap-2 md:grid-cols-[1fr,3fr] lg:pr-4">
 						<h6 class="col-span-2 m-0">Page Settings</h6>
-						<b>Presets</b>
-						<select on:change={setPreset} class="flex-grow">
-							<option disabled selected>Select Size</option>
+						<select on:change={setPreset} class="col-span-full flex-grow" class:text-input-placeholder={!blockedBySize}>
+							<option disabled selected>Select a Size Preset</option>
 							<option value="210x297x9">DIN A4</option>
 							<option value="216x279x10">US Letter</option>
 						</select>
-						<div class="h-4 col-span-full" />
 						<b>Sheet Size</b>
 						<div>
-							<input type="number" name="width" bind:value={width} /> x
-							<input type="number" name="height" bind:value={height} /> mm
+							<input type="number" name="width" bind:value={width} min="63" class:invalid={!width && !!height} /> x
+							<input type="number" name="height" bind:value={height} min="15" class:invalid={!!width && !height} /> mm
 						</div>
 						<b>Printer Margins</b>
-						<div><input type="number" name="margin" bind:value={margin} /> mm</div>
+						<div>
+							<input
+								type="number"
+								name="margin"
+								bind:value={margin}
+								min="0"
+								class:invalid={!margin && !!width && !!height}
+							/> mm
+						</div>
+						<div class="col-span-full" />
+						<b>Font Size</b>
+						<div>
+							<input type="number" name="size" bind:value={size} min="1" class:invalid={blockedByFontSize} /> mm
+						</div>
+						<b>Line Spacing</b>
+						<div>
+							<input type="number" name="spacing" bind:value={spacing} min="0" class:invalid={blockedBySpacing} /> mm
+						</div>
+						<b>Font Width</b>
+						<select class="flex-grow" name="wide" bind:value={wide}>
+							<option value="condensed">Condensed</option>
+							<option value="semi-condensed" selected>Default</option>
+							<option value="normal">Wide</option>
+						</select>
 					</div>
 					<div class="col-half lg:pl-4">
 						<h6 class="m-0">Card Numbers</h6>
@@ -64,17 +99,21 @@
 							To make it easier to enter the numbers for lots of cards, you can leave out the "-", and capitalization does
 							not matter.
 						</div>
-						<textarea name="cardNos" bind:value={cardNos} placeholder={"LL01-001\nLL01-002\nLL01-003\n..."} />
+						<textarea name="cardNos" bind:value={cardNos} placeholder={"LL01-001,LL01-002,LL01-003,..."} />
 					</div>
 				</div>
 			</form>
-			<div class="flex items-center justify-end w-full">
+			<div class="flex w-full items-center justify-end">
 				<div
 					use:tooltip={{
 						content: blockedBySize
 							? "You must set page size and margins."
 							: blockedByMargin
 							? "With the given margin, the page would not fit any labels."
+							: blockedByFontSize
+							? "Font size must be higher than 0."
+							: blockedBySpacing
+							? "Line spacing must be 0 or higher."
 							: "You must enter at least one card number.",
 						placement: "top",
 						offset: -5,
@@ -89,7 +128,7 @@
 	<div class="panel">
 		<div class="panel-inner">
 			<h4>How to Use</h4>
-			<div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
+			<div class="mb-2 flex w-full justify-center lg:float-right lg:ml-4 lg:w-[unset]">
 				<img class="max-w-md" src="/images/photos/labels_example.jpg" alt="Example for the Label Printer" />
 			</div>
 			If you own SIC cards, the&nbsp;<b>Label Printer</b> allows you to create small tags for your collection. With

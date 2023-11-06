@@ -153,7 +153,8 @@ input::placeholder {
 	@apply text-input-placeholder;
 }
 
-input:invalid {
+input:invalid,
+input.invalid {
 	@apply outline outline-4 outline-error-border;
 }
 

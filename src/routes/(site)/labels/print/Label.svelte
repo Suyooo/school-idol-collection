@@ -80,8 +80,8 @@
 
 		@apply box-border flex w-0 flex-none flex-col overflow-hidden text-justify;
 		font-family: "Open Sans", Arial, sans-serif;
-		font-size: 3mm;
-		line-height: 3mm;
+		font-size: var(--skill-font-size);
+		line-height: calc(var(--skill-font-size) + var(--skill-font-spacing));
 		letter-spacing: -0.1mm;
 		outline: 0.25mm solid rgb(230, 230, 230);
 		outline-offset: -0.125mm;
@@ -106,14 +106,26 @@
 			&.skillsallcards {
 				@apply flex items-start;
 				padding: 0 1mm;
-				font-stretch: semi-condensed;
+				font-stretch: var(--skill-font-width);
 
 				& > .skillscard {
 					border: 0.25mm solid black;
-					padding: 0.5mm 0.75mm 0.5mm 0.5mm;
+					padding: 0.75mm 0.75mm 0.75mm 0.5mm;
 					text-indent: -0.25mm;
 					flex: 0 0 100%;
 					flex-wrap: nowrap;
+
+					&:before {
+						content: "";
+						display: block;
+						margin-top: calc(-0.5 * var(--skill-font-spacing));
+					}
+
+					&:after {
+						content: "";
+						display: block;
+						margin-bottom: calc(-0.5 * var(--skill-font-spacing));
+					}
 
 					&.othergroupmember {
 						opacity: 0;
@@ -128,9 +140,9 @@
 
 			&.skillsgroup {
 				--group-pos: 0;
-				padding: 0.5mm 0.75mm 0.5mm 0.5mm;
+				padding: 0.75mm 0.75mm 0.75mm 0.5mm;
 				text-indent: -0.25mm;
-				font-stretch: semi-condensed;
+				font-stretch: var(--skill-font-width);
 				border: 0.25mm solid black;
 				margin-left: calc((-100% + var(--group-skill-overlap) * 2) * var(--group-pos) + var(--group-skill-margin));
 
@@ -144,21 +156,21 @@
 			}
 
 			&.costume {
-				margin-left: 0.5mm;
-				margin-right: 0.5mm;
+				padding-left: 0.5mm;
+				padding-right: 0.5mm;
 
 				& > span {
-					@apply inline-flex items-center rounded-full;
+					@apply box-content inline-flex items-center rounded-full;
 					padding: 0 2.5mm 0 2mm;
 					border: 0.5mm solid hotpink;
 					color: hotpink;
-					font-size: 2mm;
+					font-size: calc(var(--skill-font-size) * 0.75);
 
 					& > span:first-child {
-						@apply box-content flex items-center justify-center rounded-full;
+						@apply flex flex-shrink-0 items-center justify-center rounded-full;
 						border: 0.5mm solid hotpink;
-						width: 1.5mm;
-						height: 1.5mm;
+						width: calc(var(--skill-font-size) * 0.75);
+						height: calc(var(--skill-font-size) * 0.75);
 						margin-right: 2mm;
 
 						& > span {
@@ -169,7 +181,7 @@
 
 					& > span:last-child {
 						font-weight: bold;
-						font-stretch: semi-condensed;
+						font-stretch: var(--skill-font-width);
 						margin-top: -0.25mm;
 					}
 				}
@@ -179,9 +191,9 @@
 				@apply flex justify-between;
 				margin: 0;
 				padding: 0 1mm;
-				height: 3mm;
-				font-size: 2mm;
-				line-height: 3mm;
+				height: calc(var(--skill-font-size) / 2 + 1mm);
+				font-size: calc(var(--skill-font-size) / 2);
+				line-height: calc(var(--skill-font-size) / 2 + 1mm);
 			}
 
 			&.fold {

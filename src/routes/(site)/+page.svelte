@@ -19,14 +19,14 @@
 	<title>SIC</title>
 </svelte:head>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
 	<div class="content col-span-2">
 		<h3>Newest Set</h3>
-		<div class=" grid grid-cols-1 sm:grid-cols-3 gap-y-2 sm:gap-y-0 sm:gap-x-4 full-img-element">
+		<div class=" full-img-element grid grid-cols-1 gap-y-2 sm:grid-cols-3 sm:gap-x-4 sm:gap-y-0">
 			<div class="flippable-set-element">
 				<SetGridElement set={data.latestSet} />
 			</div>
-			<div class="col-span-2 rounded-2xl overflow-hidden">
+			<div class="col-span-2 overflow-hidden rounded-2xl">
 				<Splide
 					options={{
 						label: `Cards from Set ${data.latestSet.id}`,
@@ -69,13 +69,13 @@
 				the site, and give SIC a try!<br /><br />
 				In the future, this site will hopefully offer even more, including some deckbuilding helpers and even the ability
 				to play-test right in your browser &ndash; to share this little card game I like with everyone, and give other Love&nbsp;Live!
-				fans the chance to experience it. But for now, I hope you enjoy browsing through all the cards SIC has to offer!
+				fans the chance to try it. But for now, I hope you enjoy browsing through all the cards SIC has to offer!
 			</div>
 		</div>
 	</div>
 	<div class="content flex flex-col">
 		<h3 class="flex-grow-0">Get Started</h3>
-		<div class="flex-grow flex flex-col justify-between">
+		<div class="flex flex-grow flex-col justify-between">
 			<a href="/faq/rules" class="button panel big-link">
 				<HowToPlay />
 				<div>How To Play</div>

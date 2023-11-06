@@ -11,6 +11,9 @@
 	let width: number = form?.width ? parseInt(form?.width.toString()) : 0;
 	let height: number = form?.height ? parseInt(form?.height.toString()) : 0;
 	let margin: number = form?.margin ? parseInt(form?.margin.toString()) : 0;
+	let size: number = form?.size ? parseInt(form?.size.toString()) : 0;
+	let spacing: number = form?.spacing ? parseInt(form?.spacing.toString()) : 0;
+	let wide: string = form?.wide?.toString() ?? "";
 	let contentWidth: number,
 		contentHeight: number,
 		shelfCardNos: string[][],
@@ -101,11 +104,12 @@
 					<div class="-indent-5">
 						<b>①</b> Print the labels one-sided, at the highest quality and at original (or 100%) scale. Check the print
 						preview caregully - you may need to enable "Print Backgrounds" or similar options to make sure that all icons
-						show up!
+						show up! You can also only print one page at first to test the quality first.
 					</div>
 					<div class="mt-2 -indent-5">
 						<b>②</b> Double-check the size with a ruler after the print - the distance between the grey lines should be 63.5mm
-						(2.5in) for cards in portrait orientation and 88mm (3.47in) for cards in landscape orientation.
+						(2.5in) for cards in portrait orientation and 88mm (3.47in) for cards in landscape orientation. If the text is
+						too hard to read, try increasing font size or width.
 					</div>
 					<div class="mt-2 -indent-5">
 						<b>③</b> Cut out each label along the grey lines. Then, fold the labels on the black line below the card number
@@ -132,6 +136,9 @@
 		class="sheets"
 		style:margin={"0 " + margin + "mm"}
 		style:--page-margin={margin + "mm"}
+		style:--skill-font-size={size + "mm"}
+		style:--skill-font-spacing={spacing + "mm"}
+		style:--skill-font-width={wide}
 		class:opacity-0={showSpinner}
 		data-theme="print"
 	>
@@ -166,12 +173,12 @@
 	}
 
 	.sheets {
-		@apply pointer-events-none m-0 select-none bg-white text-black;
+		@apply m-0 select-none bg-white text-black;
 		border: var(--page-margin) solid white;
 
 		& :global(.skill-icon) {
-			margin-top: -0.06rem;
-			margin-bottom: -0.19rem;
+			margin-top: -0.133rem;
+			vertical-align: middle;
 		}
 
 		& :global(a) {
