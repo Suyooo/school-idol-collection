@@ -5,6 +5,7 @@
 	import type { ActionData } from "./$types.js";
 	import Shelving from "./shelf.js";
 	import Label from "./Label.svelte";
+	import Spinner from "$lib/style/icons/Spinner.svelte";
 
 	export let form: ActionData;
 	let width: number = form?.width ? parseInt(form?.width.toString()) : 0;
@@ -19,8 +20,10 @@
 
 	$: contentWidth = width - margin * 2;
 	$: contentHeight = height - margin * 2;
+	let showSpinner = true;
 
 	onMount(() => {
+		showSpinner = false;
 		if (form === null || form.cardNos.length === 0) return;
 
 		// Sort all the labels into horizontal shelves
@@ -85,9 +88,14 @@
 			{#if form.cardNos.length === 0}
 				No cards were left to be labeled. Close the tab and change the card number list!
 			{:else}
-				{form.cardNos.length} label{form.cardNos.length === 1 ? "" : "s"} ready to print!
-				<div class="mt-1 flex w-full items-center justify-center">
-					<Button label="Print" accent on:click={() => print()}>Print</Button>
+				<div class="my-4 flex h-9 w-full items-center justify-between">
+					{#if showSpinner}
+						<span>Building page layout... (Make sure you have JavaScript enabled in your browser!)</span>
+						<Spinner />
+					{:else}
+						<b>{form.cardNos.length} label{form.cardNos.length === 1 ? "" : "s"} ready to print!</b>
+						<Button label="Print" accent on:click={() => print()}>Print</Button>
+					{/if}
 				</div>
 				<div class="mt-2">
 					<div class="-indent-5">
@@ -98,8 +106,7 @@
 						(2.5in) for cards in portrait orientation and 88mm (3.47in) for cards in landscape orientation.
 					</div>
 					<div class="-indent-5">
-						<b>③</b> Cut out each label along the grey lines. The labels have (hopefully) been aligned in a way that matches
-						up as many labels as possible on one cut line. Then, fold the labels on the black line below the card number
+						<b>③</b> Cut out each label along the grey lines. Then, fold the labels on the black line below the card number
 						and ID.
 					</div>
 					<div class="-indent-5">
@@ -109,13 +116,23 @@
 			{/if}
 		</div>
 	</div>
+
+	{#if showSpinner}
+		<div class="mt-16"><Spinner /></div>
+	{/if}
 	<div
 		bind:this={pageSize}
 		class="absolute left-[1000vw] print:hidden"
 		style:width={contentWidth + "mm"}
 		style:height={contentHeight + "mm"}
 	/>
-	<table class="sheets" style:margin={"0 " + margin + "mm"} style:--page-margin={margin + "mm"} data-theme="light">
+	<table
+		class="sheets"
+		style:margin={"0 " + margin + "mm"}
+		style:--page-margin={margin + "mm"}
+		class:opacity-0={showSpinner}
+		data-theme="light"
+	>
 		{#each shelfCardNos ?? form.cardNos.map((c) => [c]) as shelf, i}
 			<tr class="shelf">
 				<td style:width={contentWidth + "mm"} bind:this={shelfElements[i]}>

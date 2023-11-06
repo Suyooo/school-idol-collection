@@ -76,6 +76,7 @@ test("labels result page", async ({ page, context }) => {
 	const pagePromise = context.waitForEvent("page");
 	await (await page.$("button:text('Print')"))?.click();
 	const newPage = await pagePromise;
+	await newPage.waitForSelector("button");
 	await expect(await newPage.getByText("1 label ready to print!").count()).toBeGreaterThan(0);
 });
 
