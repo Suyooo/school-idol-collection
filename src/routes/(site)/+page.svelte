@@ -39,7 +39,7 @@
 					{#each data.latestSetCards as slot, i (i)}
 						<SplideSlide>
 							<div class="mb-8 sm:mb-0">
-								<CardGridElement card={slot[Math.floor(Math.random() * slot.length)]} />
+								<CardGridElement card={slot[Math.floor(Math.random() * slot.length)]} squareCorners />
 							</div>
 						</SplideSlide>
 					{/each}

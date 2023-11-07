@@ -6,9 +6,10 @@
 	import CardImage from "$lib/format/CardImage.svelte";
 
 	export let card: Card;
+	export let squareCorners: boolean = false;
 </script>
 
-<a href="/card/{card.cardNo}" class="grid-item">
+<a href="/card/{card.cardNo}" class="grid-item" class:rounded-2xl={!squareCorners}>
 	<div class="imgcont">
 		<CardImage {card} />
 		<CardImage {card} back />
@@ -29,7 +30,7 @@
 
 <style lang="postcss">
 	.grid-item {
-		@apply flex flex-col rounded-2xl bg-background-grid p-1 no-underline;
+		@apply flex flex-col bg-background-grid p-1 no-underline;
 
 		& > * {
 			@apply flex-shrink-0 flex-grow-0 basis-0;
