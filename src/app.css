@@ -89,11 +89,11 @@ h2 {
 }
 
 h3 {
-	@apply m-0 mb-4 w-full rounded-2xl bg-background-grid py-1 text-center text-3xl font-bold tracking-widest text-text-header;
+	@apply m-0 mb-2 w-full rounded-2xl text-center text-3xl font-bold tracking-widest text-text-header;
 }
 
 h4 {
-	@apply m-0 -mx-4 mb-4 bg-background-grid py-1 text-center text-2xl font-bold tracking-widest text-text-header;
+	@apply m-0 -mx-4 mb-2 text-center text-2xl font-bold tracking-widest text-text-header;
 }
 
 h5 {
@@ -146,7 +146,7 @@ div.anchor {
 input,
 textarea,
 select {
-	@apply border border-input-border bg-input-background p-2;
+	@apply rounded border border-input-border bg-input-background p-2;
 }
 
 input::placeholder {

@@ -73,7 +73,7 @@
 					<div>
 						<Button
 							accent
-							class="w-10 h-10 !px-0 flex items-center justify-center"
+							class="flex h-10 w-10 items-center justify-center !px-0"
 							on:click={() => (menuExpanded = !menuExpanded)}
 							label={menuExpanded ? "Collapse Menu" : "Expand Menu"}
 						>
@@ -87,11 +87,11 @@
 				</div>
 			</div>
 			<div class="buttons" class:open={menuExpanded}>
-				<Button href="/list" label="Card List" class="!tracking-widest !text-base" onpanel>Card List</Button>
-				<Button href="/faq" label="How To Play" class="!tracking-widest !text-base" onpanel>How To Play</Button>
-				<Button href="/search" label="Card Search" class="!tracking-widest !text-base" onpanel>Card Search</Button>
-				<Button href="/labels" label="Label Printer" class="!tracking-widest !text-base" onpanel>Label Printer</Button>
-				<Button href="/about" label="About" class="!tracking-widest !text-base" onpanel>About</Button>
+				<Button href="/list" label="Card List" class="!text-base !tracking-widest" onpanel>Card List</Button>
+				<Button href="/faq" label="How To Play" class="!text-base !tracking-widest" onpanel>How To Play</Button>
+				<Button href="/search" label="Card Search" class="!text-base !tracking-widest" onpanel>Card Search</Button>
+				<Button href="/labels" label="Label Printer" class="!text-base !tracking-widest" onpanel>Label Printer</Button>
+				<Button href="/about" label="About" class="!text-base !tracking-widest" onpanel>About</Button>
 			</div>
 		</div>
 		<form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
@@ -121,7 +121,7 @@
 
 <style lang="postcss">
 	.header {
-		@apply w-full bg-background-panel;
+		@apply w-full bg-background-header;
 
 		& .cont {
 			@apply flex flex-col items-start justify-between gap-y-2 sm:flex-row;

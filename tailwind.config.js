@@ -4,8 +4,12 @@ import { createThemes } from "tw-colors";
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: ["./src/**/*.{html,js,svelte,ts}"],
-	colors: {},
 	theme: {
+		colors: {
+			transparent: "transparent",
+			white: "white",
+			black: "black",
+		},
 		extend: {
 			borderRadius: {
 				"card-v": "4.66% / 3.33%",
@@ -23,7 +27,91 @@ export default {
 	plugins: [
 		createThemes(
 			({ light, dark }) => ({
-				light: light({}),
+				light: light({
+					background: {
+						DEFAULT: colors.slate[50],
+						content: colors.cyan[400],
+						panel: colors.cyan[50],
+						grid: colors.cyan[200],
+						highlight: colors.cyan[200],
+						header: colors.cyan[200],
+					},
+					text: {
+						DEFAULT: colors.cyan[950],
+						subtle: colors.cyan[400],
+						header: colors.pink[800],
+						cardid: colors.cyan[700],
+						rarity: colors.pink[700],
+					},
+					link: {
+						DEFAULT: colors.pink[600],
+						hover: colors.pink[500],
+					},
+					button: {
+						background: colors.cyan[300],
+						text: colors.cyan[950],
+						hover: {
+							background: colors.cyan[200],
+							text: colors.black,
+						},
+						pressed: colors.cyan[50],
+						disabled: {
+							background: colors.cyan[50],
+							text: colors.cyan[300],
+						},
+						accent: {
+							background: colors.pink[300],
+							text: colors.pink[950],
+							hover: {
+								background: colors.pink[200],
+								text: colors.black,
+							},
+							pressed: colors.pink[50],
+							disabled: {
+								background: colors.pink[50],
+								text: colors.pink[300],
+							},
+						},
+						onpanel: {
+							background: colors.cyan[100],
+							text: colors.black,
+							hover: {
+								background: colors.cyan[50],
+							},
+						},
+					},
+					attribute: {
+						all: "#efb513",
+						smile: "#fc3b81",
+						pure: "#3ebb65",
+						cool: "#3fb6e5",
+					},
+					highlight: {
+						red: "#ee0000",
+						blue: "#0000ee",
+					},
+					input: {
+						background: colors.cyan[100],
+						border: colors.cyan[300],
+						placeholder: colors.cyan[400],
+						disabled: {
+							background: colors.slate[50],
+							text: colors.slate[400],
+						},
+					},
+					error: {
+						text: colors.red[600],
+						border: colors.red[500],
+						background: colors.red[400],
+					},
+					table: {
+						border: colors.cyan[500],
+					},
+					faq: {
+						question: colors.pink[500],
+						answer: colors.cyan[500],
+					},
+				}),
 				dark: dark({
 					background: {
 						DEFAULT: colors.slate[900],
@@ -31,6 +119,7 @@ export default {
 						panel: colors.slate[700],
 						grid: colors.slate[600],
 						highlight: colors.slate[500],
+						header: colors.slate[700],
 					},
 					text: {
 						DEFAULT: colors.white,
@@ -111,7 +200,7 @@ export default {
 				print: light({
 					link: { DEFAULT: "#ee0000" },
 					attribute: {
-						all: "#ffc533",
+						all: "#efb513",
 						smile: "#fc3b81",
 						pure: "#3ebb65",
 						cool: "#3fb6e5",
@@ -123,7 +212,7 @@ export default {
 				}),
 			}),
 			{
-				defaultTheme: "dark",
+				defaultTheme: "light",
 			}
 		),
 	],
