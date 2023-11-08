@@ -64,7 +64,7 @@
 
 <svelte:window on:keydown={updateAltStatus} on:keyup={updateAltStatus} />
 
-<div class="header">
+<header class="header">
 	<div class="cont">
 		<div class="menu">
 			<div class="top">
@@ -113,18 +113,18 @@
 			</button>
 		</form>
 	</div>
-</div>
+</header>
 
-<div class="cont">
+<main class="cont">
 	<slot />
-</div>
+</main>
 
 <style lang="postcss">
 	.header {
 		@apply w-full bg-background-header;
 
 		& .cont {
-			@apply flex flex-col items-start justify-between gap-y-2 sm:flex-row;
+			@apply flex max-w-screen-2xl flex-col items-start justify-between gap-y-2 sm:flex-row;
 
 			& .menu {
 				@apply flex w-full flex-col items-center font-bold uppercase tracking-widest text-text-header sm:flex-row sm:items-start;

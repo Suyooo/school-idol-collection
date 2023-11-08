@@ -10,10 +10,10 @@
 <svelte:head><title>How To Play → Rules &bull; SIC</title></svelte:head>
 
 <div class="content">
-	<h3>Rules</h3>
+	<h1>Rules</h1>
 	<div class="panel">
 		<div class="panel-inner">
-			<h4>Base Rules</h4>
+			<h2>Base Rules</h2>
 			To get an overview of the base rules,
 			<a href="https://llsic-en.carrd.co/" target="_blank">
 				Your Sinclair has translated the official rule sheet here
@@ -24,13 +24,13 @@
 
 	<div class="panel">
 		<div class="panel-inner">
-			<h4>Rule Modifications</h4>
+			<h2>Rule Modifications</h2>
 			Here, some of the rules that you can easily change up when play SIC are highlighted. While the recommended rule for
 			each modification is listed, you can decide yourself whether you want to use these defaults or not. When playing casually
 			with others, you should talk about these to make sure everyone is on the same page, while they're usually already decided
 			by the organizers at events or tournaments.
 
-			<h5 id="option_cost">Star Rule</h5>
+			<h3 id="option_cost">Star Rule</h3>
 			<p>
 				All Member cards have a Cost, from 0 <Star repl="Stars" /> to 3 <Star repl="Stars" />, depending on their
 				rarity.<br />
@@ -41,7 +41,7 @@
 				can use any number you want as the limit, or even remove it and play with no Cost limit.
 			</p>
 
-			<h5 id="option_birthday">Birthday Bonus</h5>
+			<h3 id="option_birthday">Birthday Bonus</h3>
 			<p>
 				Some Member cards have Birthday Bonus Pieces in their profile.<br />
 				If the game is taking place in the same month as that Member's birthday, you can add these Bonus Pieces to the card's
@@ -53,7 +53,7 @@
 				at the start of a match, every player could choose one Member to get the Birthday Bonus for that match.
 			</p>
 
-			<h5 id="option_goal">Live Points Goal</h5>
+			<h3 id="option_goal">Live Points Goal</h3>
 			<p>
 				This game is balanced around a goal of 9 Live Points, which is the recommended target.<br />
 				However, if you want to play longer games, you can also increase the Live Points Goal, or, if you want to play multiple
@@ -66,7 +66,7 @@
 				has the most Live Points at the end.
 			</p>
 
-			<h5 id="option_multi">Three or More Players</h5>
+			<h3 id="option_multi">Three or More Players</h3>
 			<p>
 				You can not only play the game one on one, but also with three or more players.<br />
 				It is recommended to play in clockwise order, and deciding the starting player with a game of Rock-Paper-Scissors.<br
@@ -75,7 +75,7 @@
 				place, third place and so on are decided by the order in which they win and go out.
 			</p>
 
-			<h5 id="option_sleeving">Sleeving</h5>
+			<h3 id="option_sleeving">Sleeving</h3>
 			<p>
 				Since the cards have illustrations on their back, it is recommended to use card sleeves when playing to hide the
 				back, so other players can't see what cards you have on your hand, and you can't see what you will draw next.
@@ -94,12 +94,12 @@
 	</div>
 	<div class="panel">
 		<div class="panel-inner">
-			<h4>Advanced Mechanics</h4>
+			<h2>Advanced Mechanics</h2>
 			These mechanics are additional rules for cards introduced in later Aqours sets.
 
-			<h5>Pairs and Trios</h5>
+			<h3>Pairs and Trios</h3>
 			<div>
-				<div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
+				<div class="mb-2 flex w-full justify-center lg:float-right lg:ml-4 lg:w-[unset]">
 					<a href="/card/LL14-059"><CardImage cardNo="LL14-059" orientation={CardOrientation.PORTRAIT} /></a>
 					<a href="/card/LL14-060"><CardImage cardNo="LL14-060" orientation={CardOrientation.PORTRAIT} /></a>
 				</div>
@@ -116,9 +116,9 @@
 				more information, check out <a href="/faq/general#group">the FAQ about Pairs and Trios</a>.
 			</div>
 
-			<h5 class="clear-both">Memories</h5>
+			<h3 class="clear-both">Memories</h3>
 			<div>
-				<div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
+				<div class="mb-2 flex w-full justify-center lg:float-right lg:ml-4 lg:w-[unset]">
 					<a href="/card/LL11-073"><CardImage cardNo="LL11-073" orientation={CardOrientation.LANDSCAPE} /></a>
 				</div>
 				Memory cards are a third type of cards, in addition to the Member and Song cards you already know. They are not part
@@ -136,9 +136,9 @@
 				find out how to bring it onto your Stage.
 			</div>
 
-			<h5 class="clear-both">Idolization</h5>
+			<h3 class="clear-both">Idolization</h3>
 			<div>
-				<div class="lg:float-right lg:ml-4 mb-2 flex w-full lg:w-[unset] justify-center">
+				<div class="mb-2 flex w-full justify-center lg:float-right lg:ml-4 lg:w-[unset]">
 					<a href="/card/LL15-028"><CardImage cardNo="LL15-028" orientation={CardOrientation.PORTRAIT} /></a>
 				</div>
 				Certain cards are able to be Idolized. This works a little like Idolization in the original LLSIF: by combining multiple
@@ -158,12 +158,12 @@
 	</div>
 	<div class="panel">
 		<div class="panel-inner">
-			<h4>Official Event Rules</h4>
+			<h2>Official Event Rules</h2>
 			These are the recommended Deck Construction Restrictions and Rule Options from the SIC site, used for official events.
 			These are simply guidelines, something to start off with - if all the players agree (or you're hosting an event and
 			you're the one making the rules), you can do things differently.
 
-			<h5 id="official_options">Rule Options</h5>
+			<h3 id="official_options">Rule Options</h3>
 			<ul>
 				<li>Live Points Goal: 9</li>
 				<li>Birthday Bonus: Yes, same month</li>
@@ -171,7 +171,7 @@
 				<li>Sleeving: Required, unified sleeve for Deck and Set List each (can be the same sleeve for both)</li>
 			</ul>
 
-			<h5 id="official_deck">Deck / Member Cards</h5>
+			<h3 id="official_deck">Deck / Member Cards</h3>
 			<ul>
 				<li>Your Deck must have at least 20 Member cards. (There is no maximum.)</li>
 				<li>You must not have more than four Member cards with the same ID in your Deck.</li>
@@ -182,20 +182,20 @@
 				</li>
 			</ul>
 
-			<h5 id="official_setlist">Set List / Song Cards</h5>
+			<h3 id="official_setlist">Set List / Song Cards</h3>
 			<ul>
 				<li>Your Set List must have at least 6 Song cards. (Again, no maximum.)</li>
 				<li>Every Song card in your Set List must have an unique ID.</li>
 			</ul>
 
-			<h5 id="official_collection">Collection</h5>
+			<h3 id="official_collection">Collection</h3>
 			<p>
 				Cards from your Collection you might look for during the game must be prepared and placed on the table you're
 				playing on. While it is not your actual Collection, this prepared set is what should be used as your
 				"Collection" during official events.
 			</p>
 
-			<h5 id="official_banlist">Card Bans</h5>
+			<h3 id="official_banlist">Card Bans</h3>
 			<div class="ml-4">
 				If you have a card from Set A in your Deck, Set List or Collection, you must not have any cards from Set B in
 				your Deck, Set List or Collection.

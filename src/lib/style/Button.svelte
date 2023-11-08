@@ -27,7 +27,7 @@
 <style lang="postcss">
 	a,
 	button {
-		@apply flex cursor-pointer select-none items-center justify-center rounded-full bg-button-background px-4 py-2 text-sm font-bold uppercase tracking-wide text-button-text no-underline;
+		@apply flex cursor-pointer select-none items-center justify-center rounded bg-button-background px-4 py-2 text-sm font-bold uppercase tracking-wide text-button-text no-underline;
 
 		&:hover {
 			@apply bg-button-hover-background text-button-hover-text;

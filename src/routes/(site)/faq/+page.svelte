@@ -1,7 +1,7 @@
 <svelte:head><title>How To Play &bull; SIC</title></svelte:head>
 
 <div class="content">
-	<h3>How To Play</h3>
+	<h1>How To Play</h1>
 	<div class="panel">
 		<div class="panel-inner">
 			These pages are (mostly) straight translations of the How To Play and FAQ on the official site, containing
@@ -16,7 +16,7 @@
 	</div>
 	<div class="panel">
 		<div class="panel-inner">
-			<h4>General</h4>
+			<h2>General</h2>
 			<ul>
 				<li><a href="/faq/rules">Game Rules</a></li>
 				<li><a href="/faq/general">General Frequently Asked Questions</a></li>
@@ -25,7 +25,7 @@
 	</div>
 	<div class="panel">
 		<div class="panel-inner">
-			<h4>Per-Set FAQ</h4>
+			<h2>Per-Set FAQ</h2>
 			<ul>
 				<li><a href="/faq/LL01">LL01 Frequently Asked Questions</a></li>
 				<li><a href="/faq/LL02">LL02 Frequently Asked Questions</a></li>
