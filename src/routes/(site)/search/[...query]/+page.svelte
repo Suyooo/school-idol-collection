@@ -40,7 +40,7 @@
 	<div class="panel mb-8">
 		<div class="panel-inner pb-0">
 			<div class="flex items-center">
-				<div class="font-bold text-text-header flex-grow">
+				<div class="text-text-header-inpanel flex-grow font-bold">
 					{#each queryExplain as q, i}
 						{#if i > 0},{/if}
 						<Skill skill={q} />
@@ -77,13 +77,13 @@
 		</GridPanel>
 
 		{#if pagination.totalResults > pagination.pageSize}
-			<div class="mt-2 flex flex-col gap-y-2 items-center">
+			<div class="mt-2 flex flex-col items-center gap-y-2">
 				<div>
 					Cards {(pagination.page - 1) * pagination.pageSize + 1}
 					- {Math.min(pagination.page * pagination.pageSize, pagination.totalResults)}
 					of {pagination.totalResults}
 				</div>
-				<div class="max-w-md flex flex-wrap gap-2 justify-center">
+				<div class="flex max-w-md flex-wrap justify-center gap-2">
 					{#each { length: Math.ceil(pagination.totalResults / pagination.pageSize) } as _, i}
 						<Button
 							class="w-12 px-0"

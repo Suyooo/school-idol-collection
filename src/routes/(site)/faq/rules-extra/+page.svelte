@@ -5,11 +5,18 @@
 	import Idolized from "$lib/format/Idolized.svelte";
 	import Star from "$lib/format/Star.svelte";
 	import TriggerComponent from "$lib/format/TriggerComponent.svelte";
+	import Go from "$lib/style/icons/Go.svelte";
 </script>
 
-<svelte:head><title>How To Play → Extra Rules Info &bull; SIC</title></svelte:head>
+<svelte:head><title>Extra Rules Info &bull; SIC</title></svelte:head>
 
-<h1>Extra Rules Info</h1>
+<h1>
+	<div>
+		<a class="button" href="/faq">How to Play </a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+	</div>
+	Extra Rules Info
+</h1>
 
 <div class="panel">
 	<div class="panel-inner">

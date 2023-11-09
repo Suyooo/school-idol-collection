@@ -18,7 +18,7 @@
 		changes, and see whether you can make some new discoveries that'll help you enjoy SIC even more ♪
 	</div>
 </div>
-<div class="my-4 lg:grid lg:grid-cols-3 lg:justify-items-stretch lg:gap-4">
+<div class="my-4 grid grid-cols-1 gap-4 lg:grid-cols-3 lg:justify-items-stretch">
 	<a class="button group" href="https://llsic-en.carrd.co/" target="_blank">
 		<div class="panel h-full">
 			<div class="panel-inner text-justify">

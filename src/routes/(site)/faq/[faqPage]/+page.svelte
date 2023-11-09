@@ -6,6 +6,7 @@
 	import Question from "../Question.svelte";
 	import Section from "../Section.svelte";
 	import SeeAlso from "../SeeAlso.svelte";
+	import Go from "$lib/style/icons/Go.svelte";
 
 	let cards: { [key: string]: Card }, sections: FaqSectionPrepared[];
 	$: ({ cards, sections } = $page.data);
@@ -13,12 +14,18 @@
 
 <svelte:head>
 	<title>
-		How To Play → {$page.params.faqPage === "other" ? "Other Sets" : $page.params.faqPage} FAQ &bull; SIC
+		{$page.params.faqPage === "other" ? "Other Sets" : $page.params.faqPage} FAQ &bull; SIC
 	</title>
 </svelte:head>
 
 <div class="content">
-	<h1>{$page.params.faqPage === "other" ? "Other Sets" : $page.params.faqPage} Frequently Asked Questions</h1>
+	<h1>
+		<div>
+			<a class="button" href="/faq">How to Play </a>
+			<span class="text-text-header-breadcrumb"><Go /></span>
+		</div>
+		{$page.params.faqPage === "other" ? "Other Sets" : $page.params.faqPage} Frequently Asked Questions
+	</h1>
 	<div class="panel">
 		<div class="panel-inner">
 			{#each sections as section}

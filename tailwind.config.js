@@ -29,7 +29,7 @@ export default {
 				light: light({
 					background: {
 						DEFAULT: colors.slate[50],
-						content: colors.cyan[400],
+						content: colors.cyan[300],
 						panel: colors.cyan[50],
 						grid: colors.cyan[200],
 						highlight: colors.cyan[200],
@@ -38,7 +38,11 @@ export default {
 					text: {
 						DEFAULT: colors.cyan[950],
 						subtle: colors.cyan[400],
-						header: colors.pink[800],
+						header: {
+							main: colors.cyan[900],
+							inpanel: colors.pink[800],
+							breadcrumb: colors.cyan[600],
+						},
 						cardid: colors.cyan[700],
 						rarity: colors.pink[700],
 					},
