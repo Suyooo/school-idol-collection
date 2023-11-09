@@ -124,17 +124,4 @@
 			}
 		}
 	}
-
-	.big-link {
-		@apply mt-2 flex items-center gap-4 px-6 py-4 text-xl font-bold no-underline first:mt-0 hover:bg-button-hover-background;
-
-		& div:last-child {
-			@apply flex-grow text-link;
-		}
-
-		&:after {
-			@apply self-baseline text-4xl leading-6;
-			content: "🢒";
-		}
-	}
 </style>

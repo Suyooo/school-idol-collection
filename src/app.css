@@ -88,11 +88,11 @@ h2 {
 }
 
 h3 {
-	@apply mb-0 mt-4 text-lg font-bold tracking-wider text-text-header;
+	@apply text-lg font-bold tracking-wider text-text-header [&:not(:first-child)]:mt-4;
 }
 
 h4 {
-	@apply mb-0 mt-4 font-bold tracking-wider text-text-header;
+	@apply font-bold tracking-wider text-text-header [&:not(:first-child)]:mt-4;
 }
 
 tr > th {
@@ -152,4 +152,16 @@ select:disabled {
 
 textarea {
 	@apply mb-2 h-32 w-full rounded;
+}
+
+.big-link {
+	@apply flex items-center gap-4 rounded bg-link px-6 py-4 text-xl font-bold text-white no-underline first:mt-0 hover:bg-link-hover group-hover:bg-link-hover;
+
+	& svg {
+		@apply flex-shrink-0;
+	}
+
+	& div {
+		@apply flex-grow text-white;
+	}
 }

@@ -11,19 +11,22 @@
 
 {#each subjects as subject}
 	{#if isMultipleSubjects(subject)}
-		<h5 id={subject.from.cardNo}>
+		<h3 id={subject.from.cardNo}>
 			{@html cardLink(subject.from)} to {@html cardLink(subject.to)}
-		</h5>
+		</h3>
 	{:else}
-		<h5 id={subject.cardNo}>
+		<h3 id={subject.cardNo}>
 			{@html cardLink(subject)}
-		</h5>
+		</h3>
 	{/if}
 {/each}
 <slot />
 
 <style lang="postcss">
-	h5 + h5 {
-		@apply -mt-3;
+	h3 {
+		@apply mb-2;
+		& + h3 {
+			@apply -mt-4;
+		}
 	}
 </style>

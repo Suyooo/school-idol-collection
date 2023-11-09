@@ -18,7 +18,7 @@
 </svelte:head>
 
 <div class="content">
-	<h3>{$page.params.faqPage === "other" ? "Other Sets" : $page.params.faqPage} Frequently Asked Questions</h3>
+	<h1>{$page.params.faqPage === "other" ? "Other Sets" : $page.params.faqPage} Frequently Asked Questions</h1>
 	<div class="panel">
 		<div class="panel-inner">
 			{#each sections as section}
