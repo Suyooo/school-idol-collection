@@ -308,14 +308,14 @@
 
 <style lang="postcss">
 	.grid {
-		@apply -mx-4 mt-2 grid-cols-[1fr_2fr] lg:grid-cols-[1fr_2fr_1fr_2fr];
+		@apply box-content grid-cols-[1fr_2fr] align-top leading-5 lg:grid-cols-[1fr_2fr_1fr_2fr];
 
 		& .header,
 		& .value {
-			@apply border-t border-background-panel px-2 py-1;
+			@apply mt-[-1px] border-y border-background-content px-2 py-1;
 		}
 		& .header {
-			@apply bg-background-highlight text-xs font-bold uppercase leading-5 tracking-widest;
+			@apply rounded-l bg-background-content text-xs font-bold uppercase leading-5 tracking-widest lg:ml-4;
 
 			& > span.subheader {
 				@apply float-right font-normal;
@@ -325,12 +325,15 @@
 				@apply col-start-1;
 			}
 		}
-		& .value.wide {
-			@apply col-start-2 col-end-[-1];
+
+		& .value {
+			&.wide {
+				@apply col-start-2 col-end-[-1];
+			}
 		}
 
 		& .gap {
-			@apply col-span-full h-4;
+			@apply col-span-full h-4 lg:ml-4;
 		}
 	}
 

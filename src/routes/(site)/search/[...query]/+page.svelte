@@ -6,7 +6,7 @@
 	import { urlToUiOptions } from "$lib/search/ui.js";
 	import Skill from "$lib/format/Skill.svelte";
 	import Button from "$lib/style/Button.svelte";
-	import GridPanel from "$lib/style/GridPanel.svelte";
+	import CardListGrid from "$lib/style/CardListGrid.svelte";
 	import Collapse from "$lib/style/icons/Collapse.svelte";
 	import Expand from "$lib/style/icons/Expand.svelte";
 	import type { PageData } from "./$types.js";
@@ -40,7 +40,7 @@
 	<div class="panel mb-8">
 		<div class="panel-inner pb-0">
 			<div class="flex items-center">
-				<div class="text-text-header-inpanel flex-grow font-bold">
+				<div class="flex-grow font-bold text-text-header-inpanel">
 					{#each queryExplain as q, i}
 						{#if i > 0},{/if}
 						<Skill skill={q} />
@@ -72,9 +72,9 @@
 			<div class="panel-inner !py-2">There are no results for this query.</div>
 		</div>
 	{:else}
-		<GridPanel items={cards} key="cardNo" let:item={card}>
+		<CardListGrid items={cards} key="cardNo" let:item={card}>
 			<CardGridElement {card} />
-		</GridPanel>
+		</CardListGrid>
 
 		{#if pagination.totalResults > pagination.pageSize}
 			<div class="mt-2 flex flex-col items-center gap-y-2">
