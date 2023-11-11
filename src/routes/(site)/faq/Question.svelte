@@ -19,9 +19,9 @@
 	});
 </script>
 
-<div class="w-full group relative">
+<div class="group relative w-full">
 	<button
-		class="absolute -left-2 top-0 justify-center hidden group-hover:block z-50"
+		class="absolute -left-2 top-0 z-50 hidden justify-center group-hover:block"
 		title="Copy Link to This Question"
 		on:click={copyLink}
 	>
@@ -58,7 +58,7 @@
 		@apply relative pl-12;
 
 		&:after {
-			@apply absolute left-4 top-[0.2rem] h-4 w-4 rounded-full text-center text-xs font-bold leading-[0.875rem] text-background-panel;
+			@apply text-text-contrast absolute left-4 top-[0.2rem] h-4 w-4 rounded-full text-center text-xs font-bold leading-[0.875rem];
 		}
 	}
 

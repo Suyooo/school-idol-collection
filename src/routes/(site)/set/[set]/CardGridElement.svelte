@@ -8,19 +8,21 @@
 	export let squareCorners: boolean = false;
 </script>
 
-<CardListGridElement
-	href="/card/{card.cardNo}"
-	title={`<span class="rarity">${cardRarityShort(card)}</span> ${card.nameEng || card.nameJpn}`}
-	{squareCorners}
-	extraInfoLeft={card.cardNo}
-	extraInfoRight={cardType(card)}
->
-	<CardImage {card} />
-	<CardImage {card} back />
-</CardListGridElement>
+<div class="contents">
+	<CardListGridElement
+		href="/card/{card.cardNo}"
+		title={`<span class="rarity">${cardRarityShort(card)}</span> ${card.nameEng || card.nameJpn}`}
+		{squareCorners}
+		extraInfoLeft={card.cardNo}
+		extraInfoRight={cardType(card)}
+	>
+		<CardImage {card} />
+		<CardImage {card} back />
+	</CardListGridElement>
+</div>
 
 <style lang="postcss">
-	:global(.grid-item .imgcont) {
+	div :global(.imgcont) {
 		@apply bg-background-grid;
 	}
 </style>

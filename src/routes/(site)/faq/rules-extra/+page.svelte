@@ -81,7 +81,7 @@
 		</div>
 	</div>
 </div>
-<div class="panel">
+<div class="panel mt-4">
 	<div class="panel-inner">
 		<h2>Rule Modifications</h2>
 		Here, some of the rules that you can easily change up when play SIC are highlighted. While the recommended rule for each
@@ -151,7 +151,7 @@
 		</p>
 	</div>
 </div>
-<div class="panel">
+<div class="panel mt-4">
 	<div class="panel-inner">
 		<h2>Official Event Rules</h2>
 		These are the recommended Deck Construction Restrictions and Rule Options from the SIC site, used for official events.

@@ -29,10 +29,10 @@
 		}
 
 		& > .imgcont {
-			@apply mb-1 flex w-full basis-36 content-center items-center justify-center gap-2 overflow-hidden rounded-sm px-2;
+			@apply mb-1 flex w-full basis-36 items-center justify-center gap-2 overflow-hidden rounded-sm px-2;
 
 			& > :global(img) {
-				@apply max-h-32 max-w-[50%] basis-0 object-contain;
+				@apply max-h-[8rem] max-w-[8rem] basis-0 object-contain;
 			}
 		}
 

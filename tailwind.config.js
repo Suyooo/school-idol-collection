@@ -45,7 +45,8 @@ export default {
 					},
 					text: {
 						DEFAULT: colors.cyan[950],
-						subtle: colors.cyan[400],
+						contrast: colors.white,
+						subtle: colors.slate[400],
 						header: {
 							main: colors.cyan[900],
 							inpanel: colors.pink[800],
