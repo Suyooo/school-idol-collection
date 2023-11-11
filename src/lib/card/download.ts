@@ -1,3 +1,4 @@
+import { fileTypeFromBuffer } from "file-type";
 import fs from "fs";
 import { JSDOM } from "jsdom";
 
@@ -8,7 +9,7 @@ export async function downloadCardImages(
 	set: string,
 	fetchFunc?: (url: string) => Promise<Response>,
 	document?: Document
-) {
+): Promise<string> {
 	if (!fetchFunc) fetchFunc = fetch;
 	if (!document) {
 		const cardRes = await fetchFunc(`https://lovelive-sic.com/cardlist/list/?cardno=${cardNo}`);
@@ -37,32 +38,32 @@ export async function downloadCardImages(
 				`.card-expansion-list li a[href='${setLink.substring(setLink.indexOf("/cardlist"))}'] img`
 			) as HTMLImageElement
 		).src;
-		await fetchFunc(setUrl).then(saveResponseToFile(`static/images/cards/${set}/set.jpg`));
+		await fetchFunc(setUrl).then(saveResponseToFile(`static/images/cards/${set}/set`));
 	}
 
-	const frontUrl = (document.querySelector(".illust-1 img") as HTMLImageElement).src;
-	if (frontUrl.endsWith("SECRET.jpg")) return;
-	const backUrl = (document.querySelector(".illust-2 img") as HTMLImageElement).src;
+	const frontUrl = (document.querySelector(".illust-2 img") as HTMLImageElement).src;
+	if (frontUrl.endsWith("SECRET.jpg")) return "jpg";
+	const backUrl = (document.querySelector(".illust-1 img") as HTMLImageElement).src;
 
 	await Promise.all([
-		fetchFunc(frontUrl).then(saveResponseToFile(`static/images/cards/${set}/${cardNo}-front.jpg`)),
-		fetchFunc(backUrl).then(saveResponseToFile(`static/images/cards/${set}/${cardNo}-back.jpg`)),
+		fetchFunc(frontUrl).then(saveResponseToFile(`static/images/cards/${set}/${cardNo}-front`)),
+		fetchFunc(backUrl).then(saveResponseToFile(`static/images/cards/${set}/${cardNo}-back`)),
 	]);
+
+	return frontUrl.endsWith(".gif") ? "gif" : "jpg";
 }
 
 export function saveResponseToFile(filename: string): (res: Response) => Promise<void> {
 	return async (res) => {
 		if (res.ok && res.body) {
-			const out = fs.createWriteStream(filename);
-			const reader = res.body.getReader();
-			while (true) {
-				const { done, value } = await reader.read();
-				if (done) {
-					out.close();
-					break;
-				}
-				out.write(value);
+			const reader = await res.arrayBuffer();
+			const type = await fileTypeFromBuffer(reader);
+			if (type === undefined) {
+				throw "Attempted to download unknown image filetype to " + filename;
 			}
+			const out = fs.createWriteStream(filename + "." + type.ext);
+			out.write(Buffer.from(reader));
+			out.close();
 		}
 
 		// a little bit of throttle

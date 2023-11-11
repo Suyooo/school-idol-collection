@@ -18,7 +18,7 @@
 		isLandscape =
 			(card ? (back ? card.backOrientation : card.frontOrientation) : orientation) === CardOrientation.LANDSCAPE;
 		if (secret) url = `/images/cards/secret.jpg`;
-		else url = `/images/cards/${set}/${usedCardNo}-${back ? "back" : "front"}.jpg`;
+		else url = `/images/cards/${set}/${usedCardNo}-${back ? "back" : "front"}.${card?.imageFileExt ?? "gif"}`;
 	}
 </script>
 

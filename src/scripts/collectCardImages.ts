@@ -20,8 +20,10 @@ import { cardIsMember } from "$lib/card/types.js";
 		const set = card.cardNo.split("-")[0];
 
 		if (
-			fs.existsSync(`static/images/cards/${set}/${card.cardNo}-front.jpg`) &&
-			fs.existsSync(`static/images/cards/${set}/${card.cardNo}-back.jpg`)
+			(fs.existsSync(`static/images/cards/${set}/${card.cardNo}-front.gif`) ||
+				fs.existsSync(`static/images/cards/${set}/${card.cardNo}-front.jpg`)) &&
+			(fs.existsSync(`static/images/cards/${set}/${card.cardNo}-back.gif`) ||
+				fs.existsSync(`static/images/cards/${set}/${card.cardNo}-back.jpg`))
 		) {
 			continue;
 		}
@@ -38,7 +40,7 @@ import { cardIsMember } from "$lib/card/types.js";
 		}
 		const document = new JSDOM(await cardRes.text()).window.document;
 		await fetch((document.querySelector(".illust-1 img") as HTMLImageElement).src).then(
-			saveResponseToFile(`static/images/cards/secret.jpg`)
+			saveResponseToFile(`static/images/cards/secret`)
 		);
 		anyDownloaded = true;
 	}

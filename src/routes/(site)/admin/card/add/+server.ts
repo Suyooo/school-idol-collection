@@ -89,10 +89,11 @@ export const POST: RequestHandler = (async ({ locals, request, fetch }) => {
 	}
 
 	applyFixes(info, cardNo, set, inSetNo, type);
+	let imageFileExt = "jpg";
 	if (type !== CardType.MEMBER || info["レアリティ"] !== "Secret") {
-		await downloadCardImages(cardNo, set, fetch, document);
+		imageFileExt = await downloadCardImages(cardNo, set, fetch, document);
 	}
-	await importCard(info, await locals.DB, cardNo, set, inSetNo, type);
+	await importCard(info, await locals.DB, cardNo, set, inSetNo, type, imageFileExt);
 
 	return json({ success: true });
 }) satisfies RequestHandler;
@@ -257,7 +258,8 @@ async function importCard(
 	cardNo: string,
 	set: string,
 	inSetNo: number,
-	type: CardType
+	type: CardType,
+	imageFileExt: string
 ) {
 	await DB.transaction(async (transaction) => {
 		const card: Partial<Card> = {
@@ -267,6 +269,7 @@ async function importCard(
 			copyright: info["コピーライト"]!,
 			group: 0,
 			type,
+			imageFileExt,
 		};
 		let skillText = info["スキル"]?.replace(/\n\n/g, "\n");
 		let orientationCheckCardNo = info["カードNo."]!;

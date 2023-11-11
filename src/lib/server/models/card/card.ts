@@ -99,6 +99,12 @@ export class CardBase extends Model {
 	declare skills: Skill[];
 
 	@Attribute({
+		type: DataTypes.STRING(3),
+		allowNull: false,
+	})
+	declare imageFileExt: string;
+
+	@Attribute({
 		type: DataTypes.INTEGER.UNSIGNED,
 		allowNull: false,
 	})
@@ -199,7 +205,7 @@ export function addScopes(sequelize: Sequelize) {
 		attributes: ["id"],
 	}));
 	CardBase.addScope("viewForLink", () => ({
-		attributes: ["cardNo", "id", "type", "nameJpn", "nameEng", "frontOrientation", "backOrientation"],
+		attributes: ["cardNo", "id", "type", "nameJpn", "nameEng", "imageFileExt", "frontOrientation", "backOrientation"],
 		include: [
 			{ model: sequelize.m.CardMemberExtraInfo, attributes: ["rarity"] },
 			{ model: sequelize.m.CardSongExtraInfo, attributes: ["rarity"] },

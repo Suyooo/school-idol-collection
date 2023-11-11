@@ -34,6 +34,7 @@
 		"@types/probe-image-size": "^7.2.0",
 		"@types/uuid": "^9.0.4",
 		"autoprefixer": "^10.4.13",
+		"file-type": "^18.7.0",
 		"jsdom": "^21.1.2",
 		"mariadb": "^3.2.2",
 		"patch-package": "^8.0.0",
