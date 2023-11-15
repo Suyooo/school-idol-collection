@@ -102,9 +102,9 @@
 				</div>
 				<div class="mt-2">
 					<div class="-indent-5">
-						<b>①</b> Print the labels one-sided, at the highest quality and at original (or 100%) scale. Check the print
-						preview caregully - you may need to enable "Print Backgrounds" or similar options to make sure that all icons
-						show up! You can also only print one page at first to test the quality first.
+						<b>①</b> Print this page one-sided, at the highest quality and at original (or 100%) scale. Check the print preview
+						caregully - you may need to enable "Print Backgrounds" or similar options to make sure that all icons show up!
+						You can also only print one page at first to test the quality first.
 					</div>
 					<div class="mt-2 -indent-5">
 						<b>②</b> Double-check the size with a ruler after the print - the distance between the grey lines should be 63.5mm

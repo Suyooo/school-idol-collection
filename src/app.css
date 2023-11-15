@@ -130,11 +130,11 @@ select {
 }
 
 textarea {
-	@apply mb-2 h-32 w-full rounded;
+	@apply h-32 w-full rounded;
 }
 
 .big-link {
-	@apply text-text-contrast flex items-center gap-4 rounded bg-link px-6 py-4 text-xl font-bold no-underline first:mt-0 hover:bg-link-hover group-hover:bg-link-hover;
+	@apply flex items-center gap-4 rounded bg-link px-6 py-4 text-xl font-bold text-text-contrast no-underline first:mt-0 hover:bg-link-hover group-hover:bg-link-hover;
 
 	& svg {
 		@apply flex-shrink-0;
