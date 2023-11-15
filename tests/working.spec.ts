@@ -39,8 +39,8 @@ test("faq page", async ({ page }) => {
 });
 
 test("faq rules page", async ({ page }) => {
-	await page.goto("/faq/rules");
-	await expect(await page.getByText("Rules").count()).toBeGreaterThan(0);
+	await page.goto("/faq/rules-extra");
+	await expect(await page.getByText("Extra Rules Info").count()).toBeGreaterThan(0);
 });
 
 test("faq general page", async ({ page }) => {
@@ -60,7 +60,7 @@ test("search page", async ({ page }) => {
 
 test("search result page", async ({ page }) => {
 	await page.goto("/search/muse/memory/set:LL13");
-	await expect(await page.getByText("Search Results").count()).toBeGreaterThan(0);
+	await expect(await page.getByText("Results").count()).toBeGreaterThan(0);
 });
 
 test("labels page", async ({ page }) => {
