@@ -114,7 +114,7 @@ export default {
 					error: {
 						text: colors.red[600],
 						border: colors.red[500],
-						background: colors.red[400],
+						background: colors.red[300],
 					},
 					table: {
 						border: colors.cyan[500],

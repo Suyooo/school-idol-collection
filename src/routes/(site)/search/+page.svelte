@@ -23,11 +23,9 @@
 	<title>Search &bull; SIC</title>
 </svelte:head>
 
-<div class="content">
-	<h3>Search</h3>
-	<div class="panel">
-		<div class="panel-inner">
-			<SearchOptions {options} />
-		</div>
+<h1>Search</h1>
+<div class="panel">
+	<div class="panel-inner">
+		<SearchOptions {options} />
 	</div>
 </div>

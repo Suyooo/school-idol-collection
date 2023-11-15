@@ -15,8 +15,8 @@
 	}
 </script>
 
-<div class="row items-start">
-	<div class="col-half lg:pr-4 grid grid-cols-[1fr,3fr] gap-2 items-center">
+<div class="flex items-start max-lg:flex-col">
+	<div class="grid flex-grow basis-0 grid-cols-[1fr,3fr] items-center gap-2 lg:pr-4">
 		<b>{uppercaseFirst(options.cardType || "Card")} Name </b>
 		<input bind:value={options.cardName} placeholder="—" />
 
@@ -48,7 +48,7 @@
 		<b>Skill Text</b>
 		<input bind:value={options.skillText} placeholder="—" />
 	</div>
-	<div class="col-half mt-4 lg:mt-0 lg:pl-4 grid grid-cols-[1fr,3fr] gap-2 items-center">
+	<div class="mt-4 grid flex-grow basis-0 grid-cols-[1fr,3fr] items-center gap-2 lg:mt-0 lg:pl-4">
 		{#if options.cardType === "member"}
 			<b>Rarity</b>
 			<select bind:value={options.memberRarity} class:text-input-placeholder={!uiOptionIsSet(options.memberRarity)}>
@@ -303,16 +303,16 @@
 					</select>
 				</div>
 			{:else}
-				<div class="self-start mt-2.5 col-span-full">Select a Requirement Type to show additional search options.</div>
+				<div class="col-span-full mt-2.5 self-start">Select a Requirement Type to show additional search options.</div>
 			{/if}
 		{:else if options.cardType === "memory"}
-			<div class="self-start mt-2.5 col-span-full">Memory cards have no additional search options.</div>
+			<div class="col-span-full mt-2.5 self-start">Memory cards have no additional search options.</div>
 		{:else}
-			<div class="self-start mt-2.5 col-span-full">Select a Card Type to show additional search options.</div>
+			<div class="col-span-full mt-2.5 self-start">Select a Card Type to show additional search options.</div>
 		{/if}
 	</div>
 </div>
-<div class="mt-2 flex items-center justify-end w-full">
+<div class="mt-2 flex w-full items-center justify-end">
 	<Button label="Search" accent on:click={query}>Search</Button>
 </div>
 

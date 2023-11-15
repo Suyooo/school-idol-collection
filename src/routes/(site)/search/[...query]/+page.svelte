@@ -34,66 +34,68 @@
 	<title>Search Results &bull; SIC</title>
 </svelte:head>
 
-<div class="content">
-	<h3>Search Results</h3>
+<h1>Search</h1>
 
-	<div class="panel mb-8">
-		<div class="panel-inner pb-0">
-			<div class="flex items-center">
-				<div class="flex-grow font-bold text-text-header-inpanel">
-					{#each queryExplain as q, i}
-						{#if i > 0},{/if}
-						<Skill skill={q} />
-					{/each}
-				</div>
-				<Button
-					class="flex items-center"
-					onpanel
-					on:click={() => (showOptions = !showOptions)}
-					label={showOptions ? "Collapse Search Options" : "Expand Search Options"}
-				>
-					{#if showOptions}
-						<Collapse />
-					{:else}
-						<Expand />
-					{/if}
-					<span class="ml-2">Change Search Query</span>
-				</Button>
+<div class="panel mb-4">
+	<div class="panel-inner pb-0">
+		<div class="flex items-center">
+			<div class="flex-grow font-bold text-text-header-inpanel">
+				{#each queryExplain as q, i}
+					{#if i > 0},{/if}
+					<Skill skill={q} />
+				{/each}
 			</div>
-			<div class="mt-4" class:hidden={!showOptions}>
-				{#key queryUrl}
-					<SearchOptions {options} />
-				{/key}
-			</div>
+			<Button
+				class="flex items-center"
+				on:click={() => (showOptions = !showOptions)}
+				label={showOptions ? "Collapse Search Options" : "Expand Search Options"}
+			>
+				{#if showOptions}
+					<Collapse />
+				{:else}
+					<Expand />
+				{/if}
+				<span class="ml-2">Change Search Query</span>
+			</Button>
+		</div>
+		<div class="mt-4" class:hidden={!showOptions}>
+			{#key queryUrl}
+				<SearchOptions {options} />
+			{/key}
 		</div>
 	</div>
-	{#if cards.length === 0}
-		<div class="panel !bg-error-background">
-			<div class="panel-inner !py-2">There are no results for this query.</div>
-		</div>
-	{:else}
-		<CardListGrid items={cards} key="cardNo" let:item={card}>
-			<CardGridElement {card} />
-		</CardListGrid>
-
-		{#if pagination.totalResults > pagination.pageSize}
-			<div class="mt-2 flex flex-col items-center gap-y-2">
-				<div>
-					Cards {(pagination.page - 1) * pagination.pageSize + 1}
-					- {Math.min(pagination.page * pagination.pageSize, pagination.totalResults)}
-					of {pagination.totalResults}
-				</div>
-				<div class="flex max-w-md flex-wrap justify-center gap-2">
-					{#each { length: Math.ceil(pagination.totalResults / pagination.pageSize) } as _, i}
-						<Button
-							class="w-12 px-0"
-							accent={i + 1 === pagination.page}
-							label={`Page ${i + 1}`}
-							on:click={() => goto(`/search/${queryUrl}/page:${i + 1}`)}>{i + 1}</Button
-						>
-					{/each}
-				</div>
-			</div>
-		{/if}
-	{/if}
 </div>
+{#if cards.length === 0}
+	<div class="panel !border-error-border !bg-error-background">
+		<div class="panel-inner">There are no results for this query.</div>
+	</div>
+{:else}
+	<div class="panel">
+		<div class="panel-inner">
+			<h2>Results</h2>
+			<CardListGrid items={cards} key="cardNo" let:item={card}>
+				<CardGridElement {card} />
+			</CardListGrid>
+		</div>
+	</div>
+
+	{#if pagination.totalResults > pagination.pageSize}
+		<div class="mt-2 flex flex-col items-center gap-y-2">
+			<div>
+				Cards {(pagination.page - 1) * pagination.pageSize + 1}
+				- {Math.min(pagination.page * pagination.pageSize, pagination.totalResults)}
+				of {pagination.totalResults}
+			</div>
+			<div class="flex max-w-md flex-wrap justify-center gap-2">
+				{#each { length: Math.ceil(pagination.totalResults / pagination.pageSize) } as _, i}
+					<Button
+						class="w-12 px-0"
+						accent={i + 1 === pagination.page}
+						label={`Page ${i + 1}`}
+						on:click={() => goto(`/search/${queryUrl}/page:${i + 1}`)}>{i + 1}</Button
+					>
+				{/each}
+			</div>
+		</div>
+	{/if}
+{/if}
