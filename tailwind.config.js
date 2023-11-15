@@ -68,8 +68,8 @@ export default {
 						},
 						pressed: colors.white,
 						disabled: {
-							background: colors.cyan[50],
-							text: colors.cyan[300],
+							background: colors.slate[200],
+							text: colors.slate[500],
 						},
 						accent: {
 							background: colors.pink[300],
@@ -80,8 +80,8 @@ export default {
 							},
 							pressed: colors.pink[50],
 							disabled: {
-								background: colors.pink[50],
-								text: colors.pink[300],
+								background: colors.stone[200],
+								text: colors.stone[500],
 							},
 						},
 						header: {

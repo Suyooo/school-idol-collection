@@ -67,10 +67,6 @@
 			&:active {
 				@apply bg-button-pressed;
 			}
-
-			&.disabled {
-				@apply bg-button-disabled-background text-button-disabled-text;
-			}
 		}
 	}
 </style>
