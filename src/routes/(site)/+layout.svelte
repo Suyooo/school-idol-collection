@@ -87,11 +87,11 @@
 				</div>
 			</div>
 			<div class="buttons" class:open={menuExpanded}>
-				<Button href="/list" label="Card List" class="!text-base !tracking-widest" onpanel>Card List</Button>
-				<Button href="/faq" label="How To Play" class="!text-base !tracking-widest" onpanel>How To Play</Button>
-				<Button href="/search" label="Card Search" class="!text-base !tracking-widest" onpanel>Card Search</Button>
-				<Button href="/labels" label="Label Printer" class="!text-base !tracking-widest" onpanel>Label Printer</Button>
-				<Button href="/about" label="About" class="!text-base !tracking-widest" onpanel>About</Button>
+				<Button href="/list" label="Card List" class="!text-base !tracking-widest" header>Card List</Button>
+				<Button href="/faq" label="How To Play" class="!text-base !tracking-widest" header>How To Play</Button>
+				<Button href="/search" label="Card Search" class="!text-base !tracking-widest" header>Card Search</Button>
+				<Button href="/labels" label="Label Printer" class="!text-base !tracking-widest" header>Label Printer</Button>
+				<Button href="/about" label="About" class="!text-base !tracking-widest" header>About</Button>
 			</div>
 		</div>
 		<form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
@@ -127,7 +127,7 @@
 			@apply flex max-w-screen-2xl flex-col items-start justify-between gap-y-2 sm:flex-row;
 
 			& .menu {
-				@apply text-text-header-inpanel flex w-full flex-col items-center font-bold uppercase tracking-widest sm:flex-row sm:items-start;
+				@apply flex w-full flex-col items-center font-bold uppercase tracking-widest text-text-header-inpanel sm:flex-row sm:items-start;
 
 				& .top {
 					@apply flex w-full flex-shrink items-center justify-between sm:ml-0 sm:w-max sm:justify-start;

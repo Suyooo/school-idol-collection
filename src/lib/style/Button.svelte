@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let accent: boolean = false;
-	export let onpanel: boolean = false;
+	export let header: boolean = false;
 	export let disabled: boolean = false;
 	export let href: string | undefined = undefined;
 	export let style: string = "";
@@ -15,11 +15,11 @@
 		<slot />
 	</button>
 {:else if href}
-	<a {href} class:accent class:onpanel class={`button ${classes}`} {style} title={label} aria-label={label} {target}>
+	<a {href} class:accent class:header class={`button ${classes}`} {style} title={label} aria-label={label} {target}>
 		<slot />
 	</a>
 {:else}
-	<button class:accent class:onpanel class={classes} {style} title={label} aria-label={label} on:click>
+	<button class:accent class:header class={classes} {style} title={label} aria-label={label} on:click>
 		<slot />
 	</button>
 {/if}
@@ -57,11 +57,11 @@
 			}
 		}
 
-		&.onpanel {
-			@apply bg-button-onpanel-background text-button-onpanel-text;
+		&.header {
+			@apply bg-button-header-background text-button-header-text;
 
 			&:hover {
-				@apply bg-button-onpanel-hover-background text-button-hover-text;
+				@apply bg-button-header-hover-background text-button-hover-text;
 			}
 
 			&:active {

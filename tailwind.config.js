@@ -84,7 +84,7 @@ export default {
 								text: colors.pink[300],
 							},
 						},
-						onpanel: {
+						header: {
 							background: colors.cyan[100],
 							text: colors.black,
 							hover: {
@@ -169,7 +169,7 @@ export default {
 								text: colors.pink[500],
 							},
 						},
-						onpanel: {
+						header: {
 							background: colors.slate[500],
 							text: colors.white,
 							hover: {
