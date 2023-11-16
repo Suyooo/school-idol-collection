@@ -178,7 +178,6 @@
 
 		& :global(.skill-icon) {
 			margin-top: -0.133rem;
-			vertical-align: middle;
 		}
 
 		& :global(a) {

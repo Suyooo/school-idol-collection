@@ -59,7 +59,7 @@
 		<Question {...data.sections[0].qa[21]} />
 	</div>
 </div>
-<div class="panel">
+<div class="panel mt-4">
 	<div class="panel-inner">
 		<h2>Skills</h2>
 		<h3>Can I use my Starting Members' <TriggerComponent trigger={TriggerEnum.ENTRY} /> Skill?</h3>
@@ -84,7 +84,7 @@
 		<Question {...data.sections[0].qa[31]} />
 	</div>
 </div>
-<div class="panel">
+<div class="panel mt-4">
 	<div class="panel-inner">
 		<h2>Lives</h2>
 		<h3>Can I perform a <b>⟪LIVE⟫</b> with more Pieces than the requirement?</h3>
@@ -113,6 +113,10 @@
 </div>
 
 <style lang="postcss">
+	h3 {
+		@apply tracking-normal;
+	}
+
 	div.anchor {
 		@apply -mb-4;
 	}

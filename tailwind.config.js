@@ -54,11 +54,11 @@ export default {
 						},
 						cardid: {
 							DEFAULT: colors.slate[600],
-							hover: colors.slate[400],
+							hover: colors.slate[500],
 						},
 						rarity: {
-							DEFAULT: colors.pink[800],
-							hover: colors.pink[600],
+							DEFAULT: colors.pink[900],
+							hover: colors.pink[700],
 						},
 					},
 					link: {

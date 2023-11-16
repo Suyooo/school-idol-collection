@@ -24,7 +24,7 @@
 
 <style lang="postcss">
 	h3 {
-		@apply mb-2;
+		@apply tracking-normal;
 		& + h3 {
 			@apply -mt-4;
 		}
