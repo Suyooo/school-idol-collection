@@ -312,10 +312,10 @@
 
 		& .header,
 		& .value {
-			@apply mt-[-1px] border-y border-background-content px-2 py-1;
+			@apply mt-[-1px] border-y border-background-accent px-2 py-1;
 		}
 		& .header {
-			@apply rounded-l bg-background-content text-xs font-bold uppercase leading-5 tracking-widest lg:ml-4;
+			@apply rounded-l bg-background-accent text-xs font-bold uppercase leading-5 tracking-widest lg:ml-4;
 
 			& > span.subheader {
 				@apply float-right font-normal;

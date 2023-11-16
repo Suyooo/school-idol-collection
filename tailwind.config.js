@@ -36,28 +36,28 @@ export default {
 			({ light, dark }) => ({
 				light: light({
 					background: {
-						DEFAULT: colors.slate[50],
-						content: colors.cyan[300],
-						panel: colors.cyan[50],
+						DEFAULT: colors.cyan[50],
+						accent: colors.cyan[300],
+						panel: colors.slate[50],
 						grid: colors.cyan[100],
 						highlight: colors.cyan[200],
-						header: colors.cyan[200],
+						header: colors.cyan[300],
 					},
 					text: {
 						DEFAULT: colors.cyan[950],
 						contrast: colors.white,
 						subtle: colors.slate[400],
 						header: {
-							main: colors.cyan[900],
-							inpanel: colors.pink[800],
+							frame: colors.cyan[900],
 							breadcrumb: colors.cyan[600],
+							intext: colors.pink[800],
 						},
 						cardid: colors.cyan[600],
 						rarity: colors.pink[600],
 					},
 					link: {
 						DEFAULT: colors.pink[700],
-						hover: colors.pink[600],
+						hover: colors.pink[500],
 					},
 					button: {
 						background: colors.cyan[200],
@@ -105,7 +105,7 @@ export default {
 					input: {
 						background: colors.cyan[100],
 						border: colors.cyan[300],
-						placeholder: colors.cyan[400],
+						placeholder: colors.cyan[500],
 						disabled: {
 							background: colors.slate[50],
 							text: colors.slate[400],

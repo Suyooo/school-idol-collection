@@ -39,7 +39,7 @@
 <div class="panel mb-4">
 	<div class="panel-inner pb-0">
 		<div class="flex items-center">
-			<div class="flex-grow font-bold text-text-header-inpanel">
+			<div class="flex-grow font-bold text-text-header-intext">
 				{#each queryExplain as q, i}
 					{#if i > 0},{/if}
 					<Skill skill={q} />

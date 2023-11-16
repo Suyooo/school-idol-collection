@@ -32,7 +32,7 @@ a:not(.button) {
 }
 
 .panel {
-	@apply rounded-xl border-4 border-background-content bg-background-panel;
+	@apply border-background-accent rounded-xl border-4 bg-background-panel;
 }
 
 .panel-inner {
@@ -48,13 +48,13 @@ span.rarity {
 }
 
 h1 {
-	@apply mb-4 flex w-full flex-col items-start rounded-xl bg-background-content py-1 pl-4 text-2xl font-bold uppercase tracking-widest text-text-header-main lg:flex-row lg:items-center;
+	@apply bg-background-accent text-text-header-frame mb-4 flex w-full flex-col items-start rounded-xl py-1 pl-4 text-2xl font-bold uppercase tracking-widest lg:flex-row lg:items-center;
 
 	& div {
 		@apply flex items-center;
 
 		& a.button {
-			@apply text-base tracking-wide text-text-header-breadcrumb no-underline hover:text-text-header-main hover:underline;
+			@apply hover:text-text-header-frame text-base tracking-wide text-text-header-breadcrumb no-underline hover:underline;
 		}
 
 		& svg {
@@ -64,15 +64,15 @@ h1 {
 }
 
 h2 {
-	@apply -mx-4 -mt-4 mb-3 bg-background-content pb-0.5 pl-4 text-lg font-bold uppercase tracking-widest text-text-header-main;
+	@apply bg-background-accent text-text-header-frame -mx-4 -mt-4 mb-3 pb-0.5 pl-4 text-lg font-bold uppercase tracking-widest;
 }
 
 h3 {
-	@apply text-lg font-bold tracking-wider text-text-header-inpanel [&:not(:first-child)]:mt-4;
+	@apply text-text-header-intext text-lg font-bold tracking-wider [&:not(:first-child)]:mt-4;
 }
 
 h4 {
-	@apply font-bold tracking-wider text-text-header-inpanel [&:not(:first-child)]:mt-4;
+	@apply text-text-header-intext font-bold tracking-wider [&:not(:first-child)]:mt-4;
 }
 
 tr > th {
@@ -149,7 +149,7 @@ textarea {
 	@apply -mb-1 -mt-3 ml-1 flex items-center gap-1 text-xs;
 
 	& a {
-		@apply flex gap-1 text-background-content hover:text-background-highlight;
+		@apply text-background-accent flex gap-1 hover:text-background-highlight;
 	}
 }
 
@@ -166,7 +166,7 @@ table {
 		}
 	}
 	& th {
-		@apply bg-background-content text-center font-bold;
+		@apply bg-background-accent text-center font-bold;
 	}
 
 	& tr {

@@ -127,7 +127,7 @@
 			@apply flex max-w-screen-2xl flex-col items-start justify-between gap-y-2 sm:flex-row;
 
 			& .menu {
-				@apply flex w-full flex-col items-center font-bold uppercase tracking-widest text-text-header-inpanel sm:flex-row sm:items-start;
+				@apply flex w-full flex-col items-center font-bold uppercase tracking-widest sm:flex-row sm:items-start;
 
 				& .top {
 					@apply flex w-full flex-shrink items-center justify-between sm:ml-0 sm:w-max sm:justify-start;
