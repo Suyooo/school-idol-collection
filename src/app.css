@@ -32,11 +32,11 @@ a:not(.button) {
 }
 
 .panel {
-	@apply border-background-accent rounded-xl border-4 bg-background-panel;
+	@apply rounded-xl border-4 border-background-accent bg-background-panel;
 }
 
 .panel-inner {
-	@apply overflow-hidden rounded-lg p-4;
+	@apply overflow-hidden rounded-lg p-4 text-justify;
 }
 
 span.card-id {
@@ -48,13 +48,13 @@ span.rarity {
 }
 
 h1 {
-	@apply bg-background-accent text-text-header-frame mb-4 flex w-full flex-col items-start rounded-xl py-1 pl-4 text-2xl font-bold uppercase tracking-widest lg:flex-row lg:items-center;
+	@apply mb-4 flex w-full flex-col items-start rounded-xl bg-background-accent py-1 pl-4 text-2xl font-bold uppercase tracking-widest text-text-header-frame lg:flex-row lg:items-center;
 
 	& div {
 		@apply flex items-center;
 
 		& a.button {
-			@apply hover:text-text-header-frame text-base tracking-wide text-text-header-breadcrumb no-underline hover:underline;
+			@apply text-base tracking-wide text-text-header-breadcrumb no-underline hover:text-text-header-frame hover:underline;
 		}
 
 		& svg {
@@ -64,15 +64,15 @@ h1 {
 }
 
 h2 {
-	@apply bg-background-accent text-text-header-frame -mx-4 -mt-4 mb-3 pb-0.5 pl-4 text-lg font-bold uppercase tracking-widest;
+	@apply -mx-4 -mt-4 mb-3 bg-background-accent pb-0.5 pl-4 text-lg font-bold uppercase tracking-widest text-text-header-frame;
 }
 
 h3 {
-	@apply text-text-header-intext text-lg font-bold tracking-wider [&:not(:first-child)]:mt-4;
+	@apply text-lg font-bold tracking-wider text-text-header-intext [&:not(:first-child)]:mt-4;
 }
 
 h4 {
-	@apply text-text-header-intext font-bold tracking-wider [&:not(:first-child)]:mt-4;
+	@apply font-bold tracking-wider text-text-header-intext [&:not(:first-child)]:mt-4;
 }
 
 tr > th {
@@ -133,23 +133,11 @@ textarea {
 	@apply h-32 w-full rounded;
 }
 
-.big-link {
-	@apply flex items-center gap-4 rounded bg-link px-6 py-4 text-xl font-bold text-text-contrast no-underline first:mt-0 hover:bg-link-hover group-hover:bg-link-hover;
-
-	& svg {
-		@apply flex-shrink-0;
-	}
-
-	& div {
-		@apply flex-grow;
-	}
-}
-
 .breadcrumbs {
 	@apply -mb-1 -mt-3 ml-1 flex items-center gap-1 text-xs;
 
 	& a {
-		@apply text-background-accent flex gap-1 hover:text-background-highlight;
+		@apply flex gap-1 text-background-accent hover:text-background-highlight;
 	}
 }
 

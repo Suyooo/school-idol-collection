@@ -22,7 +22,7 @@
 
 <style lang="postcss">
 	.grid-item {
-		@apply flex flex-col bg-background-accent p-1 no-underline;
+		@apply flex flex-col bg-background-accent p-1 text-left no-underline;
 
 		& > * {
 			@apply flex-shrink-0 flex-grow-0 basis-0;

@@ -9,7 +9,7 @@
 	import type { PageServerData } from "./$types.js";
 	import SetGridElement from "./list/SetGridElement.svelte";
 	import CardGridElement from "./set/[set]/CardGridElement.svelte";
-	import Go from "$lib/style/icons/Go.svelte";
+	import BigLink from "$lib/style/BigLink.svelte";
 </script>
 
 <script lang="ts">
@@ -71,44 +71,26 @@
 			Maybe you already have collected some of the cards because they looked neat, but never knew how the CCG itself works?
 			Check out <a href="/faq">the How To Play page</a>, look up your cards with the Quick Search in the top right of
 			the site, and give SIC a try!<br /><br />
-			Right now, this site aims to be a complete repository for translations of both the game's cards and official help pages.
-			In the future, this site will hopefully offer even more, including some deckbuilding helpers and even the ability to
-			play-test right in your browser &ndash; to share this little card game I like with everyone, and give other Love&nbsp;Live!
-			fans the chance to try it. But for now, I hope you enjoy browsing through all the cards SIC has to offer!
+			Right now, this site aims to be a complete repository for translations of both the game's cards and official help pages,
+			with some extra bits like linking to search results right from Skill texts and the Label Printer. In the future, this
+			site will hopefully offer even more, including deckbuilding helpers and even the ability to play-test right in your
+			browser &ndash; to share this little card game I like with everyone, and give other Love&nbsp;Live! fans the chance
+			to try it. But for now, I hope you enjoy browsing through all the cards SIC has to offer!
 		</div>
 	</div>
 	<div class="panel">
 		<div class="panel-inner flex h-full flex-col">
 			<h2 class="mb-4 flex-grow-0">Get Started</h2>
 			<div class="flex flex-grow flex-col justify-between gap-2">
-				<a href="/faq" class="button big-link group">
-					<HowToPlay />
-					<div>How To Play</div>
-					<Go />
-				</a>
-				<a href="/list" class="button big-link group">
-					<CardList />
-					<div>Browse the Card List</div>
-					<Go />
-				</a>
-				<a href="/search" class="button big-link group">
-					<Search />
-					<div>Search for Cards</div>
-					<Go />
-				</a>
-				<a href="/labels" class="button big-link group">
-					<Print />
-					<div>Print Labels</div>
-					<Go />
-				</a>
-				<a href="https://lovelive-sic.com/" target="_blank" class="button big-link group">
-					<More />
-					<div>
-						<div class="-mt-1.5">Visit the Official Site</div>
-						<div class="leading -mb-1.5 -mt-1 text-xs">(Japanese, External Link)</div>
-					</div>
-					<Go />
-				</a>
+				<BigLink href="/faq"><HowToPlay slot="icon" /> How To Play</BigLink>
+				<BigLink href="/list"><CardList slot="icon" /> Browse the Card List</BigLink>
+				<BigLink href="/search"><Search slot="icon" /> Search for Cards</BigLink>
+				<BigLink href="/labels"><Print slot="icon" /> Print Labels</BigLink>
+				<BigLink href="https://lovelive-sic.com/" target="_blank">
+					<More slot="icon" />
+					<svelte:fragment slot="primary">Visit the Official Site</svelte:fragment>
+					<svelte:fragment slot="secondary">(Japanese, External Link)</svelte:fragment>
+				</BigLink>
 			</div>
 		</div>
 	</div>
