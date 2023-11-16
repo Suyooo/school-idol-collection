@@ -45,7 +45,8 @@
 			@apply px-2 py-0.5 text-xs;
 		}
 
-		&:hover {
+		&:hover,
+		&:focus {
 			@apply bg-button-hover-background text-button-hover-text;
 		}
 
@@ -60,7 +61,8 @@
 		&.accent {
 			@apply bg-button-accent-background text-button-accent-text;
 
-			&:hover {
+			&:hover,
+			&:focus {
 				@apply bg-button-accent-hover-background text-button-accent-hover-text;
 			}
 
@@ -76,7 +78,8 @@
 		&.header {
 			@apply bg-button-header-background text-button-header-text;
 
-			&:hover {
+			&:hover,
+			&:focus {
 				@apply bg-button-header-hover-background text-button-hover-text;
 			}
 
