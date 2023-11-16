@@ -3,6 +3,7 @@
 	import Button from "$lib/style/Button.svelte";
 	import type { CheckResult, CheckSkillList } from "./+server.js";
 	import CheckElement from "./CheckElement.svelte";
+	import Go from "$lib/style/icons/Go.svelte";
 
 	type CheckSkillListWithResults = CheckSkillList & {
 		results: Writable<Promise<CheckResultWithUi> | null>[];
@@ -15,32 +16,32 @@
 
 <script lang="ts">
 	let disabled: boolean = false,
-		skillListPromise: Promise<CheckSkillListWithResults[]> | null = null;
+		checkSkillListPromise: Promise<CheckSkillListWithResults[]> | null = null;
 
 	function start() {
 		if (disabled) return;
 		disabled = true;
 
-		skillListPromise = new Promise((skillResolve, skillReject) => {
+		checkSkillListPromise = new Promise((checkSkillResolve, checkSkillReject) => {
 			fetch(`/admin/card/check`, {
 				method: "POST",
 			})
 				.then(async (res) => {
 					if (res.status !== 200) {
-						skillReject(res.status + " " + res.statusText);
+						checkSkillReject(res.status + " " + res.statusText);
 					}
 
-					const skillList: CheckSkillListWithResults[] = ((await res.json()) as CheckSkillList[]).map((c) => ({
+					const checkSkillList: CheckSkillListWithResults[] = ((await res.json()) as CheckSkillList[]).map((c) => ({
 						...c,
 						results: c.annotations.map(() => writable(null)),
 					}));
-					skillResolve(skillList);
+					checkSkillResolve(checkSkillList);
 
-					for (const skill of skillList) {
+					for (const skill of checkSkillList) {
 						for (const i in skill.annotations) {
 							const annotation = skill.annotations[i];
 							skill.results[i].set(
-								new Promise<CheckResultWithUi>((checkResolve, checkReject) => {
+								new Promise<CheckResultWithUi>((checkPairResolve, checkPairReject) => {
 									fetch(`/admin/card/check/pair`, {
 										method: "POST",
 										headers: { "Content-Type": "application/json" },
@@ -48,16 +49,16 @@
 									})
 										.then(async (res) => {
 											if (res.status !== 200) {
-												checkReject(res.status + " " + res.statusText);
+												checkPairReject(res.status + " " + res.statusText);
 											}
 
 											const pairRes: CheckResult = await res.json();
 											const failed =
 												pairRes.onlyInJpn.length > 0 || pairRes.onlyInEng.length > 0 || pairRes.common.length === 0;
-											checkResolve({ ...pairRes, expand: failed });
+											checkPairResolve({ ...pairRes, expand: failed });
 										})
 										.catch((e) => {
-											checkReject("Failed to check annotation pair: " + e.message);
+											checkPairReject("Failed to check annotation pair: " + e.message);
 										});
 								})
 							);
@@ -66,7 +67,7 @@
 					}
 				})
 				.catch((e) => {
-					skillReject("Failed to find annotated Skills: " + e.message);
+					checkSkillReject("Failed to find Skills with Annotations: " + e.message);
 				})
 				.finally(() => {
 					disabled = false;
@@ -76,39 +77,69 @@
 </script>
 
 <svelte:head>
-	<title>Admin → Cards → Integrity Check &bull; SIC</title>
+	<title>Integrity Check (Cards Admin Panel) &bull; SIC</title>
 </svelte:head>
 
-<div class="content">
-	<div class="panel">
-		<div class="panel-inner">
-			<Button label="Start Check" accent on:click={start} {disabled}>Start Check</Button>
-			{#if skillListPromise !== null}
-				{#await skillListPromise}
+<h1>
+	<div>
+		<a class="button" href="/admin">Admin Panel</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+		<a class="button" href="/admin/card">Cards</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+	</div>
+	Integrity Check
+</h1>
+
+<div class="panel">
+	<div class="panel-inner">
+		<Button label="Start Check" accent on:click={start} {disabled}>Start Check</Button>
+		{#if checkSkillListPromise !== null}
+			<div class="mt-4">
+				{#await checkSkillListPromise}
 					Searching for Skills with Annotations...
-				{:then skillList}
-					<table class="w-full">
-						{#each skillList as skill (skill.skillId)}
-							<tr>
-								<td class="font-bold pr-2 align-top leading-7">
-									{#if skill.cardNo}
-										<a href="/card/{skill.cardNo}">#{skill.skillId}</a>
-									{:else}
-										#{skill.skillId}
-									{/if}
-								</td>
-								<td class="flex flex-col gap-y-2 mb-2">
-									{#each skill.annotations as annotation, i (i)}
-										<CheckElement {annotation} result={skill.results[i]} />
-									{/each}
-								</td>
-							</tr>
+				{:then checkSkillList}
+					<table>
+						<tr>
+							<th>ID</th>
+							<th>Results</th>
+							<th></th>
+						</tr>
+						{#each checkSkillList as check (check.skill.id)}
+							{#each check.annotations as annotation, i (i)}
+								<tr>
+									<td class="align-text-top">
+										{#if i === 0}
+											{check.skill.id}
+										{/if}
+									</td>
+									<td>
+										<CheckElement {annotation} result={check.results[i]} />
+									</td>
+									<td class="flex gap-2">
+										<Button small label="View Card with this Skill" href="/card/{check.cardNo}">View</Button>
+										<Button
+											small
+											label="List Cards with this Skill's Pattern"
+											href="/admin/pattern/apply/{check.skill.patternId}"
+										>
+											List
+										</Button>
+										<Button
+											small
+											label="Edit this Skill's Pattern"
+											href="/admin/pattern/edit/{check.skill.patternId}/{check.skill.id}"
+										>
+											Edit
+										</Button>
+									</td>
+								</tr>
+							{/each}
 						{/each}
 					</table>
 				{:catch e}
 					{e}
 				{/await}
-			{/if}
-		</div>
+			</div>
+		{/if}
 	</div>
 </div>

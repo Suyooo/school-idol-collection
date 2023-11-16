@@ -152,3 +152,29 @@ textarea {
 		@apply flex gap-1 text-background-content hover:text-background-highlight;
 	}
 }
+
+table {
+	@apply w-full overflow-hidden rounded-t;
+	& td,
+	& th {
+		@apply px-4 py-2;
+		&:first-child {
+			@apply text-center font-bold;
+		}
+		&:not(:first-child) {
+			@apply border-l border-table-border;
+		}
+	}
+	& th {
+		@apply bg-background-content text-center font-bold;
+	}
+
+	& tr {
+		&:hover {
+			@apply !bg-background-highlight/50;
+		}
+		&:nth-child(even) {
+			@apply bg-background-highlight/20;
+		}
+	}
+}

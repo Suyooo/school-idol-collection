@@ -2,6 +2,7 @@
 	export let accent: boolean = false;
 	export let header: boolean = false;
 	export let disabled: boolean = false;
+	export let small: boolean = false;
 	export let href: string | undefined = undefined;
 	export let style: string = "";
 	let classes: string = "";
@@ -11,15 +12,26 @@
 </script>
 
 {#if disabled}
-	<button disabled class:accent class={`disabled ${classes}`} {style} title={label} aria-label={label}>
+	<button disabled class:small class:accent class={`disabled ${classes}`} {style} title={label} aria-label={label}>
 		<slot />
 	</button>
 {:else if href}
-	<a {href} class:accent class:header class={`button ${classes}`} {style} title={label} aria-label={label} {target}>
+	<a
+		{href}
+		class:small
+		class:accent
+		class:header
+		class={`button ${classes}`}
+		class:pointer-events-none={disabled}
+		{style}
+		title={label}
+		aria-label={label}
+		{target}
+	>
 		<slot />
 	</a>
 {:else}
-	<button class:accent class:header class={classes} {style} title={label} aria-label={label} on:click>
+	<button class:small class:accent class:header class={classes} {style} title={label} aria-label={label} on:click>
 		<slot />
 	</button>
 {/if}
@@ -27,7 +39,11 @@
 <style lang="postcss">
 	a,
 	button {
-		@apply flex cursor-pointer select-none items-center justify-center rounded bg-button-background px-4 py-2 text-sm font-bold uppercase tracking-wide text-button-text no-underline;
+		@apply flex cursor-pointer select-none items-center justify-center whitespace-nowrap rounded bg-button-background px-4 py-2 text-sm font-bold uppercase tracking-wide text-button-text no-underline;
+
+		&.small {
+			@apply px-2 py-0.5 text-xs;
+		}
 
 		&:hover {
 			@apply bg-button-hover-background text-button-hover-text;

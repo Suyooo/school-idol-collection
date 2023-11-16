@@ -1,9 +1,10 @@
 import { Op } from "@sequelize/core";
 import { json } from "@sveltejs/kit";
+import type Skill from "$models/skill/skill.js";
 import type { RequestHandler } from "./$types.js";
 
 export type CheckSkillList = {
-	skillId: number;
+	skill: Skill;
 	cardNo: string | null;
 	annotations: CheckAnnotation[];
 };
@@ -88,7 +89,7 @@ export const POST: RequestHandler = (async ({ locals }) => {
 		if (annotations.length > 0) {
 			if (skill.cardNo) {
 				checks.push({
-					skillId: skill.id,
+					skill: skill.get({ plain: true }),
 					cardNo: skill.cardNo,
 					annotations,
 				});
@@ -97,7 +98,7 @@ export const POST: RequestHandler = (async ({ locals }) => {
 					include: DB.m.CardMemberExtraInfo,
 				});
 				checks.push({
-					skillId: skill.id,
+					skill: skill.get({ plain: true }),
 					cardNo: group!.memberExtraInfos[0].cardNo,
 					annotations,
 				});

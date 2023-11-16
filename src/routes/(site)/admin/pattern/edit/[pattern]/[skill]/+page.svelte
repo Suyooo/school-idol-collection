@@ -6,6 +6,8 @@
 	import type { PatternGroupTypeID } from "../../../../../../../lib/translation/patternGroupType.js";
 	import type { PageData } from "./$types.js";
 	import Pill from "./Pill.svelte";
+	import Go from "$lib/style/icons/Go.svelte";
+	import TriggerComponent from "$lib/format/TriggerComponent.svelte";
 
 	export let data: PageData;
 	// Not reactive to stop inputs getting reset on every change. There should be no links from this route to itself
@@ -93,144 +95,155 @@
 </script>
 
 <svelte:head>
-	<title>Admin → Pattern → Edit &bull; SIC</title>
+	<title>Edit (Patterns Admin Panel) &bull; SIC</title>
 </svelte:head>
 
-<div class="content">
-	<h5>Triggers</h5>
-	<div class="panel">
-		<div class="panel-inner" id="trigDiv">
-			<div class="row">
-				{#each TriggerEnum.all as t}
-					<div class="col-quarter">
-						<input type="checkbox" id="trig{t.id}" bind:checked={triggers[t.id]} />
-						<label for="trig{t.id}">{t.toName()}</label>
+<h1>
+	<div>
+		<a class="button" href="/admin">Admin Panel</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+		<a class="button" href="/admin/pattern">Patterns</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+	</div>
+	Edit
+</h1>
+<div class="flex gap-4 max-lg:flex-col">
+	<div class="flex-grow-[3] basis-0">
+		<div class="panel">
+			<div class="panel-inner">
+				<h2>Pattern</h2>
+				<div class="grid grid-cols-2 gap-4">
+					<div>
+						<h3>Regex</h3>
+						<div class="mb-2">
+							{#key data}
+								<textarea id="regex" bind:value={regex} bind:this={regexTextarea} />
+							{/key}
+							{#if errorRegex}
+								<div class="error">{errorRegex}</div>
+							{/if}
+						</div>
+						<Pill refocus={regexTextarea}>([０-９]+)</Pill>
+						<Pill refocus={regexTextarea}>([０-９])([０-９])([０-９])</Pill>
+						<Pill refocus={regexTextarea}>((?:【(?:オール|赤|緑|青)】)+)</Pill>
+						<Pill refocus={regexTextarea}>(【(?:オール|赤|緑|青)】)</Pill>
+						<Pill refocus={regexTextarea}>([^「」]+?)</Pill>
 					</div>
-				{/each}
-			</div>
-		</div>
-	</div>
-	<h5>Pattern</h5>
-	<div class="panel">
-		<div class="panel-inner">
-			<div class="row">
-				<div class="col-half px-2">
-					<h6>Regex</h6>
-					{#key data}
-						<textarea id="regex" bind:value={regex} bind:this={regexTextarea} />
-					{/key}
-					{#if errorRegex}
-						<div class="error">{errorRegex}</div>
-					{/if}
-
-					<Pill refocus={regexTextarea}>([０-９]+)</Pill>
-					<Pill refocus={regexTextarea}>([０-９])([０-９])([０-９])</Pill>
-					<Pill refocus={regexTextarea}>((?:【(?:オール|赤|緑|青)】)+)</Pill>
-					<Pill refocus={regexTextarea}>(【(?:オール|赤|緑|青)】)</Pill>
-					<Pill refocus={regexTextarea}>([^「」]+?)</Pill>
+					<div>
+						<h3>Template</h3>
+						<div class="mb-2">
+							{#key data}
+								<textarea id="template" bind:value={template} bind:this={templateTextarea} />
+							{/key}
+							{#if errorTemplate}
+								<div class="error">{errorTemplate}</div>
+							{/if}
+						</div>
+						<Pill refocus={templateTextarea}>⟪SCOUT⟫</Pill>
+						<Pill refocus={templateTextarea}>⟪ENTER⟫</Pill>
+						<Pill refocus={templateTextarea}>⟪LIVE⟫</Pill>
+						<Pill refocus={templateTextarea}>[LIVE]</Pill>
+						<Pill refocus={templateTextarea}>[RUSH]</Pill>
+						<Pill refocus={templateTextarea}>[ALL]</Pill>
+						<Pill refocus={templateTextarea}>[SMILE]</Pill>
+						<Pill refocus={templateTextarea}>[PURE]</Pill>
+						<Pill refocus={templateTextarea}>[COOL]</Pill>
+						<Pill refocus={templateTextarea}>the Any Piece requirement is reduced by &lt;X&gt;</Pill>
+						<Pill refocus={templateTextarea}
+							>the Attribute Piece requirement changes to [&lt;X&gt;&lt;X&gt;&lt;X&gt;]</Pill
+						>
+						<Pill refocus={templateTextarea}>you have Members on Stand-By</Pill>
+						<Pill refocus={templateTextarea}>on Stand-By on your Stage</Pill>
+						<Pill refocus={templateTextarea}>If you do,</Pill>
+						<Pill refocus={templateTextarea}>you may</Pill>
+						<Pill refocus={templateTextarea}>gain +&lt;X&gt;</Pill>
+						<Pill refocus={templateTextarea}>in your Hand</Pill>
+						<Pill refocus={templateTextarea}>without Stars</Pill>
+						<Pill refocus={templateTextarea}>1 Star or more</Pill>
+						<Pill refocus={templateTextarea}>Flip/Look at the top card of your Deck</Pill>
+						<Pill refocus={templateTextarea}>add/return a card to your Hand</Pill>
+						<Pill refocus={templateTextarea}>Do either: ①②</Pill>
+						<Pill refocus={templateTextarea}>face-down</Pill>
+						<Pill refocus={templateTextarea}>face-up</Pill>
+						<Pill refocus={templateTextarea}>base Live Points</Pill>
+						<Pill refocus={templateTextarea}>bring from your Collection to your Stage</Pill>
+						<Pill refocus={templateTextarea}>«LIVE» with this Member</Pill>
+						<Pill refocus={templateTextarea}>returned Member</Pill>
+						<Pill refocus={templateTextarea}>differently named (group) Members (with)</Pill>
+						<Pill refocus={templateTextarea}>gain ♪Live Points +&lt;X&gt;♪</Pill>
+						<div class="block text-xs italic leading-3">
+							Capitalization: "Stage" "Stand-By" "Hand" "Deck" "Member" "Song" "card" "Live Outfit" "Live Points"
+							"Attribute" "Collection" "Idolized"<br />
+							In quotes: Names, Groups, Years, Song Names, Card Names/IDs
+						</div>
+					</div>
 				</div>
-				<div class="col-half px-2">
-					<h6>Template</h6>
-					{#key data}
-						<textarea id="template" bind:value={template} bind:this={templateTextarea} />
-					{/key}
-					{#if errorTemplate}
-						<div class="error">{errorTemplate}</div>
-					{/if}
-
-					<Pill refocus={templateTextarea}>⟪SCOUT⟫</Pill>
-					<Pill refocus={templateTextarea}>⟪ENTER⟫</Pill>
-					<Pill refocus={templateTextarea}>⟪LIVE⟫</Pill>
-					<Pill refocus={templateTextarea}>[LIVE]</Pill>
-					<Pill refocus={templateTextarea}>[RUSH]</Pill>
-					<Pill refocus={templateTextarea}>[ALL]</Pill>
-					<Pill refocus={templateTextarea}>[SMILE]</Pill>
-					<Pill refocus={templateTextarea}>[PURE]</Pill>
-					<Pill refocus={templateTextarea}>[COOL]</Pill>
-					<Pill refocus={templateTextarea}>the Any Piece requirement is reduced by &lt;X&gt;</Pill>
-					<Pill refocus={templateTextarea}
-						>the Attribute Piece requirement changes to [&lt;X&gt;&lt;X&gt;&lt;X&gt;]</Pill
-					>
-					<Pill refocus={templateTextarea}>you have Members on Stand-By</Pill>
-					<Pill refocus={templateTextarea}>on Stand-By on your Stage</Pill>
-					<Pill refocus={templateTextarea}>If you do,</Pill>
-					<Pill refocus={templateTextarea}>you may</Pill>
-					<Pill refocus={templateTextarea}>gain +&lt;X&gt;</Pill>
-					<Pill refocus={templateTextarea}>in your Hand</Pill>
-					<Pill refocus={templateTextarea}>without Stars</Pill>
-					<Pill refocus={templateTextarea}>1 Star or more</Pill>
-					<Pill refocus={templateTextarea}>Flip/Look at the top card of your Deck</Pill>
-					<Pill refocus={templateTextarea}>add/return a card to your Hand</Pill>
-					<Pill refocus={templateTextarea}>Do either: ①②</Pill>
-					<Pill refocus={templateTextarea}>face-down</Pill>
-					<Pill refocus={templateTextarea}>face-up</Pill>
-					<Pill refocus={templateTextarea}>base Live Points</Pill>
-					<Pill refocus={templateTextarea}>bring from your Collection to your Stage</Pill>
-					<Pill refocus={templateTextarea}>«LIVE» with this Member</Pill>
-					<Pill refocus={templateTextarea}>returned Member</Pill>
-					<Pill refocus={templateTextarea}>differently named (group) Members (with)</Pill>
-					<Pill refocus={templateTextarea}>gain ♪Live Points +&lt;X&gt;♪</Pill>
-					<i class="text-sm"
-						><br />Capitalization: "Stage" "Stand-By" "Hand" "Deck" "Member" "Song" "card" "Live Outfit" "Live Points"
-						"Attribute" "Collection" "Idolized"<br />
-						In quotes: Names, Groups, Years, Song Names, Card Names/IDs</i
+				<div class="mt-2 flex w-full items-center justify-end">
+					<Button label="Save Pattern and go to Apply Page" accent on:click={submit} disabled={!lastSuccessful}
+						>Save and Apply</Button
 					>
 				</div>
 			</div>
 		</div>
+
+		<div class="panel mt-4">
+			<div class="panel-inner">
+				<h2>Test</h2>
+				<div class="grid grid-cols-2 gap-4">
+					<div>
+						<h3>Example</h3>
+						{#key data}
+							<textarea id="example" bind:value={example} />
+						{/key}
+					</div>
+					<div>
+						<h3>Result</h3>
+						<span class:text-text-subtle={!lastSuccessful}>{result}</span>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<h5>Groups</h5>
-	<div class="panel">
-		<div class="panel-inner" id="groupslist">
-			{#each { length: lastMatch.length - 1 } as _, g}
-				<h6>Group {g} <span>{lastMatch[g + 1]}</span></h6>
-				<div class="row">
+
+	<div class="flex-grow basis-0">
+		<div class="panel">
+			<div class="panel-inner">
+				<h2>Triggers</h2>
+				<div class="grid grid-cols-2">
+					{#each TriggerEnum.all as t}
+						<div>
+							<input type="checkbox" id="trig{t.id}" bind:checked={triggers[t.id]} />
+							<label for="trig{t.id}"><TriggerComponent trigger={t} /></label>
+						</div>
+					{/each}
+				</div>
+			</div>
+		</div>
+
+		<div class="panel mt-4">
+			<div class="panel-inner" id="groupslist">
+				<h2>Groups</h2>
+				{#each { length: lastMatch.length - 1 } as _, g}
+					<div class="mt-2 flex items-center gap-1">
+						<h3 class="!m-0">G{g}</h3>
+						<div class="rounded bg-background-highlight px-1 py-0.5 text-xs font-normal tracking-tighter text-text">
+							{lastMatch[g + 1]}
+						</div>
+					</div>
 					{#each PatternGroupType.all as t}
 						<div class="col-quarter">
 							<input type="radio" name="group{g}" id="group{g}_type{t.id}" bind:group={groupTypeIds[g]} value={t.id} />
 							<label for="group{g}_type{t.id}">{t.name}</label>
 						</div>
 					{/each}
-				</div>
-			{/each}
-		</div>
-	</div>
-	<div class="flex items-center justify-end mt-2 w-full">
-		<Button label="Submit" accent on:click={submit} disabled={!lastSuccessful}>Submit</Button>
-	</div>
-	<h5>Test</h5>
-	<div class="panel">
-		<div class="panel-inner">
-			<div class="row">
-				<div class="col-half px-2">
-					<h6>Example</h6>
-					{#key data}
-						<textarea id="example" bind:value={example} />
-					{/key}
-				</div>
-				<div class="col-half px-2">
-					<h6>Result</h6>
-					<span class:text-text-subtle={!lastSuccessful}>{result}</span>
-				</div>
+				{/each}
 			</div>
 		</div>
 	</div>
 </div>
 
 <style lang="postcss">
-	h5 {
-		@apply clear-both;
-	}
-
-	.panel h6 {
-		@apply m-0 text-sm;
-
-		& span {
-			@apply bg-background px-1 font-normal normal-case tracking-normal text-text;
-		}
-	}
-
 	.error {
-		@apply mb-2 rounded bg-error-background p-2;
+		@apply mt-2 rounded border-4 border-error-border bg-error-background px-2 py-1;
 	}
 </style>

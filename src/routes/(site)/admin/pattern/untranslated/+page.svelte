@@ -2,6 +2,8 @@
 	import { isCardSkillShortInfo } from "$lib/translation/skills.js";
 	import type { ShortSkillInfo } from "$lib/translation/skills.js";
 	import type { PageData } from "./$types.js";
+	import Button from "$lib/style/Button.svelte";
+	import Go from "$lib/style/icons/Go.svelte";
 
 	export let data: PageData;
 	let untranslated: ShortSkillInfo[];
@@ -9,49 +11,53 @@
 </script>
 
 <svelte:head>
-	<title>Admin → Pattern → Untranslated List &bull; SIC</title>
+	<title>Untranslated (Patterns Admin Panel) &bull; SIC</title>
 </svelte:head>
 
-<div class="content">
-	<div class="panel">
-		<div class="panel-inner">
-			<table>
-				<thead>
+<h1>
+	<div>
+		<a class="button" href="/admin">Admin Panel</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+		<a class="button" href="/admin/pattern">Patterns</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+	</div>
+	Untranslated
+</h1>
+
+<div class="panel">
+	<div class="panel-inner">
+		<table>
+			<thead>
+				<tr>
+					<th>Card</th>
+					<th>Skill</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{#if untranslated.length === 0}
 					<tr>
-						<th>Card</th>
-						<th>JPN</th>
-						<th>Create</th>
+						<td colspan="3">No untranslated Skills left 👍</td>
 					</tr>
-				</thead>
-				<tbody>
-					{#if untranslated.length === 0}
-						<tr>
-							<td colspan="3">No untranslated Skills left :)</td>
-						</tr>
-					{/if}
-					{#each untranslated as a}
-						<tr>
+				{/if}
+				{#each untranslated as a}
+					<tr>
+						<td>
 							{#if isCardSkillShortInfo(a)}
-								<th><a href="/card/{a.cardNo}/">{a.cardNo}</a></th>
+								<a href="/card/{a.cardNo}/">{a.cardNo}</a>
 							{:else}
-								<th><a href="/card/{a.firstCardNo}/">Group #{a.groupId}</a></th>
+								<a href="/card/{a.firstCardNo}/">Group #{a.groupId}</a>
 							{/if}
-							<td>{a.skillJpn}</td>
-							<td><a href="/admin/pattern/edit/new/{a.skillId}">Create</a></td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+						</td>
+						<td>{a.skillJpn}</td>
+						<td>
+							<Button small label="Create Pattern for this Skill" href="/admin/pattern/edit/new/{a.skillId}">
+								Create Pattern
+							</Button>
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
 	</div>
 </div>
-
-<style lang="postcss">
-	td {
-		@apply px-4 py-4;
-
-		&:not(:first-child) {
-			@apply border-l border-table-border;
-		}
-	}
-</style>

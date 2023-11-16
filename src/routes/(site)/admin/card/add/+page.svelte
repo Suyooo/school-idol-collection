@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from "$lib/style/Button.svelte";
+	import Go from "$lib/style/icons/Go.svelte";
 
 	let cardNo: string = "",
 		disabled: boolean = false;
@@ -29,16 +30,24 @@
 </script>
 
 <svelte:head>
-	<title>Admin → Cards → Download &bull; SIC</title>
+	<title>Download (Cards Admin Panel) &bull; SIC</title>
 </svelte:head>
 
-<div class="content">
-	<div class="panel">
-		<div class="panel-inner">
-			Download Single Card: <input bind:value={cardNo} />
-			<div class="flex items-center justify-end w-full">
-				<Button label="Download" accent on:click={submitCard} {disabled}>Download</Button>
-			</div>
+<h1>
+	<div>
+		<a class="button" href="/admin">Admin Panel</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+		<a class="button" href="/admin/card">Cards</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+	</div>
+	Download
+</h1>
+<div class="panel">
+	<div class="panel-inner">
+		<div class="flex items-center gap-4">
+			<label for="dl_single" class="font-bold">Download Single Card</label>
+			<input id="dl_single" bind:value={cardNo} />
+			<Button label="Download Single Card" accent on:click={submitCard} {disabled}>Go</Button>
 		</div>
 	</div>
 </div>

@@ -15,8 +15,8 @@
 	$: $result?.then((res) => (failed = res.onlyInJpn.length > 0 || res.onlyInEng.length > 0 || res.common.length === 0));
 </script>
 
-<div class="w-full bg-background-content px-2 py-1 rounded" class:!bg-error-background={failed}>
-	<div class="flex">
+<div class="w-full">
+	<div class="flex" class:!bg-error-background={failed}>
 		<div class="flex-grow">
 			{annotation.annotationJpn} / {annotation.annotationEng}
 		</div>
@@ -46,7 +46,7 @@
 
 	{#await $result then res}
 		{#if res && res.expand}
-			<div>
+			<div class="ml-2 border-l border-table-border pl-2">
 				<div class="font-bold">
 					{#if res.onlyInJpn.length === 0 && res.onlyInEng.length === 0}
 						{#if res.common.length === 0}

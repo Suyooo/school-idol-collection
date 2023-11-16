@@ -3,13 +3,14 @@
 	import type { ShortSkillInfo } from "$lib/translation/skills.js";
 	import Button from "$lib/style/Button.svelte";
 	import type { PageData } from "./$types.js";
+	import Go from "$lib/style/icons/Go.svelte";
 
 	export let data: PageData;
 	let id: number,
 		applicable: ShortSkillInfo[],
 		checkboxes: HTMLInputElement[] = [],
 		disabled: boolean = false;
-	$: id = data.id;
+	$: id = data.pattern.id;
 	$: applicable = data.applicable;
 
 	function toggleAll(e: Event) {
@@ -46,60 +47,83 @@
 </script>
 
 <svelte:head>
-	<title>Admin → Pattern → Apply &bull; SIC</title>
+	<title>Apply (Patterns Admin Panel) &bull; SIC</title>
 </svelte:head>
 
-<div class="content">
-	<div class="panel">
-		<div class="panel-inner">
-			<table>
-				<thead>
+<h1>
+	<div>
+		<a class="button" href="/admin">Admin Panel</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+		<a class="button" href="/admin/pattern">Patterns</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+	</div>
+	Apply
+</h1>
+<div class="panel">
+	<div class="panel-inner">
+		<table class="info">
+			<tr>
+				<td>Pattern ID</td>
+				<td>
+					{data.pattern.id}
+					<Button label="Edit this Pattern" class="ml-2" small href="/admin/pattern/edit/{id}/{applicable[0].skillId}/">
+						Edit Pattern
+					</Button>
+				</td>
+			</tr>
+			<tr><td>Regex</td><td>{data.pattern.regex}</td></tr>
+			<tr><td>Template</td><td>{data.pattern.template}</td></tr>
+		</table>
+		<table class="mt-8">
+			<thead>
+				<tr>
+					<th>Card</th>
+					<th>JPN</th>
+					<th>ENG</th>
+					<th>Apply</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each applicable as a, i}
 					<tr>
-						<th>Card</th>
-						<th>JPN</th>
-						<th>ENG</th>
-						<th>Apply</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each applicable as a, i}
-						<tr>
+						<td>
 							{#if isCardSkillShortInfo(a)}
-								<th><a href="/card/{a.cardNo}/">{a.cardNo}</a></th>
+								<a href="/card/{a.cardNo}/">{a.cardNo}</a>
 							{:else}
-								<th><a href="/card/{a.firstCardNo}/">Group #{a.groupId}</a></th>
+								<a href="/card/{a.firstCardNo}/">Group #{a.groupId}</a>
 							{/if}
-							<td>{a.skillJpn}</td>
-							<td>{a.skillEng}</td>
-							<td><input type="checkbox" data-skill={a.skillId} bind:this={checkboxes[i]} /></td>
-						</tr>
-					{/each}
-					<tr>
-						<td />
-						<td />
-						<td />
-						<td class="whitespace-nowrap">
-							<input id="all" type="checkbox" on:change={toggleAll} />
-							<label for="all">All</label>
 						</td>
+						<td>{a.skillJpn}</td>
+						<td>{a.skillEng}</td>
+						<td><input type="checkbox" data-skill={a.skillId} bind:this={checkboxes[i]} /></td>
 					</tr>
-				</tbody>
-			</table>
+				{/each}
+			</tbody>
+		</table>
 
-			<div class="flex items-center justify-between mt-2 w-full">
-				<Button label="Edit" accent href="/admin/pattern/edit/{id}/{applicable[0].skillId}/">Edit</Button>
-				<Button label="Apply" accent on:click={submit} {disabled}>Apply</Button>
-			</div>
+		<div class="mt-2 flex w-full items-center justify-end">
+			<label for="all" class="mr-2 font-bold">Select All</label>
+			<input id="all" class="mr-4" type="checkbox" on:change={toggleAll} />
+
+			<Button label="Apply and Update English Skills Texts" accent on:click={submit} {disabled}>Apply to Skills</Button>
 		</div>
 	</div>
 </div>
 
 <style lang="postcss">
-	td {
-		@apply px-4 py-4;
+	.info td {
+		@apply !text-left;
 
-		&:not(:first-child) {
-			@apply border-l border-table-border;
+		&:first-child {
+			@apply w-0 whitespace-nowrap;
 		}
+
+		&:last-child {
+			@apply flex;
+		}
+	}
+
+	td:last-child {
+		@apply text-center;
 	}
 </style>

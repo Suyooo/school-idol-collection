@@ -40,7 +40,7 @@ export default class PatternGroupType {
 				async function (DB: Sequelize | null, match: string, options?: QueryOptions) {
 					if (DB === null) return "EXAMPLE NAME";
 					const skilltext = skilltextPattern.exec(match)?.[1];
-					const n = (await DB.m.TranslationName.findByPk(match, options))?.eng;
+					const n = (await DB.m.TranslationName.findOne({ ...options, where: { jpn: match } }))?.eng;
 					if (n === undefined) throw new NotFoundError(match + " is not a known name");
 					return skilltext ? "{{skilltext:" + n + "}}" : n;
 				},
@@ -54,7 +54,7 @@ export default class PatternGroupType {
 				"Song Name",
 				async function (DB: Sequelize | null, match: string, options?: QueryOptions) {
 					if (DB === null) return "EXAMPLE SONG";
-					const n = (await DB.m.TranslationSong.findByPk(match, options))?.eng;
+					const n = (await DB.m.TranslationSong.findOne({ ...options, where: { jpn: match } }))?.eng;
 					if (n === undefined) throw new NotFoundError(match + " is not a known song");
 					return n;
 				},
@@ -68,7 +68,7 @@ export default class PatternGroupType {
 				"Costume Name",
 				async function (DB: Sequelize | null, match: string, options?: QueryOptions) {
 					if (DB === null) return "EXAMPLE COSTUME";
-					const n = (await DB.m.TranslationSong.findByPk(match, options))?.eng;
+					const n = (await DB.m.TranslationSong.findOne({ ...options, where: { jpn: match } }))?.eng;
 					if (n === undefined) throw new NotFoundError(match + " is not a known song");
 					return n;
 				},

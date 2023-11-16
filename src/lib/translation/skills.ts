@@ -97,7 +97,7 @@ export async function getApplicableSkills(
 							skillEng: appliedPattern,
 					  }
 					: {
-							groupId: skillObj.id,
+							groupId: skillObj.group.id,
 							firstCardNo: skillObj.group.memberExtraInfos[0].cardNo,
 							skillId: skillObj.id,
 							skillJpn: skill,

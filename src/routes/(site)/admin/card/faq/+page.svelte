@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from "$lib/style/Button.svelte";
+	import Go from "$lib/style/icons/Go.svelte";
 
 	let faqName: string = "",
 		disabled: boolean = false;
@@ -29,16 +30,24 @@
 </script>
 
 <svelte:head>
-	<title>Admin → Cards → FAQ Links &bull; SIC</title>
+	<title>FAQ Links (Cards Admin Panel) &bull; SIC</title>
 </svelte:head>
 
-<div class="content">
-	<div class="panel">
-		<div class="panel-inner">
-			Enter name of the FAQ page: <input bind:value={faqName} />
-			<div class="flex items-center justify-end w-full">
-				<Button label="Apply" accent on:click={submit} {disabled}>Apply</Button>
-			</div>
+<h1>
+	<div>
+		<a class="button" href="/admin">Admin Panel</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+		<a class="button" href="/admin/card">Cards</a>
+		<span class="text-text-header-breadcrumb"><Go /></span>
+	</div>
+	FAQ Links
+</h1>
+<div class="panel">
+	<div class="panel-inner">
+		<div class="flex items-center gap-4">
+			<label for="name" class="font-bold">FAQ Page Name</label>
+			<input id="name" bind:value={faqName} />
+			<Button label="Update FAQ Links on Card Pages" accent on:click={submit} {disabled}>Go</Button>
 		</div>
 	</div>
 </div>

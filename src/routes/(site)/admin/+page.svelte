@@ -4,21 +4,19 @@
 </script>
 
 <svelte:head>
-	<title>Admin &bull; SIC</title>
+	<title>Admin Panel &bull; SIC</title>
 </svelte:head>
 
-<div class="content">
-	<h3>Admin Panel</h3>
-	<div class="panel">
-		<div class="panel-inner">
-			<h4><a href="/admin/card">Cards</a></h4>
-			<CardLinkList />
-		</div>
+<h1>Admin Panel</h1>
+<div class="panel">
+	<div class="panel-inner">
+		<h2><a href="/admin/card">Cards</a></h2>
+		<CardLinkList />
 	</div>
-	<div class="panel">
-		<div class="panel-inner">
-			<h4><a href="/admin/pattern">Patterns</a></h4>
-			<PatternLinkList />
-		</div>
+</div>
+<div class="panel mt-4">
+	<div class="panel-inner">
+		<h2><a href="/admin/pattern">Patterns</a></h2>
+		<PatternLinkList />
 	</div>
 </div>

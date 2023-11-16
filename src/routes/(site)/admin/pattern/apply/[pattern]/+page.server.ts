@@ -9,5 +9,5 @@ export const load: PageServerLoad = (async ({ params, locals }) => {
 		throw error(404, { message: "This pattern does not exist." });
 	}
 
-	return { id: pattern.id, applicable: await getApplicableSkills(DB, pattern) };
+	return { pattern: pattern.get({ plain: true }), applicable: await getApplicableSkills(DB, pattern) };
 }) satisfies PageServerLoad;
