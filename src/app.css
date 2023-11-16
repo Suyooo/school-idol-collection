@@ -71,10 +71,6 @@ h4 {
 	@apply font-bold tracking-wider text-text-header-intext [&:not(:first-child)]:mt-4;
 }
 
-tr > th {
-	@apply whitespace-nowrap;
-}
-
 .skill-icon {
 	@apply relative inline-block h-[1.25em] cursor-text select-all overflow-hidden bg-contain bg-no-repeat align-top !text-transparent;
 
@@ -137,7 +133,7 @@ textarea {
 	}
 }
 
-table {
+table:not(.nostyle) {
 	@apply w-full overflow-hidden rounded-t;
 	& td,
 	& th {
@@ -150,7 +146,7 @@ table {
 		}
 	}
 	& th {
-		@apply bg-background-accent text-center font-bold;
+		@apply whitespace-nowrap bg-background-accent text-center font-bold;
 	}
 
 	& tr {

@@ -133,7 +133,7 @@
 		style:height={contentHeight + "mm"}
 	/>
 	<table
-		class="sheets"
+		class="nostyle sheets"
 		style:margin={"0 " + margin + "mm"}
 		style:--page-margin={margin + "mm"}
 		style:--skill-font-size={size + "mm"}
