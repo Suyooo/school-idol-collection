@@ -91,7 +91,9 @@
 				<Button href="/faq" label="How To Play" class="!text-base !tracking-widest" header>How To Play</Button>
 				<Button href="/search" label="Card Search" class="!text-base !tracking-widest" header>Card Search</Button>
 				<Button href="/labels" label="Label Printer" class="!text-base !tracking-widest" header>Label Printer</Button>
-				<Button href="/about" label="About" class="!text-base !tracking-widest" header>About</Button>
+				<Button href="/about" label="About This Site" class="!text-base !tracking-widest" header>
+					About This Site
+				</Button>
 			</div>
 		</div>
 		<form class="quicksearch" on:submit|preventDefault={doQuicksearch}>

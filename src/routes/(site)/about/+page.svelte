@@ -3,10 +3,10 @@
 </script>
 
 <svelte:head>
-	<title>About &bull; SIC</title>
+	<title>About This Site &bull; SIC</title>
 </svelte:head>
 
-<PageHeader>About</PageHeader>
+<PageHeader>About This Site</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<div class="">
