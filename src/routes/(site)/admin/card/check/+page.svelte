@@ -3,7 +3,7 @@
 	import Button from "$lib/style/Button.svelte";
 	import type { CheckResult, CheckSkillList } from "./+server.js";
 	import CheckElement from "./CheckElement.svelte";
-	import Go from "$lib/style/icons/Go.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 
 	type CheckSkillListWithResults = CheckSkillList & {
 		results: Writable<Promise<CheckResultWithUi> | null>[];
@@ -80,16 +80,14 @@
 	<title>Integrity Check (Cards Admin Panel) &bull; SIC</title>
 </svelte:head>
 
-<h1>
-	<div>
-		<a class="button" href="/admin">Admin Panel</a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-		<a class="button" href="/admin/card">Cards</a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-	</div>
+<PageHeader
+	breadcrumbs={[
+		["/admin", "Admin Panel"],
+		["/admin/card", "Cards"],
+	]}
+>
 	Integrity Check
-</h1>
-
+</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<Button label="Start Check" accent on:click={start} {disabled}>Start Check</Button>

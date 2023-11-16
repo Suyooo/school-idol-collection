@@ -52,8 +52,8 @@ export default {
 							breadcrumb: colors.cyan[600],
 							intext: colors.pink[800],
 						},
-						cardid: colors.cyan[600],
-						rarity: colors.pink[600],
+						cardid: colors.amber[700],
+						rarity: colors.pink[800],
 					},
 					link: {
 						DEFAULT: colors.pink[700],

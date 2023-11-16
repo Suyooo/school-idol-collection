@@ -1,4 +1,5 @@
 <script>
+	import PageHeader from "$lib/style/PageHeader.svelte";
 	import CardLinkList from "./card/LinkList.svelte";
 	import PatternLinkList from "./pattern/LinkList.svelte";
 </script>
@@ -7,7 +8,7 @@
 	<title>Admin Panel &bull; SIC</title>
 </svelte:head>
 
-<h1>Admin Panel</h1>
+<PageHeader>Admin Panel</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<h2><a href="/admin/card">Cards</a></h2>

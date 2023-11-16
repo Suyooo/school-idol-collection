@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Go from "$lib/style/icons/Go.svelte";
-	export let href: string | undefined = undefined;
+	export let href: string;
 	export let target: string | undefined = undefined;
 	let extraClasses = "";
 	export { extraClasses as class };

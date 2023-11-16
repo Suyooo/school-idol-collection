@@ -6,8 +6,8 @@
 	import type { PatternGroupTypeID } from "../../../../../../../lib/translation/patternGroupType.js";
 	import type { PageData } from "./$types.js";
 	import Pill from "./Pill.svelte";
-	import Go from "$lib/style/icons/Go.svelte";
 	import TriggerComponent from "$lib/format/TriggerComponent.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 
 	export let data: PageData;
 	// Not reactive to stop inputs getting reset on every change. There should be no links from this route to itself
@@ -98,15 +98,14 @@
 	<title>Edit (Patterns Admin Panel) &bull; SIC</title>
 </svelte:head>
 
-<h1>
-	<div>
-		<a class="button" href="/admin">Admin Panel</a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-		<a class="button" href="/admin/pattern">Patterns</a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-	</div>
+<PageHeader
+	breadcrumbs={[
+		["/admin", "Admin Panel"],
+		["/admin/pattern", "Patterns"],
+	]}
+>
 	Edit
-</h1>
+</PageHeader>
 <div class="flex gap-4 max-lg:flex-col">
 	<div class="flex-grow-[3] basis-0">
 		<div class="panel">

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from "$lib/style/Button.svelte";
-	import Go from "$lib/style/icons/Go.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 
 	let faqName: string = "",
 		disabled: boolean = false;
@@ -33,15 +33,14 @@
 	<title>FAQ Links (Cards Admin Panel) &bull; SIC</title>
 </svelte:head>
 
-<h1>
-	<div>
-		<a class="button" href="/admin">Admin Panel</a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-		<a class="button" href="/admin/card">Cards</a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-	</div>
+<PageHeader
+	breadcrumbs={[
+		["/admin", "Admin Panel"],
+		["/admin/card", "Cards"],
+	]}
+>
 	FAQ Links
-</h1>
+</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<div class="flex items-center gap-4">

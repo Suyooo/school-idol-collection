@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type Card from "$models/card/card.js";
 	import { cardTitle } from "$lib/card/strings.js";
-	import Language from "$lib/enums/language.js";
 	import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
 	import CardImage from "$lib/format/CardImage.svelte";
 	import type { PageData } from "./$types.js";
 	import CardInfoRows from "./CardInfoRows.svelte";
 	import CardPageButtons from "./CardPageButtons.svelte";
-	import Go from "$lib/style/icons/Go.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
+	import Language from "$lib/enums/language.js";
 
 	export let data: PageData;
 	let card: Card & CardPageExtraInfo<true, true>;
@@ -18,16 +18,14 @@
 	<title>{cardTitle(card, false)} &bull; SIC</title>
 </svelte:head>
 
-<h1>
-	<div>
-		<a class="button" href="/list">Card List</a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-		<a class="button" href="/set/${card.cardSet}">{card.cardSet}</a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-	</div>
-	<span class="whitespace-pre-line normal-case tracking-wide">{@html cardTitle(card, true, Language.ENG, true)}</span>
-</h1>
-
+<PageHeader
+	breadcrumbs={[
+		["/list", "Card List"],
+		["/set/" + card.cardSet, card.cardSet],
+	]}
+>
+	<div class="normal-case tracking-normal">{@html cardTitle(card, true, Language.ENG, true)}</div>
+</PageHeader>
 <div class="panel">
 	<div class="panel-inner lg:flex lg:gap-4">
 		<div class="imgcont">

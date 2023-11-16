@@ -3,6 +3,7 @@
 	import { tooltip } from "svooltip";
 	import Button from "$lib/style/Button.svelte";
 	import type { Snapshot } from "./$types.js";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 
 	let width: number,
 		height: number,
@@ -47,7 +48,7 @@
 	<title>Label Printer &bull; SIC</title>
 </svelte:head>
 
-<h1>Label Printer</h1>
+<PageHeader>Label Printer</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<form action="/labels/print" method="POST" target="_blank" bind:this={form}>

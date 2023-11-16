@@ -12,6 +12,7 @@
 	import type { PageData } from "./$types.js";
 	import CardGridElement from "../../set/[set]/CardGridElement.svelte";
 	import SearchOptions from "../SearchOptions.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 
 	export let data: PageData;
 	let cards: Card[],
@@ -34,8 +35,7 @@
 	<title>Search Results &bull; SIC</title>
 </svelte:head>
 
-<h1>Search</h1>
-
+<PageHeader>Search</PageHeader>
 <div class="panel mb-4">
 	<div class="panel-inner pb-0">
 		<div class="flex items-center">

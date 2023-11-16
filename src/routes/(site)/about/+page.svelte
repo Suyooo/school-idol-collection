@@ -1,8 +1,12 @@
+<script lang="ts">
+	import PageHeader from "$lib/style/PageHeader.svelte";
+</script>
+
 <svelte:head>
 	<title>About &bull; SIC</title>
 </svelte:head>
 
-<h1>About</h1>
+<PageHeader>About</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<div class="">

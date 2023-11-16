@@ -47,20 +47,9 @@ span.rarity {
 	@apply font-bold text-text-rarity;
 }
 
-h1 {
-	@apply mb-4 flex w-full flex-col items-start rounded-xl bg-background-accent py-1 pl-4 text-2xl font-bold uppercase tracking-widest text-text-header-frame lg:flex-row lg:items-center;
-
-	& div {
-		@apply flex items-center;
-
-		& a.button {
-			@apply text-base tracking-wide text-text-header-breadcrumb no-underline hover:text-text-header-frame hover:underline;
-		}
-
-		& svg {
-			@apply text-text-header-breadcrumb;
-		}
-	}
+h1,
+.header1 {
+	@apply mb-4 w-full rounded-xl bg-background-accent py-1 pl-4 text-2xl font-bold uppercase tracking-widest text-text-header-frame;
 }
 
 h2 {

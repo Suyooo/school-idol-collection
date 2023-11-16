@@ -4,6 +4,7 @@
 	import { urlToUiOptions } from "$lib/search/ui.js";
 	import type { Snapshot } from "./$types.js";
 	import SearchOptions from "./SearchOptions.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 
 	let options: SearchUiOptions = {};
 
@@ -23,7 +24,7 @@
 	<title>Search &bull; SIC</title>
 </svelte:head>
 
-<h1>Search</h1>
+<PageHeader>Search</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<SearchOptions {options} />

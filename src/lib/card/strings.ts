@@ -12,7 +12,7 @@ export function cardLink(card: Card, lang: Language = Language.ENG): string {
 
 export function cardName(card: Card, styled: boolean, lang: Language = Language.ENG): string {
 	const quot = styled ? "&quot;" : `"`;
-	const pre = styled ? `<span class="lg:inline-block">${quot}` : `${quot}`;
+	const pre = styled ? `<span class="inline-block">${quot}` : `${quot}`;
 	const post = `${quot}`;
 	return card.nameEng === null || lang === Language.JPN
 		? card.nameJpn
@@ -34,7 +34,7 @@ export function cardTitle(
 	if (styled)
 		return `<span class="card-id">${card.cardNo}</span>${
 			showRarity ? ` <span class="rarity">${cardRarityShort(card)}</span>` : ""
-		} ${cardName(card, styled, lang)}</span>`;
+		} ${cardName(card, styled, lang)}`;
 	else return `${card.cardNo}${showRarity ? ` ${cardRarityShort(card)}` : ""} ${cardName(card, false, lang)}`;
 }
 

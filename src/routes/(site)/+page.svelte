@@ -20,6 +20,7 @@
 	<title>SIC</title>
 </svelte:head>
 
+<h1 class="sr-only">Front Page</h1>
 <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
 	<div class="panel col-span-2">
 		<div class="panel-inner">

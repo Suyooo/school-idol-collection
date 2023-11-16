@@ -6,19 +6,14 @@
 	import Note from "../Note.svelte";
 	import Question from "../Question.svelte";
 	import SeeAlso from "../SeeAlso.svelte";
-	import Go from "$lib/style/icons/Go.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 
 	export let data: PageData;
 </script>
 
 <svelte:head><title>General FAQ &bull; SIC</title></svelte:head>
-<h1>
-	<div>
-		<a class="button" href="/faq"> How to Play </a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-	</div>
-	Frequently Asked Questions
-</h1>
+
+<PageHeader breadcrumbs={[["/faq", "How to Play"]]}>Frequently Asked Questions</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<h2>Cards</h2>

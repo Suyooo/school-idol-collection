@@ -5,19 +5,12 @@
 	import Idolized from "$lib/format/Idolized.svelte";
 	import Star from "$lib/format/Star.svelte";
 	import TriggerComponent from "$lib/format/TriggerComponent.svelte";
-	import Go from "$lib/style/icons/Go.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 </script>
 
 <svelte:head><title>Extra Rules Info &bull; SIC</title></svelte:head>
 
-<h1>
-	<div>
-		<a class="button" href="/faq">How to Play </a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-	</div>
-	Extra Rules Info
-</h1>
-
+<PageHeader breadcrumbs={[["/faq", "How to Play"]]}>Extra Rules Info</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<h2>Additional Mechanics</h2>

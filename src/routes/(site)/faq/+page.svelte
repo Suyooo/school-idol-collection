@@ -1,12 +1,12 @@
 <script lang="ts">
 	import HowToPlay from "$lib/style/icons/home/HowToPlay.svelte";
-	import Go from "$lib/style/icons/Go.svelte";
 	import BigLink from "$lib/style/BigLink.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 </script>
 
 <svelte:head><title>How To Play &bull; SIC</title></svelte:head>
 
-<h1>How To Play</h1>
+<PageHeader>How To Play</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		These pages are (mostly) straight translations of the How To Play and FAQ on the official site, including details
@@ -20,37 +20,31 @@
 	</div>
 </div>
 <div class="my-4 grid grid-cols-1 gap-4 lg:grid-cols-3 lg:justify-items-stretch">
-	<a class="button group" href="https://llsic-en.carrd.co/" target="_blank">
-		<div class="panel h-full">
-			<div class="panel-inner">
-				<BigLink class="add-group mb-2">
-					<HowToPlay slot="icon" />
-					<svelte:fragment slot="primary">Game Rules</svelte:fragment>
-					<svelte:fragment slot="secondary">(External Link)</svelte:fragment>
-				</BigLink>
-				Your Sinclair made a great translation with typesetting of the original rule sheet, explaining the basic rules of
-				SIC. This is all you need to know if you want to try out the game!
-			</div>
+	<div class="panel h-full">
+		<div class="panel-inner">
+			<BigLink href="https://llsic-en.carrd.co/" target="_blank" class="mb-2">
+				<HowToPlay slot="icon" />
+				<svelte:fragment slot="primary">Game Rules</svelte:fragment>
+				<svelte:fragment slot="secondary">(External Link)</svelte:fragment>
+			</BigLink>
+			Your Sinclair made a great translation with typesetting of the original rule sheet, explaining the basic rules of SIC.
+			This is all you need to know if you want to try out the game!
 		</div>
-	</a>
-	<a class="button group" href="http://localhost:5173/faq/rules-extra">
-		<div class="panel h-full">
-			<div class="panel-inner">
-				<BigLink class="add-group mb-2"><HowToPlay slot="icon" /> Extra Rules Info</BigLink>
-				Details on Idolization, Pairs/Trios and Memories &ndash; new game mechanics, which were introduced in later card
-				sets. Also, some optional rules and official event rules!
-			</div>
+	</div>
+	<div class="panel h-full">
+		<div class="panel-inner">
+			<BigLink href="/faq/rules-extra" class="mb-2"><HowToPlay slot="icon" /> Extra Rules Info</BigLink>
+			Details on Idolization, Pairs/Trios and Memories &ndash; new game mechanics, which were introduced in later card sets.
+			Also, some optional rules and official event rules!
 		</div>
-	</a>
-	<a class="button group" href="http://localhost:5173/faq/general">
-		<div class="panel h-full">
-			<div class="panel-inner">
-				<BigLink class="add-group mb-2"><HowToPlay slot="icon" /> FAQ</BigLink>
-				Frequently asked questions and answers about the general game rules. If you have questions about specific cards,
-				make sure to also check the Per-Set FAQ below!
-			</div>
+	</div>
+	<div class="panel h-full">
+		<div class="panel-inner">
+			<BigLink href="/faq/general" class="mb-2"><HowToPlay slot="icon" /> FAQ</BigLink>
+			Frequently asked questions and answers about the general game rules. If you have questions about specific cards, make
+			sure to also check the Per-Set FAQ below!
 		</div>
-	</a>
+	</div>
 </div>
 <div class="panel">
 	<div class="panel-inner">
@@ -85,9 +79,3 @@
 		</ul>
 	</div>
 </div>
-
-<style lang="postcss">
-	:global(.add-group) {
-		@apply group-hover:bg-link-hover group-focus:bg-link-hover group-active:bg-button-accent-background;
-	}
-</style>

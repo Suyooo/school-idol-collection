@@ -1,5 +1,5 @@
 <script>
-	import Go from "$lib/style/icons/Go.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 	import LinkList from "./LinkList.svelte";
 </script>
 
@@ -7,13 +7,7 @@
 	<title>Cards Admin Panel &bull; SIC</title>
 </svelte:head>
 
-<h1>
-	<div>
-		<a class="button" href="/admin">Admin Panel</a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-	</div>
-	Cards
-</h1>
+<PageHeader breadcrumbs={[["/admin", "Admin Panel"]]}>Cards</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<LinkList />

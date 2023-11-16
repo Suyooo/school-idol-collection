@@ -3,7 +3,7 @@
 	import type { ShortSkillInfo } from "$lib/translation/skills.js";
 	import type { PageData } from "./$types.js";
 	import Button from "$lib/style/Button.svelte";
-	import Go from "$lib/style/icons/Go.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 
 	export let data: PageData;
 	let untranslated: ShortSkillInfo[];
@@ -14,16 +14,14 @@
 	<title>Untranslated (Patterns Admin Panel) &bull; SIC</title>
 </svelte:head>
 
-<h1>
-	<div>
-		<a class="button" href="/admin">Admin Panel</a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-		<a class="button" href="/admin/pattern">Patterns</a>
-		<span class="text-text-header-breadcrumb"><Go /></span>
-	</div>
+<PageHeader
+	breadcrumbs={[
+		["/admin", "Admin Panel"],
+		["/admin/pattern", "Patterns"],
+	]}
+>
 	Untranslated
-</h1>
-
+</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<table>

@@ -3,6 +3,7 @@
 	import CardListGrid from "$lib/style/CardListGrid.svelte";
 	import type { PageData } from "./$types.js";
 	import SetGridElement from "./SetGridElement.svelte";
+	import PageHeader from "$lib/style/PageHeader.svelte";
 
 	export let data: PageData;
 	let categories: SetCategory[];
@@ -13,7 +14,7 @@
 	<title>Card List &bull; SIC</title>
 </svelte:head>
 
-<h1>Card List</h1>
+<PageHeader>Card List</PageHeader>
 {#each categories as cat (cat.id)}
 	<div class="panel">
 		<div class="panel-inner">
