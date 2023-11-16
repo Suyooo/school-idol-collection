@@ -19,8 +19,8 @@
 		<h3>Pairs and Trios</h3>
 		<div>
 			<div class="mb-2 flex w-full justify-center lg:float-right lg:ml-4 lg:w-[unset]">
-				<a href="/card/LL14-059"><CardImage cardNo="LL14-059" orientation={CardOrientation.PORTRAIT} /></a>
-				<a href="/card/LL14-060"><CardImage cardNo="LL14-060" orientation={CardOrientation.PORTRAIT} /></a>
+				<a href="/card/LL11-057"><CardImage cardNo="LL11-057" orientation={CardOrientation.PORTRAIT} /></a>
+				<a href="/card/LL11-052"><CardImage cardNo="LL11-052" orientation={CardOrientation.PORTRAIT} /></a>
 			</div>
 			Certain cards can be linked into Pairs or Trios. Their illustrations will combine into one larger image if you do so.<br
 			/>

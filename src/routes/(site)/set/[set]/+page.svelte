@@ -13,7 +13,9 @@
 	<title>{$page.params.set} Card List &bull; SIC</title>
 </svelte:head>
 
-<PageHeader breadcrumbs={[["/list", "Card List"]]}>How To Play</PageHeader>
+<PageHeader breadcrumbs={[["/list", "Card List"]]}>
+	{$page.params.set} ({data.set.eng.replace(` (${$page.params.set})`, "")})
+</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		<CardListGrid items={data.cards} key="cardNo" let:item={card}>

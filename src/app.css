@@ -69,6 +69,7 @@ h3 {
 
 .skill-icon {
 	@apply relative inline-block h-[1.25em] cursor-text select-all overflow-hidden bg-contain bg-bottom bg-no-repeat align-top !text-transparent;
+	filter: drop-shadow(0 0 1px gray);
 
 	&::before {
 		@apply pointer-events-none absolute -left-4 top-0 select-none !text-transparent underline;
