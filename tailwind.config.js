@@ -52,8 +52,14 @@ export default {
 							breadcrumb: colors.cyan[600],
 							intext: colors.pink[800],
 						},
-						cardid: colors.amber[700],
-						rarity: colors.pink[800],
+						cardid: {
+							DEFAULT: colors.slate[600],
+							hover: colors.slate[400],
+						},
+						rarity: {
+							DEFAULT: colors.pink[800],
+							hover: colors.pink[600],
+						},
 					},
 					link: {
 						DEFAULT: colors.pink[700],
@@ -93,10 +99,10 @@ export default {
 						},
 					},
 					attribute: {
-						all: "#efb513",
-						smile: "#fc3b81",
-						pure: "#3ebb65",
-						cool: "#3fb6e5",
+						all: "#996633",
+						smile: "#df1961",
+						pure: "#06862e",
+						cool: "#067baa",
 					},
 					highlight: {
 						red: "#ee0000",
@@ -212,10 +218,10 @@ export default {
 				print: light({
 					link: { DEFAULT: "#ee0000" },
 					attribute: {
-						all: "#efb513",
-						smile: "#fc3b81",
-						pure: "#3ebb65",
-						cool: "#3fb6e5",
+						all: "#996633",
+						smile: "#df1961",
+						pure: "#06862e",
+						cool: "#067baa",
 					},
 					highlight: {
 						red: "#ee0000",

@@ -12,6 +12,13 @@ a:not(.button) {
 	&:focus,
 	&:hover {
 		@apply text-link-hover;
+
+		& .card-id {
+			@apply text-text-cardid-hover;
+		}
+		& .rarity {
+			@apply text-text-rarity-hover;
+		}
 	}
 
 	& *,
@@ -39,11 +46,11 @@ a:not(.button) {
 	@apply overflow-hidden rounded-lg p-4 text-justify;
 }
 
-span.card-id {
+.card-id {
 	@apply font-bold text-text-cardid;
 }
 
-span.rarity {
+.rarity {
 	@apply font-bold text-text-rarity;
 }
 

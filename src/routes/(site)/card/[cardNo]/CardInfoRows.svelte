@@ -57,12 +57,12 @@
 		{/if}
 	</div>
 	<div class="value">
-		{cardId(card)}
+		<span class="card-id">{cardId(card)}</span>
 		{#if !hideSharedId}
 			{#each cardWithSharedIdCards.sameId as sameIdCard (sameIdCard.cardNo)}
 				<br />
 				<a href="/card/{sameIdCard.cardNo}">
-					{sameIdCard.cardNo}
+					<span class="card-id">{sameIdCard.cardNo}</span>
 					<span class="rarity">{cardRarityShort(sameIdCard)}</span>
 				</a>
 			{/each}
