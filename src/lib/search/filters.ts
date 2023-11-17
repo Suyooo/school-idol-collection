@@ -1,5 +1,4 @@
 import type { Includeable, ScopeOptions } from "@sequelize/core";
-import type { IncludeOptions } from "@sequelize/core/_non-semver-use-at-your-own-risk_/model.js";
 import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import GroupEnum from "$lib/enums/group.js";
 import type { GroupID } from "$lib/enums/group.js";
@@ -11,35 +10,39 @@ import { CardMemberRarity, CardSongRarity } from "../enums/cardRarity.js";
 export default abstract class SearchFilter {
 	abstract readonly key: string;
 
-	protected constructor(_split?: string[]) {}
+	protected constructor() {}
 
 	abstract getExplainString(): string;
 
 	abstract getUrlPart(): string;
 
+	abstract getMapping(): Record<string, string>;
+
 	abstract getScopeElements(): (string | ScopeOptions)[];
 }
 
 export abstract class SearchFilter0 extends SearchFilter {
-	constructor(split?: string[]) {
-		super(split);
+	constructor() {
+		super();
 	}
 
-	getUrlPart = () => this.key;
+	getUrlPart = () => `${this.key}`;
+	getMapping = () => ({ [this.key]: "" });
 }
 
 export abstract class SearchFilter1 extends SearchFilter {
 	param!: string;
 
-	constructor(split?: string[]) {
-		super(split);
-		if (split !== undefined) {
-			this.param = split.slice(1).join(":");
-			if (this.param.trim() === "") throw new SearchFilterError("Missing parameter", split.join(":"));
+	constructor(param: string) {
+		super();
+		if (param === null) {
+			throw new SearchFilterError("Missing parameter", "");
 		}
+		this.param = param;
 	}
 
-	getUrlPart = () => this.key + ":" + escapeForUrl(this.param);
+	getUrlPart = () => `${this.key}=${escapeForUrl(this.param)}`;
+	getMapping = () => ({ [this.key]: this.param });
 }
 
 export class SearchFilterMember extends SearchFilter0 {
@@ -240,8 +243,8 @@ export class SearchFilterCardID extends SearchFilter1 {
 export class SearchFilterMemberYear extends SearchFilter1 {
 	readonly key = "year";
 
-	constructor(split?: string[]) {
-		super(split);
+	constructor(param: string) {
+		super(param);
 		if (this.param !== "1" && this.param !== "2" && this.param !== "3") {
 			throw new SearchFilterError("Invalid parameter for School Year filter", this.param);
 		}
@@ -263,7 +266,7 @@ export class SearchFilterMemberYear extends SearchFilter1 {
 export abstract class SearchFilterTranslatableLike extends SearchFilter1 {
 	abstract readonly columnNames: string[];
 	abstract readonly explainName: string;
-	readonly include: IncludeOptions | undefined = undefined;
+	readonly include: Includeable | undefined = undefined;
 
 	getScopeElements = () => {
 		if (this.include) {
@@ -311,7 +314,7 @@ export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
 	abstract readonly column: string;
 	readonly columnLiteral: boolean = false;
 	abstract readonly explainName: string;
-	readonly explainAfter: boolean = false;
+	readonly explainNameAfterNumber: boolean = false;
 	readonly include: Includeable | undefined = undefined;
 
 	getScopeElements = () => [
@@ -321,7 +324,7 @@ export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
 	];
 	getExplainString = () => {
 		const mod = this.param.endsWith("+") ? " or more" : this.param.endsWith("-") ? " or less" : "";
-		if (this.explainAfter) {
+		if (this.explainNameAfterNumber) {
 			return `${parseInt(this.param)}${mod} ${
 				this.param === "1" ? this.explainName.substring(0, this.explainName.length - 1) : this.explainName
 			}`;
@@ -329,7 +332,6 @@ export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
 			return `${this.explainName} is ${parseInt(this.param)}${mod}`;
 		}
 	};
-	getUrlPart = () => this.key + ":" + this.param;
 }
 
 export class SearchFilterMemberCost extends SearchFilterNumberWithMod {
@@ -348,7 +350,7 @@ export class SearchFilterMemberPieces extends SearchFilterNumberWithMod {
 	readonly column = "member.piecesSmile + member.piecesPure + member.piecesCool + member.piecesAll";
 	readonly columnLiteral = true;
 	readonly explainName = "Pieces";
-	readonly explainAfter = true;
+	readonly explainNameAfterNumber = true;
 	readonly include: Includeable = {
 		association: "member",
 		required: true,
@@ -360,7 +362,7 @@ export class SearchFilterMemberPiecesAll extends SearchFilterNumberWithMod {
 	readonly key = "allpieces";
 	readonly column = "$member.piecesAll$";
 	readonly explainName = "[ALL] Pieces";
-	readonly explainAfter = true;
+	readonly explainNameAfterNumber = true;
 	readonly include: Includeable = {
 		association: "member",
 		required: true,
@@ -372,7 +374,7 @@ export class SearchFilterMemberPiecesSmile extends SearchFilterNumberWithMod {
 	readonly key = "smilepieces";
 	readonly column = "$member.piecesSmile$";
 	readonly explainName = "[SMILE] Pieces";
-	readonly explainAfter = true;
+	readonly explainNameAfterNumber = true;
 	readonly include: Includeable = {
 		association: "member",
 		required: true,
@@ -384,7 +386,7 @@ export class SearchFilterMemberPiecesPure extends SearchFilterNumberWithMod {
 	readonly key = "purepieces";
 	readonly column = "$member.piecesPure$";
 	readonly explainName = "[PURE] Pieces";
-	readonly explainAfter = true;
+	readonly explainNameAfterNumber = true;
 	readonly include: Includeable = {
 		association: "member",
 		required: true,
@@ -396,7 +398,7 @@ export class SearchFilterMemberPiecesCool extends SearchFilterNumberWithMod {
 	readonly key = "coolpieces";
 	readonly column = "$member.piecesCool$";
 	readonly explainName = "[COOL] Pieces";
-	readonly explainAfter = true;
+	readonly explainNameAfterNumber = true;
 	readonly include: Includeable = {
 		association: "member",
 		required: true,
@@ -468,7 +470,7 @@ export class SearchFilterSongLivePoints extends SearchFilterNumberWithMod {
 	readonly key = "livepoints";
 	readonly column = "$song.lpBase$";
 	readonly explainName = "Base Live Points";
-	readonly explainAfter = true;
+	readonly explainNameAfterNumber = true;
 	readonly include: Includeable = {
 		association: "song",
 		required: true,
@@ -480,7 +482,7 @@ export class SearchFilterSongReqSmile extends SearchFilterNumberWithMod {
 	readonly key = "smilerequired";
 	readonly column = "$song.attrRequirement.piecesSmile$";
 	readonly explainName = "Required [SMILE] Pieces";
-	readonly explainAfter = true;
+	readonly explainNameAfterNumber = true;
 	readonly include: Includeable = {
 		association: "song",
 		required: true,
@@ -498,7 +500,7 @@ export class SearchFilterSongReqPure extends SearchFilterNumberWithMod {
 	readonly key = "purerequired";
 	readonly column = "$song.attrRequirement.piecesPure$";
 	readonly explainName = "Required [PURE] Pieces";
-	readonly explainAfter = true;
+	readonly explainNameAfterNumber = true;
 	readonly include: Includeable = {
 		association: "song",
 		required: true,
@@ -516,7 +518,7 @@ export class SearchFilterSongReqCool extends SearchFilterNumberWithMod {
 	readonly key = "coolrequired";
 	readonly column = "$song.attrRequirement.piecesCool$";
 	readonly explainName = "Required [COOL] Pieces";
-	readonly explainAfter = true;
+	readonly explainNameAfterNumber = true;
 	readonly include: Includeable = {
 		association: "song",
 		required: true,
@@ -534,7 +536,7 @@ export class SearchFilterSongReqAny extends SearchFilterNumberWithMod {
 	readonly key = "required";
 	readonly column = "$song.anyRequirement.piecesAll$";
 	readonly explainName = "Required Pieces";
-	readonly explainAfter = true;
+	readonly explainNameAfterNumber = true;
 	readonly include: Includeable = {
 		association: "song",
 		required: true,
@@ -548,7 +550,7 @@ export class SearchFilterSongReqAny extends SearchFilterNumberWithMod {
 	};
 }
 
-const map = new Map<string, new (split?: string[]) => SearchFilter>([
+const map = new Map<string, new (param: string) => SearchFilter>([
 	["member", SearchFilterMember],
 	["song", SearchFilterSong],
 	["memory", SearchFilterMemory],
@@ -605,7 +607,7 @@ const map = new Map<string, new (split?: string[]) => SearchFilter>([
 	["coolrequired", SearchFilterSongReqCool],
 ]);
 
-export function getSearchFilter(key: string): { new (split: string[]): SearchFilter } {
+export function getSearchFilterConstructor(key: string): { new (param: string): SearchFilter } {
 	if (map.has(key)) {
 		return map.get(key)!;
 	} else {

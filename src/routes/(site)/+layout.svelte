@@ -123,7 +123,7 @@
 
 <style lang="postcss">
 	.header {
-		@apply w-full bg-background-header;
+		@apply w-full bg-background-accent;
 
 		& .cont {
 			@apply flex max-w-screen-2xl flex-col items-start justify-between gap-y-2 sm:flex-row;

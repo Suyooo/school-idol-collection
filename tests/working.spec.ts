@@ -59,7 +59,7 @@ test("search page", async ({ page }) => {
 });
 
 test("search result page", async ({ page }) => {
-	await page.goto("/search/muse/memory/set:LL13");
+	await page.goto("/search?muse&memory&set=LL13");
 	await expect(await page.getByText("Results").count()).toBeGreaterThan(0);
 });
 

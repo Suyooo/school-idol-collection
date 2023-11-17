@@ -41,7 +41,6 @@ export default {
 						panel: colors.slate[50],
 						grid: colors.cyan[100],
 						highlight: colors.cyan[200],
-						header: colors.cyan[300],
 					},
 					text: {
 						DEFAULT: colors.cyan[950],

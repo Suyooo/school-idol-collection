@@ -10,7 +10,7 @@ import SearchFilter, {
 	SearchFilterName,
 	SearchFilterSkill,
 	SearchFilterSong,
-} from "$lib/search/options.js";
+} from "$lib/search/filters.js";
 
 type Key = "card" | "song" | "mem" | "costume" | "skilltext";
 export type AnnotationID = 0 | 1 | 2 | 3 | 4;
@@ -76,11 +76,7 @@ export default class AnnotationEnum {
 		0,
 		"card",
 		true,
-		(parameter) => {
-			const f = new SearchFilterCardID();
-			f.param = parameter;
-			return [f];
-		},
+		(parameter) => [new SearchFilterCardID(parameter)],
 		(_parameter, cards) => "/card/" + cards[0].cardNo,
 		(_parameter, cards, lang: Language) => {
 			let name;
@@ -92,26 +88,16 @@ export default class AnnotationEnum {
 			return cards[0].id + " " + name;
 		}
 	);
-	static SONG = new AnnotationEnum(1, "song", true, (parameter) => {
-		const f = new SearchFilterName();
-		f.param = parameter;
-		return [new SearchFilterSong(), f];
-	});
-	static MEM = new AnnotationEnum(2, "mem", true, (parameter) => {
-		const f = new SearchFilterName();
-		f.param = parameter;
-		return [new SearchFilterMemory(), f];
-	});
-	static COSTUME = new AnnotationEnum(3, "costume", true, (parameter) => {
-		const f = new SearchFilterCostume();
-		f.param = parameter;
-		return [f];
-	});
-	static SKILLTEXT = new AnnotationEnum(4, "skilltext", false, (parameter) => {
-		const f = new SearchFilterSkill();
-		f.param = parameter;
-		return [f];
-	});
+	static SONG = new AnnotationEnum(1, "song", true, (parameter) => [
+		new SearchFilterSong(),
+		new SearchFilterName(parameter),
+	]);
+	static MEM = new AnnotationEnum(2, "mem", true, (parameter) => [
+		new SearchFilterMemory(),
+		new SearchFilterName(parameter),
+	]);
+	static COSTUME = new AnnotationEnum(3, "costume", true, (parameter) => [new SearchFilterCostume(parameter)]);
+	static SKILLTEXT = new AnnotationEnum(4, "skilltext", false, (parameter) => [new SearchFilterSkill(parameter)]);
 
 	static fromId(n: number): AnnotationEnum {
 		const a = AnnotationEnum.idMap.get(<AttributeID>n);

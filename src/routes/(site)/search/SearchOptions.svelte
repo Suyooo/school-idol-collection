@@ -10,7 +10,7 @@
 	function query() {
 		const url = uiOptionsToUrl(options);
 		if (url.length > 0) {
-			goto("/search/" + url);
+			goto("/search?" + url);
 		}
 	}
 </script>

@@ -41,7 +41,7 @@ export type SearchUiOptions = {
 	songPiecesAllMod?: NumberQueryMod;
 };
 
-export function uiOptionIsSet(value: any) {
+export function uiOptionIsSet(value: any): value is string {
 	return value !== undefined && value !== null && value !== "";
 }
 
@@ -184,10 +184,10 @@ const mapNumberInputReverse: Map<string, keyof SearchUiOptions> = new Map(
 
 export function urlToUiOptions(url: string): SearchUiOptions {
 	const options: { [key: string]: string } = {};
-	const filterQueries = url.split(/(?<!\/)\/(?!\/)/g).map((f) => f.replace(/\/\//g, "/"));
+	const filterQueries = url.substring(1).split("&");
 
 	for (const filterQuery of filterQueries) {
-		const split = filterQuery.split(":").map((s) => decodeURIComponent(s));
+		const split = filterQuery.split("=").map((s) => decodeURIComponent(s));
 
 		if (mapSelectInputReverse.has(filterQuery)) {
 			options[mapSelectInputReverse.get(filterQuery)!] = filterQuery;
@@ -219,16 +219,19 @@ export function uiOptionsToUrl(options: SearchUiOptions): string {
 	// Inputs => 1-parameter filter
 	for (const [name, inputInfo] of [...mapTextInput.entries()]) {
 		if (inputInfo.condition && !inputInfo.condition(options)) continue;
-		if (!uiOptionIsSet(options[name])) continue;
-		filters.push(`${inputInfo.urlParam}:${escapeForUrl((<string>options[name]).replace(/\//g, "//"))}`);
+		const param = options[name];
+		if (!uiOptionIsSet(param)) continue;
+		filters.push(`${inputInfo.urlParam}=${escapeForUrl(param)}`);
 	}
 
 	// Number with Mod => 1-parameter filter
 	for (const [name, inputInfo] of [...mapNumberInput.entries()]) {
 		if (inputInfo.condition && !inputInfo.condition(options)) continue;
-		if (!uiOptionIsSet(options[name])) continue;
-		filters.push(`${inputInfo.urlParam}:${options[name]}${options[<keyof SearchUiOptions>(name + "Mod")]}`);
+		const param = options[name];
+		const paramMod = options[(name + "Mod") as keyof SearchUiOptions];
+		if (!uiOptionIsSet(param)) continue;
+		filters.push(`${inputInfo.urlParam}=${param}${escapeForUrl(uiOptionIsSet(paramMod) ? paramMod : "")}`);
 	}
 
-	return filters.join("/");
+	return filters.join("&");
 }

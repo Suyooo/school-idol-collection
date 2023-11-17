@@ -1,28 +1,24 @@
 import { error, json } from "@sveltejs/kit";
 import type Card from "$models/card/card.js";
 import SearchFilterError from "$lib/errors/searchFilterError.js";
-import { getSearchFilter } from "$lib/search/options.js";
+import { getSearchFilterConstructor } from "$lib/search/filters.js";
 import searchQuery from "$lib/search/query.js";
 import type CardSearchResult from "$lib/types/cardSearchResult.js";
 import type { RequestHandler } from "./$types.js";
 
 const PAGE_SIZE = 60;
 
-export const GET: RequestHandler = (async ({ params }) => {
+export const GET: RequestHandler = (async ({ url }) => {
 	const filters = [];
 	let page = 1;
 
 	try {
-		const filterQueries = params.query.split(/(?<!\/)\/(?!\/)/g).map((f) => f.replace(/\/\//g, "/"));
-
-		for (const filterQuery of filterQueries) {
-			if (filterQuery.startsWith("page:")) {
-				page = parseInt(filterQuery.substring(5));
+		for (const [key, param] of url.searchParams.entries()) {
+			if (key === "page") {
+				page = parseInt(param);
 				continue;
 			}
-			if (filterQuery.length === 0) continue;
-			const split = filterQuery.split(":");
-			filters.push(new (getSearchFilter(split[0]))(split));
+			filters.push(new (getSearchFilterConstructor(key))(param));
 		}
 	} catch (e) {
 		if (e instanceof SearchFilterError) {
@@ -49,7 +45,7 @@ export const GET: RequestHandler = (async ({ params }) => {
 			totalResults: count,
 			pageSize: PAGE_SIZE,
 		},
-		queryUrl: filters.map((f) => f.getUrlPart()).join("/"),
+		queryUrl: "?" + filters.map((f) => f.getUrlPart()).join("&"),
 		queryExplain: filters.map((f) => f.getExplainString()),
 	} as CardSearchResult<false>);
 }) satisfies RequestHandler;
