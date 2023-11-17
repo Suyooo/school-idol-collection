@@ -125,7 +125,7 @@
 		<div class="header">Costume</div>
 		<div class="value">
 			{#if card.member.costumeJpn !== null}
-				<a href="/search/costume:{escapeForUrl(card.member.costumeEng ?? card.member.costumeJpn)}">
+				<a href="/search?costume={escapeForUrl(card.member.costumeEng ?? card.member.costumeJpn)}">
 					{card.member.costumeEng ?? card.member.costumeJpn}
 				</a>
 			{:else}

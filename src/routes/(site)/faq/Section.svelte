@@ -26,7 +26,7 @@
 	h3 {
 		@apply tracking-normal;
 		& + h3 {
-			@apply -mt-4;
+			@apply -mt-1;
 		}
 	}
 </style>

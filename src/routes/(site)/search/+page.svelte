@@ -37,7 +37,7 @@
 </script>
 
 <svelte:head>
-	<title>Search &bull; SIC</title>
+	<title>Search{hasResults(data) ? ` (${data.queryExplain.join(", ")})` : ""} &bull; SIC</title>
 </svelte:head>
 
 <PageHeader>Search</PageHeader>
@@ -52,8 +52,9 @@
 		<div class="panel-inner pb-0">
 			<div class="flex items-center">
 				<div class="flex-grow font-bold text-text-header-intext">
-					{#each data.queryExplain as q, i}
-						{#if i > 0},{/if}
+					{#each data.queryExplainPreparsed as q, i}
+						{#if i > 0},
+						{/if}
 						<Skill skill={q} />
 					{/each}
 				</div>

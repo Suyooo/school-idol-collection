@@ -10,11 +10,12 @@ export default interface CardSearchResult<IsPreparsed extends boolean> {
 		pageSize: number;
 	};
 	queryUrl: string;
-	queryExplain: IsPreparsed extends true ? ParseNodePrepared[][] : string[];
+	queryExplain: string[];
+	queryExplainPreparsed: IsPreparsed extends true ? ParseNodePrepared[][] : never;
 }
 
 export function addPreparse(res: CardSearchResult<false>): CardSearchResult<true> {
 	const newRes = res as CardSearchResult<boolean>;
-	newRes.queryExplain = res.queryExplain.map((f) => parseSkillToNodes(f, Language.ENG, true));
+	newRes.queryExplainPreparsed = res.queryExplain.map((f) => parseSkillToNodes(f, Language.ENG, true));
 	return newRes as CardSearchResult<true>;
 }
