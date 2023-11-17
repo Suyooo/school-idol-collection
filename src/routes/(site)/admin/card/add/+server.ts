@@ -237,9 +237,9 @@ function applyFixes(
 	}
 }
 
-async function checkImageOrientation(cardNo: string, side: string) {
+async function checkImageOrientation(cardNo: string, ext: string, side: string) {
 	const set = cardNo.split("-")[0];
-	const res = await probeImageSize(fs.createReadStream(`static/images/cards/${set}/${cardNo}-${side}.jpg`));
+	const res = await probeImageSize(fs.createReadStream(`static/images/cards/${set}/${cardNo}-${side}.${ext}`));
 	if (res.width < res.height) return CardOrientation.PORTRAIT;
 	else return CardOrientation.LANDSCAPE;
 }
@@ -310,7 +310,16 @@ async function importCard(
 				// Estimate card no. of the base SP card for SEC cards
 				let paddedInSetNo = (inSetNo - 9).toString();
 				while (paddedInSetNo.length < 3) paddedInSetNo = "0" + paddedInSetNo;
-				card.member!.baseIfSecret = orientationCheckCardNo = set + "-" + paddedInSetNo;
+				const baseCardNo = set + "-" + paddedInSetNo;
+				const baseCard = await DB.m.Card.findByPk(baseCardNo, {
+					transaction,
+					attributes: ["frontOrientation", "backOrientation"],
+				});
+				if (baseCard === null) {
+					throw error(500, `Download base card (${baseCardNo}) before secret card (${cardNo})`);
+				}
+				memberInfo.baseIfSecret = baseCardNo;
+				card.frontOrientation = card.backOrientation = CardOrientation.PORTRAIT;
 			}
 
 			let pieces = [0, 0, 0, 0];
@@ -425,7 +434,7 @@ async function importCard(
 							transaction,
 						})
 					).id;
-					const existingMembers = await DB.m.Card.withScope(["cardNoOnly"]).findAll({
+					const existingMembers = await DB.m.Card.withScope(["viewCardNoOnly"]).findAll({
 						where: {
 							id: {
 								[Op.in]: memberIds,
@@ -471,9 +480,16 @@ async function importCard(
 			const lpMatch = lpPattern.exec(info["ライブP"]!);
 			if (lpMatch === null) throw new ImportError("Invalid Live Points scraped from website", cardNo);
 			songInfo.lpBase = parseInt(lpMatch[1]);
-			songInfo.lpBonus = lpMatch[2] === "+X" ? "X" : lpMatch[2] === "+∞" ? "∞" : parseInt(lpMatch[2]);
+			if (lpMatch[2])
+				songInfo.lpBonus = lpMatch[2] === "+X" ? "X" : lpMatch[2] === "+∞" ? "∞" : parseInt(lpMatch[2]).toString();
 
 			if (info["共通スコア"]) {
+				songInfo.requirementType = CardSongRequirementType.ANY_PIECE;
+				songInfo.anyRequirement = {
+					piecesAll: parseInt(info["共通スコア"]!),
+				} as CardSongAnyReqExtraInfo;
+				card.song = songInfo as CardSongWithAnyReq["song"];
+			} else {
 				songInfo.requirementType = CardSongRequirementType.ATTR_PIECE;
 				songInfo.attrRequirement = {
 					piecesSmile: parseInt(info["赤スコア"]!),
@@ -481,12 +497,6 @@ async function importCard(
 					piecesCool: parseInt(info["青スコア"]!),
 				} as CardSongAttrReqExtraInfo;
 				card.song = songInfo as CardSongWithAttrReq["song"];
-			} else {
-				songInfo.requirementType = CardSongRequirementType.ANY_PIECE;
-				songInfo.anyRequirement = {
-					piecesAll: parseInt(info["共通スコア"]!),
-				} as CardSongAnyReqExtraInfo;
-				card.song = songInfo as CardSongWithAnyReq["song"];
 			}
 		} /*else if (type === CardType.MEMORY) { nothing to do }*/
 
@@ -510,8 +520,10 @@ async function importCard(
 			card.skills = skills as Skill[];
 		}
 
-		card.frontOrientation = await checkImageOrientation(orientationCheckCardNo, "front");
-		card.backOrientation = await checkImageOrientation(orientationCheckCardNo, "back");
+		if (!card.member?.baseIfSecret) {
+			card.frontOrientation = await checkImageOrientation(orientationCheckCardNo, card.imageFileExt!, "front");
+			card.backOrientation = await checkImageOrientation(orientationCheckCardNo, card.imageFileExt!, "back");
+		}
 
 		// Add the card to the database
 		await DB.m.Card.destroy({ where: { cardNo }, transaction });

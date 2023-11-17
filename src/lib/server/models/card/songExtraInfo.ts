@@ -67,7 +67,7 @@ export default class CardSongExtraInfo extends Model {
 		type: DataTypes.STRING(2),
 		allowNull: true,
 	})
-	declare lpBonus: number | "X" | "∞" | null;
+	declare lpBonus: string | null;
 
 	@Attribute({
 		type: DataTypes.INTEGER.UNSIGNED,
