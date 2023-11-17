@@ -5,7 +5,6 @@
 	import type { PageData, Snapshot } from "./$types.js";
 	import SearchUi from "./SearchUi.svelte";
 	import PageHeader from "$lib/style/PageHeader.svelte";
-	import { goto } from "$app/navigation";
 	import Skill from "$lib/format/Skill.svelte";
 	import Button from "$lib/style/Button.svelte";
 	import CardListGrid from "$lib/style/CardListGrid.svelte";
@@ -106,7 +105,7 @@
 							class="w-12 px-0"
 							accent={i + 1 === data.pagination.page}
 							label={`Page ${i + 1}`}
-							on:click={() => goto(`/search${queryUrl}&page=${i + 1}`)}
+							href={`search${queryUrl}${i > 0 ? `&page=${i + 1}` : ""}`}
 						>
 							{i + 1}
 						</Button>
