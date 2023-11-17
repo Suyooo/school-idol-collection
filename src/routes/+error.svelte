@@ -13,7 +13,7 @@
 	<div class="panel error">
 		<div class="panel-inner flex w-full items-center gap-4 max-lg:flex-col">
 			<div class="text-3xl font-bold text-text-header-intext">{$page.status}</div>
-			<div>{$page.error.message}</div>
+			<div>{$page.error?.message ?? ""}</div>
 		</div>
 	</div>
 </BaseLayout>

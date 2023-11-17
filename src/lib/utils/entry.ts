@@ -1,4 +1,4 @@
-const entryCardNoRegex = /^(?:ex?15-?e\d{1,2}|(?:l?l?\d\d|ex?\d\d|pr?)-?\d{1,3})$/i;
+const entryCardNoRegex = /^(?:ex?15-?e\d{1,2}|(?:pr?-?0?69[ab])|(?:l?l?\d\d|ex?\d\d|pr?)-?\d{1,3})$/i;
 const entryCardNoRegexNoDefaultSetName = /^(?:ex?15-?e\d{1,2}|(?:pr?-?0?69[ab])|(?:ll?\d\d|ex?\d\d|pr?)-?\d{1,3})$/i;
 //const canonicalCardNoRegex = /(LL\d\d|EX\d\d|PR)-\d\d\d/;
 
@@ -45,7 +45,7 @@ export function entryCardNoToCanonical(entry: string): string {
 	}
 
 	// PR-069A / PR-069B: additional zero needed if a postfixed A/B is there, default to A if not
-	if (entry.startsWith("PR-069")) {
+	if (entry.startsWith("PR-069") || entry.startsWith("PR-69")) {
 		if (entry.endsWith("A") || entry.endsWith("B")) {
 			if (entry.length !== prefixlength + 5) {
 				entry = `${entry.substring(0, prefixlength + 1)}0${entry.substring(prefixlength + 1)}`;
