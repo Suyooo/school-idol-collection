@@ -60,7 +60,7 @@
 		</div>
 	</div>
 	<div class="panel col-span-2">
-		<div class="panel-inner text-justify">
+		<div class="panel-inner">
 			<h2>What Is SIC?</h2>
 			<b>School Idol Collection</b> is a Collectible Card Game with characters from the Love&nbsp;Live! franchise, where
 			your goal is to perform a successful live show! Manage your Members on the Stage, organize Lives with songs from

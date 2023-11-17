@@ -47,7 +47,7 @@ a:not(.button) {
 }
 
 .panel-inner {
-	@apply overflow-hidden rounded-lg p-4 text-justify;
+	@apply overflow-hidden rounded-lg p-4;
 }
 
 .card-id {

@@ -12,7 +12,8 @@
 	import Expand from "$lib/style/icons/Expand.svelte";
 	import CardGridElement from "../(cardlist)/set/[set]/CardGridElement.svelte";
 	import type CardSearchResult from "$lib/types/cardSearchResult.js";
-	import { page } from "$app/stores";
+	import Go from "$lib/style/icons/Go.svelte";
+	import Back from "$lib/style/icons/Back.svelte";
 
 	export let data: PageData;
 
@@ -25,7 +26,7 @@
 	function hasError(data: any): data is { error: string } {
 		return data.hasOwnProperty("error");
 	}
-	$: options = hasResults(data) || hasError(data) ? urlToUiOptions($page.url.search) : {};
+	$: options = hasResults(data) ? urlToUiOptions(data.queryUrl) : {};
 
 	export const snapshot: Snapshot = {
 		capture: () => options,
@@ -100,30 +101,54 @@
 				<CardListGrid items={data.cards} key="cardNo" let:item={card}>
 					<CardGridElement {card} />
 				</CardListGrid>
+
+				<div class="mt-6 flex flex-col items-center gap-y-2">
+					<div>
+						Cards {(data.pagination.page - 1) * data.pagination.pageSize + 1}
+						- {Math.min(data.pagination.page * data.pagination.pageSize, data.pagination.totalResults)}
+						of {data.pagination.totalResults}
+					</div>
+					{#if data.pagination.totalResults > data.pagination.pageSize}
+						{@const queryUrl = data.queryUrl}
+						<div class="flex items-center gap-2">
+							<div class="w-12">
+								{#if data.pagination.page > 1}
+									<Button
+										class="h-6 w-12 px-0"
+										label={`Previous Page`}
+										href={`search${queryUrl}${data.pagination.page > 2 ? `&page=${data.pagination.page - 1}` : ""}`}
+									>
+										<Back />
+									</Button>
+								{/if}
+							</div>
+							<div class="flex max-w-md flex-wrap justify-center gap-2">
+								{#each { length: Math.ceil(data.pagination.totalResults / data.pagination.pageSize) } as _, i}
+									<Button
+										class="w-12 px-0"
+										accent={i + 1 === data.pagination.page}
+										label={`Page ${i + 1}`}
+										href={`search${queryUrl}${i > 0 ? `&page=${i + 1}` : ""}`}
+									>
+										{i + 1}
+									</Button>
+								{/each}
+							</div>
+							<div class="w-12">
+								{#if data.pagination.page < data.pagination.totalResults / data.pagination.pageSize}
+									<Button
+										class="h-6 w-12 px-0"
+										label={`Next Page`}
+										href={`search${queryUrl}&page=${data.pagination.page + 1}`}
+									>
+										<Go />
+									</Button>
+								{/if}
+							</div>
+						</div>
+					{/if}
+				</div>
 			</div>
 		</div>
-
-		{#if data.pagination.totalResults > data.pagination.pageSize}
-			<div class="mt-2 flex flex-col items-center gap-y-2">
-				<div>
-					Cards {(data.pagination.page - 1) * data.pagination.pageSize + 1}
-					- {Math.min(data.pagination.page * data.pagination.pageSize, data.pagination.totalResults)}
-					of {data.pagination.totalResults}
-				</div>
-				<div class="flex max-w-md flex-wrap justify-center gap-2">
-					{#each { length: Math.ceil(data.pagination.totalResults / data.pagination.pageSize) } as _, i}
-						{@const queryUrl = data.queryUrl}
-						<Button
-							class="w-12 px-0"
-							accent={i + 1 === data.pagination.page}
-							label={`Page ${i + 1}`}
-							href={`search${queryUrl}${i > 0 ? `&page=${i + 1}` : ""}`}
-						>
-							{i + 1}
-						</Button>
-					{/each}
-				</div>
-			</div>
-		{/if}
 	{/if}
 {/if}
