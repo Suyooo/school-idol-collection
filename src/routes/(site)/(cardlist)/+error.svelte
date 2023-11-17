@@ -4,4 +4,5 @@
 	import PageHeader from "$lib/style/PageHeader.svelte";
 </script>
 
-<BaseLayout><PageHeader>Error</PageHeader><PageError /></BaseLayout>
+<PageHeader breadcrumbs={[["/list", "Card List"]]}>Error</PageHeader>
+<PageError />

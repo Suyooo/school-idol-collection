@@ -2,7 +2,7 @@
 	import { onMount } from "svelte";
 	import { goto as gotoInThisTab } from "$app/navigation";
 	import "svooltip/styles.css";
-	import "../app.css";
+	import "../../app.css";
 	import { couldBeEntryCardNo, entryCardNoToCanonical } from "$lib/utils/entry.js";
 	import { stringIsInteger } from "$lib/utils/string.js";
 	import Button from "$lib/style/Button.svelte";

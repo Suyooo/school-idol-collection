@@ -7,8 +7,8 @@
 	import More from "$lib/style/icons/home/More.svelte";
 	import Print from "$lib/style/icons/home/Print.svelte";
 	import type { PageServerData } from "./$types.js";
-	import SetGridElement from "./list/SetGridElement.svelte";
-	import CardGridElement from "./set/[set]/CardGridElement.svelte";
+	import SetGridElement from "./(cardlist)/list/SetGridElement.svelte";
+	import CardGridElement from "./(cardlist)/set/[set]/CardGridElement.svelte";
 	import BigLink from "$lib/style/BigLink.svelte";
 </script>
 

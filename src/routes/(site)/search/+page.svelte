@@ -10,8 +10,9 @@
 	import CardListGrid from "$lib/style/CardListGrid.svelte";
 	import Collapse from "$lib/style/icons/Collapse.svelte";
 	import Expand from "$lib/style/icons/Expand.svelte";
-	import CardGridElement from "../set/[set]/CardGridElement.svelte";
+	import CardGridElement from "../(cardlist)/set/[set]/CardGridElement.svelte";
 	import type CardSearchResult from "$lib/types/cardSearchResult.js";
+	import { page } from "$app/stores";
 
 	export let data: PageData;
 
@@ -21,7 +22,10 @@
 	function hasResults(data: any): data is CardSearchResult<true> {
 		return data.hasOwnProperty("cards");
 	}
-	$: options = hasResults(data) ? urlToUiOptions(data.queryUrl) : {};
+	function hasError(data: any): data is { error: string } {
+		return data.hasOwnProperty("error");
+	}
+	$: options = hasResults(data) || hasError(data) ? urlToUiOptions($page.url.search) : {};
 
 	export const snapshot: Snapshot = {
 		capture: () => options,
@@ -41,6 +45,14 @@
 
 <PageHeader>Search</PageHeader>
 {#if !hasResults(data)}
+	{#if hasError(data)}
+		<div class="panel error mb-4">
+			<div class="panel-inner">
+				<b>Error in Search Query:</b>
+				{data.error}
+			</div>
+		</div>
+	{/if}
 	<div class="panel">
 		<div class="panel-inner">
 			<SearchUi {options} />

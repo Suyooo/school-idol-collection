@@ -4,4 +4,5 @@
 	import PageHeader from "$lib/style/PageHeader.svelte";
 </script>
 
-<BaseLayout><PageHeader>Error</PageHeader><PageError /></BaseLayout>
+<PageHeader breadcrumbs={[["/faq", "How to Play"]]}>Error</PageHeader>
+<PageError />
