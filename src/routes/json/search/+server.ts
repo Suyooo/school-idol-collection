@@ -22,14 +22,14 @@ export const GET: RequestHandler = (async ({ url }) => {
 		}
 	} catch (e) {
 		if (e instanceof SearchFilterError) {
-			throw error(404, { message: e.message });
+			throw error(400, { message: e.message });
 		} else {
 			throw e;
 		}
 	}
 
 	if (filters.length === 0) {
-		throw error(404, { message: "No search filters specified" });
+		throw error(400, { message: "No search filters specified" });
 	}
 
 	const query = await searchQuery(filters, ["viewForLink", "viewRarity", "orderCardNo"]);

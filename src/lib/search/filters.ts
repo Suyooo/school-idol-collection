@@ -8,9 +8,11 @@ import AttributeEnum from "../enums/attribute.js";
 import { CardMemberRarity, CardSongRarity } from "../enums/cardRarity.js";
 
 export default abstract class SearchFilter {
-	abstract readonly key: string;
+	readonly key: string;
 
-	protected constructor() {}
+	protected constructor(key: string) {
+		this.key = key;
+	}
 
 	abstract getExplainString(): string;
 
@@ -22,8 +24,8 @@ export default abstract class SearchFilter {
 }
 
 export abstract class SearchFilter0 extends SearchFilter {
-	constructor() {
-		super();
+	constructor(key: string) {
+		super(key);
 	}
 
 	getUrlPart = () => `${this.key}`;
@@ -33,10 +35,10 @@ export abstract class SearchFilter0 extends SearchFilter {
 export abstract class SearchFilter1 extends SearchFilter {
 	param!: string;
 
-	constructor(param: string) {
-		super();
+	constructor(key: string, param: string) {
+		super(key);
 		if (param === null) {
-			throw new SearchFilterError("Missing parameter", "");
+			throw new SearchFilterError("Missing parameter", key);
 		}
 		this.param = param;
 	}
@@ -45,212 +47,275 @@ export abstract class SearchFilter1 extends SearchFilter {
 	getMapping = () => ({ [this.key]: this.param });
 }
 
+export abstract class SearchFilterNumber extends SearchFilter1 {
+	paramAsNumber!: number;
+
+	constructor(key: string, param: string) {
+		super(key, param);
+		this.paramAsNumber = parseInt(param);
+		if (isNaN(this.paramAsNumber)) {
+			throw new SearchFilterError(`Parameter "${this.param}" is not a number`, key);
+		}
+	}
+}
+
 export class SearchFilterMember extends SearchFilter0 {
-	readonly key = "member";
+	constructor() {
+		super("member");
+	}
 	getExplainString = () => "Members";
 	getScopeElements = () => ["filterMembers"];
 }
 
 export class SearchFilterSong extends SearchFilter0 {
-	readonly key = "song";
+	constructor() {
+		super("song");
+	}
 	getExplainString = () => "Songs";
 	getScopeElements = () => ["filterSongs"];
 }
 
 export class SearchFilterMemory extends SearchFilter0 {
-	readonly key = "memory";
+	constructor() {
+		super("memory");
+	}
 	getExplainString = () => "Memories";
 	getScopeElements = () => ["filterMemories"];
 }
 
 export class SearchFilterSet extends SearchFilter1 {
-	readonly key = "set";
+	constructor(param: string) {
+		super("set", param);
+	}
 	getExplainString = () => `In Set ${this.param}`;
 	getScopeElements = () => [<ScopeOptions>{ method: ["filterSet", this.param] }];
 }
 
 export abstract class SearchFilterMemberRarity extends SearchFilter0 {
-	abstract readonly rarity: CardMemberRarity;
+	readonly rarity: CardMemberRarity;
+	constructor(key: string, rarity: CardMemberRarity) {
+		super(key);
+		this.rarity = rarity;
+	}
 	getScopeElements = () => [<ScopeOptions>{ method: ["searchMemberRarity", this.rarity] }];
 }
 
 export class SearchFilterMemberRarityR extends SearchFilterMemberRarity {
-	readonly key = "r";
-	readonly rarity = CardMemberRarity.R;
+	constructor() {
+		super("r", CardMemberRarity.R);
+	}
 	getExplainString = () => "R Rarity";
 }
 
 export class SearchFilterMemberRaritySR extends SearchFilterMemberRarity {
-	readonly key = "sr";
-	readonly rarity = CardMemberRarity.SR;
+	constructor() {
+		super("sr", CardMemberRarity.SR);
+	}
 	getExplainString = () => "SR Rarity";
 }
 
 export class SearchFilterMemberRarityHR extends SearchFilterMemberRarity {
-	readonly key = "hr";
-	readonly rarity = CardMemberRarity.HR;
+	constructor() {
+		super("hr", CardMemberRarity.HR);
+	}
 	getExplainString = () => "HR Rarity";
 }
 
 export class SearchFilterMemberRaritySpecial extends SearchFilterMemberRarity {
-	readonly key = "special";
-	readonly rarity = CardMemberRarity.Special;
+	constructor() {
+		super("special", CardMemberRarity.Special);
+	}
 	getExplainString = () => "Special Rarity";
 }
 
 export class SearchFilterMemberRaritySecret extends SearchFilterMemberRarity {
-	readonly key = "secret";
-	readonly rarity = CardMemberRarity.Secret;
+	constructor() {
+		super("secret", CardMemberRarity.Secret);
+	}
 	getExplainString = () => "Secret Rarity";
 }
 
 export class SearchFilterMemberRarityPR extends SearchFilterMemberRarity {
-	readonly key = "pr";
-	readonly rarity = CardMemberRarity.PR;
+	constructor() {
+		super("pr", CardMemberRarity.PR);
+	}
 	getExplainString = () => "PR Rarity";
 }
 
 export class SearchFilterMemberRarityN extends SearchFilterMemberRarity {
-	readonly key = "n";
-	readonly rarity = CardMemberRarity.N;
+	constructor() {
+		super("n", CardMemberRarity.N);
+	}
 	getExplainString = () => "N Rarity";
 }
 
 export class SearchFilterMemberRaritySSR extends SearchFilterMemberRarity {
-	readonly key = "ssr";
-	readonly rarity = CardMemberRarity.SSR;
+	constructor() {
+		super("ssr", CardMemberRarity.SSR);
+	}
 	getExplainString = () => "SSR Rarity";
 }
 
 export abstract class SearchFilterMemberNames extends SearchFilter0 {
-	abstract readonly group: GroupID;
+	readonly group: GroupID;
+	constructor(key: string, group: GroupID) {
+		super(key);
+		this.group = group;
+	}
 	getScopeElements = () => [<ScopeOptions>{ method: ["searchGroup", GroupEnum.getSubIdsFromId(this.group)] }];
 }
 
 export class SearchFilterMemberGroupMuse extends SearchFilterMemberNames {
-	readonly key = "muse";
-	readonly group = 2;
+	constructor() {
+		super("muse", 2);
+	}
 	getExplainString = () => "µ's";
 }
 
 export class SearchFilterMemberGroupAqours extends SearchFilterMemberNames {
-	readonly key = "aqours";
-	readonly group = 3;
+	constructor() {
+		super("aqours", 3);
+	}
 	getExplainString = () => "Aqours";
 }
 
 export class SearchFilterMemberGroupPrintemps extends SearchFilterMemberNames {
-	readonly key = "printemps";
-	readonly group = 4;
+	constructor() {
+		super("printemps", 4);
+	}
 	getExplainString = () => "Printemps";
 }
 
 export class SearchFilterMemberGroupLilyWhite extends SearchFilterMemberNames {
-	readonly key = "lilywhite";
-	readonly group = 5;
+	constructor() {
+		super("lilywhite", 5);
+	}
 	getExplainString = () => "lily white";
 }
 
 export class SearchFilterMemberGroupBiBi extends SearchFilterMemberNames {
-	readonly key = "bibi";
-	readonly group = 6;
+	constructor() {
+		super("bibi", 6);
+	}
 	getExplainString = () => "BiBi";
 }
 
 export class SearchFilterMemberGroupCYaRon extends SearchFilterMemberNames {
-	readonly key = "cyaron";
-	readonly group = 7;
+	constructor() {
+		super("cyaron", 7);
+	}
 	getExplainString = () => "CYaRon!";
 }
 
 export class SearchFilterMemberGroupAzalea extends SearchFilterMemberNames {
-	readonly key = "azalea";
-	readonly group = 8;
+	constructor() {
+		super("azalea", 8);
+	}
 	getExplainString = () => "AZALEA";
 }
 
 export class SearchFilterMemberGroupGuiltyKiss extends SearchFilterMemberNames {
-	readonly key = "guiltykiss";
-	readonly group = 9;
+	constructor() {
+		super("guiltykiss", 9);
+	}
 	getExplainString = () => "Guilty Kiss";
 }
 
 export class SearchFilterMemberGroupSaintSnow extends SearchFilterMemberNames {
-	readonly key = "saintsnow";
-	readonly group = 10;
+	constructor() {
+		super("saintsnow", 10);
+	}
 	getExplainString = () => "Saint Snow";
 }
 
 export abstract class SearchFilterSongRarity extends SearchFilter0 {
-	abstract readonly rarity: CardSongRarity;
+	readonly rarity: CardSongRarity;
+	constructor(key: string, rarity: CardSongRarity) {
+		super(key);
+		this.rarity = rarity;
+	}
 	getScopeElements = () => [<ScopeOptions>{ method: ["searchSongRarity", this.rarity] }];
 }
 
 export class SearchFilterSongRarityM extends SearchFilterSongRarity {
-	readonly key = "m";
-	readonly rarity = CardSongRarity.M;
+	constructor() {
+		super("m", CardSongRarity.M);
+	}
 	getExplainString = () => "M Rarity";
 }
 
 export class SearchFilterSongRarityGR extends SearchFilterSongRarity {
-	readonly key = "gr";
-	readonly rarity = CardSongRarity.GR;
+	constructor() {
+		super("gr", CardSongRarity.GR);
+	}
 	getExplainString = () => "GR Rarity";
 }
 
 export class SearchFilterMemberIdolizableYes extends SearchFilter0 {
-	readonly key = "idolizable";
+	constructor() {
+		super("idolizable");
+	}
 	getScopeElements = () => ["searchIdolizable"];
 	getExplainString = () => "Idolizable";
 }
 
 export class SearchFilterMemberIdolizableNo extends SearchFilter0 {
-	readonly key = "idolizable";
+	constructor() {
+		super("notidolizable");
+	}
 	getScopeElements = () => ["searchNotIdolizable"];
 	getExplainString = () => "Not Idolizable";
 }
 
 export class SearchFilterMemberAbilityNone extends SearchFilter0 {
-	readonly key = "noability";
+	constructor() {
+		super("noability");
+	}
 	getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", false, false] }];
 	getExplainString = () => "No Ability";
 }
 
 export class SearchFilterMemberAbilityRush extends SearchFilter0 {
-	readonly key = "rush";
+	constructor() {
+		super("rush");
+	}
 	getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", true, null] }];
 	getExplainString = () => "[RUSH] Ability";
 }
 
 export class SearchFilterMemberAbilityLive extends SearchFilter0 {
-	readonly key = "live";
+	constructor() {
+		super("live");
+	}
 	getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", null, true] }];
 	getExplainString = () => "[LIVE] Ability";
 }
 
 export class SearchFilterMemberAbilityRushOrLive extends SearchFilter0 {
-	readonly key = "rushorlive";
+	constructor() {
+		super("rushorlive");
+	}
 	getScopeElements = () => [<ScopeOptions>{ method: ["searchAbility", true, true] }];
 	getExplainString = () => "[RUSH/LIVE] Ability";
 }
 
-export class SearchFilterCardID extends SearchFilter1 {
-	readonly key = "id";
-	getScopeElements = () => [<ScopeOptions>{ method: ["filterId", parseInt(this.param)] }];
+export class SearchFilterCardID extends SearchFilterNumber {
+	constructor(param: string) {
+		super("id", param);
+	}
+	getScopeElements = () => [<ScopeOptions>{ method: ["filterId", this.paramAsNumber] }];
 	getExplainString = () => "Card ID " + this.param;
 }
 
-export class SearchFilterMemberYear extends SearchFilter1 {
-	readonly key = "year";
-
+export class SearchFilterMemberYear extends SearchFilterNumber {
 	constructor(param: string) {
-		super(param);
-		if (this.param !== "1" && this.param !== "2" && this.param !== "3") {
-			throw new SearchFilterError("Invalid parameter for School Year filter", this.param);
+		super("year", param);
+		if (this.paramAsNumber < 1 || this.paramAsNumber > 3) {
+			throw new SearchFilterError(`Invalid parameter "${this.param}" is out of range for this filter`, "year");
 		}
 	}
 
-	getScopeElements = () => [<ScopeOptions>{ method: ["searchYear", parseInt(this.param)] }];
+	getScopeElements = () => [<ScopeOptions>{ method: ["searchYear", this.paramAsNumber] }];
 	getExplainString = () => {
 		switch (this.param) {
 			case "1":
@@ -264,9 +329,16 @@ export class SearchFilterMemberYear extends SearchFilter1 {
 }
 
 export abstract class SearchFilterTranslatableLike extends SearchFilter1 {
-	abstract readonly columnNames: string[];
-	abstract readonly explainName: string;
-	readonly include: Includeable | undefined = undefined;
+	readonly columnNames: string[];
+	readonly explainName: string;
+	readonly include: Includeable | undefined;
+
+	constructor(key: string, param: string, columnNames: string[], explainName: string, include?: Includeable) {
+		super(key, param);
+		this.columnNames = columnNames;
+		this.explainName = explainName;
+		this.include = include;
+	}
 
 	getScopeElements = () => {
 		if (this.include) {
@@ -282,40 +354,55 @@ export abstract class SearchFilterTranslatableLike extends SearchFilter1 {
 }
 
 export class SearchFilterName extends SearchFilterTranslatableLike {
-	readonly key = "name";
-	readonly columnNames = ["nameJpn", "nameEng"];
-	readonly explainName = "Name";
+	constructor(param: string) {
+		super("name", param, ["nameJpn", "nameEng"], "Name");
+	}
 }
 
 export class SearchFilterCostume extends SearchFilterTranslatableLike {
-	readonly key = "costume";
-	readonly columnNames = ["$member.costumeJpn$", "$member.costumeEng$"];
-	readonly explainName = "Costume";
-	readonly include = {
-		association: "member",
-		required: true,
-		attributes: ["costumeJpn", "costumeEng"],
-	};
+	constructor(param: string) {
+		super("costume", param, ["$member.costumeJpn$", "$member.costumeEng$"], "Costume", {
+			association: "member",
+			required: true,
+			attributes: ["costumeJpn", "costumeEng"],
+		});
+	}
 }
 
 export class SearchFilterSkill extends SearchFilterTranslatableLike {
-	readonly key = "skill";
-	readonly columnNames = ["$skills.jpn$", "$skills.eng$"];
-	readonly explainName = "Skill";
-	readonly include = {
-		association: "skills",
-		separate: false,
-		required: true,
-		attributes: ["jpn", "eng"],
-	};
+	constructor(param: string) {
+		super("skill", param, ["$skills.jpn$", "$skills.eng$"], "Skill", {
+			association: "skills",
+			separate: false,
+			required: true,
+			attributes: ["jpn", "eng"],
+		});
+	}
 }
 
-export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
-	abstract readonly column: string;
-	readonly columnLiteral: boolean = false;
-	abstract readonly explainName: string;
-	readonly explainNameAfterNumber: boolean = false;
-	readonly include: Includeable | undefined = undefined;
+export abstract class SearchFilterNumberWithMod extends SearchFilterNumber {
+	readonly column: string;
+	readonly columnLiteral: boolean;
+	readonly explainName: string;
+	readonly explainNameAfterNumber: boolean;
+	readonly include: Includeable | undefined;
+
+	constructor(
+		key: string,
+		param: string,
+		column: string,
+		columnLiteral: boolean,
+		explainName: string,
+		explainNameAfterNumber: boolean,
+		include?: Includeable
+	) {
+		super(key, param.startsWith("<") || param.startsWith(">") ? param.substring(1) : param);
+		this.column = column;
+		this.columnLiteral = columnLiteral;
+		this.explainName = explainName;
+		this.explainNameAfterNumber = explainNameAfterNumber;
+		this.include = include;
+	}
 
 	getScopeElements = () => [
 		<ScopeOptions>{
@@ -336,219 +423,224 @@ export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
 }
 
 export class SearchFilterMemberCost extends SearchFilterNumberWithMod {
-	readonly key = "cost";
-	readonly column = "$member.cost$";
-	readonly explainName = "Cost";
-	readonly include: Includeable = {
-		association: "member",
-		required: true,
-		attributes: ["cost"],
-	};
+	constructor(param: string) {
+		super("cost", param, "$member.cost$", false, "Cost", false, {
+			association: "member",
+			required: true,
+			attributes: ["cost"],
+		});
+	}
 }
 
 export class SearchFilterMemberPieces extends SearchFilterNumberWithMod {
-	readonly key = "pieces";
-	readonly column = "member.piecesSmile + member.piecesPure + member.piecesCool + member.piecesAll";
-	readonly columnLiteral = true;
-	readonly explainName = "Pieces";
-	readonly explainNameAfterNumber = true;
-	readonly include: Includeable = {
-		association: "member",
-		required: true,
-		attributes: ["piecesSmile", "piecesPure", "piecesCool", "piecesAll"],
-	};
+	constructor(param: string) {
+		super(
+			"pieces",
+			param,
+			"member.piecesSmile + member.piecesPure + member.piecesCool + member.piecesAll",
+			true,
+			"Pieces",
+			true,
+			{
+				association: "member",
+				required: true,
+				attributes: ["piecesSmile", "piecesPure", "piecesCool", "piecesAll"],
+			}
+		);
+	}
 }
 
 export class SearchFilterMemberPiecesAll extends SearchFilterNumberWithMod {
-	readonly key = "allpieces";
-	readonly column = "$member.piecesAll$";
-	readonly explainName = "[ALL] Pieces";
-	readonly explainNameAfterNumber = true;
-	readonly include: Includeable = {
-		association: "member",
-		required: true,
-		attributes: ["piecesAll"],
-	};
+	constructor(param: string) {
+		super("allpieces", param, "$member.piecesAll$", false, "[ALL] Pieces", true, {
+			association: "member",
+			required: true,
+			attributes: ["piecesAll"],
+		});
+	}
 }
 
 export class SearchFilterMemberPiecesSmile extends SearchFilterNumberWithMod {
-	readonly key = "smilepieces";
-	readonly column = "$member.piecesSmile$";
-	readonly explainName = "[SMILE] Pieces";
-	readonly explainNameAfterNumber = true;
-	readonly include: Includeable = {
-		association: "member",
-		required: true,
-		attributes: ["piecesSmile"],
-	};
+	constructor(param: string) {
+		super("smilepieces", param, "$member.piecesSmile$", false, "[SMILE] Pieces", true, {
+			association: "member",
+			required: true,
+			attributes: ["piecesSmile"],
+		});
+	}
 }
 
 export class SearchFilterMemberPiecesPure extends SearchFilterNumberWithMod {
-	readonly key = "purepieces";
-	readonly column = "$member.piecesPure$";
-	readonly explainName = "[PURE] Pieces";
-	readonly explainNameAfterNumber = true;
-	readonly include: Includeable = {
-		association: "member",
-		required: true,
-		attributes: ["piecesPure"],
-	};
+	constructor(param: string) {
+		super("purepieces", param, "$member.piecesPure$", false, "[PURE] Pieces", true, {
+			association: "member",
+			required: true,
+			attributes: ["piecesPure"],
+		});
+	}
 }
 
 export class SearchFilterMemberPiecesCool extends SearchFilterNumberWithMod {
-	readonly key = "coolpieces";
-	readonly column = "$member.piecesCool$";
-	readonly explainName = "[COOL] Pieces";
-	readonly explainNameAfterNumber = true;
-	readonly include: Includeable = {
-		association: "member",
-		required: true,
-		attributes: ["piecesCool"],
-	};
+	constructor(param: string) {
+		super("coolpieces", param, "$member.piecesCool$", false, "[COOL] Pieces", true, {
+			association: "member",
+			required: true,
+			attributes: ["piecesCool"],
+		});
+	}
 }
 
 export class SearchFilterMemberBonusYes extends SearchFilter0 {
-	readonly key = "bonus";
+	constructor() {
+		super("bonus");
+	}
 	getScopeElements = () => ["searchBonus"];
 	getExplainString = () => "With Birthday Bonus";
 }
 
 export class SearchFilterMemberBonusNo extends SearchFilter0 {
-	readonly key = "nobonus";
+	constructor() {
+		super("nobonus");
+	}
 	getScopeElements = () => ["searchNoBonus"];
 	getExplainString = () => "No Birthday Bonus";
 }
 
 export abstract class SearchFilterSongAttribute extends SearchFilter0 {
-	abstract readonly attribute: AttributeEnum;
+	readonly attribute: AttributeEnum;
+	constructor(key: string, attribute: AttributeEnum) {
+		super(key);
+		this.attribute = attribute;
+	}
 	getScopeElements = () => [<ScopeOptions>{ method: ["searchSongAttribute", this.attribute.id] }];
 	getExplainString = () => `Attribute is ${this.attribute.toSongAttributeName()}`;
 }
 
 export class SearchFilterSongAttributeNeutral extends SearchFilterSongAttribute {
-	readonly key = "neutral";
-	readonly attribute = AttributeEnum.ALL;
+	constructor() {
+		super("neutral", AttributeEnum.ALL);
+	}
 }
 
 export class SearchFilterSongAttributeSmile extends SearchFilterSongAttribute {
-	readonly key = "smile";
-	readonly attribute = AttributeEnum.SMILE;
+	constructor() {
+		super("smile", AttributeEnum.SMILE);
+	}
 }
 
 export class SearchFilterSongAttributePure extends SearchFilterSongAttribute {
-	readonly key = "pure";
-	readonly attribute = AttributeEnum.PURE;
+	constructor() {
+		super("pure", AttributeEnum.PURE);
+	}
 }
 
 export class SearchFilterSongAttributeCool extends SearchFilterSongAttribute {
-	readonly key = "cool";
-	readonly attribute = AttributeEnum.COOL;
+	constructor() {
+		super("cool", AttributeEnum.COOL);
+	}
 }
 
 export class SearchFilterSongAttributeOrange extends SearchFilterSongAttribute {
-	readonly key = "orange";
-	readonly attribute = AttributeEnum.ORANGE;
+	constructor() {
+		super("orange", AttributeEnum.ORANGE);
+	}
 }
 
 export abstract class SearchFilterSongReqType extends SearchFilter0 {
-	abstract readonly reqType: CardSongRequirementType;
+	readonly reqType: CardSongRequirementType;
+	constructor(key: string, reqType: CardSongRequirementType) {
+		super(key);
+		this.reqType = reqType;
+	}
 	getScopeElements = () => [<ScopeOptions>{ method: ["searchSongReqType", this.reqType] }];
 }
 
 export class SearchFilterSongReqTypeAny extends SearchFilterSongReqType {
-	readonly key = "anypiece";
-	readonly reqType = CardSongRequirementType.ANY_PIECE;
+	constructor() {
+		super("anypiece", CardSongRequirementType.ANY_PIECE);
+	}
 	getExplainString = () => "With Any Piece Requirement";
 }
 
 export class SearchFilterSongReqTypeAttr extends SearchFilterSongReqType {
-	readonly key = "attributepiece";
-	readonly reqType = CardSongRequirementType.ATTR_PIECE;
+	constructor() {
+		super("attributepiece", CardSongRequirementType.ATTR_PIECE);
+	}
 	getExplainString = () => "With Attribute Piece Requirement";
 }
 
 export class SearchFilterSongLivePoints extends SearchFilterNumberWithMod {
-	readonly key = "livepoints";
-	readonly column = "$song.lpBase$";
-	readonly explainName = "Base Live Points";
-	readonly explainNameAfterNumber = true;
-	readonly include: Includeable = {
-		association: "song",
-		required: true,
-		attributes: ["lpBase"],
-	};
+	constructor(param: string) {
+		super("livepoints", param, "$song.lpBase$", false, "Base Live Points", true, {
+			association: "song",
+			required: true,
+			attributes: ["lpBase"],
+		});
+	}
 }
 
 export class SearchFilterSongReqSmile extends SearchFilterNumberWithMod {
-	readonly key = "smilerequired";
-	readonly column = "$song.attrRequirement.piecesSmile$";
-	readonly explainName = "Required [SMILE] Pieces";
-	readonly explainNameAfterNumber = true;
-	readonly include: Includeable = {
-		association: "song",
-		required: true,
-		include: [
-			{
-				association: "attrRequirement",
-				required: true,
-				attributes: ["piecesSmile"],
-			},
-		],
-	};
+	constructor(param: string) {
+		super("smilerequired", param, "$song.attrRequirement.piecesSmile$", false, "Required [SMILE] Pieces", true, {
+			association: "song",
+			required: true,
+			include: [
+				{
+					association: "attrRequirement",
+					required: true,
+					attributes: ["piecesSmile"],
+				},
+			],
+		});
+	}
 }
 
 export class SearchFilterSongReqPure extends SearchFilterNumberWithMod {
-	readonly key = "purerequired";
-	readonly column = "$song.attrRequirement.piecesPure$";
-	readonly explainName = "Required [PURE] Pieces";
-	readonly explainNameAfterNumber = true;
-	readonly include: Includeable = {
-		association: "song",
-		required: true,
-		include: [
-			{
-				association: "attrRequirement",
-				required: true,
-				attributes: ["piecesPure"],
-			},
-		],
-	};
+	constructor(param: string) {
+		super("purerequired", param, "$song.attrRequirement.piecesPure$", false, "Required [PURE] Pieces", true, {
+			association: "song",
+			required: true,
+			include: [
+				{
+					association: "attrRequirement",
+					required: true,
+					attributes: ["piecesPure"],
+				},
+			],
+		});
+	}
 }
 
 export class SearchFilterSongReqCool extends SearchFilterNumberWithMod {
-	readonly key = "coolrequired";
-	readonly column = "$song.attrRequirement.piecesCool$";
-	readonly explainName = "Required [COOL] Pieces";
-	readonly explainNameAfterNumber = true;
-	readonly include: Includeable = {
-		association: "song",
-		required: true,
-		include: [
-			{
-				association: "attrRequirement",
-				required: true,
-				attributes: ["piecesCool"],
-			},
-		],
-	};
+	constructor(param: string) {
+		super("coolrequired", param, "$song.attrRequirement.piecesCool$", false, "Required [COOL] Pieces", true, {
+			association: "song",
+			required: true,
+			include: [
+				{
+					association: "attrRequirement",
+					required: true,
+					attributes: ["piecesCool"],
+				},
+			],
+		});
+	}
 }
 
 export class SearchFilterSongReqAny extends SearchFilterNumberWithMod {
-	readonly key = "required";
-	readonly column = "$song.anyRequirement.piecesAll$";
-	readonly explainName = "Required Pieces";
-	readonly explainNameAfterNumber = true;
-	readonly include: Includeable = {
-		association: "song",
-		required: true,
-		include: [
-			{
-				association: "anyRequirement",
-				required: true,
-				attributes: ["piecesAll"],
-			},
-		],
-	};
+	constructor(param: string) {
+		super("required", param, "$song.anyRequirement.piecesAll$", false, "Required Pieces", true, {
+			association: "song",
+			required: true,
+			include: [
+				{
+					association: "anyRequirement",
+					required: true,
+					attributes: ["piecesAll"],
+				},
+			],
+		});
+	}
 }
 
 const map = new Map<string, new (param: string) => SearchFilter>([
