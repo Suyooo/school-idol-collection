@@ -103,7 +103,7 @@
 				<div class="mt-2">
 					<div class="-indent-5">
 						<b>①</b> Print this page one-sided, at the highest quality and at original (or 100%) scale. Check the print preview
-						caregully - you may need to enable "Print Backgrounds" or similar options to make sure that all icons show up!
+						carefully - you may need to enable "Print Backgrounds" or similar options to make sure that all icons show up!
 						You can also only print one page at first to test the quality first.
 					</div>
 					<div class="mt-2 -indent-5">
