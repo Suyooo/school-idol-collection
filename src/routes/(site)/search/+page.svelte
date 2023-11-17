@@ -3,7 +3,7 @@
 	import type { SearchUiOptions } from "$lib/search/ui.js";
 	import { urlToUiOptions } from "$lib/search/ui.js";
 	import type { PageData, Snapshot } from "./$types.js";
-	import SearchOptions from "./SearchOptions.svelte";
+	import SearchUi from "./SearchUi.svelte";
 	import PageHeader from "$lib/style/PageHeader.svelte";
 	import { goto } from "$app/navigation";
 	import Skill from "$lib/format/Skill.svelte";
@@ -14,7 +14,7 @@
 	import CardGridElement from "../set/[set]/CardGridElement.svelte";
 	import type CardSearchResult from "$lib/types/cardSearchResult.js";
 
-	export let data: {} | CardSearchResult<true>;
+	export let data: PageData;
 
 	let options: SearchUiOptions,
 		showOptions: boolean = false;
@@ -44,7 +44,7 @@
 {#if !hasResults(data)}
 	<div class="panel">
 		<div class="panel-inner">
-			<SearchOptions {options} />
+			<SearchUi {options} />
 		</div>
 	</div>
 {:else}
@@ -72,7 +72,7 @@
 			</div>
 			<div class="mt-4" class:hidden={!showOptions}>
 				{#key data.queryUrl}
-					<SearchOptions {options} />
+					<SearchUi {options} />
 				{/key}
 			</div>
 		</div>

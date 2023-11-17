@@ -1,6 +1,6 @@
 import { escapeForUrl } from "$lib/utils/string.js";
 
-type NumberQueryMod = "" | "-" | "+";
+type NumberQueryMod = "" | "<" | ">";
 
 export type SearchUiOptions = {
 	cardName?: string;
@@ -9,7 +9,7 @@ export type SearchUiOptions = {
 	skillText?: string;
 	cardType?: "" | "member" | "song" | "memory";
 	memberRarity?: "" | "r" | "sr" | "hr" | "special" | "secret" | "pr" | "n" | "ssr";
-	memberYear?: "" | "year?:1" | "year?:2" | "year?:3";
+	memberYear?: "" | "year=1" | "year=2" | "year=3";
 	memberCost?: "" | "0" | "1" | "2" | "3";
 	memberCostMod?: NumberQueryMod;
 	memberIdolizable?: "" | "idolizable" | "notidolizable";
@@ -76,7 +76,7 @@ const mapSelectInput: Map<
 	[
 		"memberYear",
 		{
-			urlParamOptions: ["year:1", "year:2", "year:3"],
+			urlParamOptions: ["year=1", "year=2", "year=3"],
 			condition: (options) => options.cardType === "member",
 		},
 	],
@@ -194,10 +194,11 @@ export function urlToUiOptions(url: string): SearchUiOptions {
 		} else if (mapTextInputReverse.has(split[0])) {
 			options[mapTextInputReverse.get(split[0])!] = split[1];
 		} else if (mapNumberInputReverse.has(split[0])) {
-			options[mapNumberInputReverse.get(split[0])!] = parseInt(split[1]).toString();
-			if (split[1].endsWith("+") || split[1].endsWith("-")) {
-				options[mapNumberInputReverse.get(split[0])! + "Mod"] = split[1].at(-1)!;
+			if (split[1].startsWith(">") || split[1].startsWith("<")) {
+				options[mapNumberInputReverse.get(split[0])!] = parseInt(split[1].substring(1)).toString();
+				options[mapNumberInputReverse.get(split[0])! + "Mod"] = split[1].charAt(0);
 			} else {
+				options[mapNumberInputReverse.get(split[0])!] = parseInt(split[1]).toString();
 				options[mapNumberInputReverse.get(split[0])! + "Mod"] = "";
 			}
 		}
@@ -230,7 +231,7 @@ export function uiOptionsToUrl(options: SearchUiOptions): string {
 		const param = options[name];
 		const paramMod = options[(name + "Mod") as keyof SearchUiOptions];
 		if (!uiOptionIsSet(param)) continue;
-		filters.push(`${inputInfo.urlParam}=${param}${escapeForUrl(uiOptionIsSet(paramMod) ? paramMod : "")}`);
+		filters.push(`${inputInfo.urlParam}=${escapeForUrl(uiOptionIsSet(paramMod) ? paramMod : "")}${param}`);
 	}
 
 	return filters.join("&");

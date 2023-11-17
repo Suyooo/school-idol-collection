@@ -323,13 +323,14 @@ export abstract class SearchFilterNumberWithMod extends SearchFilter1 {
 		},
 	];
 	getExplainString = () => {
-		const mod = this.param.endsWith("+") ? " or more" : this.param.endsWith("-") ? " or less" : "";
+		const mod = this.param.startsWith(">") ? " or more" : this.param.startsWith("<") ? " or less" : "";
+		const number = parseInt(mod === "" ? this.param : this.param.substring(1));
 		if (this.explainNameAfterNumber) {
-			return `${parseInt(this.param)}${mod} ${
+			return `${number}${mod} ${
 				this.param === "1" ? this.explainName.substring(0, this.explainName.length - 1) : this.explainName
 			}`;
 		} else {
-			return `${this.explainName} is ${parseInt(this.param)}${mod}`;
+			return `${this.explainName} is ${number}${mod}`;
 		}
 	};
 }
