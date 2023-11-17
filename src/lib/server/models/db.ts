@@ -45,18 +45,28 @@ export const modelList: ModelStatic<any>[] = [
 	Set,
 ];
 
-const sequelize = new OrigSequelize({
-	dialect: "mariadb",
-	dialectModule: mariadb,
-	host: env.DB_HOST,
-	username: env.DB_USER,
-	password: env.DB_PASSWORD,
-	database: env.DB_DATABASE,
-	port: 3306,
-	models: modelList,
-	logging: false,
-	logQueryParameters: true,
-});
+const sequelize = new OrigSequelize(
+	process.env.SIC_USE_TEST_DB === "1"
+		? {
+				dialect: "sqlite",
+				storage: "tests/test.db",
+				models: modelList,
+				logging: false,
+				logQueryParameters: true,
+		  }
+		: {
+				dialect: "mariadb",
+				dialectModule: mariadb,
+				host: env.DB_HOST,
+				username: env.DB_USER,
+				password: env.DB_PASSWORD,
+				database: env.DB_DATABASE,
+				port: 3306,
+				models: modelList,
+				logging: false,
+				logQueryParameters: true,
+		  }
+);
 
 async function addScopes(sq: Sequelize) {
 	addScopesCardBase(sq);

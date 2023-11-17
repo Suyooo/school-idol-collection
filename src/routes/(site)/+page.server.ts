@@ -16,7 +16,18 @@ const latestSetCardNos = [
 export const load: PageServerLoad = (async ({ locals }) => {
 	const DB = await locals.DB;
 
-	const latestCard = DB.m.Card.withScope(["viewForLink", "viewRarity"])
+	if (process.env.SIC_USE_TEST_DB === "1") {
+		const card = await DB.m.Card.withScope(["viewForLink"])
+			.findByPk("LL01-001")
+			.then((r) => r!.get({ plain: true }));
+		return {
+			latestCard: card,
+			latestSet: await DB.m.Set.findByPk("LL01").then((r) => r!.get({ plain: true })),
+			latestSetCards: [[card], [card], [card]],
+		};
+	}
+
+	const latestCard = DB.m.Card.withScope(["viewForLink"])
 		.findByPk(latestCardNo)
 		.then((c) => c!.get({ plain: true }));
 
@@ -26,7 +37,7 @@ export const load: PageServerLoad = (async ({ locals }) => {
 			Promise.all(
 				slot.map(
 					(cardNo) =>
-						DB.m.Card.withScope(["viewForLink", "viewRarity"])
+						DB.m.Card.withScope(["viewForLink"])
 							.findByPk(cardNo)
 							.then((c) => c!.get({ plain: true })) as Promise<Card>
 				)

@@ -6,7 +6,7 @@ import searchQuery from "$lib/search/query.js";
 import type CardSearchResult from "$lib/types/cardSearchResult.js";
 import type { RequestHandler } from "./$types.js";
 
-const PAGE_SIZE = 60;
+const PAGE_SIZE = process.env.SIC_USE_TEST_DB ? 4 : 60;
 
 export const GET: RequestHandler = (async ({ url }) => {
 	const filters = [];

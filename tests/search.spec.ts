@@ -72,11 +72,11 @@ test.describe("UI Options", () => {
 		await page.goto("/search");
 	});
 
-	textInputTest("Card Name", ["halation", "/", "?"]);
+	textInputTest("Card Name", ["halation", "/", "？", "?"]);
 	selectTest("Group");
 	selectTest("Card Type");
 	textInputTest("Card Set", ["LL01", "PR"]);
-	textInputTest("Skill Text", ["changes to", "/", "?"]);
+	textInputTest("Skill Text", ["メンバー", "/", "?"]);
 
 	test.describe("Member-only Options", () => {
 		test.beforeEach(async ({ page }) => {
@@ -88,7 +88,7 @@ test.describe("UI Options", () => {
 		selectTest("School Year");
 		numberTest("Cost");
 		selectTest("Ability");
-		textInputTest("Costume", ["halation", ".", "?"]);
+		textInputTest("Costume", ["奇跡", "kiseki", "?"]);
 		numberTest("Total Pieces");
 		numberTest("[SMILE] Pieces");
 		numberTest("[PURE] Pieces");
@@ -106,7 +106,7 @@ test.describe("UI Options", () => {
 
 		selectTest("Rarity");
 		selectTest("Attribute");
-		numberTest("Base Live Points");
+		numberTest("Base Live Points", 1);
 		selectTest("Requirement");
 
 		test.describe("Any-only Options", () => {
@@ -115,7 +115,7 @@ test.describe("UI Options", () => {
 				await page.waitForSelector(`:text("Required Pieces")`);
 			});
 
-			numberTest("Required Pieces", 4);
+			numberTest("Required Pieces", 11);
 		});
 
 		test.describe("Attr-only Options", () => {
@@ -124,9 +124,9 @@ test.describe("UI Options", () => {
 				await page.waitForSelector(`:text("Required [SMILE] Pieces")`);
 			});
 
-			numberTest("Required [SMILE] Pieces", 4);
-			numberTest("Required [PURE] Pieces", 4);
-			numberTest("Required [COOL] Pieces", 4);
+			numberTest("Required [SMILE] Pieces", 2);
+			numberTest("Required [PURE] Pieces", 2);
+			numberTest("Required [COOL] Pieces", 2);
 		});
 	});
 });
@@ -140,6 +140,7 @@ test("Pagination", async ({ page }) => {
 	await test.step("Go to Page 3", async () => {
 		await (await page.$(`a[aria-label="Next Page"]`))!.click();
 		await page.waitForSelector(`body.ready`, { timeout: 5000 });
+		await expect(await page.$(`a[aria-label="Next Page"]`)).toBeNull();
 	});
 	await test.step("Back to Page 2", async () => {
 		await (await page.$(`a[aria-label="Previous Page"]`))!.click();
