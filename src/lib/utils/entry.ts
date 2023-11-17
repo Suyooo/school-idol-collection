@@ -1,5 +1,5 @@
 const entryCardNoRegex = /^(?:ex?15-?e\d{1,2}|(?:l?l?\d\d|ex?\d\d|pr?)-?\d{1,3})$/i;
-const entryCardNoRegexNoDefaultSetName = /^(?:ex?15-?e\d{1,2}|(?:ll?\d\d|ex?\d\d|pr?)-?\d{1,3})$/i;
+const entryCardNoRegexNoDefaultSetName = /^(?:ex?15-?e\d{1,2}|(?:pr?-?0?69[ab])|(?:ll?\d\d|ex?\d\d|pr?)-?\d{1,3})$/i;
 //const canonicalCardNoRegex = /(LL\d\d|EX\d\d|PR)-\d\d\d/;
 
 export function couldBeEntryCardNo(test: string, allowDefaultSetName: boolean = true): boolean {
@@ -41,6 +41,17 @@ export function entryCardNoToCanonical(entry: string): string {
 			entry = `${entry.substring(0, prefixlength + 2)}${entry.substring(prefixlength + 2).padStart(2, "0")}`;
 		} else {
 			entry = `${entry.substring(0, prefixlength + 1)}${entry.substring(prefixlength + 1).padStart(3, "0")}`;
+		}
+	}
+
+	// PR-069A / PR-069B: additional zero needed if a postfixed A/B is there, default to A if not
+	if (entry.startsWith("PR-069")) {
+		if (entry.endsWith("A") || entry.endsWith("B")) {
+			if (entry.length !== prefixlength + 5) {
+				entry = `${entry.substring(0, prefixlength + 1)}0${entry.substring(prefixlength + 1)}`;
+			}
+		} else {
+			entry += "A";
 		}
 	}
 
