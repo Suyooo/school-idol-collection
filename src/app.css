@@ -40,6 +40,10 @@ a:not(.button) {
 
 .panel {
 	@apply rounded-xl border-4 border-background-accent bg-background-panel;
+
+	&.error {
+		@apply border-error-border bg-error-background;
+	}
 }
 
 .panel-inner {

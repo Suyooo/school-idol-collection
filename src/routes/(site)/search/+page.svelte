@@ -78,7 +78,7 @@
 		</div>
 	</div>
 	{#if data.cards.length === 0}
-		<div class="panel !border-error-border !bg-error-background">
+		<div class="panel error">
 			<div class="panel-inner">There are no results for this query.</div>
 		</div>
 	{:else}
