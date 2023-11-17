@@ -397,6 +397,7 @@ export abstract class SearchFilterNumberWithMod extends SearchFilterNumber {
 		include?: Includeable
 	) {
 		super(key, param.startsWith("<") || param.startsWith(">") ? param.substring(1) : param);
+		this.param = param;
 		this.column = column;
 		this.columnLiteral = columnLiteral;
 		this.explainName = explainName;
@@ -411,13 +412,12 @@ export abstract class SearchFilterNumberWithMod extends SearchFilterNumber {
 	];
 	getExplainString = () => {
 		const mod = this.param.startsWith(">") ? " or more" : this.param.startsWith("<") ? " or less" : "";
-		const number = parseInt(mod === "" ? this.param : this.param.substring(1));
 		if (this.explainNameAfterNumber) {
-			return `${number}${mod} ${
+			return `${this.paramAsNumber}${mod} ${
 				this.param === "1" ? this.explainName.substring(0, this.explainName.length - 1) : this.explainName
 			}`;
 		} else {
-			return `${this.explainName} is ${number}${mod}`;
+			return `${this.explainName} is ${this.paramAsNumber}${mod}`;
 		}
 	};
 }

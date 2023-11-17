@@ -10,6 +10,7 @@
 	import Menu from "$lib/style/icons/Menu.svelte";
 	import Search from "$lib/style/icons/Search.svelte";
 	import Spinner from "$lib/style/icons/Spinner.svelte";
+	import { navigating } from "$app/stores";
 
 	let menuExpanded: boolean = false,
 		quicksearch: string = "",
@@ -57,7 +58,12 @@
 
 	if (import.meta.env.DEV) {
 		onMount(() => {
+			const onUnmount = navigating.subscribe((isNavigating) => {
+				if (isNavigating) document.body.classList.remove("ready");
+				else document.body.classList.add("ready");
+			});
 			document.body.classList.add("ready");
+			return onUnmount;
 		});
 	}
 </script>

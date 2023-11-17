@@ -26,7 +26,10 @@
 	function hasError(data: any): data is { error: string } {
 		return data.hasOwnProperty("error");
 	}
-	$: options = hasResults(data) ? urlToUiOptions(data.queryUrl) : {};
+	$: {
+		options = hasResults(data) ? urlToUiOptions(data.queryUrl) : {};
+		showOptions = false;
+	}
 
 	export const snapshot: Snapshot = {
 		capture: () => options,
