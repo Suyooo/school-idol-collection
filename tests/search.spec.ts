@@ -13,7 +13,13 @@ function textInputTest(label: string, inputs: string[], expected: number[]) {
 				await (await page.$(`button:has-text("Change Search Query")`))!.click();
 				const elPost = await page.locator(`:has-text("${label}") + input`);
 				await expect(await elPost.inputValue()).toBe(inputs[i]);
+
 				await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
+				if (expected[i] === 0) {
+					await expect(await page.locator(`.error:has-text("no results")`).count()).toBeGreaterThan(0);
+				} else {
+					await expect(await page.locator(`.error:has-text("no results")`).count()).toBe(0);
+				}
 			});
 		}
 	});
@@ -31,7 +37,13 @@ function selectTest(label: string, options: string[], expected: number[]) {
 				await (await page.$(`button:has-text("Change Search Query")`))!.click();
 				const elPost = await page.locator(`:has-text("${label}") + select`);
 				expect(await elPost.inputValue()).toBe(options[i]);
+
 				await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
+				if (expected[i] === 0) {
+					await expect(await page.locator(`.error:has-text("no results")`).count()).toBeGreaterThan(0);
+				} else {
+					await expect(await page.locator(`.error:has-text("no results")`).count()).toBe(0);
+				}
 			});
 		}
 	});
@@ -43,9 +55,9 @@ function numberTest(label: string, expected: [number, number, number], numOffset
 			const number = i + numOffset;
 			const expectedMod =
 				i === 0 ? ""
-				: i === 1 ? "<"
-				: ">";
-			await test.step("Input: " + expectedMod + number, async () => {
+				: i === 1 ? "-"
+				: "+";
+			await test.step("Input: " + number + expectedMod, async () => {
 				const elPre = await page.locator(`b:has-text("${label}") + div > input`);
 				await elPre.fill(number.toString());
 				const elModPre = await page.locator(`b:has-text("${label}") + div > select`);
@@ -58,7 +70,13 @@ function numberTest(label: string, expected: [number, number, number], numOffset
 				expect(await elPost.inputValue()).toBe(number.toString());
 				const elModPost = await page.locator(`:has-text("${label}") + div > select`);
 				expect(await elModPost.inputValue()).toBe(expectedMod);
+
 				await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
+				if (expected[i] === 0) {
+					await expect(await page.locator(`.error:has-text("no results")`).count()).toBeGreaterThan(0);
+				} else {
+					await expect(await page.locator(`.error:has-text("no results")`).count()).toBe(0);
+				}
 			});
 		}
 	});
@@ -73,7 +91,7 @@ test.describe("UI Options", () => {
 		await page.goto("/search");
 	});
 
-	textInputTest("Card Name", ["halation", "/", "？", "?", "+"], [1, 2, 1, 1, 0]);
+	textInputTest("Card Name", ["halation", "/", "?", "=", "+"], [1, 2, 1, 0, 0]);
 	selectTest(
 		"Group",
 		["muse", "aqours", "printemps", "lilywhite", "bibi", "cyaron", "azalea", "guiltykiss", "saintsnow"],
@@ -137,7 +155,8 @@ test.describe("UI Options", () => {
 });
 
 test("Pagination", async ({ page }) => {
-	await page.goto("/search?member&pagesize=4");
+	await page.goto("/search/member/pagesize=4");
+	await expect(await page.$(`a[aria-label="Previous Page"]`)).toBeNull();
 	await test.step("Go to Page 2", async () => {
 		await (await page.$(`a[aria-label="Next Page"]`))!.click();
 		await page.waitForSelector(`body.ready`, { timeout: 5000 });
@@ -153,6 +172,20 @@ test("Pagination", async ({ page }) => {
 	});
 	await test.step("Back to Page 1", async () => {
 		await (await page.$(`a[aria-label="Previous Page"]`))!.click();
+		await page.waitForSelector(`body.ready`, { timeout: 5000 });
+		await expect(await page.$(`a[aria-label="Previous Page"]`)).toBeNull();
+	});
+	await test.step("Jump to Page 3", async () => {
+		await (await page.$(`a[aria-label="Page 3"]`))!.click();
+		await page.waitForSelector(`body.ready`, { timeout: 5000 });
+		await expect(await page.$(`a[aria-label="Next Page"]`)).toBeNull();
+	});
+	await test.step("Jump to Page 2", async () => {
+		await (await page.$(`a[aria-label="Page 2"]`))!.click();
+		await page.waitForSelector(`body.ready`, { timeout: 5000 });
+	});
+	await test.step("Jump to Page 1", async () => {
+		await (await page.$(`a[aria-label="Page 1"]`))!.click();
 		await page.waitForSelector(`body.ready`, { timeout: 5000 });
 		await expect(await page.$(`a[aria-label="Previous Page"]`)).toBeNull();
 	});

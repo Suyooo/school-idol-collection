@@ -1,6 +1,6 @@
-import { escapeForUrl } from "$lib/utils/string.js";
+import { escapeForSearch, unescapeForSearch } from "$lib/search/escape.js";
 
-type NumberQueryMod = "" | "<" | ">";
+type NumberQueryMod = "" | "+" | "-";
 
 export type SearchUiOptions = {
 	cardName?: string;
@@ -184,7 +184,7 @@ const mapNumberInputReverse: Map<string, keyof SearchUiOptions> = new Map(
 
 export function urlToUiOptions(url: string): SearchUiOptions {
 	const options: { [key: string]: string } = {};
-	const filterQueries = url.substring(1).split("&");
+	const filterQueries = url.substring(1).split("/");
 
 	for (const filterQuery of filterQueries) {
 		const split = filterQuery.split("=").map((s) => decodeURIComponent(s));
@@ -192,13 +192,12 @@ export function urlToUiOptions(url: string): SearchUiOptions {
 		if (mapSelectInputReverse.has(filterQuery)) {
 			options[mapSelectInputReverse.get(filterQuery)!] = filterQuery;
 		} else if (mapTextInputReverse.has(split[0])) {
-			options[mapTextInputReverse.get(split[0])!] = split[1];
+			options[mapTextInputReverse.get(split[0])!] = unescapeForSearch(split[1]);
 		} else if (mapNumberInputReverse.has(split[0])) {
-			if (split[1].startsWith(">") || split[1].startsWith("<")) {
-				options[mapNumberInputReverse.get(split[0])!] = parseInt(split[1].substring(1)).toString();
-				options[mapNumberInputReverse.get(split[0])! + "Mod"] = split[1].charAt(0);
+			options[mapNumberInputReverse.get(split[0])!] = parseInt(split[1]).toString();
+			if (split[1].endsWith("+") || split[1].endsWith("-")) {
+				options[mapNumberInputReverse.get(split[0])! + "Mod"] = split[1].at(-1)!;
 			} else {
-				options[mapNumberInputReverse.get(split[0])!] = parseInt(split[1]).toString();
 				options[mapNumberInputReverse.get(split[0])! + "Mod"] = "";
 			}
 		}
@@ -222,7 +221,7 @@ export function uiOptionsToUrl(options: SearchUiOptions): string {
 		if (inputInfo.condition && !inputInfo.condition(options)) continue;
 		const param = options[name];
 		if (!uiOptionIsSet(param)) continue;
-		filters.push(`${inputInfo.urlParam}=${escapeForUrl(param)}`);
+		filters.push(`${inputInfo.urlParam}=${escapeForSearch(param)}`);
 	}
 
 	// Number with Mod => 1-parameter filter
@@ -231,8 +230,8 @@ export function uiOptionsToUrl(options: SearchUiOptions): string {
 		const param = options[name];
 		const paramMod = options[(name + "Mod") as keyof SearchUiOptions];
 		if (!uiOptionIsSet(param)) continue;
-		filters.push(`${inputInfo.urlParam}=${escapeForUrl(uiOptionIsSet(paramMod) ? paramMod : "")}${param}`);
+		filters.push(`${inputInfo.urlParam}=${param}${uiOptionIsSet(paramMod) ? paramMod : ""}`);
 	}
 
-	return filters.join("&");
+	return filters.join("/");
 }

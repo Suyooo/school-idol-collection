@@ -5,6 +5,7 @@ import { CardBase } from "$models/card/card.js";
 import type { Sequelize } from "$models/db.js";
 import type CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import type { GroupID } from "$lib/enums/group.js";
+import { SearchFilterNumberCond } from "$lib/search/filters.js";
 
 export function addScopes(sequelize: Sequelize) {
 	CardBase.addScope("searchMemberRarity", (rarity: number) => ({
@@ -73,12 +74,11 @@ export function addScopes(sequelize: Sequelize) {
 	);
 	CardBase.addScope(
 		"searchGenericNumberWithMod",
-		(term: string, column: string, columnLiteral: boolean, include?: Includeable) => {
+		(num: number, opChar: SearchFilterNumberCond, column: string, columnLiteral: boolean, include?: Includeable) => {
 			const op =
-				term.startsWith(">") ? Op.gte
-				: term.startsWith("<") ? Op.lte
+				opChar === SearchFilterNumberCond.GREATER_OR_EQUAL ? Op.gte
+				: opChar === SearchFilterNumberCond.LESS_OR_EQUAL ? Op.lte
 				: Op.eq;
-			const num = parseInt(op === Op.eq ? term : term.substring(1));
 			if (columnLiteral) return { include, where: where(literal(column), { [op]: num }) };
 			else return { include, where: { [column]: { [op]: num } } };
 		}

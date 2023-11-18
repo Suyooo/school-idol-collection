@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import type { SearchUiOptions } from "$lib/search/ui.js";
-	import { uiOptionIsSet, uiOptionsToUrl } from "$lib/search/ui.js";
+	import { uiOptionsToUrl } from "$lib/search/ui.js";
 	import { uppercaseFirst } from "$lib/utils/string.js";
 	import Button from "$lib/style/Button.svelte";
 	import SearchOptionSelect from "./SearchOptionSelect.svelte";
@@ -10,12 +10,12 @@
 	import AttributeEnum from "$lib/enums/attribute.js";
 	import SearchOptionText from "./SearchOptionText.svelte";
 
-	export let options: SearchUiOptions = {};
+	export let options: SearchUiOptions;
 
 	function query() {
 		const url = uiOptionsToUrl(options);
 		if (url.length > 0) {
-			goto("/search?" + url);
+			goto("/search/" + url);
 		}
 	}
 </script>

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type SetCategory from "$models/set/category.js";
-	import CardListGrid from "$lib/style/CardListGrid.svelte";
+	import CardListGrid from "$lib/style/Grid.svelte";
 	import type { PageData } from "./$types.js";
-	import SetGridElement from "./SetGridElement.svelte";
+	import SetGridElement from "$lib/style/SetGridElement.svelte";
 	import PageHeader from "$lib/style/PageHeader.svelte";
 
 	export let data: PageData;

@@ -14,7 +14,8 @@
 		"test": "playwright test",
 		"prebuild": "TEST=true vite-node src/scripts/collectCardImages.ts",
 		"build": "vite build",
-		"preview": "vite --host 0.0.0.0 preview"
+		"preview": "vite --host 0.0.0.0 preview",
+		"start": "node -r dotenv/config build"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.38.1",
@@ -51,5 +52,8 @@
 		"uuid": "^9.0.1",
 		"vite": "^4.0.0",
 		"vite-node": "^0.34.6"
+	},
+	"dependencies": {
+		"dotenv": "^16.3.1"
 	}
 }

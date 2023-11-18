@@ -3,7 +3,7 @@ import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import GroupEnum from "$lib/enums/group.js";
 import type { GroupID } from "$lib/enums/group.js";
 import SearchFilterError from "$lib/errors/searchFilterError.js";
-import { escapeForUrl } from "$lib/utils/string.js";
+import { escapeForSearch } from "$lib/search/escape.js";
 import AttributeEnum from "../enums/attribute.js";
 import { CardMemberRarity, CardSongRarity } from "../enums/cardRarity.js";
 
@@ -37,13 +37,13 @@ export abstract class SearchFilter1 extends SearchFilter {
 
 	constructor(key: string, param: string) {
 		super(key);
-		if (param === null) {
+		if (param === "") {
 			throw new SearchFilterError("Missing parameter", key);
 		}
 		this.param = param;
 	}
 
-	getUrlPart = () => `${this.key}=${escapeForUrl(this.param)}`;
+	getUrlPart = () => `${this.key}=${escapeForSearch(this.param)}`;
 	getMapping = () => ({ [this.key]: this.param });
 }
 
@@ -53,10 +53,13 @@ export abstract class SearchFilterNumber extends SearchFilter1 {
 	constructor(key: string, param: string) {
 		super(key, param);
 		this.paramAsNumber = parseInt(param);
+		this.param = this.paramAsNumber.toString(); // make param have a canonical representation
 		if (isNaN(this.paramAsNumber)) {
 			throw new SearchFilterError(`Parameter "${this.param}" is not a number`, key);
 		}
 	}
+
+	getUrlPart = () => `${this.key}=${this.param}`; // no escaping
 }
 
 export class SearchFilterMember extends SearchFilter0 {
@@ -380,7 +383,14 @@ export class SearchFilterSkill extends SearchFilterTranslatableLike {
 	}
 }
 
+export enum SearchFilterNumberCond {
+	EQUAL,
+	LESS_OR_EQUAL,
+	GREATER_OR_EQUAL,
+}
+
 export abstract class SearchFilterNumberWithMod extends SearchFilterNumber {
+	readonly paramOp: SearchFilterNumberCond;
 	readonly column: string;
 	readonly columnLiteral: boolean;
 	readonly explainName: string;
@@ -396,8 +406,13 @@ export abstract class SearchFilterNumberWithMod extends SearchFilterNumber {
 		explainNameAfterNumber: boolean,
 		include?: Includeable
 	) {
-		super(key, param.startsWith("<") || param.startsWith(">") ? param.substring(1) : param);
-		this.param = param;
+		super(key, param);
+		this.paramOp =
+			param.endsWith("+") ? SearchFilterNumberCond.GREATER_OR_EQUAL
+			: param.endsWith("-") ? SearchFilterNumberCond.LESS_OR_EQUAL
+			: SearchFilterNumberCond.EQUAL;
+		this.param = `${this.paramAsNumber}${this.paramOp === SearchFilterNumberCond.EQUAL ? "" : param.at(-1)}`;
+
 		this.column = column;
 		this.columnLiteral = columnLiteral;
 		this.explainName = explainName;
@@ -407,13 +422,20 @@ export abstract class SearchFilterNumberWithMod extends SearchFilterNumber {
 
 	getScopeElements = () => [
 		<ScopeOptions>{
-			method: ["searchGenericNumberWithMod", this.param, this.column, this.columnLiteral, this.include],
+			method: [
+				"searchGenericNumberWithMod",
+				this.paramAsNumber,
+				this.paramOp,
+				this.column,
+				this.columnLiteral,
+				this.include,
+			],
 		},
 	];
 	getExplainString = () => {
 		const mod =
-			this.param.startsWith(">") ? " or more"
-			: this.param.startsWith("<") ? " or less"
+			this.paramOp === SearchFilterNumberCond.GREATER_OR_EQUAL ? " or more"
+			: this.paramOp === SearchFilterNumberCond.LESS_OR_EQUAL ? " or less"
 			: "";
 		if (this.explainNameAfterNumber) {
 			return `${this.paramAsNumber}${mod} ${

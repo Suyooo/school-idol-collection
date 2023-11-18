@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import Button from "$lib/style/Button.svelte";
-	import CardListGrid from "$lib/style/CardListGrid.svelte";
+	import CardListGrid from "$lib/style/Grid.svelte";
 	import PageHeader from "$lib/style/PageHeader.svelte";
 	import type { PageData } from "./$types.js";
-	import CardGridElement from "./CardGridElement.svelte";
+	import CardGridElement from "$lib/style/CardGridElement.svelte";
 
 	export let data: PageData;
 </script>

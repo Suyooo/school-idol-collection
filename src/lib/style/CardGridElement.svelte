@@ -2,14 +2,14 @@
 	import type Card from "$models/card/card.js";
 	import { cardRarityShort, cardType } from "$lib/card/strings.js";
 	import CardImage from "$lib/format/CardImage.svelte";
-	import CardListGridElement from "$lib/style/CardListGridElement.svelte";
+	import BaseGridElement from "./BaseGridElement.svelte";
 
 	export let card: Card;
 	export let squareCorners: boolean = false;
 </script>
 
 <div class="contents">
-	<CardListGridElement
+	<BaseGridElement
 		href="/card/{card.cardNo}"
 		title={`<span class="rarity">${cardRarityShort(card)}</span> ${card.nameEng || card.nameJpn}`}
 		{squareCorners}
@@ -18,7 +18,7 @@
 	>
 		<CardImage {card} />
 		<CardImage {card} back />
-	</CardListGridElement>
+	</BaseGridElement>
 </div>
 
 <style lang="postcss">

@@ -25,7 +25,7 @@
 	import GroupEnum from "$lib/enums/group.js";
 	import Language from "$lib/enums/language.js";
 	import type CardPageExtraInfo from "$lib/types/cardPageExtraInfo.js";
-	import { escapeForUrl } from "$lib/utils/string.js";
+	import { escapeForSearch } from "$lib/search/escape.js";
 	import Ability from "$lib/format/Ability.svelte";
 	import PieceCount from "$lib/format/PieceCount.svelte";
 	import Skill from "$lib/format/Skill.svelte";
@@ -125,8 +125,8 @@
 		<div class="header">Costume</div>
 		<div class="value">
 			{#if card.member.costumeJpn !== null}
-				<a href="/search?costume={escapeForUrl(card.member.costumeEng ?? card.member.costumeJpn)}">
-					{card.member.costumeEng ?? card.member.costumeJpn}
+				<a href="/search/costume={escapeForSearch(card.member.costumeEng ?? card.member.costumeJpn)}">
+					{card.member.costumeEng ?? card.member.costumeJpn + " (no translation)"}
 				</a>
 			{:else}
 				—

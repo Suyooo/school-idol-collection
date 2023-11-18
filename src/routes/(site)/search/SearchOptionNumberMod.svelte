@@ -18,8 +18,8 @@
 	<input type="number" min="0" {max} bind:value placeholder="—" />
 	<select class="flex-grow" bind:value={valueMod} disabled={value === undefined}>
 		<option value="" selected>exactly</option>
-		<option value="<" selected>or less</option>
-		<option value=">" selected>or more</option>
+		<option value="-" selected>or less</option>
+		<option value="+" selected>or more</option>
 	</select>
 </div>
 
