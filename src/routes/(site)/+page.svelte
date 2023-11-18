@@ -10,10 +10,14 @@
 	import SetGridElement from "./(cardlist)/list/SetGridElement.svelte";
 	import CardGridElement from "./(cardlist)/set/[set]/CardGridElement.svelte";
 	import BigLink from "$lib/style/BigLink.svelte";
+	import { onMount } from "svelte";
+	import CardListGridElement from "$lib/style/CardListGridElement.svelte";
 </script>
 
 <script lang="ts">
 	export let data: PageServerData;
+	let mountData: PageServerData;
+	onMount(() => (mountData = data));
 </script>
 
 <svelte:head>
@@ -30,23 +34,30 @@
 					<SetGridElement set={data.latestSet} />
 				</div>
 				<div class="col-span-2 overflow-hidden rounded">
-					<Splide
-						options={{
-							label: `Cards from Set ${data.latestSet.id}`,
-							autoplay: true,
-							interval: 3000,
-							rewind: true,
-							type: "loop",
-						}}
-					>
-						{#each data.latestSetCards as slot, i (i)}
-							<SplideSlide>
-								<div class="mb-8 sm:mb-0">
-									<CardGridElement card={slot[Math.floor(Math.random() * slot.length)]} squareCorners />
-								</div>
-							</SplideSlide>
-						{/each}
-					</Splide>
+					{#if mountData}
+						<Splide
+							options={{
+								label: `Cards from Set ${data.latestSet.id}`,
+								autoplay: true,
+								interval: 3000,
+								rewind: true,
+								type: "loop",
+							}}
+						>
+							{#each mountData.latestSetCards as slot, i}
+								{@const pick = Math.floor(Math.random() * slot.length)}
+								<SplideSlide>
+									<div class="mb-8 sm:mb-0">
+										<CardGridElement card={slot[pick]} squareCorners />
+									</div>
+								</SplideSlide>
+							{/each}
+						</Splide>
+					{:else}
+						<div class="empty-card-el">
+							<CardGridElement card={data.latestCard} />
+						</div>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -119,6 +130,12 @@
 			& :global(.namecont) {
 				@apply sm:pb-4;
 			}
+		}
+	}
+	.empty-card-el {
+		& :global(span),
+		& :global(img) {
+			@apply opacity-0;
 		}
 	}
 </style>
