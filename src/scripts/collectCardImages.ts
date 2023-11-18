@@ -4,6 +4,8 @@ import DBPromise from "$models/db.js";
 import { downloadCardImages, saveResponseToFile } from "$lib/card/download.js";
 import { cardIsMember } from "$lib/card/types.js";
 
+/* Run with env variable TEST=true to allow DB access */
+
 (async () => {
 	const DB = await DBPromise;
 

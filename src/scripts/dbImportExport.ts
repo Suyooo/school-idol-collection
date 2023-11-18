@@ -1,9 +1,11 @@
 import fs from "fs";
 import DBPromise, { modelList } from "$models/db.js";
 
+/* Run with env variable TEST=true to allow DB access */
+
 (async () => {
 	if (process.argv.length < 3 || (process.argv[2] !== "import" && process.argv[2] !== "export")) {
-		console.error("vite-node src/scripts/dbImportExport.ts [import/export]");
+		console.error("TEST=true vite-node src/scripts/dbImportExport.ts [import/export]");
 		process.exit(1);
 	}
 
@@ -14,7 +16,6 @@ import DBPromise, { modelList } from "$models/db.js";
 		DB.transaction(async (transaction) => {
 			for (const model of modelList) {
 				const tableName = model.getTableName().tableName;
-				const primaryKey = model.modelDefinition.primaryKeysAttributeNames.values().next().value;
 
 				for (const row of importData[tableName]) {
 					// Use queryInterface to circumvent the validation methods defined in the models
@@ -33,6 +34,6 @@ import DBPromise, { modelList } from "$models/db.js";
 
 			exportData[model.getTableName().tableName] = data;
 		}
-		fs.writeFileSync("db.json", JSON.stringify(exportData, null, 4));
+		fs.writeFileSync("db.json", JSON.stringify(exportData, null, "\t"));
 	}
 })();
