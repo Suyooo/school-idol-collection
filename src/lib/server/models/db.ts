@@ -1,7 +1,7 @@
 import { env } from "$env/dynamic/private";
 import mariadb from "mariadb";
 import { Sequelize as OrigSequelize } from "@sequelize/core";
-import type { ModelStatic } from "@sequelize/core";
+import type { ModelStatic, Options } from "@sequelize/core";
 import type Card from "$models/card/card.js";
 import { CardBase } from "$models/card/card.js";
 import { addScopes as addScopesCardBase } from "$models/card/card.js";
@@ -45,28 +45,27 @@ export const modelList: ModelStatic<any>[] = [
 	Set,
 ];
 
-const sequelize = new OrigSequelize(
-	process.env.SIC_USE_TEST_DB === "1"
-		? {
-				dialect: "sqlite",
-				storage: "tests/test.db",
-				models: modelList,
-				logging: false,
-				logQueryParameters: true,
-		  }
-		: {
-				dialect: "mariadb",
-				dialectModule: mariadb,
-				host: env.DB_HOST,
-				username: env.DB_USER,
-				password: env.DB_PASSWORD,
-				database: env.DB_DATABASE,
-				port: 3306,
-				models: modelList,
-				logging: false,
-				logQueryParameters: true,
-		  }
-);
+const dbOpts: Options = {
+	dialect: "mariadb",
+	dialectModule: mariadb,
+	host: env.DB_HOST,
+	username: env.DB_USER,
+	password: env.DB_PASSWORD,
+	database: env.DB_DATABASE,
+	port: 3306,
+	models: modelList,
+	logging: false,
+	logQueryParameters: true,
+};
+const dbTestOpts: Options = {
+	dialect: "sqlite",
+	storage: "tests/test.db",
+	models: modelList,
+	logging: false,
+	logQueryParameters: true,
+};
+
+const sequelize = new OrigSequelize(process.env.SIC_USE_SEARCH_TEST_DB === "1" ? dbTestOpts : dbOpts);
 
 async function addScopes(sq: Sequelize) {
 	addScopesCardBase(sq);

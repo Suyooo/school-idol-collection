@@ -1,58 +1,52 @@
 import { expect } from "@playwright/test";
 import { test } from "./test.js";
 
-function textInputTest(label: string, inputs: string[]) {
+function textInputTest(label: string, inputs: string[], expected: number[]) {
 	test(label, async ({ page }) => {
-		for (const input of inputs) {
-			await test.step("Input: " + input, async () => {
+		for (let i = 0; i < inputs.length; i++) {
+			await test.step("Input: " + inputs[i], async () => {
 				const elPre = await page.locator(`b:has-text("${label}") + input`);
-				await elPre.fill(input);
+				await elPre.fill(inputs[i]);
 				await (await page.$(`button:text-is("Search")`))!.click();
 
 				await page.waitForSelector(`body.ready`, { timeout: 5000 });
 				await (await page.$(`button:has-text("Change Search Query")`))!.click();
 				const elPost = await page.locator(`:has-text("${label}") + input`);
-				await expect(await elPost.inputValue()).toBe(input);
-				await expect(await page.locator(".grid-item").count()).toBeGreaterThan(0);
+				await expect(await elPost.inputValue()).toBe(inputs[i]);
+				await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
 			});
 		}
 	});
 }
 
-function selectTest(label: string) {
+function selectTest(label: string, options: string[], expected: number[]) {
 	test(label, async ({ page }) => {
-		const options = await Promise.all(
-			(await (await page.locator(`b:has-text("${label}") + select > option`)).all()).map((opt) =>
-				opt.getAttribute("value")
-			)
-		);
-
-		for (let index = 1; index < options.length; index++) {
-			await test.step("Option: " + options[index], async () => {
+		for (let i = 0; i < options.length; i++) {
+			await test.step("Option: " + options[i], async () => {
 				const elPre = await page.locator(`b:has-text("${label}") + select`);
-				await elPre.selectOption({ index });
+				await elPre.selectOption({ index: i + 1 });
 				await (await page.$(`button:text-is("Search")`))!.click();
 
 				await page.waitForSelector(`body.ready`, { timeout: 5000 });
 				await (await page.$(`button:has-text("Change Search Query")`))!.click();
 				const elPost = await page.locator(`:has-text("${label}") + select`);
-				expect(await elPost.inputValue()).toBe(options[index]);
-				await expect(await page.locator(".grid-item").count()).toBeGreaterThan(0);
+				expect(await elPost.inputValue()).toBe(options[i]);
+				await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
 			});
 		}
 	});
 }
 
-function numberTest(label: string, numOffset: number = 0) {
+function numberTest(label: string, expected: [number, number, number], numOffset: number = 0) {
 	test(label, async ({ page }) => {
-		for (let index = 0; index < 3; index++) {
-			const number = index + numOffset;
-			const expectedMod = index === 0 ? "" : index === 1 ? "<" : ">";
-			await test.step("Input: " + expectedMod + index, async () => {
+		for (let i = 0; i < 3; i++) {
+			const number = i + numOffset;
+			const expectedMod = i === 0 ? "" : i === 1 ? "<" : ">";
+			await test.step("Input: " + expectedMod + i, async () => {
 				const elPre = await page.locator(`b:has-text("${label}") + div > input`);
 				await elPre.fill(number.toString());
 				const elModPre = await page.locator(`b:has-text("${label}") + div > select`);
-				await elModPre.selectOption({ index });
+				await elModPre.selectOption({ index: i });
 				await (await page.$(`button:text-is("Search")`))!.click();
 
 				await page.waitForSelector(`body.ready`, { timeout: 5000 });
@@ -61,22 +55,30 @@ function numberTest(label: string, numOffset: number = 0) {
 				expect(await elPost.inputValue()).toBe(number.toString());
 				const elModPost = await page.locator(`:has-text("${label}") + div > select`);
 				expect(await elModPost.inputValue()).toBe(expectedMod);
-				await expect(await page.locator(".grid-item").count()).toBeGreaterThan(0);
+				await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
 			});
 		}
 	});
 }
+
+test.use({
+	baseURL: "http://127.0.0.1:5175",
+});
 
 test.describe("UI Options", () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto("/search");
 	});
 
-	textInputTest("Card Name", ["halation", "/", "？", "?"]);
-	selectTest("Group");
-	selectTest("Card Type");
-	textInputTest("Card Set", ["LL01", "PR"]);
-	textInputTest("Skill Text", ["メンバー", "/", "?"]);
+	textInputTest("Card Name", ["halation", "/", "？", "?", "+"], [1, 2, 1, 1, 0]);
+	selectTest(
+		"Group",
+		["muse", "aqours", "printemps", "lilywhite", "bibi", "cyaron", "azalea", "guiltykiss", "saintsnow"],
+		[7, 12, 1, 1, 1, 3, 2, 2, 3]
+	);
+	selectTest("Card Type", ["member", "song", "memory"], [12, 11, 1]);
+	textInputTest("Card Set", ["LL01", "PR", "/", "?", "+"], [1, 2, 0, 0, 0]);
+	textInputTest("Skill Text", ["メンバー", "Member", "/", "?", "+"], [12, 14, 1, 1, 6]);
 
 	test.describe("Member-only Options", () => {
 		test.beforeEach(async ({ page }) => {
@@ -84,18 +86,18 @@ test.describe("UI Options", () => {
 			await page.waitForSelector(`:text-is("Rarity")`);
 		});
 
-		selectTest("Rarity");
-		selectTest("School Year");
-		numberTest("Cost");
-		selectTest("Ability");
-		textInputTest("Costume", ["奇跡", "kiseki", "?"]);
-		numberTest("Total Pieces");
-		numberTest("[SMILE] Pieces");
-		numberTest("[PURE] Pieces");
-		numberTest("[COOL] Pieces");
-		numberTest("[ALL] Pieces");
-		selectTest("Birthday Bonus");
-		selectTest("Idolizable");
+		selectTest("Rarity", ["r", "sr", "hr", "special", "secret", "pr", "n", "ssr"], [3, 1, 3, 1, 1, 1, 1, 1]);
+		selectTest("School Year", ["year=1", "year=2", "year=3"], [1, 3, 7]);
+		numberTest("Cost", [5, 7, 5]);
+		selectTest("Ability", ["noability", "rush", "live", "rushorlive"], [8, 3, 2, 1]);
+		textInputTest("Costume", ["奇跡", "kiseki", "/", "?", "+"], [1, 1, 0, 1, 0]);
+		numberTest("Total Pieces", [1, 5, 7]);
+		numberTest("[SMILE] Pieces", [8, 10, 2]);
+		numberTest("[PURE] Pieces", [10, 11, 1]);
+		numberTest("[COOL] Pieces", [7, 11, 1]);
+		numberTest("[ALL] Pieces", [10, 11, 1]);
+		selectTest("Birthday Bonus", ["nobonus", "bonus"], [11, 1]);
+		selectTest("Idolizable", ["notidolizable", "idolizable"], [11, 1]);
 	});
 
 	test.describe("Song-only Options", () => {
@@ -104,10 +106,10 @@ test.describe("UI Options", () => {
 			await page.waitForSelector(`:text-is("Rarity")`);
 		});
 
-		selectTest("Rarity");
-		selectTest("Attribute");
-		numberTest("Base Live Points", 1);
-		selectTest("Requirement");
+		selectTest("Rarity", ["m", "gr"], [10, 1]);
+		selectTest("Attribute", ["neutral", "smile", "pure", "cool", "orange"], [4, 2, 3, 1, 1]);
+		numberTest("Base Live Points", [1, 4, 7], 1);
+		selectTest("Requirement", ["anypiece", "attributepiece"], [3, 8]);
 
 		test.describe("Any-only Options", () => {
 			test.beforeEach(async ({ page }) => {
@@ -115,7 +117,7 @@ test.describe("UI Options", () => {
 				await page.waitForSelector(`:text("Required Pieces")`);
 			});
 
-			numberTest("Required Pieces", 11);
+			numberTest("Required Pieces", [1, 2, 1], 11);
 		});
 
 		test.describe("Attr-only Options", () => {
@@ -124,15 +126,15 @@ test.describe("UI Options", () => {
 				await page.waitForSelector(`:text("Required [SMILE] Pieces")`);
 			});
 
-			numberTest("Required [SMILE] Pieces", 2);
-			numberTest("Required [PURE] Pieces", 2);
-			numberTest("Required [COOL] Pieces", 2);
+			numberTest("Required [SMILE] Pieces", [2, 6, 2], 2);
+			numberTest("Required [PURE] Pieces", [3, 5, 3], 2);
+			numberTest("Required [COOL] Pieces", [2, 5, 3], 2);
 		});
 	});
 });
 
 test("Pagination", async ({ page }) => {
-	await page.goto("/search?member");
+	await page.goto("/search?member&pagesize=4");
 	await test.step("Go to Page 2", async () => {
 		await (await page.$(`a[aria-label="Next Page"]`))!.click();
 		await page.waitForSelector(`body.ready`, { timeout: 5000 });

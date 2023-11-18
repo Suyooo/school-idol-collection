@@ -1,7 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
 
-process.env.SIC_USE_TEST_DB = "1";
-
 export default defineConfig({
 	testDir: "./tests",
 	fullyParallel: true,
@@ -9,7 +7,8 @@ export default defineConfig({
 	retries: 2,
 	workers: process.env.CI ? 1 : undefined,
 	use: {
-		baseURL: "http://127.0.0.1:5173",
+		actionTimeout: 1000,
+		baseURL: "http://127.0.0.1:5174",
 		trace: "off",
 	},
 
@@ -20,9 +19,16 @@ export default defineConfig({
 		},
 	],
 
-	webServer: {
-		command: "npm run dev",
-		url: "http://127.0.0.1:5173",
-		reuseExistingServer: false,
-	},
+	webServer: [
+		{
+			command: "npm run dev -- --port 5174",
+			url: "http://127.0.0.1:5174",
+			reuseExistingServer: false,
+		},
+		{
+			command: "SIC_USE_SEARCH_TEST_DB=1 npm run dev -- --port 5175",
+			url: "http://127.0.0.1:5175",
+			reuseExistingServer: false,
+		},
+	],
 });

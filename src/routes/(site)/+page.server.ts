@@ -1,3 +1,4 @@
+import { error } from "@sveltejs/kit";
 import type Card from "$models/card/card.js";
 import type { PageServerLoad } from "./$types.js";
 
@@ -16,14 +17,13 @@ const latestSetCardNos = [
 export const load: PageServerLoad = (async ({ locals }) => {
 	const DB = await locals.DB;
 
-	if (process.env.SIC_USE_TEST_DB === "1") {
-		const card = await DB.m.Card.withScope(["viewForLink"])
-			.findByPk("LL01-001")
-			.then((r) => r!.get({ plain: true }));
+	if (process.env.SIC_USE_SEARCH_TEST_DB === "1") {
 		return {
-			latestCard: card,
-			latestSet: await DB.m.Set.findByPk("LL01").then((r) => r!.get({ plain: true })),
-			latestSetCards: [[card], [card], [card]],
+			latestCard: DB.m.Card.withScope(["viewForLink"])
+				.findByPk("LL01-001")
+				.then((r) => r!.get({ plain: true })),
+			latestSet: DB.m.Set.findByPk("LL01").then((r) => r!.get({ plain: true })),
+			latestSetCards: [],
 		};
 	}
 
