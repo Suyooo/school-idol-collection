@@ -3,6 +3,11 @@ import { test } from "./test.js";
 
 function textInputTest(label: string, inputs: string[], expected: number[]) {
 	test(label, async ({ page }) => {
+		await expect(inputs, "Ensure special characters are tested").toContain("?");
+		await expect(inputs, "Ensure special characters are tested").toContain("#");
+		await expect(inputs, "Ensure special characters are tested").toContain("/");
+		await expect(inputs, "Ensure special characters are tested").toContain("=");
+
 		for (let i = 0; i < inputs.length; i++) {
 			await test.step("Input: " + inputs[i], async () => {
 				const elPre = await page.locator(`b:has-text("${label}") + input`);
@@ -27,6 +32,9 @@ function textInputTest(label: string, inputs: string[], expected: number[]) {
 
 function selectTest(label: string, options: string[], expected: number[]) {
 	test(label, async ({ page }) => {
+		const optionCount = (await page.locator(`b:has-text("${label}") + select > option`).count()) - 1;
+		await expect(new Set(options).size, "Ensure every option is tested").toBe(optionCount);
+
 		for (let i = 0; i < options.length; i++) {
 			await test.step("Option: " + options[i], async () => {
 				const elPre = await page.locator(`b:has-text("${label}") + select`);
@@ -82,6 +90,7 @@ function numberTest(label: string, expected: [number, number, number], numOffset
 	});
 }
 
+// Use secondary test server, which has the search test database loaded
 test.use({
 	baseURL: "http://127.0.0.1:5175",
 });
@@ -91,15 +100,15 @@ test.describe("UI Options", () => {
 		await page.goto("/search");
 	});
 
-	textInputTest("Card Name", ["halation", "/", "?", "=", "+"], [1, 2, 1, 0, 0]);
+	textInputTest("Card Name", ["halation", "/", "?", "=", "#"], [1, 2, 1, 0, 0]);
 	selectTest(
 		"Group",
 		["muse", "aqours", "printemps", "lilywhite", "bibi", "cyaron", "azalea", "guiltykiss", "saintsnow"],
 		[7, 12, 1, 1, 1, 3, 2, 2, 3]
 	);
 	selectTest("Card Type", ["member", "song", "memory"], [12, 11, 1]);
-	textInputTest("Card Set", ["LL01", "PR", "/", "?", "+"], [1, 2, 0, 0, 0]);
-	textInputTest("Skill Text", ["メンバー", "Member", "/", "?", "+"], [12, 14, 1, 1, 6]);
+	textInputTest("Card Set", ["LL01", "PR", "/", "?", "=", "#"], [1, 2, 0, 0, 0, 0]);
+	textInputTest("Skill Text", ["メンバー", "Member", "/", "?", "=", "#"], [12, 14, 1, 1, 0, 0]);
 
 	test.describe("Member-only Options", () => {
 		test.beforeEach(async ({ page }) => {
@@ -111,7 +120,7 @@ test.describe("UI Options", () => {
 		selectTest("School Year", ["year=1", "year=2", "year=3"], [1, 3, 7]);
 		numberTest("Cost", [5, 7, 5]);
 		selectTest("Ability", ["noability", "rush", "live", "rushorlive"], [8, 3, 2, 1]);
-		textInputTest("Costume", ["奇跡", "kiseki", "/", "?", "+"], [1, 1, 0, 1, 0]);
+		textInputTest("Costume", ["奇跡", "kiseki", "/", "?", "=", "#"], [1, 1, 0, 1, 0, 0]);
 		numberTest("Total Pieces", [1, 5, 7]);
 		numberTest("[SMILE] Pieces", [8, 10, 2]);
 		numberTest("[PURE] Pieces", [10, 11, 1]);
