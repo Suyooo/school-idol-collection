@@ -58,7 +58,7 @@
 		@apply relative pl-12;
 
 		&:after {
-			@apply text-text-contrast absolute left-4 top-[0.2rem] h-4 w-4 rounded-full text-center text-xs font-bold leading-[0.875rem];
+			@apply absolute left-4 top-[0.2rem] h-4 w-4 rounded-full text-center text-xs font-bold leading-[0.875rem] text-text-contrast;
 		}
 	}
 

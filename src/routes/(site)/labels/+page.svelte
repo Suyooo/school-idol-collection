@@ -111,14 +111,11 @@
 		<div class="mt-2 flex w-full items-center justify-end">
 			<div
 				use:tooltip={{
-					content: blockedBySize
-						? "You must set page size and margins."
-						: blockedByMargin
-						? "With the given margin, the page would not fit any labels."
-						: blockedByFontSize
-						? "Font size must be higher than 0."
-						: blockedBySpacing
-						? "Line spacing must be 0 or higher."
+					content:
+						blockedBySize ? "You must set page size and margins."
+						: blockedByMargin ? "With the given margin, the page would not fit any labels."
+						: blockedByFontSize ? "Font size must be higher than 0."
+						: blockedBySpacing ? "Line spacing must be 0 or higher."
 						: "You must enter at least one card number.",
 					placement: "top",
 					offset: -5,

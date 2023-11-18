@@ -331,9 +331,8 @@ async function importCard(
 			memberInfo.piecesSmile = pieces[AttributeEnum.SMILE.id];
 			memberInfo.piecesPure = pieces[AttributeEnum.PURE.id];
 			memberInfo.piecesCool = pieces[AttributeEnum.COOL.id];
-			memberInfo.pieceBdayAttribute = info["ボーナス"]
-				? AttributeEnum.fromSongAttributeName(info["ボーナス"]).id
-				: null;
+			memberInfo.pieceBdayAttribute =
+				info["ボーナス"] ? AttributeEnum.fromSongAttributeName(info["ボーナス"]).id : null;
 
 			if (skillText !== undefined && skillText.indexOf("【特別練習】") !== -1) {
 				if (skillText.indexOf("<覚醒>") !== -1) {
@@ -420,9 +419,10 @@ async function importCard(
 								line: i,
 								patternId: checkSkillPattern[i] ? checkSkillPattern[i]!.pattern.id : null,
 								jpn: skillLine,
-								eng: checkSkillPattern[i]
-									? appendTriggersToString(checkSkillPattern[i]!.triggers, checkSkillPattern[i]!.translatedSkill)
-									: null,
+								eng:
+									checkSkillPattern[i] ?
+										appendTriggersToString(checkSkillPattern[i]!.triggers, checkSkillPattern[i]!.translatedSkill)
+									:	null,
 							});
 						}
 					}
@@ -481,7 +481,10 @@ async function importCard(
 			if (lpMatch === null) throw new ImportError("Invalid Live Points scraped from website", cardNo);
 			songInfo.lpBase = parseInt(lpMatch[1]);
 			if (lpMatch[2])
-				songInfo.lpBonus = lpMatch[2] === "+X" ? "X" : lpMatch[2] === "+∞" ? "∞" : parseInt(lpMatch[2]).toString();
+				songInfo.lpBonus =
+					lpMatch[2] === "+X" ? "X"
+					: lpMatch[2] === "+∞" ? "∞"
+					: parseInt(lpMatch[2]).toString();
 
 			if (info["共通スコア"]) {
 				songInfo.requirementType = CardSongRequirementType.ANY_PIECE;
@@ -512,9 +515,10 @@ async function importCard(
 					line: i,
 					patternId: checkSkillPattern[i] ? checkSkillPattern[i]!.pattern.id : null,
 					jpn: skillLine,
-					eng: checkSkillPattern[i]
-						? appendTriggersToString(checkSkillPattern[i]!.triggers, checkSkillPattern[i]!.translatedSkill)
-						: null,
+					eng:
+						checkSkillPattern[i] ?
+							appendTriggersToString(checkSkillPattern[i]!.triggers, checkSkillPattern[i]!.translatedSkill)
+						:	null,
 				});
 			}
 			card.skills = skills as Skill[];

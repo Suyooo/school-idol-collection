@@ -16,7 +16,10 @@
 		set = usedCardNo.split("-")[0];
 		secret = card ? cardIsMember(card) && card.member.rarity === CardMemberRarity.Secret : false;
 		isLandscape =
-			(card ? (back ? card.backOrientation : card.frontOrientation) : orientation) === CardOrientation.LANDSCAPE;
+			(card ?
+				back ? card.backOrientation
+				:	card.frontOrientation
+			:	orientation) === CardOrientation.LANDSCAPE;
 		if (secret) url = `/images/cards/secret.jpg`;
 		else url = `/images/cards/${set}/${usedCardNo}-${back ? "back" : "front"}.${card?.imageFileExt ?? "gif"}`;
 	}

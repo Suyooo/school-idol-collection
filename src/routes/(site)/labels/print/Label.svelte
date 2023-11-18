@@ -24,9 +24,9 @@
 <div class="label" class:narrow={!isLandscape} class:wide={isLandscape}>
 	<div class="skillsallcards">
 		{#each card.member && card.member.group && showGroupSkills ? card.member.group.expectedMemberIds
-					.split("|")
-					.filter((c) => c !== "")
-					.map((c) => byCardNo[byCardId[parseInt(c)].cardNo]) : [card] as c}
+				.split("|")
+				.filter((c) => c !== "")
+				.map((c) => byCardNo[byCardId[parseInt(c)].cardNo]) : [card] as c}
 			{#if c.skills.length > 0}
 				<div class="skillscard" class:othergroupmember={c.cardNo !== cardNo}>
 					{#each c.skills as skill (skill.id)}
@@ -61,11 +61,9 @@
 	<div class="ids">
 		<div>
 			{card.cardNo}
-			{cardIsMember(card)
-				? CardMemberRarity[card.member.rarity]
-				: cardIsSong(card)
-				? CardSongRarity[card.song.rarity]
-				: "ME"}
+			{cardIsMember(card) ? CardMemberRarity[card.member.rarity]
+			: cardIsSong(card) ? CardSongRarity[card.song.rarity]
+			: "ME"}
 		</div>
 		<div>ID: {card.id.toString().padStart(4, "0")}</div>
 	</div>

@@ -74,7 +74,10 @@ export function addScopes(sequelize: Sequelize) {
 	CardBase.addScope(
 		"searchGenericNumberWithMod",
 		(term: string, column: string, columnLiteral: boolean, include?: Includeable) => {
-			const op = term.startsWith(">") ? Op.gte : term.startsWith("<") ? Op.lte : Op.eq;
+			const op =
+				term.startsWith(">") ? Op.gte
+				: term.startsWith("<") ? Op.lte
+				: Op.eq;
 			const num = parseInt(op === Op.eq ? term : term.substring(1));
 			if (columnLiteral) return { include, where: where(literal(column), { [op]: num }) };
 			else return { include, where: { [column]: { [op]: num } } };

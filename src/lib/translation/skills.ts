@@ -56,15 +56,15 @@ export async function listUntranslatedSkills(DB: Sequelize): Promise<ShortSkillI
 	});
 
 	return allSkills.map((skillObj) =>
-		skillObj.isCardSkill()
-			? { cardNo: skillObj.cardNo, skillJpn: skillObj.jpn, skillEng: "-", skillId: skillObj.id }
-			: {
-					groupId: skillObj.groupId,
-					firstCardNo: skillObj.group.memberExtraInfos[0].cardNo,
-					skillJpn: skillObj.jpn,
-					skillEng: "-",
-					skillId: skillObj.id,
-			  }
+		skillObj.isCardSkill() ?
+			{ cardNo: skillObj.cardNo, skillJpn: skillObj.jpn, skillEng: "-", skillId: skillObj.id }
+		:	{
+				groupId: skillObj.groupId,
+				firstCardNo: skillObj.group.memberExtraInfos[0].cardNo,
+				skillJpn: skillObj.jpn,
+				skillEng: "-",
+				skillId: skillObj.id,
+			}
 	);
 }
 
@@ -89,20 +89,20 @@ export async function getApplicableSkills(
 		const appliedPattern = await applyPatternOrNull(DB, skill, triggers, pattern, options);
 		if (appliedPattern !== null) {
 			res.push(
-				skillObj.isCardSkill()
-					? {
-							cardNo: skillObj.cardNo,
-							skillId: skillObj.id,
-							skillJpn: skill,
-							skillEng: appliedPattern,
-					  }
-					: {
-							groupId: skillObj.group.id,
-							firstCardNo: skillObj.group.memberExtraInfos[0].cardNo,
-							skillId: skillObj.id,
-							skillJpn: skill,
-							skillEng: appliedPattern,
-					  }
+				skillObj.isCardSkill() ?
+					{
+						cardNo: skillObj.cardNo,
+						skillId: skillObj.id,
+						skillJpn: skill,
+						skillEng: appliedPattern,
+					}
+				:	{
+						groupId: skillObj.group.id,
+						firstCardNo: skillObj.group.memberExtraInfos[0].cardNo,
+						skillId: skillObj.id,
+						skillJpn: skill,
+						skillEng: appliedPattern,
+					}
 			);
 		}
 	}

@@ -81,7 +81,12 @@ export function parseSkillToNodes(
 	cardType?: CardType
 ): ParseNodePrepared[] {
 	const isSkillObj = skill !== null && typeof skill !== "string";
-	const skillString: string | null = isSkillObj ? (lang === Language.ENG ? skill.eng : skill.jpn) : skill;
+	const skillString: string | null =
+		isSkillObj ?
+			lang === Language.ENG ?
+				skill.eng
+			:	skill.jpn
+		:	skill;
 
 	if (skillString === null) {
 		const secret = Symbol();

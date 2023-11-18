@@ -411,7 +411,10 @@ export abstract class SearchFilterNumberWithMod extends SearchFilterNumber {
 		},
 	];
 	getExplainString = () => {
-		const mod = this.param.startsWith(">") ? " or more" : this.param.startsWith("<") ? " or less" : "";
+		const mod =
+			this.param.startsWith(">") ? " or more"
+			: this.param.startsWith("<") ? " or less"
+			: "";
 		if (this.explainNameAfterNumber) {
 			return `${this.paramAsNumber}${mod} ${
 				this.param === "1" ? this.explainName.substring(0, this.explainName.length - 1) : this.explainName

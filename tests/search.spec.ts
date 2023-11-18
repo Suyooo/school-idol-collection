@@ -41,7 +41,10 @@ function numberTest(label: string, expected: [number, number, number], numOffset
 	test(label, async ({ page }) => {
 		for (let i = 0; i < 3; i++) {
 			const number = i + numOffset;
-			const expectedMod = i === 0 ? "" : i === 1 ? "<" : ">";
+			const expectedMod =
+				i === 0 ? ""
+				: i === 1 ? "<"
+				: ">";
 			await test.step("Input: " + expectedMod + number, async () => {
 				const elPre = await page.locator(`b:has-text("${label}") + div > input`);
 				await elPre.fill(number.toString());

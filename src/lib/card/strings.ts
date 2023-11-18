@@ -14,12 +14,12 @@ export function cardName(card: Card, styled: boolean, lang: Language = Language.
 	const quot = styled ? "&quot;" : `"`;
 	const pre = styled ? `<span class="inline-block">${quot}` : `${quot}`;
 	const post = `${quot}`;
-	return card.nameEng === null || lang === Language.JPN
-		? card.nameJpn
+	return card.nameEng === null || lang === Language.JPN ?
+			card.nameJpn
 				.split("／")
 				.map((s) => `${pre}${s}${post}`)
 				.join(styled ? "／</span>" : "／")
-		: card.nameEng
+		:	card.nameEng
 				.split(" / ")
 				.map((s) => `${pre}${s}${post}`)
 				.join(styled ? "&nbsp;/</span> " : " / ");
