@@ -3,7 +3,6 @@ import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import GroupEnum from "$lib/enums/group.js";
 import type { GroupID } from "$lib/enums/group.js";
 import SearchFilterError from "$lib/errors/searchFilterError.js";
-import { escapeForSearch } from "$lib/search/escape.js";
 import AttributeEnum from "../enums/attribute.js";
 import { CardMemberRarity, CardSongRarity } from "../enums/cardRarity.js";
 
@@ -43,7 +42,7 @@ export abstract class SearchFilter1 extends SearchFilter {
 		this.param = param;
 	}
 
-	getUrlPart = () => `${this.key}=${escapeForSearch(this.param)}`;
+	getUrlPart = () => `${this.key}=${encodeURIComponent(this.param)}`;
 	getMapping = () => ({ [this.key]: this.param });
 }
 

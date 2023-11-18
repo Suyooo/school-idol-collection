@@ -1,5 +1,3 @@
-import { escapeForSearch, unescapeForSearch } from "$lib/search/escape.js";
-
 type NumberQueryMod = "" | "+" | "-";
 
 export type SearchUiOptions = {
@@ -187,12 +185,12 @@ export function urlToUiOptions(url: string): SearchUiOptions {
 	const filterQueries = url.split("/");
 
 	for (const filterQuery of filterQueries) {
-		const split = filterQuery.split("=").map((s) => decodeURIComponent(s));
+		const split = filterQuery.split("=");
 
 		if (mapSelectInputReverse.has(filterQuery)) {
 			options[mapSelectInputReverse.get(filterQuery)!] = filterQuery;
 		} else if (mapTextInputReverse.has(split[0])) {
-			options[mapTextInputReverse.get(split[0])!] = unescapeForSearch(split[1]);
+			options[mapTextInputReverse.get(split[0])!] = decodeURIComponent(split[1]);
 		} else if (mapNumberInputReverse.has(split[0])) {
 			options[mapNumberInputReverse.get(split[0])!] = parseInt(split[1]).toString();
 			if (split[1].endsWith("+") || split[1].endsWith("-")) {
@@ -221,7 +219,7 @@ export function uiOptionsToUrl(options: SearchUiOptions): string {
 		if (inputInfo.condition && !inputInfo.condition(options)) continue;
 		const param = options[name];
 		if (!uiOptionIsSet(param)) continue;
-		filters.push(`${inputInfo.urlParam}=${escapeForSearch(param)}`);
+		filters.push(`${inputInfo.urlParam}=${encodeURIComponent(param)}`);
 	}
 
 	// Number with Mod => 1-parameter filter
