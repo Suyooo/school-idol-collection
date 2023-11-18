@@ -105,7 +105,7 @@
 									<Button
 										class="h-6 w-12 px-0"
 										label={`Previous Page`}
-										href={`/search${queryUrl}${data.pagination.page > 2 ? `/page=${data.pagination.page - 1}` : ""}`}
+										href={`/search/${queryUrl}${data.pagination.page > 2 ? `/page=${data.pagination.page - 1}` : ""}`}
 									>
 										<Back />
 									</Button>
@@ -117,7 +117,7 @@
 										class="w-12 px-0"
 										accent={i + 1 === data.pagination.page}
 										label={`Page ${i + 1}`}
-										href={`/search${queryUrl}${i > 0 ? `/page=${i + 1}` : ""}`}
+										href={`/search/${queryUrl}${i > 0 ? `/page=${i + 1}` : ""}`}
 									>
 										{i + 1}
 									</Button>
@@ -128,7 +128,7 @@
 									<Button
 										class="h-6 w-12 px-0"
 										label={`Next Page`}
-										href={`/search${queryUrl}/page=${data.pagination.page + 1}`}
+										href={`/search/${queryUrl}/page=${data.pagination.page + 1}`}
 									>
 										<Go />
 									</Button>

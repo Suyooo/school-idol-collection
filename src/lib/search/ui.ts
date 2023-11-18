@@ -184,7 +184,7 @@ const mapNumberInputReverse: Map<string, keyof SearchUiOptions> = new Map(
 
 export function urlToUiOptions(url: string): SearchUiOptions {
 	const options: { [key: string]: string } = {};
-	const filterQueries = url.substring(1).split("/");
+	const filterQueries = url.split("/");
 
 	for (const filterQuery of filterQueries) {
 		const split = filterQuery.split("=").map((s) => decodeURIComponent(s));

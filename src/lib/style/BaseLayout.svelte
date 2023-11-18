@@ -35,18 +35,18 @@
 			goto(`/card/${entryCardNoToCanonical(quicksearch)}`);
 		} else if (quicksearch.length <= 4 && stringIsInteger(quicksearch)) {
 			// Only digits - probably a card ID, search for that
-			fetch(`/json/search?id=${quicksearch}`).then(async (res) => {
+			fetch(`/json/search/id=${quicksearch}`).then(async (res) => {
 				const cards = (await res.json()).cards;
 				if (cards && cards.length > 0) {
 					goto(`/card/${cards[0].cardNo}`);
 				} else {
 					// No cards with that ID, go to search page to show "no results" text
-					goto(`/search?id=${quicksearch}`);
+					goto(`/search/id=${quicksearch}`);
 				}
 			});
 		} else {
 			// Name search
-			goto(`/search?name=${quicksearch}`);
+			goto(`/search/name=${quicksearch}`);
 		}
 	}
 

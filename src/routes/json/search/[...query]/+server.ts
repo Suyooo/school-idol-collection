@@ -10,7 +10,6 @@ import type { RequestHandler } from "./$types.js";
 const PAGE_SIZE = 60;
 
 export const GET: RequestHandler = (async ({ url, request }) => {
-	console.log(request);
 	const filters: SearchFilter[] = [];
 	let page = 1;
 	let pageSize = PAGE_SIZE;
@@ -71,7 +70,7 @@ export const GET: RequestHandler = (async ({ url, request }) => {
 			totalResults: count,
 			pageSize,
 		},
-		queryUrl: "/" + filters.map((f) => f.getUrlPart()).join("/") + pageSizeQuery,
+		queryUrl: filters.map((f) => f.getUrlPart()).join("/") + pageSizeQuery,
 		queryExplain: filters.map((f) => f.getExplainString()),
 	} as CardSearchResult<false>);
 }) satisfies RequestHandler;

@@ -2090,7 +2090,7 @@ export const _data: { [key: string]: Faq } = {
 				{
 					key: `cards`,
 					question: `Which cards have Skills that require "counting {{red:"Members currently in your Lives"}}"?`,
-					answer: `You can use <a href="/search?skill=Members%20currently%20in%20your%20Lives">the Search function on this site</a> to find all cards affected by this Skill.`,
+					answer: `You can use <a href="/search/skill=Members%20currently%20in%20your%20Lives">the Search function on this site</a> to find all cards affected by this Skill.`,
 				},
 				{
 					key: `samelive`,
@@ -2484,7 +2484,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `What exactly does the [Auto] Skill do?`,
-					answer: `When using the Skills of <a href="/search?skill=Dia-chan">certain cards</a>, the other players get a chance to call Dia {{red:"Dia-chan"}}. If all other players do so, the requirement is met.<br>For example, if {{link:LL08-049}}'s Skill is resolved and all other players call Dia {{red:"Dia-chan"}}, you may ⟪ENTER⟫ one Member without Stars from your Hand, and then draw two cards. If even one of the other players does not call Dia {{red:"Dia-chan"}}, the top card of your Deck is ⟪ENTER⟫ed and no cards are drawn.`,
+					answer: `When using the Skills of <a href="/search/skill=Dia-chan">certain cards</a>, the other players get a chance to call Dia {{red:"Dia-chan"}}. If all other players do so, the requirement is met.<br>For example, if {{link:LL08-049}}'s Skill is resolved and all other players call Dia {{red:"Dia-chan"}}, you may ⟪ENTER⟫ one Member without Stars from your Hand, and then draw two cards. If even one of the other players does not call Dia {{red:"Dia-chan"}}, the top card of your Deck is ⟪ENTER⟫ed and no cards are drawn.`,
 				},
 			],
 		},
@@ -2569,7 +2569,7 @@ export const _data: { [key: string]: Faq } = {
 				{
 					key: `songs`,
 					question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
-					answer: `You can find <a href="/search?azalea&song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/azalea&song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
 				},
 				{
 					key: `dupes`,
@@ -2752,7 +2752,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"CYaRon!"}} Song cards?`,
-					answer: `You can find <a href="/search?cyaron&song">a list of all {{red:"CYaRon!"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/cyaron&song">a list of all {{red:"CYaRon!"}} Song cards here</a>.`,
 				},
 			],
 		},
@@ -2761,7 +2761,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
-					answer: `You can find <a href="/search?azalea&song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/azalea&song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
 				},
 			],
 		},
@@ -2770,7 +2770,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"Guilty Kiss"}} Song cards?`,
-					answer: `You can find <a href="/search?guiltykiss&song">a list of all {{red:"Guilty Kiss"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/guiltykiss&song">a list of all {{red:"Guilty Kiss"}} Song cards here</a>.`,
 				},
 			],
 		},
@@ -3529,7 +3529,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"Guilty Kiss"}} Song cards?`,
-					answer: `You can find <a href="/search?guiltykiss&song">a list of all {{red:"Guilty Kiss"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/guiltykiss&song">a list of all {{red:"Guilty Kiss"}} Song cards here</a>.`,
 				},
 			],
 		},
@@ -3538,7 +3538,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"CYaRon!"}} Song cards?`,
-					answer: `You can find <a href="/search?cyaron&song">a list of all {{red:"CYaRon!"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/cyaron&song">a list of all {{red:"CYaRon!"}} Song cards here</a>.`,
 				},
 			],
 		},
@@ -3547,7 +3547,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
-					answer: `You can find <a href="/search?azalea&song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/azalea&song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
 				},
 			],
 		},

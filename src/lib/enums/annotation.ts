@@ -64,10 +64,10 @@ export default class AnnotationEnum {
 			return "/card/" + cards[0].cardNo;
 		} else {
 			return (
-				"/search?" +
+				"/search/" +
 				this.getSearchFilters(parameter)
 					.map((f) => f.getUrlPart())
-					.join("&")
+					.join("/")
 			);
 		}
 	}
