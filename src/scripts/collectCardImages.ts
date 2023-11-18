@@ -22,10 +22,8 @@ import { cardIsMember } from "$lib/card/types.js";
 		const set = card.cardNo.split("-")[0];
 
 		if (
-			(fs.existsSync(`static/images/cards/${set}/${card.cardNo}-front.gif`) ||
-				fs.existsSync(`static/images/cards/${set}/${card.cardNo}-front.jpg`)) &&
-			(fs.existsSync(`static/images/cards/${set}/${card.cardNo}-back.gif`) ||
-				fs.existsSync(`static/images/cards/${set}/${card.cardNo}-back.jpg`))
+			fs.existsSync(`static/images/cards/${set}/${card.cardNo}-front.${card.imageFileExt}`) &&
+			fs.existsSync(`static/images/cards/${set}/${card.cardNo}-back.${card.imageFileExt}`)
 		) {
 			continue;
 		}
