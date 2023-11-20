@@ -55,6 +55,10 @@ export default class GroupEnum {
 		else return [this.id, ...this.superGroup.toIdsWithSuper()];
 	}
 
+	toIdsWithSubs(): GroupID[] {
+		return GroupEnum.getSubIdsFromId(this.id);
+	}
+
 	static UNKNOWN = new GroupEnum(0, "???");
 	static NONE = new GroupEnum(1, "—");
 	static MUSE = new GroupEnum(2, "µ's");
@@ -70,19 +74,19 @@ export default class GroupEnum {
 
 	static getSubIdsFromId(n: number): GroupID[] {
 		const a = GroupEnum.idMapWithSubs.get(<GroupID>n);
-		if (a === undefined) throw new EnumError("Trigger", "ID (subgroups included)", n);
+		if (a === undefined) throw new EnumError("Group", "ID (subgroups included)", n);
 		else return a.map((g) => g.id);
 	}
 
 	static fromId(n: number): GroupEnum {
 		const a = GroupEnum.idMap.get(<GroupID>n);
-		if (a === undefined) throw new EnumError("Trigger", "ID", n);
+		if (a === undefined) throw new EnumError("Group", "ID", n);
 		else return a;
 	}
 
 	static fromName(s: string): GroupEnum {
 		const a = GroupEnum.nameMap.get(<Name>s);
-		if (a === undefined) throw new EnumError("Trigger", "name", s);
+		if (a === undefined) throw new EnumError("Group", "name", s);
 		else return a;
 	}
 }

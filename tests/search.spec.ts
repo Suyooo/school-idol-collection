@@ -118,7 +118,7 @@ test.describe("UI Options", () => {
 		});
 
 		selectTest("Rarity", ["r", "sr", "hr", "special", "secret", "pr", "n", "ssr"], [3, 1, 3, 1, 1, 1, 1, 1]);
-		selectTest("School Year", ["year=1", "year=2", "year=3"], [1, 3, 7]);
+		selectTest("School Year", ["1", "2", "3"], [1, 3, 7]);
 		numberTest("Cost", [5, 7, 5]);
 		selectTest("Ability", ["noability", "rush", "live", "rushorlive"], [8, 3, 2, 1]);
 		textInputTest("Costume", ["奇跡", "kiseki", "/", "?", "=", "#", "'"], [1, 1, 0, 1, 0, 0, 0]);
@@ -127,8 +127,8 @@ test.describe("UI Options", () => {
 		numberTest("[PURE] Pieces", [10, 11, 1]);
 		numberTest("[COOL] Pieces", [7, 11, 1]);
 		numberTest("[ALL] Pieces", [10, 11, 1]);
-		selectTest("Birthday Bonus", ["nobonus", "bonus"], [11, 1]);
-		selectTest("Idolizable", ["notidolizable", "idolizable"], [11, 1]);
+		selectTest("Birthday Bonus", ["bonus", "nobonus"], [1, 11]);
+		selectTest("Idolizable", ["idolizable", "notidolizable"], [1, 11]);
 	});
 
 	test.describe("Song-only Options", () => {

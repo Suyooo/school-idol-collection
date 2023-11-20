@@ -1,23 +1,15 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import type { SearchUiOptions } from "$lib/search/ui.js";
-	import { urlToUiOptions } from "$lib/search/ui.js";
+	import type { SearchQueryMap } from "$lib/search/types.js";
 	import SearchUi from "./SearchUi.svelte";
 	import PageHeader from "$lib/style/PageHeader.svelte";
 	import type { Snapshot } from "./$types.js";
 
-	let options: SearchUiOptions = {};
+	let query: SearchQueryMap = {};
 
 	export const snapshot: Snapshot = {
-		capture: () => options,
-		restore: (value) => (options = value),
+		capture: () => query,
+		restore: (value) => (query = value),
 	};
-
-	onMount(() => {
-		if (history.state.prefillQueryUrl) {
-			options = urlToUiOptions(history.state.prefillQueryUrl);
-		}
-	});
 </script>
 
 <svelte:head>
@@ -27,6 +19,6 @@
 <PageHeader>Search</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
-		<SearchUi bind:options />
+		<SearchUi bind:query />
 	</div>
 </div>

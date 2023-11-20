@@ -1,6 +1,4 @@
 <script lang="ts">
-	import type { SearchUiOptions } from "$lib/search/ui.js";
-	import { urlToUiOptions } from "$lib/search/ui.js";
 	import type { PageData } from "./$types.js";
 	import SearchUi from "../SearchUi.svelte";
 	import PageHeader from "$lib/style/PageHeader.svelte";
@@ -13,10 +11,12 @@
 	import type CardSearchResult from "$lib/types/cardSearchResult.js";
 	import Go from "$lib/style/icons/Go.svelte";
 	import Back from "$lib/style/icons/Back.svelte";
+	import { urlToQueryMap } from "$lib/search/querymap.js";
+	import type { SearchQueryMap } from "$lib/search/types.js";
 
 	export let data: PageData;
 
-	let options: SearchUiOptions,
+	let query: SearchQueryMap,
 		showOptions: boolean = false;
 
 	function hasResults(data: any): data is CardSearchResult<true> {
@@ -30,7 +30,7 @@
 		updateOptions();
 	}
 	function updateOptions() {
-		options = hasResults(data) ? urlToUiOptions(data.queryUrl) : {};
+		query = hasResults(data) ? urlToQueryMap(data.queryUrl) : {};
 		showOptions = hasError(data);
 	}
 </script>
@@ -73,7 +73,7 @@
 			</div>
 		{/if}
 		<div class:hidden={!showOptions}>
-			<SearchUi bind:options />
+			<SearchUi bind:query />
 		</div>
 	</div>
 </div>

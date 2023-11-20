@@ -16,7 +16,7 @@ import type Link from "$models/skill/link.js";
 import type TranslationPattern from "$models/translation/pattern.js";
 import AnnotationEnum from "$lib/enums/annotation.js";
 import type { ParseNodePrepared } from "$lib/format/format.js";
-import searchQuery from "$lib/search/query.js";
+import searchQuery from "$lib/server/search/query.js";
 
 @Table({
 	modelName: "Skill",
@@ -133,7 +133,7 @@ export class SkillBase extends Model {
 				);
 				const cards = (
 					await (
-						await searchQuery(type.getSearchFilters(parameter), ["viewCardNoOnly"])
+						await searchQuery(type.getSearchQuery(parameter), ["viewCardNoOnly"])
 					).findAll({
 						transaction: options.transaction,
 					})
@@ -159,7 +159,7 @@ export class SkillBase extends Model {
 				);
 				const cards = (
 					await (
-						await searchQuery(type.getSearchFilters(parameter), ["viewCardNoOnly"])
+						await searchQuery(type.getSearchQuery(parameter), ["viewCardNoOnly"])
 					).findAll({
 						transaction: options.transaction,
 					})

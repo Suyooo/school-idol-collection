@@ -1,6 +1,7 @@
 import type { QueryOptions } from "@sequelize/core";
 import type { Sequelize } from "$models/db.js";
 import AttributeEnum from "$lib/enums/attribute.js";
+import CardType from "$lib/enums/cardType.js";
 import MissingTranslationError from "$lib/errors/missingTranslationError.js";
 import NotFoundError from "$lib/errors/notFoundError.js";
 import * as Grammar from "$lib/utils/grammar.js";
@@ -83,9 +84,10 @@ export default class PatternGroupType {
 				async function (DB: Sequelize | null, match: string, options?: QueryOptions) {
 					if (DB === null) return "EXAMPLE MEMORY";
 					const n = (
-						await DB.m.Card.withScope(["filterMemories", "viewForLink"]).findOne({
+						await DB.m.Card.withScope("viewForLink").findOne({
 							...options,
 							where: {
+								type: CardType.MEMORY,
 								nameJpn: match,
 							},
 						})

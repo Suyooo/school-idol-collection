@@ -1,7 +1,6 @@
 import { json } from "@sveltejs/kit";
-import type Card from "$models/card/card.js";
 import AnnotationEnum from "$lib/enums/annotation.js";
-import searchQuery from "$lib/search/query.js";
+import searchQuery from "$lib/server/search/query.js";
 import type { CheckResult } from "../+server.js";
 import type { RequestHandler } from "./$types.js";
 
@@ -15,8 +14,8 @@ export const POST: RequestHandler = (async ({ locals, request }) => {
 	const eng = annotationEng.substring(key.length + 3, annotationEng.length - 2);
 
 	const [jpnCards, engCards] = await Promise.all([
-		(await searchQuery(annotation.getSearchFilters(jpn), ["viewCardNoOnly"])).findAll(),
-		(await searchQuery(annotation.getSearchFilters(eng), ["viewCardNoOnly"])).findAll(),
+		(await searchQuery(annotation.getSearchQuery(jpn), ["viewCardNoOnly"])).findAll(),
+		(await searchQuery(annotation.getSearchQuery(eng), ["viewCardNoOnly"])).findAll(),
 	]);
 
 	const jpnCardNos = new Set(jpnCards.map((c) => c.cardNo));

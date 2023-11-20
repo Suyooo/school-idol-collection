@@ -1,61 +1,33 @@
 import { error, json } from "@sveltejs/kit";
 import type Card from "$models/card/card.js";
-import SearchFilterError from "$lib/errors/searchFilterError.js";
-import SearchFilter, { getSearchFilterConstructor } from "$lib/search/filters.js";
-import searchQuery from "$lib/search/query.js";
+import type SearchFilterError from "$lib/errors/searchFilterError.js";
+import { queryMapToUrl, urlToQueryMap } from "$lib/search/querymap.js";
+import type { SearchQueryMap } from "$lib/search/types.js";
+import { type SearchFilter, queryMapToFilterList } from "$lib/server/search/filters.js";
+import searchQuery from "$lib/server/search/query.js";
 import type CardSearchResult from "$lib/types/cardSearchResult.js";
 import type { RequestHandler } from "./$types.js";
 
-const PAGE_SIZE = 60;
+const DEFAULT_PAGE_SIZE = 60;
 
 export const GET: RequestHandler = (async ({ url }) => {
-	const filters: SearchFilter[] = [];
-	let page = 1;
-	let pageSize = PAGE_SIZE;
-	let pageSizeQuery = "";
-
+	// Use url instead of params.query to keep escaped characters, cut off origin and "/json/search/"
+	let query: SearchQueryMap;
 	try {
-		// Use url instead of params.query to keep escaped characters, cut off origin and "/json/search/"
-		const query = url.toString().substring(url.origin.length + 13);
-
-		for (const filter of query.split("/")) {
-			const trim = filter.trim();
-			if (trim.length === 0) continue;
-			const [key, ...rest] = trim.split("=");
-			if (key.length === 0) throw error(400, { message: `"${trim}" is missing a filter name` });
-			const param = decodeURIComponent(rest.join("="));
-
-			if (key === "page") {
-				page = parseInt(param);
-				if (isNaN(page)) {
-					throw error(400, { message: "Parameter for page is not a number" });
-				}
-				continue;
-			}
-			if (key === "pagesize") {
-				pageSize = parseInt(param);
-				if (isNaN(pageSize)) {
-					throw error(400, { message: "Parameter for pageSize is not a number" });
-				}
-				pageSizeQuery = "/pagesize=" + pageSize;
-				continue;
-			}
-			filters.push(new (getSearchFilterConstructor(key))(param));
-		}
+		query = urlToQueryMap(url.toString().substring(url.origin.length + 13));
 	} catch (e) {
-		if (e instanceof SearchFilterError) {
-			throw error(400, { message: e.message });
-		} else {
-			throw e;
-		}
+		throw error(400, { message: (e as SearchFilterError).message });
 	}
+	const page = query.page ?? 1;
+	const pageSize = query.pagesize ?? DEFAULT_PAGE_SIZE;
 
+	const filters: SearchFilter[] = queryMapToFilterList(query);
 	if (filters.length === 0) {
 		throw error(400, { message: "No search filters specified" });
 	}
 
-	const query = await searchQuery(filters, ["viewForLink", "viewRarity", "orderCardNo"]);
-	const { count, rows } = await query.findAndCountAll({
+	const scope = await searchQuery(filters, ["viewForLink", "viewRarity", "orderCardNo"]);
+	const { count, rows } = await scope.findAndCountAll({
 		offset: (page - 1) * pageSize,
 		limit: pageSize,
 	});
@@ -67,7 +39,7 @@ export const GET: RequestHandler = (async ({ url }) => {
 			totalResults: count,
 			pageSize,
 		},
-		queryUrl: filters.map((f) => f.getUrlPart()).join("/") + pageSizeQuery,
-		queryExplain: filters.map((f) => f.getExplainString()),
+		queryUrl: queryMapToUrl(query) + (pageSize !== DEFAULT_PAGE_SIZE ? `/pagesize=${pageSize}` : ""),
+		queryExplain: filters.map((f) => f.explain),
 	} as CardSearchResult<false>);
 }) satisfies RequestHandler;

@@ -47,10 +47,3 @@ export default class CardMemberGroup extends Model {
 	})
 	declare skills: Skill[];
 }
-
-export function addScopes(sequelize: Sequelize) {
-	// TODO: move to decorators once @Scope is implemented
-	CardMemberGroup.addScope("filterHasSkill", () => ({
-		include: [{ model: sequelize.m.Skill, required: true }],
-	}));
-}

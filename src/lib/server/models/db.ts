@@ -1,14 +1,13 @@
 import { env } from "$env/dynamic/private";
 import mariadb from "mariadb";
 import { Sequelize as OrigSequelize } from "@sequelize/core";
-import type { ModelStatic, Options } from "@sequelize/core";
+import type { ModelStatic } from "@sequelize/core";
 import type Card from "$models/card/card.js";
 import { CardBase } from "$models/card/card.js";
 import { addScopes as addScopesCardBase } from "$models/card/card.js";
 import CardFAQLink from "$models/card/faqLink.js";
 import CardMemberExtraInfo from "$models/card/memberExtraInfo.js";
 import CardMemberGroup from "$models/card/memberGroup.js";
-import { addScopes as addScopesCardMemberGroup } from "$models/card/memberGroup.js";
 import CardMemberIdolizePieceExtraInfo from "$models/card/memberIdolizePieceExtraInfo.js";
 import CardSongAnyReqExtraInfo from "$models/card/songAnyReqExtraInfo.js";
 import CardSongAttrReqExtraInfo from "$models/card/songAttrReqExtraInfo.js";
@@ -22,7 +21,7 @@ import { SkillBase } from "$models/skill/skill.js";
 import TranslationName from "$models/translation/name.js";
 import TranslationPattern from "$models/translation/pattern.js";
 import TranslationSong from "$models/translation/song.js";
-import { addScopes as addScopesSearch } from "$lib/search/scopes.js";
+import { addScopes as addScopesSearch } from "$lib/server/search/scopes.js";
 
 // Order is important - this is the order tables are imported and data is imported
 // So tables that have foreign keys must be sorted after the tables they reference
@@ -70,7 +69,6 @@ const sequelize = new OrigSequelize(
 
 async function addScopes(sq: Sequelize) {
 	addScopesCardBase(sq);
-	addScopesCardMemberGroup(sq);
 	addScopesSearch(sq);
 }
 

@@ -1,19 +1,19 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import type { SearchUiOptions } from "$lib/search/ui.js";
-	import { uiOptionsToUrl } from "$lib/search/ui.js";
-	import { uppercaseFirst } from "$lib/utils/string.js";
+	import { queryMapToUrl } from "$lib/search/querymap.js";
+	import type { SearchQueryMap } from "$lib/search/types.js";
 	import Button from "$lib/style/Button.svelte";
-	import SearchOptionSelect from "./SearchOptionSelect.svelte";
-	import SearchOptionNumberMod from "./SearchOptionNumberMod.svelte";
+	import SearchOptionNumberFixedSelect from "./SearchOptionNumberFixedSelect.svelte";
+	import SearchOptionTextOptions from "./SearchOptionTextOptions.svelte";
+	import SearchOptionNumberCond from "./SearchOptionNumberCond.svelte";
 	import Piece from "$lib/format/Piece.svelte";
 	import AttributeEnum from "$lib/enums/attribute.js";
-	import SearchOptionText from "./SearchOptionText.svelte";
+	import SearchOptionTextFree from "./SearchOptionTextFree.svelte";
 
-	export let options: SearchUiOptions;
+	export let query: SearchQueryMap;
 
-	function query() {
-		const url = uiOptionsToUrl(options);
+	function submit() {
+		const url = queryMapToUrl(query);
 		if (url.length > 0) {
 			goto("/search/" + url);
 		}
@@ -22,188 +22,185 @@
 
 <div class="flex items-start max-lg:flex-col">
 	<div class="grid flex-grow basis-0 grid-cols-[1fr,3fr] items-center gap-2 lg:pr-4">
-		<SearchOptionText bind:value={options.cardName}>{uppercaseFirst(options.cardType || "Card")} Name</SearchOptionText>
+		<SearchOptionTextFree bind:value={query.name}>Card Name</SearchOptionTextFree>
 
-		<SearchOptionSelect
-			bind:value={options.group}
-			options={[
-				["muse", "µ's"],
-				["aqours", "Aqours"],
-				["printemps", "Printemps"],
-				["lilywhite", "lily white"],
-				["bibi", "BiBi"],
-				["cyaron", "CYaRon!"],
-				["azalea", "AZALEA"],
-				["guiltykiss", "Guilty Kiss"],
-				["saintsnow", "Saint Snow"],
-			]}
+		<SearchOptionTextOptions
+			key="group"
+			bind:value={query.group}
+			options={{
+				muse: "µ's",
+				aqours: "Aqours",
+				printemps: "Printemps",
+				lilywhite: "lily white",
+				bibi: "BiBi",
+				cyaron: "CYaRon!",
+				azalea: "AZALEA",
+				guiltykiss: "Guilty Kiss",
+				saintsnow: "Saint Snow",
+			}}
 		>
 			Group
-		</SearchOptionSelect>
+		</SearchOptionTextOptions>
 
-		<SearchOptionSelect
-			bind:value={options.cardType}
-			options={[
-				["member", "Member"],
-				["song", "Song"],
-				["memory", "Memory"],
-			]}
+		<SearchOptionTextOptions
+			key="type"
+			bind:value={query.type}
+			options={{
+				member: "Member",
+				song: "Song",
+				memory: "Memory",
+			}}
 		>
 			Card Type
-		</SearchOptionSelect>
+		</SearchOptionTextOptions>
 
-		<SearchOptionText bind:value={options.cardSet}>Card Set</SearchOptionText>
+		<SearchOptionTextFree bind:value={query.set}>Card Set</SearchOptionTextFree>
 
-		<SearchOptionText bind:value={options.skillText}>Skill Text</SearchOptionText>
+		<SearchOptionTextFree bind:value={query.skill}>Skill Text</SearchOptionTextFree>
 	</div>
 	<div class="mt-4 grid flex-grow basis-0 grid-cols-[1fr,3fr] items-center gap-2 lg:mt-0 lg:pl-4">
-		{#if options.cardType === "member"}
-			<SearchOptionSelect
-				bind:value={options.memberRarity}
-				options={[
-					["r", "R"],
-					["sr", "SR"],
-					["hr", "HR"],
-					["special", "Special"],
-					["secret", "Secret"],
-					["pr", "PR"],
-					["n", "N"],
-					["ssr", "SSR"],
-				]}
+		{#if query["type"] === "member"}
+			<SearchOptionTextOptions
+				key="memberrarity"
+				bind:value={query.memberrarity}
+				options={{
+					r: "R",
+					sr: "SR",
+					hr: "HR",
+					special: "Special",
+					secret: "Secret",
+					pr: "PR",
+					n: "N",
+					ssr: "SSR",
+				}}
 			>
 				Rarity
-			</SearchOptionSelect>
+			</SearchOptionTextOptions>
 
-			<SearchOptionSelect
-				bind:value={options.memberYear}
-				options={[
-					["year=1", "1st Year"],
-					["year=2", "2nd Year"],
-					["year=3", "3nd Year"],
-				]}
+			<SearchOptionNumberFixedSelect
+				bind:value={query.year}
+				options={{
+					1: "1st Year",
+					2: "2nd Year",
+					3: "3nd Year",
+				}}
 			>
 				School Year
-			</SearchOptionSelect>
+			</SearchOptionNumberFixedSelect>
 
-			<SearchOptionNumberMod bind:value={options.memberCost} bind:valueMod={options.memberCostMod} max={3}>
-				Cost
-			</SearchOptionNumberMod>
+			<SearchOptionNumberCond bind:value={query.cost} max={3}>Cost</SearchOptionNumberCond>
 
-			<SearchOptionSelect
-				bind:value={options.memberAbility}
-				options={[
-					["noability", "None"],
-					["rush", "[RUSH]"],
-					["live", "[LIVE]"],
-					["rushorlive", "[RUSH/LIVE]"],
-				]}
+			<SearchOptionTextOptions
+				key="ability"
+				bind:value={query.ability}
+				options={{
+					noability: "None",
+					rush: "[RUSH]",
+					live: "[LIVE]",
+					rushorlive: "[RUSH/LIVE]",
+				}}
 			>
 				Ability
-			</SearchOptionSelect>
+			</SearchOptionTextOptions>
 
-			<SearchOptionText bind:value={options.memberCostume}>Costume</SearchOptionText>
+			<SearchOptionTextFree bind:value={query.costume}>Costume</SearchOptionTextFree>
 
-			<SearchOptionNumberMod bind:value={options.memberPieces} bind:valueMod={options.memberPiecesMod} max={4}>
-				Total Pieces
-			</SearchOptionNumberMod>
+			<SearchOptionNumberCond bind:value={query.pieces} max={4}>Total Pieces</SearchOptionNumberCond>
 
-			<SearchOptionNumberMod
-				bind:value={options.memberPiecesSmile}
-				bind:valueMod={options.memberPiecesSmileMod}
-				max={4}
-			>
+			<SearchOptionNumberCond bind:value={query.smilepieces} max={4}>
 				<Piece attr={AttributeEnum.SMILE} /> Pieces
-			</SearchOptionNumberMod>
+			</SearchOptionNumberCond>
 
-			<SearchOptionNumberMod bind:value={options.memberPiecesPure} bind:valueMod={options.memberPiecesPureMod} max={4}>
+			<SearchOptionNumberCond bind:value={query.purepieces} max={4}>
 				<Piece attr={AttributeEnum.PURE} /> Pieces
-			</SearchOptionNumberMod>
+			</SearchOptionNumberCond>
 
-			<SearchOptionNumberMod bind:value={options.memberPiecesCool} bind:valueMod={options.memberPiecesCoolMod} max={4}>
+			<SearchOptionNumberCond bind:value={query.coolpieces} max={4}>
 				<Piece attr={AttributeEnum.COOL} /> Pieces
-			</SearchOptionNumberMod>
+			</SearchOptionNumberCond>
 
-			<SearchOptionNumberMod bind:value={options.memberPiecesAll} bind:valueMod={options.memberPiecesAllMod} max={4}>
+			<SearchOptionNumberCond bind:value={query.allpieces} max={4}>
 				<Piece attr={AttributeEnum.ALL} /> Pieces
-			</SearchOptionNumberMod>
+			</SearchOptionNumberCond>
 
-			<SearchOptionSelect
-				bind:value={options.memberPieceBonus}
-				options={[
-					["nobonus", "No"],
-					["bonus", "Yes"],
-				]}
+			<SearchOptionTextOptions
+				key="bonus"
+				bind:value={query.bonus}
+				options={{
+					bonus: "Yes",
+					nobonus: "No",
+				}}
 			>
 				Birthday Bonus
-			</SearchOptionSelect>
+			</SearchOptionTextOptions>
 
-			<SearchOptionSelect
-				bind:value={options.memberIdolizable}
-				options={[
-					["notidolizable", "No"],
-					["idolizable", "Yes"],
-				]}
+			<SearchOptionTextOptions
+				key="idolizable"
+				bind:value={query.idolizable}
+				options={{
+					idolizable: "Yes",
+					notidolizable: "No",
+				}}
 			>
 				Idolizable
-			</SearchOptionSelect>
-		{:else if options.cardType === "song"}
-			<SearchOptionSelect
-				bind:value={options.songRarity}
-				options={[
-					["m", "M"],
-					["gr", "GR"],
-				]}
+			</SearchOptionTextOptions>
+		{:else if query["type"] === "song"}
+			<SearchOptionTextOptions
+				key="songrarity"
+				bind:value={query.songrarity}
+				options={{
+					m: "M",
+					gr: "GR",
+				}}
 			>
 				Rarity
-			</SearchOptionSelect>
+			</SearchOptionTextOptions>
 
-			<SearchOptionSelect
-				bind:value={options.songAttribute}
-				options={[
-					["neutral", "Neutral"],
-					["smile", "Smile"],
-					["pure", "Pure"],
-					["cool", "Cool"],
-					["orange", "Orange"],
-				]}
+			<SearchOptionTextOptions
+				key="attribute"
+				bind:value={query.attribute}
+				options={{
+					neutral: "Neutral",
+					smile: "Smile",
+					pure: "Pure",
+					cool: "Cool",
+					orange: "Orange",
+				}}
 			>
 				Attribute
-			</SearchOptionSelect>
+			</SearchOptionTextOptions>
 
-			<SearchOptionNumberMod bind:value={options.songLivePoints} bind:valueMod={options.songLivePointsMod}>
-				Base Live Points
-			</SearchOptionNumberMod>
+			<SearchOptionNumberCond bind:value={query.livepoints}>Base Live Points</SearchOptionNumberCond>
 
-			<SearchOptionSelect
-				bind:value={options.songRequirementType}
-				options={[
-					["anypiece", "Any Piece Requirement"],
-					["attributepiece", "Attribute Piece Requirement"],
-				]}
+			<SearchOptionTextOptions
+				key="requirementtype"
+				bind:value={query.requirementtype}
+				options={{
+					anypiece: "Any Piece Requirement",
+					attributepiece: "Attribute Piece Requirement",
+				}}
 			>
 				Requirement
-			</SearchOptionSelect>
+			</SearchOptionTextOptions>
 
-			{#if options.songRequirementType === "anypiece"}
-				<SearchOptionNumberMod bind:value={options.songPiecesAll} bind:valueMod={options.songPiecesAllMod}>
-					Required Pieces
-				</SearchOptionNumberMod>
-			{:else if options.songRequirementType === "attributepiece"}
-				<SearchOptionNumberMod bind:value={options.songPiecesSmile} bind:valueMod={options.songPiecesSmileMod}>
+			{#if query.requirementtype === "anypiece"}
+				<SearchOptionNumberCond bind:value={query.required}>Required Pieces</SearchOptionNumberCond>
+			{:else if query.requirementtype === "attributepiece"}
+				<SearchOptionNumberCond bind:value={query.smilerequired}>
 					Required <Piece attr={AttributeEnum.SMILE} /> Pieces
-				</SearchOptionNumberMod>
+				</SearchOptionNumberCond>
 
-				<SearchOptionNumberMod bind:value={options.songPiecesPure} bind:valueMod={options.songPiecesPureMod}>
+				<SearchOptionNumberCond bind:value={query.purerequired}>
 					Required <Piece attr={AttributeEnum.PURE} /> Pieces
-				</SearchOptionNumberMod>
+				</SearchOptionNumberCond>
 
-				<SearchOptionNumberMod bind:value={options.songPiecesCool} bind:valueMod={options.songPiecesCoolMod}>
+				<SearchOptionNumberCond bind:value={query.coolrequired}>
 					Required <Piece attr={AttributeEnum.COOL} /> Pieces
-				</SearchOptionNumberMod>
+				</SearchOptionNumberCond>
 			{:else}
 				<div class="col-span-full mt-2.5 self-start">Select a Requirement Type to show additional search options.</div>
 			{/if}
-		{:else if options.cardType === "memory"}
+		{:else if query["type"] === "memory"}
 			<div class="col-span-full mt-2.5 self-start">Memory cards have no additional search options.</div>
 		{:else}
 			<div class="col-span-full mt-2.5 self-start">Select a Card Type to show additional search options.</div>
@@ -211,5 +208,5 @@
 	</div>
 </div>
 <div class="mt-2 flex w-full items-center justify-end">
-	<Button label="Search" accent on:click={query}>Search</Button>
+	<Button label="Search" accent on:click={submit}>Search</Button>
 </div>

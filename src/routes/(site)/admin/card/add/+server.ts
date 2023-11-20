@@ -23,7 +23,8 @@ import { CardMemberRarity, CardSongRarity } from "$lib/enums/cardRarity.js";
 import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import CardType from "$lib/enums/cardType.js";
 import ImportError from "$lib/errors/importError.js";
-import { getScopesFromFilters } from "$lib/search/query.js";
+import { queryMapToFilterList } from "$lib/server/search/filters.js";
+import { getScopesFromFilters } from "$lib/server/search/query.js";
 import { appendTriggersToString, tryAllPatterns } from "$lib/translation/skills.js";
 import type { RangeCost, RangeDay, RangeMonth, RangeYear } from "$lib/types/ranges.js";
 import type { RequestHandler } from "./$types.js";
@@ -549,7 +550,7 @@ async function importCard(
 		// Find any already existing annotations that now link to this new card
 		for (const annotation of await DB.m.Annotation.findAll({ transaction })) {
 			const type = AnnotationEnum.fromId(annotation.type);
-			const scopes = getScopesFromFilters(type.getSearchFilters(annotation.parameter));
+			const scopes = getScopesFromFilters(queryMapToFilterList(type.getSearchQuery(annotation.parameter)));
 			if (
 				(
 					await DB.m.Card.withScope(scopes).findAll({

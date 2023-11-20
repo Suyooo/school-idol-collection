@@ -231,16 +231,4 @@ export function addScopes(sequelize: Sequelize) {
 	CardBase.addScope("filterSet", (set) => ({
 		where: { cardNo: { [Op.like]: set + "-%" } },
 	}));
-	CardBase.addScope("filterMembers", () => ({
-		where: { type: CardType.MEMBER },
-	}));
-	CardBase.addScope("filterSongs", () => ({
-		where: { type: CardType.SONG },
-	}));
-	CardBase.addScope("filterMemories", () => ({
-		where: { type: CardType.MEMORY },
-	}));
-	CardBase.addScope("filterHasSkill", () => ({
-		include: [{ model: sequelize.m.Skill, required: true }],
-	}));
 }

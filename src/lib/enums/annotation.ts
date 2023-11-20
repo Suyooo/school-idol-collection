@@ -3,14 +3,8 @@ import type Annotation from "$models/skill/annotation.js";
 import type { AttributeID } from "$lib/enums/attribute.js";
 import Language from "$lib/enums/language.js";
 import EnumError from "$lib/errors/enumError.js";
-import SearchFilter, {
-	SearchFilterCardID,
-	SearchFilterCostume,
-	SearchFilterMemory,
-	SearchFilterName,
-	SearchFilterSkill,
-	SearchFilterSong,
-} from "$lib/search/filters.js";
+import { queryMapToUrl } from "$lib/search/querymap.js";
+import type { SearchQueryMap } from "$lib/search/types.js";
 
 type Key = "card" | "song" | "mem" | "costume" | "skilltext";
 export type AnnotationID = 0 | 1 | 2 | 3 | 4;
@@ -18,7 +12,7 @@ export type AnnotationID = 0 | 1 | 2 | 3 | 4;
 export default class AnnotationEnum {
 	readonly id: AnnotationID;
 	readonly key: Key;
-	readonly getSearchFilters: (parameter: string) => SearchFilter[];
+	readonly getSearchQuery: (parameter: string) => SearchQueryMap;
 	private readonly getLinkTargetOverride?: (parameter: string, cards: Card[]) => string;
 	private readonly getLinkLabelOverride?: (parameter: string, cards: Card[], lang: Language) => string;
 
@@ -31,13 +25,13 @@ export default class AnnotationEnum {
 		id: AnnotationID,
 		key: Key,
 		showBacklink: boolean,
-		getSearchFilters: (parameter: string) => SearchFilter[],
+		getSearchQuery: (parameter: string) => SearchQueryMap,
 		getLinkTargetOverride?: (parameter: string, cards: Card[]) => string,
 		getLinkLabelOverride?: (parameter: string, cards: Card[], lang: Language) => string
 	) {
 		this.id = id;
 		this.key = key;
-		this.getSearchFilters = getSearchFilters;
+		this.getSearchQuery = getSearchQuery;
 		this.getLinkTargetOverride = getLinkTargetOverride;
 		this.getLinkLabelOverride = getLinkLabelOverride;
 
@@ -63,12 +57,7 @@ export default class AnnotationEnum {
 		} else if (cards.length === 1) {
 			return "/card/" + cards[0].cardNo;
 		} else {
-			return (
-				"/search/" +
-				this.getSearchFilters(parameter)
-					.map((f) => f.getUrlPart())
-					.join("/")
-			);
+			return "/search/" + queryMapToUrl(this.getSearchQuery(parameter));
 		}
 	}
 
@@ -76,7 +65,7 @@ export default class AnnotationEnum {
 		0,
 		"card",
 		true,
-		(parameter) => [new SearchFilterCardID(parameter)],
+		(parameter) => ({ id: parseInt(parameter) }),
 		(_parameter, cards) => "/card/" + cards[0].cardNo,
 		(_parameter, cards, lang: Language) => {
 			let name;
@@ -88,16 +77,10 @@ export default class AnnotationEnum {
 			return cards[0].id + " " + name;
 		}
 	);
-	static SONG = new AnnotationEnum(1, "song", true, (parameter) => [
-		new SearchFilterSong(),
-		new SearchFilterName(parameter),
-	]);
-	static MEM = new AnnotationEnum(2, "mem", true, (parameter) => [
-		new SearchFilterMemory(),
-		new SearchFilterName(parameter),
-	]);
-	static COSTUME = new AnnotationEnum(3, "costume", true, (parameter) => [new SearchFilterCostume(parameter)]);
-	static SKILLTEXT = new AnnotationEnum(4, "skilltext", false, (parameter) => [new SearchFilterSkill(parameter)]);
+	static SONG = new AnnotationEnum(1, "song", true, (parameter) => ({ type: "song", name: parameter }));
+	static MEM = new AnnotationEnum(2, "mem", true, (parameter) => ({ type: "memory", name: parameter }));
+	static COSTUME = new AnnotationEnum(3, "costume", true, (parameter) => ({ costume: parameter }));
+	static SKILLTEXT = new AnnotationEnum(4, "skilltext", false, (parameter) => ({ skill: parameter }));
 
 	static fromId(n: number): AnnotationEnum {
 		const a = AnnotationEnum.idMap.get(<AttributeID>n);
