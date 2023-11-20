@@ -2569,7 +2569,7 @@ export const _data: { [key: string]: Faq } = {
 				{
 					key: `songs`,
 					question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
-					answer: `You can find <a href="/search/azalea&song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/azalea/song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
 				},
 				{
 					key: `dupes`,
@@ -2752,7 +2752,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"CYaRon!"}} Song cards?`,
-					answer: `You can find <a href="/search/cyaron&song">a list of all {{red:"CYaRon!"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/cyaron/song">a list of all {{red:"CYaRon!"}} Song cards here</a>.`,
 				},
 			],
 		},
@@ -2761,7 +2761,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
-					answer: `You can find <a href="/search/azalea&song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/azalea/song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
 				},
 			],
 		},
@@ -2770,7 +2770,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"Guilty Kiss"}} Song cards?`,
-					answer: `You can find <a href="/search/guiltykiss&song">a list of all {{red:"Guilty Kiss"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/guiltykiss/song">a list of all {{red:"Guilty Kiss"}} Song cards here</a>.`,
 				},
 			],
 		},
@@ -3529,7 +3529,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"Guilty Kiss"}} Song cards?`,
-					answer: `You can find <a href="/search/guiltykiss&song">a list of all {{red:"Guilty Kiss"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/guiltykiss/song">a list of all {{red:"Guilty Kiss"}} Song cards here</a>.`,
 				},
 			],
 		},
@@ -3538,7 +3538,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"CYaRon!"}} Song cards?`,
-					answer: `You can find <a href="/search/cyaron&song">a list of all {{red:"CYaRon!"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/cyaron/song">a list of all {{red:"CYaRon!"}} Song cards here</a>.`,
 				},
 			],
 		},
@@ -3547,7 +3547,7 @@ export const _data: { [key: string]: Faq } = {
 			qa: [
 				{
 					question: `Which Song cards are {{red:"AZALEA"}} Song cards?`,
-					answer: `You can find <a href="/search/azalea&song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
+					answer: `You can find <a href="/search/azalea/song">a list of all {{red:"AZALEA"}} Song cards here</a>.`,
 				},
 			],
 		},

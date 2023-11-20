@@ -22,16 +22,14 @@
 	function hasResults(data: any): data is CardSearchResult<true> {
 		return data.hasOwnProperty("cards");
 	}
-	function hasError(data: any): data is { error: string } {
-		return data.hasOwnProperty("error");
-	}
+
 	$: {
 		data;
 		updateOptions();
 	}
 	function updateOptions() {
 		query = hasResults(data) ? urlToQueryMap(data.queryUrl) : {};
-		showOptions = hasError(data);
+		showOptions = false;
 	}
 </script>
 
@@ -40,14 +38,6 @@
 </svelte:head>
 
 <PageHeader>Search</PageHeader>
-{#if hasError(data)}
-	<div class="panel error mb-4">
-		<div class="panel-inner">
-			<b>Error in Search Query:</b>
-			{data.error}
-		</div>
-	</div>
-{/if}
 <div class="panel mb-4">
 	<div class="panel-inner pb-0">
 		{#if hasResults(data)}

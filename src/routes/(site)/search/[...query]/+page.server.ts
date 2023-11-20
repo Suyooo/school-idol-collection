@@ -8,11 +8,7 @@ export const load: PageServerLoad = (async ({ fetch, url }) => {
 	const res = await fetch(`/json${url.pathname}`);
 	if (!res.ok) {
 		const json = await res.json();
-		if (json) {
-			return { error: json.message };
-		} else {
-			throw error(res.status, res.statusText);
-		}
+		throw error(res.status, json ? json.message : res.statusText);
 	}
 
 	return addPreparse(await res.json()) as CardSearchResult<true>;
