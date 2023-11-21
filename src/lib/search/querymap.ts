@@ -39,9 +39,37 @@ const isKeyReal = (s: string): s is KeysReal =>
 const isURLKey = (s: string): s is KeysURL =>
 	isKeyTextOptionsParam(s) || isKeyTextFree(s) || isKeyNumberFixed(s) || isKeyNumberCond(s) || isKeyPseudo(s);
 
-function queryMapSorter(a: KeysReal, b: KeysReal) {
-	// TODO: sensible sort
-	return a.localeCompare(b);
+const filterOrder: string[] = [
+	"id",
+	"group",
+	"type",
+	"name",
+	"set",
+	"skill",
+	"memberrarity",
+	"year",
+	"cost",
+	"ability",
+	"costume",
+	"pieces",
+	"allpieces",
+	"smilepieces",
+	"purepieces",
+	"coolpieces",
+	"bonus",
+	"idolizable",
+	"songrarity",
+	"attribute",
+	"livepoints",
+	"requirementtype",
+	"required",
+	"smilerequired",
+	"purerequired",
+	"coolrequired",
+];
+
+export function queryMapSorter(a: KeysReal, b: KeysReal) {
+	return filterOrder.indexOf(a) - filterOrder.indexOf(b);
 }
 
 export function removePseudoFilters(k: KeysAll) {

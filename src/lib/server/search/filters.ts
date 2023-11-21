@@ -4,7 +4,7 @@ import { CardMemberRarity, CardSongRarity } from "$lib/enums/cardRarity.js";
 import CardSongRequirementType from "$lib/enums/cardSongRequirementType.js";
 import CardType from "$lib/enums/cardType.js";
 import GroupEnum from "$lib/enums/group.js";
-import { removePseudoFilters } from "$lib/search/querymap.js";
+import { queryMapSorter, removePseudoFilters } from "$lib/search/querymap.js";
 import {
 	type KeysAll,
 	type KeysNumberCond,
@@ -21,9 +21,9 @@ import {
 import { ordinal } from "$lib/utils/grammar.js";
 
 export function queryMapToFilterList(query: SearchQueryMap): SearchFilter[] {
-	return ((Object.keys(query) as KeysAll[]).filter(removePseudoFilters) as KeysReal[]).map((k) =>
-		makeSearchFilter(k, query[k]!)
-	);
+	return ((Object.keys(query) as KeysAll[]).filter(removePseudoFilters) as KeysReal[])
+		.sort(queryMapSorter)
+		.map((k) => makeSearchFilter(k, query[k]!));
 }
 
 export function filterListToQueryMap(filters: SearchFilter[]): SearchQueryMap {
@@ -139,14 +139,14 @@ const generators: { [K in KeysText]: SearchFilterGenerator<KeysText> } & {
 
 	// Member
 	memberrarity: generatorTextOptions("memberrarity", "searchMemberRarity", {
-		r: ["R", CardMemberRarity.R],
-		sr: ["SR", CardMemberRarity.SR],
-		hr: ["HR", CardMemberRarity.HR],
-		special: ["Special", CardMemberRarity.Special],
-		secret: ["Secret", CardMemberRarity.Secret],
-		pr: ["PR", CardMemberRarity.PR],
-		n: ["N", CardMemberRarity.N],
-		ssr: ["SSR", CardMemberRarity.SSR],
+		r: ["Rarity R", CardMemberRarity.R],
+		sr: ["Rarity SR", CardMemberRarity.SR],
+		hr: ["Rarity HR", CardMemberRarity.HR],
+		special: ["Rarity Special", CardMemberRarity.Special],
+		secret: ["Rarity Secret", CardMemberRarity.Secret],
+		pr: ["Rarity PR", CardMemberRarity.PR],
+		n: ["Rarity N", CardMemberRarity.N],
+		ssr: ["Rarity SSR", CardMemberRarity.SSR],
 	}),
 	year: generatorMatch("year", "searchYear", (p) => `${ordinal(p)} Year`),
 	cost: generatorNumberCond("cost", "$member.cost$", false, "Cost", false, {
@@ -208,8 +208,8 @@ const generators: { [K in KeysText]: SearchFilterGenerator<KeysText> } & {
 
 	// Song
 	songrarity: generatorTextOptions("songrarity", "searchSongRarity", {
-		m: ["M", CardSongRarity.M],
-		gr: ["GR", CardSongRarity.GR],
+		m: ["Rarity M", CardSongRarity.M],
+		gr: ["Rarity GR", CardSongRarity.GR],
 	}),
 	attribute: generatorTextOptions("attribute", "searchAttribute", {
 		neutral: ["Neutral", AttributeEnum.ALL.id],
