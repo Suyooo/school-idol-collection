@@ -8,7 +8,6 @@
 	import Collapse from "$lib/style/icons/Collapse.svelte";
 	import Expand from "$lib/style/icons/Expand.svelte";
 	import CardGridElement from "$lib/style/CardGridElement.svelte";
-	import type CardSearchResult from "$lib/types/cardSearchResult.js";
 	import Go from "$lib/style/icons/Go.svelte";
 	import Back from "$lib/style/icons/Back.svelte";
 	import { urlToQueryMap } from "$lib/search/querymap.js";

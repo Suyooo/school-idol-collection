@@ -131,54 +131,64 @@ export default {
 				}),
 				dark: dark({
 					background: {
-						DEFAULT: colors.slate[900],
-						content: colors.slate[800],
-						panel: colors.slate[700],
-						grid: colors.slate[600],
-						highlight: colors.slate[500],
-						header: colors.slate[700],
+						DEFAULT: colors.slate[950],
+						accent: colors.cyan[700],
+						panel: colors.slate[800],
+						grid: colors.cyan[950],
+						highlight: colors.cyan[500],
 					},
 					text: {
 						DEFAULT: colors.white,
+						contrast: colors.black,
 						subtle: colors.slate[400],
-						header: colors.pink[400],
-						cardid: colors.slate[100],
-						rarity: colors.pink[300],
+						header: {
+							frame: colors.cyan[50],
+							breadcrumb: colors.cyan[100],
+							intext: colors.pink[400],
+						},
+						cardid: {
+							DEFAULT: colors.slate[200],
+							hover: colors.slate[50],
+						},
+						rarity: {
+							DEFAULT: colors.pink[300],
+							hover: colors.pink[100],
+						},
 					},
 					link: {
 						DEFAULT: colors.pink[400],
 						hover: colors.pink[200],
 					},
 					button: {
-						background: colors.slate[700],
-						text: colors.slate[100],
+						background: colors.cyan[700],
+						text: colors.cyan[50],
 						hover: {
-							background: colors.slate[500],
+							background: colors.cyan[700],
 							text: colors.white,
 						},
-						pressed: colors.slate[300],
+						pressed: colors.cyan[500],
 						disabled: {
-							background: colors.slate[950],
-							text: colors.slate[500],
+							background: colors.slate[600],
+							text: colors.slate[400],
 						},
 						accent: {
-							background: colors.pink[600],
-							text: colors.pink[100],
+							background: colors.pink[700],
+							text: colors.pink[50],
 							hover: {
-								background: colors.pink[400],
+								background: colors.pink[600],
 								text: colors.white,
 							},
-							pressed: colors.pink[200],
+							pressed: colors.pink[300],
 							disabled: {
-								background: colors.pink[950],
-								text: colors.pink[500],
+								background: colors.stone[600],
+								text: colors.stone[400],
 							},
 						},
 						header: {
-							background: colors.slate[500],
+							background: colors.cyan[500],
 							text: colors.white,
 							hover: {
-								background: colors.slate[400],
+								background: colors.cyan[400],
 							},
 						},
 					},
@@ -193,9 +203,9 @@ export default {
 						blue: "#ccddff",
 					},
 					input: {
-						background: colors.slate[900],
-						border: colors.slate[500],
-						placeholder: colors.slate[400],
+						background: colors.cyan[900],
+						border: colors.cyan[700],
+						placeholder: colors.cyan[500],
 						disabled: {
 							background: colors.slate[700],
 							text: colors.slate[400],
@@ -207,7 +217,7 @@ export default {
 						background: colors.red[700],
 					},
 					table: {
-						border: colors.slate[300],
+						border: colors.cyan[500],
 					},
 					faq: {
 						question: colors.pink[400],
@@ -229,7 +239,7 @@ export default {
 				}),
 			}),
 			{
-				defaultTheme: "light",
+				defaultTheme: "dark",
 			}
 		),
 	],
