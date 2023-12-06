@@ -1,5 +1,7 @@
 <script lang="ts">
-	import HowToPlay from "$lib/style/icons/home/HowToPlay.svelte";
+	import HowToPlay from "$lib/style/icons/biglink/HowToPlay.svelte";
+	import ExtraRules from "$lib/style/icons/biglink/ExtraRules.svelte";
+	import FAQ from "$lib/style/icons/biglink/FAQ.svelte";
 	import BigLink from "$lib/style/BigLink.svelte";
 	import PageHeader from "$lib/style/PageHeader.svelte";
 </script>
@@ -33,14 +35,14 @@
 	</div>
 	<div class="panel h-full">
 		<div class="panel-inner">
-			<BigLink href="/faq/rules-extra" class="mb-2"><HowToPlay slot="icon" /> Extra Rules Info</BigLink>
+			<BigLink href="/faq/rules-extra" class="mb-2"><ExtraRules slot="icon" /> Extra Rules Info</BigLink>
 			Details on Idolization, Pairs/Trios and Memories &ndash; new game mechanics, which were introduced in later card sets.
 			Also, some optional rules and official event rules!
 		</div>
 	</div>
 	<div class="panel h-full">
 		<div class="panel-inner">
-			<BigLink href="/faq/general" class="mb-2"><HowToPlay slot="icon" /> FAQ</BigLink>
+			<BigLink href="/faq/general" class="mb-2"><FAQ slot="icon" /> FAQ</BigLink>
 			Frequently asked questions and answers about the general game rules. If you have questions about specific cards, make
 			sure to also check the Per-Set FAQ below!
 		</div>
@@ -48,9 +50,10 @@
 </div>
 <div class="panel">
 	<div class="panel-inner">
-		<h2>Per-Set FAQ</h2>
+		<h2>Frequently Asked Questions</h2>
 		<ul>
-			<li><a href="/faq/LL01">LL01 Frequently Asked Questions</a></li>
+			<li><a href="/faq/general">Frequently Asked Questions about the Rules</a></li>
+			<li class="mt-4"><a href="/faq/LL01">LL01 Frequently Asked Questions</a></li>
 			<li><a href="/faq/LL02">LL02 Frequently Asked Questions</a></li>
 			<li><a href="/faq/LL03">LL03 Frequently Asked Questions</a></li>
 			<li><a href="/faq/LL04">LL04 Frequently Asked Questions</a></li>

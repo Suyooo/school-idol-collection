@@ -2,10 +2,10 @@
 	import { Splide, SplideSlide } from "@splidejs/svelte-splide";
 	import "@splidejs/svelte-splide/css";
 	import Search from "$lib/style/icons/Search.svelte";
-	import CardList from "$lib/style/icons/home/CardList.svelte";
-	import HowToPlay from "$lib/style/icons/home/HowToPlay.svelte";
-	import More from "$lib/style/icons/home/More.svelte";
-	import Print from "$lib/style/icons/home/Print.svelte";
+	import CardList from "$lib/style/icons/biglink/CardList.svelte";
+	import HowToPlay from "$lib/style/icons/biglink/HowToPlay.svelte";
+	import ExternalLink from "$lib/style/icons/biglink/ExternalLink.svelte";
+	import Print from "$lib/style/icons/biglink/Print.svelte";
 	import type { PageServerData } from "./$types.js";
 	import SetGridElement from "$lib/style/SetGridElement.svelte";
 	import CardGridElement from "$lib/style/CardGridElement.svelte";
@@ -98,7 +98,7 @@
 				<BigLink href="/search"><Search slot="icon" /> Search for Cards</BigLink>
 				<BigLink href="/labels"><Print slot="icon" /> Print Labels</BigLink>
 				<BigLink href="https://lovelive-sic.com/" target="_blank">
-					<More slot="icon" />
+					<ExternalLink slot="icon" />
 					<svelte:fragment slot="primary">Visit the Official Site</svelte:fragment>
 					<svelte:fragment slot="secondary">(Japanese, External Link)</svelte:fragment>
 				</BigLink>
