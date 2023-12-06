@@ -6,7 +6,7 @@
 	export { extraClasses as class };
 </script>
 
-<a {href} {target} class="button {extraClasses}">
+<a {href} {target} class="button {extraClasses}" data-theme="light">
 	<div><slot name="icon" /></div>
 	{#if $$slots.primary}
 		<div>

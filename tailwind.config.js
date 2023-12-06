@@ -47,7 +47,7 @@ export default {
 						contrast: colors.white,
 						subtle: colors.slate[400],
 						header: {
-							frame: colors.cyan[900],
+							DEFAULT: colors.cyan[900],
 							breadcrumb: colors.cyan[600],
 							intext: colors.pink[800],
 						},
@@ -108,7 +108,7 @@ export default {
 						blue: "#0000ee",
 					},
 					input: {
-						background: colors.cyan[100],
+						background: colors.sky[100],
 						border: colors.cyan[300],
 						placeholder: colors.cyan[500],
 						disabled: {
@@ -133,8 +133,8 @@ export default {
 					background: {
 						DEFAULT: colors.slate[950],
 						accent: colors.cyan[700],
-						panel: colors.slate[800],
-						grid: colors.cyan[950],
+						panel: colors.cyan[950],
+						grid: colors.cyan[900],
 						highlight: colors.cyan[500],
 					},
 					text: {
@@ -142,8 +142,8 @@ export default {
 						contrast: colors.black,
 						subtle: colors.slate[400],
 						header: {
-							frame: colors.cyan[50],
-							breadcrumb: colors.cyan[100],
+							DEFAULT: colors.cyan[50],
+							breadcrumb: colors.cyan[200],
 							intext: colors.pink[400],
 						},
 						cardid: {
@@ -151,13 +151,13 @@ export default {
 							hover: colors.slate[50],
 						},
 						rarity: {
-							DEFAULT: colors.pink[300],
-							hover: colors.pink[100],
+							DEFAULT: colors.pink[200],
+							hover: colors.pink[50],
 						},
 					},
 					link: {
-						DEFAULT: colors.pink[400],
-						hover: colors.pink[200],
+						DEFAULT: colors.pink[300],
+						hover: colors.pink[100],
 					},
 					button: {
 						background: colors.cyan[700],
@@ -172,10 +172,10 @@ export default {
 							text: colors.slate[400],
 						},
 						accent: {
-							background: colors.pink[700],
+							background: colors.pink[600],
 							text: colors.pink[50],
 							hover: {
-								background: colors.pink[600],
+								background: colors.pink[500],
 								text: colors.white,
 							},
 							pressed: colors.pink[300],
@@ -203,11 +203,11 @@ export default {
 						blue: "#ccddff",
 					},
 					input: {
-						background: colors.cyan[900],
+						background: colors.slate[900],
 						border: colors.cyan[700],
 						placeholder: colors.cyan[500],
 						disabled: {
-							background: colors.slate[700],
+							background: colors.cyan[950],
 							text: colors.slate[400],
 						},
 					},
@@ -221,7 +221,7 @@ export default {
 					},
 					faq: {
 						question: colors.pink[400],
-						answer: colors.slate[400],
+						answer: colors.cyan[400],
 					},
 				}),
 				print: light({

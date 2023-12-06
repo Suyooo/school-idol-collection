@@ -102,30 +102,28 @@
 				</div>
 			</div>
 			<div class="buttons" class:open={menuExpanded}>
-				<Button href="/list" label="Card List" class="!text-base !tracking-widest" header>Card List</Button>
-				<Button href="/faq" label="How To Play" class="!text-base !tracking-widest" header>How To Play</Button>
-				<Button href="/search" label="Card Search" class="!text-base !tracking-widest" header>Card Search</Button>
-				<Button href="/labels" label="Label Printer" class="!text-base !tracking-widest" header>Label Printer</Button>
-				<Button href="/about" label="About This Site" class="!text-base !tracking-widest" header>
-					About This Site
-				</Button>
+				<Button href="/list" label="Card List" header>Card List</Button>
+				<Button href="/faq" label="How To Play" header>How To Play</Button>
+				<Button href="/search" label="Card Search" header>Card Search</Button>
+				<Button href="/labels" label="Label Printer" header>Label Printer</Button>
+				<Button href="/about" label="About This Site" header>About This Site</Button>
+				{#if import.meta.env.DEV}
+					<Button accent href="/admin" label="Admin">Admin</Button>
+				{/if}
 			</div>
 		</div>
 		<div class="rightside">
-			{#if import.meta.env.DEV}
-				<Button accent href="/admin" label="Admin">Admin</Button>
-			{/if}
-			<div class="flex items-center gap-x-1">
+			<button class="text-text-header flex items-center gap-x-1" on:click={changeTheme} title="Toggle Light/Dark Theme">
 				<ThemeLight></ThemeLight>
-				<button class="relative box-content h-5 w-10 rounded-full border-2 text-text" on:click={changeTheme}>
+				<div class="border-text-header relative box-content h-5 w-10 rounded-full border-2">
 					<div
-						class="absolute top-0.5 h-4 w-4 rounded-full bg-text"
+						class="bg-text-header absolute top-0.5 h-4 w-4 rounded-full"
 						class:left-0.5={theme !== "dark"}
 						class:right-0.5={theme === "dark"}
 					></div>
-				</button>
+				</div>
 				<ThemeDark></ThemeDark>
-			</div>
+			</button>
 			<form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
 				<input
 					placeholder="Quick Search (Card No., ID or Name)"
@@ -175,7 +173,7 @@
 					@apply flex flex-col flex-wrap items-center gap-x-4 gap-y-2 sm:flex-row;
 
 					& :global(a) {
-						@apply hidden;
+						@apply hidden !text-base !tracking-widest;
 
 						&:nth-child(-n + 1) {
 							@apply md:block;

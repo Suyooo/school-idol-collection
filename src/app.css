@@ -60,11 +60,11 @@ a:not(.button) {
 
 h1,
 .header1 {
-	@apply mb-4 w-full rounded-xl bg-background-accent py-1 pl-4 text-2xl font-bold uppercase tracking-widest text-text-header-frame;
+	@apply text-text-header mb-4 w-full rounded-xl bg-background-accent py-1 pl-4 text-2xl font-bold uppercase tracking-widest;
 }
 
 h2 {
-	@apply -mx-4 -mt-4 mb-3 bg-background-accent pb-0.5 pl-4 text-lg font-bold uppercase tracking-widest text-text-header-frame;
+	@apply text-text-header -mx-4 -mt-4 mb-3 bg-background-accent pb-0.5 pl-4 text-lg font-bold uppercase tracking-widest;
 }
 
 h3 {

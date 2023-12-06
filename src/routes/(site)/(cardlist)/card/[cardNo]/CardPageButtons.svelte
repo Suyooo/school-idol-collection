@@ -30,7 +30,7 @@
 	}
 
 	.buttons > div :global(a),
-	.buttons > div :global(div) {
+	.buttons > div :global(button) {
 		@apply flex-shrink-0 flex-grow basis-0 text-center lg:flex-grow-0;
 	}
 </style>

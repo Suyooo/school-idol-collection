@@ -28,7 +28,7 @@
 			@apply flex items-center text-text-header-breadcrumb;
 
 			& > a {
-				@apply text-base tracking-wide text-text-header-breadcrumb no-underline hover:text-text-header-frame hover:underline;
+				@apply hover:text-text-header text-base tracking-wide text-text-header-breadcrumb no-underline hover:underline;
 			}
 
 			& > span {

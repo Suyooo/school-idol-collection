@@ -20,8 +20,8 @@
 	}
 </script>
 
-<div class="flex items-start max-lg:flex-col">
-	<div class="grid flex-grow basis-0 grid-cols-[1fr,3fr] items-center gap-2 lg:pr-4">
+<div class="flex items-start gap-x-8 max-lg:flex-col">
+	<div class="grid w-full flex-grow basis-0 grid-cols-[1fr,3fr] items-center gap-2">
 		<SearchOptionTextFree bind:value={query.name}>Card Name</SearchOptionTextFree>
 
 		<SearchOptionTextOptions
@@ -58,7 +58,7 @@
 
 		<SearchOptionTextFree bind:value={query.skill}>Skill Text</SearchOptionTextFree>
 	</div>
-	<div class="mt-4 grid flex-grow basis-0 grid-cols-[1fr,3fr] items-center gap-2 lg:mt-0 lg:pl-4">
+	<div class="grid w-full flex-grow basis-0 grid-cols-[1fr,3fr] items-center gap-2 max-lg:mt-12">
 		{#if query["type"] === "member"}
 			<SearchOptionTextOptions
 				key="memberrarity"
@@ -201,9 +201,9 @@
 				<div class="col-span-full mt-2.5 self-start">Select a Requirement Type to show additional search options.</div>
 			{/if}
 		{:else if query["type"] === "memory"}
-			<div class="col-span-full mt-2.5 self-start">Memory cards have no additional search options.</div>
+			<div class="col-span-full self-start lg:mt-2.5">Memory cards have no additional search options.</div>
 		{:else}
-			<div class="col-span-full mt-2.5 self-start">Select a Card Type to show additional search options.</div>
+			<div class="col-span-full self-start lg:mt-2.5">Select a Card Type to show additional search options.</div>
 		{/if}
 	</div>
 </div>
