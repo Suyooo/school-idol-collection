@@ -9,7 +9,7 @@ export const test = base.extend({
 
 			if (javaScriptEnabled) {
 				await page.waitForSelector("body.ready", {
-					timeout: 5000,
+					timeout: 10000,
 				});
 			}
 

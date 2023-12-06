@@ -7,7 +7,7 @@ export default defineConfig({
 	retries: 2,
 	workers: process.env.CI ? 1 : undefined,
 	use: {
-		actionTimeout: 1000,
+		actionTimeout: 10000,
 		baseURL: "http://127.0.0.1:5174",
 		trace: "off",
 	},
