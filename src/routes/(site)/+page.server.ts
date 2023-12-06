@@ -1,8 +1,7 @@
-import { error } from "@sveltejs/kit";
 import type Card from "$models/card/card.js";
 import type { PageServerLoad } from "./$types.js";
 
-const latestCardNo = "PR-271";
+const latestCardNo = "PR-272";
 const latestSetId = "LL17";
 const latestSetCardNos = [
 	[10, 9],
