@@ -143,7 +143,7 @@ export default {
 						subtle: colors.slate[400],
 						header: {
 							DEFAULT: colors.cyan[50],
-							breadcrumb: colors.cyan[200],
+							breadcrumb: colors.sky[200],
 							intext: colors.pink[400],
 						},
 						cardid: {

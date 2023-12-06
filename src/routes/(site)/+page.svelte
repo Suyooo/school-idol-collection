@@ -32,7 +32,7 @@
 				<div class="flippable-set-element">
 					<SetGridElement set={data.latestSet} />
 				</div>
-				<div class="col-span-2 overflow-hidden rounded">
+				<div class="splide">
 					{#if mountData}
 						<Splide
 							options={{
@@ -135,6 +135,27 @@
 		& :global(span),
 		& :global(img) {
 			@apply opacity-0;
+		}
+	}
+
+	.splide {
+		@apply col-span-2 overflow-hidden rounded;
+
+		& :global(.splide__arrow) {
+			@apply top-[calc(50%_-_1.25rem)] bg-background-accent opacity-100;
+			& :global(svg) {
+				@apply fill-text-header-breadcrumb;
+			}
+		}
+
+		& :global(.splide__pagination) {
+			@apply bottom-14 flex justify-end;
+			& :global(.splide__pagination__page) {
+				@apply bg-background-accent opacity-100;
+			}
+			& :global(.splide__pagination__page.is-active) {
+				@apply bg-text-header-breadcrumb;
+			}
 		}
 	}
 </style>
