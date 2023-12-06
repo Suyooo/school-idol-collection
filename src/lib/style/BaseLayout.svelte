@@ -10,6 +10,8 @@
 	import Menu from "$lib/style/icons/Menu.svelte";
 	import Search from "$lib/style/icons/Search.svelte";
 	import Spinner from "$lib/style/icons/Spinner.svelte";
+	import ThemeLight from "$lib/style/icons/ThemeLight.svelte";
+	import ThemeDark from "$lib/style/icons/ThemeDark.svelte";
 	import { navigating } from "$app/stores";
 
 	let menuExpanded: boolean = false,
@@ -54,6 +56,13 @@
 		if (e.key === "Alt") {
 			isAltDown = e.type === "keydown";
 		}
+	}
+
+	let theme: string = (typeof localStorage === "undefined" ? null : localStorage)?.getItem("sic-theme") || "light";
+	function changeTheme() {
+		theme = document.body.dataset.theme === "dark" ? "light" : "dark";
+		localStorage.setItem("sic-theme", theme);
+		document.body.dataset.theme = theme;
 	}
 
 	if (import.meta.env.DEV) {
@@ -102,24 +111,37 @@
 				</Button>
 			</div>
 		</div>
-		<form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
+		<div class="rightside">
 			{#if import.meta.env.DEV}
-				<Button accent class="mr-4" href="/admin" label="Admin">Admin</Button>
+				<Button accent href="/admin" label="Admin">Admin</Button>
 			{/if}
-			<input
-				placeholder="Quick Search (Card No., ID or Name)"
-				bind:value={quicksearch}
-				aria-label="Quick Search. Enter a card number, ID or name"
-				disabled={searching}
-			/>
-			<button disabled={quicksearch === "" || searching} aria-label="Submit Quick Search">
-				{#if searching}
-					<Spinner />
-				{:else}
-					<Search />
-				{/if}
-			</button>
-		</form>
+			<div class="flex items-center gap-x-1">
+				<ThemeLight></ThemeLight>
+				<button class="relative box-content h-5 w-10 rounded-full border-2 text-text" on:click={changeTheme}>
+					<div
+						class="absolute top-0.5 h-4 w-4 rounded-full bg-text"
+						class:left-0.5={theme !== "dark"}
+						class:right-0.5={theme === "dark"}
+					></div>
+				</button>
+				<ThemeDark></ThemeDark>
+			</div>
+			<form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
+				<input
+					placeholder="Quick Search (Card No., ID or Name)"
+					bind:value={quicksearch}
+					aria-label="Quick Search. Enter a card number, ID or name"
+					disabled={searching}
+				/>
+				<button disabled={quicksearch === "" || searching} aria-label="Submit Quick Search">
+					{#if searching}
+						<Spinner />
+					{:else}
+						<Search />
+					{/if}
+				</button>
+			</form>
+		</div>
 	</div>
 </header>
 
@@ -176,15 +198,19 @@
 				}
 			}
 
-			& .quicksearch {
-				@apply relative flex w-full flex-grow items-center sm:justify-end;
+			& .rightside {
+				@apply flex w-full flex-grow items-center gap-x-4 sm:justify-end;
 
-				& input {
-					@apply w-full pr-9 sm:max-w-sm;
-				}
+				& .quicksearch {
+					@apply relative min-w-[20rem];
 
-				& button {
-					@apply absolute right-2;
+					& input {
+						@apply w-full pr-9 sm:max-w-sm;
+					}
+
+					& button {
+						@apply absolute bottom-0 right-2 top-0;
+					}
 				}
 			}
 		}

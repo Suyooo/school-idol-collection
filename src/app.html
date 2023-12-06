@@ -6,7 +6,12 @@
 		<meta name="viewport" content="width=device-width" />
 		%sveltekit.head%
 	</head>
-	<body data-sveltekit-preload-data="hover" data-theme="dark">
+	<body data-sveltekit-preload-data="hover">
+		<script>
+			if (typeof localStorage !== "undefined") {
+				document.body.dataset.theme = localStorage.getItem("sic-theme") || "light";
+			}
+		</script>
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>
