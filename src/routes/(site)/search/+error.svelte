@@ -21,6 +21,8 @@
 	<title>Search &bull; SIC</title>
 </svelte:head>
 
+<PageHeader>Search</PageHeader>
+
 <div class="panel error mb-4">
 	<div class="panel-inner">
 		<b>Error in Search Query:</b>
@@ -28,7 +30,6 @@
 	</div>
 </div>
 
-<PageHeader>Search</PageHeader>
 <div class="panel">
 	<div class="panel-inner">
 		{#key loadedFromSnapshot}
