@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Go from "$lib/style/icons/Go.svelte";
+
 	export let href: string;
 	export let title: string;
 	export let extraInfoLeft: string | null = null;
@@ -11,7 +13,7 @@
 		<slot />
 	</div>
 	<div class="namecont">
-		<span>⏵</span><span>{@html title}</span>
+		<span><Go /></span><span>{@html title}</span>
 	</div>
 	{#if extraInfoLeft !== null}
 		<div class="linecont">
