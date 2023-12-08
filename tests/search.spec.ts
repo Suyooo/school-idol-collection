@@ -2,7 +2,7 @@ import { expect } from "@playwright/test";
 import { test } from "./test.js";
 
 function textInputTest(label: string, inputs: string[], expected: number[]) {
-	test(label, async ({ page }) => {
+	test(label, async ({ page, javaScriptEnabled }) => {
 		await expect(inputs, "Ensure special characters are tested").toContain("?");
 		await expect(inputs, "Ensure special characters are tested").toContain("#");
 		await expect(inputs, "Ensure special characters are tested").toContain("/");
@@ -15,7 +15,8 @@ function textInputTest(label: string, inputs: string[], expected: number[]) {
 				await elPre.fill(inputs[i]);
 				await (await page.$(`button:text-is("Search")`))!.click();
 
-				await page.waitForSelector(`body.ready`, { timeout: 5000 });
+				if (javaScriptEnabled) await page.waitForSelector(`body.ready`, { timeout: 10000 });
+				else await page.waitForLoadState();
 				await (await page.$(`button:has-text("Change Search Query")`))!.click();
 				const elPost = await page.locator(`:has-text("${label}") + input`);
 				await expect(await elPost.inputValue()).toBe(inputs[i]);
@@ -32,7 +33,7 @@ function textInputTest(label: string, inputs: string[], expected: number[]) {
 }
 
 function selectTest(label: string, options: string[], expected: number[]) {
-	test(label, async ({ page }) => {
+	test(label, async ({ page, javaScriptEnabled }) => {
 		const optionCount = (await page.locator(`b:has-text("${label}") + select > option`).count()) - 1;
 		await expect(new Set(options).size, "Ensure every option is tested").toBe(optionCount);
 
@@ -42,7 +43,8 @@ function selectTest(label: string, options: string[], expected: number[]) {
 				await elPre.selectOption({ index: i + 1 });
 				await (await page.$(`button:text-is("Search")`))!.click();
 
-				await page.waitForSelector(`body.ready`, { timeout: 5000 });
+				if (javaScriptEnabled) await page.waitForSelector(`body.ready`, { timeout: 10000 });
+				else await page.waitForLoadState();
 				await (await page.$(`button:has-text("Change Search Query")`))!.click();
 				const elPost = await page.locator(`:has-text("${label}") + select`);
 				expect(await elPost.inputValue()).toBe(options[i]);
@@ -59,7 +61,7 @@ function selectTest(label: string, options: string[], expected: number[]) {
 }
 
 function numberTest(label: string, expected: [number, number, number], numOffset: number = 0) {
-	test(label, async ({ page }) => {
+	test(label, async ({ page, javaScriptEnabled }) => {
 		for (let i = 0; i < 3; i++) {
 			const number = i + numOffset;
 			const expectedMod =
@@ -73,7 +75,8 @@ function numberTest(label: string, expected: [number, number, number], numOffset
 				await elModPre.selectOption({ index: i });
 				await (await page.$(`button:text-is("Search")`))!.click();
 
-				await page.waitForSelector(`body.ready`, { timeout: 5000 });
+				if (javaScriptEnabled) await page.waitForSelector(`body.ready`, { timeout: 10000 });
+				else await page.waitForLoadState();
 				await (await page.$(`button:has-text("Change Search Query")`))!.click();
 				const elPost = await page.locator(`:has-text("${label}") + div > input`);
 				expect(await elPost.inputValue()).toBe(number.toString());
@@ -112,9 +115,15 @@ test.describe("UI Options", () => {
 	textInputTest("Skill Text", ["メンバー", "Member", "/", "?", "=", "#", "'"], [12, 14, 1, 1, 0, 0, 3]);
 
 	test.describe("Member-only Options", () => {
-		test.beforeEach(async ({ page }) => {
+		test.beforeEach(async ({ page, javaScriptEnabled }) => {
 			await page.selectOption(`:text-is("Card Type") + select`, "member");
-			await page.waitForSelector(`:text-is("Rarity")`);
+			if (javaScriptEnabled) {
+				await page.waitForSelector(`:text-is("Rarity")`);
+			} else {
+				await (await page.$(`button:text-is("Search")`))!.click();
+				await page.waitForLoadState();
+				await (await page.$(`button:has-text("Change Search Query")`))!.click();
+			}
 		});
 
 		selectTest("Rarity", ["r", "sr", "hr", "special", "secret", "pr", "n", "ssr"], [3, 1, 3, 1, 1, 1, 1, 1]);
@@ -132,9 +141,15 @@ test.describe("UI Options", () => {
 	});
 
 	test.describe("Song-only Options", () => {
-		test.beforeEach(async ({ page }) => {
+		test.beforeEach(async ({ page, javaScriptEnabled }) => {
 			await page.selectOption(`:text-is("Card Type") + select`, "song");
-			await page.waitForSelector(`:text-is("Rarity")`);
+			if (javaScriptEnabled) {
+				await page.waitForSelector(`:text-is("Rarity")`);
+			} else {
+				await (await page.$(`button:text-is("Search")`))!.click();
+				await page.waitForLoadState();
+				await (await page.$(`button:has-text("Change Search Query")`))!.click();
+			}
 		});
 
 		selectTest("Rarity", ["m", "gr"], [10, 1]);
@@ -143,18 +158,30 @@ test.describe("UI Options", () => {
 		selectTest("Requirement", ["anypiece", "attributepiece"], [3, 8]);
 
 		test.describe("Any-only Options", () => {
-			test.beforeEach(async ({ page }) => {
+			test.beforeEach(async ({ page, javaScriptEnabled }) => {
 				await page.selectOption(`:text("Requirement") + select`, "Any Piece Requirement");
-				await page.waitForSelector(`:text("Required Pieces")`);
+				if (javaScriptEnabled) {
+					await page.waitForSelector(`:text("Required Pieces")`);
+				} else {
+					await (await page.$(`button:text-is("Search")`))!.click();
+					await page.waitForLoadState();
+					await (await page.$(`button:has-text("Change Search Query")`))!.click();
+				}
 			});
 
 			numberTest("Required Pieces", [1, 2, 1], 11);
 		});
 
 		test.describe("Attr-only Options", () => {
-			test.beforeEach(async ({ page }) => {
+			test.beforeEach(async ({ page, javaScriptEnabled }) => {
 				await page.selectOption(`:text("Requirement") + select`, "Attribute Piece Requirement");
-				await page.waitForSelector(`:text("Required [SMILE] Pieces")`);
+				if (javaScriptEnabled) {
+					await page.waitForSelector(`:text("Required [SMILE] Pieces")`);
+				} else {
+					await (await page.$(`button:text-is("Search")`))!.click();
+					await page.waitForLoadState();
+					await (await page.$(`button:has-text("Change Search Query")`))!.click();
+				}
 			});
 
 			numberTest("Required [SMILE] Pieces", [2, 6, 2], 2);
@@ -164,39 +191,46 @@ test.describe("UI Options", () => {
 	});
 });
 
-test("Pagination", async ({ page }) => {
+test("Pagination", async ({ page, javaScriptEnabled }) => {
 	await page.goto("/search/member/pagesize=4");
 	await expect(await page.$(`a[aria-label="Previous Page"]`)).toBeNull();
 	await test.step("Go to Page 2", async () => {
 		await (await page.$(`a[aria-label="Next Page"]`))!.click();
-		await page.waitForSelector(`body.ready`, { timeout: 5000 });
+		if (javaScriptEnabled) await page.waitForSelector(`body.ready`, { timeout: 10000 });
+		else await page.waitForLoadState();
 	});
 	await test.step("Go to Page 3", async () => {
 		await (await page.$(`a[aria-label="Next Page"]`))!.click();
-		await page.waitForSelector(`body.ready`, { timeout: 5000 });
+		if (javaScriptEnabled) await page.waitForSelector(`body.ready`, { timeout: 10000 });
+		else await page.waitForLoadState();
 		await expect(await page.$(`a[aria-label="Next Page"]`)).toBeNull();
 	});
 	await test.step("Back to Page 2", async () => {
 		await (await page.$(`a[aria-label="Previous Page"]`))!.click();
-		await page.waitForSelector(`body.ready`, { timeout: 5000 });
+		if (javaScriptEnabled) await page.waitForSelector(`body.ready`, { timeout: 10000 });
+		else await page.waitForLoadState();
 	});
 	await test.step("Back to Page 1", async () => {
 		await (await page.$(`a[aria-label="Previous Page"]`))!.click();
-		await page.waitForSelector(`body.ready`, { timeout: 5000 });
+		if (javaScriptEnabled) await page.waitForSelector(`body.ready`, { timeout: 10000 });
+		else await page.waitForLoadState();
 		await expect(await page.$(`a[aria-label="Previous Page"]`)).toBeNull();
 	});
 	await test.step("Jump to Page 3", async () => {
 		await (await page.$(`a[aria-label="Page 3"]`))!.click();
-		await page.waitForSelector(`body.ready`, { timeout: 5000 });
+		if (javaScriptEnabled) await page.waitForSelector(`body.ready`, { timeout: 10000 });
+		else await page.waitForLoadState();
 		await expect(await page.$(`a[aria-label="Next Page"]`)).toBeNull();
 	});
 	await test.step("Jump to Page 2", async () => {
 		await (await page.$(`a[aria-label="Page 2"]`))!.click();
-		await page.waitForSelector(`body.ready`, { timeout: 5000 });
+		if (javaScriptEnabled) await page.waitForSelector(`body.ready`, { timeout: 10000 });
+		else await page.waitForLoadState();
 	});
 	await test.step("Jump to Page 1", async () => {
 		await (await page.$(`a[aria-label="Page 1"]`))!.click();
-		await page.waitForSelector(`body.ready`, { timeout: 5000 });
+		if (javaScriptEnabled) await page.waitForSelector(`body.ready`, { timeout: 10000 });
+		else await page.waitForLoadState();
 		await expect(await page.$(`a[aria-label="Previous Page"]`)).toBeNull();
 	});
 });

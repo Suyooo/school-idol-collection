@@ -68,7 +68,9 @@ test("labels page", async ({ page }) => {
 	await expect(await page.getByText("Label Printer").count()).toBeGreaterThan(0);
 });
 
-test("labels result page", async ({ page, context }) => {
+test("labels result page", async ({ page, context, javaScriptEnabled }) => {
+	test.skip(!javaScriptEnabled, "Labels Printer only works on JavaScript");
+
 	await page.goto("/labels");
 	await page.selectOption("select", "DIN A4");
 	await page.fill("textarea", "LL01-001");

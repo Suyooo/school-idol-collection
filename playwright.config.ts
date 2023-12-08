@@ -14,8 +14,12 @@ export default defineConfig({
 
 	projects: [
 		{
-			name: "firefox",
-			use: { ...devices["Desktop Firefox"] },
+			name: "Firefox JS",
+			use: { ...devices["Desktop Firefox"], javaScriptEnabled: true },
+		},
+		{
+			name: "Firefox NoScript",
+			use: { ...devices["Desktop Firefox"], javaScriptEnabled: false },
 		},
 	],
 
