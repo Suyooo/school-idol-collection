@@ -62,3 +62,27 @@ export type SearchParam<K> =
 	: K extends KeysNumberCond ? KeysNumberCondParam
 	: K extends KeysPseudo ? KeysNumberFixedParam
 	: never;
+
+export const keysMemberOnly: Set<KeysAll> = new Set([
+	"memberrarity",
+	"idolizable",
+	"ability",
+	"bonus",
+	"costume",
+	"cost",
+	"pieces",
+	"allpieces",
+	"smilepieces",
+	"purepieces",
+	"coolpieces",
+]);
+export const keysSongOnly: Set<KeysAll> = new Set([
+	"songrarity",
+	"attribute",
+	"requirementtype",
+	"livepoints",
+	"required",
+	"smilerequired",
+	"purerequired",
+	"coolrequired",
+]);

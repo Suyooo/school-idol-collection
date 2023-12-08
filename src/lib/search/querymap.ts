@@ -11,9 +11,11 @@ import {
 	type KeysURL,
 	SearchNumberCond,
 	type SearchQueryMap,
+	keysMemberOnly,
 	keysNumberCond,
 	keysNumberFixed,
 	keysPseudo,
+	keysSongOnly,
 	keysTextFree,
 	keysTextOptions,
 } from "./types.js";
@@ -76,6 +78,14 @@ export function removePseudoFilters(k: KeysAll) {
 	return isKeyReal(k);
 }
 
+function removeInvalidTypeOnlyKeys(query: SearchQueryMap) {
+	for (const key of Object.keys(query) as KeysAll[]) {
+		if ((keysMemberOnly.has(key) && query.type !== "member") || (keysSongOnly.has(key) && query.type !== "song")) {
+			delete query[key];
+		}
+	}
+}
+
 export function formDataToQueryMap(form: FormData) {
 	const query: SearchQueryMap = {};
 	for (const entry of form.entries()) {
@@ -113,6 +123,8 @@ export function formDataToQueryMap(form: FormData) {
 			}
 		}
 	}
+
+	removeInvalidTypeOnlyKeys(query);
 	return query;
 }
 
@@ -168,10 +180,12 @@ export function urlToQueryMap(url: string): SearchQueryMap {
 		}
 	}
 
+	removeInvalidTypeOnlyKeys(query);
 	return query;
 }
 
 export function queryMapToUrl(query: SearchQueryMap): string {
+	removeInvalidTypeOnlyKeys(query);
 	return ((Object.keys(query) as KeysAll[]).filter(removePseudoFilters) as KeysReal[])
 		.filter((k) => query[k] !== undefined)
 		.sort(queryMapSorter)
