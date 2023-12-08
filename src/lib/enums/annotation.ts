@@ -79,7 +79,7 @@ export default class AnnotationEnum {
 	);
 	static SONG = new AnnotationEnum(1, "song", true, (parameter) => ({ type: "song", name: parameter }));
 	static MEM = new AnnotationEnum(2, "mem", true, (parameter) => ({ type: "memory", name: parameter }));
-	static COSTUME = new AnnotationEnum(3, "costume", true, (parameter) => ({ costume: parameter }));
+	static COSTUME = new AnnotationEnum(3, "costume", true, (parameter) => ({ type: "member", costume: parameter }));
 	static SKILLTEXT = new AnnotationEnum(4, "skilltext", false, (parameter) => ({ skill: parameter }));
 
 	static fromId(n: number): AnnotationEnum {

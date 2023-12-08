@@ -124,7 +124,7 @@
 		<div class="header">Costume</div>
 		<div class="value">
 			{#if card.member.costumeJpn !== null}
-				<a href="/search/costume={encodeURIComponent(card.member.costumeEng ?? card.member.costumeJpn)}">
+				<a href="/search/member/costume={encodeURIComponent(card.member.costumeEng ?? card.member.costumeJpn)}">
 					{card.member.costumeEng ?? card.member.costumeJpn + " (no translation)"}
 				</a>
 			{:else}
