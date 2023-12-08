@@ -56,6 +56,9 @@ const sequelize = new OrigSequelize(
 	:	{
 			dialect: "mariadb",
 			dialectModule: mariadb,
+			dialectOptions: {
+				socketPath: env.DB_SOCKET,
+			},
 			host: env.DB_HOST,
 			username: env.DB_USER,
 			password: env.DB_PASSWORD,
