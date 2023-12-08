@@ -10,9 +10,8 @@
 	import Menu from "$lib/style/icons/Menu.svelte";
 	import Search from "$lib/style/icons/Search.svelte";
 	import Spinner from "$lib/style/icons/Spinner.svelte";
-	import ThemeLight from "$lib/style/icons/ThemeLight.svelte";
-	import ThemeDark from "$lib/style/icons/ThemeDark.svelte";
 	import { navigating } from "$app/stores";
+	import BaseLayoutThemeToggle from "$lib/style/BaseLayoutThemeToggle.svelte";
 
 	let menuExpanded: boolean = false,
 		quicksearch: string = "",
@@ -84,7 +83,8 @@
 		<div class="menu">
 			<div class="top">
 				<a class="logo" href="/">SIC</a>
-				<div class="expand">
+				<div class="topbuttons">
+					<BaseLayoutThemeToggle {theme} {changeTheme} class="sm:hidden" />
 					<div>
 						<Button
 							accent
@@ -113,17 +113,7 @@
 			</div>
 		</div>
 		<div class="rightside">
-			<button class="text-text-header flex items-center gap-x-1" on:click={changeTheme} title="Toggle Light/Dark Theme">
-				<ThemeLight></ThemeLight>
-				<div class="border-text-header relative box-content h-5 w-10 rounded-full border-2">
-					<div
-						class="bg-text-header absolute top-0.5 h-4 w-4 rounded-full"
-						class:left-0.5={theme !== "dark"}
-						class:right-0.5={theme === "dark"}
-					></div>
-				</div>
-				<ThemeDark></ThemeDark>
-			</button>
+			<BaseLayoutThemeToggle {theme} {changeTheme} class="max-sm:hidden" />
 			<form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
 				<input
 					placeholder="Quick Search (Card No., ID or Name)"
@@ -164,8 +154,8 @@
 						@apply cursor-pointer text-3xl leading-10 no-underline;
 					}
 
-					& .expand {
-						@apply flex flex-none sm:px-4;
+					& .topbuttons {
+						@apply flex flex-none items-center gap-x-4 sm:px-4;
 					}
 				}
 
@@ -200,10 +190,10 @@
 				@apply flex w-full flex-grow items-center gap-x-4 sm:justify-end;
 
 				& .quicksearch {
-					@apply relative min-w-[20rem];
+					@apply relative w-full sm:min-w-[20rem] sm:max-w-sm;
 
 					& input {
-						@apply w-full pr-9 sm:max-w-sm;
+						@apply w-full pr-9;
 					}
 
 					& button {
