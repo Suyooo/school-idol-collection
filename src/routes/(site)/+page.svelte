@@ -46,9 +46,7 @@
 							{#each mountData.latestSetCards as slot, i}
 								{@const pick = Math.floor(Math.random() * slot.length)}
 								<SplideSlide>
-									<div class="mb-8 sm:mb-0">
 										<CardGridElement card={slot[pick]} squareCorners />
-									</div>
 								</SplideSlide>
 							{/each}
 						</Splide>
