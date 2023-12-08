@@ -10,13 +10,11 @@
 	import SetGridElement from "$lib/style/SetGridElement.svelte";
 	import CardGridElement from "$lib/style/CardGridElement.svelte";
 	import BigLink from "$lib/style/BigLink.svelte";
-	import { onMount } from "svelte";
+	import { browser } from "$app/environment";
 </script>
 
 <script lang="ts">
 	export let data: PageServerData;
-	let mountData: PageServerData;
-	onMount(() => (mountData = data));
 </script>
 
 <svelte:head>
@@ -28,32 +26,34 @@
 	<div class="panel col-span-2">
 		<div class="panel-inner">
 			<h2 class="mb-4">Newest Set</h2>
-			<div class=" full-img-element grid grid-cols-1 gap-y-2 sm:grid-cols-3 sm:gap-x-4 sm:gap-y-0">
+			<div class="full-img-element grid grid-cols-1 gap-y-2 sm:grid-cols-3 sm:gap-x-4 sm:gap-y-0">
 				<div class="flippable-set-element">
 					<SetGridElement set={data.latestSet} />
 				</div>
-				<div class="splide">
-					{#if mountData}
+				<div class="splide h-[15.75rem]">
+					{#if browser}
 						<Splide
 							options={{
 								label: `Cards from Set ${data.latestSet.id}`,
 								autoplay: true,
-								interval: 3000,
+								interval: 5000,
 								rewind: true,
 								type: "loop",
 							}}
 						>
-							{#each mountData.latestSetCards as slot, i}
-								{@const pick = Math.floor(Math.random() * slot.length)}
+							{#each data.latestSetCards as slot, i}
+								{@const pickIdx = Math.floor(Math.random() * slot.length)}
 								<SplideSlide>
-										<CardGridElement card={slot[pick]} squareCorners />
+									<CardGridElement card={slot[pickIdx]} squareCorners />
 								</SplideSlide>
 							{/each}
 						</Splide>
 					{:else}
-						<div class="empty-card-el">
-							<CardGridElement card={data.latestCard} />
-						</div>
+						{@const slotIdx = Math.floor(Math.random() * data.latestSetCards.length)}
+						{@const pickIdx = Math.floor(Math.random() * data.latestSetCards[slotIdx].length)}
+						<noscript class="w-full">
+							<CardGridElement card={data.latestSetCards[slotIdx][pickIdx]} />
+						</noscript>
 					{/if}
 				</div>
 			</div>
@@ -129,15 +129,9 @@
 			}
 		}
 	}
-	.empty-card-el {
-		& :global(span),
-		& :global(img) {
-			@apply opacity-0;
-		}
-	}
 
 	.splide {
-		@apply col-span-2 overflow-hidden rounded;
+		@apply visible col-span-2 overflow-hidden rounded;
 
 		& :global(.splide__arrow) {
 			@apply top-[calc(50%_-_1.25rem)] bg-background-accent opacity-100;

@@ -17,12 +17,13 @@ export const load: PageServerLoad = (async ({ locals }) => {
 	const DB = await locals.DB;
 
 	if (process.env.SIC_USE_SEARCH_TEST_DB === "1") {
+		const latestCard = await DB.m.Card.withScope(["viewForLink"])
+			.findByPk("LL01-001")
+			.then((r) => r!.get({ plain: true }));
 		return {
-			latestCard: DB.m.Card.withScope(["viewForLink"])
-				.findByPk("LL01-001")
-				.then((r) => r!.get({ plain: true })),
+			latestCard,
 			latestSet: DB.m.Set.findByPk("LL01").then((r) => r!.get({ plain: true })),
-			latestSetCards: [],
+			latestSetCards: [[latestCard]],
 		};
 	}
 
