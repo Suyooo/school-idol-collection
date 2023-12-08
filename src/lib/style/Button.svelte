@@ -27,6 +27,7 @@
 		title={label}
 		aria-label={label}
 		{target}
+		on:click
 	>
 		<slot />
 	</a>

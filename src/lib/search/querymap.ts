@@ -76,6 +76,46 @@ export function removePseudoFilters(k: KeysAll) {
 	return isKeyReal(k);
 }
 
+export function formDataToQueryMap(form: FormData) {
+	const query: SearchQueryMap = {};
+	for (const entry of form.entries()) {
+		const [key, val] = entry as [keyof SearchQueryMap, string];
+		if (val.length === 0) {
+			continue;
+		}
+
+		if (key.endsWith("_cond")) {
+			// Merged with the non-_cond key below, ignore here
+			continue;
+		}
+		if (!isKeyReal(key)) {
+			throw new SearchFilterError("Unknown filter key", key);
+		}
+
+		if (isKeyTextOptions(key) || isKeyTextFree(key)) {
+			query[key] = val;
+		} else {
+			const valAsNumber = parseInt(val);
+
+			if (isNaN(valAsNumber)) {
+				throw new SearchFilterError("Parameter is not a number", `${key}=${val}`);
+			}
+
+			if (isKeyNumberCond(key)) {
+				const param = (form.get(key + "_cond") as string) || "";
+				const paramOp =
+					param.endsWith(SearchNumberCond.LESS_OR_EQUAL) ? SearchNumberCond.LESS_OR_EQUAL
+					: param.endsWith(SearchNumberCond.GREATER_OR_EQUAL) ? SearchNumberCond.GREATER_OR_EQUAL
+					: SearchNumberCond.EQUAL;
+				query[key] = [valAsNumber, paramOp];
+			} else {
+				query[key] = valAsNumber;
+			}
+		}
+	}
+	return query;
+}
+
 export function urlToQueryMap(url: string): SearchQueryMap {
 	const query: SearchQueryMap = {};
 	for (const filter of url.split("/")) {

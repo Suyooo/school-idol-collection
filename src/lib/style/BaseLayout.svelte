@@ -29,7 +29,7 @@
 		quicksearch = "";
 	}
 
-	function doQuicksearch(e: SubmitEvent) {
+	function doQuicksearch() {
 		if (quicksearch === "" || searching) return;
 		searching = true;
 		getUrlForQuicksearchQuery(quicksearch).then((url) => goto(url));

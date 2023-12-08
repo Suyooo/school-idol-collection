@@ -108,7 +108,9 @@
 				</div>
 			</div>
 		</form>
-		<div class="mt-2 flex w-full items-center justify-end">
+
+		<div class="mt-2 flex w-full items-center justify-end gap-x-2">
+			<noscript class="font-bold text-error-text">JavaScript must be enabled for this tool to work.</noscript>
 			<div
 				use:tooltip={{
 					content:

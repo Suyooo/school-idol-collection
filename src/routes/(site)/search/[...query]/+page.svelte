@@ -12,6 +12,7 @@
 	import Back from "$lib/style/icons/Back.svelte";
 	import { urlToQueryMap } from "$lib/search/querymap.js";
 	import type { SearchQueryMap } from "$lib/search/types.js";
+	import { browser } from "$app/environment";
 
 	export let data: PageData;
 
@@ -34,9 +35,9 @@
 </svelte:head>
 
 <PageHeader>Search</PageHeader>
-<div class="panel mb-4">
-	<div class="panel-inner pb-0">
-		<div class="flex items-center" class:mb-4={showOptions}>
+<div class="panel group mb-4">
+	<div class="panel-inner pb-0" tabindex="-1">
+		<div class="flex items-center">
 			<div class="flex-grow font-bold text-text-header-intext">
 				{#each data.queryExplainPreparsed as q, i}
 					{#if i > 0},
@@ -45,7 +46,7 @@
 			</div>
 			<Button
 				class="flex items-center"
-				on:click={() => (showOptions = !showOptions)}
+				on:click={(e) => (e.preventDefault(), (showOptions = !showOptions))}
 				label={showOptions ? "Collapse Search Options" : "Expand Search Options"}
 			>
 				{#if showOptions}
@@ -56,7 +57,7 @@
 				<span class="ml-2">Change Search Query</span>
 			</Button>
 		</div>
-		<div class:hidden={!showOptions}>
+		<div class="mt-4 hidden" class:group-focus-within:!block={!browser} class:!block={showOptions}>
 			<SearchUi bind:query />
 		</div>
 	</div>
