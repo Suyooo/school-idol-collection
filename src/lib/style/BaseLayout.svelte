@@ -3,8 +3,6 @@
 	import { goto as gotoInThisTab } from "$app/navigation";
 	import "svooltip/styles.css";
 	import "../../app.css";
-	import { couldBeEntryCardNo, entryCardNoToCanonical } from "$lib/utils/entry.js";
-	import { stringIsInteger } from "$lib/utils/string.js";
 	import Button from "$lib/style/Button.svelte";
 	import Collapse from "$lib/style/icons/Collapse.svelte";
 	import Menu from "$lib/style/icons/Menu.svelte";
@@ -12,6 +10,9 @@
 	import Spinner from "$lib/style/icons/Spinner.svelte";
 	import { navigating } from "$app/stores";
 	import BaseLayoutThemeToggle from "$lib/style/BaseLayoutThemeToggle.svelte";
+	import { getUrlForQuicksearchQuery } from "$lib/search/quicksearch.js";
+	import type { FormEventHandler } from "svelte/elements";
+	import { browser } from "$app/environment";
 
 	let menuExpanded: boolean = false,
 		quicksearch: string = "",
@@ -28,27 +29,10 @@
 		quicksearch = "";
 	}
 
-	function doQuicksearch() {
+	function doQuicksearch(e: SubmitEvent) {
 		if (quicksearch === "" || searching) return;
 		searching = true;
-		if (couldBeEntryCardNo(quicksearch, false)) {
-			// Card number - go directly to page
-			goto(`/card/${entryCardNoToCanonical(quicksearch)}`);
-		} else if (quicksearch.length <= 4 && stringIsInteger(quicksearch)) {
-			// Only digits - probably a card ID, search for that
-			fetch(`/json/search/id=${quicksearch}`).then(async (res) => {
-				const cards = (await res.json()).cards;
-				if (cards && cards.length > 0) {
-					goto(`/card/${cards[0].cardNo}`);
-				} else {
-					// No cards with that ID, go to search page to show "no results" text
-					goto(`/search/id=${quicksearch}`);
-				}
-			});
-		} else {
-			// Name search
-			goto(`/search/name=${quicksearch}`);
-		}
+		getUrlForQuicksearchQuery(quicksearch).then((url) => goto(url));
 	}
 
 	function updateAltStatus(e: KeyboardEvent) {
@@ -114,14 +98,15 @@
 		</div>
 		<div class="rightside">
 			<BaseLayoutThemeToggle {theme} {changeTheme} class="max-sm:hidden" />
-			<form class="quicksearch" on:submit|preventDefault={doQuicksearch}>
+			<form class="quicksearch" on:submit|preventDefault={doQuicksearch} action="/redirect/quicksearch" method="POST">
 				<input
 					placeholder="Quick Search (Card No., ID or Name)"
 					bind:value={quicksearch}
 					aria-label="Quick Search. Enter a card number, ID or name"
 					disabled={searching}
+					name="query"
 				/>
-				<button disabled={quicksearch === "" || searching} aria-label="Submit Quick Search">
+				<button disabled={browser && (quicksearch === "" || searching)} aria-label="Submit Quick Search">
 					{#if searching}
 						<Spinner />
 					{:else}

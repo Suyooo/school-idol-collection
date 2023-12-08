@@ -239,7 +239,7 @@ export default {
 				}),
 			}),
 			{
-				defaultTheme: "dark",
+				defaultTheme: "light",
 			}
 		),
 	],
