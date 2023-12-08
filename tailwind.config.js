@@ -112,7 +112,6 @@ export default {
 						border: colors.cyan[300],
 						placeholder: colors.cyan[500],
 						disabled: {
-							background: colors.slate[50],
 							text: colors.slate[400],
 						},
 					},
@@ -207,7 +206,6 @@ export default {
 						border: colors.cyan[700],
 						placeholder: colors.cyan[500],
 						disabled: {
-							background: colors.cyan[950],
 							text: colors.slate[400],
 						},
 					},

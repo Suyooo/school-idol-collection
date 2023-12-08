@@ -60,11 +60,11 @@ a:not(.button) {
 
 h1,
 .header1 {
-	@apply text-text-header mb-4 w-full rounded-xl bg-background-accent py-1 pl-4 text-2xl font-bold uppercase tracking-widest;
+	@apply mb-4 w-full rounded-xl bg-background-accent py-1 pl-4 text-2xl font-bold uppercase tracking-widest text-text-header;
 }
 
 h2 {
-	@apply text-text-header -mx-4 -mt-4 mb-3 bg-background-accent pb-0.5 pl-4 text-lg font-bold uppercase tracking-widest;
+	@apply -mx-4 -mt-4 mb-3 bg-background-accent pb-0.5 pl-4 text-lg font-bold uppercase tracking-widest text-text-header;
 }
 
 h3 {
@@ -118,7 +118,7 @@ select {
 	}
 
 	&:disabled {
-		@apply bg-input-disabled-background text-input-disabled-text;
+		@apply border-input-disabled-text bg-transparent text-input-disabled-text;
 	}
 }
 
