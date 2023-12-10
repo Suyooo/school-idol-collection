@@ -2,6 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npm run check
-npm test
+npm test -- --max-failures=3
 npm run db:export
 git add db.json

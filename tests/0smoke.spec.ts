@@ -3,6 +3,11 @@ import { test } from "./test.js";
 
 /* Smoke tests to make sure the pages don't error at least. */
 
+test.beforeAll(async ({}) => {
+	// give vite time to warm up
+	await new Promise((resolve) => setTimeout(resolve, 5000));
+});
+
 test("home page", async ({ page }) => {
 	await page.goto("/");
 	await expect(await page.getByText("Newest Set").count()).toBeGreaterThan(0);
@@ -78,7 +83,7 @@ test("labels result page", async ({ page, context, javaScriptEnabled }) => {
 	const pagePromise = context.waitForEvent("page");
 	await (await page.$("button:text('Generate')"))!.click();
 	const newPage = await pagePromise;
-	await newPage.waitForSelector("button");
+	await newPage.waitForSelector("button:text('Print')");
 	await expect(await newPage.getByText("1 label ready to print!").count()).toBeGreaterThan(0);
 });
 

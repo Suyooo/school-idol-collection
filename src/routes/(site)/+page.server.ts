@@ -16,7 +16,7 @@ const latestSetCardNos = [
 export const load: PageServerLoad = (async ({ locals }) => {
 	const DB = await locals.DB;
 
-	if (process.env.SIC_USE_SEARCH_TEST_DB === "1") {
+	if (process.env.SIC_TEST_SEARCH_USE_DUMMY_DB === "1") {
 		const latestCard = await DB.m.Card.withScope(["viewForLink"])
 			.findByPk("LL01-001")
 			.then((r) => r!.get({ plain: true }));

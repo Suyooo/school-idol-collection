@@ -21,11 +21,13 @@ function textInputTest(label: string, inputs: string[], expected: number[]) {
 				const elPost = await page.locator(`:has-text("${label}") + input`);
 				await expect(await elPost.inputValue()).toBe(inputs[i]);
 
-				await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
-				if (expected[i] === 0) {
-					await expect(await page.locator(`.error:has-text("no results")`).count()).toBeGreaterThan(0);
-				} else {
-					await expect(await page.locator(`.error:has-text("no results")`).count()).toBe(0);
+				if (!process.env.SIC_TEST_OVERRIDE_URL || process.env.SIC_TEST_SEARCH_OVERRIDE_URL) {
+					await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
+					if (expected[i] === 0) {
+						await expect(await page.locator(`.error:has-text("no results")`).count()).toBeGreaterThan(0);
+					} else {
+						await expect(await page.locator(`.error:has-text("no results")`).count()).toBe(0);
+					}
 				}
 			});
 		}
@@ -49,11 +51,13 @@ function selectTest(label: string, options: string[], expected: number[]) {
 				const elPost = await page.locator(`:has-text("${label}") + select`);
 				expect(await elPost.inputValue()).toBe(options[i]);
 
-				await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
-				if (expected[i] === 0) {
-					await expect(await page.locator(`.error:has-text("no results")`).count()).toBeGreaterThan(0);
-				} else {
-					await expect(await page.locator(`.error:has-text("no results")`).count()).toBe(0);
+				if (!process.env.SIC_TEST_OVERRIDE_URL || process.env.SIC_TEST_SEARCH_OVERRIDE_URL) {
+					await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
+					if (expected[i] === 0) {
+						await expect(await page.locator(`.error:has-text("no results")`).count()).toBeGreaterThan(0);
+					} else {
+						await expect(await page.locator(`.error:has-text("no results")`).count()).toBe(0);
+					}
 				}
 			});
 		}
@@ -64,11 +68,11 @@ function numberTest(label: string, expected: [number, number, number], numOffset
 	test(label, async ({ page, javaScriptEnabled }) => {
 		for (let i = 0; i < 3; i++) {
 			const number = i + numOffset;
-			const expectedMod =
+			const modOption =
 				i === 0 ? ""
 				: i === 1 ? "-"
 				: "+";
-			await test.step("Input: " + number + expectedMod, async () => {
+			await test.step("Input: " + number + modOption, async () => {
 				const elPre = await page.locator(`b:has-text("${label}") + div > input`);
 				await elPre.fill(number.toString());
 				const elModPre = await page.locator(`b:has-text("${label}") + div > select`);
@@ -81,13 +85,15 @@ function numberTest(label: string, expected: [number, number, number], numOffset
 				const elPost = await page.locator(`:has-text("${label}") + div > input`);
 				expect(await elPost.inputValue()).toBe(number.toString());
 				const elModPost = await page.locator(`:has-text("${label}") + div > select`);
-				expect(await elModPost.inputValue()).toBe(expectedMod);
+				expect(await elModPost.inputValue()).toBe(modOption);
 
-				await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
-				if (expected[i] === 0) {
-					await expect(await page.locator(`.error:has-text("no results")`).count()).toBeGreaterThan(0);
-				} else {
-					await expect(await page.locator(`.error:has-text("no results")`).count()).toBe(0);
+				if (!process.env.SIC_TEST_OVERRIDE_URL || process.env.SIC_TEST_SEARCH_OVERRIDE_URL) {
+					await expect(await page.locator(".grid-item").count()).toBe(expected[i]);
+					if (expected[i] === 0) {
+						await expect(await page.locator(`.error:has-text("no results")`).count()).toBeGreaterThan(0);
+					} else {
+						await expect(await page.locator(`.error:has-text("no results")`).count()).toBe(0);
+					}
 				}
 			});
 		}
@@ -96,7 +102,7 @@ function numberTest(label: string, expected: [number, number, number], numOffset
 
 // Use secondary test server, which has the search test database loaded
 test.use({
-	baseURL: "http://127.0.0.1:5175",
+	baseURL: process.env.SIC_TEST_SEARCH_OVERRIDE_URL || "http://127.0.0.1:5175",
 });
 
 test.describe("UI Options", () => {

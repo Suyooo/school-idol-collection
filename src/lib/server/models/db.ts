@@ -45,7 +45,7 @@ export const modelList: ModelStatic<any>[] = [
 ];
 
 const sequelize = new OrigSequelize(
-	process.env.SIC_USE_SEARCH_TEST_DB === "1" ?
+	process.env.SIC_TEST_SEARCH_USE_DUMMY_DB === "1" ?
 		{
 			dialect: "sqlite",
 			storage: "tests/test.db",

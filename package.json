@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"prepare": "playwright install && husky install && patch-package",
+		"prepare": "husky install && patch-package",
 		"dev": "vite --host 0.0.0.0 dev",
 		"sync": "svelte-kit sync",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -18,7 +18,7 @@
 		"start": "node -r dotenv/config build"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.38.1",
+		"@playwright/test": "^1.39.0",
 		"@sequelize/core": "^7.0.0-alpha.23",
 		"@splidejs/svelte-splide": "^0.2.9",
 		"@sveltejs/adapter-node": "^1.1.0",
