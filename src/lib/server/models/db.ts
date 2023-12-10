@@ -53,17 +53,28 @@ const sequelize = new OrigSequelize(
 			logging: false,
 			logQueryParameters: true,
 		}
-	:	{
+	: env.DB_SOCKET ?
+		{
 			dialect: "mariadb",
 			dialectModule: mariadb,
 			dialectOptions: {
 				socketPath: env.DB_SOCKET,
 			},
+			username: env.DB_USER,
+			password: env.DB_PASSWORD,
+			database: env.DB_DATABASE,
+			models: modelList,
+			logging: false,
+			logQueryParameters: true,
+		}
+	:	{
+			dialect: "mariadb",
+			dialectModule: mariadb,
 			host: env.DB_HOST,
 			username: env.DB_USER,
 			password: env.DB_PASSWORD,
 			database: env.DB_DATABASE,
-			port: 3306,
+			port: parseInt(env.DB_PORT || "3306"),
 			models: modelList,
 			logging: false,
 			logQueryParameters: true,
