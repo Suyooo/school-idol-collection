@@ -13,5 +13,8 @@ export default defineConfig(() => {
 				plugins: [tailwindNested, tailwind(tailwindConfig), autoprefixer],
 			},
 		},
+		define: {
+			__SIC_TEST_SEARCH_USE_DUMMY_DB__: process.env.SIC_TEST_SEARCH_USE_DUMMY_DB,
+		},
 	};
 });
