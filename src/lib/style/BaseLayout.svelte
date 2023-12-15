@@ -41,7 +41,11 @@
 		}
 	}
 
-	let theme: string = (typeof localStorage === "undefined" ? null : localStorage)?.getItem("sic-theme") || "light";
+	let theme: string =
+		typeof localStorage !== "undefined" ?
+			localStorage.getItem("sic-theme") ||
+			(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+		:	"light";
 	function changeTheme() {
 		theme = document.body.dataset.theme === "dark" ? "light" : "dark";
 		localStorage.setItem("sic-theme", theme);
@@ -72,7 +76,7 @@
 					<div>
 						<Button
 							accent
-							class="flex h-10 w-10 items-center justify-center !px-0 !bg-link hover:!bg-link-hover active:!bg-link-hover !text-text-contrast"
+							class="flex h-10 w-10 items-center justify-center !bg-link !px-0 !text-text-contrast hover:!bg-link-hover active:!bg-link-hover"
 							on:click={() => (menuExpanded = !menuExpanded)}
 							label={menuExpanded ? "Collapse Menu" : "Expand Menu"}
 						>

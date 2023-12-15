@@ -9,7 +9,9 @@
 	<body data-sveltekit-preload-data="hover">
 		<script>
 			if (typeof localStorage !== "undefined") {
-				document.body.dataset.theme = localStorage.getItem("sic-theme") || "light";
+				document.body.dataset.theme =
+					localStorage.getItem("sic-theme") ||
+					(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 			}
 		</script>
 		<div style="display: contents">%sveltekit.body%</div>
