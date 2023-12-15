@@ -6,6 +6,7 @@
 	import { CardOrientation } from "$lib/enums/cardOrientation.js";
 	import { CardMemberRarity, CardSongRarity } from "$lib/enums/cardRarity.js";
 	import Skill from "$lib/format/Skill.svelte";
+	import Play from "$lib/style/icons/Play.svelte";
 
 	export let cardNo: string;
 	export let byCardNo: { [cardNo: string]: Card };
@@ -54,7 +55,7 @@
 	{/if}
 	{#if cardIsMember(card) && card.member.costumeJpn}
 		<div class="costume">
-			<span><span><span>⏵</span></span><span>{card.member.costumeEng ?? card.member.costumeJpn}</span></span>
+			<span><span><span><Play /></span></span><span>{card.member.costumeEng ?? card.member.costumeJpn}</span></span>
 		</div>
 	{/if}
 	<hr />
@@ -172,8 +173,9 @@
 						margin-right: 2mm;
 
 						& > span {
-							margin-top: -0.3mm;
-							margin-left: 0.15mm;
+							@apply text-xs;
+							margin-left: 0.45mm;
+							margin-bottom: 0.1mm;
 						}
 					}
 

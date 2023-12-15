@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Button from "$lib/style/Button.svelte";
+	import Back from "$lib/style/icons/Back.svelte";
+	import Go from "$lib/style/icons/Go.svelte";
 
 	export let prevCardNo: string | null;
 	export let nextCardNo: string | null;
@@ -9,8 +11,8 @@
 
 <div class="buttons">
 	<div class="flex">
-		<Button href="/card/{prevCardNo}" label="Previous Card" accent disabled={prevCardNo === null}>🢀</Button>
-		<Button href="/card/{nextCardNo}" label="Next Card" accent disabled={nextCardNo === null}>🢂</Button>
+		<Button href="/card/{prevCardNo}" label="Previous Card" accent disabled={prevCardNo === null}><Back /></Button>
+		<Button href="/card/{nextCardNo}" label="Next Card" accent disabled={nextCardNo === null}><Go /></Button>
 	</div>
 	<div class={showBackLinksOnlyOnLarge ? "hidden lg:flex" : "flex"}>
 		<Button label="View Set" href="/set/{cardSet}">View Set</Button>

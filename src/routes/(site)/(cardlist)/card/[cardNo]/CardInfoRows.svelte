@@ -30,6 +30,7 @@
 	import Skill from "$lib/format/Skill.svelte";
 	import Collapse from "$lib/style/icons/Collapse.svelte";
 	import Expand from "$lib/style/icons/Expand.svelte";
+	import Go from "$lib/style/icons/Go.svelte";
 
 	export let card: Card;
 	export let hideSharedId: boolean = false;
@@ -295,6 +296,7 @@
 		<div class="value wide faqs">
 			{#each card.faqs as faq (faq.cardId + "_" + faq.displayOrder)}
 				<a href={faq.link}>
+					<div class="icon"><Go /></div>
 					<Skill skill={faq.labelPreparsed ?? faq.label} parseAsHelpText />
 					{#if faq.shortAnswer}
 						<span class="!text-text-cardid">({faq.shortAnswer})</span>
@@ -363,9 +365,10 @@
 	.faqs > a {
 		@apply relative block pl-4;
 
-		&:before {
-			@apply absolute left-0 top-0 font-bold text-text-subtle;
-			content: "⏵";
+		& .icon {
+			@apply absolute left-0 top-0 text-xs font-bold text-faq-question;
+			margin-left: -0.25rem;
+			margin-top: 0.15rem;
 		}
 	}
 </style>
