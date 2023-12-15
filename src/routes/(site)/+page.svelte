@@ -19,6 +19,14 @@
 
 <svelte:head>
 	<title>SIC</title>
+	<noscript>
+		<style>
+			.splidespacer {
+				pointer-events: auto !important;
+				opacity: 1 !important;
+			}
+		</style>
+	</noscript>
 </svelte:head>
 
 <h1 class="sr-only">Front Page</h1>
@@ -30,7 +38,7 @@
 				<div class="flippable-set-element">
 					<SetGridElement set={data.latestSet} />
 				</div>
-				<div class="splide h-[15.75rem]">
+				<div class="splide">
 					{#if browser}
 						<Splide
 							options={{
@@ -41,7 +49,7 @@
 								type: "loop",
 							}}
 						>
-							{#each data.latestSetCards as slot, i}
+							{#each data.latestSetCards as slot}
 								{@const pickIdx = Math.floor(Math.random() * slot.length)}
 								<SplideSlide>
 									<CardGridElement card={slot[pickIdx]} squareCorners />
@@ -49,11 +57,11 @@
 							{/each}
 						</Splide>
 					{:else}
-						{@const slotIdx = Math.floor(Math.random() * data.latestSetCards.length)}
-						{@const pickIdx = Math.floor(Math.random() * data.latestSetCards[slotIdx].length)}
-						<noscript class="w-full">
-							<CardGridElement card={data.latestSetCards[slotIdx][pickIdx]} />
-						</noscript>
+						<div class="splidespacer">
+							<CardGridElement
+								card={data.latestSetCards[data.latestSetCardHighlightId[0]][data.latestSetCardHighlightId[1]]}
+							/>
+						</div>
 					{/if}
 				</div>
 			</div>
@@ -109,9 +117,16 @@
 	.full-img-element {
 		& :global(.imgcont) {
 			@apply !basis-[unset] py-2 sm:!flex-grow;
+			height: 181px;
 
 			& :global(img) {
 				@apply !max-h-full !max-w-full;
+			}
+			& :global(img.card-v) {
+				height: 181px;
+			}
+			& :global(img.card-h) {
+				height: 130px;
 			}
 		}
 		& :global(.namecont) {
@@ -122,7 +137,7 @@
 		& :global(.grid-item) {
 			@apply !flex-row items-center sm:h-full sm:!flex-col sm:items-start;
 			& :global(.imgcont) {
-				@apply !basis-12 sm:!basis-[unset];
+				@apply !basis-12 max-sm:!mb-0 sm:!basis-[unset] h-[unset];
 			}
 			& :global(.namecont) {
 				@apply sm:pb-4;
@@ -131,7 +146,7 @@
 	}
 
 	.splide {
-		@apply visible col-span-2 overflow-hidden rounded;
+		@apply visible relative col-span-2 overflow-hidden rounded;
 
 		& :global(.splide__arrow) {
 			@apply top-[calc(50%_-_1.25rem)] bg-background-accent opacity-100;
@@ -149,5 +164,8 @@
 				@apply bg-text-header-breadcrumb;
 			}
 		}
+	}
+	.splidespacer {
+		@apply pointer-events-none opacity-0;
 	}
 </style>

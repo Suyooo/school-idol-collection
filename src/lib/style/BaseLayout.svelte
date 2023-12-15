@@ -72,7 +72,7 @@
 					<div>
 						<Button
 							accent
-							class="flex h-10 w-10 items-center justify-center !px-0"
+							class="flex h-10 w-10 items-center justify-center !px-0 !bg-link hover:!bg-link-hover active:!bg-link-hover !text-text-contrast"
 							on:click={() => (menuExpanded = !menuExpanded)}
 							label={menuExpanded ? "Collapse Menu" : "Expand Menu"}
 						>
@@ -136,7 +136,7 @@
 					@apply flex w-full flex-shrink items-center justify-between sm:ml-0 sm:w-max sm:justify-start;
 
 					& .logo {
-						@apply cursor-pointer text-3xl leading-10 no-underline;
+						@apply cursor-pointer text-3xl leading-10 no-underline hover:underline active:underline;
 					}
 
 					& .topbuttons {

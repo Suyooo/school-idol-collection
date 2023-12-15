@@ -12,6 +12,7 @@ const latestSetCardNos = [
 ].map(([firstCard, maxDistance]) =>
 	new Array(maxDistance).fill(0).map((_, i) => `${latestSetId}-${(firstCard + i).toString().padStart(3, "0")}`)
 );
+const latestSetCardHighlightId = [2, 0];
 
 export const load: PageServerLoad = (async ({ locals }) => {
 	const DB = await locals.DB;
@@ -24,6 +25,7 @@ export const load: PageServerLoad = (async ({ locals }) => {
 			latestCard,
 			latestSet: DB.m.Set.findByPk("LL01").then((r) => r!.get({ plain: true })),
 			latestSetCards: [[latestCard]],
+			latestSetCardHighlightId: [0, 0],
 		};
 	}
 
@@ -45,5 +47,5 @@ export const load: PageServerLoad = (async ({ locals }) => {
 		)
 	);
 
-	return { latestCard, latestSet, latestSetCards };
+	return { latestCard, latestSet, latestSetCards, latestSetCardHighlightId };
 }) satisfies PageServerLoad;
