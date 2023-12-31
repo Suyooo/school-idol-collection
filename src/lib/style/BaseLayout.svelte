@@ -131,7 +131,7 @@
 		@apply w-full bg-background-accent;
 
 		& .cont {
-			@apply flex max-w-screen-2xl flex-col items-start justify-between gap-y-2 sm:flex-row;
+			@apply flex max-w-screen-2xl flex-col items-start justify-between gap-y-2 max-sm:py-2 sm:flex-row;
 
 			& .menu {
 				@apply flex w-full flex-col items-center font-bold uppercase tracking-widest sm:flex-row sm:items-start;

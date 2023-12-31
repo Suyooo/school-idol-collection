@@ -67,7 +67,7 @@
 		@apply mx-8 mb-4 flex flex-shrink-0 items-center justify-center gap-4 max-lg:h-card-long lg:mb-0 lg:w-card-long lg:flex-col lg:justify-start;
 
 		& > div {
-			@apply flex h-card-long w-card-long flex-shrink-0 items-center justify-center;
+			@apply flex flex-shrink-0 items-center justify-center sm:h-card-long sm:w-card-long;
 			& :global(img) {
 				@apply max-w-full;
 			}
