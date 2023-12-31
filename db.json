@@ -27719,6 +27719,18 @@
 			"frontOrientation": 0,
 			"backOrientation": 0,
 			"copyright": "©2013 プロジェクトラブライブ！ ©KLabGames ©bushiroad"
+		},
+		{
+			"cardNo": "PR-273",
+			"id": 1860,
+			"type": 0,
+			"nameJpn": "高坂 穂乃果",
+			"nameEng": "Honoka Kousaka",
+			"group": 4,
+			"imageFileExt": "gif",
+			"frontOrientation": 0,
+			"backOrientation": 0,
+			"copyright": "©2013 プロジェクトラブライブ！ ©KLabGames ©bushiroad"
 		}
 	],
 	"CardMemberGroups": [
@@ -68516,6 +68528,26 @@
 			"costumeEng": null,
 			"abilityRush": true,
 			"abilityLive": false,
+			"idolizeType": 0,
+			"groupId": null
+		},
+		{
+			"cardNo": "PR-273",
+			"rarity": 5,
+			"baseIfSecret": null,
+			"cost": 1,
+			"birthDay": 3,
+			"birthMonth": 8,
+			"year": 2,
+			"piecesAll": 0,
+			"piecesSmile": 0,
+			"piecesPure": 1,
+			"piecesCool": 0,
+			"pieceBdayAttribute": null,
+			"costumeJpn": null,
+			"costumeEng": null,
+			"abilityRush": false,
+			"abilityLive": true,
 			"idolizeType": 0,
 			"groupId": null
 		}
