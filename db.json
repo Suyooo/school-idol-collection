@@ -27755,6 +27755,18 @@
 			"frontOrientation": 0,
 			"backOrientation": 0,
 			"copyright": "©2013 プロジェクトラブライブ！ ©KLabGames ©bushiroad"
+		},
+		{
+			"cardNo": "PR-276",
+			"id": 1863,
+			"type": 0,
+			"nameJpn": "園田 海未",
+			"nameEng": "Umi Sonoda",
+			"group": 5,
+			"imageFileExt": "gif",
+			"frontOrientation": 0,
+			"backOrientation": 0,
+			"copyright": "©2013 プロジェクトラブライブ！ ©KLabGames ©bushiroad"
 		}
 	],
 	"CardMemberGroups": [
@@ -68607,6 +68619,26 @@
 			"piecesSmile": 0,
 			"piecesPure": 0,
 			"piecesCool": 1,
+			"pieceBdayAttribute": null,
+			"costumeJpn": null,
+			"costumeEng": null,
+			"abilityRush": true,
+			"abilityLive": false,
+			"idolizeType": 0,
+			"groupId": null
+		},
+		{
+			"cardNo": "PR-276",
+			"rarity": 5,
+			"baseIfSecret": null,
+			"cost": 1,
+			"birthDay": 15,
+			"birthMonth": 3,
+			"year": 2,
+			"piecesAll": 0,
+			"piecesSmile": 1,
+			"piecesPure": 0,
+			"piecesCool": 0,
 			"pieceBdayAttribute": null,
 			"costumeJpn": null,
 			"costumeEng": null,
