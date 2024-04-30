@@ -1,7 +1,7 @@
 import type Card from "$models/card/card.js";
 import type { PageServerLoad } from "./$types.js";
 
-const latestCardNo = "PR-276";
+const latestCardNo = "PR-277";
 const latestSetId = "LL17";
 const latestSetCardNos = [
 	[10, 9],
