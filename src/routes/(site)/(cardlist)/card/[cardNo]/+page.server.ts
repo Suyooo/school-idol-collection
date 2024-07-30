@@ -7,5 +7,5 @@ export const load: PageServerLoad = (async ({ params, fetch, locals }) => {
 	if (!res.ok) {
 		throw error(res.status, await res.json());
 	}
-	return { card: addExtraInfo(await locals.DB, await res.json(), true, true, true) };
+	return { card: await addExtraInfo(await locals.DB, await res.json(), true, true, true) };
 }) satisfies PageServerLoad;
