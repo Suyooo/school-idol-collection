@@ -27815,6 +27815,18 @@
 			"frontOrientation": 0,
 			"backOrientation": 0,
 			"copyright": "©2013 プロジェクトラブライブ！ ©KLabGames ©bushiroad"
+		},
+		{
+			"cardNo": "PR-281",
+			"id": 1868,
+			"type": 0,
+			"nameJpn": "矢澤 にこ",
+			"nameEng": "Nico Yazawa",
+			"group": 6,
+			"imageFileExt": "gif",
+			"frontOrientation": 0,
+			"backOrientation": 0,
+			"copyright": "©2013 プロジェクトラブライブ！ ©KLabGames ©bushiroad"
 		}
 	],
 	"CardMemberGroups": [
@@ -68767,6 +68779,26 @@
 			"piecesSmile": 0,
 			"piecesPure": 0,
 			"piecesCool": 1,
+			"pieceBdayAttribute": null,
+			"costumeJpn": null,
+			"costumeEng": null,
+			"abilityRush": false,
+			"abilityLive": true,
+			"idolizeType": 0,
+			"groupId": null
+		},
+		{
+			"cardNo": "PR-281",
+			"rarity": 5,
+			"baseIfSecret": null,
+			"cost": 1,
+			"birthDay": 22,
+			"birthMonth": 7,
+			"year": 3,
+			"piecesAll": 0,
+			"piecesSmile": 0,
+			"piecesPure": 1,
+			"piecesCool": 0,
 			"pieceBdayAttribute": null,
 			"costumeJpn": null,
 			"costumeEng": null,
