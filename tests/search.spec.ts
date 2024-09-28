@@ -1,8 +1,9 @@
-import { expect } from "@playwright/test";
+// @ts-ignore
+import { PlaywrightTestArgs, PlaywrightTestOptions, expect } from "@playwright/test";
 import { test } from "./test.js";
 
 function textInputTest(label: string, inputs: string[], expected: number[]) {
-	test(label, async ({ page, javaScriptEnabled }) => {
+	test(label, async ({ page, javaScriptEnabled }: PlaywrightTestArgs & PlaywrightTestOptions) => {
 		await expect(inputs, "Ensure special characters are tested").toContain("?");
 		await expect(inputs, "Ensure special characters are tested").toContain("#");
 		await expect(inputs, "Ensure special characters are tested").toContain("/");
@@ -35,7 +36,7 @@ function textInputTest(label: string, inputs: string[], expected: number[]) {
 }
 
 function selectTest(label: string, options: string[], expected: number[]) {
-	test(label, async ({ page, javaScriptEnabled }) => {
+	test(label, async ({ page, javaScriptEnabled }: PlaywrightTestArgs & PlaywrightTestOptions) => {
 		const optionCount = (await page.locator(`b:has-text("${label}") + select > option`).count()) - 1;
 		await expect(new Set(options).size, "Ensure every option is tested").toBe(optionCount);
 
@@ -65,7 +66,7 @@ function selectTest(label: string, options: string[], expected: number[]) {
 }
 
 function numberTest(label: string, expected: [number, number, number], numOffset: number = 0) {
-	test(label, async ({ page, javaScriptEnabled }) => {
+	test(label, async ({ page, javaScriptEnabled }: PlaywrightTestArgs & PlaywrightTestOptions) => {
 		for (let i = 0; i < 3; i++) {
 			const number = i + numOffset;
 			const modOption =
@@ -106,7 +107,7 @@ test.use({
 });
 
 test.describe("UI Options", () => {
-	test.beforeEach(async ({ page }) => {
+	test.beforeEach(async ({ page }: PlaywrightTestArgs) => {
 		await page.goto("/search");
 	});
 
@@ -121,7 +122,7 @@ test.describe("UI Options", () => {
 	textInputTest("Skill Text", ["メンバー", "Member", "/", "?", "=", "#", "'"], [12, 14, 1, 1, 0, 0, 3]);
 
 	test.describe("Member-only Options", () => {
-		test.beforeEach(async ({ page, javaScriptEnabled }) => {
+		test.beforeEach(async ({ page, javaScriptEnabled }: PlaywrightTestArgs & PlaywrightTestOptions) => {
 			await page.selectOption(`:text-is("Card Type") + select`, "member");
 			if (javaScriptEnabled) {
 				await page.waitForSelector(`:text-is("Rarity")`);
@@ -147,7 +148,7 @@ test.describe("UI Options", () => {
 	});
 
 	test.describe("Song-only Options", () => {
-		test.beforeEach(async ({ page, javaScriptEnabled }) => {
+		test.beforeEach(async ({ page, javaScriptEnabled }: PlaywrightTestArgs & PlaywrightTestOptions) => {
 			await page.selectOption(`:text-is("Card Type") + select`, "song");
 			if (javaScriptEnabled) {
 				await page.waitForSelector(`:text-is("Rarity")`);
@@ -164,7 +165,7 @@ test.describe("UI Options", () => {
 		selectTest("Requirement", ["anypiece", "attributepiece"], [3, 8]);
 
 		test.describe("Any-only Options", () => {
-			test.beforeEach(async ({ page, javaScriptEnabled }) => {
+			test.beforeEach(async ({ page, javaScriptEnabled }: PlaywrightTestArgs & PlaywrightTestOptions) => {
 				await page.selectOption(`:text("Requirement") + select`, "Any Piece Requirement");
 				if (javaScriptEnabled) {
 					await page.waitForSelector(`:text("Required Pieces")`);
@@ -179,7 +180,7 @@ test.describe("UI Options", () => {
 		});
 
 		test.describe("Attr-only Options", () => {
-			test.beforeEach(async ({ page, javaScriptEnabled }) => {
+			test.beforeEach(async ({ page, javaScriptEnabled }: PlaywrightTestArgs & PlaywrightTestOptions) => {
 				await page.selectOption(`:text("Requirement") + select`, "Attribute Piece Requirement");
 				if (javaScriptEnabled) {
 					await page.waitForSelector(`:text("Required [SMILE] Pieces")`);
@@ -197,7 +198,7 @@ test.describe("UI Options", () => {
 	});
 });
 
-test("Pagination", async ({ page, javaScriptEnabled }) => {
+test("Pagination", async ({ page, javaScriptEnabled }: PlaywrightTestArgs & PlaywrightTestOptions) => {
 	await page.goto("/search/member/pagesize=4");
 	await expect(await page.$(`a[aria-label="Previous Page"]`)).toBeNull();
 	await test.step("Go to Page 2", async () => {

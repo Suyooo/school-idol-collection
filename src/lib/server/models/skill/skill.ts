@@ -1,5 +1,6 @@
-import { type BelongsToMany, DataTypes, Model } from "@sequelize/core";
-import type { QueryOptions } from "@sequelize/core";
+import { DataTypes, Model } from "@sequelize/core";
+import type { ModelStatic, QueryOptions } from "@sequelize/core";
+import type { BelongsToMany } from "@sequelize/core/decorators-legacy";
 import {
 	AfterCreate,
 	AfterUpdate,
@@ -138,11 +139,13 @@ export class SkillBase extends Model {
 						transaction: options.transaction,
 					})
 				).map((c) => c.cardNo);
-				await (<BelongsToMany<Annotation, Card, Link>>SkillBase.associations.annotations.target.associations.links).add(
-					annotation,
-					cards,
-					{ transaction: options.transaction }
-				);
+
+				for (const cardNo in cards) {
+					await (<ModelStatic<Link>>SkillBase.associations.annotations.target.associations.links.target).create(
+						{ from: annotation.id, to: cardNo },
+						{ transaction: options.transaction }
+					);
+				}
 			}
 		}
 		if (skill.changed("eng") && skill.eng !== null) {
@@ -164,11 +167,13 @@ export class SkillBase extends Model {
 						transaction: options.transaction,
 					})
 				).map((c) => c.cardNo);
-				await (<BelongsToMany<Annotation, Card, Link>>SkillBase.associations.annotations.target.associations.links).add(
-					annotation,
-					cards,
-					{ transaction: options.transaction }
-				);
+
+				for (const cardNo in cards) {
+					await (<ModelStatic<Link>>SkillBase.associations.annotations.target.associations.links.target).create(
+						{ from: annotation.id, to: cardNo },
+						{ transaction: options.transaction }
+					);
+				}
 			}
 		}
 	}

@@ -47,5 +47,10 @@ export const load: PageServerLoad = (async ({ locals }) => {
 		)
 	);
 
-	return { latestCard, latestSet, latestSetCards, latestSetCardHighlightId };
+	return {
+		latestCard: await latestCard,
+		latestSet: await await latestSet,
+		latestSetCards: await latestSetCards,
+		latestSetCardHighlightId,
+	};
 }) satisfies PageServerLoad;
