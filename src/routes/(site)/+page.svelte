@@ -88,11 +88,13 @@
 			Maybe you already have collected some of the cards because they looked neat, but never knew how the CCG itself works?
 			Check out <a href="/faq">the How To Play page</a>, look up your cards with the Quick Search in the top right of
 			the site, and give SIC a try!<br /><br />
-			Right now, this site aims to be a complete repository for translations of both the game's cards and official help pages,
-			with some extra bits like linking to search results right from Skill texts and the Label Printer. In the future, this
-			site will hopefully offer even more, including deckbuilding helpers and even the ability to play-test right in your
-			browser &ndash; to share this little card game I like with everyone, and give other Love&nbsp;Live! fans the chance
-			to try it. But for now, I hope you enjoy browsing through all the cards SIC has to offer!
+			SIC was officially supported and received new cards every month until September 2024, and which point it was officially
+			shut down due to the announcement of the new Love Live! TCG. This site aims to act as a complete repository for translations
+			of both the game's cards and official help pages, with some extra bits like linking to search results right from Skill
+			texts and the Label Printer. The site will remain online for the foreseeable future, to archive what SIC was and to
+			share this little card game I like with everyone, and give other Love&nbsp;Live! fans the chance to try it. Maybe I'll
+			create something simlar when LLTCG releases, but for now, I hope you enjoy browsing through all the cards SIC has to
+			offer!
 		</div>
 	</div>
 	<div class="panel">
@@ -137,7 +139,7 @@
 		& :global(.grid-item) {
 			@apply !flex-row items-center sm:h-full sm:!flex-col sm:items-start;
 			& :global(.imgcont) {
-				@apply !basis-12 max-sm:!mb-0 sm:!basis-[unset] h-[unset];
+				@apply h-[unset] !basis-12 max-sm:!mb-0 sm:!basis-[unset];
 			}
 			& :global(.namecont) {
 				@apply sm:pb-4;
